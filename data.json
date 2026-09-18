@@ -6,7 +6,13 @@
       "desc": "教材、PPT、课后习题答案",
       "intro": "本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。",
       "progress": 60,
-      "files": []
+      "files": [
+        {
+          "name": "Snipaste_2026-08-31_22-18-05.png",
+          "url": "https://benyia.github.io/benyia.github.io/files/1789736482801_Snipaste_2026-08-31_22-18-05.png",
+          "type": "图片"
+        }
+      ]
     },
     {
       "icon": "🧠",
@@ -227,7 +233,7 @@
   "diary": [],
   "advisor": [],
   "siteConfig": {
-    "title": "思齐的控制主页",
+    "title": "思齐",
     "subtitle": "钟爱奥迪A6"
   }
 }

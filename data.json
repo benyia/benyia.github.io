@@ -175,6 +175,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-19 00:15",
+      "action": "名单：公开敏感信息"
+    },
+    {
       "time": "2026-09-19 00:14",
       "action": "添加导师指导记录"
     },
@@ -340,6 +344,6 @@
     }
   ],
   "rosterConfig": {
-    "showSensitive": false
+    "showSensitive": true
   }
 }

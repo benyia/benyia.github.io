@@ -13,7 +13,12 @@
       "files": [
         {
           "name": "第1章 绪论.pdf",
-          "url": "files/1789738888760_第1章_绪论.pdf",
+          "url": "https://benyia.github.io/benyia.github.io/files/1789738888760_第1章_绪论.pdf",
+          "type": "PDF"
+        },
+        {
+          "name": "第1章 绪论.pdf",
+          "url": "https://benyia.github.io/benyia.github.io/files/1789738892078_第1章_绪论.pdf",
           "type": "PDF"
         }
       ]
@@ -60,14 +65,6 @@
       "date": "2026-09-01",
       "level": "red",
       "content": "各研究生：2026年秋季学期选课即将开始，请于9月1日-9月5日登录研究生系统完成选课。"
-    },
-    {
-      "title": "1111",
-      "source": "",
-      "date": "2026-09-18",
-      "level": "normal",
-      "content": "1111",
-      "time": "2026-09-18 23:18"
     }
   ],
   "classItems": [
@@ -136,10 +133,26 @@
       "url": "https://code.visualstudio.com/"
     }
   ],
+  "timeline": [
+    {
+      "date": "2026-09-01",
+      "title": "秋季学期开始",
+      "desc": "新学期正式开学"
+    },
+    {
+      "date": "2026-10-15",
+      "title": "开题报告",
+      "desc": "研究生开题答辩"
+    }
+  ],
   "ledger": [],
   "diary": [],
   "advisor": [],
   "logs": [
+    {
+      "time": "2026-09-18 23:29",
+      "action": "删除通知"
+    },
     {
       "time": "2026-09-18 23:24",
       "action": "删除班级事务"

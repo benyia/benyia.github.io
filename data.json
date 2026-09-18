@@ -82,6 +82,21 @@
       "fileName": "",
       "files": [],
       "abstract": "参考文献综述"
+    },
+    {
+      "title": "11111",
+      "status": "在投",
+      "year": "",
+      "desc": "",
+      "abstract": "",
+      "tags": [
+        "阅读"
+      ],
+      "files": [],
+      "images": [],
+      "file": "",
+      "fileName": "",
+      "time": "2026-09-19 00:23"
     }
   ],
   "notices": [
@@ -174,6 +189,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-19 00:23",
+      "action": "添加论文：11111"
+    },
     {
       "time": "2026-09-19 00:18",
       "action": "修改站点设置"

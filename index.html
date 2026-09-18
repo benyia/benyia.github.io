@@ -169,8 +169,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 <div class="hero">
   <a href="admin.html" class="admin-link">管理后台 →</a>
   <div class="hero-inner">
-    <h1>钟爱奥迪A6</h1>
-    <p class="subtitle">个人主页 · 学习资源 · 生活记录</p>
+    <h1 id="siteTitle">思齐</h1>
+    <p class="subtitle" id="siteSubtitle">钟爱奥迪A6</p>
     <span class="domain">benyia.com</span>
   </div>
 </div>
@@ -288,6 +288,7 @@ const GH_OWNER = "benyia";
 const GH_REPO = "benyia.github.io";
 
 const DEFAULT_DATA = {
+  siteConfig: {title: "思齐", subtitle: "钟爱奥迪A6"},
   courses: [
     {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", intro:"本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。", progress: 60, files: [
       {name:"课程简介.pdf", url:"", type:"PDF"},
@@ -353,6 +354,11 @@ async function loadData(){
     }
   } catch(e) {
     blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+  }
+  // 应用站点配置
+  if(blogData.siteConfig){
+    document.getElementById("siteTitle").textContent = blogData.siteConfig.title || "思齐";
+    document.getElementById("siteSubtitle").textContent = blogData.siteConfig.subtitle || "钟爱奥迪A6";
   }
   renderAll();
 }

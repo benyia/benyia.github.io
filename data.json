@@ -224,16 +224,10 @@
     }
   ],
   "ledger": [],
-  "diary": [
-    {
-      "date": "2026-09-18",
-      "content": "你好"
-    }
-  ],
-  "advisor": [
-    {
-      "date": "2026-09-18",
-      "content": "年后"
-    }
-  ]
+  "diary": [],
+  "advisor": [],
+  "siteConfig": {
+    "title": "思齐",
+    "subtitle": "钟爱奥迪A6"
+  }
 }

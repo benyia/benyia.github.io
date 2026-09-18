@@ -262,6 +262,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     <div class="panel" id="panel-data">
       <h3>数据管理</h3>
       <div class="settings-box">
+        <h4>🎨 站点标题设置</h4>
+        <p style="margin-bottom:12px">修改主页显示的大标题和签名。</p>
+        <input type="text" id="cfgTitle" placeholder="大标题（如：思齐）">
+        <input type="text" id="cfgSubtitle" placeholder="副标题/签名（如：钟爱奥迪A6）">
+        <button class="btn btn-primary btn-sm" onclick="saveSiteConfig()">保存标题</button>
+        <div class="status-msg" id="cfgStatus"></div>
+      </div>
+      <div class="settings-box">
         <h4>🔑 修改登录密码</h4>
         <input type="password" id="oldPwd" placeholder="当前密码">
         <input type="password" id="newPwd" placeholder="新密码（至少4位）">
@@ -293,6 +301,7 @@ const GH_OWNER = "benyia";
 const GH_REPO = "benyia.github.io";
 
 const DEFAULT_DATA = {
+  siteConfig: {title: "思齐", subtitle: "钟爱奥迪A6"},
   courses: [
     {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", intro:"本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。", progress: 60, files: []},
     {icon:"🧠", title:"神经网络与深度学习", desc:"课件、上机指导、参考书", intro:"深度学习基础、CNN、RNN、Transformer等模型原理与实践应用。", progress: 30, files: []},
@@ -360,6 +369,11 @@ async function doLogin(){
   document.getElementById("ghToken").value = localStorage.getItem("benyia_gh_token") || "";
   await loadData();
   renderAll();
+  // 加载站点配置
+  if(blogData.siteConfig){
+    document.getElementById("cfgTitle").value = blogData.siteConfig.title || "思齐";
+    document.getElementById("cfgSubtitle").value = blogData.siteConfig.subtitle || "钟爱奥迪A6";
+  }
 }
 function doLogout(){ location.reload(); }
 
@@ -376,6 +390,17 @@ function changePwd(){
   document.getElementById("oldPwd").value="";
   document.getElementById("newPwd").value="";
   document.getElementById("confirmPwd").value="";
+}
+
+async function saveSiteConfig(){
+  blogData.siteConfig = {
+    title: document.getElementById("cfgTitle").value.trim() || "思齐",
+    subtitle: document.getElementById("cfgSubtitle").value.trim() || "钟爱奥迪A6"
+  };
+  await saveData();
+  const st = document.getElementById("cfgStatus");
+  st.className = "status-msg ok";
+  st.textContent = "标题已保存，刷新前台即可看到效果";
 }
 
 function saveToken(){

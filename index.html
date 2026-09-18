@@ -223,6 +223,7 @@ function renderBlog(){
       <div class="card-icon">${c.icon||"📄"}</div>
       <div class="card-title">${esc(c.title)}</div>
       <div class="card-desc">${esc(c.desc)}</div>
+      ${c.file ? `<div style="margin-top:8px;font-size:.82rem;color:var(--primary)">📎 ${esc(c.fileName||"下载文件")}</div>` : ""}
     </a>`).join("") || '<div class="empty-state">暂无课程</div>';
   // 论文
   document.getElementById("papersList").innerHTML = b.papers.map(p=>`
@@ -230,6 +231,7 @@ function renderBlog(){
       <div class="item-content">
         <div class="item-title">${esc(p.title)}</div>
         <div class="item-meta">${esc(p.desc||"")} ${p.year?("· "+p.year):""}</div>
+        ${p.file ? `<a class="file-link" href="${p.file}" target="_blank" style="display:inline-block;margin-top:4px;font-size:.82rem">📎 ${esc(p.fileName||"下载PDF")}</a>` : ""}
       </div>
       <span class="item-tag tag-${p.status==="已发表"?"green":p.status==="在投"?"orange":"blue"}">${esc(p.status)}</span>
     </div>`).join("") || '<div class="empty-state">暂无论文</div>';

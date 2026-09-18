@@ -10,7 +10,6 @@
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 a{color:var(--primary);text-decoration:none}
 
-/* 登录页 */
 .login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh}
 .login-box{background:var(--card);border-radius:12px;padding:40px;width:360px;box-shadow:0 10px 40px rgba(0,0,0,.1)}
 .login-box h2{text-align:center;margin-bottom:24px;font-size:1.4rem}
@@ -20,7 +19,6 @@ a{color:var(--primary);text-decoration:none}
 .login-box .btn:hover{background:var(--primary-dark)}
 .login-error{color:var(--danger);font-size:.85rem;text-align:center;margin-top:8px;display:none}
 
-/* 主后台 */
 .admin-header{background:var(--card);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
 .admin-header h1{font-size:1.1rem}
 .admin-header .actions{display:flex;gap:10px}
@@ -31,6 +29,8 @@ a{color:var(--primary);text-decoration:none}
 .btn-outline:hover{border-color:var(--primary);color:var(--primary)}
 .btn-danger{background:#fef2f2;color:var(--danger)}
 .btn-danger:hover{background:#fee2e2}
+.btn-success{background:#d1fae5;color:#059669}
+.btn-success:hover{background:#a7f3d0}
 .btn-sm{padding:4px 10px;font-size:.8rem}
 
 .admin-body{max-width:900px;margin:0 auto;padding:24px}
@@ -47,7 +47,8 @@ a{color:var(--primary);text-decoration:none}
 .item-row .row-body{flex:1}
 .item-row .row-title{font-weight:600;font-size:.92rem;margin-bottom:2px}
 .item-row .row-meta{font-size:.8rem;color:var(--text3)}
-.item-row .row-actions{display:flex;gap:6px;flex-shrink:0}
+.item-row .row-actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
+.file-link{display:inline-block;margin-top:4px;font-size:.8rem;color:var(--primary)}
 
 .add-form{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px}
 .add-form h4{font-size:.9rem;margin-bottom:12px;color:var(--text2)}
@@ -55,9 +56,22 @@ a{color:var(--primary);text-decoration:none}
 .form-grid input,.form-grid select,.form-grid textarea{padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:.88rem;font-family:inherit;width:100%}
 .form-grid textarea{grid-column:1/-1;min-height:60px;resize:vertical}
 .form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{outline:none;border-color:var(--primary)}
+.upload-area{grid-column:1/-1;border:2px dashed var(--border);border-radius:6px;padding:16px;text-align:center;cursor:pointer;transition:all .15s}
+.upload-area:hover{border-color:var(--primary);background:var(--primary-light)}
+.upload-area.has-file{border-color:var(--success);background:#ecfdf5}
+.upload-area p{font-size:.85rem;color:var(--text2)}
+.upload-area .file-name{font-size:.82rem;color:var(--success);margin-top:4px}
 
 .data-tools{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
 .empty{text-align:center;padding:32px;color:var(--text3);font-size:.88rem}
+.settings-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px}
+.settings-box h4{font-size:.9rem;margin-bottom:12px}
+.settings-box input{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:.88rem;margin-bottom:10px}
+.settings-box input:focus{outline:none;border-color:var(--primary)}
+.settings-box p{font-size:.82rem;color:var(--text2);margin-top:8px;line-height:1.5}
+.status-msg{font-size:.85rem;margin-top:8px;padding:8px 12px;border-radius:6px;display:none}
+.status-msg.ok{display:block;background:#d1fae5;color:#059669}
+.status-msg.err{display:block;background:#fef2f2;color:var(--danger)}
 
 @media(max-width:640px){
 .admin-body{padding:16px}
@@ -67,7 +81,6 @@ a{color:var(--primary);text-decoration:none}
 </head>
 <body>
 
-<!-- 登录页 -->
 <div class="login-wrap" id="loginPage">
   <div class="login-box">
     <h2>思齐的博客后台</h2>
@@ -77,7 +90,6 @@ a{color:var(--primary);text-decoration:none}
   </div>
 </div>
 
-<!-- 后台主界面 -->
 <div id="adminMain" style="display:none">
   <div class="admin-header">
     <h1>管理后台</h1>
@@ -97,7 +109,6 @@ a{color:var(--primary);text-decoration:none}
       <button class="tab" data-t="data">数据管理</button>
     </div>
 
-    <!-- 课程 -->
     <div class="panel active" id="panel-courses">
       <h3>我的课程</h3>
       <div class="add-form">
@@ -106,14 +117,18 @@ a{color:var(--primary);text-decoration:none}
           <input id="c_icon" placeholder="图标 emoji（如 📐）">
           <input id="c_title" placeholder="课程名称">
           <input id="c_desc" placeholder="描述">
-          <input id="c_link" placeholder="链接 URL">
+          <input id="c_link" placeholder="外部链接 URL（可选）">
+          <div class="upload-area" id="c_upload" onclick="document.getElementById('c_file').click()">
+            <p>📎 点击上传课程文件（PDF、PPT等）</p>
+            <input type="file" id="c_file" style="display:none" onchange="onFileSelect('c')">
+            <div class="file-name" id="c_filename"></div>
+          </div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="addItem('courses')">添加</button>
       </div>
       <div id="list-courses"></div>
     </div>
 
-    <!-- 论文 -->
     <div class="panel" id="panel-papers">
       <h3>论文管理</h3>
       <div class="add-form">
@@ -123,13 +138,17 @@ a{color:var(--primary);text-decoration:none}
           <select id="p_status"><option>已发表</option><option>在投</option><option>阅读中</option></select>
           <input id="p_year" placeholder="年份（如 2026）">
           <input id="p_desc" placeholder="备注">
+          <div class="upload-area" id="p_upload" onclick="document.getElementById('p_file').click()">
+            <p>📎 点击上传论文文件（PDF等）</p>
+            <input type="file" id="p_file" style="display:none" onchange="onFileSelect('p')">
+            <div class="file-name" id="p_filename"></div>
+          </div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="addItem('papers')">添加</button>
       </div>
       <div id="list-papers"></div>
     </div>
 
-    <!-- 通知 -->
     <div class="panel" id="panel-notices">
       <h3>学校通知</h3>
       <div class="add-form">
@@ -145,7 +164,6 @@ a{color:var(--primary);text-decoration:none}
       <div id="list-notices"></div>
     </div>
 
-    <!-- 班级 -->
     <div class="panel" id="panel-class">
       <h3>班级事务</h3>
       <div class="add-form">
@@ -160,7 +178,6 @@ a{color:var(--primary);text-decoration:none}
       <div id="list-classItems"></div>
     </div>
 
-    <!-- 生活服务 -->
     <div class="panel" id="panel-life">
       <h3>生活服务</h3>
       <div class="add-form">
@@ -176,7 +193,6 @@ a{color:var(--primary);text-decoration:none}
       <div id="list-lifeServices"></div>
     </div>
 
-    <!-- 软件下载 -->
     <div class="panel" id="panel-softwares">
       <h3>软件下载</h3>
       <div class="add-form">
@@ -192,57 +208,151 @@ a{color:var(--primary);text-decoration:none}
       <div id="list-softwares"></div>
     </div>
 
-    <!-- 数据管理 -->
     <div class="panel" id="panel-data">
       <h3>数据管理</h3>
-      <p style="font-size:.88rem;color:var(--text2);margin-bottom:16px">
-        博客内容数据保存在你当前浏览器中。导出备份后，可以在其他设备导入恢复。
-      </p>
+
+      <div class="settings-box">
+        <h4>修改登录密码</h4>
+        <input type="password" id="oldPwd" placeholder="当前密码">
+        <input type="password" id="newPwd" placeholder="新密码（至少4位）">
+        <input type="password" id="confirmPwd" placeholder="确认新密码">
+        <button class="btn btn-primary btn-sm" onclick="changePwd()">确认修改</button>
+        <div class="status-msg" id="pwdStatus"></div>
+      </div>
+
+      <div class="settings-box">
+        <h4>GitHub 文件上传设置</h4>
+        <p style="font-size:.85rem;margin-bottom:10px">要在课程/论文里上传文件并让所有访客都能下载，需要设置一个 GitHub Token：</p>
+        <input type="text" id="ghToken" placeholder="GitHub Personal Access Token">
+        <p style="font-size:.8rem;color:var(--text3)">
+          生成方式：GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)<br>
+          勾选 <strong>repo</strong> 权限即可。Token 只保存在你浏览器里，不会上传到服务器。
+        </p>
+        <button class="btn btn-primary btn-sm" onclick="saveToken()">保存 Token</button>
+        <div class="status-msg" id="tokenStatus"></div>
+      </div>
+
       <div class="data-tools">
-        <button class="btn btn-outline" onclick="exportData()">导出数据（下载备份）</button>
+        <button class="btn btn-outline" onclick="exportData()">导出数据</button>
         <button class="btn btn-outline" onclick="document.getElementById('importFile').click()">导入数据</button>
         <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
         <button class="btn btn-danger" onclick="resetData()">恢复默认内容</button>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;font-size:.85rem;color:var(--text2)">
-        <p><strong>注意：</strong></p>
-        <p>· 前台的"记账"、"日记"、"导师指导"数据是个人私密数据，只存在你自己浏览器里，不在此管理</p>
-        <p>· 如果你换了电脑或浏览器，博客的课程、通知等内容会恢复默认，请记得导出备份</p>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-const ADMIN_PWD = "syj3008338"; // 默认密码，可修改
+const DEFAULT_PWD = "syj3008338";
+const GH_OWNER = "benyia";
+const GH_REPO = "benyia.github.io";
 
-// ===== 登录 =====
+// ===== 密码 =====
+function getPwd(){ return localStorage.getItem("benyia_admin_pwd") || DEFAULT_PWD; }
+function setPwd(pwd){ localStorage.setItem("benyia_admin_pwd", pwd); }
+
 function doLogin(){
   const pwd = document.getElementById("pwdInput").value;
-  if(pwd === ADMIN_PWD){
+  if(pwd === getPwd()){
     document.getElementById("loginPage").style.display="none";
     document.getElementById("adminMain").style.display="block";
+    document.getElementById("ghToken").value = localStorage.getItem("benyia_gh_token") || "";
     renderAll();
   } else {
     document.getElementById("loginError").style.display="block";
   }
 }
-function doLogout(){
-  localStorage.removeItem("benyia_admin_auth");
-  location.reload();
+function doLogout(){ location.reload(); }
+
+function changePwd(){
+  const oldP = document.getElementById("oldPwd").value;
+  const newP = document.getElementById("newPwd").value;
+  const conP = document.getElementById("confirmPwd").value;
+  const st = document.getElementById("pwdStatus");
+  if(oldP !== getPwd()){ st.className="status-msg err"; st.textContent="当前密码错误"; return; }
+  if(newP.length < 4){ st.className="status-msg err"; st.textContent="新密码至少4位"; return; }
+  if(newP !== conP){ st.className="status-msg err"; st.textContent="两次输入不一致"; return; }
+  setPwd(newP);
+  st.className="status-msg ok"; st.textContent="密码修改成功！";
+  document.getElementById("oldPwd").value="";
+  document.getElementById("newPwd").value="";
+  document.getElementById("confirmPwd").value="";
+}
+
+// ===== GitHub Token =====
+function saveToken(){
+  const t = document.getElementById("ghToken").value.trim();
+  localStorage.setItem("benyia_gh_token", t);
+  const st = document.getElementById("tokenStatus");
+  st.className = t ? "status-msg ok" : "status-msg err";
+  st.textContent = t ? "Token 已保存" : "Token 已清除";
+}
+
+// ===== 文件上传（GitHub API） =====
+let pendingFiles = {}; // {c: file, p: file}
+
+function onFileSelect(prefix){
+  const input = document.getElementById(prefix+"_file");
+  const file = input.files[0];
+  if(!file) return;
+  pendingFiles[prefix] = file;
+  const area = document.getElementById(prefix+"_upload");
+  const nameEl = document.getElementById(prefix+"_filename");
+  area.classList.add("has-file");
+  nameEl.textContent = "已选择：" + file.name + "（" + (file.size/1024/1024).toFixed(2) + " MB）";
+}
+
+async function uploadToGitHub(file){
+  const token = localStorage.getItem("benyia_gh_token");
+  if(!token) throw new Error("请先在「数据管理」里设置 GitHub Token");
+
+  const content = await fileToBase64(file);
+  const path = "files/" + Date.now() + "_" + file.name.replace(/[^\w.\-\u4e00-\u9fa5]/g, "_");
+  const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`;
+
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Authorization": "token " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: "Upload: " + file.name,
+      content: content
+    })
+  });
+
+  if(!res.ok){
+    const err = await res.json();
+    throw new Error(err.message || "上传失败");
+  }
+  return `https://${GH_OWNER}.github.io/${GH_REPO}/${path}`;
+}
+
+function fileToBase64(file){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      // FileReader result is data:...;base64,xxxx, strip prefix
+      const b64 = reader.result.split(",")[1];
+      resolve(b64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 
 // ===== 数据 =====
 const DEFAULTS = {
   courses: [
-    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", link:"#"},
-    {icon:"🧠", title:"神经网络与深度学习", desc:"课件、上机指导、参考书", link:"#"},
-    {icon:"💻", title:"计算机控制系统", desc:"教材、章节PPT、习题解答", link:"#"},
-    {icon:"⚙️", title:"现代控制理论", desc:"状态空间分析、最优控制", link:"#"}
+    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", link:"#", file:"", fileName:""},
+    {icon:"🧠", title:"神经网络与深度学习", desc:"课件、上机指导、参考书", link:"#", file:"", fileName:""},
+    {icon:"💻", title:"计算机控制系统", desc:"教材、章节PPT、习题解答", link:"#", file:"", fileName:""},
+    {icon:"⚙️", title:"现代控制理论", desc:"状态空间分析、最优控制", link:"#", file:"", fileName:""}
   ],
   papers: [
-    {title:"基于深度学习的故障诊断方法研究", status:"在投", year:"2026", desc:""},
-    {title:"自适应控制算法综述", status:"阅读中", year:"", desc:"参考文献"}
+    {title:"基于深度学习的故障诊断方法研究", status:"在投", year:"2026", desc:"", file:"", fileName:""},
+    {title:"自适应控制算法综述", status:"阅读中", year:"", desc:"参考文献", file:"", fileName:""}
   ],
   notices: [
     {title:"2026年秋季学期选课通知", source:"研究生院", date:"2026-09-01", level:"red"},
@@ -272,15 +382,12 @@ const DEFAULTS = {
 };
 
 function getBlog(){
-  try {
-    const b = JSON.parse(localStorage.getItem("benyia_blog"));
-    if(b) return b;
-  } catch(e){}
+  try { const b = JSON.parse(localStorage.getItem("benyia_blog")); if(b) return b; } catch(e){}
   return JSON.parse(JSON.stringify(DEFAULTS));
 }
 function saveBlog(b){ localStorage.setItem("benyia_blog", JSON.stringify(b)); }
 
-// ===== Tab 切换 =====
+// ===== Tab =====
 document.querySelectorAll(".tab").forEach(t=>{
   t.onclick=()=>{
     document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
@@ -290,8 +397,8 @@ document.querySelectorAll(".tab").forEach(t=>{
   };
 });
 
-// ===== 渲染列表 =====
-function renderList(key, fields, labelFn){
+// ===== 渲染 =====
+function renderList(key, fields, labelFn, hasFile){
   const b = getBlog();
   const list = b[key] || [];
   const el = document.getElementById("list-"+key);
@@ -300,7 +407,8 @@ function renderList(key, fields, labelFn){
     <div class="item-row">
       <div class="row-body">
         <div class="row-title">${labelFn(item)}</div>
-        <div class="row-meta">${fields.map(f=>`${item[f]||""}`).filter(Boolean).join(" · ")}</div>
+        <div class="row-meta">${fields.map(f=>item[f]||"").filter(Boolean).join(" · ")}</div>
+        ${hasFile && item.file ? `<a class="file-link" href="${item.file}" target="_blank">📎 ${item.fileName || "下载文件"}</a>` : ""}
       </div>
       <div class="row-actions">
         <button class="btn btn-outline btn-sm" onclick="editItem('${key}',${i})">编辑</button>
@@ -311,49 +419,87 @@ function renderList(key, fields, labelFn){
 }
 
 function renderAll(){
-  renderList("courses", ["icon","desc","link"], i=>i.title);
-  renderList("papers", ["status","year","desc"], i=>i.title);
-  renderList("notices", ["source","date"], i=>i.title);
-  renderList("classItems", ["type","date"], i=>i.title);
-  renderList("lifeServices", ["desc","url"], i=>i.title);
-  renderList("softwares", ["desc","url"], i=>i.title);
+  renderList("courses", ["icon","desc","link"], i=>i.title, true);
+  renderList("papers", ["status","year","desc"], i=>i.title, true);
+  renderList("notices", ["source","date"], i=>i.title, false);
+  renderList("classItems", ["type","date"], i=>i.title, false);
+  renderList("lifeServices", ["desc","url"], i=>i.title, false);
+  renderList("softwares", ["desc","url"], i=>i.title, false);
 }
 
 // ===== 添加 =====
-function addItem(key){
+async function addItem(key){
   const b = getBlog();
   if(!b[key]) b[key]=[];
   let item = {};
-  switch(key){
-    case "courses":
-      item = {icon:val("c_icon"), title:val("c_title"), desc:val("c_desc"), link:val("c_link")||"#"};
-      clearInputs(["c_icon","c_title","c_desc","c_link"]); break;
-    case "papers":
-      item = {title:val("p_title"), status:val("p_status"), year:val("p_year"), desc:val("p_desc")};
-      clearInputs(["p_title","p_year","p_desc"]); break;
-    case "notices":
-      item = {title:val("n_title"), source:val("n_source"), date:val("n_date"), level:val("n_level")};
-      clearInputs(["n_title","n_source","n_date"]); break;
-    case "classItems":
-      item = {title:val("cl_title"), type:val("cl_type"), date:val("cl_date")};
-      clearInputs(["cl_title","cl_date"]); break;
-    case "lifeServices":
-      item = {icon:val("l_icon"), title:val("l_title"), desc:val("l_desc"), url:val("l_url")};
-      clearInputs(["l_icon","l_title","l_desc","l_url"]); break;
-    case "softwares":
-      item = {icon:val("s_icon"), title:val("s_title"), desc:val("s_desc"), url:val("s_url")};
-      clearInputs(["s_icon","s_title","s_desc","s_url"]); break;
+
+  if(key === "courses"){
+    item = {icon:val("c_icon"), title:val("c_title"), desc:val("c_desc"), link:val("c_link")||"#", file:"", fileName:""};
+    if(pendingFiles["c"]){
+      btnLoading(this, "上传中...");
+      try {
+        const url = await uploadToGitHub(pendingFiles["c"]);
+        item.file = url;
+        item.fileName = pendingFiles["c"].name;
+      } catch(e){
+        alert("文件上传失败：" + e.message);
+        resetBtn(this);
+        return;
+      }
+      pendingFiles["c"] = null;
+      document.getElementById("c_upload").classList.remove("has-file");
+      document.getElementById("c_filename").textContent = "";
+    }
+    clearInputs(["c_icon","c_title","c_desc","c_link"]);
   }
+  else if(key === "papers"){
+    item = {title:val("p_title"), status:val("p_status"), year:val("p_year"), desc:val("p_desc"), file:"", fileName:""};
+    if(pendingFiles["p"]){
+      btnLoading(this, "上传中...");
+      try {
+        const url = await uploadToGitHub(pendingFiles["p"]);
+        item.file = url;
+        item.fileName = pendingFiles["p"].name;
+      } catch(e){
+        alert("文件上传失败：" + e.message);
+        resetBtn(this);
+        return;
+      }
+      pendingFiles["p"] = null;
+      document.getElementById("p_upload").classList.remove("has-file");
+      document.getElementById("p_filename").textContent = "";
+    }
+    clearInputs(["p_title","p_year","p_desc"]);
+  }
+  else if(key === "notices"){
+    item = {title:val("n_title"), source:val("n_source"), date:val("n_date"), level:val("n_level")};
+    clearInputs(["n_title","n_source","n_date"]);
+  }
+  else if(key === "classItems"){
+    item = {title:val("cl_title"), type:val("cl_type"), date:val("cl_date")};
+    clearInputs(["cl_title","cl_date"]);
+  }
+  else if(key === "lifeServices"){
+    item = {icon:val("l_icon"), title:val("l_title"), desc:val("l_desc"), url:val("l_url")};
+    clearInputs(["l_icon","l_title","l_desc","l_url"]);
+  }
+  else if(key === "softwares"){
+    item = {icon:val("s_icon"), title:val("s_title"), desc:val("s_desc"), url:val("s_url")};
+    clearInputs(["s_icon","s_title","s_desc","s_url"]);
+  }
+
   if(!item.title){ alert("标题不能为空"); return; }
   b[key].push(item);
   saveBlog(b);
   renderAll();
 }
 
+function btnLoading(btn, text){ btn.textContent=text; btn.disabled=true; }
+function resetBtn(btn){ btn.textContent="添加"; btn.disabled=false; }
 function val(id){ return document.getElementById(id).value.trim(); }
 function clearInputs(ids){ ids.forEach(id=>document.getElementById(id).value=""); }
 
-// ===== 删除 =====
+// ===== 删除/编辑 =====
 function delItem(key, idx){
   if(!confirm("确定删除？")) return;
   const b = getBlog();
@@ -361,15 +507,13 @@ function delItem(key, idx){
   saveBlog(b);
   renderAll();
 }
-
-// ===== 编辑 =====
 function editItem(key, idx){
   const b = getBlog();
   const item = b[key][idx];
   const newTitle = prompt("编辑标题：", item.title);
   if(newTitle === null) return;
   item.title = newTitle;
-  const newDesc = prompt("编辑描述（可选）：", item.desc || item.source || item.status || "");
+  const newDesc = prompt("编辑描述：", item.desc || item.source || item.status || "");
   if(newDesc !== null){
     if(item.desc !== undefined) item.desc = newDesc;
     else if(item.source !== undefined) item.source = newDesc;
@@ -384,9 +528,7 @@ function exportData(){
   const blob = new Blob([JSON.stringify(b, null, 2)], {type:"application/json"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url;
-  a.download = "benyia_blog_backup.json";
-  a.click();
+  a.href = url; a.download = "benyia_blog_backup.json"; a.click();
   URL.revokeObjectURL(url);
 }
 function importData(e){
@@ -394,17 +536,13 @@ function importData(e){
   if(!file) return;
   const reader = new FileReader();
   reader.onload = function(ev){
-    try {
-      const data = JSON.parse(ev.target.result);
-      saveBlog(data);
-      renderAll();
-      alert("导入成功！");
-    } catch(err){ alert("文件格式错误"); }
+    try { saveBlog(JSON.parse(ev.target.result)); renderAll(); alert("导入成功！"); }
+    catch(err){ alert("文件格式错误"); }
   };
   reader.readAsText(file);
 }
 function resetData(){
-  if(!confirm("确定恢复默认内容？当前修改会丢失！")) return;
+  if(!confirm("确定恢复默认内容？")) return;
   localStorage.removeItem("benyia_blog");
   renderAll();
 }

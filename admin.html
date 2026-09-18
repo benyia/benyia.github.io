@@ -7,7 +7,8 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--primary:#10b981;--primary-light:#d1fae5;--bg:#f0fdf4;--card:#fff;--text:#1e293b;--text2:#64748b;--text3:#94a3b8;--border:#e2e8f0;--radius:12px}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);line-height:1.6;background-image:url("image1.png");background-size:cover;background-attachment:fixed;background-position:center;min-height:100vh}
+body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,.5);z-index:-1}
 .login-screen{max-width:400px;margin:100px auto;padding:40px;background:var(--card);border-radius:var(--radius);box-shadow:0 4px 20px rgba(0,0,0,.08)}
 .login-screen h1{text-align:center;margin-bottom:24px;font-size:1.4rem}
 .login-screen input{width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:12px;font-size:.95rem}
@@ -102,7 +103,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <div class="card"><div class="num" id="statC">0</div><div>课程</div></div>
       <div class="card"><div class="num" id="statP">0</div><div>论文</div></div>
       <div class="card"><div class="num" id="statN">0</div><div>通知</div></div>
-      <div class="card"><div class="num" id="statT">0</div><div>时间记录</div></div>
       <div class="card"><div class="num" id="statF">0</div><div>已上传文件</div></div>
     </div>
     <div class="tabs">
@@ -112,7 +112,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <button data-p="notices">通知</button>
       <button data-p="class">班级事务</button>
       <button data-p="life">生活服务</button>
-      <button data-p="timeline">时间记录</button>
       <button data-p="ledger">记账</button>
       <button data-p="diary">日记</button>
       <button data-p="advisor">导师指导</button>
@@ -285,20 +284,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <div class="card"><h2>生活服务列表</h2><div id="lifeList"></div></div>
     </div>
 
-    <!-- ===== 时间记录 ===== -->
-    <div class="panel" id="panel-timeline">
-      <div class="card">
-        <h2>添加时间记录</h2>
-        <div class="form-row">
-          <input type="date" id="tlDate" style="flex:1">
-          <input type="text" id="tlTitle" placeholder="事件标题" style="flex:1.5">
-          <input type="text" id="tlDesc" placeholder="描述" style="flex:1.5">
-        </div>
-        <button class="btn btn-primary" onclick="addTimeline()">添加</button>
-      </div>
-      <div class="card"><h2>时间记录列表</h2><div id="timelineList"></div></div>
-    </div>
-
     <!-- ===== 记账 ===== -->
     <div class="panel" id="panel-ledger">
       <div class="card">
@@ -365,7 +350,7 @@ const MAX_FILE_MB = 25;
 const DEFAULT_DATA = {
   siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。"},
   courses:[],papers:[],notices:[],classItems:[],lifeServices:[],
-  timeline:[],ledger:[],diary:[],advisor:[],logs:[]
+  ledger:[],diary:[],advisor:[],logs:[]
 };
 
 /* ============================================================
@@ -556,7 +541,6 @@ async function initPanel(){
   $("tokenStatus").className = "status-msg " + (getStoredToken() ? "ok" : "err");
   $("nDate").value = todayStr();
   $("clDate").value = todayStr();
-  $("tlDate").value = todayStr();
   $("lgDate").value = todayStr();
   await syncNow(true);
 }
@@ -710,46 +694,33 @@ async function uploadFile(file, kind){
   }
   if(!getStoredToken()) throw new Error("请先在「站点设置」里填写 GitHub Token");
 
-  const path = buildFilePath(file.name);
+  const safe = buildFilePath(file.name);                 /* files/123_名字.pdf（可含中文） */
+  const apiPath = safe.split("/").map(encodeURIComponent).join("/");  /* API 用编码后路径 */
+
   const status = $(kind+"UpStatus");
   if(status && file.size > 2*1024*1024){
     status.textContent = "正在编码「"+file.name+"」("+fmtSize(file.size)+")，大文件需要几秒…";
-    /* 让浏览器先把上面这行提示画出来，再做重活 */
     await new Promise(r=>setTimeout(r, 50));
   }
   const content = await fileToBase64(file);
-  const body = JSON.stringify({
-    message: "Upload: "+file.name,
-    content,
-    branch: GH_BRANCH
-  });
+  const body = JSON.stringify({message:"Upload: "+file.name, content, branch:GH_BRANCH});
 
-  /* 用 XHR 以便拿到上传进度 */
-  await new Promise((resolve, reject)=>{
-    const xhr = new XMLHttpRequest();
-    xhr.open("PUT", "https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+path);
-    Object.keys(ghHeaders()).forEach(k=>xhr.setRequestHeader(k, ghHeaders()[k]));
-    xhr.setRequestHeader("Content-Type","application/json");
-    xhr.upload.onprogress = (e)=>{
-      if(e.lengthComputable) setProgress(kind, Math.round(e.loaded/e.total*95));
-    };
-    xhr.onload = ()=>{
-      if(xhr.status>=200 && xhr.status<300){ resolve(); }
-      else{
-        let m = "HTTP "+xhr.status;
-        try{ const j=JSON.parse(xhr.responseText); if(j.message) m += "："+j.message; }catch(e){}
-        reject(new Error(m));
-      }
-    };
-    xhr.onerror = ()=>reject(new Error("网络错误"));
-    xhr.send(body);
+  /* 用 fetch（与保存数据同一套，已验证可用） */
+  const res = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+apiPath, {
+    method:"PUT",
+    headers:Object.assign({}, ghHeaders(), {"Content-Type":"application/json"}),
+    body
   });
+  if(!res.ok){
+    let m = "HTTP "+res.status;
+    try{ const j = await res.json(); if(j.message) m += "："+j.message; }catch(e){}
+    throw new Error(m);
+  }
 
-  setProgress(kind, 100);
   /* 相对路径在 GitHub Pages 和本地预览下都能正确解析 */
   return {
     name: file.name,
-    url: path,                /* 相对路径，如 files/xxx.pdf */
+    url: safe,                 /* 相对路径，如 files/xxx.pdf */
     type: (file.name.split(".").pop()||"file").toUpperCase(),
     size: file.size
   };
@@ -820,11 +791,10 @@ function renderAll(){
   $("statC").textContent=(blogData.courses||[]).length;
   $("statP").textContent=(blogData.papers||[]).length;
   $("statN").textContent=(blogData.notices||[]).length;
-  $("statT").textContent=(blogData.timeline||[]).length;
   $("statF").textContent=fileCount;
 
   renderCourses();renderPapers();renderNotices();renderClass();renderLife();
-  renderTimeline();renderLedger();renderDiary();renderAdvisor();renderLogs();
+  renderLedger();renderDiary();renderAdvisor();renderLogs();
 }
 
 /* 列表里显示文件行（已保存的） */
@@ -1090,34 +1060,6 @@ function delLife(i){
   if(!confirm("确定删除？")) return;
   blogData.lifeServices.splice(i,1);
   saveData("删除生活服务");
-  renderAll();
-}
-
-/* ---------- 时间记录 ---------- */
-function addTimeline(){
-  const date=$("tlDate").value;
-  const title=$("tlTitle").value.trim();
-  if(!date||!title){ showToast("请输入日期和事件标题","error"); return; }
-  blogData.timeline.push({date,title,desc:$("tlDesc").value.trim()});
-  saveData("添加时间记录："+title);
-  renderAll();
-  ["tlTitle","tlDesc"].forEach(id=>$(id).value="");
-  $("tlDate").value=todayStr();
-}
-function renderTimeline(){
-  const list=(blogData.timeline||[]).slice().sort((a,b)=>String(b.date).localeCompare(String(a.date)));
-  $("timelineList").innerHTML=list.map(t=>{
-    const realIdx = blogData.timeline.indexOf(t);
-    return `
-    <div class="item-row">
-      <div class="info"><div class="title">${esc(t.title)}</div><div class="desc">${esc(t.date)} · ${esc(t.desc)}</div></div>
-      <button class="btn btn-danger btn-sm" onclick="delTimeline(${realIdx})">删除</button>
-    </div>`;}).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
-}
-function delTimeline(i){
-  if(!confirm("确定删除？")) return;
-  blogData.timeline.splice(i,1);
-  saveData("删除时间记录");
   renderAll();
 }
 

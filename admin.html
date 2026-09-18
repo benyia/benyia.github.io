@@ -473,7 +473,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     <div class="panel" id="panel-diary">
       <div class="card">
         <h2>写日记</h2>
-        <div class="form-row"><input type="text" id="diaryTitle" placeholder="标题（可不填，当博客写）"></div>
+        <div class="form-row"><input type="text" id="diaryTitle" placeholder="标题（留空会自动从正文生成）"></div>
         <div class="form-row"><textarea id="diaryContent" placeholder="正文……可以像写博客一样写" style="min-height:150px"></textarea></div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
         <div id="imgList_diary" style="margin-bottom:6px"></div>
@@ -1567,12 +1567,26 @@ function delLedger(realIdx){
 }
 
 /* ---------- 日记 ---------- */
+function autoTitle(text, date){
+  var s = String(text||"");
+  var lines = s.split(String.fromCharCode(10));
+  var first = "";
+  for(var i=0;i<lines.length;i++){
+    var t = lines[i].replace(/^[#>*\-\s]+/, "").trim();
+    if(t){ first = t; break; }
+  }
+  first = first.split("  ").join(" ").trim();
+  if(!first) return date || "无标题";
+  if(first.length > 24) return first.slice(0, 24) + "…";
+  return first;
+}
 function addDiary(){
   var content=$("diaryContent").value.trim();
   var title=$("diaryTitle").value.trim();
   if(!content && !title){ showToast("请写点内容","error"); return; }
+  if(!title) title = autoTitle(content, todayStr());
   blogData.diary.push({date:todayStr(), title:title, content:content, images:(imgDrafts.diary||[]).slice(), media:(drafts.dmedia||[]).slice(), time:nowStr()});
-  saveData("写日记："+(title||"无标题"));
+  saveData("写日记："+title);
   renderAll();
   $("diaryContent").value=""; $("diaryTitle").value="";
   setImgDrafts("diary", []);

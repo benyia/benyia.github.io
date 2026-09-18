@@ -148,6 +148,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <input type="text" id="cfgBio" placeholder="一句话简介" style="flex:2">
         </div>
         <div class="form-row"><input type="text" id="cfgTitle" placeholder="网站标题"><input type="text" id="cfgSub" placeholder="副标题"></div>
+        <div class="form-row"><input type="text" id="cfgDefaultImage" placeholder="默认图片(没上传图片时显示，可留空)" style="flex:2"><button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultImage')">上传</button></div>
         <div class="form-row"><textarea id="cfgAbout" placeholder="关于我的介绍..." style="min-height:150px"></textarea></div>
         <button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
       </div>
@@ -523,7 +524,7 @@ const PWD_KEY = "benyia_admin_pwd";
 const TOKEN_KEY = "benyia_gh_token";
 
 /* 上传单个文件的建议上限（GitHub contents API 限制，超过请用 Git LFS 或网盘） */
-const MAX_FILE_MB = 50;
+const MAX_FILE_MB = 100;
 
 const DEFAULT_DATA = {
   siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",avatar:"思",name:"思齐",bio:"控制工程研究生"},
@@ -900,7 +901,7 @@ function hideProgress(kind){
 
 async function uploadFile(file, kind){
   if(file.size > MAX_FILE_MB*1024*1024){
-    throw new Error("「"+file.name+"」有 "+fmtSize(file.size)+"，超过 "+MAX_FILE_MB+"MB 上限");
+    throw new Error("「"+file.name+"」有 "+fmtSize(file.size)+"，超过 GitHub 单文件上限 "+MAX_FILE_MB+"MB。大文件请先传到网盘，再用「外链地址」粘链接。");
   }
   if(!getStoredToken()) throw new Error("请先在「站点设置」里填写 GitHub Token");
 
@@ -1132,6 +1133,7 @@ function renderAll(){
   $("cfgSub").value   = sc.subtitle || "";
   $("cfgAbout").value = sc.about || "";
   $("cfgAvatar").value = sc.avatar || "";
+  $("cfgDefaultImage").value = sc.defaultImage || "";
   $("cfgName").value   = sc.name || "";
   $("cfgBio").value    = sc.bio || "";
   $("tagsInput").value = (blogData.tags||[]).join(",");
@@ -1611,6 +1613,7 @@ function saveSiteConfig(){
     subtitle: $("cfgSub").value.trim(),
     about: $("cfgAbout").value,
     avatar: $("cfgAvatar").value.trim() || "思",
+    defaultImage: $("cfgDefaultImage").value.trim(),
     name: $("cfgName").value.trim() || "思齐",
     bio: $("cfgBio").value.trim()
   };

@@ -56,19 +56,6 @@
       ],
       "file": "",
       "fileName": ""
-    },
-    {
-      "title": "1111",
-      "status": "在投",
-      "year": "",
-      "desc": "",
-      "tags": [
-        "阅读"
-      ],
-      "files": [],
-      "file": "",
-      "fileName": "",
-      "time": "2026-09-18 23:18"
     }
   ],
   "notices": [
@@ -174,17 +161,14 @@
       "desc": "研究生开题答辩"
     }
   ],
-  "ledger": [
-    {
-      "type": "expense",
-      "amount": 1111,
-      "date": "2026-09-18",
-      "desc": "丸子"
-    }
-  ],
+  "ledger": [],
   "diary": [],
   "advisor": [],
   "logs": [
+    {
+      "time": "2026-09-18 23:24",
+      "action": "删除记账"
+    },
     {
       "time": "2026-09-18 23:24",
       "action": "删除论文"

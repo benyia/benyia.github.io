@@ -165,8 +165,19 @@
     }
   ],
   "diary": [],
-  "advisor": [],
+  "advisor": [
+    {
+      "date": "2026-09-19",
+      "time": "00:14",
+      "content": "1111",
+      "images": []
+    }
+  ],
   "logs": [
+    {
+      "time": "2026-09-19 00:14",
+      "action": "添加导师指导记录"
+    },
     {
       "time": "2026-09-19 00:12",
       "action": "名单：公开敏感信息"
@@ -329,6 +340,6 @@
     }
   ],
   "rosterConfig": {
-    "showSensitive": true
+    "showSensitive": false
   }
 }

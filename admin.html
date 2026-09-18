@@ -876,9 +876,12 @@ function fileToBase64(file){
 }
 
 /* 清理文件名并生成存放路径 */
+let _upSeq = 0;
 function buildFilePath(name){
-  const safe = String(name).replace(/[^\w.\-\u4e00-\u9fa5]/g, "_").slice(-80);
-  return FILES_DIR + "/" + Date.now() + "_" + Math.random().toString(36).slice(2,7) + "_" + safe;
+  _upSeq++;
+  const safe = String(name).replace(/[^\w.\-\u4e00-\u9fa5]/g, "_").slice(-60);
+  const rnd = Math.random().toString(36).slice(2, 10);
+  return FILES_DIR + "/" + Date.now() + "_" + _upSeq + "_" + rnd + "_" + safe;
 }
 
 function setProgress(kind, pct){
@@ -898,36 +901,45 @@ async function uploadFile(file, kind){
   }
   if(!getStoredToken()) throw new Error("请先在「站点设置」里填写 GitHub Token");
 
-  const safe = buildFilePath(file.name);                 /* files/123_名字.pdf（可含中文） */
-  const apiPath = safe.split("/").map(encodeURIComponent).join("/");  /* API 用编码后路径 */
-
   const status = $(kind+"UpStatus");
   if(status && file.size > 2*1024*1024){
     status.textContent = "正在编码「"+file.name+"」("+fmtSize(file.size)+")，大文件需要几秒…";
     await new Promise(r=>setTimeout(r, 50));
   }
   const content = await fileToBase64(file);
-  const body = JSON.stringify({message:"Upload: "+file.name, content, branch:GH_BRANCH});
 
-  /* 用 fetch（与保存数据同一套，已验证可用） */
-  const res = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+apiPath, {
-    method:"PUT",
-    headers:Object.assign({}, ghHeaders(), {"Content-Type":"application/json"}),
-    body
-  });
-  if(!res.ok){
-    let m = "HTTP "+res.status;
-    try{ const j = await res.json(); if(j.message) m += "："+j.message; }catch(e){}
-    throw new Error(m);
+  let lastErr = "";
+  for(let attempt=1; attempt<=4; attempt++){
+    const safe = buildFilePath(file.name);                 /* 每次重试都换一个新路径 */
+    const apiPath = safe.split("/").map(encodeURIComponent).join("/");
+    const body = JSON.stringify({message:"Upload: "+file.name, content, branch:GH_BRANCH});
+    let res = null, json = null;
+    try{
+      res = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+apiPath, {
+        method:"PUT",
+        headers:Object.assign({}, ghHeaders(), {"Content-Type":"application/json"}),
+        body: body
+      });
+      try{ json = await res.json(); }catch(e){}
+    }catch(e){
+      lastErr = "网络错误："+e.message;
+      await new Promise(r=>setTimeout(r, 700*attempt));
+      continue;
+    }
+
+    if(res.ok){
+      return {name:file.name, url:safe, type:(file.name.split(".").pop()||"file").toUpperCase(), size:file.size};
+    }
+
+    lastErr = "HTTP "+res.status + (json && json.message ? ("："+json.message) : "");
+    if(attempt < 4 && (res.status===409 || res.status===422 || res.status>=500)){
+      if(status) status.textContent = "上传冲突，正在重试（"+attempt+"/4）…";
+      await new Promise(r=>setTimeout(r, 700*attempt));
+      continue;
+    }
+    break;
   }
-
-  /* 相对路径在 GitHub Pages 和本地预览下都能正确解析 */
-  return {
-    name: file.name,
-    url: safe,                 /* 相对路径，如 files/xxx.pdf */
-    type: (file.name.split(".").pop()||"file").toUpperCase(),
-    size: file.size
-  };
+  throw new Error(lastErr);
 }
 
 /* ---------- 通用图片 / 图标上传 ---------- */

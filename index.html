@@ -281,11 +281,8 @@ body::before{
         <div class="stat-card expense"><div class="num" id="statExp">¥0</div><div class="label">本月支出</div></div>
         <div class="stat-card"><div class="num" id="statBal">¥0</div><div class="label">本月结余</div></div>
       </div>
-      <div class="ledger-form">
-        <select id="lgType"><option value="expense">支出</option><option value="income">收入</option></select>
-        <input type="number" id="lgAmt" placeholder="金额">
-        <input type="text" id="lgDesc" placeholder="备注">
-        <button class="btn" onclick="addLedger()">记一笔</button>
+      <div class="ledger-form" style="justify-content:center">
+        <span style="font-size:.86rem;color:var(--text2)">记账请到 <a href="admin.html" style="color:var(--primary)">管理后台</a> → 「记账」</span>
       </div>
       <div id="ledgerList"></div>
     </div>
@@ -331,7 +328,7 @@ body::before{
 <script>
 const GH_OWNER = "benyia";
 const GH_REPO = "benyia.github.io";
-const GH_TOKEN = "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";
+/* 前台只读取公开的 data.json，不需要任何 Token（所有改动都在 admin.html 里做） */
 
 const PAGE_TITLES = {
   home: ["思齐个人主页", "钟爱奥迪A6"],
@@ -376,11 +373,26 @@ const DEFAULT_DATA = {
 };
 
 let blogData = null;
-let dataSha = "";
 let currentCourseIdx = -1;
 let currentNoticeIdx = -1;
 
 function esc(s){ return String(s||"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* 把一条记录里的附件统一成数组，兼容新的 files[] 和旧的 file/fileName */
+function collectFiles(item){
+  if(!item) return [];
+  if(Array.isArray(item.files) && item.files.length) return item.files;
+  if(item.file){
+    return [{name:item.fileName || decodeURIComponent(String(item.file).split("/").pop()||"附件"), url:item.file, type:"文件"}];
+  }
+  return [];
+}
+function fmtSize(bytes){
+  if(!bytes && bytes!==0) return "";
+  if(bytes < 1024) return bytes+" B";
+  if(bytes < 1024*1024) return (bytes/1024).toFixed(1)+" KB";
+  return (bytes/1024/1024).toFixed(2)+" MB";
+}
 
 async function loadData(){
   try {
@@ -399,30 +411,6 @@ async function loadData(){
     document.getElementById("titleP").textContent = blogData.siteConfig.subtitle || "";
   }
   renderAll();
-}
-
-async function saveData(action){
-  if(action){
-    blogData.logs = blogData.logs||[];
-    blogData.logs.unshift({time: new Date().toLocaleString("zh-CN"), action});
-    if(blogData.logs.length > 100) blogData.logs = blogData.logs.slice(0,100);
-  }
-  try {
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(blogData, null, 2))));
-    if(!dataSha){
-      const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`);
-      if(res.ok){ const d = await res.json(); dataSha = d.sha; }
-    }
-    const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`, {
-      method: "PUT",
-      headers: {"Authorization":"token "+GH_TOKEN, "Content-Type":"application/json"},
-      body: JSON.stringify({message:"Update: "+(action||"blog"), content, sha: dataSha})
-    });
-    if(r.ok){
-      const d = await r.json(); dataSha = d.content.sha;
-    }
-    return true;
-  } catch(e){ console.error("保存失败", e); return false; }
 }
 
 function renderAll(){
@@ -447,7 +435,7 @@ function renderAll(){
       <div class="article-cover">${c.icon||"📐"}</div>
       <div class="article-body">
         <div class="article-title">${esc(c.title)}</div>
-        <div class="article-meta"><span>${c.files?c.files.length:0} 个文件</span><span>进度 ${c.progress||0}%</span>${c.time?`<span class="time">🕐 ${c.time}</span>`:""}</div>
+        <div class="article-meta"><span>${collectFiles(c).length} 个文件</span><span>进度 ${c.progress||0}%</span>${c.time?`<span class="time">🕐 ${c.time}</span>`:""}</div>
         <div class="article-desc">${esc(c.desc)}</div>
       </div>
     </div>`).join("") || '<div class="empty">暂无课程</div>';
@@ -519,10 +507,11 @@ function openCourse(idx){
   document.getElementById("cdIntro").textContent = c.intro||"";
   document.getElementById("cdProgressBar").style.width = (c.progress||0)+"%";
   document.getElementById("cdProgressText").textContent = "学习进度："+(c.progress||0)+"%";
-  document.getElementById("cdFiles").innerHTML = (c.files||[]).map(f=>`
+  const courseFiles = collectFiles(c);
+  document.getElementById("cdFiles").innerHTML = courseFiles.map(f=>`
     <div class="file-item">
-      <div><div class="name">${f.name}</div><div class="type">${f.type||"文件"}</div></div>
-      ${f.url?`<a href="${f.url}" target="_blank">下载</a>`:"<span>待上传</span>"}
+      <div><div class="name">${esc(f.name)}</div><div class="type">${esc(f.type||"文件")}${f.size?" · "+fmtSize(f.size):""}</div></div>
+      ${f.url?`<a href="${esc(f.url)}" target="_blank" rel="noopener">下载</a>`:"<span>待上传</span>"}
     </div>`).join("") || '<div class="empty">暂无文件</div>';
   setPageTitle("courseDetail", c.title, "");
   showSection("courseDetail");
@@ -581,18 +570,6 @@ function renderLedger(){
       <div class="date">${esc(r.date)}</div>
       <div class="title">${esc(r.desc||"无备注")} <span style="float:right">${r.type==="income"?"+":"-"}¥${parseFloat(r.amount).toFixed(2)}</span></div>
     </div>`).join("") || '<div class="empty">暂无记录</div>';
-}
-
-async function addLedger(){
-  const amt = parseFloat(document.getElementById("lgAmt").value);
-  const desc = document.getElementById("lgDesc").value.trim();
-  const type = document.getElementById("lgType").value;
-  if(!amt||amt<=0){ alert("请输入金额"); return; }
-  blogData.ledger.push({date:todayStr(), type, amount:amt, desc});
-  await saveData("记一笔："+desc);
-  document.getElementById("lgAmt").value="";
-  document.getElementById("lgDesc").value="";
-  renderLedger();
 }
 
 function renderDiary(){

@@ -599,20 +599,34 @@ function renderAll(){
   document.getElementById("statPapers").textContent = (blogData.papers||[]).length;
 }
 
+function itemTime(x){
+  return String((x && x.time) || (x && x.date) || "");
+}
+function byTimeDesc(a, b){
+  var ta = itemTime(a), tb = itemTime(b);
+  if(!ta && !tb) return 0;
+  if(!ta) return 1;
+  if(!tb) return -1;
+  return tb.localeCompare(ta);
+}
 function renderHome(){
   var items = [];
   (blogData.courses||[]).forEach(function(c,i){ items.push({type:"课程", item:c, icon:c.icon||"📚", title:c.title, desc:c.desc, time:c.time||"", click:"openCourse("+i+")"}); });
   (blogData.papers||[]).forEach(function(p,i){ items.push({type:"论文", item:p, icon:"📝", title:p.title, desc:p.abstract||p.desc, time:p.time||"", click:"openPaper("+i+")"}); });
-  (blogData.notices||[]).forEach(function(n,i){ items.push({type:"通知", item:n, icon:"🔔", title:n.title, desc:n.content, time:n.time||"", click:"openNotice("+i+")"}); });
-  (blogData.classItems||[]).forEach(function(c,i){ items.push({type:"班级", item:c, icon:"👥", title:c.title, desc:c.content, time:c.time||"", click:"openClass("+i+")"}); });
+  (blogData.notices||[]).forEach(function(n,i){ items.push({type:"通知", item:n, icon:"🔔", title:n.title, desc:n.content, time:n.time||n.date||"", click:"openNotice("+i+")"}); });
+  (blogData.classItems||[]).forEach(function(c,i){ items.push({type:"班级", item:c, icon:"👥", title:c.title, desc:c.content, time:c.time||c.date||"", click:"openClass("+i+")"}); });
+  items.sort(byTimeDesc);
   document.getElementById("homeList").innerHTML = items.map(function(a){
-    return '<div class="article-card" onclick="'+a.click+'">'+coverHTML(a.item, a.icon)+'<div class="article-body"><div class="article-title">'+esc(a.title)+'</div><div class="article-meta"><span>'+a.type+'</span>'+(a.time?'<span class="time">🕐 '+a.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(a.desc||"").slice(0,120))+'</div></div></div>';
+    return '<div class="article-card" onclick="'+a.click+'">'+coverHTML(a.item, a.icon)+'<div class="article-body"><div class="article-title">'+esc(a.title)+'</div><div class="article-meta"><span>'+a.type+'</span>'+(a.time?'<span class="time">🕐 '+esc(a.time)+'</span>':"")+'</div><div class="article-desc">'+esc(String(a.desc||"").slice(0,120))+'</div></div></div>';
   }).join("") || '<div class="empty">暂无内容</div>';
 }
 
 function renderCourses(){
-  document.getElementById("coursesList").innerHTML = (blogData.courses||[]).map(function(c,i){
-    return '<div class="article-card" onclick="openCourse('+i+')">'+coverHTML(c, c.icon||"📐")+'<div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+collectFiles(c).length+' 个文件</span><span>进度 '+(c.progress||0)+'%</span>'+(c.time?'<span class="time">🕐 '+c.time+'</span>':"")+'</div><div class="article-desc">'+esc(c.desc)+'</div></div></div>';
+  var arr = (blogData.courses||[]).map(function(c,i){ return {c:c, i:i}; });
+  arr.sort(function(a,b){ return byTimeDesc(a.c, b.c); });
+  document.getElementById("coursesList").innerHTML = arr.map(function(it){
+    var c = it.c, i = it.i;
+    return '<div class="article-card" onclick="openCourse('+i+')">'+coverHTML(c, c.icon||"📐")+'<div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+collectFiles(c).length+' 个文件</span><span>进度 '+(c.progress||0)+'%</span>'+(c.time?'<span class="time">🕐 '+esc(c.time)+'</span>':"")+'</div><div class="article-desc">'+esc(c.desc)+'</div></div></div>';
   }).join("") || '<div class="empty">暂无课程</div>';
 }
 function openCourse(idx){
@@ -655,8 +669,11 @@ function openPaper(idx){
 function backToPapers(){ showSection("papers"); setPageTitle("papers"); currentPaperIdx=-1; }
 
 function renderNotices(){
-  document.getElementById("noticesList").innerHTML = (blogData.notices||[]).map(function(n,i){
-    return '<div class="article-card" onclick="openNotice('+i+')">'+coverHTML(n, "🔔")+'<div class="article-body"><div class="article-title">'+esc(n.title)+'</div><div class="article-meta"><span>'+esc(n.source)+'</span><span>'+esc(n.date)+'</span>'+(n.time?'<span class="time">🕐 '+n.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(n.content||"").slice(0,100))+'</div>'+imgStrip(n)+'</div></div>';
+  var arr = (blogData.notices||[]).map(function(n,i){ return {n:n, i:i}; });
+  arr.sort(function(a,b){ return byTimeDesc(a.n, b.n); });
+  document.getElementById("noticesList").innerHTML = arr.map(function(it){
+    var n = it.n, i = it.i;
+    return '<div class="article-card" onclick="openNotice('+i+')">'+coverHTML(n, "🔔")+'<div class="article-body"><div class="article-title">'+esc(n.title)+'</div><div class="article-meta"><span>'+esc(n.source)+'</span><span>'+esc(n.date)+'</span>'+(n.time?'<span class="time">🕐 '+esc(n.time)+'</span>':"")+'</div><div class="article-desc">'+esc(String(n.content||"").slice(0,100))+'</div>'+imgStrip(n)+'</div></div>';
   }).join("") || '<div class="empty">暂无通知</div>';
 }
 function openNotice(idx){
@@ -672,10 +689,11 @@ function backToNotices(){ showSection("notices"); setPageTitle("notices"); curre
 
 function renderClass(){
   var all = blogData.classItems||[];
-  var list = classFilter==="all" ? all : all.filter(function(c){return c.type===classFilter;});
+  var list = classFilter==="all" ? all.slice() : all.filter(function(c){return c.type===classFilter;});
+  list.sort(byTimeDesc);
   document.getElementById("classList").innerHTML = list.map(function(c){
     var idx = all.indexOf(c);
-    return '<div class="article-card" onclick="openClass('+idx+')">'+coverHTML(c, "👥")+'<div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+esc(c.type)+'</span><span>'+esc(c.date||"")+'</span>'+(c.time?'<span class="time">🕐 '+c.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(c.content||"").slice(0,100))+'</div>'+imgStrip(c)+'</div></div>';
+    return '<div class="article-card" onclick="openClass('+idx+')">'+coverHTML(c, "👥")+'<div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+esc(c.type)+'</span><span>'+esc(c.date||"")+'</span>'+(c.time?'<span class="time">🕐 '+esc(c.time)+'</span>':"")+'</div><div class="article-desc">'+esc(String(c.content||"").slice(0,100))+'</div>'+imgStrip(c)+'</div></div>';
   }).join("") || '<div class="empty">暂无内容</div>';
 }
 function openClass(idx){

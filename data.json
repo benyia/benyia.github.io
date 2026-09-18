@@ -169,6 +169,10 @@
   "logs": [
     {
       "time": "2026-09-19 00:12",
+      "action": "名单：公开敏感信息"
+    },
+    {
+      "time": "2026-09-19 00:12",
       "action": "添加名单：史晏杰"
     },
     {
@@ -325,6 +329,6 @@
     }
   ],
   "rosterConfig": {
-    "showSensitive": false
+    "showSensitive": true
   }
 }

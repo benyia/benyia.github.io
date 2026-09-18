@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>管理后台 | 思齐的个人主页</title>
+<title>管理后台 | 钟爱奥迪A6</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -13,9 +13,8 @@
 }
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
 
-/* Login */
 .login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  background:linear-gradient(135deg,#1e1b4b,#4338ca)}
+  background:linear-gradient(135deg,#0f172a,#3b82f6)}
 .login-box{background:var(--card);border-radius:20px;padding:40px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
 .login-box h2{text-align:center;margin-bottom:8px;font-size:1.5rem;font-weight:700}
 .login-box .sub{text-align:center;color:var(--text3);font-size:.85rem;margin-bottom:28px}
@@ -25,7 +24,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .login-box .btn:hover{transform:translateY(-2px)}
 .login-error{color:var(--danger);font-size:.85rem;text-align:center;margin-top:8px;display:none}
 
-/* Header */
 .admin-header{background:var(--card);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
 .admin-header h1{font-size:1.1rem}
 .admin-header .actions{display:flex;gap:10px}
@@ -38,7 +36,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .btn-danger:hover{background:#fee2e2}
 .btn-sm{padding:5px 12px;font-size:.8rem}
 
-/* Body */
 .admin-body{max-width:900px;margin:0 auto;padding:24px}
 .tabs{display:flex;gap:4px;margin-bottom:24px;flex-wrap:wrap;background:var(--card);padding:6px;border-radius:12px;border:1px solid var(--border)}
 .tab{padding:8px 16px;border-radius:8px;font-size:.88rem;cursor:pointer;background:transparent;border:none;color:var(--text2);transition:all .2s}
@@ -49,12 +46,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .panel.active{display:block;animation:fadeIn .3s ease}
 .panel h3{font-size:1.1rem;margin-bottom:16px}
 
-/* Form */
 .add-form{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px}
 .add-form h4{font-size:.9rem;margin-bottom:14px;color:var(--text2)}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-.form-grid input,.form-grid select,.form-grid textarea{padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:.88rem;font-family:inherit;width:100}
-.form-grid textarea{grid-column:1/-1;min-height:60px;resize:vertical}
+.form-grid input,.form-grid select,.form-grid textarea{padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:.88rem;font-family:inherit;width:100%}
+.form-grid textarea{grid-column:1/-1;min-height:80px;resize:vertical}
 .form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{outline:none;border-color:var(--primary)}
 .upload-area{grid-column:1/-1;border:2px dashed var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:all .2s}
 .upload-area:hover{border-color:var(--primary);background:#eef2ff}
@@ -62,17 +58,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .upload-area p{font-size:.85rem;color:var(--text2)}
 .upload-area .file-name{font-size:.82rem;color:var(--success);margin-top:4px}
 
-/* List */
 .item-row{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;transition:all .2s}
 .item-row:hover{border-color:var(--primary);box-shadow:0 2px 12px rgba(0,0,0,.05)}
 .row-body{flex:1}
 .row-title{font-weight:600;font-size:.92rem;margin-bottom:2px}
 .row-meta{font-size:.8rem;color:var(--text3)}
-.row-actions{display:flex;gap:6px;flex-shrink:0}
+.row-actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
 .file-link{display:inline-block;margin-top:4px;font-size:.8rem;color:var(--primary)}
 .empty{text-align:center;padding:40px;color:var(--text3);font-size:.88rem}
 
-/* Settings */
 .settings-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
 .settings-box h4{font-size:.95rem;margin-bottom:14px}
 .settings-box input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:.88rem;margin-bottom:10px}
@@ -82,6 +76,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .status-msg.err{display:block;background:#fef2f2;color:var(--danger)}
 .data-tools{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
 
+/* Course detail editor */
+.course-editor{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;display:none}
+.course-editor.active{display:block}
+.course-editor h4{font-size:1rem;margin-bottom:16px;color:var(--primary)}
+.progress-input{display:flex;align-items:center;gap:10px;margin:12px 0}
+.progress-input input[type=range]{flex:1}
+.progress-input span{min-width:50px;font-weight:600;color:var(--primary)}
+.file-row{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#f8fafc;border-radius:8px;margin-bottom:8px}
+.file-row .fname{font-size:.88rem}
+.file-row .ftype{font-size:.75rem;color:var(--text3)}
+
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:640px){.admin-body{padding:16px}.form-grid{grid-template-columns:1fr}}
 </style>
@@ -90,7 +95,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 
 <div class="login-wrap" id="loginPage">
   <div class="login-box">
-    <h2>思齐的博客后台</h2>
+    <h2>钟爱奥迪A6 博客后台</h2>
     <p class="sub">管理你的个人主页内容</p>
     <input type="password" id="pwdInput" placeholder="请输入管理密码" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="btn" onclick="doLogin()">登 录</button>
@@ -117,23 +122,50 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <button class="tab" data-t="data">数据管理</button>
     </div>
 
+    <!-- 课程管理 -->
     <div class="panel active" id="panel-courses">
       <h3>我的课程</h3>
       <div class="add-form">
-        <h4>添加课程</h4>
+        <h4>添加新课程</h4>
         <div class="form-grid">
           <input id="c_icon" placeholder="图标 emoji（如 📐）">
           <input id="c_title" placeholder="课程名称">
-          <input id="c_desc" placeholder="描述">
-          <input id="c_link" placeholder="外部链接 URL（可选）">
-          <div class="upload-area" id="c_upload" onclick="document.getElementById('c_file').click()">
-            <p>📎 点击上传课程文件（PDF、PPT等）</p>
-            <input type="file" id="c_file" style="display:none" onchange="onFileSelect('c')">
-            <div class="file-name" id="c_filename"></div>
+          <input id="c_desc" placeholder="一句话描述">
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addCourse()">添加课程</button>
+      </div>
+
+      <!-- 课程详情编辑器 -->
+      <div class="course-editor" id="courseEditor">
+        <h4 id="ceTitle">编辑课程详情</h4>
+        <div class="form-grid">
+          <input id="ceIcon" placeholder="图标 emoji">
+          <input id="ceTitleInput" placeholder="课程名称">
+          <input id="ceDesc" placeholder="一句话描述" style="grid-column:1/-1">
+        </div>
+        <div style="margin:16px 0">
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:8px">课程简介</label>
+          <textarea id="ceIntro" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:80px;font-family:inherit" placeholder="介绍这门课学什么、重点内容..."></textarea>
+        </div>
+        <div class="progress-input">
+          <label style="font-size:.85rem;color:var(--text2)">学习进度</label>
+          <input type="range" id="ceProgress" min="0" max="100" value="0" oninput="document.getElementById('ceProgVal').textContent=this.value+'%'">
+          <span id="ceProgVal">0%</span>
+        </div>
+        <div style="margin:16px 0">
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:8px">课程文件（视频、PPT、PDF、资料等）</label>
+          <div id="ceFileList"></div>
+          <div class="upload-area" id="ceUpload" onclick="document.getElementById('ce_file').click()" style="margin-top:10px">
+            <p>📎 点击上传文件（可多次上传）</p>
+            <input type="file" id="ce_file" style="display:none" onchange="onCeFileSelect()">
           </div>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="addItem('courses', this)">添加</button>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-primary btn-sm" onclick="saveCourseDetail()">保存修改</button>
+          <button class="btn btn-outline btn-sm" onclick="closeCourseEditor()">取消</button>
+        </div>
       </div>
+
       <div id="list-courses"></div>
     </div>
 
@@ -229,7 +261,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 
     <div class="panel" id="panel-data">
       <h3>数据管理</h3>
-
       <div class="settings-box">
         <h4>🔑 修改登录密码</h4>
         <input type="password" id="oldPwd" placeholder="当前密码">
@@ -238,19 +269,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
         <button class="btn btn-primary btn-sm" onclick="changePwd()">确认修改</button>
         <div class="status-msg" id="pwdStatus"></div>
       </div>
-
       <div class="settings-box">
         <h4>☁️ GitHub 同步设置（重要）</h4>
         <p style="margin-bottom:12px">设置 Token 后，所有内容修改都会自动同步到 GitHub，换浏览器/换电脑数据都不会丢。</p>
         <input type="text" id="ghToken" placeholder="GitHub Personal Access Token">
-        <p>
-          生成方式：GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)<br>
-          勾选 <strong>repo</strong> 权限即可。Token 只保存在你浏览器里。
-        </p>
+        <p>生成方式：GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)<br>勾选 <strong>repo</strong> 权限即可。Token 只保存在你浏览器里。</p>
         <button class="btn btn-primary btn-sm" onclick="saveToken()">保存 Token</button>
         <div class="status-msg" id="tokenStatus"></div>
       </div>
-
       <div class="data-tools">
         <button class="btn btn-outline" onclick="exportData()">导出数据</button>
         <button class="btn btn-outline" onclick="document.getElementById('importFile').click()">导入数据</button>
@@ -268,10 +294,10 @@ const GH_REPO = "benyia.github.io";
 
 const DEFAULT_DATA = {
   courses: [
-    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", link:"#", file:"", fileName:""},
-    {icon:"🧠", title:"神经网络与深度学习", desc:"课件、上机指导、参考书", link:"#", file:"", fileName:""},
-    {icon:"💻", title:"计算机控制系统", desc:"教材、章节PPT、习题解答", link:"#", file:"", fileName:""},
-    {icon:"⚙️", title:"现代控制理论", desc:"状态空间分析、最优控制", link:"#", file:"", fileName:""}
+    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", intro:"本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。", progress: 60, files: []},
+    {icon:"🧠", title:"神经网络与深度学习", desc:"课件、上机指导、参考书", intro:"深度学习基础、CNN、RNN、Transformer等模型原理与实践应用。", progress: 30, files: []},
+    {icon:"💻", title:"计算机控制系统", desc:"教材、章节PPT、习题解答", intro:"计算机控制系统的硬件结构、信号采集与输出、控制算法设计。", progress: 0, files: []},
+    {icon:"⚙️", title:"现代控制理论", desc:"状态空间分析、最优控制", intro:"状态空间表达式、能控性能观性、李雅普诺夫稳定性、最优控制。", progress: 0, files: []}
   ],
   papers: [
     {title:"基于深度学习的故障诊断方法研究", status:"在投", year:"2026", desc:"", file:"", fileName:""},
@@ -316,6 +342,8 @@ const DEFAULT_DATA = {
 let blogData = null;
 let dataSha = "";
 let pendingFiles = {};
+let editingCourseIdx = -1;
+let ceNewFiles = []; // 课程编辑器待上传的新文件
 
 // ===== 密码 =====
 function getPwd(){ return localStorage.getItem("benyia_admin_pwd") || DEFAULT_PWD; }
@@ -356,7 +384,6 @@ function saveToken(){
   const st = document.getElementById("tokenStatus");
   st.className = t ? "status-msg ok" : "status-msg err";
   st.textContent = t ? "Token 已保存，内容修改将自动同步到 GitHub" : "Token 已清除";
-  // 保存后立即同步一次
   if(t) saveData();
 }
 
@@ -366,7 +393,6 @@ async function loadData(){
     const res = await fetch("data.json?v=" + Date.now());
     if(res.ok){
       blogData = await res.json();
-      // 获取 sha
       try {
         const shaRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`);
         if(shaRes.ok){ const d = await shaRes.json(); dataSha = d.sha; }
@@ -383,7 +409,6 @@ async function loadData(){
 async function saveData(){
   const token = localStorage.getItem("benyia_gh_token");
   if(!token){
-    // 没有 token，保存到本地
     localStorage.setItem("benyia_blog_local", JSON.stringify(blogData));
     return;
   }
@@ -394,7 +419,6 @@ async function saveData(){
       headers: {"Authorization":"token "+token, "Content-Type":"application/json"},
       body: JSON.stringify({message:"Update blog data", content, sha: dataSha})
     });
-    // 更新 sha
     const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`);
     if(res.ok){ const d = await res.json(); dataSha = d.sha; }
   } catch(e) {
@@ -446,7 +470,144 @@ document.querySelectorAll(".tab").forEach(t=>{
   };
 });
 
-// ===== 渲染 =====
+// ===== 课程管理 =====
+function renderCourses(){
+  const list = blogData.courses || [];
+  const el = document.getElementById("list-courses");
+  if(!list.length){ el.innerHTML='<div class="empty">暂无课程，添加一门吧</div>'; return; }
+  el.innerHTML = list.map((c,i)=>`
+    <div class="item-row">
+      <div class="row-body">
+        <div class="row-title">${c.icon||"📚"} ${c.title}</div>
+        <div class="row-meta">${c.desc||""} · 进度 ${c.progress||0}% · ${c.files?c.files.length:0} 个文件</div>
+      </div>
+      <div class="row-actions">
+        <button class="btn btn-outline btn-sm" onclick="openCourseEditor(${i})">编辑详情</button>
+        <button class="btn btn-danger btn-sm" onclick="delCourse(${i})">删除</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function addCourse(){
+  const icon = document.getElementById("c_icon").value.trim();
+  const title = document.getElementById("c_title").value.trim();
+  const desc = document.getElementById("c_desc").value.trim();
+  if(!title){ alert("请输入课程名称"); return; }
+  blogData.courses.push({icon, title, desc, intro:"", progress:0, files:[]});
+  await saveData();
+  document.getElementById("c_icon").value="";
+  document.getElementById("c_title").value="";
+  document.getElementById("c_desc").value="";
+  renderCourses();
+}
+
+async function delCourse(idx){
+  if(!confirm("确定删除这门课程？")) return;
+  blogData.courses.splice(idx,1);
+  await saveData();
+  renderCourses();
+}
+
+function openCourseEditor(idx){
+  editingCourseIdx = idx;
+  const c = blogData.courses[idx];
+  document.getElementById("ceTitle").textContent = "编辑：" + c.title;
+  document.getElementById("ceIcon").value = c.icon||"";
+  document.getElementById("ceTitleInput").value = c.title;
+  document.getElementById("ceDesc").value = c.desc||"";
+  document.getElementById("ceIntro").value = c.intro||"";
+  document.getElementById("ceProgress").value = c.progress||0;
+  document.getElementById("ceProgVal").textContent = (c.progress||0)+"%";
+  ceNewFiles = [];
+  renderCeFiles();
+  document.getElementById("courseEditor").classList.add("active");
+  window.scrollTo({top: document.getElementById("courseEditor").offsetTop - 20, behavior:"smooth"});
+}
+
+function closeCourseEditor(){
+  editingCourseIdx = -1;
+  ceNewFiles = [];
+  document.getElementById("courseEditor").classList.remove("active");
+}
+
+function renderCeFiles(){
+  const c = blogData.courses[editingCourseIdx];
+  const existing = c.files||[];
+  let html = "";
+  existing.forEach((f,i)=>{
+    html += `<div class="file-row">
+      <div><div class="fname">${f.name}</div><div class="ftype">${f.type||"文件"}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="delCeFile(${i})">删除</button>
+    </div>`;
+  });
+  ceNewFiles.forEach((f,i)=>{
+    html += `<div class="file-row" style="background:#ecfdf5">
+      <div><div class="fname">${f.name}</div><div class="ftype">新文件（保存后上传）</div></div>
+      <button class="btn btn-danger btn-sm" onclick="delCeNewFile(${i})">移除</button>
+    </div>`;
+  });
+  document.getElementById("ceFileList").innerHTML = html || '<div style="font-size:.85rem;color:var(--text3);padding:10px 0">暂无文件</div>';
+}
+
+function onCeFileSelect(){
+  const input = document.getElementById("ce_file");
+  const files = input.files;
+  for(let f of files){
+    ceNewFiles.push(f);
+  }
+  input.value = "";
+  renderCeFiles();
+}
+
+function delCeFile(idx){
+  if(!confirm("删除这个文件？")) return;
+  blogData.courses[editingCourseIdx].files.splice(idx,1);
+  renderCeFiles();
+}
+
+function delCeNewFile(idx){
+  ceNewFiles.splice(idx,1);
+  renderCeFiles();
+}
+
+async function saveCourseDetail(){
+  const c = blogData.courses[editingCourseIdx];
+  c.icon = document.getElementById("ceIcon").value.trim();
+  c.title = document.getElementById("ceTitleInput").value.trim();
+  c.desc = document.getElementById("ceDesc").value.trim();
+  c.intro = document.getElementById("ceIntro").value.trim();
+  c.progress = parseInt(document.getElementById("ceProgress").value) || 0;
+
+  // 上传新文件
+  if(ceNewFiles.length > 0){
+    alert("正在上传 " + ceNewFiles.length + " 个文件...");
+    for(let f of ceNewFiles){
+      try {
+        const url = await uploadToGitHub(f);
+        let type = "文件";
+        const ext = f.name.split(".").pop().toLowerCase();
+        if(["pdf"].includes(ext)) type = "PDF";
+        else if(["ppt","pptx"].includes(ext)) type = "PPT";
+        else if(["mp4","avi","mov","mkv"].includes(ext)) type = "视频";
+        else if(["doc","docx"].includes(ext)) type = "Word";
+        else if(["zip","rar","7z"].includes(ext)) type = "压缩包";
+        else if(["jpg","png","gif"].includes(ext)) type = "图片";
+        c.files.push({name: f.name, url, type});
+      } catch(e){
+        alert("上传失败：" + f.name + " - " + e.message);
+      }
+    }
+    ceNewFiles = [];
+  }
+
+  await saveData();
+  closeCourseEditor();
+  renderCourses();
+  alert("保存成功！");
+}
+
+// ===== 其他列表渲染 =====
 function renderList(key, fields, labelFn, hasFile){
   const list = blogData[key] || [];
   const el = document.getElementById("list-"+key);
@@ -467,7 +628,7 @@ function renderList(key, fields, labelFn, hasFile){
 }
 
 function renderAll(){
-  renderList("courses", ["icon","desc","link"], i=>i.title, true);
+  renderCourses();
   renderList("papers", ["status","year","desc"], i=>i.title, true);
   renderList("notices", ["source","date"], i=>i.title, false);
   renderList("classItems", ["type","date"], i=>i.title, true);
@@ -475,26 +636,14 @@ function renderAll(){
   renderList("softwares", ["desc","url"], i=>i.title, false);
 }
 
-// ===== 添加 =====
+// ===== 添加条目 =====
 async function addItem(key, btn){
   let item = {};
   const oldText = btn.textContent;
   btn.textContent = "处理中...";
   btn.disabled = true;
-
   try {
-    if(key === "courses"){
-      item = {icon:val("c_icon"), title:val("c_title"), desc:val("c_desc"), link:val("c_link")||"#", file:"", fileName:""};
-      if(pendingFiles["c"]){
-        const url = await uploadToGitHub(pendingFiles["c"]);
-        item.file = url; item.fileName = pendingFiles["c"].name;
-        pendingFiles["c"] = null;
-        document.getElementById("c_upload").classList.remove("has-file");
-        document.getElementById("c_filename").textContent = "";
-      }
-      clearInputs(["c_icon","c_title","c_desc","c_link"]);
-    }
-    else if(key === "papers"){
+    if(key === "papers"){
       item = {title:val("p_title"), status:val("p_status"), year:val("p_year"), desc:val("p_desc"), file:"", fileName:""};
       if(pendingFiles["p"]){
         const url = await uploadToGitHub(pendingFiles["p"]);
@@ -535,7 +684,6 @@ async function addItem(key, btn){
       item = {icon:val("s_icon"), title:val("s_title"), desc:val("s_desc"), url:val("s_url")};
       clearInputs(["s_icon","s_title","s_desc","s_url"]);
     }
-
     if(!item.title){ alert("标题不能为空"); return; }
     blogData[key].push(item);
     await saveData();
@@ -551,7 +699,6 @@ async function addItem(key, btn){
 function val(id){ return document.getElementById(id).value.trim(); }
 function clearInputs(ids){ ids.forEach(id=>document.getElementById(id).value=""); }
 
-// ===== 删除/编辑 =====
 async function delItem(key, idx){
   if(!confirm("确定删除？")) return;
   blogData[key].splice(idx,1);

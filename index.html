@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>思齐 | 个人主页</title>
+<title>钟爱奥迪A6 | 个人主页</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -17,13 +17,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 
 /* Hero */
 .hero{
-  background:linear-gradient(135deg,#1e1b4b 0%,#312e81 40%,#4338ca 70%,#6366f1 100%);
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 40%,#1e40af 70%,#3b82f6 100%);
   color:#fff;padding:80px 24px 120px;text-align:center;position:relative;overflow:hidden;
 }
 .hero::before{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(circle at 20% 50%,rgba(139,92,246,.3) 0%,transparent 50%),
-             radial-gradient(circle at 80% 20%,rgba(6,182,212,.25) 0%,transparent 50%);
+  background:radial-gradient(circle at 20% 50%,rgba(59,130,246,.3) 0%,transparent 50%),
+             radial-gradient(circle at 80% 20%,rgba(6,182,212,.2) 0%,transparent 50%);
 }
 .hero::after{
   content:"";position:absolute;bottom:-2px;left:0;right:0;height:60px;
@@ -31,8 +31,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   clip-path:ellipse(55% 100% at 50% 100%);
 }
 .hero-inner{position:relative;z-index:1}
-.hero h1{font-size:3rem;font-weight:800;letter-spacing:.3em;margin-bottom:8px;
-  background:linear-gradient(90deg,#fff,#c7d2fe,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+.hero h1{font-size:3rem;font-weight:800;letter-spacing:.2em;margin-bottom:8px;
+  background:linear-gradient(90deg,#fff,#93c5fd,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
   animation:fadeUp .8s ease}
 .hero .subtitle{font-size:1.1rem;opacity:.85;margin-bottom:20px;animation:fadeUp .8s ease .1s both}
 .hero .domain{display:inline-block;padding:6px 20px;background:rgba(255,255,255,.15);border-radius:99px;
@@ -57,16 +57,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .main{max-width:1100px;margin:0 auto;padding:32px 24px 80px}
 .section{display:none;animation:fadeIn .4s ease}
 .section.active{display:block}
-.section-header{margin-bottom:24px}
+.section-header{margin-bottom:24px;display:flex;justify-content:space-between;align-items:center}
 .section-header h2{font-size:1.5rem;font-weight:700;margin-bottom:4px}
 .section-header p{color:var(--text2);font-size:.9rem}
+
+/* Back button */
+.back-btn{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;
+  cursor:pointer;font-size:.85rem;color:var(--text2);transition:all .2s}
+.back-btn:hover{border-color:var(--primary);color:var(--primary)}
 
 /* Cards Grid */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
 .link-card{
   background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;
   text-decoration:none;color:var(--text);transition:all .3s cubic-bezier(.4,0,.2,1);
-  display:block;position:relative;overflow:hidden;
+  display:block;position:relative;overflow:hidden;cursor:pointer;
 }
 .link-card::before{
   content:"";position:absolute;top:0;left:0;right:0;height:3px;
@@ -80,6 +85,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .card-desc{font-size:.85rem;color:var(--text2)}
 .file-badge{display:inline-block;margin-top:10px;padding:3px 10px;background:#eef2ff;color:var(--primary);
   border-radius:99px;font-size:.75rem}
+
+/* Course detail */
+.course-detail{display:none}
+.course-detail.active{display:block;animation:fadeIn .4s ease}
+.detail-header{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin-bottom:24px}
+.detail-header .icon{font-size:3rem;margin-bottom:16px}
+.detail-header h2{font-size:1.8rem;margin-bottom:8px}
+.detail-header .intro{color:var(--text2);line-height:1.8;margin-bottom:20px}
+.progress-bar-wrap{background:#e2e8f0;height:10px;border-radius:99px;overflow:hidden;margin-bottom:8px}
+.progress-bar{background:linear-gradient(90deg,var(--primary),var(--accent));height:100%;border-radius:99px;transition:width .5s ease}
+.progress-text{font-size:.85rem;color:var(--text2)}
+
+.files-section h3{font-size:1.1rem;margin-bottom:16px}
+.file-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;
+  margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;transition:all .2s}
+.file-item:hover{border-color:var(--primary)}
+.file-item .name{font-weight:500}
+.file-item .type{font-size:.75rem;color:var(--text3);margin-top:2px}
+.file-item a{padding:6px 14px;background:var(--primary);color:#fff;border-radius:6px;font-size:.8rem;
+  text-decoration:none;transition:all .2s}
+.file-item a:hover{background:#4f46e5}
 
 /* List */
 .list{display:flex;flex-direction:column;gap:12px}
@@ -95,7 +121,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .tag-orange{background:#fff7ed;color:#ea580c}
 .tag-blue{background:#eff6ff;color:#2563eb}
 .tag-green{background:#f0fdf4;color:#16a34a}
-.tag-purple{background:#faf5ff;color:#9333ea}
 
 /* Ledger */
 .ledger-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:24px}
@@ -134,6 +159,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   .grid{grid-template-columns:1fr}
   .nav{padding:0 12px}
   .nav button{padding:14px 14px;font-size:.82rem}
+  .detail-header{padding:20px}
+  .detail-header h2{font-size:1.4rem}
 }
 </style>
 </head>
@@ -142,7 +169,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 <div class="hero">
   <a href="admin.html" class="admin-link">管理后台 →</a>
   <div class="hero-inner">
-    <h1>思 齐</h1>
+    <h1>钟爱奥迪A6</h1>
     <p class="subtitle">个人主页 · 学习资源 · 生活记录</p>
     <span class="domain">benyia.com</span>
   </div>
@@ -161,9 +188,37 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 </nav>
 
 <main class="main">
+  <!-- 课程列表 -->
   <div class="section active" id="sec-courses">
-    <div class="section-header"><h2>我的课程</h2><p>本学期课程资料与学习资源</p></div>
+    <div class="section-header">
+      <div>
+        <h2>我的课程</h2>
+        <p>本学期课程资料与学习资源</p>
+      </div>
+    </div>
     <div class="grid" id="coursesList"></div>
+  </div>
+
+  <!-- 课程详情 -->
+  <div class="section" id="sec-courseDetail">
+    <div class="section-header">
+      <div>
+        <h2 id="cdTitle">课程详情</h2>
+        <p id="cdSub">课程资料与学习进度</p>
+      </div>
+      <button class="back-btn" onclick="backToCourses()">← 返回课程列表</button>
+    </div>
+    <div class="detail-header">
+      <div class="icon" id="cdIcon">📐</div>
+      <h2 id="cdName">课程名称</h2>
+      <p class="intro" id="cdIntro">课程简介</p>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="cdProgressBar" style="width:0%"></div></div>
+      <div class="progress-text" id="cdProgressText">学习进度：0%</div>
+    </div>
+    <div class="files-section">
+      <h3>📁 课程资料</h3>
+      <div id="cdFiles"></div>
+    </div>
   </div>
 
   <div class="section" id="sec-papers">
@@ -226,7 +281,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   </div>
 </main>
 
-<div class="footer">© 2026 思齐 · benyia.com · Powered by GitHub Pages</div>
+<div class="footer">© 2026 钟爱奥迪A6 · benyia.com · Powered by GitHub Pages</div>
 
 <script>
 const GH_OWNER = "benyia";
@@ -234,10 +289,13 @@ const GH_REPO = "benyia.github.io";
 
 const DEFAULT_DATA = {
   courses: [
-    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", link:"#", file:"", fileName:""},
-    {icon:"🧠", title:"神经网络与深度学习", desc:"课件、上机指导、参考书", link:"#", file:"", fileName:""},
-    {icon:"💻", title:"计算机控制系统", desc:"教材、章节PPT、习题解答", link:"#", file:"", fileName:""},
-    {icon:"⚙️", title:"现代控制理论", desc:"状态空间分析、最优控制", link:"#", file:"", fileName:""}
+    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", intro:"本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。", progress: 60, files: [
+      {name:"课程简介.pdf", url:"", type:"PDF"},
+      {name:"第1章 绪论.ppt", url:"", type:"PPT"}
+    ]},
+    {icon:"🧠", title:"神经网络与深度学习", desc:"课件、上机指导、参考书", intro:"深度学习基础、CNN、RNN、Transformer等模型原理与实践应用。", progress: 30, files: []},
+    {icon:"💻", title:"计算机控制系统", desc:"教材、章节PPT、习题解答", intro:"计算机控制系统的硬件结构、信号采集与输出、控制算法设计。", progress: 0, files: []},
+    {icon:"⚙️", title:"现代控制理论", desc:"状态空间分析、最优控制", intro:"状态空间表达式、能控性能观性、李雅普诺夫稳定性、最优控制。", progress: 0, files: []}
   ],
   papers: [
     {title:"基于深度学习的故障诊断方法研究", status:"在投", year:"2026", desc:"", file:"", fileName:""},
@@ -280,6 +338,7 @@ const DEFAULT_DATA = {
 };
 
 let blogData = null;
+let currentCourseIdx = -1;
 
 function esc(s){ return String(s||"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
@@ -288,10 +347,7 @@ async function loadData(){
     const res = await fetch("data.json?v=" + Date.now());
     if(res.ok){
       blogData = await res.json();
-      // 确保所有字段都存在
-      for(const k in DEFAULT_DATA){
-        if(!blogData[k]) blogData[k] = DEFAULT_DATA[k];
-      }
+      for(const k in DEFAULT_DATA){ if(!blogData[k]) blogData[k] = DEFAULT_DATA[k]; }
     } else {
       blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
     }
@@ -302,14 +358,14 @@ async function loadData(){
 }
 
 function renderAll(){
-  // 课程
-  document.getElementById("coursesList").innerHTML = blogData.courses.map(c=>`
-    <a class="link-card" href="${c.link||"#"}" target="_blank">
+  // 课程列表
+  document.getElementById("coursesList").innerHTML = blogData.courses.map((c,i)=>`
+    <div class="link-card" onclick="openCourse(${i})">
       <div class="card-icon">${c.icon||"📄"}</div>
       <div class="card-title">${esc(c.title)}</div>
       <div class="card-desc">${esc(c.desc)}</div>
-      ${c.file ? `<span class="file-badge">📎 ${esc(c.fileName||"下载文件")}</span>` : ""}
-    </a>`).join("") || '<div class="empty"><div class="icon">📚</div>暂无课程</div>';
+      <span class="file-badge">${c.files?c.files.length:0} 个文件 · ${c.progress||0}%</span>
+    </div>`).join("") || '<div class="empty"><div class="icon">📚</div>暂无课程</div>';
 
   // 论文
   document.getElementById("papersList").innerHTML = blogData.papers.map(p=>`
@@ -366,13 +422,55 @@ function renderAll(){
   renderAdvisor();
 }
 
+// 课程详情
+function openCourse(idx){
+  currentCourseIdx = idx;
+  const c = blogData.courses[idx];
+  document.getElementById("cdIcon").textContent = c.icon||"📐";
+  document.getElementById("cdName").textContent = c.title;
+  document.getElementById("cdIntro").textContent = c.intro||"暂无简介";
+  document.getElementById("cdProgressBar").style.width = (c.progress||0)+"%";
+  document.getElementById("cdProgressText").textContent = "学习进度："+(c.progress||0)+"%";
+
+  const files = c.files||[];
+  document.getElementById("cdFiles").innerHTML = files.map(f=>`
+    <div class="file-item">
+      <div>
+        <div class="name">${f.name}</div>
+        <div class="type">${f.type||"文件"}</div>
+      </div>
+      ${f.url ? `<a href="${f.url}" target="_blank">下载</a>` : `<span style="font-size:.8rem;color:var(--text3)">待上传</span>`}
+    </div>`).join("") || '<div class="empty"><div class="icon">📁</div>暂无资料文件</div>';
+
+  // 切换到详情页
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("sec-courseDetail").classList.add("active");
+  window.scrollTo(0,0);
+}
+
+function backToCourses(){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("sec-courses").classList.add("active");
+  currentCourseIdx = -1;
+  window.scrollTo(0,0);
+}
+
 // Tab
 document.querySelectorAll("#nav button").forEach(btn=>{
   btn.onclick = ()=>{
     document.querySelectorAll("#nav button").forEach(b=>b.classList.remove("active"));
     document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
     btn.classList.add("active");
-    document.getElementById("sec-"+btn.dataset.t).classList.add("active");
+    const t = btn.dataset.t;
+    if(t === "courses"){
+      if(currentCourseIdx >= 0){
+        backToCourses();
+      } else {
+        document.getElementById("sec-courses").classList.add("active");
+      }
+    } else {
+      document.getElementById("sec-"+t).classList.add("active");
+    }
   };
 });
 
@@ -451,13 +549,11 @@ async function openAdvisor(){
 async function saveData(){
   const token = localStorage.getItem("benyia_gh_token");
   if(!token){
-    alert("记账/日记/导师记录是本地保存的，换浏览器会丢失。如需跨设备同步，请在后台设置 GitHub Token。");
     localStorage.setItem("benyia_blog_local", JSON.stringify(blogData));
     return;
   }
   try {
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(blogData, null, 2))));
-    // 获取当前文件 sha
     let sha = "";
     try {
       const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`);
@@ -470,8 +566,6 @@ async function saveData(){
     });
   } catch(e){
     console.error("保存失败", e);
-    alert("同步到 GitHub 失败，已保存在本地");
-    localStorage.setItem("benyia_blog_local", JSON.stringify(blogData));
   }
 }
 

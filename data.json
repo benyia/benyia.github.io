@@ -224,6 +224,11 @@
     }
   ],
   "ledger": [],
-  "diary": [],
+  "diary": [
+    {
+      "date": "2026-09-18",
+      "content": "你好"
+    }
+  ],
   "advisor": []
 }

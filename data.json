@@ -5,8 +5,7 @@
     "about": "你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",
     "avatar": "files/1789748280707_yiqio_583fc105d116716dbba227422b5595d9.jpg",
     "name": "思齐",
-    "bio": "控制工程研究生 · 记录学习与生活",
-    "defaultImage": "files/default-cover.jpg"
+    "bio": "控制工程研究生 · 记录学习与生活"
   },
   "courses": [
     {
@@ -184,6 +183,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-19 00:54",
+      "action": "添加快速链接：deepseek"
+    },
+    {
       "time": "2026-09-19 00:49",
       "action": "删除论文"
     },
@@ -336,6 +339,11 @@
       "icon": "💡",
       "title": "知乎",
       "url": "https://www.zhihu.com"
+    },
+    {
+      "icon": "files/1789750469796_1_jr62fxot_微信图片_20260919005412_101_51.png",
+      "title": "deepseek",
+      "url": "https://chat.deepseek.com/"
     }
   ],
   "ledgerCategories": {

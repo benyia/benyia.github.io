@@ -177,7 +177,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       </div>
 
       <div class="card">
-        <h2>🔗 快速链接管理（首页右侧）</h2>
+        <h2 id="qlFormTitle">🔗 快速链接管理（首页右侧）</h2>
         <div id="quickLinkManageList" style="margin-bottom:10px"></div>
         <div class="form-row">
           <input type="text" id="qlIcon" placeholder="图标" style="flex:0.5">
@@ -226,11 +226,12 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div id="imgList_course" style="margin-bottom:6px"></div>
         <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('course')">添加图片</button></div>
 
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 课程文件</b></div>
+        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 课程文件</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">可传多个；填文件夹名即归入该文件夹</span></div>
+        <div class="form-row"><input type="text" id="cFolder" placeholder="文件夹名（留空=根目录；填了就传到这个文件夹）"></div>
         <div class="file-list" id="cFiles"></div>
         <div class="upload-box" onclick="document.getElementById('cFileInput').click()">
           <div class="up-hint">点击选择文件并上传（PDF / PPT / 图片 / 压缩包等）</div>
-          <div class="up-status" id="cUpStatus">支持多选；单个文件建议不超过 25MB</div>
+          <div class="up-status" id="cUpStatus">支持多选；单个文件不超过 100MB</div>
           <div class="progress-track" id="cProgressTrack"><div class="progress-bar" id="cProgressBar"></div></div>
         </div>
         <input type="file" id="cFileInput" multiple style="display:none" onchange="onCourseFiles(event)">
@@ -270,7 +271,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="file-list" id="pFiles"></div>
         <div class="upload-box" onclick="document.getElementById('pFileInput').click()">
           <div class="up-hint">点击选择文件并上传</div>
-          <div class="up-status" id="pUpStatus">支持多选；单个文件建议不超过 25MB</div>
+          <div class="up-status" id="pUpStatus">支持多选；单个文件不超过 100MB</div>
           <div class="progress-track" id="pProgressTrack"><div class="progress-bar" id="pProgressBar"></div></div>
         </div>
         <input type="file" id="pFileInput" multiple style="display:none" onchange="onPaperFiles(event)">
@@ -320,7 +321,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="file-list" id="clFiles"></div>
         <div class="upload-box" onclick="document.getElementById('clFileInput').click()">
           <div class="up-hint">点击选择文件并上传</div>
-          <div class="up-status" id="clUpStatus">支持多选；单个文件建议不超过 25MB</div>
+          <div class="up-status" id="clUpStatus">支持多选；单个文件不超过 100MB</div>
           <div class="progress-track" id="clProgressTrack"><div class="progress-bar" id="clProgressBar"></div></div>
         </div>
         <input type="file" id="clFileInput" multiple style="display:none" onchange="onClassFiles(event)">
@@ -393,7 +394,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     <!-- ===== 生活服务 ===== -->
     <div class="panel" id="panel-life">
       <div class="card">
-        <h2>添加生活服务链接</h2>
+        <h2 id="lifeFormTitle">添加生活服务链接</h2>
         <div class="form-row">
           <input type="text" id="lsIcon" placeholder="图标" style="flex:0.5">
           <button class="btn btn-ghost btn-sm" onclick="pickIcon('lsIcon')">图片</button>
@@ -408,7 +409,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="file-list" id="lifeFiles"></div>
         <div class="upload-box" onclick="document.getElementById('lifeFileInput').click()">
           <div class="up-hint">点击选择文件并上传</div>
-          <div class="up-status" id="lifeUpStatus">支持多选；单个文件建议不超过 50MB</div>
+          <div class="up-status" id="lifeUpStatus">支持多选；单个文件不超过 100MB</div>
           <div class="progress-track" id="lifeProgressTrack"><div class="progress-bar" id="lifeProgressBar"></div></div>
         </div>
         <input type="file" id="lifeFileInput" multiple style="display:none" onchange="onLifeFiles(event)">
@@ -431,7 +432,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="file-list" id="mediaFiles"></div>
         <div class="upload-box" onclick="document.getElementById('mediaFileInput').click()">
           <div class="up-hint">点击选择文件并上传</div>
-          <div class="up-status" id="mediaUpStatus">单个文件建议不超过 50MB</div>
+          <div class="up-status" id="mediaUpStatus">单个文件不超过 100MB</div>
           <div class="progress-track" id="mediaProgressTrack"><div class="progress-bar" id="mediaProgressBar"></div></div>
         </div>
         <input type="file" id="mediaFileInput" multiple style="display:none" onchange="onMediaFiles(event)">
@@ -449,8 +450,12 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <select id="lgCategory" style="flex:1"></select>
           <input type="number" id="lgAmount" placeholder="金额" step="0.01" style="flex:1">
           <input type="date" id="lgDate" style="flex:1">
+          <input type="time" id="lgTime" style="flex:1">
           <input type="text" id="lgDesc" placeholder="备注" style="flex:2">
         </div>
+        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🧾 账单 / 票据</b></div>
+        <div id="imgList_ledger" style="margin-bottom:6px"></div>
+        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('ledger')">上传账单</button></div>
         <button class="btn btn-primary" onclick="addLedger()">保存</button>
         <div style="margin-top:10px;font-size:.88rem">
           合计：收入 ¥<b id="lgIn">0.00</b> · 支出 ¥<b id="lgOut">0.00</b> · 结余 ¥<b id="lgNet">0.00</b>
@@ -468,12 +473,21 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     <div class="panel" id="panel-diary">
       <div class="card">
         <h2>写日记</h2>
-        <div class="form-row"><textarea id="diaryContent" placeholder="今天发生了什么..."></textarea></div>
+        <div class="form-row"><input type="text" id="diaryTitle" placeholder="标题（可不填，当博客写）"></div>
+        <div class="form-row"><textarea id="diaryContent" placeholder="正文……可以像写博客一样写" style="min-height:150px"></textarea></div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
         <div id="imgList_diary" style="margin-bottom:6px"></div>
         <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('diary')">添加图片</button></div>
 
-        <button class="btn btn-primary" onclick="addDiary()">保存日记</button>
+        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🎵 影音（音乐 / 视频）</b></div>
+        <div class="file-list" id="dmediaFiles"></div>
+        <div class="upload-box" onclick="document.getElementById('dmediaFileInput').click()">
+          <div class="up-hint">点击上传音乐 / 视频</div>
+          <div class="up-status" id="dmediaUpStatus">单个不超过 100MB；更大的请用网盘外链</div>
+          <div class="progress-track" id="dmediaProgressTrack"><div class="progress-bar" id="dmediaProgressBar"></div></div>
+        </div>
+        <input type="file" id="dmediaFileInput" multiple style="display:none" onchange="onDmediaFiles(event)">
+        <div style="margin-top:12px"><button class="btn btn-primary" onclick="addDiary()">保存日记</button></div>
         <div style="margin-top:10px">
           <button class="btn btn-ghost btn-sm" onclick="exportDiary()">导出日记</button>
           <button class="btn btn-ghost btn-sm" onclick="document.getElementById('diaryImport').click()">导入日记</button>
@@ -490,6 +504,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="form-row">
           <input type="date" id="advDate" style="flex:1">
           <input type="time" id="advTime" style="flex:1">
+          <input type="number" id="advCount" placeholder="第几次指导" style="flex:1">
         </div>
         <div class="form-row"><textarea id="advContent" placeholder="和导师聊了什么..."></textarea></div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
@@ -555,12 +570,29 @@ let saving = false;
 /* 编辑态：null 表示新增，数字表示正在编辑的下标 */
 const editing = {course:null, paper:null, class:null};
 /* 表单里已上传的文件列表 */
-const drafts  = {course:[], paper:[], class:[], life:[], media:[]};
+const drafts  = {course:[], paper:[], class:[], life:[], media:[], dmedia:[]};
 
 /* ============================================================
    小工具
    ============================================================ */
 function $(id){ return document.getElementById(id); }
+function isAdminImg(v){
+  v = String(v||"").trim();
+  if(!v) return false;
+  if(v.indexOf("data:image") === 0) return true;
+  if(v.indexOf("http://") === 0 || v.indexOf("https://") === 0) return true;
+  if(v.indexOf("//") === 0) return true;
+  if(v.indexOf("files/") === 0) return true;
+  if(v.indexOf("/") === 0) return true;
+  if(/[.](png|jpe?g|gif|webp|svg|bmp|avif|ico)$/i.test(v)) return true;
+  return false;
+}
+function iconThumb(v, size){
+  size = size || 28;
+  if(isAdminImg(v)) return '<img src="'+esc(v)+'" style="width:'+size+'px;height:'+size+'px;object-fit:cover;border-radius:6px;vertical-align:middle">';
+  return esc(v||"");
+}
+
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function nowStr(){ const d=new Date(); return todayStr()+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
@@ -1073,7 +1105,7 @@ function toggleRosterSensitive(){
 }
 function exportRoster(){ downloadJSON("roster-"+todayStr()+".json", blogData.roster||[]); showToast("已导出名单 JSON"); }
 
-async function handleFiles(fileList, kind){
+async function handleFiles(fileList, kind, folder){
   var files = Array.prototype.slice.call(fileList||[]);
   if(!files.length) return;
   var status = kindEl(kind,"UpStatus");
@@ -1083,6 +1115,7 @@ async function handleFiles(fileList, kind){
     try{
       if(status) status.textContent = "上传中（"+(done+1)+"/"+files.length+"）："+f.name;
       var meta = await uploadFile(f, kind);
+      meta.folder = folder || "";
       drafts[kind].push(meta);
       done++;
       renderDraftFiles(kind);
@@ -1100,25 +1133,67 @@ async function handleFiles(fileList, kind){
   renderDraftFiles(kind);
 }
 
+function removeDraftFileBtn(btn){
+  var kind = btn.getAttribute("data-fkind");
+  var i = parseInt(btn.getAttribute("data-fidx"),10);
+  if(drafts[kind]){ drafts[kind].splice(i,1); renderDraftFiles(kind); }
+}
 function renderDraftFiles(kind){
   var box = kindEl(kind,"Files");
   if(!box) return;
   var list = drafts[kind]||[];
-  box.innerHTML = list.map(function(f,i){
-    return '<div class="file-item"><span class="fname">📄 '+esc(f.name)+'</span><span class="fsize">'+esc(f.type||"")+(f.size?(" · "+fmtSize(f.size)):"")+'</span><button class="btn btn-danger btn-sm" data-fkind="'+esc(kind)+'" data-fidx="'+i+'" onclick="removeDraftFileBtn(this)">移除</button></div>';
-  }).join("") || '<div style="font-size:.82rem;color:#94a3b8">还没有文件</div>';
+  if(!list.length){ box.innerHTML = '<div style="font-size:.82rem;color:#94a3b8">还没有文件</div>'; return; }
+  var groups = {}, order = [];
+  list.forEach(function(f,i){
+    var g = f.folder || "";
+    if(!groups[g]){ groups[g] = []; order.push(g); }
+    groups[g].push({f:f, i:i});
+  });
+  var html = "";
+  order.forEach(function(g){
+    html += '<div style="margin:8px 0 4px;font-size:.85rem;font-weight:600">' + (g ? ('📁 '+esc(g)) : '📄 根目录（未归类）');
+    if(g){
+      html += ' <button class="btn btn-ghost btn-sm" data-fk="'+esc(kind)+'" data-fn="'+esc(g)+'" onclick="renameFolderBtn(this)">重命名</button>';
+      html += ' <button class="btn btn-danger btn-sm" data-fk="'+esc(kind)+'" data-fn="'+esc(g)+'" onclick="deleteFolderBtn(this)">删除文件夹</button>';
+    }
+    html += '</div>';
+    groups[g].forEach(function(it){
+      html += '<div class="file-item"><span class="fname">📄 '+esc(it.f.name)+'</span><span class="fsize">'+esc(it.f.type||"")+(it.f.size?(" · "+fmtSize(it.f.size)):"")+'</span><button class="btn btn-danger btn-sm" data-fkind="'+esc(kind)+'" data-fidx="'+it.i+'" onclick="removeDraftFileBtn(this)">移除</button></div>';
+    });
+  });
+  box.innerHTML = html;
+}
+function renameFolderBtn(btn){ renameFolder(btn.getAttribute("data-fk"), btn.getAttribute("data-fn")); }
+function deleteFolderBtn(btn){ deleteFolderDraft(btn.getAttribute("data-fk"), btn.getAttribute("data-fn")); }
+function renameFolder(kind, name){
+  var nn = prompt("文件夹新名称：", name);
+  if(nn === null) return;
+  nn = nn.trim();
+  if(!nn){ showToast("名称不能为空","error"); return; }
+  (drafts[kind]||[]).forEach(function(f){ if((f.folder||"") === name) f.folder = nn; });
+  renderDraftFiles(kind);
+  showToast("文件夹已重命名（记得点保存）");
+}
+function deleteFolderDraft(kind, name){
+  var n = (drafts[kind]||[]).filter(function(f){ return (f.folder||"") === name; }).length;
+  if(!confirm("删除文件夹「"+name+"」及其中 "+n+" 个文件？（记得点保存才生效）")) return;
+  drafts[kind] = (drafts[kind]||[]).filter(function(f){ return (f.folder||"") !== name; });
+  renderDraftFiles(kind);
+  showToast("文件夹已删除（记得点保存）");
 }
 function removeDraftFileBtn(btn){
   var kind = btn.getAttribute("data-fkind");
   var i = parseInt(btn.getAttribute("data-fidx"),10);
   if(drafts[kind]){ drafts[kind].splice(i,1); renderDraftFiles(kind); }
 }
-function removeDraftFile(kind, i){
-  drafts[kind].splice(i,1);
-  renderDraftFiles(kind);
-}
 
-function onCourseFiles(e){ const v=e.target.files; handleFiles(v,"course"); e.target.value=""; }
+function onCourseFiles(e){
+  var v = e.target.files;
+  var folder = $("cFolder") ? $("cFolder").value.trim() : "";
+  handleFiles(v, "course", folder);
+  e.target.value = "";
+}
+function onDmediaFiles(e){ var v=e.target.files; handleFiles(v,"dmedia"); e.target.value=""; }
 function onPaperFiles(e){ const v=e.target.files; handleFiles(v,"paper"); e.target.value=""; }
 function onClassFiles(e){ const v=e.target.files; handleFiles(v,"class"); e.target.value=""; }
 function onLifeFiles(e){ const v=e.target.files; handleFiles(v,"life"); e.target.value=""; }
@@ -1244,18 +1319,13 @@ function editCourse(i){
   $("panel-courses").scrollIntoView({behavior:"smooth"});
 }
 function renderCourses(){
-  $("courseList").innerHTML=(blogData.courses||[]).map((c,i)=>`
-    <div class="item-row">
-      <div class="info">
-        <div class="title">${esc(c.icon||"")} ${esc(c.title)}</div>
-        <div class="desc">${esc(c.desc)} · 进度 ${c.progress||0}% · ${(c.files||[]).length} 个文件</div>
-        ${fileRows(c.files,"courses",i)}${imgRows(c.images,"courses",i)}
-      </div>
-      <div class="actions">
-        <button class="btn btn-ghost btn-sm" onclick="editCourse(${i})">编辑</button>
-        <button class="btn btn-danger btn-sm" onclick="delCourse(${i})">删除</button>
-      </div>
-    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+  $("courseList").innerHTML=(blogData.courses||[]).map(function(c,i){
+    var nfiles = (c.files||[]).length;
+    var folders = {};
+    (c.files||[]).forEach(function(f){ if(f.folder) folders[f.folder] = 1; });
+    var nf = Object.keys(folders).length;
+    return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(c.icon,26)+' '+esc(c.title)+'</div><div class="desc">'+esc(c.desc)+' · 进度 '+(c.progress||0)+'% · '+nfiles+' 个文件'+(nf?(' · '+nf+' 个文件夹'):'')+'</div>'+fileRows(c.files,"courses",i)+imgRows(c.images,"courses",i)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editCourse('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delCourse('+i+')">删除</button></div></div>';
+  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delCourse(i){
   if(!confirm("确定删除「"+blogData.courses[i].title+"」？")) return;
@@ -1432,17 +1502,21 @@ function addLife(){
   var url=$("lsUrl").value.trim();
   var files=(drafts.life||[]).slice();
   if(!title || (!url && !files.length)){ showToast("请输入名称，并填写链接或上传文件","error"); return; }
-  blogData.lifeServices.push({icon:$("lsIcon").value.trim()||"🔗", title:title, desc:$("lsDesc").value.trim(), url:url, files:files, images:(imgDrafts.life||[]).slice()});
-  saveData("添加生活服务："+title);
-  drafts.life=[];
+  var item = {icon:$("lsIcon").value.trim()||"🔗", title:title, desc:$("lsDesc").value.trim(), url:url, files:files, images:(imgDrafts.life||[]).slice()};
+  blogData.lifeServices = blogData.lifeServices || [];
+  if(editingLife === null){
+    blogData.lifeServices.push(item);
+    saveData("添加生活服务："+title);
+  }else{
+    blogData.lifeServices[editingLife] = item;
+    saveData("编辑生活服务："+title);
+  }
+  cancelLifeEdit();
   renderAll();
-  ["lsIcon","lsTitle","lsDesc","lsUrl"].forEach(function(id){$(id).value="";});
-  renderDraftFiles("life");
-  setImgDrafts("life", []);
 }
 function renderLife(){
-  $("lifeList").innerHTML=(blogData.lifeServices||[]).map(function(s,i){
-    return '<div class="item-row"><div class="info"><div class="title">'+esc(s.icon||"")+' '+esc(s.title)+'</div><div class="desc">'+esc(s.desc)+(s.url?' · <a href="'+esc(s.url)+'" target="_blank">打开</a>':"")+'</div>'+fileRows(s.files,"lifeServices",i)+imgRows(s.images,"lifeServices",i)+'</div><div class="actions"><button class="btn btn-danger btn-sm" onclick="delLife('+i+')">删除</button></div></div>';
+  $("lifeList").innerHTML=(blogData.lifeServices||[]).map(function(it,i){
+    return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(it.icon,24)+' '+esc(it.title)+'</div><div class="desc">'+esc(it.desc)+(it.url?' · <a href="'+esc(it.url)+'" target="_blank">打开</a>':"")+'</div>'+fileRows(it.files,"lifeServices",i)+imgRows(it.images,"lifeServices",i)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editLife('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delLife('+i+')">删除</button></div></div>';
   }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delLife(i){
@@ -1454,36 +1528,36 @@ function delLife(i){
 
 /* ---------- 记账 ---------- */
 function addLedger(){
-  const amount=parseFloat($("lgAmount").value);
+  var amount=parseFloat($("lgAmount").value);
   if(isNaN(amount)||amount<=0){ showToast("请输入正确的金额","error"); return; }
   blogData.ledger.push({
     type:$("lgType").value,
-    amount,
+    amount:amount,
     date:$("lgDate").value||todayStr(),
+    time:$("lgTime").value||"",
     desc:$("lgDesc").value.trim(),
-    category:$("lgCategory").value||"其他"
+    category:$("lgCategory").value||"其他",
+    images:(imgDrafts.ledger||[]).slice()
   });
   saveData("记账：¥"+amount.toFixed(2));
   renderAll();
-  $("lgAmount").value=""; $("lgDesc").value=""; $("lgDate").value=todayStr();
+  $("lgAmount").value=""; $("lgDesc").value="";
+  setImgDrafts("ledger", []);
 }
 function renderLedger(){
-  const list=(blogData.ledger||[]).slice().reverse();
-  let income=0, expense=0;
-  (blogData.ledger||[]).forEach(r=>{
-    const a=parseFloat(r.amount)||0;
+  var list=(blogData.ledger||[]).slice().reverse();
+  var income=0, expense=0;
+  (blogData.ledger||[]).forEach(function(r){
+    var a=parseFloat(r.amount)||0;
     if(r.type==="income") income+=a; else expense+=a;
   });
   $("lgIn").textContent=income.toFixed(2);
   $("lgOut").textContent=expense.toFixed(2);
   $("lgNet").textContent=(income-expense).toFixed(2);
-  $("ledgerList").innerHTML=list.map(r=>{
-    const realIdx=blogData.ledger.indexOf(r);
-    return `
-    <div class="item-row">
-      <div class="info"><div class="title">${r.type==="income"?"收入":"支出"} ¥${(parseFloat(r.amount)||0).toFixed(2)}</div><div class="desc">${esc(r.date)} · ${esc(r.category||"其他")} · ${esc(r.desc||"")}</div></div>
-      <button class="btn btn-danger btn-sm" onclick="delLedger(${realIdx})">删除</button>
-    </div>`;}).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+  $("ledgerList").innerHTML=list.map(function(r){
+    var realIdx=blogData.ledger.indexOf(r);
+    return '<div class="item-row"><div class="info"><div class="title">'+(r.type==="income"?"收入":"支出")+' ¥'+(parseFloat(r.amount)||0).toFixed(2)+'</div><div class="desc">'+esc(r.date)+(r.time?(' '+esc(r.time)):"")+' · '+esc(r.category||"其他")+' · '+esc(r.desc||"")+'</div>'+imgRows(r.images,"ledger",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delLedger('+realIdx+')">删除</button></div>';
+  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delLedger(realIdx){
   if(!confirm("确定删除？")) return;
@@ -1495,22 +1569,21 @@ function delLedger(realIdx){
 /* ---------- 日记 ---------- */
 function addDiary(){
   var content=$("diaryContent").value.trim();
-  if(!content){ showToast("请写点内容","error"); return; }
-  blogData.diary.push({date:todayStr(), content:content, images:(imgDrafts.diary||[]).slice(), time:nowStr()});
-  saveData("写日记");
+  var title=$("diaryTitle").value.trim();
+  if(!content && !title){ showToast("请写点内容","error"); return; }
+  blogData.diary.push({date:todayStr(), title:title, content:content, images:(imgDrafts.diary||[]).slice(), media:(drafts.dmedia||[]).slice(), time:nowStr()});
+  saveData("写日记："+(title||"无标题"));
   renderAll();
-  $("diaryContent").value="";
+  $("diaryContent").value=""; $("diaryTitle").value="";
   setImgDrafts("diary", []);
+  drafts.dmedia = []; renderDraftFiles("dmedia");
 }
 function renderDiary(){
-  const list=(blogData.diary||[]).slice().reverse();
-  $("diaryList").innerHTML=list.map(d=>{
-    const realIdx=blogData.diary.indexOf(d);
-    return `
-    <div class="item-row">
-      <div class="info"><div class="title">${esc(d.date)}</div><div class="desc" style="white-space:pre-wrap">${esc(d.content)}</div></div>
-      <button class="btn btn-danger btn-sm" onclick="delDiary(${realIdx})">删除</button>
-    </div>`;}).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+  var list=(blogData.diary||[]).slice().reverse();
+  $("diaryList").innerHTML=list.map(function(d){
+    var realIdx=blogData.diary.indexOf(d);
+    return '<div class="item-row"><div class="info"><div class="title">'+esc(d.title||d.date)+'</div><div class="desc" style="white-space:pre-wrap">'+esc(String(d.content||"").slice(0,120))+'</div><div class="desc">'+esc(d.date)+' · '+((d.media||[]).length)+' 个影音</div>'+imgRows(d.images,"diary",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delDiary('+realIdx+')">删除</button></div>';
+  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delDiary(realIdx){
   if(!confirm("确定删除？")) return;
@@ -1523,17 +1596,17 @@ function delDiary(realIdx){
 function addAdvisor(){
   var content=$("advContent").value.trim();
   if(!content){ showToast("请写点内容","error"); return; }
-  blogData.advisor.push({date:$("advDate").value||todayStr(), time:$("advTime").value||"", content:content, images:(imgDrafts.advisor||[]).slice()});
+  blogData.advisor.push({date:$("advDate").value||todayStr(), time:$("advTime").value||"", count:parseInt($("advCount").value,10)||0, content:content, images:(imgDrafts.advisor||[]).slice()});
   saveData("添加导师指导记录");
   renderAll();
-  $("advContent").value="";
+  $("advContent").value=""; $("advCount").value="";
   setImgDrafts("advisor", []);
 }
 function renderAdvisor(){
   var list=(blogData.advisor||[]).slice().reverse();
   $("advisorList").innerHTML=list.map(function(d){
     var realIdx=blogData.advisor.indexOf(d);
-    return '<div class="item-row"><div class="info"><div class="title">'+esc(d.date)+(d.time?' '+esc(d.time):"")+'</div><div class="desc" style="white-space:pre-wrap">'+esc(d.content)+'</div></div><button class="btn btn-danger btn-sm" onclick="delAdvisor('+realIdx+')">删除</button></div>';
+    return '<div class="item-row"><div class="info"><div class="title">'+(d.count?('第 '+d.count+' 次指导 · '):"")+esc(d.date)+(d.time?(' '+esc(d.time)):"")+'</div><div class="desc" style="white-space:pre-wrap">'+esc(d.content)+'</div>'+imgRows(d.images,"advisor",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delAdvisor('+realIdx+')">删除</button></div>';
   }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delAdvisor(realIdx){
@@ -1620,10 +1693,47 @@ function saveSiteConfig(){
   saveData("修改站点设置");
   renderAll();
 }
+/* ---------- 生活服务：编辑 ---------- */
+let editingLife = null;
+function editLife(i){
+  var it = blogData.lifeServices[i];
+  editingLife = i;
+  $("lsIcon").value = it.icon||""; $("lsTitle").value = it.title||"";
+  $("lsDesc").value = it.desc||""; $("lsUrl").value = it.url||"";
+  drafts.life = (it.files||[]).slice();
+  setImgDrafts("life", it.images);
+  renderDraftFiles("life");
+  $("lifeFormTitle").textContent = "编辑生活服务：" + (it.title||"");
+  var box = document.getElementById("panel-life");
+  if(box && box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
+}
+function cancelLifeEdit(){
+  editingLife = null;
+  ["lsIcon","lsTitle","lsDesc","lsUrl"].forEach(function(id){ $(id).value=""; });
+  drafts.life = []; renderDraftFiles("life"); setImgDrafts("life", []);
+  $("lifeFormTitle").textContent = "添加生活服务链接";
+}
+
+/* ---------- 快速链接：编辑 ---------- */
+let editingQL = null;
+function editQuickLink(i){
+  var l = blogData.quickLinks[i];
+  editingQL = i;
+  $("qlIcon").value = l.icon||""; $("qlTitle").value = l.title||""; $("qlUrl").value = l.url||"";
+  $("qlFormTitle").textContent = "✏️ 编辑快速链接：" + (l.title||"");
+  var box = document.getElementById("panel-site");
+  if(box && box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
+}
+function cancelQuickLinkEdit(){
+  editingQL = null;
+  ["qlIcon","qlTitle","qlUrl"].forEach(function(id){ $(id).value=""; });
+  $("qlFormTitle").textContent = "🔗 快速链接管理（首页右侧）";
+}
+
 /* ---------- 分类管理 ---------- */
 function renderCatManage(){
   $("catManageList").innerHTML = (blogData.categories||[]).map(function(c,i){
-    return '<div class="item-row"><div class="info"><div class="title">'+esc(c.icon||"")+' '+esc(c.name)+'</div><div class="desc">指向：'+esc(c.section||"")+'</div></div><button class="btn btn-danger btn-sm" onclick="delCategory('+i+')">删除</button></div>';
+    return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(c.icon,22)+' '+esc(c.name)+'</div><div class="desc">指向：'+esc(c.section||"")+'</div></div><button class="btn btn-danger btn-sm" onclick="delCategory('+i+')">删除</button></div>';
   }).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无分类</div>';
 }
 function addCategory(){
@@ -1654,7 +1764,7 @@ function saveTags(){
 /* ---------- 快速链接管理 ---------- */
 function renderQuickLinkManage(){
   $("quickLinkManageList").innerHTML = (blogData.quickLinks||[]).map(function(l,i){
-    return '<div class="item-row"><div class="info"><div class="title">'+esc(l.icon||"")+' '+esc(l.title)+'</div><div class="desc">'+esc(l.url)+'</div></div><button class="btn btn-danger btn-sm" onclick="delQuickLink('+i+')">删除</button></div>';
+    return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(l.icon,22)+' '+esc(l.title)+'</div><div class="desc">'+esc(l.url)+'</div></div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editQuickLink('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delQuickLink('+i+')">删除</button></div></div>';
   }).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无链接</div>';
 }
 function addQuickLink(){
@@ -1662,10 +1772,11 @@ function addQuickLink(){
   var url=$("qlUrl").value.trim();
   if(!title||!url){ showToast("请输入名称和链接","error"); return; }
   blogData.quickLinks = blogData.quickLinks || [];
-  blogData.quickLinks.push({icon:$("qlIcon").value.trim()||"🔗", title:title, url:url});
-  saveData("添加快速链接："+title);
+  var item = {icon:$("qlIcon").value.trim()||"🔗", title:title, url:url};
+  if(editingQL === null){ blogData.quickLinks.push(item); saveData("添加快速链接："+title); }
+  else { blogData.quickLinks[editingQL] = item; saveData("编辑快速链接："+title); }
+  cancelQuickLinkEdit();
   renderAll();
-  $("qlTitle").value=""; $("qlUrl").value=""; $("qlIcon").value="";
 }
 function delQuickLink(i){
   if(!confirm("确定删除？")) return;

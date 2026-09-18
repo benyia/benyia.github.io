@@ -369,7 +369,7 @@ const PAGE_TITLES = {
 };
 
 const DEFAULT_DATA = {
-  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", name:"思齐", bio:"控制工程研究生"},
+  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", name:"思齐", bio:"控制工程研究生", defaultImage:""},
   categories: [
     {icon:"📚", name:"课程学习", section:"courses"},
     {icon:"📝", name:"论文", section:"papers"},
@@ -443,6 +443,8 @@ function iconHTML(icon, fallback){
 function coverHTML(item, iconFallback){
   var imgs = collectImages(item);
   if(imgs.length) return '<div class="article-cover" style="padding:0;overflow:hidden"><img src="'+esc(imgs[0].url)+'" style="width:100%;height:100%;object-fit:cover" alt=""></div>';
+  var def = (blogData.siteConfig && blogData.siteConfig.defaultImage) || "";
+  if(def) return '<div class="article-cover" style="padding:0;overflow:hidden"><img src="'+esc(def)+'" style="width:100%;height:100%;object-fit:cover" alt=""></div>';
   var ic = (item && item.icon) || iconFallback || "📄";
   return '<div class="article-cover">'+iconHTML(ic, "📄")+'</div>';
 }
@@ -497,7 +499,7 @@ async function loadData(){
 
 function renderProfile(){
   var sc = blogData.siteConfig;
-  document.getElementById("profileAvatar").innerHTML = iconHTML(sc.avatar, "思");
+  document.getElementById("profileAvatar").innerHTML = iconHTML(sc.avatar || sc.defaultImage || "", "思");
   document.getElementById("profileName").textContent = sc.name || "思齐";
   document.getElementById("profileBio").textContent = sc.bio || "";
 }

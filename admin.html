@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>管理后台 | 钟爱奥迪A6</title>
+<title>管理后台 | 思齐个人主页</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -50,7 +50,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .add-form h4{font-size:.9rem;margin-bottom:14px;color:var(--text2)}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .form-grid input,.form-grid select,.form-grid textarea{padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:.88rem;font-family:inherit;width:100%}
-.form-grid textarea{grid-column:1/-1;min-height:80px;resize:vertical}
+.form-grid textarea{grid-column:1/-1;min-height:100px;resize:vertical}
 .form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{outline:none;border-color:var(--primary)}
 .upload-area{grid-column:1/-1;border:2px dashed var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:all .2s}
 .upload-area:hover{border-color:var(--primary);background:#eef2ff}
@@ -76,7 +76,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .status-msg.err{display:block;background:#fef2f2;color:var(--danger)}
 .data-tools{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
 
-/* Course detail editor */
 .course-editor{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;display:none}
 .course-editor.active{display:block}
 .course-editor h4{font-size:1rem;margin-bottom:16px;color:var(--primary)}
@@ -87,6 +86,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .file-row .fname{font-size:.88rem}
 .file-row .ftype{font-size:.75rem;color:var(--text3)}
 
+.log-item{padding:12px 0;border-bottom:1px solid var(--border);font-size:.88rem}
+.log-item .time{color:var(--text3);font-size:.8rem;margin-right:10px}
+
+.tag-check{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tag-check label{display:flex;align-items:center;gap:4px;font-size:.85rem;cursor:pointer;padding:4px 10px;border:1px solid var(--border);border-radius:99px}
+.tag-check label:has(input:checked){background:#eef2ff;border-color:var(--primary);color:var(--primary)}
+
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:640px){.admin-body{padding:16px}.form-grid{grid-template-columns:1fr}}
 </style>
@@ -95,7 +101,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 
 <div class="login-wrap" id="loginPage">
   <div class="login-box">
-    <h2>钟爱奥迪A6 博客后台</h2>
+    <h2>思齐个人主页 · 管理后台</h2>
     <p class="sub">管理你的个人主页内容</p>
     <input type="password" id="pwdInput" placeholder="请输入管理密码" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="btn" onclick="doLogin()">登 录</button>
@@ -117,12 +123,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <button class="tab" data-t="papers">论文</button>
       <button class="tab" data-t="notices">通知</button>
       <button class="tab" data-t="class">班级</button>
+      <button class="tab" data-t="timeline">时间记录</button>
       <button class="tab" data-t="life">生活服务</button>
       <button class="tab" data-t="softwares">软件</button>
+      <button class="tab" data-t="diary">日记/导师</button>
       <button class="tab" data-t="data">数据管理</button>
     </div>
 
-    <!-- 课程管理 -->
     <div class="panel active" id="panel-courses">
       <h3>我的课程</h3>
       <div class="add-form">
@@ -130,12 +137,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
         <div class="form-grid">
           <input id="c_icon" placeholder="图标 emoji（如 📐）">
           <input id="c_title" placeholder="课程名称">
-          <input id="c_desc" placeholder="一句话描述">
+          <input id="c_desc" placeholder="一句话描述" style="grid-column:1/-1">
         </div>
         <button class="btn btn-primary btn-sm" onclick="addCourse()">添加课程</button>
       </div>
-
-      <!-- 课程详情编辑器 -->
       <div class="course-editor" id="courseEditor">
         <h4 id="ceTitle">编辑课程详情</h4>
         <div class="form-grid">
@@ -144,8 +149,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
           <input id="ceDesc" placeholder="一句话描述" style="grid-column:1/-1">
         </div>
         <div style="margin:16px 0">
-          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:8px">课程简介</label>
-          <textarea id="ceIntro" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:80px;font-family:inherit" placeholder="介绍这门课学什么、重点内容..."></textarea>
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:8px">课程简介（支持换行）</label>
+          <textarea id="ceIntro" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:100px;font-family:inherit" placeholder="介绍这门课学什么、重点内容..."></textarea>
         </div>
         <div class="progress-input">
           <label style="font-size:.85rem;color:var(--text2)">学习进度</label>
@@ -153,7 +158,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
           <span id="ceProgVal">0%</span>
         </div>
         <div style="margin:16px 0">
-          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:8px">课程文件（视频、PPT、PDF、资料等）</label>
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:8px">课程文件（视频、PPT、PDF等，单个建议<50MB）</label>
           <div id="ceFileList"></div>
           <div class="upload-area" id="ceUpload" onclick="document.getElementById('ce_file').click()" style="margin-top:10px">
             <p>📎 点击上传文件（可多次上传）</p>
@@ -165,7 +170,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
           <button class="btn btn-outline btn-sm" onclick="closeCourseEditor()">取消</button>
         </div>
       </div>
-
       <div id="list-courses"></div>
     </div>
 
@@ -174,17 +178,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <div class="add-form">
         <h4>添加论文</h4>
         <div class="form-grid">
-          <input id="p_title" placeholder="论文标题">
-          <select id="p_status"><option>已发表</option><option>在投</option><option>阅读中</option></select>
+          <input id="p_title" placeholder="论文标题" style="grid-column:1/-1">
+          <select id="p_status"><option>已发表</option><option>在投</option><option>阅读中</option><option>撰写中</option></select>
           <input id="p_year" placeholder="年份（如 2026）">
-          <input id="p_desc" placeholder="备注">
-          <div class="upload-area" id="p_upload" onclick="document.getElementById('p_file').click()">
-            <p>📎 点击上传论文文件（PDF等）</p>
-            <input type="file" id="p_file" style="display:none" onchange="onFileSelect('p')">
-            <div class="file-name" id="p_filename"></div>
-          </div>
+          <input id="p_desc" placeholder="备注/摘要" style="grid-column:1/-1">
         </div>
-        <button class="btn btn-primary btn-sm" onclick="addItem('papers', this)">添加</button>
+        <div class="tag-check">
+          <label><input type="checkbox" value="阅读"> 📖 阅读</label>
+          <label><input type="checkbox" value="撰写"> ✍️ 撰写</label>
+          <label><input type="checkbox" value="中文"> 🇨🇳 中文</label>
+          <label><input type="checkbox" value="英文"> 🇬🇧 英文</label>
+          <label><input type="checkbox" value="查重"> 🔍 查重</label>
+          <label><input type="checkbox" value="投稿"> 📮 投稿</label>
+        </div>
+        <div class="upload-area" id="p_upload" onclick="document.getElementById('p_file').click()">
+          <p>📎 点击上传论文文件（PDF等）</p>
+          <input type="file" id="p_file" style="display:none" onchange="onFileSelect('p')">
+          <div class="file-name" id="p_filename"></div>
+        </div>
+        <div style="margin-top:12px">
+          <button class="btn btn-primary btn-sm" onclick="addPaper(this)">添加论文</button>
+        </div>
       </div>
       <div id="list-papers"></div>
     </div>
@@ -192,14 +206,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     <div class="panel" id="panel-notices">
       <h3>学校通知</h3>
       <div class="add-form">
-        <h4>添加通知</h4>
+        <h4>添加通知（像写Word一样写内容）</h4>
         <div class="form-grid">
-          <input id="n_title" placeholder="通知标题">
+          <input id="n_title" placeholder="通知标题" style="grid-column:1/-1">
           <input id="n_source" placeholder="来源（如 研究生院）">
           <input id="n_date" type="date">
           <select id="n_level"><option value="red">重要</option><option value="orange">关注</option><option value="blue">一般</option></select>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="addItem('notices', this)">添加</button>
+        <div style="margin:12px 0">
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:8px">通知正文（支持换行）</label>
+          <textarea id="n_content" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:120px;font-family:inherit" placeholder="写通知内容，换行会自动保留..."></textarea>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addNotice(this)">添加通知</button>
       </div>
       <div id="list-notices"></div>
     </div>
@@ -212,16 +230,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
           <input id="cl_title" placeholder="标题">
           <select id="cl_type"><option>通知</option><option>活动</option></select>
           <input id="cl_date" type="date">
-          <div></div>
-          <div class="upload-area" id="cl_upload" onclick="document.getElementById('cl_file').click()">
-            <p>📎 点击上传文件（通知附件、照片等）</p>
-            <input type="file" id="cl_file" style="display:none" onchange="onFileSelect('cl')">
-            <div class="file-name" id="cl_filename"></div>
-          </div>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="addItem('classItems', this)">添加</button>
+        <div style="margin:12px 0">
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:8px">详细内容（支持换行）</label>
+          <textarea id="cl_content" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:80px;font-family:inherit" placeholder="写详细内容..."></textarea>
+        </div>
+        <div class="upload-area" id="cl_upload" onclick="document.getElementById('cl_file').click()">
+          <p>📎 点击上传文件（附件、照片等）</p>
+          <input type="file" id="cl_file" style="display:none" onchange="onFileSelect('cl')">
+          <div class="file-name" id="cl_filename"></div>
+        </div>
+        <div style="margin-top:12px">
+          <button class="btn btn-primary btn-sm" onclick="addClassItem(this)">添加</button>
+        </div>
       </div>
       <div id="list-classItems"></div>
+    </div>
+
+    <div class="panel" id="panel-timeline">
+      <h3>时间记录</h3>
+      <div class="add-form">
+        <h4>添加时间记录</h4>
+        <div class="form-grid">
+          <input id="t_date" type="date">
+          <input id="t_title" placeholder="事件标题">
+          <input id="t_desc" placeholder="详细描述" style="grid-column:1/-1">
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addTimeline(this)">添加</button>
+      </div>
+      <div id="list-timeline"></div>
     </div>
 
     <div class="panel" id="panel-life">
@@ -233,13 +270,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
           <input id="l_title" placeholder="名称">
           <input id="l_desc" placeholder="描述">
           <input id="l_url" placeholder="链接 URL">
-          <div class="upload-area" id="l_upload" onclick="document.getElementById('l_file').click()">
-            <p>📎 点击上传文件/照片（可选）</p>
-            <input type="file" id="l_file" style="display:none" onchange="onFileSelect('l')">
-            <div class="file-name" id="l_filename"></div>
-          </div>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="addItem('lifeServices', this)">添加</button>
+        <button class="btn btn-primary btn-sm" onclick="addLife(this)">添加</button>
       </div>
       <div id="list-lifeServices"></div>
     </div>
@@ -254,9 +286,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
           <input id="s_desc" placeholder="描述">
           <input id="s_url" placeholder="下载链接 URL">
         </div>
-        <button class="btn btn-primary btn-sm" onclick="addItem('softwares', this)">添加</button>
+        <button class="btn btn-primary btn-sm" onclick="addSoftware(this)">添加</button>
       </div>
       <div id="list-softwares"></div>
+    </div>
+
+    <div class="panel" id="panel-diary">
+      <h3>日记 & 导师指导</h3>
+      <div class="add-form">
+        <h4>写日记</h4>
+        <div style="margin-bottom:12px">
+          <textarea id="diaryContent" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:100px;font-family:inherit" placeholder="写今天发生了什么..."></textarea>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addDiary(this)">保存日记</button>
+      </div>
+      <div class="add-form">
+        <h4>导师指导记录</h4>
+        <div style="margin-bottom:12px">
+          <textarea id="advContent" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:100px;font-family:inherit" placeholder="记录和导师沟通的内容..."></textarea>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addAdvisor(this)">保存记录</button>
+      </div>
+      <h4 style="margin-top:20px">最近日记</h4>
+      <div id="list-diary"></div>
     </div>
 
     <div class="panel" id="panel-data">
@@ -264,8 +316,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <div class="settings-box">
         <h4>🎨 站点标题设置</h4>
         <p style="margin-bottom:12px">修改主页显示的大标题和签名。</p>
-        <input type="text" id="cfgTitle" placeholder="大标题（如：思齐）">
-        <input type="text" id="cfgSubtitle" placeholder="副标题/签名（如：钟爱奥迪A6）">
+        <input type="text" id="cfgTitle" placeholder="大标题">
+        <input type="text" id="cfgSubtitle" placeholder="副标题/签名">
         <button class="btn btn-primary btn-sm" onclick="saveSiteConfig()">保存标题</button>
         <div class="status-msg" id="cfgStatus"></div>
       </div>
@@ -279,11 +331,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       </div>
       <div class="settings-box">
         <h4>☁️ GitHub 同步设置（重要）</h4>
-        <p style="margin-bottom:12px">设置 Token 后，所有内容修改都会自动同步到 GitHub，换浏览器/换电脑数据都不会丢。</p>
+        <p style="margin-bottom:12px">设置 Token 后，所有修改自动同步到 GitHub，换浏览器/换电脑数据都不会丢。</p>
         <input type="text" id="ghToken" placeholder="GitHub Personal Access Token">
-        <p>生成方式：GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)<br>勾选 <strong>repo</strong> 权限即可。Token 只保存在你浏览器里。</p>
+        <p>生成方式：GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)<br>勾选 <strong>repo</strong> 权限即可。</p>
         <button class="btn btn-primary btn-sm" onclick="saveToken()">保存 Token</button>
         <div class="status-msg" id="tokenStatus"></div>
+      </div>
+      <div class="settings-box">
+        <h4>📝 修改日志（最近100条）</h4>
+        <div id="logsList" style="max-height:300px;overflow-y:auto"></div>
       </div>
       <div class="data-tools">
         <button class="btn btn-outline" onclick="exportData()">导出数据</button>
@@ -301,60 +357,40 @@ const GH_OWNER = "benyia";
 const GH_REPO = "benyia.github.io";
 
 const DEFAULT_DATA = {
-  siteConfig: {title: "思齐的控制主页", subtitle: "钟爱奥迪A6"},
+  siteConfig: {title: "思齐个人主页", subtitle: "钟爱奥迪A6"},
   courses: [
-    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", intro:"本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。", progress: 60, files: []},
-    {icon:"🧠", title:"神经网络与深度学习", desc:"课件、上机指导、参考书", intro:"深度学习基础、CNN、RNN、Transformer等模型原理与实践应用。", progress: 30, files: []},
-    {icon:"💻", title:"计算机控制系统", desc:"教材、章节PPT、习题解答", intro:"计算机控制系统的硬件结构、信号采集与输出、控制算法设计。", progress: 0, files: []},
-    {icon:"⚙️", title:"现代控制理论", desc:"状态空间分析、最优控制", intro:"状态空间表达式、能控性能观性、李雅普诺夫稳定性、最优控制。", progress: 0, files: []}
+    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", intro:"本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。", progress: 60, files: []}
   ],
   papers: [
-    {title:"基于深度学习的故障诊断方法研究", status:"在投", year:"2026", desc:"", file:"", fileName:""},
-    {title:"自适应控制算法综述", status:"阅读中", year:"", desc:"参考文献", file:"", fileName:""}
+    {title:"基于深度学习的故障诊断方法研究", status:"在投", year:"2026", desc:"", tags:["撰写","中文"], file:"", fileName:""}
   ],
   notices: [
-    {title:"2026年秋季学期选课通知", source:"研究生院", date:"2026-09-01", level:"red"},
-    {title:"研究生奖学金评定工作安排", source:"学院", date:"2026-09-10", level:"orange"},
-    {title:"图书馆数据库访问方式变更通知", source:"图书馆", date:"2026-09-05", level:"blue"}
+    {title:"2026年秋季学期选课通知", source:"研究生院", date:"2026-09-01", level:"red", content:"各研究生：2026年秋季学期选课即将开始，请于9月1日-9月5日登录研究生系统完成选课。"}
   ],
   classItems: [
-    {title:"组会时间调整为每周四下午2点", type:"通知", date:"2026-09-15", file:"", fileName:""},
-    {title:"班级聚餐（时间待定）", type:"活动", date:"", file:"", fileName:""}
+    {title:"组会时间调整为每周四下午2点", type:"通知", date:"2026-09-15", content:"全体同学注意，本周组会时间调整为周四下午2点，地点实验室。", file:"", fileName:""}
   ],
   lifeServices: [
-    {icon:"🛒", title:"淘宝", desc:"购物", url:"https://www.taobao.com", file:"", fileName:""},
-    {icon:"🚄", title:"12306", desc:"火车票预订", url:"https://www.12306.cn", file:"", fileName:""},
-    {icon:"🍜", title:"饿了么", desc:"外卖订餐", url:"https://www.ele.me", file:"", fileName:""},
-    {icon:"🗺️", title:"百度地图", desc:"导航出行", url:"https://map.baidu.com", file:"", fileName:""},
-    {icon:"💡", title:"知乎", desc:"知识问答", url:"https://www.zhihu.com", file:"", fileName:""},
-    {icon:"🐙", title:"GitHub", desc:"代码托管", url:"https://github.com", file:"", fileName:""},
-    {icon:"☁️", title:"百度网盘", desc:"云存储 / 文件分享", url:"https://pan.baidu.com", file:"", fileName:""},
-    {icon:"🅰️", title:"阿里云盘", desc:"不限速云盘", url:"https://www.alipan.com", file:"", fileName:""},
-    {icon:"✨", title:"夸克网盘", desc:"夸克云存储", url:"https://pan.quark.cn", file:"", fileName:""},
-    {icon:"📁", title:"123云盘", desc:"不限速云盘", url:"https://www.123pan.com", file:"", fileName:""},
-    {icon:"🟦", title:"腾讯微云", desc:"腾讯云存储", url:"https://www.weiyun.com", file:"", fileName:""},
-    {icon:"📧", title:"网易邮箱", desc:"邮件服务", url:"https://mail.163.com", file:"", fileName:""}
+    {icon:"☁️", title:"百度网盘", desc:"云存储", url:"https://pan.baidu.com", file:"", fileName:""}
   ],
   softwares: [
-    {icon:"🐍", title:"Python", desc:"多版本下载", url:"https://www.python.org/downloads/"},
-    {icon:"📝", title:"VS Code", desc:"代码编辑器", url:"https://code.visualstudio.com/"},
-    {icon:"📊", title:"Anaconda", desc:"Python 数据科学发行版", url:"https://www.anaconda.com/download"},
-    {icon:"🔢", title:"MATLAB", desc:"数学计算与仿真", url:"https://www.mathworks.com/products/matlab.html"},
-    {icon:"🔧", title:"Vivado", desc:"FPGA 开发工具", url:"https://www.xilinx.com/products/design-tools/vivado.html"},
-    {icon:"📦", title:"Git", desc:"版本控制工具", url:"https://git-scm.com/downloads"}
+    {icon:"🐍", title:"Python", desc:"多版本下载", url:"https://www.python.org/downloads/"}
+  ],
+  timeline: [
+    {date:"2026-09-01", title:"秋季学期开始", desc:"新学期正式开学"}
   ],
   ledger: [],
   diary: [],
-  advisor: []
+  advisor: [],
+  logs: []
 };
 
 let blogData = null;
 let dataSha = "";
 let pendingFiles = {};
 let editingCourseIdx = -1;
-let ceNewFiles = []; // 课程编辑器待上传的新文件
+let ceNewFiles = [];
 
-// ===== 密码 =====
 function getPwd(){ return localStorage.getItem("benyia_admin_pwd") || DEFAULT_PWD; }
 function setPwd(pwd){ localStorage.setItem("benyia_admin_pwd", pwd); }
 
@@ -369,10 +405,9 @@ async function doLogin(){
   document.getElementById("ghToken").value = localStorage.getItem("benyia_gh_token") || "";
   await loadData();
   renderAll();
-  // 加载站点配置
   if(blogData.siteConfig){
-    document.getElementById("cfgTitle").value = blogData.siteConfig.title || "思齐";
-    document.getElementById("cfgSubtitle").value = blogData.siteConfig.subtitle || "钟爱奥迪A6";
+    document.getElementById("cfgTitle").value = blogData.siteConfig.title || "思齐个人主页";
+    document.getElementById("cfgSubtitle").value = blogData.siteConfig.subtitle || "";
   }
 }
 function doLogout(){ location.reload(); }
@@ -387,20 +422,17 @@ function changePwd(){
   if(newP !== conP){ st.className="status-msg err"; st.textContent="两次输入不一致"; return; }
   setPwd(newP);
   st.className="status-msg ok"; st.textContent="密码修改成功！";
-  document.getElementById("oldPwd").value="";
-  document.getElementById("newPwd").value="";
-  document.getElementById("confirmPwd").value="";
 }
 
 async function saveSiteConfig(){
   blogData.siteConfig = {
-    title: document.getElementById("cfgTitle").value.trim() || "思齐",
-    subtitle: document.getElementById("cfgSubtitle").value.trim() || "钟爱奥迪A6"
+    title: document.getElementById("cfgTitle").value.trim() || "思齐个人主页",
+    subtitle: document.getElementById("cfgSubtitle").value.trim() || ""
   };
-  await saveData();
+  await saveData("修改站点标题");
   const st = document.getElementById("cfgStatus");
   st.className = "status-msg ok";
-  st.textContent = "标题已保存，刷新前台即可看到效果";
+  st.textContent = "标题已保存";
 }
 
 function saveToken(){
@@ -408,11 +440,9 @@ function saveToken(){
   localStorage.setItem("benyia_gh_token", t);
   const st = document.getElementById("tokenStatus");
   st.className = t ? "status-msg ok" : "status-msg err";
-  st.textContent = t ? "Token 已保存，内容修改将自动同步到 GitHub" : "Token 已清除";
-  if(t) saveData();
+  st.textContent = t ? "Token 已保存" : "Token 已清除";
 }
 
-// ===== 数据加载/保存 =====
 async function loadData(){
   try {
     const res = await fetch("data.json?v=" + Date.now());
@@ -431,7 +461,13 @@ async function loadData(){
   }
 }
 
-async function saveData(){
+async function saveData(action){
+  if(action){
+    blogData.logs = blogData.logs||[];
+    blogData.logs.unshift({time: new Date().toLocaleString("zh-CN"), action});
+    if(blogData.logs.length > 100) blogData.logs = blogData.logs.slice(0,100);
+  }
+  renderLogs();
   const token = localStorage.getItem("benyia_gh_token");
   if(!token){
     localStorage.setItem("benyia_blog_local", JSON.stringify(blogData));
@@ -442,16 +478,20 @@ async function saveData(){
     await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`, {
       method: "PUT",
       headers: {"Authorization":"token "+token, "Content-Type":"application/json"},
-      body: JSON.stringify({message:"Update blog data", content, sha: dataSha})
+      body: JSON.stringify({message:"Update: "+(action||"blog"), content, sha: dataSha})
     });
     const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`);
     if(res.ok){ const d = await res.json(); dataSha = d.sha; }
-  } catch(e) {
-    alert("同步到 GitHub 失败：" + e.message);
-  }
+  } catch(e) { alert("同步失败："+e.message); }
 }
 
-// ===== 文件上传 =====
+function renderLogs(){
+  const logs = blogData.logs||[];
+  document.getElementById("logsList").innerHTML = logs.map(l=>`
+    <div class="log-item"><span class="time">${l.time}</span>${l.action}</div>
+  `).join("") || '<div style="color:var(--text3);font-size:.88rem">暂无修改记录</div>';
+}
+
 function onFileSelect(prefix){
   const input = document.getElementById(prefix+"_file");
   const file = input.files[0];
@@ -485,7 +525,6 @@ function fileToBase64(file){
   });
 }
 
-// ===== Tab =====
 document.querySelectorAll(".tab").forEach(t=>{
   t.onclick=()=>{
     document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
@@ -495,12 +534,10 @@ document.querySelectorAll(".tab").forEach(t=>{
   };
 });
 
-// ===== 课程管理 =====
+// 课程
 function renderCourses(){
   const list = blogData.courses || [];
-  const el = document.getElementById("list-courses");
-  if(!list.length){ el.innerHTML='<div class="empty">暂无课程，添加一门吧</div>'; return; }
-  el.innerHTML = list.map((c,i)=>`
+  document.getElementById("list-courses").innerHTML = list.map((c,i)=>`
     <div class="item-row">
       <div class="row-body">
         <div class="row-title">${c.icon||"📚"} ${c.title}</div>
@@ -511,7 +548,7 @@ function renderCourses(){
         <button class="btn btn-danger btn-sm" onclick="delCourse(${i})">删除</button>
       </div>
     </div>
-  `).join("");
+  `).join("") || '<div class="empty">暂无课程</div>';
 }
 
 async function addCourse(){
@@ -520,7 +557,7 @@ async function addCourse(){
   const desc = document.getElementById("c_desc").value.trim();
   if(!title){ alert("请输入课程名称"); return; }
   blogData.courses.push({icon, title, desc, intro:"", progress:0, files:[]});
-  await saveData();
+  await saveData("添加课程："+title);
   document.getElementById("c_icon").value="";
   document.getElementById("c_title").value="";
   document.getElementById("c_desc").value="";
@@ -528,9 +565,9 @@ async function addCourse(){
 }
 
 async function delCourse(idx){
-  if(!confirm("确定删除这门课程？")) return;
+  if(!confirm("确定删除？")) return;
   blogData.courses.splice(idx,1);
-  await saveData();
+  await saveData("删除课程");
   renderCourses();
 }
 
@@ -547,54 +584,38 @@ function openCourseEditor(idx){
   ceNewFiles = [];
   renderCeFiles();
   document.getElementById("courseEditor").classList.add("active");
-  window.scrollTo({top: document.getElementById("courseEditor").offsetTop - 20, behavior:"smooth"});
 }
 
-function closeCourseEditor(){
-  editingCourseIdx = -1;
-  ceNewFiles = [];
-  document.getElementById("courseEditor").classList.remove("active");
-}
+function closeCourseEditor(){ editingCourseIdx = -1; ceNewFiles = []; document.getElementById("courseEditor").classList.remove("active"); }
 
 function renderCeFiles(){
   const c = blogData.courses[editingCourseIdx];
-  const existing = c.files||[];
-  let html = "";
-  existing.forEach((f,i)=>{
-    html += `<div class="file-row">
+  let html = (c.files||[]).map((f,i)=>`
+    <div class="file-row">
       <div><div class="fname">${f.name}</div><div class="ftype">${f.type||"文件"}</div></div>
       <button class="btn btn-danger btn-sm" onclick="delCeFile(${i})">删除</button>
-    </div>`;
-  });
-  ceNewFiles.forEach((f,i)=>{
-    html += `<div class="file-row" style="background:#ecfdf5">
-      <div><div class="fname">${f.name}</div><div class="ftype">新文件（保存后上传）</div></div>
+    </div>`).join("");
+  html += ceNewFiles.map((f,i)=>`
+    <div class="file-row" style="background:#ecfdf5">
+      <div><div class="fname">${f.name}</div><div class="ftype">新文件</div></div>
       <button class="btn btn-danger btn-sm" onclick="delCeNewFile(${i})">移除</button>
-    </div>`;
-  });
+    </div>`).join("");
   document.getElementById("ceFileList").innerHTML = html || '<div style="font-size:.85rem;color:var(--text3);padding:10px 0">暂无文件</div>';
 }
 
 function onCeFileSelect(){
-  const input = document.getElementById("ce_file");
-  const files = input.files;
-  for(let f of files){
-    ceNewFiles.push(f);
-  }
-  input.value = "";
+  const files = document.getElementById("ce_file").files;
+  for(let f of files) ceNewFiles.push(f);
+  document.getElementById("ce_file").value = "";
   renderCeFiles();
 }
 
-function delCeFile(idx){
-  if(!confirm("删除这个文件？")) return;
+async function delCeFile(idx){
+  if(!confirm("删除？")) return;
   blogData.courses[editingCourseIdx].files.splice(idx,1);
   renderCeFiles();
 }
-
-function delCeNewFile(idx){
-  ceNewFiles.splice(idx,1);
-  renderCeFiles();
-}
+function delCeNewFile(idx){ ceNewFiles.splice(idx,1); renderCeFiles(); }
 
 async function saveCourseDetail(){
   const c = blogData.courses[editingCourseIdx];
@@ -603,10 +624,7 @@ async function saveCourseDetail(){
   c.desc = document.getElementById("ceDesc").value.trim();
   c.intro = document.getElementById("ceIntro").value.trim();
   c.progress = parseInt(document.getElementById("ceProgress").value) || 0;
-
-  // 上传新文件
   if(ceNewFiles.length > 0){
-    alert("正在上传 " + ceNewFiles.length + " 个文件...");
     for(let f of ceNewFiles){
       try {
         const url = await uploadToGitHub(f);
@@ -617,141 +635,265 @@ async function saveCourseDetail(){
         else if(["mp4","avi","mov","mkv"].includes(ext)) type = "视频";
         else if(["doc","docx"].includes(ext)) type = "Word";
         else if(["zip","rar","7z"].includes(ext)) type = "压缩包";
-        else if(["jpg","png","gif"].includes(ext)) type = "图片";
         c.files.push({name: f.name, url, type});
-      } catch(e){
-        alert("上传失败：" + f.name + " - " + e.message);
-      }
+      } catch(e){ alert("上传失败："+f.name); }
     }
     ceNewFiles = [];
   }
-
-  await saveData();
+  await saveData("编辑课程："+c.title);
   closeCourseEditor();
   renderCourses();
   alert("保存成功！");
 }
 
-// ===== 其他列表渲染 =====
-function renderList(key, fields, labelFn, hasFile){
-  const list = blogData[key] || [];
-  const el = document.getElementById("list-"+key);
-  if(!list.length){ el.innerHTML='<div class="empty">暂无内容，添加一条吧</div>'; return; }
-  el.innerHTML = list.map((item,i)=>`
+// 论文
+function renderPapers(){
+  document.getElementById("list-papers").innerHTML = (blogData.papers||[]).map((p,i)=>`
     <div class="item-row">
       <div class="row-body">
-        <div class="row-title">${labelFn(item)}</div>
-        <div class="row-meta">${fields.map(f=>item[f]||"").filter(Boolean).join(" · ")}</div>
-        ${hasFile && item.file ? `<a class="file-link" href="${item.file}" target="_blank">📎 ${item.fileName || "下载文件"}</a>` : ""}
+        <div class="row-title">${p.title}</div>
+        <div class="row-meta">${p.status} ${p.year?("· "+p.year):""} · ${(p.tags||[]).join(" / ")}</div>
       </div>
       <div class="row-actions">
-        <button class="btn btn-outline btn-sm" onclick="editItem('${key}',${i})">编辑</button>
-        <button class="btn btn-danger btn-sm" onclick="delItem('${key}',${i})">删除</button>
+        <button class="btn btn-danger btn-sm" onclick="delItem('papers',${i})">删除</button>
       </div>
     </div>
-  `).join("");
+  `).join("") || '<div class="empty">暂无论文</div>';
 }
 
-function renderAll(){
-  renderCourses();
-  renderList("papers", ["status","year","desc"], i=>i.title, true);
-  renderList("notices", ["source","date"], i=>i.title, false);
-  renderList("classItems", ["type","date"], i=>i.title, true);
-  renderList("lifeServices", ["desc","url"], i=>i.title, true);
-  renderList("softwares", ["desc","url"], i=>i.title, false);
-}
-
-// ===== 添加条目 =====
-async function addItem(key, btn){
-  let item = {};
-  const oldText = btn.textContent;
-  btn.textContent = "处理中...";
-  btn.disabled = true;
-  try {
-    if(key === "papers"){
-      item = {title:val("p_title"), status:val("p_status"), year:val("p_year"), desc:val("p_desc"), file:"", fileName:""};
-      if(pendingFiles["p"]){
-        const url = await uploadToGitHub(pendingFiles["p"]);
-        item.file = url; item.fileName = pendingFiles["p"].name;
-        pendingFiles["p"] = null;
-        document.getElementById("p_upload").classList.remove("has-file");
-        document.getElementById("p_filename").textContent = "";
-      }
-      clearInputs(["p_title","p_year","p_desc"]);
-    }
-    else if(key === "notices"){
-      item = {title:val("n_title"), source:val("n_source"), date:val("n_date"), level:val("n_level")};
-      clearInputs(["n_title","n_source","n_date"]);
-    }
-    else if(key === "classItems"){
-      item = {title:val("cl_title"), type:val("cl_type"), date:val("cl_date"), file:"", fileName:""};
-      if(pendingFiles["cl"]){
-        const url = await uploadToGitHub(pendingFiles["cl"]);
-        item.file = url; item.fileName = pendingFiles["cl"].name;
-        pendingFiles["cl"] = null;
-        document.getElementById("cl_upload").classList.remove("has-file");
-        document.getElementById("cl_filename").textContent = "";
-      }
-      clearInputs(["cl_title","cl_date"]);
-    }
-    else if(key === "lifeServices"){
-      item = {icon:val("l_icon"), title:val("l_title"), desc:val("l_desc"), url:val("l_url"), file:"", fileName:""};
-      if(pendingFiles["l"]){
-        const url = await uploadToGitHub(pendingFiles["l"]);
-        item.file = url; item.fileName = pendingFiles["l"].name;
-        pendingFiles["l"] = null;
-        document.getElementById("l_upload").classList.remove("has-file");
-        document.getElementById("l_filename").textContent = "";
-      }
-      clearInputs(["l_icon","l_title","l_desc","l_url"]);
-    }
-    else if(key === "softwares"){
-      item = {icon:val("s_icon"), title:val("s_title"), desc:val("s_desc"), url:val("s_url")};
-      clearInputs(["s_icon","s_title","s_desc","s_url"]);
-    }
-    if(!item.title){ alert("标题不能为空"); return; }
-    blogData[key].push(item);
-    await saveData();
-    renderAll();
-  } catch(e) {
-    alert("出错：" + e.message);
-  } finally {
-    btn.textContent = oldText;
-    btn.disabled = false;
+async function addPaper(btn){
+  const title = document.getElementById("p_title").value.trim();
+  if(!title){ alert("请输入标题"); return; }
+  const tags = [...document.querySelectorAll(".tag-check input:checked")].map(c=>c.value);
+  const item = {
+    title, status: document.getElementById("p_status").value,
+    year: document.getElementById("p_year").value,
+    desc: document.getElementById("p_desc").value,
+    tags, file:"", fileName:""
+  };
+  if(pendingFiles["p"]){
+    const url = await uploadToGitHub(pendingFiles["p"]);
+    item.file = url; item.fileName = pendingFiles["p"].name;
+    pendingFiles["p"] = null;
+    document.getElementById("p_upload").classList.remove("has-file");
+    document.getElementById("p_filename").textContent = "";
   }
+  blogData.papers.push(item);
+  await saveData("添加论文："+title);
+  document.getElementById("p_title").value="";
+  document.getElementById("p_year").value="";
+  document.getElementById("p_desc").value="";
+  renderPapers();
 }
 
-function val(id){ return document.getElementById(id).value.trim(); }
-function clearInputs(ids){ ids.forEach(id=>document.getElementById(id).value=""); }
+// 通知
+function renderNotices(){
+  document.getElementById("list-notices").innerHTML = (blogData.notices||[]).map((n,i)=>`
+    <div class="item-row">
+      <div class="row-body">
+        <div class="row-title">${n.title}</div>
+        <div class="row-meta">${n.source} · ${n.date}</div>
+      </div>
+      <div class="row-actions">
+        <button class="btn btn-danger btn-sm" onclick="delItem('notices',${i})">删除</button>
+      </div>
+    </div>
+  `).join("") || '<div class="empty">暂无通知</div>';
+}
+
+async function addNotice(btn){
+  const title = document.getElementById("n_title").value.trim();
+  if(!title){ alert("请输入标题"); return; }
+  blogData.notices.push({
+    title, source: document.getElementById("n_source").value,
+    date: document.getElementById("n_date").value,
+    level: document.getElementById("n_level").value,
+    content: document.getElementById("n_content").value
+  });
+  await saveData("添加通知："+title);
+  document.getElementById("n_title").value="";
+  document.getElementById("n_source").value="";
+  document.getElementById("n_content").value="";
+  renderNotices();
+}
+
+// 班级
+function renderClass(){
+  document.getElementById("list-classItems").innerHTML = (blogData.classItems||[]).map((c,i)=>`
+    <div class="item-row">
+      <div class="row-body">
+        <div class="row-title">${c.title}</div>
+        <div class="row-meta">${c.type} · ${c.date||""}</div>
+      </div>
+      <div class="row-actions">
+        <button class="btn btn-danger btn-sm" onclick="delItem('classItems',${i})">删除</button>
+      </div>
+    </div>
+  `).join("") || '<div class="empty">暂无班级事务</div>';
+}
+
+async function addClassItem(btn){
+  const title = document.getElementById("cl_title").value.trim();
+  if(!title){ alert("请输入标题"); return; }
+  const item = {
+    title, type: document.getElementById("cl_type").value,
+    date: document.getElementById("cl_date").value,
+    content: document.getElementById("cl_content").value,
+    file:"", fileName:""
+  };
+  if(pendingFiles["cl"]){
+    const url = await uploadToGitHub(pendingFiles["cl"]);
+    item.file = url; item.fileName = pendingFiles["cl"].name;
+    pendingFiles["cl"] = null;
+    document.getElementById("cl_upload").classList.remove("has-file");
+    document.getElementById("cl_filename").textContent = "";
+  }
+  blogData.classItems.push(item);
+  await saveData("添加班级事务："+title);
+  document.getElementById("cl_title").value="";
+  document.getElementById("cl_content").value="";
+  renderClass();
+}
+
+// 时间记录
+function renderTimeline(){
+  document.getElementById("list-timeline").innerHTML = (blogData.timeline||[]).map((t,i)=>`
+    <div class="item-row">
+      <div class="row-body">
+        <div class="row-title">${t.title}</div>
+        <div class="row-meta">${t.date} · ${t.desc||""}</div>
+      </div>
+      <div class="row-actions">
+        <button class="btn btn-danger btn-sm" onclick="delItem('timeline',${i})">删除</button>
+      </div>
+    </div>
+  `).join("") || '<div class="empty">暂无时间记录</div>';
+}
+
+async function addTimeline(btn){
+  const title = document.getElementById("t_title").value.trim();
+  if(!title){ alert("请输入标题"); return; }
+  blogData.timeline.push({
+    date: document.getElementById("t_date").value,
+    title, desc: document.getElementById("t_desc").value
+  });
+  await saveData("添加时间记录："+title);
+  document.getElementById("t_title").value="";
+  document.getElementById("t_desc").value="";
+  renderTimeline();
+}
+
+// 生活服务
+function renderLife(){
+  document.getElementById("list-lifeServices").innerHTML = (blogData.lifeServices||[]).map((s,i)=>`
+    <div class="item-row">
+      <div class="row-body">
+        <div class="row-title">${s.icon||""} ${s.title}</div>
+        <div class="row-meta">${s.desc||""} · ${s.url||""}</div>
+      </div>
+      <div class="row-actions">
+        <button class="btn btn-danger btn-sm" onclick="delItem('lifeServices',${i})">删除</button>
+      </div>
+    </div>
+  `).join("") || '<div class="empty">暂无</div>';
+}
+
+async function addLife(btn){
+  blogData.lifeServices.push({
+    icon: document.getElementById("l_icon").value,
+    title: document.getElementById("l_title").value,
+    desc: document.getElementById("l_desc").value,
+    url: document.getElementById("l_url").value,
+    file:"", fileName:""
+  });
+  await saveData("添加生活服务");
+  document.getElementById("l_icon").value="";
+  document.getElementById("l_title").value="";
+  document.getElementById("l_desc").value="";
+  document.getElementById("l_url").value="";
+  renderLife();
+}
+
+// 软件
+function renderSoftwares(){
+  document.getElementById("list-softwares").innerHTML = (blogData.softwares||[]).map((s,i)=>`
+    <div class="item-row">
+      <div class="row-body">
+        <div class="row-title">${s.icon||""} ${s.title}</div>
+        <div class="row-meta">${s.desc||""}</div>
+      </div>
+      <div class="row-actions">
+        <button class="btn btn-danger btn-sm" onclick="delItem('softwares',${i})">删除</button>
+      </div>
+    </div>
+  `).join("") || '<div class="empty">暂无</div>';
+}
+
+async function addSoftware(btn){
+  blogData.softwares.push({
+    icon: document.getElementById("s_icon").value,
+    title: document.getElementById("s_title").value,
+    desc: document.getElementById("s_desc").value,
+    url: document.getElementById("s_url").value
+  });
+  await saveData("添加软件");
+  renderSoftwares();
+}
+
+// 日记/导师
+function renderDiary(){
+  document.getElementById("list-diary").innerHTML = (blogData.diary||[]).slice(-10).reverse().map((d,i)=>`
+    <div class="item-row">
+      <div class="row-body">
+        <div class="row-title" style="font-size:.85rem">${d.date}</div>
+        <div class="row-meta">${(d.content||"").slice(0,50)}...</div>
+      </div>
+    </div>
+  `).join("") || '<div class="empty">暂无日记</div>';
+}
+
+async function addDiary(btn){
+  const content = document.getElementById("diaryContent").value.trim();
+  if(!content){ alert("请输入内容"); return; }
+  blogData.diary.push({date: new Date().toLocaleDateString("zh-CN"), content});
+  await saveData("写日记");
+  document.getElementById("diaryContent").value="";
+  renderDiary();
+}
+
+async function addAdvisor(btn){
+  const content = document.getElementById("advContent").value.trim();
+  if(!content){ alert("请输入内容"); return; }
+  blogData.advisor.push({date: new Date().toLocaleDateString("zh-CN"), content});
+  await saveData("添加导师指导记录");
+  document.getElementById("advContent").value="";
+  alert("保存成功！");
+}
 
 async function delItem(key, idx){
   if(!confirm("确定删除？")) return;
   blogData[key].splice(idx,1);
-  await saveData();
+  await saveData("删除"+key);
   renderAll();
 }
 
-async function editItem(key, idx){
-  const item = blogData[key][idx];
-  const newTitle = prompt("编辑标题：", item.title);
-  if(newTitle === null) return;
-  item.title = newTitle;
-  const newDesc = prompt("编辑描述：", item.desc || item.source || item.status || "");
-  if(newDesc !== null){
-    if(item.desc !== undefined) item.desc = newDesc;
-    else if(item.source !== undefined) item.source = newDesc;
-  }
-  await saveData();
-  renderAll();
+function renderAll(){
+  renderCourses();
+  renderPapers();
+  renderNotices();
+  renderClass();
+  renderTimeline();
+  renderLife();
+  renderSoftwares();
+  renderDiary();
+  renderLogs();
 }
 
-// ===== 导出/导入 =====
 function exportData(){
   const blob = new Blob([JSON.stringify(blogData, null, 2)], {type:"application/json"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url; a.download = "benyia_blog_backup.json"; a.click();
-  URL.revokeObjectURL(url);
+  a.href = url; a.download = "blog_backup.json"; a.click();
 }
 
 async function importData(e){
@@ -761,7 +903,7 @@ async function importData(e){
   reader.onload = async function(ev){
     try {
       blogData = JSON.parse(ev.target.result);
-      await saveData();
+      await saveData("导入数据");
       renderAll();
       alert("导入成功！");
     } catch(err){ alert("文件格式错误"); }
@@ -770,9 +912,9 @@ async function importData(e){
 }
 
 async function resetData(){
-  if(!confirm("确定恢复默认内容？（当前所有修改将被覆盖）")) return;
+  if(!confirm("确定恢复默认？")) return;
   blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-  await saveData();
+  await saveData("恢复默认");
   renderAll();
 }
 </script>

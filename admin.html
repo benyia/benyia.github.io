@@ -137,10 +137,48 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       </div>
 
       <div class="card">
-        <h2>🎨 站点设置</h2>
+        <h2>🎨 个人信息与站点设置</h2>
+        <div class="form-row">
+          <input type="text" id="cfgAvatar" placeholder="头像(emoji 或图片URL)" style="flex:1">
+          <input type="text" id="cfgName" placeholder="姓名" style="flex:1">
+          <input type="text" id="cfgBio" placeholder="一句话简介" style="flex:2">
+        </div>
         <div class="form-row"><input type="text" id="cfgTitle" placeholder="网站标题"><input type="text" id="cfgSub" placeholder="副标题"></div>
         <div class="form-row"><textarea id="cfgAbout" placeholder="关于我的介绍..." style="min-height:150px"></textarea></div>
         <button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
+      </div>
+
+      <div class="card">
+        <h2>🏷️ 分类管理（首页左侧）</h2>
+        <div id="catManageList" style="margin-bottom:10px"></div>
+        <div class="form-row">
+          <input type="text" id="catIcon" placeholder="图标" style="flex:0.5">
+          <input type="text" id="catName" placeholder="分类名" style="flex:1">
+          <select id="catSection" style="flex:1">
+            <option value="courses">课程</option>
+            <option value="papers">论文</option>
+            <option value="notices">通知</option>
+            <option value="class">班级</option>
+          </select>
+          <button class="btn btn-ghost btn-sm" onclick="addCategory()">添加分类</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>#️⃣ 标签管理</h2>
+        <div class="form-row"><input type="text" id="tagsInput" placeholder="标签，用逗号分隔，如：控制工程,深度学习,FPGA"></div>
+        <button class="btn btn-primary" onclick="saveTags()">保存标签</button>
+      </div>
+
+      <div class="card">
+        <h2>🔗 快速链接管理（首页右侧）</h2>
+        <div id="quickLinkManageList" style="margin-bottom:10px"></div>
+        <div class="form-row">
+          <input type="text" id="qlIcon" placeholder="图标" style="flex:0.5">
+          <input type="text" id="qlTitle" placeholder="名称" style="flex:1">
+          <input type="text" id="qlUrl" placeholder="链接URL" style="flex:2">
+          <button class="btn btn-ghost btn-sm" onclick="addQuickLink()">添加</button>
+        </div>
       </div>
 
       <div class="card">
@@ -210,6 +248,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="查重"> 查重</label>
           <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="投稿"> 投稿</label>
         </div>
+        <div class="form-row"><textarea id="pAbstract" placeholder="摘要 / 简介..." style="min-height:80px"></textarea></div>
         <div class="form-row"><input type="text" id="pDesc" placeholder="备注"></div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 论文文件</b></div>
         <div class="file-list" id="pFiles"></div>
@@ -249,7 +288,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="editing-bar" id="classEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelEdit('class')">取消编辑</a></div>
         <div class="form-row">
           <input type="text" id="clTitle" placeholder="标题" style="flex:2">
-          <select id="clType"><option>通知</option><option>作业</option><option>考试</option><option>活动</option></select>
+          <select id="clType"><option>通知</option><option>名单</option><option>作业</option><option>考试</option><option>活动</option></select>
           <input type="date" id="clDate" style="flex:1">
         </div>
         <div class="form-row"><textarea id="clContent" placeholder="详细内容..."></textarea></div>
@@ -289,7 +328,8 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       <div class="card">
         <h2>记一笔</h2>
         <div class="form-row">
-          <select id="lgType"><option value="expense">支出</option><option value="income">收入</option></select>
+          <select id="lgType" onchange="updateLgCategories()"><option value="expense">支出</option><option value="income">收入</option></select>
+          <select id="lgCategory" style="flex:1"></select>
           <input type="number" id="lgAmount" placeholder="金额" step="0.01" style="flex:1">
           <input type="date" id="lgDate" style="flex:1">
           <input type="text" id="lgDesc" placeholder="备注" style="flex:2">
@@ -348,9 +388,22 @@ const TOKEN_KEY = "benyia_gh_token";
 const MAX_FILE_MB = 25;
 
 const DEFAULT_DATA = {
-  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。"},
+  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",avatar:"思",name:"思齐",bio:"控制工程研究生"},
+  categories:[
+    {icon:"📚",name:"课程学习",section:"courses"},
+    {icon:"📝",name:"论文",section:"papers"},
+    {icon:"🔔",name:"学校通知",section:"notices"},
+    {icon:"👥",name:"班级事务",section:"class"}
+  ],
+  tags:["控制工程","深度学习","FPGA","Python"],
+  quickLinks:[
+    {icon:"☁️",title:"百度网盘",url:"https://pan.baidu.com"},
+    {icon:"🚄",title:"12306",url:"https://www.12306.cn"},
+    {icon:"🐙",title:"GitHub",url:"https://github.com"},
+    {icon:"💡",title:"知乎",url:"https://www.zhihu.com"}
+  ],
   courses:[],papers:[],notices:[],classItems:[],lifeServices:[],
-  ledger:[],diary:[],advisor:[],logs:[]
+  ledger:[],ledgerCategories:{expense:["吃饭","买东西","生活用品","交通","娱乐","学习","医疗","其他"],income:["工资","奖学金","补贴","红包","其他"]},diary:[],advisor:[],logs:[]
 };
 
 /* ============================================================
@@ -780,6 +833,13 @@ function renderAll(){
   $("cfgTitle").value = sc.title || "";
   $("cfgSub").value   = sc.subtitle || "";
   $("cfgAbout").value = sc.about || "";
+  $("cfgAvatar").value = sc.avatar || "";
+  $("cfgName").value   = sc.name || "";
+  $("cfgBio").value    = sc.bio || "";
+  $("tagsInput").value = (blogData.tags||[]).join(",");
+  renderCatManage();
+  renderQuickLinkManage();
+  updateLgCategories();
 
   let fileCount = 0;
   ["courses","papers","classItems"].forEach(k=>{
@@ -893,6 +953,7 @@ function savePaper(){
     status:$("pStatus").value,
     year:$("pYear").value.trim(),
     desc:$("pDesc").value.trim(),
+    abstract:$("pAbstract").value.trim(),
     tags,
     files,
     file: files.length?files[0].url:"",
@@ -913,7 +974,7 @@ function editPaper(i){
   const p=blogData.papers[i];
   editing.paper=i;
   $("pTitle").value=p.title||""; $("pStatus").value=p.status||"在投";
-  $("pYear").value=p.year||""; $("pDesc").value=p.desc||"";
+  $("pYear").value=p.year||""; $("pDesc").value=p.desc||""; $("pAbstract").value=p.abstract||"";
   document.querySelectorAll(".paper-tag").forEach(c=>c.checked=(p.tags||[]).includes(c.value));
   drafts.paper=(p.files||[]).slice();
   renderDraftFiles("paper");
@@ -1071,7 +1132,8 @@ function addLedger(){
     type:$("lgType").value,
     amount,
     date:$("lgDate").value||todayStr(),
-    desc:$("lgDesc").value.trim()
+    desc:$("lgDesc").value.trim(),
+    category:$("lgCategory").value||"其他"
   });
   saveData("记账：¥"+amount.toFixed(2));
   renderAll();
@@ -1091,7 +1153,7 @@ function renderLedger(){
     const realIdx=blogData.ledger.indexOf(r);
     return `
     <div class="item-row">
-      <div class="info"><div class="title">${r.type==="income"?"收入":"支出"} ¥${(parseFloat(r.amount)||0).toFixed(2)}</div><div class="desc">${esc(r.date)} · ${esc(r.desc||"")}</div></div>
+      <div class="info"><div class="title">${r.type==="income"?"收入":"支出"} ¥${(parseFloat(r.amount)||0).toFixed(2)}</div><div class="desc">${esc(r.date)} · ${esc(r.category||"其他")} · ${esc(r.desc||"")}</div></div>
       <button class="btn btn-danger btn-sm" onclick="delLedger(${realIdx})">删除</button>
     </div>`;}).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
@@ -1167,11 +1229,75 @@ function saveSiteConfig(){
   blogData.siteConfig = {
     title: $("cfgTitle").value.trim() || "思齐个人主页",
     subtitle: $("cfgSub").value.trim(),
-    about: $("cfgAbout").value
+    about: $("cfgAbout").value,
+    avatar: $("cfgAvatar").value.trim() || "思",
+    name: $("cfgName").value.trim() || "思齐",
+    bio: $("cfgBio").value.trim()
   };
-  /* 同步更新首页默认标题 */
   saveData("修改站点设置");
+  renderAll();
 }
+/* ---------- 分类管理 ---------- */
+function renderCatManage(){
+  $("catManageList").innerHTML = (blogData.categories||[]).map(function(c,i){
+    return '<div class="item-row"><div class="info"><div class="title">'+esc(c.icon||"")+' '+esc(c.name)+'</div><div class="desc">指向：'+esc(c.section||"")+'</div></div><button class="btn btn-danger btn-sm" onclick="delCategory('+i+')">删除</button></div>';
+  }).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无分类</div>';
+}
+function addCategory(){
+  var name=$("catName").value.trim();
+  if(!name){ showToast("请输入分类名","error"); return; }
+  blogData.categories = blogData.categories || [];
+  blogData.categories.push({icon:$("catIcon").value.trim()||"📁", name:name, section:$("catSection").value});
+  saveData("添加分类："+name);
+  renderAll();
+  $("catName").value=""; $("catIcon").value="";
+}
+function delCategory(i){
+  if(!confirm("确定删除？")) return;
+  blogData.categories.splice(i,1);
+  saveData("删除分类");
+  renderAll();
+}
+
+/* ---------- 标签管理 ---------- */
+function saveTags(){
+  var raw=$("tagsInput").value;
+  blogData.tags = raw.split(/[,，]/).map(function(t){return t.trim();}).filter(Boolean);
+  saveData("修改标签");
+  renderAll();
+  showToast("标签已保存");
+}
+
+/* ---------- 快速链接管理 ---------- */
+function renderQuickLinkManage(){
+  $("quickLinkManageList").innerHTML = (blogData.quickLinks||[]).map(function(l,i){
+    return '<div class="item-row"><div class="info"><div class="title">'+esc(l.icon||"")+' '+esc(l.title)+'</div><div class="desc">'+esc(l.url)+'</div></div><button class="btn btn-danger btn-sm" onclick="delQuickLink('+i+')">删除</button></div>';
+  }).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无链接</div>';
+}
+function addQuickLink(){
+  var title=$("qlTitle").value.trim();
+  var url=$("qlUrl").value.trim();
+  if(!title||!url){ showToast("请输入名称和链接","error"); return; }
+  blogData.quickLinks = blogData.quickLinks || [];
+  blogData.quickLinks.push({icon:$("qlIcon").value.trim()||"🔗", title:title, url:url});
+  saveData("添加快速链接："+title);
+  renderAll();
+  $("qlTitle").value=""; $("qlUrl").value=""; $("qlIcon").value="";
+}
+function delQuickLink(i){
+  if(!confirm("确定删除？")) return;
+  blogData.quickLinks.splice(i,1);
+  saveData("删除快速链接");
+  renderAll();
+}
+
+/* ---------- 记账分类下拉 ---------- */
+function updateLgCategories(){
+  var type=$("lgType").value;
+  var cats=(blogData.ledgerCategories||{})[type]||["其他"];
+  $("lgCategory").innerHTML = cats.map(function(c){return '<option>'+esc(c)+'</option>';}).join("");
+}
+
 function exportData(){
   const blob = new Blob([JSON.stringify(blogData,null,2)], {type:"application/json"});
   const a = document.createElement("a");
@@ -1195,7 +1321,7 @@ function cancelEdit(kind){
     renderDraftFiles("course");
   }
   if(kind==="paper"){
-    $("pTitle").value=""; $("pYear").value=""; $("pDesc").value="";
+    $("pTitle").value=""; $("pYear").value=""; $("pDesc").value=""; $("pAbstract").value="";
     document.querySelectorAll(".paper-tag").forEach(c=>c.checked=false);
     $("paperFormTitle").textContent="添加论文";
     $("paperEditBar").classList.remove("on");

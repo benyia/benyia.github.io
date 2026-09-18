@@ -89,6 +89,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <div class="card">
         <h2>站点设置</h2>
         <div class="form-row"><input type="text" id="cfgTitle" placeholder="网站标题"><input type="text" id="cfgSub" placeholder="副标题"></div>
+        <div class="form-row"><textarea id="cfgAbout" placeholder="关于我的介绍..." style="min-height:150px"></textarea></div>
         <button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
       </div>
     </div>
@@ -283,6 +284,7 @@ function showNotice(){
 function renderAll(){
   document.getElementById("cfgTitle").value=blogData.siteConfig.title||"";
   document.getElementById("cfgSub").value=blogData.siteConfig.subtitle||"";
+  document.getElementById("cfgAbout").value=blogData.siteConfig.about||"";
   document.getElementById("statC").textContent=(blogData.courses||[]).length;
   document.getElementById("statP").textContent=(blogData.papers||[]).length;
   document.getElementById("statN").textContent=(blogData.notices||[]).length;
@@ -294,6 +296,7 @@ function renderAll(){
 function saveSiteConfig(){
   blogData.siteConfig.title=document.getElementById("cfgTitle").value;
   blogData.siteConfig.subtitle=document.getElementById("cfgSub").value;
+  blogData.siteConfig.about=document.getElementById("cfgAbout").value;
   saveData("修改站点设置");
 }
 

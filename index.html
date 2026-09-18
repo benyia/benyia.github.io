@@ -8,15 +8,27 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --primary:#10b981;--primary-light:#d1fae5;--primary-dark:#059669;
-  --bg:#f0fdf4;--card:#fff;--text:#1e293b;--text2:#64748b;--text3:#94a3b8;
+  --bg:#f0fdf4;--card:rgba(255,255,255,.92);--text:#1e293b;--text2:#64748b;--text3:#94a3b8;
   --border:#e2e8f0;--radius:12px;--shadow:0 2px 12px rgba(0,0,0,.05);
   --shadow-hover:0 8px 30px rgba(16,185,129,.15);
 }
 html{scroll-behavior:smooth}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  background-image:url("image1.png");
+  background-size:cover;
+  background-attachment:fixed;
+  background-position:center;
+  min-height:100vh;
+}
+body::before{
+  content:"";position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(240,253,244,.85);z-index:-1;
+}
 
 /* Top Nav */
-.topnav{background:var(--card);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.topnav{background:rgba(255,255,255,.95);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
 .topnav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;height:60px}
 .nav-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.1rem;color:var(--text);text-decoration:none;white-space:nowrap}
 .nav-brand .dot{width:10px;height:10px;border-radius:50%;background:var(--primary)}
@@ -25,7 +37,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .nav-links button:hover{background:var(--primary-light);color:var(--primary-dark)}
 .nav-links button.active{background:var(--primary);color:#fff}
 .nav-search{position:relative;margin-left:auto}
-.nav-search input{padding:8px 14px 8px 36px;border:1px solid var(--border);border-radius:99px;font-size:.85rem;width:200px;outline:none;transition:all .2s}
+.nav-search input{padding:8px 14px 8px 36px;border:1px solid var(--border);border-radius:99px;font-size:.85rem;width:200px;outline:none;transition:all .2s;background:#fff}
 .nav-search input:focus{border-color:var(--primary);width:240px}
 .nav-search .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.5;font-size:.85rem}
 .search-results{position:absolute;top:120%;right:0;background:var(--card);border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.15);width:350px;max-height:400px;overflow-y:auto;display:none;z-index:100}
@@ -36,10 +48,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .search-result-item .title{font-size:.88rem}
 .nav-admin{padding:8px 14px;background:var(--primary);color:#fff;border-radius:8px;text-decoration:none;font-size:.85rem;white-space:nowrap}
 
-/* Hero */
-.hero{background:linear-gradient(135deg,#ecfdf5 0%,#d1fae5 100%);padding:40px 24px;border-bottom:1px solid var(--border);text-align:center}
-.hero h1{font-size:2rem;font-weight:800;margin-bottom:4px}
-.hero p{color:var(--text2);font-size:1rem}
+/* Page Title */
+.page-title{background:linear-gradient(135deg,rgba(209,250,229,.9),rgba(167,243,208,.9));padding:32px 24px;text-align:center;border-bottom:1px solid var(--border)}
+.page-title h1{font-size:1.8rem;font-weight:800;margin-bottom:4px}
+.page-title p{color:var(--text2);font-size:.95rem}
 
 /* Main Layout */
 .main{max-width:1200px;margin:0 auto;padding:24px;display:grid;grid-template-columns:240px 1fr 240px;gap:24px}
@@ -47,7 +59,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .center-col{min-width:0}
 
 /* Card */
-.side-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.side-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;backdrop-filter:blur(10px)}
 .side-card h3{font-size:.95rem;margin-bottom:14px;padding-left:10px;border-left:3px solid var(--primary)}
 
 /* Profile */
@@ -76,20 +88,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .back-btn:hover{border-color:var(--primary);color:var(--primary)}
 
 /* Article Card */
-.article-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;transition:all .3s;cursor:pointer}
+.article-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;transition:all .3s;cursor:pointer;backdrop-filter:blur(10px)}
 .article-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px)}
 .article-cover{height:160px;background:linear-gradient(135deg,#d1fae5,#a7f3d0);display:flex;align-items:center;justify-content:center;font-size:3rem}
 .article-body{padding:20px}
 .article-title{font-size:1.1rem;font-weight:700;margin-bottom:8px}
 .article-meta{font-size:.8rem;color:var(--text3);margin-bottom:8px;display:flex;gap:12px;flex-wrap:wrap}
+.article-meta .time{color:var(--primary);font-weight:500}
 .article-desc{font-size:.88rem;color:var(--text2);line-height:1.7}
 .article-tags{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
 
 /* Detail page */
-.detail-header{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:16px}
+.detail-header{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:16px;backdrop-filter:blur(10px)}
 .detail-header .icon{font-size:2.5rem;margin-bottom:12px}
 .detail-header h2{font-size:1.5rem;margin-bottom:8px}
-.detail-header .intro{color:var(--text2);line-height:1.8;margin-bottom:16px}
+.detail-header .intro{color:var(--text2);line-height:1.8;margin-bottom:16px;white-space:pre-wrap}
 .progress-bar-wrap{background:#e2e8f0;height:8px;border-radius:99px;overflow:hidden;margin-bottom:6px}
 .progress-bar{background:linear-gradient(90deg,var(--primary),#34d399);height:100%;border-radius:99px}
 .progress-text{font-size:.82rem;color:var(--text2)}
@@ -112,23 +125,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 
 /* Ledger */
 .ledger-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;backdrop-filter:blur(10px)}
 .stat-card .num{font-size:1.3rem;font-weight:700}
 .stat-card .label{font-size:.78rem;color:var(--text2)}
 .income .num{color:#10b981}.expense .num{color:#ef4444}
 .ledger-form{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.ledger-form input,.ledger-form select{padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:.85rem}
+.ledger-form input,.ledger-form select{padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:.85rem;background:var(--card)}
 .ledger-form input:first-child{flex:2;min-width:120px}
 .btn{padding:8px 16px;border:none;border-radius:8px;background:var(--primary);color:#fff;font-size:.85rem;cursor:pointer}
 .btn:hover{background:var(--primary-dark)}
 
 /* Timeline */
-.timeline-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;border-left:4px solid var(--primary)}
+.timeline-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;border-left:4px solid var(--primary);backdrop-filter:blur(10px)}
 .timeline-item .date{font-size:.78rem;color:var(--primary);font-weight:600}
 .timeline-item .title{font-weight:600;margin:4px 0}
 .timeline-item .desc{font-size:.88rem;color:var(--text2)}
 
-.diary-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px}
+.diary-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;backdrop-filter:blur(10px)}
 .diary-date{font-size:.78rem;color:var(--text3);margin-bottom:6px}
 .diary-content{font-size:.9rem;white-space:pre-wrap;line-height:1.7}
 
@@ -137,6 +150,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .footer{text-align:center;padding:32px;color:var(--text3);font-size:.82rem;border-top:1px solid var(--border);margin-top:20px}
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* About page */
+.about-content{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;backdrop-filter:blur(10px);line-height:1.8;white-space:pre-wrap;font-size:.95rem}
 
 /* Responsive */
 @media(max-width:900px){
@@ -160,10 +176,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
       <button data-t="notices">通知</button>
       <button data-t="class">班级</button>
       <button data-t="life">生活服务</button>
-      <button data-t="timeline">时间记录</button>
       <button data-t="ledger">记账</button>
       <button data-t="diary">日记</button>
       <button data-t="advisor">导师指导</button>
+      <button data-t="about">关于</button>
     </div>
     <div class="nav-search">
       <span class="icon">🔍</span>
@@ -174,9 +190,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   </div>
 </nav>
 
-<div class="hero">
-  <h1 id="siteTitle">思齐个人主页</h1>
-  <p id="siteSubtitle">钟爱奥迪A6</p>
+<div class="page-title" id="pageTitle">
+  <h1 id="titleH1">思齐个人主页</h1>
+  <p id="titleP">钟爱奥迪A6</p>
 </div>
 
 <div class="main">
@@ -184,8 +200,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   <div class="left-col">
     <div class="side-card profile">
       <div class="avatar">思</div>
-      <div class="name" id="profileName">思齐</div>
-      <div class="bio" id="profileBio">控制工程研究生 · 记录学习与生活</div>
+      <div class="name">思齐</div>
+      <div class="bio">控制工程研究生 · 记录学习与生活</div>
       <a href="https://github.com/benyia" target="_blank" class="github-btn">🐙 GitHub</a>
     </div>
     <div class="side-card">
@@ -195,7 +211,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
         <div class="cat-item" onclick="switchTab('papers')"><span>📝 论文</span><span class="count" id="cntPapers">0</span></div>
         <div class="cat-item" onclick="switchTab('notices')"><span>🔔 学校通知</span><span class="count" id="cntNotices">0</span></div>
         <div class="cat-item" onclick="switchTab('class')"><span>👥 班级事务</span><span class="count" id="cntClass">0</span></div>
-        <div class="cat-item" onclick="switchTab('timeline')"><span>📅 时间记录</span><span class="count" id="cntTimeline">0</span></div>
       </div>
     </div>
     <div class="side-card">
@@ -205,27 +220,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
         <span class="tag-chip">深度学习</span>
         <span class="tag-chip">FPGA</span>
         <span class="tag-chip">Python</span>
-        <span class="tag-chip">GitHub</span>
       </div>
     </div>
   </div>
 
   <!-- Center Column -->
   <div class="center-col">
-    <!-- Home / Course list -->
     <div class="section active" id="sec-home">
-      <div class="section-header"><h2>最新文章</h2></div>
       <div id="homeList"></div>
     </div>
 
     <div class="section" id="sec-courses">
-      <div class="section-header"><h2>我的课程</h2></div>
       <div id="coursesList"></div>
     </div>
 
     <div class="section" id="sec-courseDetail">
       <div class="section-header">
-        <h2 id="cdTitle">课程详情</h2>
         <button class="back-btn" onclick="backToCourses()">← 返回</button>
       </div>
       <div class="detail-header">
@@ -239,18 +249,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     </div>
 
     <div class="section" id="sec-papers">
-      <div class="section-header"><h2>论文</h2></div>
       <div id="papersList"></div>
     </div>
 
     <div class="section" id="sec-notices">
-      <div class="section-header"><h2>学校通知</h2></div>
       <div id="noticesList"></div>
     </div>
 
     <div class="section" id="sec-noticeDetail">
       <div class="section-header">
-        <h2>通知详情</h2>
         <button class="back-btn" onclick="backToNotices()">← 返回</button>
       </div>
       <div class="detail-header" id="noticeDetailBox">
@@ -261,22 +268,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     </div>
 
     <div class="section" id="sec-class">
-      <div class="section-header"><h2>班级事务</h2></div>
       <div id="classList"></div>
     </div>
 
     <div class="section" id="sec-life">
-      <div class="section-header"><h2>生活服务</h2></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px" id="lifeList"></div>
     </div>
 
-    <div class="section" id="sec-timeline">
-      <div class="section-header"><h2>时间记录</h2></div>
-      <div id="timelineList"></div>
-    </div>
-
     <div class="section" id="sec-ledger">
-      <div class="section-header"><h2>生活记账</h2></div>
       <div class="ledger-stats">
         <div class="stat-card income"><div class="num" id="statInc">¥0</div><div class="label">本月收入</div></div>
         <div class="stat-card expense"><div class="num" id="statExp">¥0</div><div class="label">本月支出</div></div>
@@ -292,13 +291,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     </div>
 
     <div class="section" id="sec-diary">
-      <div class="section-header"><h2>日记</h2></div>
       <div id="diaryList"></div>
     </div>
 
     <div class="section" id="sec-advisor">
-      <div class="section-header"><h2>导师指导记录</h2></div>
       <div id="advisorList"></div>
+    </div>
+
+    <div class="section" id="sec-about">
+      <div class="about-content" id="aboutContent">加载中...</div>
     </div>
   </div>
 
@@ -312,10 +313,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
         <div class="stat-item"><div class="num" id="statPapers">0</div><div class="label">论文数</div></div>
         <div class="stat-item"><div class="num" id="statDays">171</div><div class="label">建站天数</div></div>
       </div>
-    </div>
-    <div class="side-card">
-      <h3>文章归档</h3>
-      <div class="archive-list" id="archiveList"></div>
     </div>
     <div class="side-card">
       <h3>快速链接</h3>
@@ -336,31 +333,42 @@ const GH_OWNER = "benyia";
 const GH_REPO = "benyia.github.io";
 const GH_TOKEN = "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";
 
+const PAGE_TITLES = {
+  home: ["思齐个人主页", "钟爱奥迪A6"],
+  courses: ["我的课程", "本学期课程资料与学习资源"],
+  papers: ["论文", "学术论文与研究进展"],
+  notices: ["学校通知", "重要通知与公告"],
+  class: ["班级事务", "班级通知与活动"],
+  life: ["生活服务", "常用网站与工具"],
+  ledger: ["生活记账", "记录每一笔开销"],
+  diary: ["日记", "记录生活点滴"],
+  advisor: ["导师指导", "与导师交流记录"],
+  about: ["关于我", "了解更多关于思齐"],
+  courseDetail: ["课程详情", ""],
+  noticeDetail: ["通知详情", ""]
+};
+
 const DEFAULT_DATA = {
-  siteConfig: {title: "思齐个人主页", subtitle: "钟爱奥迪A6"},
+  siteConfig: {title: "思齐个人主页", subtitle: "钟爱奥迪A6", about: "你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。\n\n🎓 专业：控制工程\n💻 方向：深度学习 / 故障诊断\n🔧 技能：Verilog / Python / MATLAB\n\n欢迎交流！"},
   courses: [
-    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", intro:"本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。", progress: 60, files: []},
-    {icon:"🧠", title:"神经网络与深度学习", desc:"课件、上机指导、参考书", intro:"深度学习基础、CNN、RNN、Transformer等模型原理与实践应用。", progress: 30, files: []}
+    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", intro:"本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。", progress: 60, files: [], time:"2026-09-18 10:00"},
+    {icon:"🧠", title:"神经网络与深度学习", desc:"课件、上机指导、参考书", intro:"深度学习基础、CNN、RNN、Transformer等模型原理与实践应用。", progress: 30, files: [], time:"2026-09-18 10:00"}
   ],
   papers: [
-    {title:"基于深度学习的故障诊断方法研究", status:"在投", year:"2026", desc:"", tags:["撰写","中文"], file:"", fileName:""}
+    {title:"基于深度学习的故障诊断方法研究", status:"在投", year:"2026", desc:"", tags:["撰写","中文"], file:"", fileName:"", time:"2026-09-18 10:00"}
   ],
   notices: [
-    {title:"2026年秋季学期选课通知", source:"研究生院", date:"2026-09-01", level:"red", content:"各研究生：2026年秋季学期选课即将开始，请于9月1日-9月5日登录研究生系统完成选课。"}
+    {title:"2026年秋季学期选课通知", source:"研究生院", date:"2026-09-01", level:"red", content:"各研究生：2026年秋季学期选课即将开始，请于9月1日-9月5日登录研究生系统完成选课。", time:"2026-09-18 10:00"}
   ],
   classItems: [
-    {title:"组会时间调整为每周四下午2点", type:"通知", date:"2026-09-15", content:"全体同学注意，本周组会时间调整为周四下午2点。", file:"", fileName:""}
+    {title:"组会时间调整为每周四下午2点", type:"通知", date:"2026-09-15", content:"全体同学注意，本周组会时间调整为周四下午2点。", file:"", fileName:"", time:"2026-09-18 10:00"}
   ],
   lifeServices: [
     {icon:"☁️", title:"百度网盘", desc:"云存储", url:"https://pan.baidu.com"},
     {icon:"🅰️", title:"阿里云盘", desc:"不限速云盘", url:"https://www.alipan.com"}
   ],
-  softwares: [
-    {icon:"🐍", title:"Python", desc:"多版本下载", url:"https://www.python.org/downloads/"}
-  ],
-  timeline: [
-    {date:"2026-09-01", title:"秋季学期开始", desc:"新学期正式开学"}
-  ],
+  softwares: [],
+  timeline: [],
   ledger: [],
   diary: [],
   advisor: [],
@@ -387,8 +395,8 @@ async function loadData(){
     blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
   }
   if(blogData.siteConfig){
-    document.getElementById("siteTitle").textContent = blogData.siteConfig.title || "思齐个人主页";
-    document.getElementById("siteSubtitle").textContent = blogData.siteConfig.subtitle || "";
+    document.getElementById("titleH1").textContent = blogData.siteConfig.title || "思齐个人主页";
+    document.getElementById("titleP").textContent = blogData.siteConfig.subtitle || "";
   }
   renderAll();
 }
@@ -402,33 +410,33 @@ async function saveData(action){
   try {
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(blogData, null, 2))));
     if(!dataSha){
-      try {
-        const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`);
-        if(res.ok){ const d = await res.json(); dataSha = d.sha; }
-      } catch(e){}
+      const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`);
+      if(res.ok){ const d = await res.json(); dataSha = d.sha; }
     }
-    await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`, {
+    const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`, {
       method: "PUT",
       headers: {"Authorization":"token "+GH_TOKEN, "Content-Type":"application/json"},
       body: JSON.stringify({message:"Update: "+(action||"blog"), content, sha: dataSha})
     });
-    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`);
-    if(res.ok){ const d = await res.json(); dataSha = d.sha; }
-  } catch(e){ console.error("保存失败", e); }
+    if(r.ok){
+      const d = await r.json(); dataSha = d.content.sha;
+    }
+    return true;
+  } catch(e){ console.error("保存失败", e); return false; }
 }
 
 function renderAll(){
-  // Home list: 最新文章（课程+论文+通知混合）
+  // Home list
   const homeItems = [];
-  (blogData.courses||[]).forEach((c,i)=>homeItems.push({type:"课程", icon:c.icon||"📚", title:c.title, desc:c.desc, date:"", action:()=>openCourse(i)}));
-  (blogData.papers||[]).forEach(p=>homeItems.push({type:"论文", icon:"📝", title:p.title, desc:p.desc, date:p.year||""}));
-  (blogData.notices||[]).forEach((n,i)=>homeItems.push({type:"通知", icon:"🔔", title:n.title, desc:n.content, date:n.date, action:()=>openNotice(i)}));
+  (blogData.courses||[]).forEach((c,i)=>homeItems.push({type:"课程", icon:c.icon||"📚", title:c.title, desc:c.desc, time:c.time||"", action:()=>openCourse(i)}));
+  (blogData.papers||[]).forEach(p=>homeItems.push({type:"论文", icon:"📝", title:p.title, desc:p.desc, time:p.time||""}));
+  (blogData.notices||[]).forEach((n,i)=>homeItems.push({type:"通知", icon:"🔔", title:n.title, desc:n.content, time:n.time||"", action:()=>openNotice(i)}));
   document.getElementById("homeList").innerHTML = homeItems.map(a=>`
     <div class="article-card" onclick="${a.action?a.action:""}">
       <div class="article-cover">${a.icon}</div>
       <div class="article-body">
         <div class="article-title">${esc(a.title)}</div>
-        <div class="article-meta"><span>${a.type}</span>${a.date?`<span>${a.date}</span>`:""}</div>
+        <div class="article-meta"><span>${a.type}</span>${a.time?`<span class="time">🕐 ${a.time}</span>`:""}</div>
         <div class="article-desc">${esc(a.desc||"")}</div>
       </div>
     </div>`).join("") || '<div class="empty">暂无内容</div>';
@@ -439,7 +447,7 @@ function renderAll(){
       <div class="article-cover">${c.icon||"📐"}</div>
       <div class="article-body">
         <div class="article-title">${esc(c.title)}</div>
-        <div class="article-meta"><span>${c.files?c.files.length:0} 个文件</span><span>进度 ${c.progress||0}%</span></div>
+        <div class="article-meta"><span>${c.files?c.files.length:0} 个文件</span><span>进度 ${c.progress||0}%</span>${c.time?`<span class="time">🕐 ${c.time}</span>`:""}</div>
         <div class="article-desc">${esc(c.desc)}</div>
       </div>
     </div>`).join("") || '<div class="empty">暂无课程</div>';
@@ -449,7 +457,7 @@ function renderAll(){
     <div class="article-card">
       <div class="article-body">
         <div class="article-title">${esc(p.title)}</div>
-        <div class="article-meta"><span>${p.status}</span>${p.year?`<span>${p.year}</span>`:""}</div>
+        <div class="article-meta"><span>${p.status}</span>${p.year?`<span>${p.year}</span>`:""}${p.time?`<span class="time">🕐 ${p.time}</span>`:""}</div>
         <div class="article-tags">${(p.tags||[]).map(t=>`<span class="tag-chip">${t}</span>`).join("")}</div>
       </div>
     </div>`).join("") || '<div class="empty">暂无论文</div>';
@@ -459,7 +467,7 @@ function renderAll(){
     <div class="article-card" onclick="openNotice(${i})">
       <div class="article-body">
         <div class="article-title">${esc(n.title)}</div>
-        <div class="article-meta"><span>${n.source}</span><span>${n.date}</span></div>
+        <div class="article-meta"><span>${n.source}</span><span>${n.date}</span>${n.time?`<span class="time">🕐 ${n.time}</span>`:""}</div>
         <div class="article-desc">${esc(n.content||"").slice(0,80)}...</div>
       </div>
     </div>`).join("") || '<div class="empty">暂无通知</div>';
@@ -469,7 +477,7 @@ function renderAll(){
     <div class="article-card">
       <div class="article-body">
         <div class="article-title">${esc(c.title)}</div>
-        <div class="article-meta"><span>${c.type}</span><span>${c.date||""}</span></div>
+        <div class="article-meta"><span>${c.type}</span><span>${c.date||""}</span>${c.time?`<span class="time">🕐 ${c.time}</span>`:""}</div>
         <div class="article-desc">${esc(c.content||"")}</div>
       </div>
     </div>`).join("") || '<div class="empty">暂无班级事务</div>';
@@ -486,24 +494,18 @@ function renderAll(){
       </div>
     </a>`).join("") || '<div class="empty">暂无</div>';
 
-  // Timeline
-  document.getElementById("timelineList").innerHTML = (blogData.timeline||[]).slice().sort((a,b)=>b.date.localeCompare(a.date)).map(t=>`
-    <div class="timeline-item">
-      <div class="date">${esc(t.date)}</div>
-      <div class="title">${esc(t.title)}</div>
-      <div class="desc">${esc(t.desc)}</div>
-    </div>`).join("") || '<div class="empty">暂无</div>';
-
   renderLedger();
   renderDiary();
   renderAdvisor();
+
+  // About
+  document.getElementById("aboutContent").textContent = (blogData.siteConfig && blogData.siteConfig.about) || "暂无介绍";
 
   // Stats
   document.getElementById("cntCourses").textContent = (blogData.courses||[]).length;
   document.getElementById("cntPapers").textContent = (blogData.papers||[]).length;
   document.getElementById("cntNotices").textContent = (blogData.notices||[]).length;
   document.getElementById("cntClass").textContent = (blogData.classItems||[]).length;
-  document.getElementById("cntTimeline").textContent = (blogData.timeline||[]).length;
   document.getElementById("statArticles").textContent = (blogData.courses||[]).length + (blogData.papers||[]).length + (blogData.notices||[]).length;
   document.getElementById("statCourses").textContent = (blogData.courses||[]).length;
   document.getElementById("statPapers").textContent = (blogData.papers||[]).length;
@@ -522,10 +524,11 @@ function openCourse(idx){
       <div><div class="name">${f.name}</div><div class="type">${f.type||"文件"}</div></div>
       ${f.url?`<a href="${f.url}" target="_blank">下载</a>`:"<span>待上传</span>"}
     </div>`).join("") || '<div class="empty">暂无文件</div>';
+  setPageTitle("courseDetail", c.title, "");
   showSection("courseDetail");
 }
 
-function backToCourses(){ showSection("courses"); currentCourseIdx=-1; }
+function backToCourses(){ showSection("courses"); setPageTitle("courses"); currentCourseIdx=-1; }
 
 function openNotice(idx){
   currentNoticeIdx = idx;
@@ -533,10 +536,16 @@ function openNotice(idx){
   document.getElementById("ndTitle").textContent = n.title;
   document.getElementById("ndMeta").textContent = n.source + " · " + n.date;
   document.getElementById("ndContent").textContent = n.content||"";
+  setPageTitle("noticeDetail", n.title, "");
   showSection("noticeDetail");
 }
 
-function backToNotices(){ showSection("notices"); currentNoticeIdx=-1; }
+function backToNotices(){ showSection("notices"); setPageTitle("notices"); currentNoticeIdx=-1; }
+
+function setPageTitle(key, h1, p){
+  document.getElementById("titleH1").textContent = h1 || (PAGE_TITLES[key]?PAGE_TITLES[key][0]:"思齐个人主页");
+  document.getElementById("titleP").textContent = p !== undefined ? p : (PAGE_TITLES[key]?PAGE_TITLES[key][1]:"");
+}
 
 function showSection(name){
   document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
@@ -546,6 +555,9 @@ function showSection(name){
 
 function switchTab(t){
   document.querySelectorAll(".nav-links button").forEach(b=>b.classList.remove("active"));
+  const btn = document.querySelector(`.nav-links button[data-t="${t}"]`);
+  if(btn) btn.classList.add("active");
+  setPageTitle(t);
   showSection(t);
 }
 
@@ -554,6 +566,7 @@ document.querySelectorAll(".nav-links button").forEach(btn=>{
 });
 
 function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function nowStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
 
 function renderLedger(){
   const records = blogData.ledger||[];

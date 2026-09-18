@@ -15,6 +15,11 @@
           "name": "第1章 绪论.pdf",
           "url": "https://benyia.github.io/benyia.github.io/files/1789738888760_第1章_绪论.pdf",
           "type": "PDF"
+        },
+        {
+          "name": "第1章 绪论.pdf",
+          "url": "https://benyia.github.io/benyia.github.io/files/1789738892078_第1章_绪论.pdf",
+          "type": "PDF"
         }
       ]
     },
@@ -136,6 +141,10 @@
   "diary": [],
   "advisor": [],
   "logs": [
+    {
+      "time": "2026/9/18 21:41:35",
+      "action": "编辑课程：自动控制原理"
+    },
     {
       "time": "2026/9/18 21:41:32",
       "action": "编辑课程：自动控制原理"

@@ -3,920 +3,490 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>管理后台 | 思齐个人主页</title>
+<title>管理后台 - 思齐个人主页</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --primary:#6366f1;--primary2:#8b5cf6;--accent:#06b6d4;
-  --bg:#f1f5f9;--card:#fff;--text:#1e293b;--text2:#64748b;--text3:#94a3b8;
-  --border:#e2e8f0;--danger:#ef4444;--success:#10b981;--radius:12px;
-}
+:root{--primary:#10b981;--primary-light:#d1fae5;--bg:#f0fdf4;--card:#fff;--text:#1e293b;--text2:#64748b;--border:#e2e8f0;--radius:12px}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
-
-.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  background:linear-gradient(135deg,#0f172a,#3b82f6)}
-.login-box{background:var(--card);border-radius:20px;padding:40px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-.login-box h2{text-align:center;margin-bottom:8px;font-size:1.5rem;font-weight:700}
-.login-box .sub{text-align:center;color:var(--text3);font-size:.85rem;margin-bottom:28px}
-.login-box input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:10px;font-size:.95rem;margin-bottom:16px;transition:border .2s}
-.login-box input:focus{outline:none;border-color:var(--primary)}
-.login-box .btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border:none;border-radius:10px;font-size:1rem;cursor:pointer;transition:transform .2s}
-.login-box .btn:hover{transform:translateY(-2px)}
-.login-error{color:var(--danger);font-size:.85rem;text-align:center;margin-top:8px;display:none}
-
-.admin-header{background:var(--card);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
-.admin-header h1{font-size:1.1rem}
-.admin-header .actions{display:flex;gap:10px}
-.btn{padding:8px 18px;border-radius:8px;border:none;font-size:.85rem;cursor:pointer;transition:all .2s;font-family:inherit}
-.btn-primary{background:var(--primary);color:#fff}
-.btn-primary:hover{background:#4f46e5;transform:translateY(-1px)}
-.btn-outline{background:var(--card);color:var(--text2);border:1px solid var(--border)}
-.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
-.btn-danger{background:#fef2f2;color:var(--danger)}
-.btn-danger:hover{background:#fee2e2}
-.btn-sm{padding:5px 12px;font-size:.8rem}
-
-.admin-body{max-width:900px;margin:0 auto;padding:24px}
-.tabs{display:flex;gap:4px;margin-bottom:24px;flex-wrap:wrap;background:var(--card);padding:6px;border-radius:12px;border:1px solid var(--border)}
-.tab{padding:8px 16px;border-radius:8px;font-size:.88rem;cursor:pointer;background:transparent;border:none;color:var(--text2);transition:all .2s}
-.tab:hover{background:#eef2ff;color:var(--primary)}
-.tab.active{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(99,102,241,.3)}
-
+.login-screen{max-width:400px;margin:100px auto;padding:40px;background:var(--card);border-radius:var(--radius);box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.login-screen h1{text-align:center;margin-bottom:24px;font-size:1.4rem}
+.login-screen input{width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:12px;font-size:.95rem}
+.login-screen button{width:100%;padding:12px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:1rem;cursor:pointer}
+.login-screen button:hover{background:#059669}
+.main{display:none}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.topbar h1{font-size:1.1rem}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.88rem}
+.container{max-width:1000px;margin:24px auto;padding:0 24px}
+.tabs{display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap}
+.tabs button{padding:8px 16px;border:none;background:var(--card);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:.88rem}
+.tabs button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 .panel{display:none}
-.panel.active{display:block;animation:fadeIn .3s ease}
-.panel h3{font-size:1.1rem;margin-bottom:16px}
-
-.add-form{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px}
-.add-form h4{font-size:.9rem;margin-bottom:14px;color:var(--text2)}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-.form-grid input,.form-grid select,.form-grid textarea{padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:.88rem;font-family:inherit;width:100%}
-.form-grid textarea{grid-column:1/-1;min-height:100px;resize:vertical}
-.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{outline:none;border-color:var(--primary)}
-.upload-area{grid-column:1/-1;border:2px dashed var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:all .2s}
-.upload-area:hover{border-color:var(--primary);background:#eef2ff}
-.upload-area.has-file{border-color:var(--success);background:#ecfdf5}
-.upload-area p{font-size:.85rem;color:var(--text2)}
-.upload-area .file-name{font-size:.82rem;color:var(--success);margin-top:4px}
-
-.item-row{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;transition:all .2s}
-.item-row:hover{border-color:var(--primary);box-shadow:0 2px 12px rgba(0,0,0,.05)}
-.row-body{flex:1}
-.row-title{font-weight:600;font-size:.92rem;margin-bottom:2px}
-.row-meta{font-size:.8rem;color:var(--text3)}
-.row-actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
-.file-link{display:inline-block;margin-top:4px;font-size:.8rem;color:var(--primary)}
-.empty{text-align:center;padding:40px;color:var(--text3);font-size:.88rem}
-
-.settings-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
-.settings-box h4{font-size:.95rem;margin-bottom:14px}
-.settings-box input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:.88rem;margin-bottom:10px}
-.settings-box p{font-size:.82rem;color:var(--text2);margin-top:8px;line-height:1.6}
-.status-msg{font-size:.85rem;margin-top:8px;padding:8px 12px;border-radius:6px;display:none}
-.status-msg.ok{display:block;background:#d1fae5;color:#059669}
-.status-msg.err{display:block;background:#fef2f2;color:var(--danger)}
-.data-tools{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
-
-.course-editor{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;display:none}
-.course-editor.active{display:block}
-.course-editor h4{font-size:1rem;margin-bottom:16px;color:var(--primary)}
-.progress-input{display:flex;align-items:center;gap:10px;margin:12px 0}
-.progress-input input[type=range]{flex:1}
-.progress-input span{min-width:50px;font-weight:600;color:var(--primary)}
-.file-row{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#f8fafc;border-radius:8px;margin-bottom:8px}
-.file-row .fname{font-size:.88rem}
-.file-row .ftype{font-size:.75rem;color:var(--text3)}
-
-.log-item{padding:12px 0;border-bottom:1px solid var(--border);font-size:.88rem}
-.log-item .time{color:var(--text3);font-size:.8rem;margin-right:10px}
-
-.tag-check{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.tag-check label{display:flex;align-items:center;gap:4px;font-size:.85rem;cursor:pointer;padding:4px 10px;border:1px solid var(--border);border-radius:99px}
-.tag-check label:has(input:checked){background:#eef2ff;border-color:var(--primary);color:var(--primary)}
-
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:640px){.admin-body{padding:16px}.form-grid{grid-template-columns:1fr}}
+.panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card h2{font-size:1rem;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.item-row{padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.item-row .info{flex:1;min-width:200px}
+.item-row .title{font-weight:600}
+.item-row .desc{font-size:.82rem;color:var(--text2)}
+.form-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.form-row input,.form-row select,.form-row textarea{padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:.88rem;font-family:inherit}
+.form-row input{flex:1;min-width:120px}
+.form-row textarea{width:100%;min-height:100px;flex:1 1 100%}
+.btn{padding:8px 16px;border:none;border-radius:8px;cursor:pointer;font-size:.85rem}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-danger{background:#ef4444;color:#fff}
+.btn-sm{padding:4px 10px;font-size:.78rem}
+.stat-bar{display:flex;gap:12px;margin-bottom:16px}
+.stat-bar .card{flex:1;text-align:center;margin:0}
+.stat-bar .num{font-size:1.4rem;font-weight:700;color:var(--primary)}
+.progress-input{width:80px}
+.tag-chip{display:inline-block;padding:2px 8px;background:var(--primary-light);color:var(--primary);border-radius:99px;font-size:.75px;margin:2px}
+.log-list{font-size:.82rem;color:var(--text2)}
+.log-list .log-item{padding:6px 0;border-bottom:1px dashed var(--border)}
+.notice{padding:10px 16px;background:var(--primary-light);border-radius:8px;margin-bottom:16px;font-size:.85rem;color:#065f46}
 </style>
 </head>
 <body>
 
-<div class="login-wrap" id="loginPage">
-  <div class="login-box">
-    <h2>思齐个人主页 · 管理后台</h2>
-    <p class="sub">管理你的个人主页内容</p>
-    <input type="password" id="pwdInput" placeholder="请输入管理密码" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="btn" onclick="doLogin()">登 录</button>
-    <div class="login-error" id="loginError">密码错误</div>
-  </div>
+<div class="login-screen" id="loginScreen">
+  <h1>🔐 管理后台</h1>
+  <input type="password" id="pwdInput" placeholder="请输入密码" onkeydown="if(event.key==='Enter')login()">
+  <button onclick="login()">登录</button>
 </div>
 
-<div id="adminMain" style="display:none">
-  <div class="admin-header">
-    <h1>管理后台</h1>
-    <div class="actions">
-      <a href="index.html" class="btn btn-outline">查看前台</a>
-      <button class="btn btn-outline" onclick="doLogout()">退出</button>
+<div class="main" id="mainPanel">
+  <div class="topbar">
+    <h1>思齐博客管理后台</h1>
+    <div>
+      <a href="/" target="_blank">查看前台</a> ·
+      <a href="#" onclick="logout()">退出</a>
     </div>
   </div>
-  <div class="admin-body">
+  <div class="container">
+    <div class="notice" id="saveNotice" style="display:none">✅ 已自动保存到 GitHub</div>
+    <div class="stat-bar">
+      <div class="card"><div class="num" id="statC">0</div><div>课程</div></div>
+      <div class="card"><div class="num" id="statP">0</div><div>论文</div></div>
+      <div class="card"><div class="num" id="statN">0</div><div>通知</div></div>
+      <div class="card"><div class="num" id="statT">0</div><div>时间记录</div></div>
+    </div>
     <div class="tabs">
-      <button class="tab active" data-t="courses">课程</button>
-      <button class="tab" data-t="papers">论文</button>
-      <button class="tab" data-t="notices">通知</button>
-      <button class="tab" data-t="class">班级</button>
-      <button class="tab" data-t="timeline">时间记录</button>
-      <button class="tab" data-t="life">生活服务</button>
-      <button class="tab" data-t="softwares">软件</button>
-      <button class="tab" data-t="diary">日记/导师</button>
-      <button class="tab" data-t="data">数据管理</button>
+      <button class="active" data-p="site">站点设置</button>
+      <button data-p="courses">课程</button>
+      <button data-p="papers">论文</button>
+      <button data-p="notices">通知</button>
+      <button data-p="class">班级事务</button>
+      <button data-p="life">生活服务</button>
+      <button data-p="timeline">时间记录</button>
+      <button data-p="ledger">记账</button>
+      <button data-p="diary">日记</button>
+      <button data-p="advisor">导师指导</button>
+      <button data-p="logs">修改日志</button>
     </div>
 
-    <div class="panel active" id="panel-courses">
-      <h3>我的课程</h3>
-      <div class="add-form">
-        <h4>添加新课程</h4>
-        <div class="form-grid">
-          <input id="c_icon" placeholder="图标 emoji（如 📐）">
-          <input id="c_title" placeholder="课程名称">
-          <input id="c_desc" placeholder="一句话描述" style="grid-column:1/-1">
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="addCourse()">添加课程</button>
+    <div class="panel active" id="panel-site">
+      <div class="card">
+        <h2>站点设置</h2>
+        <div class="form-row"><input type="text" id="cfgTitle" placeholder="网站标题"><input type="text" id="cfgSub" placeholder="副标题"></div>
+        <button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
       </div>
-      <div class="course-editor" id="courseEditor">
-        <h4 id="ceTitle">编辑课程详情</h4>
-        <div class="form-grid">
-          <input id="ceIcon" placeholder="图标 emoji">
-          <input id="ceTitleInput" placeholder="课程名称">
-          <input id="ceDesc" placeholder="一句话描述" style="grid-column:1/-1">
+    </div>
+
+    <div class="panel" id="panel-courses">
+      <div class="card">
+        <h2>添加课程</h2>
+        <div class="form-row">
+          <input type="text" id="cIcon" placeholder="图标(如📐)" style="flex:0.5">
+          <input type="text" id="cTitle" placeholder="课程名称">
+          <input type="text" id="cDesc" placeholder="简介">
+          <input type="number" id="cProgress" placeholder="进度%" class="progress-input" value="0">
         </div>
-        <div style="margin:16px 0">
-          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:8px">课程简介（支持换行）</label>
-          <textarea id="ceIntro" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:100px;font-family:inherit" placeholder="介绍这门课学什么、重点内容..."></textarea>
-        </div>
-        <div class="progress-input">
-          <label style="font-size:.85rem;color:var(--text2)">学习进度</label>
-          <input type="range" id="ceProgress" min="0" max="100" value="0" oninput="document.getElementById('ceProgVal').textContent=this.value+'%'">
-          <span id="ceProgVal">0%</span>
-        </div>
-        <div style="margin:16px 0">
-          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:8px">课程文件（视频、PPT、PDF等，单个建议<50MB）</label>
-          <div id="ceFileList"></div>
-          <div class="upload-area" id="ceUpload" onclick="document.getElementById('ce_file').click()" style="margin-top:10px">
-            <p>📎 点击上传文件（可多次上传）</p>
-            <input type="file" id="ce_file" style="display:none" onchange="onCeFileSelect()">
-          </div>
-        </div>
-        <div style="display:flex;gap:10px">
-          <button class="btn btn-primary btn-sm" onclick="saveCourseDetail()">保存修改</button>
-          <button class="btn btn-outline btn-sm" onclick="closeCourseEditor()">取消</button>
-        </div>
+        <div class="form-row"><textarea id="cIntro" placeholder="课程详细介绍..."></textarea></div>
+        <button class="btn btn-primary" onclick="addCourse()">添加课程</button>
       </div>
-      <div id="list-courses"></div>
+      <div class="card"><h2>课程列表</h2><div id="courseList"></div></div>
     </div>
 
     <div class="panel" id="panel-papers">
-      <h3>论文管理</h3>
-      <div class="add-form">
-        <h4>添加论文</h4>
-        <div class="form-grid">
-          <input id="p_title" placeholder="论文标题" style="grid-column:1/-1">
-          <select id="p_status"><option>已发表</option><option>在投</option><option>阅读中</option><option>撰写中</option></select>
-          <input id="p_year" placeholder="年份（如 2026）">
-          <input id="p_desc" placeholder="备注/摘要" style="grid-column:1/-1">
+      <div class="card">
+        <h2>添加论文</h2>
+        <div class="form-row">
+          <input type="text" id="pTitle" placeholder="论文标题" style="flex:2">
+          <select id="pStatus"><option>在投</option><option>审稿中</option><option>已接收</option><option>已发表</option><option>撰写中</option></select>
+          <input type="text" id="pYear" placeholder="年份" style="flex:0.5">
         </div>
-        <div class="tag-check">
-          <label><input type="checkbox" value="阅读"> 📖 阅读</label>
-          <label><input type="checkbox" value="撰写"> ✍️ 撰写</label>
-          <label><input type="checkbox" value="中文"> 🇨🇳 中文</label>
-          <label><input type="checkbox" value="英文"> 🇬🇧 英文</label>
-          <label><input type="checkbox" value="查重"> 🔍 查重</label>
-          <label><input type="checkbox" value="投稿"> 📮 投稿</label>
+        <div class="form-row">
+          <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="阅读"> 阅读</label>
+          <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="撰写"> 撰写</label>
+          <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="中文"> 中文</label>
+          <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="英文"> 英文</label>
+          <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="查重"> 查重</label>
+          <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="投稿"> 投稿</label>
         </div>
-        <div class="upload-area" id="p_upload" onclick="document.getElementById('p_file').click()">
-          <p>📎 点击上传论文文件（PDF等）</p>
-          <input type="file" id="p_file" style="display:none" onchange="onFileSelect('p')">
-          <div class="file-name" id="p_filename"></div>
-        </div>
-        <div style="margin-top:12px">
-          <button class="btn btn-primary btn-sm" onclick="addPaper(this)">添加论文</button>
-        </div>
+        <div class="form-row"><input type="text" id="pDesc" placeholder="备注"></div>
+        <button class="btn btn-primary" onclick="addPaper()">添加论文</button>
       </div>
-      <div id="list-papers"></div>
+      <div class="card"><h2>论文列表</h2><div id="paperList"></div></div>
     </div>
 
     <div class="panel" id="panel-notices">
-      <h3>学校通知</h3>
-      <div class="add-form">
-        <h4>添加通知（像写Word一样写内容）</h4>
-        <div class="form-grid">
-          <input id="n_title" placeholder="通知标题" style="grid-column:1/-1">
-          <input id="n_source" placeholder="来源（如 研究生院）">
-          <input id="n_date" type="date">
-          <select id="n_level"><option value="red">重要</option><option value="orange">关注</option><option value="blue">一般</option></select>
+      <div class="card">
+        <h2>发布通知</h2>
+        <div class="form-row">
+          <input type="text" id="nTitle" placeholder="通知标题" style="flex:2">
+          <input type="text" id="nSource" placeholder="来源(如研究生院)" style="flex:1">
+          <input type="date" id="nDate" style="flex:1">
         </div>
-        <div style="margin:12px 0">
-          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:8px">通知正文（支持换行）</label>
-          <textarea id="n_content" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:120px;font-family:inherit" placeholder="写通知内容，换行会自动保留..."></textarea>
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="addNotice(this)">添加通知</button>
+        <div class="form-row"><textarea id="nContent" placeholder="通知正文..."></textarea></div>
+        <button class="btn btn-primary" onclick="addNotice()">发布通知</button>
       </div>
-      <div id="list-notices"></div>
+      <div class="card"><h2>通知列表</h2><div id="noticeList"></div></div>
     </div>
 
     <div class="panel" id="panel-class">
-      <h3>班级事务</h3>
-      <div class="add-form">
-        <h4>添加班级事项</h4>
-        <div class="form-grid">
-          <input id="cl_title" placeholder="标题">
-          <select id="cl_type"><option>通知</option><option>活动</option></select>
-          <input id="cl_date" type="date">
+      <div class="card">
+        <h2>添加班级事务</h2>
+        <div class="form-row">
+          <input type="text" id="clTitle" placeholder="标题" style="flex:2">
+          <select id="clType"><option>通知</option><option>作业</option><option>考试</option><option>活动</option></select>
+          <input type="date" id="clDate" style="flex:1">
         </div>
-        <div style="margin:12px 0">
-          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:8px">详细内容（支持换行）</label>
-          <textarea id="cl_content" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:80px;font-family:inherit" placeholder="写详细内容..."></textarea>
-        </div>
-        <div class="upload-area" id="cl_upload" onclick="document.getElementById('cl_file').click()">
-          <p>📎 点击上传文件（附件、照片等）</p>
-          <input type="file" id="cl_file" style="display:none" onchange="onFileSelect('cl')">
-          <div class="file-name" id="cl_filename"></div>
-        </div>
-        <div style="margin-top:12px">
-          <button class="btn btn-primary btn-sm" onclick="addClassItem(this)">添加</button>
-        </div>
+        <div class="form-row"><textarea id="clContent" placeholder="详细内容..."></textarea></div>
+        <button class="btn btn-primary" onclick="addClass()">添加</button>
       </div>
-      <div id="list-classItems"></div>
-    </div>
-
-    <div class="panel" id="panel-timeline">
-      <h3>时间记录</h3>
-      <div class="add-form">
-        <h4>添加时间记录</h4>
-        <div class="form-grid">
-          <input id="t_date" type="date">
-          <input id="t_title" placeholder="事件标题">
-          <input id="t_desc" placeholder="详细描述" style="grid-column:1/-1">
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="addTimeline(this)">添加</button>
-      </div>
-      <div id="list-timeline"></div>
+      <div class="card"><h2>班级事务列表</h2><div id="classList"></div></div>
     </div>
 
     <div class="panel" id="panel-life">
-      <h3>生活服务</h3>
-      <div class="add-form">
-        <h4>添加服务链接</h4>
-        <div class="form-grid">
-          <input id="l_icon" placeholder="图标 emoji">
-          <input id="l_title" placeholder="名称">
-          <input id="l_desc" placeholder="描述">
-          <input id="l_url" placeholder="链接 URL">
+      <div class="card">
+        <h2>添加生活服务链接</h2>
+        <div class="form-row">
+          <input type="text" id="lsIcon" placeholder="图标" style="flex:0.5">
+          <input type="text" id="lsTitle" placeholder="名称" style="flex:1">
+          <input type="text" id="lsDesc" placeholder="描述" style="flex:1">
+          <input type="text" id="lsUrl" placeholder="链接URL" style="flex:1.5">
         </div>
-        <button class="btn btn-primary btn-sm" onclick="addLife(this)">添加</button>
+        <button class="btn btn-primary" onclick="addLife()">添加</button>
       </div>
-      <div id="list-lifeServices"></div>
+      <div class="card"><h2>生活服务列表</h2><div id="lifeList"></div></div>
     </div>
 
-    <div class="panel" id="panel-softwares">
-      <h3>软件下载</h3>
-      <div class="add-form">
-        <h4>添加软件</h4>
-        <div class="form-grid">
-          <input id="s_icon" placeholder="图标 emoji">
-          <input id="s_title" placeholder="软件名称">
-          <input id="s_desc" placeholder="描述">
-          <input id="s_url" placeholder="下载链接 URL">
+    <div class="panel" id="panel-timeline">
+      <div class="card">
+        <h2>添加时间记录</h2>
+        <div class="form-row">
+          <input type="date" id="tlDate" style="flex:1">
+          <input type="text" id="tlTitle" placeholder="事件标题" style="flex:1.5">
+          <input type="text" id="tlDesc" placeholder="描述" style="flex:1.5">
         </div>
-        <button class="btn btn-primary btn-sm" onclick="addSoftware(this)">添加</button>
+        <button class="btn btn-primary" onclick="addTimeline()">添加</button>
       </div>
-      <div id="list-softwares"></div>
+      <div class="card"><h2>时间记录列表</h2><div id="timelineList"></div></div>
+    </div>
+
+    <div class="panel" id="panel-ledger">
+      <div class="card"><h2>记账列表</h2><div id="ledgerList"></div></div>
     </div>
 
     <div class="panel" id="panel-diary">
-      <h3>日记 & 导师指导</h3>
-      <div class="add-form">
-        <h4>写日记</h4>
-        <div style="margin-bottom:12px">
-          <textarea id="diaryContent" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:100px;font-family:inherit" placeholder="写今天发生了什么..."></textarea>
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="addDiary(this)">保存日记</button>
+      <div class="card">
+        <h2>写日记</h2>
+        <div class="form-row"><textarea id="diaryContent" placeholder="今天发生了什么..."></textarea></div>
+        <button class="btn btn-primary" onclick="addDiary()">保存日记</button>
       </div>
-      <div class="add-form">
-        <h4>导师指导记录</h4>
-        <div style="margin-bottom:12px">
-          <textarea id="advContent" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;min-height:100px;font-family:inherit" placeholder="记录和导师沟通的内容..."></textarea>
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="addAdvisor(this)">保存记录</button>
-      </div>
-      <h4 style="margin-top:20px">最近日记</h4>
-      <div id="list-diary"></div>
+      <div class="card"><h2>日记列表</h2><div id="diaryList"></div></div>
     </div>
 
-    <div class="panel" id="panel-data">
-      <h3>数据管理</h3>
-      <div class="settings-box">
-        <h4>🎨 站点标题设置</h4>
-        <p style="margin-bottom:12px">修改主页显示的大标题和签名。</p>
-        <input type="text" id="cfgTitle" placeholder="大标题">
-        <input type="text" id="cfgSubtitle" placeholder="副标题/签名">
-        <button class="btn btn-primary btn-sm" onclick="saveSiteConfig()">保存标题</button>
-        <div class="status-msg" id="cfgStatus"></div>
+    <div class="panel" id="panel-advisor">
+      <div class="card">
+        <h2>导师指导记录</h2>
+        <div class="form-row"><textarea id="advContent" placeholder="和导师聊了什么..."></textarea></div>
+        <button class="btn btn-primary" onclick="addAdvisor()">保存记录</button>
       </div>
-      <div class="settings-box">
-        <h4>🔑 修改登录密码</h4>
-        <input type="password" id="oldPwd" placeholder="当前密码">
-        <input type="password" id="newPwd" placeholder="新密码（至少4位）">
-        <input type="password" id="confirmPwd" placeholder="确认新密码">
-        <button class="btn btn-primary btn-sm" onclick="changePwd()">确认修改</button>
-        <div class="status-msg" id="pwdStatus"></div>
-      </div>
-      <div class="settings-box">
-        <h4>☁️ GitHub 同步设置（重要）</h4>
-        <p style="margin-bottom:12px">设置 Token 后，所有修改自动同步到 GitHub，换浏览器/换电脑数据都不会丢。</p>
-        <input type="text" id="ghToken" placeholder="GitHub Personal Access Token">
-        <p>生成方式：GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)<br>勾选 <strong>repo</strong> 权限即可。</p>
-        <button class="btn btn-primary btn-sm" onclick="saveToken()">保存 Token</button>
-        <div class="status-msg" id="tokenStatus"></div>
-      </div>
-      <div class="settings-box">
-        <h4>📝 修改日志（最近100条）</h4>
-        <div id="logsList" style="max-height:300px;overflow-y:auto"></div>
-      </div>
-      <div class="data-tools">
-        <button class="btn btn-outline" onclick="exportData()">导出数据</button>
-        <button class="btn btn-outline" onclick="document.getElementById('importFile').click()">导入数据</button>
-        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-        <button class="btn btn-danger" onclick="resetData()">恢复默认内容</button>
-      </div>
+      <div class="card"><h2>指导记录列表</h2><div id="advisorList"></div></div>
+    </div>
+
+    <div class="panel" id="panel-logs">
+      <div class="card"><h2>修改日志</h2><div class="log-list" id="logList"></div></div>
     </div>
   </div>
 </div>
 
 <script>
-const DEFAULT_PWD = "syj3008338";
 const GH_OWNER = "benyia";
 const GH_REPO = "benyia.github.io";
+const GH_TOKEN = "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";
+const ADMIN_PWD = "syj3008338";
 
 const DEFAULT_DATA = {
-  siteConfig: {title: "思齐个人主页", subtitle: "钟爱奥迪A6"},
-  courses: [
-    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", intro:"本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。", progress: 60, files: []}
-  ],
-  papers: [
-    {title:"基于深度学习的故障诊断方法研究", status:"在投", year:"2026", desc:"", tags:["撰写","中文"], file:"", fileName:""}
-  ],
-  notices: [
-    {title:"2026年秋季学期选课通知", source:"研究生院", date:"2026-09-01", level:"red", content:"各研究生：2026年秋季学期选课即将开始，请于9月1日-9月5日登录研究生系统完成选课。"}
-  ],
-  classItems: [
-    {title:"组会时间调整为每周四下午2点", type:"通知", date:"2026-09-15", content:"全体同学注意，本周组会时间调整为周四下午2点，地点实验室。", file:"", fileName:""}
-  ],
-  lifeServices: [
-    {icon:"☁️", title:"百度网盘", desc:"云存储", url:"https://pan.baidu.com", file:"", fileName:""}
-  ],
-  softwares: [
-    {icon:"🐍", title:"Python", desc:"多版本下载", url:"https://www.python.org/downloads/"}
-  ],
-  timeline: [
-    {date:"2026-09-01", title:"秋季学期开始", desc:"新学期正式开学"}
-  ],
-  ledger: [],
-  diary: [],
-  advisor: [],
-  logs: []
+  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6"},
+  courses:[],papers:[],notices:[],classItems:[],lifeServices:[],softwares:[],
+  timeline:[],ledger:[],diary:[],advisor:[],logs:[]
 };
 
-let blogData = null;
-let dataSha = "";
-let pendingFiles = {};
-let editingCourseIdx = -1;
-let ceNewFiles = [];
+let blogData=null, dataSha="";
 
-function getPwd(){ return localStorage.getItem("benyia_admin_pwd") || DEFAULT_PWD; }
-function setPwd(pwd){ localStorage.setItem("benyia_admin_pwd", pwd); }
+function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
-async function doLogin(){
-  const pwd = document.getElementById("pwdInput").value;
-  if(pwd !== getPwd()){
-    document.getElementById("loginError").style.display = "block";
-    return;
-  }
-  document.getElementById("loginPage").style.display = "none";
-  document.getElementById("adminMain").style.display = "block";
-  document.getElementById("ghToken").value = localStorage.getItem("benyia_gh_token") || "";
-  await loadData();
-  renderAll();
-  if(blogData.siteConfig){
-    document.getElementById("cfgTitle").value = blogData.siteConfig.title || "思齐个人主页";
-    document.getElementById("cfgSubtitle").value = blogData.siteConfig.subtitle || "";
-  }
+function login(){
+  const p=document.getElementById("pwdInput").value;
+  if(p===ADMIN_PWD){
+    document.getElementById("loginScreen").style.display="none";
+    document.getElementById("mainPanel").style.display="block";
+    loadData();
+  } else alert("密码错误");
 }
-function doLogout(){ location.reload(); }
-
-function changePwd(){
-  const oldP = document.getElementById("oldPwd").value;
-  const newP = document.getElementById("newPwd").value;
-  const conP = document.getElementById("confirmPwd").value;
-  const st = document.getElementById("pwdStatus");
-  if(oldP !== getPwd()){ st.className="status-msg err"; st.textContent="当前密码错误"; return; }
-  if(newP.length < 4){ st.className="status-msg err"; st.textContent="新密码至少4位"; return; }
-  if(newP !== conP){ st.className="status-msg err"; st.textContent="两次输入不一致"; return; }
-  setPwd(newP);
-  st.className="status-msg ok"; st.textContent="密码修改成功！";
-}
-
-async function saveSiteConfig(){
-  blogData.siteConfig = {
-    title: document.getElementById("cfgTitle").value.trim() || "思齐个人主页",
-    subtitle: document.getElementById("cfgSubtitle").value.trim() || ""
-  };
-  await saveData("修改站点标题");
-  const st = document.getElementById("cfgStatus");
-  st.className = "status-msg ok";
-  st.textContent = "标题已保存";
-}
-
-function saveToken(){
-  const t = document.getElementById("ghToken").value.trim();
-  localStorage.setItem("benyia_gh_token", t);
-  const st = document.getElementById("tokenStatus");
-  st.className = t ? "status-msg ok" : "status-msg err";
-  st.textContent = t ? "Token 已保存" : "Token 已清除";
-}
+function logout(){location.reload();}
 
 async function loadData(){
-  try {
-    const res = await fetch("data.json?v=" + Date.now());
-    if(res.ok){
-      blogData = await res.json();
-      try {
-        const shaRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`);
-        if(shaRes.ok){ const d = await shaRes.json(); dataSha = d.sha; }
-      } catch(e){}
-      for(const k in DEFAULT_DATA){ if(!blogData[k]) blogData[k] = DEFAULT_DATA[k]; }
-    } else {
-      blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-    }
-  } catch(e) {
-    blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-  }
+  try{
+    const res=await fetch("data.json?v="+Date.now());
+    if(res.ok){blogData=await res.json();for(const k in DEFAULT_DATA){if(!blogData[k])blogData[k]=DEFAULT_DATA[k];}}
+    else blogData=JSON.parse(JSON.stringify(DEFAULT_DATA));
+  }catch(e){blogData=JSON.parse(JSON.stringify(DEFAULT_DATA));}
+  renderAll();
 }
 
 async function saveData(action){
   if(action){
-    blogData.logs = blogData.logs||[];
-    blogData.logs.unshift({time: new Date().toLocaleString("zh-CN"), action});
-    if(blogData.logs.length > 100) blogData.logs = blogData.logs.slice(0,100);
+    blogData.logs=blogData.logs||[];
+    blogData.logs.unshift({time:new Date().toLocaleString("zh-CN"),action});
+    if(blogData.logs.length>100)blogData.logs=blogData.logs.slice(0,100);
   }
-  renderLogs();
-  const token = localStorage.getItem("benyia_gh_token");
-  if(!token){
-    localStorage.setItem("benyia_blog_local", JSON.stringify(blogData));
-    return;
-  }
-  try {
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(blogData, null, 2))));
-    await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`, {
-      method: "PUT",
-      headers: {"Authorization":"token "+token, "Content-Type":"application/json"},
-      body: JSON.stringify({message:"Update: "+(action||"blog"), content, sha: dataSha})
-    });
-    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`);
-    if(res.ok){ const d = await res.json(); dataSha = d.sha; }
-  } catch(e) { alert("同步失败："+e.message); }
-}
-
-function renderLogs(){
-  const logs = blogData.logs||[];
-  document.getElementById("logsList").innerHTML = logs.map(l=>`
-    <div class="log-item"><span class="time">${l.time}</span>${l.action}</div>
-  `).join("") || '<div style="color:var(--text3);font-size:.88rem">暂无修改记录</div>';
-}
-
-function onFileSelect(prefix){
-  const input = document.getElementById(prefix+"_file");
-  const file = input.files[0];
-  if(!file) return;
-  pendingFiles[prefix] = file;
-  const area = document.getElementById(prefix+"_upload");
-  const nameEl = document.getElementById(prefix+"_filename");
-  area.classList.add("has-file");
-  nameEl.textContent = "已选择：" + file.name + "（" + (file.size/1024/1024).toFixed(2) + " MB）";
-}
-
-async function uploadToGitHub(file){
-  const token = localStorage.getItem("benyia_gh_token");
-  if(!token) throw new Error("请先设置 GitHub Token");
-  const content = await fileToBase64(file);
-  const path = "files/" + Date.now() + "_" + file.name.replace(/[^\w.\-\u4e00-\u9fa5]/g, "_");
-  await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`, {
-    method: "PUT",
-    headers: {"Authorization":"token "+token, "Content-Type":"application/json"},
-    body: JSON.stringify({message:"Upload: "+file.name, content})
-  });
-  return `https://${GH_OWNER}.github.io/${GH_REPO}/${path}`;
-}
-
-function fileToBase64(file){
-  return new Promise((resolve, reject)=>{
-    const reader = new FileReader();
-    reader.onload = ()=>resolve(reader.result.split(",")[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-document.querySelectorAll(".tab").forEach(t=>{
-  t.onclick=()=>{
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
-    t.classList.add("active");
-    document.getElementById("panel-"+t.dataset.t).classList.add("active");
-  };
-});
-
-// 课程
-function renderCourses(){
-  const list = blogData.courses || [];
-  document.getElementById("list-courses").innerHTML = list.map((c,i)=>`
-    <div class="item-row">
-      <div class="row-body">
-        <div class="row-title">${c.icon||"📚"} ${c.title}</div>
-        <div class="row-meta">${c.desc||""} · 进度 ${c.progress||0}% · ${c.files?c.files.length:0} 个文件</div>
-      </div>
-      <div class="row-actions">
-        <button class="btn btn-outline btn-sm" onclick="openCourseEditor(${i})">编辑详情</button>
-        <button class="btn btn-danger btn-sm" onclick="delCourse(${i})">删除</button>
-      </div>
-    </div>
-  `).join("") || '<div class="empty">暂无课程</div>';
-}
-
-async function addCourse(){
-  const icon = document.getElementById("c_icon").value.trim();
-  const title = document.getElementById("c_title").value.trim();
-  const desc = document.getElementById("c_desc").value.trim();
-  if(!title){ alert("请输入课程名称"); return; }
-  blogData.courses.push({icon, title, desc, intro:"", progress:0, files:[]});
-  await saveData("添加课程："+title);
-  document.getElementById("c_icon").value="";
-  document.getElementById("c_title").value="";
-  document.getElementById("c_desc").value="";
-  renderCourses();
-}
-
-async function delCourse(idx){
-  if(!confirm("确定删除？")) return;
-  blogData.courses.splice(idx,1);
-  await saveData("删除课程");
-  renderCourses();
-}
-
-function openCourseEditor(idx){
-  editingCourseIdx = idx;
-  const c = blogData.courses[idx];
-  document.getElementById("ceTitle").textContent = "编辑：" + c.title;
-  document.getElementById("ceIcon").value = c.icon||"";
-  document.getElementById("ceTitleInput").value = c.title;
-  document.getElementById("ceDesc").value = c.desc||"";
-  document.getElementById("ceIntro").value = c.intro||"";
-  document.getElementById("ceProgress").value = c.progress||0;
-  document.getElementById("ceProgVal").textContent = (c.progress||0)+"%";
-  ceNewFiles = [];
-  renderCeFiles();
-  document.getElementById("courseEditor").classList.add("active");
-}
-
-function closeCourseEditor(){ editingCourseIdx = -1; ceNewFiles = []; document.getElementById("courseEditor").classList.remove("active"); }
-
-function renderCeFiles(){
-  const c = blogData.courses[editingCourseIdx];
-  let html = (c.files||[]).map((f,i)=>`
-    <div class="file-row">
-      <div><div class="fname">${f.name}</div><div class="ftype">${f.type||"文件"}</div></div>
-      <button class="btn btn-danger btn-sm" onclick="delCeFile(${i})">删除</button>
-    </div>`).join("");
-  html += ceNewFiles.map((f,i)=>`
-    <div class="file-row" style="background:#ecfdf5">
-      <div><div class="fname">${f.name}</div><div class="ftype">新文件</div></div>
-      <button class="btn btn-danger btn-sm" onclick="delCeNewFile(${i})">移除</button>
-    </div>`).join("");
-  document.getElementById("ceFileList").innerHTML = html || '<div style="font-size:.85rem;color:var(--text3);padding:10px 0">暂无文件</div>';
-}
-
-function onCeFileSelect(){
-  const files = document.getElementById("ce_file").files;
-  for(let f of files) ceNewFiles.push(f);
-  document.getElementById("ce_file").value = "";
-  renderCeFiles();
-}
-
-async function delCeFile(idx){
-  if(!confirm("删除？")) return;
-  blogData.courses[editingCourseIdx].files.splice(idx,1);
-  renderCeFiles();
-}
-function delCeNewFile(idx){ ceNewFiles.splice(idx,1); renderCeFiles(); }
-
-async function saveCourseDetail(){
-  const c = blogData.courses[editingCourseIdx];
-  c.icon = document.getElementById("ceIcon").value.trim();
-  c.title = document.getElementById("ceTitleInput").value.trim();
-  c.desc = document.getElementById("ceDesc").value.trim();
-  c.intro = document.getElementById("ceIntro").value.trim();
-  c.progress = parseInt(document.getElementById("ceProgress").value) || 0;
-  if(ceNewFiles.length > 0){
-    for(let f of ceNewFiles){
-      try {
-        const url = await uploadToGitHub(f);
-        let type = "文件";
-        const ext = f.name.split(".").pop().toLowerCase();
-        if(["pdf"].includes(ext)) type = "PDF";
-        else if(["ppt","pptx"].includes(ext)) type = "PPT";
-        else if(["mp4","avi","mov","mkv"].includes(ext)) type = "视频";
-        else if(["doc","docx"].includes(ext)) type = "Word";
-        else if(["zip","rar","7z"].includes(ext)) type = "压缩包";
-        c.files.push({name: f.name, url, type});
-      } catch(e){ alert("上传失败："+f.name); }
+  try{
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(blogData,null,2))));
+    if(!dataSha){
+      try{
+        const res=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`);
+        if(res.ok){const d=await res.json();dataSha=d.sha;}
+      }catch(e){}
     }
-    ceNewFiles = [];
-  }
-  await saveData("编辑课程："+c.title);
-  closeCourseEditor();
-  renderCourses();
-  alert("保存成功！");
+    const r=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`,{
+      method:"PUT",
+      headers:{"Authorization":"token "+GH_TOKEN,"Content-Type":"application/json"},
+      body:JSON.stringify({message:"Update: "+(action||"blog"),content,sha:dataSha})
+    });
+    if(r.ok){
+      const d=await r.json();dataSha=d.content.sha;
+      showNotice();
+    }
+  }catch(e){console.error("保存失败",e);alert("保存失败: "+e.message);}
 }
 
-// 论文
-function renderPapers(){
-  document.getElementById("list-papers").innerHTML = (blogData.papers||[]).map((p,i)=>`
-    <div class="item-row">
-      <div class="row-body">
-        <div class="row-title">${p.title}</div>
-        <div class="row-meta">${p.status} ${p.year?("· "+p.year):""} · ${(p.tags||[]).join(" / ")}</div>
-      </div>
-      <div class="row-actions">
-        <button class="btn btn-danger btn-sm" onclick="delItem('papers',${i})">删除</button>
-      </div>
-    </div>
-  `).join("") || '<div class="empty">暂无论文</div>';
-}
-
-async function addPaper(btn){
-  const title = document.getElementById("p_title").value.trim();
-  if(!title){ alert("请输入标题"); return; }
-  const tags = [...document.querySelectorAll(".tag-check input:checked")].map(c=>c.value);
-  const item = {
-    title, status: document.getElementById("p_status").value,
-    year: document.getElementById("p_year").value,
-    desc: document.getElementById("p_desc").value,
-    tags, file:"", fileName:""
-  };
-  if(pendingFiles["p"]){
-    const url = await uploadToGitHub(pendingFiles["p"]);
-    item.file = url; item.fileName = pendingFiles["p"].name;
-    pendingFiles["p"] = null;
-    document.getElementById("p_upload").classList.remove("has-file");
-    document.getElementById("p_filename").textContent = "";
-  }
-  blogData.papers.push(item);
-  await saveData("添加论文："+title);
-  document.getElementById("p_title").value="";
-  document.getElementById("p_year").value="";
-  document.getElementById("p_desc").value="";
-  renderPapers();
-}
-
-// 通知
-function renderNotices(){
-  document.getElementById("list-notices").innerHTML = (blogData.notices||[]).map((n,i)=>`
-    <div class="item-row">
-      <div class="row-body">
-        <div class="row-title">${n.title}</div>
-        <div class="row-meta">${n.source} · ${n.date}</div>
-      </div>
-      <div class="row-actions">
-        <button class="btn btn-danger btn-sm" onclick="delItem('notices',${i})">删除</button>
-      </div>
-    </div>
-  `).join("") || '<div class="empty">暂无通知</div>';
-}
-
-async function addNotice(btn){
-  const title = document.getElementById("n_title").value.trim();
-  if(!title){ alert("请输入标题"); return; }
-  blogData.notices.push({
-    title, source: document.getElementById("n_source").value,
-    date: document.getElementById("n_date").value,
-    level: document.getElementById("n_level").value,
-    content: document.getElementById("n_content").value
-  });
-  await saveData("添加通知："+title);
-  document.getElementById("n_title").value="";
-  document.getElementById("n_source").value="";
-  document.getElementById("n_content").value="";
-  renderNotices();
-}
-
-// 班级
-function renderClass(){
-  document.getElementById("list-classItems").innerHTML = (blogData.classItems||[]).map((c,i)=>`
-    <div class="item-row">
-      <div class="row-body">
-        <div class="row-title">${c.title}</div>
-        <div class="row-meta">${c.type} · ${c.date||""}</div>
-      </div>
-      <div class="row-actions">
-        <button class="btn btn-danger btn-sm" onclick="delItem('classItems',${i})">删除</button>
-      </div>
-    </div>
-  `).join("") || '<div class="empty">暂无班级事务</div>';
-}
-
-async function addClassItem(btn){
-  const title = document.getElementById("cl_title").value.trim();
-  if(!title){ alert("请输入标题"); return; }
-  const item = {
-    title, type: document.getElementById("cl_type").value,
-    date: document.getElementById("cl_date").value,
-    content: document.getElementById("cl_content").value,
-    file:"", fileName:""
-  };
-  if(pendingFiles["cl"]){
-    const url = await uploadToGitHub(pendingFiles["cl"]);
-    item.file = url; item.fileName = pendingFiles["cl"].name;
-    pendingFiles["cl"] = null;
-    document.getElementById("cl_upload").classList.remove("has-file");
-    document.getElementById("cl_filename").textContent = "";
-  }
-  blogData.classItems.push(item);
-  await saveData("添加班级事务："+title);
-  document.getElementById("cl_title").value="";
-  document.getElementById("cl_content").value="";
-  renderClass();
-}
-
-// 时间记录
-function renderTimeline(){
-  document.getElementById("list-timeline").innerHTML = (blogData.timeline||[]).map((t,i)=>`
-    <div class="item-row">
-      <div class="row-body">
-        <div class="row-title">${t.title}</div>
-        <div class="row-meta">${t.date} · ${t.desc||""}</div>
-      </div>
-      <div class="row-actions">
-        <button class="btn btn-danger btn-sm" onclick="delItem('timeline',${i})">删除</button>
-      </div>
-    </div>
-  `).join("") || '<div class="empty">暂无时间记录</div>';
-}
-
-async function addTimeline(btn){
-  const title = document.getElementById("t_title").value.trim();
-  if(!title){ alert("请输入标题"); return; }
-  blogData.timeline.push({
-    date: document.getElementById("t_date").value,
-    title, desc: document.getElementById("t_desc").value
-  });
-  await saveData("添加时间记录："+title);
-  document.getElementById("t_title").value="";
-  document.getElementById("t_desc").value="";
-  renderTimeline();
-}
-
-// 生活服务
-function renderLife(){
-  document.getElementById("list-lifeServices").innerHTML = (blogData.lifeServices||[]).map((s,i)=>`
-    <div class="item-row">
-      <div class="row-body">
-        <div class="row-title">${s.icon||""} ${s.title}</div>
-        <div class="row-meta">${s.desc||""} · ${s.url||""}</div>
-      </div>
-      <div class="row-actions">
-        <button class="btn btn-danger btn-sm" onclick="delItem('lifeServices',${i})">删除</button>
-      </div>
-    </div>
-  `).join("") || '<div class="empty">暂无</div>';
-}
-
-async function addLife(btn){
-  blogData.lifeServices.push({
-    icon: document.getElementById("l_icon").value,
-    title: document.getElementById("l_title").value,
-    desc: document.getElementById("l_desc").value,
-    url: document.getElementById("l_url").value,
-    file:"", fileName:""
-  });
-  await saveData("添加生活服务");
-  document.getElementById("l_icon").value="";
-  document.getElementById("l_title").value="";
-  document.getElementById("l_desc").value="";
-  document.getElementById("l_url").value="";
-  renderLife();
-}
-
-// 软件
-function renderSoftwares(){
-  document.getElementById("list-softwares").innerHTML = (blogData.softwares||[]).map((s,i)=>`
-    <div class="item-row">
-      <div class="row-body">
-        <div class="row-title">${s.icon||""} ${s.title}</div>
-        <div class="row-meta">${s.desc||""}</div>
-      </div>
-      <div class="row-actions">
-        <button class="btn btn-danger btn-sm" onclick="delItem('softwares',${i})">删除</button>
-      </div>
-    </div>
-  `).join("") || '<div class="empty">暂无</div>';
-}
-
-async function addSoftware(btn){
-  blogData.softwares.push({
-    icon: document.getElementById("s_icon").value,
-    title: document.getElementById("s_title").value,
-    desc: document.getElementById("s_desc").value,
-    url: document.getElementById("s_url").value
-  });
-  await saveData("添加软件");
-  renderSoftwares();
-}
-
-// 日记/导师
-function renderDiary(){
-  document.getElementById("list-diary").innerHTML = (blogData.diary||[]).slice(-10).reverse().map((d,i)=>`
-    <div class="item-row">
-      <div class="row-body">
-        <div class="row-title" style="font-size:.85rem">${d.date}</div>
-        <div class="row-meta">${(d.content||"").slice(0,50)}...</div>
-      </div>
-    </div>
-  `).join("") || '<div class="empty">暂无日记</div>';
-}
-
-async function addDiary(btn){
-  const content = document.getElementById("diaryContent").value.trim();
-  if(!content){ alert("请输入内容"); return; }
-  blogData.diary.push({date: new Date().toLocaleDateString("zh-CN"), content});
-  await saveData("写日记");
-  document.getElementById("diaryContent").value="";
-  renderDiary();
-}
-
-async function addAdvisor(btn){
-  const content = document.getElementById("advContent").value.trim();
-  if(!content){ alert("请输入内容"); return; }
-  blogData.advisor.push({date: new Date().toLocaleDateString("zh-CN"), content});
-  await saveData("添加导师指导记录");
-  document.getElementById("advContent").value="";
-  alert("保存成功！");
-}
-
-async function delItem(key, idx){
-  if(!confirm("确定删除？")) return;
-  blogData[key].splice(idx,1);
-  await saveData("删除"+key);
-  renderAll();
+function showNotice(){
+  const n=document.getElementById("saveNotice");
+  n.style.display="block";
+  setTimeout(()=>n.style.display="none",2000);
 }
 
 function renderAll(){
+  document.getElementById("cfgTitle").value=blogData.siteConfig.title||"";
+  document.getElementById("cfgSub").value=blogData.siteConfig.subtitle||"";
+  document.getElementById("statC").textContent=(blogData.courses||[]).length;
+  document.getElementById("statP").textContent=(blogData.papers||[]).length;
+  document.getElementById("statN").textContent=(blogData.notices||[]).length;
+  document.getElementById("statT").textContent=(blogData.timeline||[]).length;
+  renderCourses();renderPapers();renderNotices();renderClass();renderLife();
+  renderTimeline();renderLedger();renderDiary();renderAdvisor();renderLogs();
+}
+
+function saveSiteConfig(){
+  blogData.siteConfig.title=document.getElementById("cfgTitle").value;
+  blogData.siteConfig.subtitle=document.getElementById("cfgSub").value;
+  saveData("修改站点设置");
+}
+
+function addCourse(){
+  const icon=document.getElementById("cIcon").value||"📚";
+  const title=document.getElementById("cTitle").value.trim();
+  const desc=document.getElementById("cDesc").value.trim();
+  const progress=parseInt(document.getElementById("cProgress").value)||0;
+  const intro=document.getElementById("cIntro").value.trim();
+  if(!title){alert("请输入课程名称");return;}
+  blogData.courses.push({icon,title,desc,intro,progress,files:[]});
+  saveData("添加课程："+title);
   renderCourses();
+  ["cIcon","cTitle","cDesc","cIntro"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("cProgress").value=0;
+}
+
+function renderCourses(){
+  document.getElementById("courseList").innerHTML=(blogData.courses||[]).map((c,i)=>`
+    <div class="item-row">
+      <div class="info"><div class="title">${c.icon} ${esc(c.title)}</div><div class="desc">${esc(c.desc)} · 进度${c.progress||0}%</div></div>
+      <button class="btn btn-danger btn-sm" onclick="delCourse(${i})">删除</button>
+    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+}
+function delCourse(i){if(confirm("确定删除？")){blogData.courses.splice(i,1);saveData("删除课程");renderCourses();}}
+
+function addPaper(){
+  const title=document.getElementById("pTitle").value.trim();
+  const status=document.getElementById("pStatus").value;
+  const year=document.getElementById("pYear").value;
+  const desc=document.getElementById("pDesc").value;
+  const tags=[...document.querySelectorAll(".paper-tag:checked")].map(c=>c.value);
+  if(!title){alert("请输入论文标题");return;}
+  blogData.papers.push({title,status,year,desc,tags,file:"",fileName:""});
+  saveData("添加论文："+title);
   renderPapers();
+  document.getElementById("pTitle").value="";
+  document.getElementById("pDesc").value="";
+  document.querySelectorAll(".paper-tag").forEach(c=>c.checked=false);
+}
+function renderPapers(){
+  document.getElementById("paperList").innerHTML=(blogData.papers||[]).map((p,i)=>`
+    <div class="item-row">
+      <div class="info"><div class="title">${esc(p.title)}</div><div class="desc">${p.status} · ${p.year||""} ${(p.tags||[]).map(t=>`<span class="tag-chip">${t}</span>`).join("")}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="delPaper(${i})">删除</button>
+    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+}
+function delPaper(i){if(confirm("确定删除？")){blogData.papers.splice(i,1);saveData("删除论文");renderPapers();}}
+
+function addNotice(){
+  const title=document.getElementById("nTitle").value.trim();
+  const source=document.getElementById("nSource").value.trim();
+  const date=document.getElementById("nDate").value||new Date().toISOString().slice(0,10);
+  const content=document.getElementById("nContent").value.trim();
+  if(!title){alert("请输入标题");return;}
+  blogData.notices.push({title,source,date,level:"normal",content});
+  saveData("发布通知："+title);
   renderNotices();
+  ["nTitle","nSource","nContent"].forEach(id=>document.getElementById(id).value="");
+}
+function renderNotices(){
+  document.getElementById("noticeList").innerHTML=(blogData.notices||[]).map((n,i)=>`
+    <div class="item-row">
+      <div class="info"><div class="title">${esc(n.title)}</div><div class="desc">${n.source} · ${n.date}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="delNotice(${i})">删除</button>
+    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+}
+function delNotice(i){if(confirm("确定删除？")){blogData.notices.splice(i,1);saveData("删除通知");renderNotices();}}
+
+function addClass(){
+  const title=document.getElementById("clTitle").value.trim();
+  const type=document.getElementById("clType").value;
+  const date=document.getElementById("clDate").value||new Date().toISOString().slice(0,10);
+  const content=document.getElementById("clContent").value.trim();
+  if(!title){alert("请输入标题");return;}
+  blogData.classItems.push({title,type,date,content,file:"",fileName:""});
+  saveData("添加班级事务："+title);
   renderClass();
-  renderTimeline();
+  ["clTitle","clContent"].forEach(id=>document.getElementById(id).value="");
+}
+function renderClass(){
+  document.getElementById("classList").innerHTML=(blogData.classItems||[]).map((c,i)=>`
+    <div class="item-row">
+      <div class="info"><div class="title">${esc(c.title)}</div><div class="desc">${c.type} · ${c.date}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="delClass(${i})">删除</button>
+    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+}
+function delClass(i){if(confirm("确定删除？")){blogData.classItems.splice(i,1);saveData("删除班级事务");renderClass();}}
+
+function addLife(){
+  const icon=document.getElementById("lsIcon").value||"🔗";
+  const title=document.getElementById("lsTitle").value.trim();
+  const desc=document.getElementById("lsDesc").value.trim();
+  const url=document.getElementById("lsUrl").value.trim();
+  if(!title||!url){alert("请输入名称和链接");return;}
+  blogData.lifeServices.push({icon,title,desc,url});
+  saveData("添加生活服务："+title);
   renderLife();
-  renderSoftwares();
+  ["lsIcon","lsTitle","lsDesc","lsUrl"].forEach(id=>document.getElementById(id).value="");
+}
+function renderLife(){
+  document.getElementById("lifeList").innerHTML=(blogData.lifeServices||[]).map((s,i)=>`
+    <div class="item-row">
+      <div class="info"><div class="title">${s.icon} ${esc(s.title)}</div><div class="desc">${esc(s.desc)} · ${esc(s.url)}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="delLife(${i})">删除</button>
+    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+}
+function delLife(i){if(confirm("确定删除？")){blogData.lifeServices.splice(i,1);saveData("删除生活服务");renderLife();}}
+
+function addTimeline(){
+  const date=document.getElementById("tlDate").value;
+  const title=document.getElementById("tlTitle").value.trim();
+  const desc=document.getElementById("tlDesc").value.trim();
+  if(!date||!title){alert("请输入日期和事件标题");return;}
+  blogData.timeline.push({date,title,desc});
+  saveData("添加时间记录："+title);
+  renderTimeline();
+  ["tlDate","tlTitle","tlDesc"].forEach(id=>document.getElementById(id).value="");
+}
+function renderTimeline(){
+  document.getElementById("timelineList").innerHTML=(blogData.timeline||[]).map((t,i)=>`
+    <div class="item-row">
+      <div class="info"><div class="title">${esc(t.title)}</div><div class="desc">${t.date} · ${esc(t.desc)}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="delTimeline(${i})">删除</button>
+    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+}
+function delTimeline(i){if(confirm("确定删除？")){blogData.timeline.splice(i,1);saveData("删除时间记录");renderTimeline();}}
+
+function renderLedger(){
+  document.getElementById("ledgerList").innerHTML=(blogData.ledger||[]).slice().reverse().map((r,i)=>`
+    <div class="item-row">
+      <div class="info"><div class="title">${r.type==="income"?"收入":"支出"} ¥${parseFloat(r.amount).toFixed(2)}</div><div class="desc">${r.date} · ${esc(r.desc||"")}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="delLedger(${i})">删除</button>
+    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+}
+function delLedger(i){
+  const realIdx=blogData.ledger.length-1-i;
+  if(confirm("确定删除？")){blogData.ledger.splice(realIdx,1);saveData("删除记账");renderLedger();}
+}
+
+function addDiary(){
+  const content=document.getElementById("diaryContent").value.trim();
+  if(!content){alert("请写点内容");return;}
+  blogData.diary.push({date:new Date().toISOString().slice(0,10),content});
+  saveData("写日记");
   renderDiary();
-  renderLogs();
+  document.getElementById("diaryContent").value="";
+}
+function renderDiary(){
+  document.getElementById("diaryList").innerHTML=(blogData.diary||[]).slice().reverse().map((d,i)=>`
+    <div class="item-row">
+      <div class="info"><div class="title">${d.date}</div><div class="desc" style="white-space:pre-wrap">${esc(d.content)}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="delDiary(${i})">删除</button>
+    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+}
+function delDiary(i){
+  const realIdx=blogData.diary.length-1-i;
+  if(confirm("确定删除？")){blogData.diary.splice(realIdx,1);saveData("删除日记");renderDiary();}
 }
 
-function exportData(){
-  const blob = new Blob([JSON.stringify(blogData, null, 2)], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = "blog_backup.json"; a.click();
+function addAdvisor(){
+  const content=document.getElementById("advContent").value.trim();
+  if(!content){alert("请写点内容");return;}
+  blogData.advisor.push({date:new Date().toISOString().slice(0,10),content});
+  saveData("添加导师指导记录");
+  renderAdvisor();
+  document.getElementById("advContent").value="";
+}
+function renderAdvisor(){
+  document.getElementById("advisorList").innerHTML=(blogData.advisor||[]).slice().reverse().map((d,i)=>`
+    <div class="item-row">
+      <div class="info"><div class="title">${d.date}</div><div class="desc" style="white-space:pre-wrap">${esc(d.content)}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="delAdvisor(${i})">删除</button>
+    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+}
+function delAdvisor(i){
+  const realIdx=blogData.advisor.length-1-i;
+  if(confirm("确定删除？")){blogData.advisor.splice(realIdx,1);saveData("删除导师记录");renderAdvisor();}
 }
 
-async function importData(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = async function(ev){
-    try {
-      blogData = JSON.parse(ev.target.result);
-      await saveData("导入数据");
-      renderAll();
-      alert("导入成功！");
-    } catch(err){ alert("文件格式错误"); }
+function renderLogs(){
+  document.getElementById("logList").innerHTML=(blogData.logs||[]).map(l=>`
+    <div class="log-item"><b>${esc(l.time)}</b> — ${esc(l.action)}</div>`).join("")||'<div style="color:#94a3b8">暂无日志</div>';
+}
+
+document.querySelectorAll(".tabs button").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("panel-"+btn.dataset.p).classList.add("active");
   };
-  reader.readAsText(file);
-}
-
-async function resetData(){
-  if(!confirm("确定恢复默认？")) return;
-  blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-  await saveData("恢复默认");
-  renderAll();
-}
+});
 </script>
 </body>
 </html>

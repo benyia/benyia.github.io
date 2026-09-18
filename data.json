@@ -3,7 +3,7 @@
     "title": "思齐个人主页",
     "subtitle": "钟爱奥迪A6",
     "about": "你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",
-    "avatar": "思",
+    "avatar": "files/1789748280707_yiqio_583fc105d116716dbba227422b5595d9.jpg",
     "name": "思齐",
     "bio": "控制工程研究生 · 记录学习与生活"
   },
@@ -64,10 +64,19 @@
         "撰写",
         "中文"
       ],
-      "file": "",
-      "fileName": "",
-      "files": [],
-      "abstract": ""
+      "file": "files/1789749211130_1_tuzq0wgf_高速LVDS收发器的研究与设计_谢詹奇.pdf",
+      "fileName": "高速LVDS收发器的研究与设计_谢詹奇.pdf",
+      "files": [
+        {
+          "name": "高速LVDS收发器的研究与设计_谢詹奇.pdf",
+          "url": "files/1789749211130_1_tuzq0wgf_高速LVDS收发器的研究与设计_谢詹奇.pdf",
+          "type": "PDF",
+          "size": 1598340
+        }
+      ],
+      "abstract": "",
+      "images": [],
+      "time": "2026-09-19 00:33"
     },
     {
       "title": "Adaptive Control: A Survey",
@@ -82,6 +91,21 @@
       "fileName": "",
       "files": [],
       "abstract": "参考文献综述"
+    },
+    {
+      "title": "11111",
+      "status": "在投",
+      "year": "",
+      "desc": "",
+      "abstract": "",
+      "tags": [
+        "阅读"
+      ],
+      "files": [],
+      "images": [],
+      "file": "",
+      "fileName": "",
+      "time": "2026-09-19 00:23"
     }
   ],
   "notices": [
@@ -175,16 +199,16 @@
   ],
   "logs": [
     {
-      "time": "2026-09-19 00:29",
-      "action": "名单：隐藏敏感信息"
+      "time": "2026-09-19 00:33",
+      "action": "编辑论文：基于深度学习的故障诊断方法研究"
     },
     {
-      "time": "2026-09-19 00:28",
-      "action": "名单：公开敏感信息"
+      "time": "2026-09-19 00:23",
+      "action": "添加论文：11111"
     },
     {
-      "time": "2026-09-19 00:28",
-      "action": "名单：隐藏敏感信息"
+      "time": "2026-09-19 00:18",
+      "action": "修改站点设置"
     },
     {
       "time": "2026-09-19 00:15",
@@ -356,6 +380,6 @@
     }
   ],
   "rosterConfig": {
-    "showSensitive": false
+    "showSensitive": true
   }
 }

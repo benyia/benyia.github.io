@@ -1,35 +1,144 @@
 {
-  "siteConfig": {"title": "思齐个人主页", "subtitle": "钟爱奥迪A6"},
+  "siteConfig": {
+    "title": "思齐个人主页",
+    "subtitle": "钟爱奥迪A6"
+  },
   "courses": [
-    {"icon":"📐", "title":"自动控制原理", "desc":"教材、PPT、课后习题答案", "intro":"本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。", "progress": 60, "files": []},
-    {"icon":"🧠", "title":"神经网络与深度学习", "desc":"课件、上机指导、参考书", "intro":"深度学习基础、CNN、RNN、Transformer等模型原理与实践应用。", "progress": 30, "files": []}
+    {
+      "icon": "📐",
+      "title": "自动控制原理",
+      "desc": "教材、PPT、课后习题答案",
+      "intro": "本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。",
+      "progress": 0,
+      "files": [
+        {
+          "name": "第1章 绪论.pdf",
+          "url": "https://benyia.github.io/benyia.github.io/files/1789738888760_第1章_绪论.pdf",
+          "type": "PDF"
+        }
+      ]
+    },
+    {
+      "icon": "🧠",
+      "title": "神经网络与深度学习",
+      "desc": "课件、上机指导、参考书",
+      "intro": "深度学习基础、CNN、RNN、Transformer等模型原理与实践应用。",
+      "progress": 30,
+      "files": []
+    }
   ],
   "papers": [
-    {"title":"基于深度学习的故障诊断方法研究", "status":"在投", "year":"2026", "desc":"", "tags":["撰写","中文"], "file":"", "fileName":""},
-    {"title":"Adaptive Control: A Survey", "status":"阅读中", "year":"", "desc":"参考文献综述", "tags":["阅读","英文"], "file":"", "fileName":""}
+    {
+      "title": "基于深度学习的故障诊断方法研究",
+      "status": "在投",
+      "year": "2026",
+      "desc": "",
+      "tags": [
+        "撰写",
+        "中文"
+      ],
+      "file": "",
+      "fileName": ""
+    },
+    {
+      "title": "Adaptive Control: A Survey",
+      "status": "阅读中",
+      "year": "",
+      "desc": "参考文献综述",
+      "tags": [
+        "阅读",
+        "英文"
+      ],
+      "file": "",
+      "fileName": ""
+    }
   ],
   "notices": [
-    {"title":"2026年秋季学期选课通知", "source":"研究生院", "date":"2026-09-01", "level":"red", "content":"各研究生：2026年秋季学期选课即将开始，请于9月1日-9月5日登录研究生系统完成选课。"}
+    {
+      "title": "2026年秋季学期选课通知",
+      "source": "研究生院",
+      "date": "2026-09-01",
+      "level": "red",
+      "content": "各研究生：2026年秋季学期选课即将开始，请于9月1日-9月5日登录研究生系统完成选课。"
+    }
   ],
   "classItems": [
-    {"title":"组会时间调整为每周四下午2点", "type":"通知", "date":"2026-09-15", "content":"全体同学注意，本周组会时间调整为周四下午2点，地点实验室。", "file":"", "fileName":""}
+    {
+      "title": "组会时间调整为每周四下午2点",
+      "type": "通知",
+      "date": "2026-09-15",
+      "content": "全体同学注意，本周组会时间调整为周四下午2点，地点实验室。",
+      "file": "",
+      "fileName": ""
+    }
   ],
   "lifeServices": [
-    {"icon":"☁️", "title":"百度网盘", "desc":"云存储 / 文件分享", "url":"https://pan.baidu.com", "file":"", "fileName":""},
-    {"icon":"🅰️", "title":"阿里云盘", "desc":"不限速云盘", "url":"https://www.alipan.com", "file":"", "fileName":""},
-    {"icon":"✨", "title":"夸克网盘", "desc":"夸克云存储", "url":"https://pan.quark.cn", "file":"", "fileName":""},
-    {"icon":"📁", "title":"123云盘", "desc":"不限速云盘", "url":"https://www.123pan.com", "file":"", "fileName":""}
+    {
+      "icon": "☁️",
+      "title": "百度网盘",
+      "desc": "云存储 / 文件分享",
+      "url": "https://pan.baidu.com",
+      "file": "",
+      "fileName": ""
+    },
+    {
+      "icon": "🅰️",
+      "title": "阿里云盘",
+      "desc": "不限速云盘",
+      "url": "https://www.alipan.com",
+      "file": "",
+      "fileName": ""
+    },
+    {
+      "icon": "✨",
+      "title": "夸克网盘",
+      "desc": "夸克云存储",
+      "url": "https://pan.quark.cn",
+      "file": "",
+      "fileName": ""
+    },
+    {
+      "icon": "📁",
+      "title": "123云盘",
+      "desc": "不限速云盘",
+      "url": "https://www.123pan.com",
+      "file": "",
+      "fileName": ""
+    }
   ],
   "softwares": [
-    {"icon":"🐍", "title":"Python", "desc":"多版本下载", "url":"https://www.python.org/downloads/"},
-    {"icon":"📝", "title":"VS Code", "desc":"代码编辑器", "url":"https://code.visualstudio.com/"}
+    {
+      "icon": "🐍",
+      "title": "Python",
+      "desc": "多版本下载",
+      "url": "https://www.python.org/downloads/"
+    },
+    {
+      "icon": "📝",
+      "title": "VS Code",
+      "desc": "代码编辑器",
+      "url": "https://code.visualstudio.com/"
+    }
   ],
   "timeline": [
-    {"date":"2026-09-01", "title":"秋季学期开始", "desc":"新学期正式开学"},
-    {"date":"2026-10-15", "title":"开题报告", "desc":"研究生开题答辩"}
+    {
+      "date": "2026-09-01",
+      "title": "秋季学期开始",
+      "desc": "新学期正式开学"
+    },
+    {
+      "date": "2026-10-15",
+      "title": "开题报告",
+      "desc": "研究生开题答辩"
+    }
   ],
   "ledger": [],
   "diary": [],
   "advisor": [],
-  "logs": []
+  "logs": [
+    {
+      "time": "2026/9/18 21:41:32",
+      "action": "编辑课程：自动控制原理"
+    }
+  ]
 }

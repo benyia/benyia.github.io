@@ -179,12 +179,11 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       <button data-t="papers">论文</button>
       <button data-t="notices">通知</button>
       <button data-t="class">班级</button>
+      <button data-t="advisor">导师指导</button>
       <button data-t="roster">名单</button>
       <button data-t="life">生活服务</button>
-      <button data-t="media">影音</button>
       <button data-t="ledger">记账</button>
       <button data-t="diary">日记</button>
-      <button data-t="advisor">导师指导</button>
       <button data-t="about">关于</button>
     </div>
     <div class="nav-search">
@@ -291,9 +290,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 
     <div class="section" id="sec-life">
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px" id="lifeList"></div>
-    </div>
-
-    <div class="section" id="sec-media">
+      <h3 style="margin:26px 0 12px;font-size:1rem;padding-left:10px;border-left:3px solid var(--primary)">🎵 音乐 · 🎬 视频 · 🖼️ 图片</h3>
       <div class="filter-bar" id="mediaFilters"></div>
       <div id="mediaList"></div>
     </div>
@@ -426,11 +423,21 @@ function collectImages(item){
 }
 function isImgUrl(v){
   v = String(v||"").trim();
-  return /^(https?:)?///.test(v) || /^files//.test(v) || /^data:image/.test(v) || /^.?/?[^s]+.(png|jpe?g|gif|webp|svg|bmp)$/i.test(v);
+  if(!v) return false;
+  if(v.indexOf("data:image") === 0) return true;
+  if(v.indexOf("http://") === 0 || v.indexOf("https://") === 0) return true;
+  if(v.indexOf("//") === 0) return true;
+  if(v.indexOf("files/") === 0) return true;
+  if(v.indexOf("/") === 0) return true;
+  if(/[.](png|jpe?g|gif|webp|svg|bmp|avif|ico)$/i.test(v)) return true;
+  return false;
 }
 function iconHTML(icon, fallback){
   var v = String(icon||"").trim();
-  if(isImgUrl(v)) return '<img src="'+esc(v)+'" style="width:100%;height:100%;object-fit:cover" alt="">';
+  var fb = esc(fallback || "📄");
+  if(isImgUrl(v)){
+    return '<img src="'+esc(v)+'" style="width:100%;height:100%;object-fit:cover" alt="" onerror="this.style.display=&#39;none&#39;;var n=this.nextElementSibling;if(n){n.style.display=&#39;inline-block&#39;;}"><span style="display:none;font-size:1.6rem">'+fb+'</span>';
+  }
   return esc(v || fallback || "📄");
 }
 function coverHTML(item, iconFallback){

@@ -884,13 +884,20 @@ function buildFilePath(name){
   return FILES_DIR + "/" + Date.now() + "_" + _upSeq + "_" + rnd + "_" + safe;
 }
 
+/* 后台元素命名兼容：课程用 c 前缀、论文 p、班级 cl */
+var KIND_PREFIX = { course:"c", paper:"p", "class":"cl", life:"life", media:"media" };
+function kindEl(kind, suffix){
+  var p = KIND_PREFIX[kind] || kind;
+  return $(p + suffix) || $(kind + suffix);
+}
+
 function setProgress(kind, pct){
-  const t = $(kind+"ProgressTrack"), b = $(kind+"ProgressBar");
+  var t = kindEl(kind,"ProgressTrack"), b = kindEl(kind,"ProgressBar");
   if(t) t.classList.add("on");
   if(b) b.style.width = pct+"%";
 }
 function hideProgress(kind){
-  const t = $(kind+"ProgressTrack"), b = $(kind+"ProgressBar");
+  var t = kindEl(kind,"ProgressTrack"), b = kindEl(kind,"ProgressBar");
   if(t) t.classList.remove("on");
   if(b) b.style.width = "0%";
 }
@@ -901,7 +908,7 @@ async function uploadFile(file, kind){
   }
   if(!getStoredToken()) throw new Error("请先在「站点设置」里填写 GitHub Token");
 
-  const status = $(kind+"UpStatus");
+  const status = kindEl(kind,"UpStatus");
   if(status && file.size > 2*1024*1024){
     status.textContent = "正在编码「"+file.name+"」("+fmtSize(file.size)+")，大文件需要几秒…";
     await new Promise(r=>setTimeout(r, 50));
@@ -1070,19 +1077,20 @@ function toggleRosterSensitive(){
 function exportRoster(){ downloadJSON("roster-"+todayStr()+".json", blogData.roster||[]); showToast("已导出名单 JSON"); }
 
 async function handleFiles(fileList, kind){
-  const files = Array.from(fileList||[]);
+  var files = Array.prototype.slice.call(fileList||[]);
   if(!files.length) return;
-  const status = $(kind+"UpStatus");
-  const box = $(kind+"UpStatus");
-  let done = 0;
-  for(const f of files){
+  var status = kindEl(kind,"UpStatus");
+  var done = 0;
+  for(var i=0;i<files.length;i++){
+    var f = files[i];
     try{
-      status.textContent = "上传中（"+(done+1)+"/"+files.length+"）："+f.name;
-      const meta = await uploadFile(f, kind);
+      if(status) status.textContent = "上传中（"+(done+1)+"/"+files.length+"）："+f.name;
+      var meta = await uploadFile(f, kind);
       drafts[kind].push(meta);
       done++;
+      renderDraftFiles(kind);
     }catch(e){
-      status.textContent = "❌ 上传失败："+e.message;
+      if(status) status.textContent = "❌ 上传失败："+e.message;
       showToast("上传失败："+e.message, "error");
       hideProgress(kind);
       renderDraftFiles(kind);
@@ -1090,21 +1098,23 @@ async function handleFiles(fileList, kind){
     }
   }
   hideProgress(kind);
-  status.textContent = "✅ 已上传 "+done+" 个文件（记得点下方按钮保存）";
+  if(status) status.textContent = "✅ 已上传 "+done+" 个文件（记得点下方按钮保存）";
   showToast("已上传 "+done+" 个文件，别忘了点保存");
   renderDraftFiles(kind);
 }
 
 function renderDraftFiles(kind){
-  const box = $(kind+"Files");
+  var box = kindEl(kind,"Files");
   if(!box) return;
-  const list = drafts[kind]||[];
-  box.innerHTML = list.map((f,i)=>`
-    <div class="file-item">
-      <span class="fname">📄 ${esc(f.name)}</span>
-      <span class="fsize">${esc(f.type||"")} ${f.size?("· "+fmtSize(f.size)):""}</span>
-      <button class="btn btn-danger btn-sm" onclick="removeDraftFile('${kind}',${i})">移除</button>
-    </div>`).join("") || '<div style="font-size:.82rem;color:var(--text3);padding:4px 0">还没有文件</div>';
+  var list = drafts[kind]||[];
+  box.innerHTML = list.map(function(f,i){
+    return '<div class="file-item"><span class="fname">📄 '+esc(f.name)+'</span><span class="fsize">'+esc(f.type||"")+(f.size?(" · "+fmtSize(f.size)):"")+'</span><button class="btn btn-danger btn-sm" data-fkind="'+esc(kind)+'" data-fidx="'+i+'" onclick="removeDraftFileBtn(this)">移除</button></div>';
+  }).join("") || '<div style="font-size:.82rem;color:#94a3b8">还没有文件</div>';
+}
+function removeDraftFileBtn(btn){
+  var kind = btn.getAttribute("data-fkind");
+  var i = parseInt(btn.getAttribute("data-fidx"),10);
+  if(drafts[kind]){ drafts[kind].splice(i,1); renderDraftFiles(kind); }
 }
 function removeDraftFile(kind, i){
   drafts[kind].splice(i,1);

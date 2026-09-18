@@ -1,0 +1,46 @@
+{
+  "courses": [
+    {"icon":"📐", "title":"自动控制原理", "desc":"教材、PPT、课后习题答案", "link":"#", "file":"", "fileName":""},
+    {"icon":"🧠", "title":"神经网络与深度学习", "desc":"课件、上机指导、参考书", "link":"#", "file":"", "fileName":""},
+    {"icon":"💻", "title":"计算机控制系统", "desc":"教材、章节PPT、习题解答", "link":"#", "file":"", "fileName":""},
+    {"icon":"⚙️", "title":"现代控制理论", "desc":"状态空间分析、最优控制", "link":"#", "file":"", "fileName":""}
+  ],
+  "papers": [
+    {"title":"基于深度学习的故障诊断方法研究", "status":"在投", "year":"2026", "desc":"", "file":"", "fileName":""},
+    {"title":"自适应控制算法综述", "status":"阅读中", "year":"", "desc":"参考文献", "file":"", "fileName":""}
+  ],
+  "notices": [
+    {"title":"2026年秋季学期选课通知", "source":"研究生院", "date":"2026-09-01", "level":"red"},
+    {"title":"研究生奖学金评定工作安排", "source":"学院", "date":"2026-09-10", "level":"orange"},
+    {"title":"图书馆数据库访问方式变更通知", "source":"图书馆", "date":"2026-09-05", "level":"blue"}
+  ],
+  "classItems": [
+    {"title":"组会时间调整为每周四下午2点", "type":"通知", "date":"2026-09-15", "file":"", "fileName":""},
+    {"title":"班级聚餐（时间待定）", "type":"活动", "date":"", "file":"", "fileName":""}
+  ],
+  "lifeServices": [
+    {"icon":"🛒", "title":"淘宝", "desc":"购物", "url":"https://www.taobao.com", "file":"", "fileName":""},
+    {"icon":"🚄", "title":"12306", "desc":"火车票预订", "url":"https://www.12306.cn", "file":"", "fileName":""},
+    {"icon":"🍜", "title":"饿了么", "desc":"外卖订餐", "url":"https://www.ele.me", "file":"", "fileName":""},
+    {"icon":"🗺️", "title":"百度地图", "desc":"导航出行", "url":"https://map.baidu.com", "file":"", "fileName":""},
+    {"icon":"💡", "title":"知乎", "desc":"知识问答", "url":"https://www.zhihu.com", "file":"", "fileName":""},
+    {"icon":"🐙", "title":"GitHub", "desc":"代码托管", "url":"https://github.com", "file":"", "fileName":""},
+    {"icon":"☁️", "title":"百度网盘", "desc":"云存储 / 文件分享", "url":"https://pan.baidu.com", "file":"", "fileName":""},
+    {"icon":"🅰️", "title":"阿里云盘", "desc":"不限速云盘", "url":"https://www.alipan.com", "file":"", "fileName":""},
+    {"icon":"✨", "title":"夸克网盘", "desc":"夸克云存储", "url":"https://pan.quark.cn", "file":"", "fileName":""},
+    {"icon":"📁", "title":"123云盘", "desc":"不限速云盘", "url":"https://www.123pan.com", "file":"", "fileName":""},
+    {"icon":"🟦", "title":"腾讯微云", "desc":"腾讯云存储", "url":"https://www.weiyun.com", "file":"", "fileName":""},
+    {"icon":"📧", "title":"网易邮箱", "desc":"邮件服务", "url":"https://mail.163.com", "file":"", "fileName":""}
+  ],
+  "softwares": [
+    {"icon":"🐍", "title":"Python", "desc":"多版本下载", "url":"https://www.python.org/downloads/"},
+    {"icon":"📝", "title":"VS Code", "desc":"代码编辑器", "url":"https://code.visualstudio.com/"},
+    {"icon":"📊", "title":"Anaconda", "desc":"Python 数据科学发行版", "url":"https://www.anaconda.com/download"},
+    {"icon":"🔢", "title":"MATLAB", "desc":"数学计算与仿真", "url":"https://www.mathworks.com/products/matlab.html"},
+    {"icon":"🔧", "title":"Vivado", "desc":"FPGA 开发工具", "url":"https://www.xilinx.com/products/design-tools/vivado.html"},
+    {"icon":"📦", "title":"Git", "desc":"版本控制工具", "url":"https://git-scm.com/downloads"}
+  ],
+  "ledger": [],
+  "diary": [],
+  "advisor": []
+}

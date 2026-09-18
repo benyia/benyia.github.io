@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>思齐的个人主页 | benyia.com</title>
+<style>
+  /* ===== 基础重置与变量 ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --primary-dark: #1d4ed8;
+    --accent: #f59e0b;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --success: #10b981;
+    --danger: #ef4444;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  a { color: var(--primary); text-decoration: none; transition: color .15s; }
+  a:hover { color: var(--primary-dark); }
+
+  /* ===== 顶部 Header ===== */
+  .header {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+    color: #fff;
+    padding: 40px 24px 32px;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    font-size: .95rem;
+    opacity: .85;
+    font-weight: 300;
+  }
+  .header .domain {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 4px 14px;
+    background: rgba(255,255,255,.15);
+    border-radius: 20px;
+    font-size: .8rem;
+    letter-spacing: 1px;
+  }
+
+  /* ===== 导航栏 ===== */
+  .nav {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow);
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-item {
+    flex-shrink: 0;
+    padding: 14px 18px;
+    font-size: .9rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all .15s;
+    white-space: nowrap;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: inherit;
+  }
+  .nav-item:hover { color: var(--primary); background: var(--primary-light); }
+  .nav-item.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    font-weight: 600;
+  }
+
+  /* ===== 主内容区 ===== */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn .25s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .section-desc {
+    font-size: .9rem;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  /* ===== 卡片网格（链接类板块） ===== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .link-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: all .2s;
+    display: block;
+    color: var(--text);
+  }
+  .link-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+  .link-card .card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  .link-card .card-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+  .link-card .card-desc {
+    font-size: .85rem;
+    color: var(--text-secondary);
+  }
+
+  /* ===== 列表类板块 ===== */
+  .list-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .list-item .item-content { flex: 1; }
+  .list-item .item-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .list-item .item-meta {
+    font-size: .8rem;
+    color: var(--text-muted);
+  }
+  .list-item .item-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: .75rem;
+    font-weight: 500;
+  }
+  .tag-red { background: #fef2f2; color: var(--danger); }
+  .tag-blue { background: var(--primary-light); color: var(--primary); }
+  .tag-green { background: #d1fae5; color: #059669; }
+  .tag-orange { background: #fef3c7; color: #d97706; }
+
+  /* ===== 表单/交互板块 ===== */
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: .88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .15s;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-outline {
+    background: var(--card);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+  .btn-danger {
+    background: transparent;
+    color: var(--danger);
+    padding: 4px 10px;
+    font-size: .8rem;
+  }
+  .btn-danger:hover { background: #fef2f2; }
+
+  /* 记账统计 */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-card .stat-label {
+    font-size: .8rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .stat-card .stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .stat-value.income { color: var(--success); }
+  .stat-value.expense { color: var(--danger); }
+  .stat-value.balance { color: var(--primary); }
+
+  /* 表单 */
+  .form-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .form-row input, .form-row select, .form-row textarea {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: .9rem;
+    font-family: inherit;
+    background: var(--card);
+    color: var(--text);
+    flex: 1;
+    min-width: 120px;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+  .form-row textarea {
+    width: 100%;
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  /* 记录条目 */
+  .record-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .record-item .rec-body { flex: 1; }
+  .record-item .rec-date {
+    font-size: .78rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .record-item .rec-text {
+    font-size: .92rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .record-item .rec-amount {
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+  .record-item .rec-amount.income { color: var(--success); }
+  .record-item .rec-amount.expense { color: var(--danger); }
+
+  .empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--text-muted);
+    font-size: .9rem;
+  }
+
+  /* ===== Footer ===== */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    font-size: .8rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    background: var(--card);
+  }
+
+  /* ===== 响应式 ===== */
+  @media (max-width: 640px) {
+    .header { padding: 28px 16px 24px; }
+    .header h1 { font-size: 1.5rem; }
+    .main { padding: 20px 16px 40px; }
+    .card-grid { grid-template-columns: 1fr; }
+    .form-row { flex-direction: column; }
+    .form-row input, .form-row select { min-width: unset; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Header ===== -->
+<header class="header">
+  <h1>思 齐</h1>
+  <p class="subtitle">个人主页 · 学习资源 · 生活记录</p>
+  <span class="domain">benyia.com</span>
+</header>
+
+<!-- ===== 导航 ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-item active" data-section="courses">我的课程</button>
+    <button class="nav-item" data-section="papers">论文</button>
+    <button class="nav-item" data-section="notices">学校通知</button>
+    <button class="nav-item" data-section="class">班级事务</button>
+    <button class="nav-item" data-section="life">生活服务</button>
+    <button class="nav-item" data-section="software">软件下载</button>
+    <button class="nav-item" data-section="ledger">生活记账</button>
+    <button class="nav-item" data-section="diary">日记</button>
+    <button class="nav-item" data-section="advisor">导师指导</button>
+  </div>
+</nav>
+
+<!-- ===== 主内容 ===== -->
+<main class="main">
+
+  <!-- 我的课程 -->
+  <section class="section active" id="courses">
+    <h2 class="section-title">我的课程</h2>
+    <p class="section-desc">本学期课程资料与学习资源</p>
+    <div class="card-grid">
+      <a class="link-card" href="#" onclick="return false">
+        <div class="card-icon">📐</div>
+        <div class="card-title">自动控制原理</div>
+        <div class="card-desc">教材、PPT、课后习题答案</div>
+      </a>
+      <a class="link-card" href="#" onclick="return false">
+        <div class="card-icon">🧠</div>
+        <div class="card-title">神经网络与深度学习</div>
+        <div class="card-desc">课件、上机指导、参考书</div>
+      </a>
+      <a class="link-card" href="#" onclick="return false">
+        <div class="card-icon">💻</div>
+        <div class="card-title">计算机控制系统</div>
+        <div class="card-desc">教材、章节PPT、习题解答</div>
+      </a>
+      <a class="link-card" href="#" onclick="return false">
+        <div class="card-icon">⚙️</div>
+        <div class="card-title">现代控制理论</div>
+        <div class="card-desc">状态空间分析、最优控制</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 论文 -->
+  <section class="section" id="papers">
+    <h2 class="section-title">论文</h2>
+    <p class="section-desc">已发表 / 在投 / 阅读中的论文</p>
+    <div id="paper-list">
+      <div class="list-item">
+        <div class="item-content">
+          <div class="item-title">基于深度学习的故障诊断方法研究</div>
+          <div class="item-meta">在投 · 2026</div>
+        </div>
+        <span class="item-tag tag-orange">在投</span>
+      </div>
+      <div class="list-item">
+        <div class="item-content">
+          <div class="item-title">自适应控制算法综述</div>
+          <div class="item-meta">阅读中 · 参考文献</div>
+        </div>
+        <span class="item-tag tag-blue">阅读中</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 学校重要通知 -->
+  <section class="section" id="notices">
+    <h2 class="section-title">学校重要通知</h2>
+    <p class="section-desc">研究生院 / 学院重要通知汇总</p>
+    <div id="notice-list">
+      <div class="list-item">
+        <div class="item-content">
+          <div class="item-title">2026年秋季学期选课通知</div>
+          <div class="item-meta">研究生院 · 2026-09-01</div>
+        </div>
+        <span class="item-tag tag-red">重要</span>
+      </div>
+      <div class="list-item">
+        <div class="item-content">
+          <div class="item-title">研究生奖学金评定工作安排</div>
+          <div class="item-meta">学院 · 2026-09-10</div>
+        </div>
+        <span class="item-tag tag-orange">关注</span>
+      </div>
+      <div class="list-item">
+        <div class="item-content">
+          <div class="item-title">图书馆数据库访问方式变更通知</div>
+          <div class="item-meta">图书馆 · 2026-09-05</div>
+        </div>
+        <span class="item-tag tag-blue">一般</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 班级事务 -->
+  <section class="section" id="class">
+    <h2 class="section-title">班级事务</h2>
+    <p class="section-desc">班级通知、活动安排、待办事项</p>
+    <div id="class-list">
+      <div class="list-item">
+        <div class="item-content">
+          <div class="item-title">组会时间调整为每周四下午2点</div>
+          <div class="item-meta">班级群通知 · 2026-09-15</div>
+        </div>
+        <span class="item-tag tag-blue">通知</span>
+      </div>
+      <div class="list-item">
+        <div class="item-content">
+          <div class="item-title">班级聚餐（时间待定）</div>
+          <div class="item-meta">活动 · 待确认</div>
+        </div>
+        <span class="item-tag tag-green">活动</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 生活服务 -->
+  <section class="section" id="life">
+    <h2 class="section-title">生活服务</h2>
+    <p class="section-desc">常用生活服务快捷入口</p>
+    <div class="card-grid">
+      <a class="link-card" href="https://www.taobao.com" target="_blank">
+        <div class="card-icon">🛒</div>
+        <div class="card-title">淘宝</div>
+        <div class="card-desc">购物</div>
+      </a>
+      <a class="link-card" href="https://www.12306.cn" target="_blank">
+        <div class="card-icon">🚄</div>
+        <div class="card-title">12306</div>
+        <div class="card-desc">火车票预订</div>
+      </a>
+      <a class="link-card" href="https://www.ele.me" target="_blank">
+        <div class="card-icon">🍜</div>
+        <div class="card-title">饿了么</div>
+        <div class="card-desc">外卖订餐</div>
+      </a>
+      <a class="link-card" href="https://map.baidu.com" target="_blank">
+        <div class="card-icon">🗺️</div>
+        <div class="card-title">百度地图</div>
+        <div class="card-desc">导航出行</div>
+      </a>
+      <a class="link-card" href="https://www.zhihu.com" target="_blank">
+        <div class="card-icon">💡</div>
+        <div class="card-title">知乎</div>
+        <div class="card-desc">知识问答</div>
+      </a>
+      <a class="link-card" href="https://github.com" target="_blank">
+        <div class="card-icon">🐙</div>
+        <div class="card-title">GitHub</div>
+        <div class="card-desc">代码托管</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 软件下载 -->
+  <section class="section" id="software">
+    <h2 class="section-title">软件下载</h2>
+    <p class="section-desc">常用软件安装包与工具</p>
+    <div class="card-grid">
+      <a class="link-card" href="https://www.python.org/downloads/" target="_blank">
+        <div class="card-icon">🐍</div>
+        <div class="card-title">Python</div>
+        <div class="card-desc">多版本下载</div>
+      </a>
+      <a class="link-card" href="https://code.visualstudio.com/" target="_blank">
+        <div class="card-icon">📝</div>
+        <div class="card-title">VS Code</div>
+        <div class="card-desc">代码编辑器</div>
+      </a>
+      <a class="link-card" href="https://www.anaconda.com/download" target="_blank">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Anaconda</div>
+        <div class="card-desc">Python 数据科学发行版</div>
+      </a>
+      <a class="link-card" href="https://www.mathworks.com/products/matlab.html" target="_blank">
+        <div class="card-icon">🔢</div>
+        <div class="card-title">MATLAB</div>
+        <div class="card-desc">数学计算与仿真</div>
+      </a>
+      <a class="link-card" href="https://www.ti.com/tool/MSP430-GCC-OPENSOURCE" target="_blank">
+        <div class="card-icon">🔧</div>
+        <div class="card-title">Vivado</div>
+        <div class="card-desc">FPGA 开发工具</div>
+      </a>
+      <a class="link-card" href="https://git-scm.com/downloads" target="_blank">
+        <div class="card-icon">📦</div>
+        <div class="card-title">Git</div>
+        <div class="card-desc">版本控制工具</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 生活记账 -->
+  <section class="section" id="ledger">
+    <h2 class="section-title">生活记账</h2>
+    <p class="section-desc">记录每一笔收支，数据保存在本地浏览器</p>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">本月收入</div>
+        <div class="stat-value income" id="stat-income">¥0.00</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">本月支出</div>
+        <div class="stat-value expense" id="stat-expense">¥0.00</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">结余</div>
+        <div class="stat-value balance" id="stat-balance">¥0.00</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <select id="ledger-type">
+        <option value="expense">支出</option>
+        <option value="income">收入</option>
+      </select>
+      <input type="number" id="ledger-amount" placeholder="金额（元）" step="0.01" style="width:120px">
+      <input type="text" id="ledger-desc" placeholder="备注（如：食堂午餐）" style="flex:1;min-width:150px">
+      <button class="btn btn-primary" onclick="addLedger()">添加记录</button>
+    </div>
+
+    <div id="ledger-list"></div>
+  </section>
+
+  <!-- 日记 -->
+  <section class="section" id="diary">
+    <h2 class="section-title">日记</h2>
+    <p class="section-desc">随手记录，数据保存在本地浏览器</p>
+
+    <div class="toolbar">
+      <input type="date" id="diary-date" style="width:150px">
+      <button class="btn btn-primary" onclick="addDiary()">写日记</button>
+    </div>
+    <div style="margin-bottom:16px">
+      <textarea id="diary-text" placeholder="今天发生了什么..." style="width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:.92rem;min-height:100px;resize:vertical"></textarea>
+    </div>
+
+    <div id="diary-list"></div>
+  </section>
+
+  <!-- 导师指导记录 -->
+  <section class="section" id="advisor">
+    <h2 class="section-title">导师指导记录</h2>
+    <p class="section-desc">每次组会与导师交流的要点记录</p>
+
+    <div class="toolbar">
+      <input type="date" id="advisor-date" style="width:150px">
+      <button class="btn btn-primary" onclick="addAdvisor()">添加记录</button>
+    </div>
+    <div style="margin-bottom:16px">
+      <textarea id="advisor-text" placeholder="指导内容、待办事项、下一步计划..." style="width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:.92rem;min-height:100px;resize:vertical"></textarea>
+    </div>
+
+    <div id="advisor-list"></div>
+  </section>
+
+</main>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  © 2026 思齐 · benyia.com · Powered by GitHub Pages
+</footer>
+
+<script>
+// ===== 导航切换 =====
+document.querySelectorAll('.nav-item').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.section).classList.add('active');
+  });
+});
+
+// ===== localStorage 工具 =====
+function loadData(key) {
+  try { return JSON.parse(localStorage.getItem(key)) || []; }
+  catch { return []; }
+}
+function saveData(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+// ===== 生活记账 =====
+function renderLedger() {
+  const records = loadData('benyia_ledger');
+  const listEl = document.getElementById('ledger-list');
+
+  // 统计本月
+  const now = new Date();
+  const ym = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  let income = 0, expense = 0;
+  records.forEach(r => {
+    if (r.date.startsWith(ym)) {
+      if (r.type === 'income') income += parseFloat(r.amount);
+      else expense += parseFloat(r.amount);
+    }
+  });
+  document.getElementById('stat-income').textContent = '¥' + income.toFixed(2);
+  document.getElementById('stat-expense').textContent = '¥' + expense.toFixed(2);
+  document.getElementById('stat-balance').textContent = '¥' + (income - expense).toFixed(2);
+
+  if (records.length === 0) {
+    listEl.innerHTML = '<div class="empty-state">还没有记录，记一笔试试吧</div>';
+    return;
+  }
+  // 按日期倒序
+  records.sort((a,b) => b.date.localeCompare(a.date));
+  listEl.innerHTML = records.map((r, i) => `
+    <div class="record-item">
+      <div class="rec-body">
+        <div class="rec-date">${r.date} · ${r.type === 'income' ? '收入' : '支出'}</div>
+        <div class="rec-text">${escapeHtml(r.desc)}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="rec-amount ${r.type}">${r.type === 'income' ? '+' : '-'}¥${parseFloat(r.amount).toFixed(2)}</span>
+        <button class="btn btn-danger" onclick="deleteLedger(${i})">删除</button>
+      </div>
+    </div>
+  `).join('');
+}
+function addLedger() {
+  const type = document.getElementById('ledger-type').value;
+  const amount = parseFloat(document.getElementById('ledger-amount').value);
+  const desc = document.getElementById('ledger-desc').value.trim();
+  if (!amount || amount <= 0) { alert('请输入有效金额'); return; }
+  const records = loadData('benyia_ledger');
+  records.push({ type, amount, desc, date: todayStr() });
+  saveData('benyia_ledger', records);
+  document.getElementById('ledger-amount').value = '';
+  document.getElementById('ledger-desc').value = '';
+  renderLedger();
+}
+function deleteLedger(idx) {
+  const records = loadData('benyia_ledger');
+  records.sort((a,b) => b.date.localeCompare(a.date));
+  records.splice(idx, 1);
+  saveData('benyia_ledger', records);
+  renderLedger();
+}
+
+// ===== 日记 =====
+function renderDiary() {
+  const records = loadData('benyia_diary');
+  const listEl = document.getElementById('diary-list');
+  if (records.length === 0) {
+    listEl.innerHTML = '<div class="empty-state">还没有日记，开始写第一篇吧</div>';
+    return;
+  }
+  records.sort((a,b) => b.date.localeCompare(a.date));
+  listEl.innerHTML = records.map((r, i) => `
+    <div class="record-item">
+      <div class="rec-body">
+        <div class="rec-date">${r.date}</div>
+        <div class="rec-text">${escapeHtml(r.text)}</div>
+      </div>
+      <button class="btn btn-danger" onclick="deleteDiary(${i})">删除</button>
+    </div>
+  `).join('');
+}
+function addDiary() {
+  const date = document.getElementById('diary-date').value || todayStr();
+  const text = document.getElementById('diary-text').value.trim();
+  if (!text) { alert('请写点内容'); return; }
+  const records = loadData('benyia_diary');
+  records.push({ date, text });
+  saveData('benyia_diary', records);
+  document.getElementById('diary-text').value = '';
+  renderDiary();
+}
+function deleteDiary(idx) {
+  const records = loadData('benyia_diary');
+  records.sort((a,b) => b.date.localeCompare(a.date));
+  records.splice(idx, 1);
+  saveData('benyia_diary', records);
+  renderDiary();
+}
+
+// ===== 导师指导记录 =====
+function renderAdvisor() {
+  const records = loadData('benyia_advisor');
+  const listEl = document.getElementById('advisor-list');
+  if (records.length === 0) {
+    listEl.innerHTML = '<div class="empty-state">还没有指导记录</div>';
+    return;
+  }
+  records.sort((a,b) => b.date.localeCompare(a.date));
+  listEl.innerHTML = records.map((r, i) => `
+    <div class="record-item">
+      <div class="rec-body">
+        <div class="rec-date">${r.date}</div>
+        <div class="rec-text">${escapeHtml(r.text)}</div>
+      </div>
+      <button class="btn btn-danger" onclick="deleteAdvisor(${i})">删除</button>
+    </div>
+  `).join('');
+}
+function addAdvisor() {
+  const date = document.getElementById('advisor-date').value || todayStr();
+  const text = document.getElementById('advisor-text').value.trim();
+  if (!text) { alert('请写点内容'); return; }
+  const records = loadData('benyia_advisor');
+  records.push({ date, text });
+  saveData('benyia_advisor', records);
+  document.getElementById('advisor-text').value = '';
+  renderAdvisor();
+}
+function deleteAdvisor(idx) {
+  const records = loadData('benyia_advisor');
+  records.sort((a,b) => b.date.localeCompare(a.date));
+  records.splice(idx, 1);
+  saveData('benyia_advisor', records);
+  renderAdvisor();
+}
+
+// ===== 工具 =====
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ===== 初始化 =====
+document.getElementById('diary-date').value = todayStr();
+document.getElementById('advisor-date').value = todayStr();
+renderLedger();
+renderDiary();
+renderAdvisor();
+</script>
+</body>
+</html>

@@ -172,6 +172,12 @@ a{color:var(--primary);text-decoration:none}
           <input id="cl_title" placeholder="标题">
           <select id="cl_type"><option>通知</option><option>活动</option></select>
           <input id="cl_date" type="date">
+          <div></div>
+          <div class="upload-area" id="cl_upload" onclick="document.getElementById('cl_file').click()">
+            <p>📎 点击上传文件（通知附件、照片等）</p>
+            <input type="file" id="cl_file" style="display:none" onchange="onFileSelect('cl')">
+            <div class="file-name" id="cl_filename"></div>
+          </div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="addItem('classItems')">添加</button>
       </div>
@@ -187,6 +193,11 @@ a{color:var(--primary);text-decoration:none}
           <input id="l_title" placeholder="名称">
           <input id="l_desc" placeholder="描述">
           <input id="l_url" placeholder="链接 URL">
+          <div class="upload-area" id="l_upload" onclick="document.getElementById('l_file').click()">
+            <p>📎 点击上传文件/照片（可选）</p>
+            <input type="file" id="l_file" style="display:none" onchange="onFileSelect('l')">
+            <div class="file-name" id="l_filename"></div>
+          </div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="addItem('lifeServices')">添加</button>
       </div>
@@ -364,12 +375,18 @@ const DEFAULTS = {
     {title:"班级聚餐（时间待定）", type:"活动", date:""}
   ],
   lifeServices: [
-    {icon:"🛒", title:"淘宝", desc:"购物", url:"https://www.taobao.com"},
-    {icon:"🚄", title:"12306", desc:"火车票预订", url:"https://www.12306.cn"},
-    {icon:"🍜", title:"饿了么", desc:"外卖订餐", url:"https://www.ele.me"},
-    {icon:"🗺️", title:"百度地图", desc:"导航出行", url:"https://map.baidu.com"},
-    {icon:"💡", title:"知乎", desc:"知识问答", url:"https://www.zhihu.com"},
-    {icon:"🐙", title:"GitHub", desc:"代码托管", url:"https://github.com"}
+    {icon:"🛒", title:"淘宝", desc:"购物", url:"https://www.taobao.com", file:"", fileName:""},
+    {icon:"🚄", title:"12306", desc:"火车票预订", url:"https://www.12306.cn", file:"", fileName:""},
+    {icon:"🍜", title:"饿了么", desc:"外卖订餐", url:"https://www.ele.me", file:"", fileName:""},
+    {icon:"🗺️", title:"百度地图", desc:"导航出行", url:"https://map.baidu.com", file:"", fileName:""},
+    {icon:"💡", title:"知乎", desc:"知识问答", url:"https://www.zhihu.com", file:"", fileName:""},
+    {icon:"🐙", title:"GitHub", desc:"代码托管", url:"https://github.com", file:"", fileName:""},
+    {icon:"☁️", title:"百度网盘", desc:"云存储 / 文件分享", url:"https://pan.baidu.com", file:"", fileName:""},
+    {icon:"🅰️", title:"阿里云盘", desc:"不限速云盘", url:"https://www.aliyundrive.com", file:"", fileName:""},
+    {icon:"✨", title:"夸克网盘", desc:"夸克云存储", url:"https://pan.quark.cn", file:"", fileName:""},
+    {icon:"📁", title:"123云盘", desc:"不限速云盘", url:"https://www.123pan.com", file:"", fileName:""},
+    {icon:"🟦", title:"腾讯微云", desc:"腾讯云存储", url:"https://www.weiyun.com", file:"", fileName:""},
+    {icon:"📧", title:"网易邮箱", desc:"邮件服务", url:"https://mail.163.com", file:"", fileName:""}
   ],
   softwares: [
     {icon:"🐍", title:"Python", desc:"多版本下载", url:"https://www.python.org/downloads/"},
@@ -422,8 +439,8 @@ function renderAll(){
   renderList("courses", ["icon","desc","link"], i=>i.title, true);
   renderList("papers", ["status","year","desc"], i=>i.title, true);
   renderList("notices", ["source","date"], i=>i.title, false);
-  renderList("classItems", ["type","date"], i=>i.title, false);
-  renderList("lifeServices", ["desc","url"], i=>i.title, false);
+  renderList("classItems", ["type","date"], i=>i.title, true);
+  renderList("lifeServices", ["desc","url"], i=>i.title, true);
   renderList("softwares", ["desc","url"], i=>i.title, false);
 }
 
@@ -476,11 +493,41 @@ async function addItem(key){
     clearInputs(["n_title","n_source","n_date"]);
   }
   else if(key === "classItems"){
-    item = {title:val("cl_title"), type:val("cl_type"), date:val("cl_date")};
+    item = {title:val("cl_title"), type:val("cl_type"), date:val("cl_date"), file:"", fileName:""};
+    if(pendingFiles["cl"]){
+      btnLoading(this, "上传中...");
+      try {
+        const url = await uploadToGitHub(pendingFiles["cl"]);
+        item.file = url;
+        item.fileName = pendingFiles["cl"].name;
+      } catch(e){
+        alert("文件上传失败：" + e.message);
+        resetBtn(this);
+        return;
+      }
+      pendingFiles["cl"] = null;
+      document.getElementById("cl_upload").classList.remove("has-file");
+      document.getElementById("cl_filename").textContent = "";
+    }
     clearInputs(["cl_title","cl_date"]);
   }
   else if(key === "lifeServices"){
-    item = {icon:val("l_icon"), title:val("l_title"), desc:val("l_desc"), url:val("l_url")};
+    item = {icon:val("l_icon"), title:val("l_title"), desc:val("l_desc"), url:val("l_url"), file:"", fileName:""};
+    if(pendingFiles["l"]){
+      btnLoading(this, "上传中...");
+      try {
+        const url = await uploadToGitHub(pendingFiles["l"]);
+        item.file = url;
+        item.fileName = pendingFiles["l"].name;
+      } catch(e){
+        alert("文件上传失败：" + e.message);
+        resetBtn(this);
+        return;
+      }
+      pendingFiles["l"] = null;
+      document.getElementById("l_upload").classList.remove("has-file");
+      document.getElementById("l_filename").textContent = "";
+    }
     clearInputs(["l_icon","l_title","l_desc","l_url"]);
   }
   else if(key === "softwares"){

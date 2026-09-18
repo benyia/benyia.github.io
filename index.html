@@ -251,15 +251,17 @@ function renderBlog(){
       <div class="item-content">
         <div class="item-title">${esc(c.title)}</div>
         <div class="item-meta">${c.date?esc(c.date):""}</div>
+        ${c.file ? `<a style="display:inline-block;margin-top:4px;font-size:.82rem;color:var(--primary)" href="${c.file}" target="_blank">📎 ${esc(c.fileName||"下载附件")}</a>` : ""}
       </div>
       <span class="item-tag tag-${c.type==="活动"?"green":"blue"}">${esc(c.type)}</span>
     </div>`).join("") || '<div class="empty-state">暂无班级事务</div>';
   // 生活服务
   document.getElementById("lifeList").innerHTML = b.lifeServices.map(s=>`
     <a class="link-card" href="${s.url||"#"}" target="_blank">
-      <div class="card-icon">${s.icon||"🔗"}</div>
+      <div class="card-icon">${s.icon||"🛒"}</div>
       <div class="card-title">${esc(s.title)}</div>
       <div class="card-desc">${esc(s.desc)}</div>
+      ${s.file ? `<div style="margin-top:6px;font-size:.8rem;color:var(--primary)">📎 ${esc(s.fileName||"附件")}</div>` : ""}
     </a>`).join("") || '<div class="empty-state">暂无</div>';
   // 软件
   document.getElementById("softList").innerHTML = b.softwares.map(s=>`

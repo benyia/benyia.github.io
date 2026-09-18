@@ -33,6 +33,15 @@
       "files": [],
       "abstract": "",
       "tags": []
+    },
+    {
+      "icon": "1111",
+      "title": "111",
+      "desc": "",
+      "intro": "",
+      "progress": 0,
+      "files": [],
+      "time": "2026-09-18 23:46"
     }
   ],
   "papers": [
@@ -140,6 +149,10 @@
   "diary": [],
   "advisor": [],
   "logs": [
+    {
+      "time": "2026-09-18 23:46",
+      "action": "添加课程：111"
+    },
     {
       "time": "2026-09-18 23:29",
       "action": "删除通知"

@@ -13,12 +13,7 @@
       "files": [
         {
           "name": "第1章 绪论.pdf",
-          "url": "https://benyia.github.io/benyia.github.io/files/1789738888760_第1章_绪论.pdf",
-          "type": "PDF"
-        },
-        {
-          "name": "第1章 绪论.pdf",
-          "url": "https://benyia.github.io/benyia.github.io/files/1789738892078_第1章_绪论.pdf",
+          "url": "files/1789738888760_第1章_绪论.pdf",
           "type": "PDF"
         }
       ]
@@ -139,18 +134,6 @@
       "title": "VS Code",
       "desc": "代码编辑器",
       "url": "https://code.visualstudio.com/"
-    }
-  ],
-  "timeline": [
-    {
-      "date": "2026-09-01",
-      "title": "秋季学期开始",
-      "desc": "新学期正式开学"
-    },
-    {
-      "date": "2026-10-15",
-      "title": "开题报告",
-      "desc": "研究生开题答辩"
     }
   ],
   "ledger": [],

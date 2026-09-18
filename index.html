@@ -155,6 +155,16 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .diary-media{margin-top:10px}
 .diary-media audio{width:100%;max-width:440px;margin-top:8px}
 .diary-media video{width:100%;max-width:560px;border-radius:10px;margin-top:8px}
+details.diary-item{padding:0;overflow:hidden}
+.diary-summary{cursor:pointer;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;list-style:none;outline:none}
+.diary-summary::-webkit-details-marker{display:none}
+.diary-summary-main{min-width:0;flex:1}
+.diary-summary-title{display:block;font-size:1.02rem;font-weight:700;color:var(--text)}
+.diary-summary-preview{display:block;font-size:.8rem;color:var(--text3);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.diary-summary-date{font-size:.76rem;color:var(--text3);white-space:nowrap}
+.diary-summary-arrow{color:var(--text3);font-size:.8rem;transition:transform .2s}
+details[open] .diary-summary-arrow{transform:rotate(180deg)}
+.diary-body{padding:0 18px 18px}
 .icon-img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .footer{text-align:center;padding:32px;color:var(--text3);font-size:.82rem;border-top:1px solid var(--border);margin-top:20px;background:rgba(255,255,255,.55)}
 
@@ -756,8 +766,25 @@ async function addLedgerFromFront(){
   }catch(e){ hint.textContent = "保存失败："+e.message; hint.style.color = "#ef4444"; }
 }
 
+function autoTitle(text, date){
+  var s = String(text||"");
+  var lines = s.split(String.fromCharCode(10));
+  var first = "";
+  for(var i=0;i<lines.length;i++){
+    var t = lines[i].replace(/^[#>*\-\s]+/, "").trim();
+    if(t){ first = t; break; }
+  }
+  first = first.split("  ").join(" ").trim();
+  if(!first) return date || "无标题";
+  if(first.length > 24) return first.slice(0, 24) + "…";
+  return first;
+}
 function renderDiary(){
-  document.getElementById("diaryList").innerHTML = (blogData.diary||[]).slice().reverse().map(function(d){
+  var list = (blogData.diary||[]).slice().reverse();
+  document.getElementById("diaryList").innerHTML = list.map(function(d, idx){
+    var title = d.title || autoTitle(d.content, d.date);
+    var preview = String(d.content||"").split(String.fromCharCode(10)).join(" ").trim();
+    if(preview.length > 46) preview = preview.slice(0,46) + "…";
     var media = (d.media||[]).map(function(m){
       var url = esc(m.url);
       var nm = String(m.name||"");
@@ -768,7 +795,15 @@ function renderDiary(){
       else if(["mp3","wav","m4a","ogg","flac","aac"].indexOf(ext) >= 0) player = '<audio controls preload="metadata" src="'+url+'"></audio>';
       return '<div class="diary-media">'+player+'<div><a class="btn" href="'+url+'" download target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.78rem;margin-top:6px">下载 '+esc(nm)+'</a></div></div>';
     }).join("");
-    return '<div class="diary-item"><div class="diary-date">'+esc(d.date)+'</div>'+(d.title?('<div class="diary-title">'+esc(d.title)+'</div>'):"")+'<div class="diary-content">'+esc(d.content)+'</div>'+galleryHTML(d)+media+'</div>';
+    return '<details class="diary-item"'+(idx===0?" open":"")+'>'
+      + '<summary class="diary-summary">'
+      +   '<span class="diary-summary-main"><span class="diary-summary-title">'+esc(title)+'</span>'
+      +   (preview?'<span class="diary-summary-preview">'+esc(preview)+'</span>':"")+'</span>'
+      +   '<span class="diary-summary-date">'+esc(d.date)+'</span>'
+      +   '<span class="diary-summary-arrow">▼</span>'
+      + '</summary>'
+      + '<div class="diary-body"><div class="diary-content">'+esc(d.content)+'</div>'+galleryHTML(d)+media+'</div>'
+      + '</details>';
   }).join("") || '<div class="empty">暂无日记</div>';
 }
 function renderAdvisor(){

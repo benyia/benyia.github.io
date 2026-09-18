@@ -75,6 +75,12 @@
       "source": "图书馆",
       "date": "2026-09-05",
       "level": "blue"
+    },
+    {
+      "title": "秋季运动会",
+      "source": "研究生院",
+      "date": "2026-09-18",
+      "level": "red"
     }
   ],
   "classItems": [

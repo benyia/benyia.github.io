@@ -150,6 +150,11 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .roster-row{font-size:.86rem;display:flex;gap:8px}
 .roster-row .k{color:var(--text3);flex:0 0 72px}
 .roster-row .v{color:var(--text);font-weight:500;word-break:break-all}
+.folder-title{font-size:.86rem;font-weight:600;margin:14px 0 6px;color:var(--primary-dark)}
+.diary-title{font-size:1.05rem;font-weight:700;margin:2px 0 10px}
+.diary-media{margin-top:10px}
+.diary-media audio{width:100%;max-width:440px;margin-top:8px}
+.diary-media video{width:100%;max-width:560px;border-radius:10px;margin-top:8px}
 .icon-img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .footer{text-align:center;padding:32px;color:var(--text3);font-size:.82rem;border-top:1px solid var(--border);margin-top:20px;background:rgba(255,255,255,.55)}
 
@@ -469,6 +474,25 @@ function collectFiles(item){
   if(item.file) return [{name:item.fileName||"附件", url:item.file, type:"文件"}];
   return [];
 }
+function fileListGrouped(item){
+  var files = collectFiles(item);
+  if(!files.length) return '<div class="empty">暂无文件</div>';
+  var groups = {}, order = [];
+  files.forEach(function(f){
+    var g = f.folder || "";
+    if(!groups[g]){ groups[g] = []; order.push(g); }
+    groups[g].push(f);
+  });
+  var html = "";
+  order.forEach(function(g){
+    html += '<div class="folder-title">' + (g ? ('📁 ' + esc(g)) : '📄 文件') + '</div>';
+    groups[g].forEach(function(f){
+      html += '<div class="file-item"><div><div class="name">'+esc(f.name)+'</div><div class="type">'+esc(f.type||"文件")+(f.size?" · "+fmtSize(f.size):"")+'</div></div>'+(f.url?'<a href="'+esc(f.url)+'" target="_blank" rel="noopener">下载</a>':"<span>待上传</span>")+'</div>';
+    });
+  });
+  return html;
+}
+
 function fileListHTML(item){
   var files = collectFiles(item);
   return files.map(function(f){
@@ -589,7 +613,7 @@ function openCourse(idx){
   document.getElementById("cdIntro").textContent = c.intro||"";
   document.getElementById("cdProgressBar").style.width = (c.progress||0)+"%";
   document.getElementById("cdProgressText").textContent = "学习进度："+(c.progress||0)+"%";
-  document.getElementById("cdFiles").innerHTML = galleryHTML(c) + fileListHTML(c);
+  document.getElementById("cdFiles").innerHTML = galleryHTML(c) + fileListGrouped(c);
   setPageTitle("courseDetail", c.title, "");
   showSection("courseDetail");
 }
@@ -614,7 +638,7 @@ function openPaper(idx){
   if(p.abstract){ ab.style.display="block"; ab.textContent = "摘要：" + p.abstract; }
   else { ab.style.display="none"; }
   document.getElementById("pdDesc").textContent = p.desc || "";
-  document.getElementById("pdFiles").innerHTML = galleryHTML(p) + fileListHTML(p);
+  document.getElementById("pdFiles").innerHTML = galleryHTML(p) + fileListGrouped(p);
   setPageTitle("paperDetail", p.title, "");
   showSection("paperDetail");
 }
@@ -650,7 +674,7 @@ function openClass(idx){
   document.getElementById("clDetailTitle").textContent = c.title;
   document.getElementById("clDetailMeta").textContent = (c.type||"") + " · " + (c.date||"");
   document.getElementById("clDetailContent").textContent = c.content||"";
-  document.getElementById("clDetailFiles").innerHTML = galleryHTML(c) + fileListHTML(c);
+  document.getElementById("clDetailFiles").innerHTML = galleryHTML(c) + fileListGrouped(c);
   setPageTitle("classDetail", c.title, "");
   showSection("classDetail");
 }
@@ -697,7 +721,9 @@ function renderLedger(){
   document.getElementById("statExp").textContent = "¥"+exp.toFixed(0);
   document.getElementById("statBal").textContent = "¥"+(inc-exp).toFixed(0);
   document.getElementById("ledgerList").innerHTML = records.slice().reverse().map(function(r){
-    return '<div class="ledger-item" style="border-left-color:'+(r.type==="income"?"#10b981":"#ef4444")+'"><div><div class="date">'+esc(r.date)+' · '+esc(r.category||"其他")+'</div><div>'+esc(r.desc||"无备注")+'</div></div><div class="amount" style="color:'+(r.type==="income"?"#10b981":"#ef4444")+'">'+(r.type==="income"?"+":"-")+'¥'+(parseFloat(r.amount)||0).toFixed(2)+'</div></div>';
+    var imgs = collectImages(r);
+    var bills = imgs.length ? '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">'+imgs.map(function(f){ return '<a href="'+esc(f.url)+'" target="_blank" rel="noopener"><img src="'+esc(f.url)+'" style="width:64px;height:64px;object-fit:cover;border-radius:8px" alt=""></a>'; }).join("")+'</div>' : "";
+    return '<div class="ledger-item" style="border-left-color:'+(r.type==="income"?"#10b981":"#ef4444")+'"><div style="flex:1;min-width:180px"><div class="date">'+esc(r.date)+(r.time?(' '+esc(r.time)):"")+' · '+esc(r.category||"其他")+'</div><div>'+esc(r.desc||"无备注")+'</div>'+bills+'</div><div class="amount" style="color:'+(r.type==="income"?"#10b981":"#ef4444")+'">'+(r.type==="income"?"+":"-")+'¥'+(parseFloat(r.amount)||0).toFixed(2)+'</div></div>';
   }).join("") || '<div class="empty">暂无记录</div>';
   updateLgCategories();
 }
@@ -732,12 +758,22 @@ async function addLedgerFromFront(){
 
 function renderDiary(){
   document.getElementById("diaryList").innerHTML = (blogData.diary||[]).slice().reverse().map(function(d){
-    return '<div class="diary-item"><div class="diary-date">'+esc(d.date)+'</div><div class="diary-content">'+esc(d.content)+'</div>'+galleryHTML(d)+'</div>';
+    var media = (d.media||[]).map(function(m){
+      var url = esc(m.url);
+      var nm = String(m.name||"");
+      var dot = nm.lastIndexOf(".");
+      var ext = dot >= 0 ? nm.slice(dot+1).toLowerCase() : "";
+      var player = "";
+      if(["mp4","webm","mov","mkv","avi"].indexOf(ext) >= 0) player = '<video controls preload="metadata" src="'+url+'"></video>';
+      else if(["mp3","wav","m4a","ogg","flac","aac"].indexOf(ext) >= 0) player = '<audio controls preload="metadata" src="'+url+'"></audio>';
+      return '<div class="diary-media">'+player+'<div><a class="btn" href="'+url+'" download target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.78rem;margin-top:6px">下载 '+esc(nm)+'</a></div></div>';
+    }).join("");
+    return '<div class="diary-item"><div class="diary-date">'+esc(d.date)+'</div>'+(d.title?('<div class="diary-title">'+esc(d.title)+'</div>'):"")+'<div class="diary-content">'+esc(d.content)+'</div>'+galleryHTML(d)+media+'</div>';
   }).join("") || '<div class="empty">暂无日记</div>';
 }
 function renderAdvisor(){
   document.getElementById("advisorList").innerHTML = (blogData.advisor||[]).slice().reverse().map(function(d){
-    return '<div class="diary-item"><div class="diary-date">'+esc(d.date)+(d.time?' '+esc(d.time):"")+'</div><div class="diary-content">'+esc(d.content)+'</div>'+galleryHTML(d)+'</div>';
+    return '<div class="diary-item"><div class="diary-date">'+(d.count?('第 '+d.count+' 次指导 · '):"")+esc(d.date)+(d.time?' '+esc(d.time):"")+'</div><div class="diary-content">'+esc(d.content)+'</div>'+galleryHTML(d)+'</div>';
   }).join("") || '<div class="empty">暂无记录</div>';
 }
 

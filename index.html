@@ -8,27 +8,20 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --primary:#10b981;--primary-light:#d1fae5;--primary-dark:#059669;
-  --bg:#f0fdf4;--card:rgba(255,255,255,.92);--text:#1e293b;--text2:#64748b;--text3:#94a3b8;
+  --bg:#f0fdf4;--card:rgba(255,255,255,.94);--text:#1e293b;--text2:#64748b;--text3:#94a3b8;
   --border:#e2e8f0;--radius:12px;--shadow:0 2px 12px rgba(0,0,0,.05);
   --shadow-hover:0 8px 30px rgba(16,185,129,.15);
 }
 html{scroll-behavior:smooth}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-  background:var(--bg);color:var(--text);line-height:1.6;
-  background-image:url("image1.png");
-  background-size:cover;
-  background-attachment:fixed;
-  background-position:center;
-  min-height:100vh;
+  color:var(--text);line-height:1.6;
+  background-image:url("image1.png");background-size:cover;background-attachment:fixed;background-position:center;min-height:100vh;
 }
-body::before{
-  content:"";position:fixed;top:0;left:0;right:0;bottom:0;
-  background:rgba(255,255,255,.38);z-index:-1;
-}
+body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,.38);z-index:-1}
 
 /* Top Nav */
-.topnav{background:rgba(255,255,255,.95);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.topnav{background:rgba(255,255,255,.92);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
 .topnav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;height:60px}
 .nav-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.1rem;color:var(--text);text-decoration:none;white-space:nowrap}
 .nav-brand .dot{width:10px;height:10px;border-radius:50%;background:var(--primary)}
@@ -46,7 +39,6 @@ body::before{
 .search-result-item:hover{background:#f8fafc}
 .search-result-item .type{font-size:.72rem;color:var(--primary);font-weight:600}
 .search-result-item .title{font-size:.88rem}
-.nav-admin{padding:8px 14px;background:var(--primary);color:#fff;border-radius:8px;text-decoration:none;font-size:.85rem;white-space:nowrap}
 
 /* Page Title */
 .page-title{background:rgba(255,255,255,.55);padding:32px 24px;text-align:center;border-bottom:1px solid var(--border)}
@@ -64,18 +56,17 @@ body::before{
 
 /* Profile */
 .profile{text-align:center}
-.avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#34d399);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff}
+.avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#34d399);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
 .profile .name{font-size:1.1rem;font-weight:700;margin-bottom:4px}
 .profile .bio{font-size:.82rem;color:var(--text2);margin-bottom:12px}
-.profile .github-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#1f2937;color:#fff;border-radius:8px;font-size:.82rem;text-decoration:none;transition:all .2s}
-.profile .github-btn:hover{background:#111827}
 
 /* Category/Tag list */
-.cat-list,.tag-list{display:flex;flex-direction:column;gap:6px}
+.cat-list{display:flex;flex-direction:column;gap:6px}
 .cat-item{display:flex;justify-content:space-between;padding:6px 10px;border-radius:6px;cursor:pointer;transition:all .2s;font-size:.88rem}
 .cat-item:hover{background:var(--primary-light);color:var(--primary-dark)}
 .cat-item .count{background:var(--primary-light);color:var(--primary-dark);padding:0 8px;border-radius:99px;font-size:.75rem}
-.tag-list{flex-wrap:wrap;flex-direction:row}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px}
 .tag-chip{padding:4px 10px;background:var(--primary-light);color:var(--primary-dark);border-radius:99px;font-size:.78rem;cursor:pointer;transition:all .2s}
 .tag-chip:hover{background:var(--primary);color:#fff}
 
@@ -87,15 +78,20 @@ body::before{
 .back-btn{padding:6px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:.82rem;color:var(--text2)}
 .back-btn:hover{border-color:var(--primary);color:var(--primary)}
 
+/* Filter bar */
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.filter-bar button{padding:6px 14px;border:1px solid var(--border);background:var(--card);border-radius:99px;cursor:pointer;font-size:.82rem;color:var(--text2);font-family:inherit}
+.filter-bar button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
 /* Article Card */
 .article-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;transition:all .3s;cursor:pointer;backdrop-filter:blur(10px)}
 .article-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px)}
-.article-cover{height:160px;background:linear-gradient(135deg,#d1fae5,#a7f3d0);display:flex;align-items:center;justify-content:center;font-size:3rem}
-.article-body{padding:20px}
+.article-cover{height:120px;background:linear-gradient(135deg,#d1fae5,#a7f3d0);display:flex;align-items:center;justify-content:center;font-size:2.6rem}
+.article-body{padding:18px}
 .article-title{font-size:1.1rem;font-weight:700;margin-bottom:8px}
 .article-meta{font-size:.8rem;color:var(--text3);margin-bottom:8px;display:flex;gap:12px;flex-wrap:wrap}
 .article-meta .time{color:var(--primary);font-weight:500}
-.article-desc{font-size:.88rem;color:var(--text2);line-height:1.7}
+.article-desc{font-size:.88rem;color:var(--text2);line-height:1.7;white-space:pre-wrap}
 .article-tags{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
 
 /* Detail page */
@@ -103,12 +99,13 @@ body::before{
 .detail-header .icon{font-size:2.5rem;margin-bottom:12px}
 .detail-header h2{font-size:1.5rem;margin-bottom:8px}
 .detail-header .intro{color:var(--text2);line-height:1.8;margin-bottom:16px;white-space:pre-wrap}
+.detail-header .abstract{background:#f8fafc;border-left:3px solid var(--primary);padding:12px 16px;border-radius:8px;color:var(--text2);line-height:1.8;margin:12px 0;white-space:pre-wrap;font-size:.9rem}
 .progress-bar-wrap{background:#e2e8f0;height:8px;border-radius:99px;overflow:hidden;margin-bottom:6px}
 .progress-bar{background:linear-gradient(90deg,var(--primary),#34d399);height:100%;border-radius:99px}
 .progress-text{font-size:.82rem;color:var(--text2)}
 
 .file-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
-.file-item .name{font-weight:500;font-size:.9rem}
+.file-item .name{font-weight:500;font-size:.9rem;word-break:break-all}
 .file-item .type{font-size:.75rem;color:var(--text3)}
 .file-item a{padding:5px 12px;background:var(--primary);color:#fff;border-radius:6px;font-size:.78rem;text-decoration:none}
 
@@ -117,10 +114,9 @@ body::before{
 .stat-item{text-align:center;padding:12px;background:#f8fafc;border-radius:8px}
 .stat-item .num{font-size:1.2rem;font-weight:700;color:var(--primary)}
 .stat-item .label{font-size:.75rem;color:var(--text2)}
-
-.archive-list,.quick-links{display:flex;flex-direction:column;gap:4px}
-.archive-item,.quick-link{padding:6px 10px;font-size:.85rem;color:var(--text2);cursor:pointer;border-radius:6px;display:flex;justify-content:space-between}
-.archive-item:hover,.quick-link:hover{background:var(--primary-light);color:var(--primary-dark)}
+.quick-links{display:flex;flex-direction:column;gap:4px}
+.quick-link{padding:6px 10px;font-size:.85rem;color:var(--text2);cursor:pointer;border-radius:6px;display:flex;justify-content:space-between}
+.quick-link:hover{background:var(--primary-light);color:var(--primary-dark)}
 .quick-link a{color:inherit;text-decoration:none;display:flex;justify-content:space-between;width:100%}
 
 /* Ledger */
@@ -129,29 +125,28 @@ body::before{
 .stat-card .num{font-size:1.3rem;font-weight:700}
 .stat-card .label{font-size:.78rem;color:var(--text2)}
 .income .num{color:#10b981}.expense .num{color:#ef4444}
-.ledger-form{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.ledger-form{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
 .ledger-form input,.ledger-form select{padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:.85rem;background:var(--card)}
-.ledger-form input:first-child{flex:2;min-width:120px}
-.btn{padding:8px 16px;border:none;border-radius:8px;background:var(--primary);color:#fff;font-size:.85rem;cursor:pointer}
+.ledger-form select{flex:1;min-width:90px}
+.ledger-form input[type=number]{flex:1;min-width:90px}
+.ledger-form input[type=text]{flex:2;min-width:120px}
+.btn{padding:8px 16px;border:none;border-radius:8px;background:var(--primary);color:#fff;font-size:.85rem;cursor:pointer;font-family:inherit}
 .btn:hover{background:var(--primary-dark)}
 
-/* Timeline */
-.timeline-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;border-left:4px solid var(--primary);backdrop-filter:blur(10px)}
-.timeline-item .date{font-size:.78rem;color:var(--primary);font-weight:600}
-.timeline-item .title{font-weight:600;margin:4px 0}
-.timeline-item .desc{font-size:.88rem;color:var(--text2)}
-
+/* Ledger / diary / advisor items */
+.ledger-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;border-left:4px solid var(--primary);backdrop-filter:blur(10px);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.ledger-item .date{font-size:.78rem;color:var(--text3)}
+.ledger-item .amount{font-weight:700}
 .diary-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;backdrop-filter:blur(10px)}
 .diary-date{font-size:.78rem;color:var(--text3);margin-bottom:6px}
 .diary-content{font-size:.9rem;white-space:pre-wrap;line-height:1.7}
 
 .empty{text-align:center;padding:40px;color:var(--text3);font-size:.88rem}
-
 .footer{text-align:center;padding:32px;color:var(--text3);font-size:.82rem;border-top:1px solid var(--border);margin-top:20px;background:rgba(255,255,255,.55)}
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* About page */
+/* About */
 .about-content{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;backdrop-filter:blur(10px);line-height:1.8;white-space:pre-wrap;font-size:.95rem}
 
 /* Responsive */
@@ -186,7 +181,6 @@ body::before{
       <input type="text" id="searchInput" placeholder="搜索..." oninput="doSearch(this.value)">
       <div class="search-results" id="searchResults"></div>
     </div>
-    <a href="admin.html" class="nav-admin">管理后台</a>
   </div>
 </nav>
 
@@ -199,28 +193,17 @@ body::before{
   <!-- Left Column -->
   <div class="left-col">
     <div class="side-card profile">
-      <div class="avatar">思</div>
-      <div class="name">思齐</div>
-      <div class="bio">控制工程研究生 · 记录学习与生活</div>
-      <a href="https://github.com/benyia" target="_blank" class="github-btn">🐙 GitHub</a>
+      <div class="avatar" id="profileAvatar">思</div>
+      <div class="name" id="profileName">思齐</div>
+      <div class="bio" id="profileBio">控制工程研究生</div>
     </div>
     <div class="side-card">
       <h3>分类</h3>
-      <div class="cat-list">
-        <div class="cat-item" onclick="switchTab('courses')"><span>📚 课程学习</span><span class="count" id="cntCourses">0</span></div>
-        <div class="cat-item" onclick="switchTab('papers')"><span>📝 论文</span><span class="count" id="cntPapers">0</span></div>
-        <div class="cat-item" onclick="switchTab('notices')"><span>🔔 学校通知</span><span class="count" id="cntNotices">0</span></div>
-        <div class="cat-item" onclick="switchTab('class')"><span>👥 班级事务</span><span class="count" id="cntClass">0</span></div>
-      </div>
+      <div class="cat-list" id="catList"></div>
     </div>
     <div class="side-card">
       <h3>标签</h3>
-      <div class="tag-list" id="tagList">
-        <span class="tag-chip">控制工程</span>
-        <span class="tag-chip">深度学习</span>
-        <span class="tag-chip">FPGA</span>
-        <span class="tag-chip">Python</span>
-      </div>
+      <div class="tag-list" id="tagList"></div>
     </div>
   </div>
 
@@ -235,9 +218,7 @@ body::before{
     </div>
 
     <div class="section" id="sec-courseDetail">
-      <div class="section-header">
-        <button class="back-btn" onclick="backToCourses()">← 返回</button>
-      </div>
+      <div class="section-header"><button class="back-btn" onclick="backToCourses()">← 返回</button></div>
       <div class="detail-header">
         <div class="icon" id="cdIcon">📐</div>
         <h2 id="cdName">课程名称</h2>
@@ -249,7 +230,20 @@ body::before{
     </div>
 
     <div class="section" id="sec-papers">
+      <div class="filter-bar" id="paperFilters"></div>
       <div id="papersList"></div>
+    </div>
+
+    <div class="section" id="sec-paperDetail">
+      <div class="section-header"><button class="back-btn" onclick="backToPapers()">← 返回</button></div>
+      <div class="detail-header">
+        <h2 id="pdTitle"></h2>
+        <div class="article-meta" id="pdMeta"></div>
+        <div class="article-tags" id="pdTags"></div>
+        <div class="abstract" id="pdAbstract" style="display:none"></div>
+        <p class="intro" id="pdDesc"></p>
+      </div>
+      <div id="pdFiles"></div>
     </div>
 
     <div class="section" id="sec-notices">
@@ -257,9 +251,7 @@ body::before{
     </div>
 
     <div class="section" id="sec-noticeDetail">
-      <div class="section-header">
-        <button class="back-btn" onclick="backToNotices()">← 返回</button>
-      </div>
+      <div class="section-header"><button class="back-btn" onclick="backToNotices()">← 返回</button></div>
       <div class="detail-header" id="noticeDetailBox">
         <h2 id="ndTitle"></h2>
         <div class="article-meta" id="ndMeta"></div>
@@ -268,7 +260,18 @@ body::before{
     </div>
 
     <div class="section" id="sec-class">
+      <div class="filter-bar" id="classFilters"></div>
       <div id="classList"></div>
+    </div>
+
+    <div class="section" id="sec-classDetail">
+      <div class="section-header"><button class="back-btn" onclick="backToClass()">← 返回</button></div>
+      <div class="detail-header">
+        <h2 id="clDetailTitle"></h2>
+        <div class="article-meta" id="clDetailMeta"></div>
+        <p class="intro" id="clDetailContent"></p>
+      </div>
+      <div id="clDetailFiles"></div>
     </div>
 
     <div class="section" id="sec-life">
@@ -282,7 +285,8 @@ body::before{
         <div class="stat-card"><div class="num" id="statBal">¥0</div><div class="label">本月结余</div></div>
       </div>
       <div class="ledger-form">
-        <select id="lgType"><option value="expense">支出</option><option value="income">收入</option></select>
+        <select id="lgType" onchange="updateLgCategories()"><option value="expense">支出</option><option value="income">收入</option></select>
+        <select id="lgCategory"></select>
         <input type="number" id="lgAmt" placeholder="金额">
         <input type="text" id="lgDesc" placeholder="备注">
         <button class="btn" onclick="addLedgerFromFront()">记一笔</button>
@@ -317,12 +321,7 @@ body::before{
     </div>
     <div class="side-card">
       <h3>快速链接</h3>
-      <div class="quick-links">
-        <div class="quick-link"><a href="https://pan.baidu.com" target="_blank"><span>☁️ 百度网盘</span><span>→</span></a></div>
-        <div class="quick-link"><a href="https://www.12306.cn" target="_blank"><span>🚄 12306</span><span>→</span></a></div>
-        <div class="quick-link"><a href="https://github.com" target="_blank"><span>🐙 GitHub</span><span>→</span></a></div>
-        <div class="quick-link"><a href="https://www.zhihu.com" target="_blank"><span>💡 知乎</span><span>→</span></a></div>
-      </div>
+      <div class="quick-links" id="quickLinks"></div>
     </div>
   </div>
 </div>
@@ -332,334 +331,357 @@ body::before{
 <script>
 const GH_OWNER = "benyia";
 const GH_REPO = "benyia.github.io";
-/* 前台只读取公开的 data.json，不需要任何 Token（所有改动都在 admin.html 里做） */
 
 const PAGE_TITLES = {
   home: ["思齐个人主页", "钟爱奥迪A6"],
-  courses: ["我的课程", "本学期课程资料与学习资源"],
+  courses: ["我的课程", "课程资料与学习资源"],
   papers: ["论文", "学术论文与研究进展"],
   notices: ["学校通知", "重要通知与公告"],
-  class: ["班级事务", "班级通知与活动"],
+  class: ["班级事务", "通知、名单与活动"],
   life: ["生活服务", "常用网站与工具"],
   ledger: ["生活记账", "记录每一笔开销"],
   diary: ["日记", "记录生活点滴"],
   advisor: ["导师指导", "与导师交流记录"],
   about: ["关于我", "了解更多关于思齐"],
   courseDetail: ["课程详情", ""],
-  noticeDetail: ["通知详情", ""]
+  paperDetail: ["论文详情", ""],
+  noticeDetail: ["通知详情", ""],
+  classDetail: ["班级事务详情", ""]
 };
 
 const DEFAULT_DATA = {
-  siteConfig: {title: "思齐个人主页", subtitle: "钟爱奥迪A6", about: "你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。\n\n🎓 专业：控制工程\n💻 方向：深度学习 / 故障诊断\n🔧 技能：Verilog / Python / MATLAB\n\n欢迎交流！"},
-  courses: [
-    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", intro:"本课程主要讲授反馈控制系统的基本原理、数学模型、时域分析、根轨迹法和频率响应法等内容。", progress: 60, files: [], time:"2026-09-18 10:00"},
-    {icon:"🧠", title:"神经网络与深度学习", desc:"课件、上机指导、参考书", intro:"深度学习基础、CNN、RNN、Transformer等模型原理与实践应用。", progress: 30, files: [], time:"2026-09-18 10:00"}
+  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", name:"思齐", bio:"控制工程研究生"},
+  categories: [
+    {icon:"📚", name:"课程学习", section:"courses"},
+    {icon:"📝", name:"论文", section:"papers"},
+    {icon:"🔔", name:"学校通知", section:"notices"},
+    {icon:"👥", name:"班级事务", section:"class"}
   ],
-  papers: [
-    {title:"基于深度学习的故障诊断方法研究", status:"在投", year:"2026", desc:"", tags:["撰写","中文"], file:"", fileName:"", time:"2026-09-18 10:00"}
+  tags: ["控制工程","深度学习","FPGA","Python"],
+  quickLinks: [
+    {icon:"☁️", title:"百度网盘", url:"https://pan.baidu.com"},
+    {icon:"🚄", title:"12306", url:"https://www.12306.cn"},
+    {icon:"🐙", title:"GitHub", url:"https://github.com"},
+    {icon:"💡", title:"知乎", url:"https://www.zhihu.com"}
   ],
-  notices: [
-    {title:"2026年秋季学期选课通知", source:"研究生院", date:"2026-09-01", level:"red", content:"各研究生：2026年秋季学期选课即将开始，请于9月1日-9月5日登录研究生系统完成选课。", time:"2026-09-18 10:00"}
-  ],
-  classItems: [
-    {title:"组会时间调整为每周四下午2点", type:"通知", date:"2026-09-15", content:"全体同学注意，本周组会时间调整为周四下午2点。", file:"", fileName:"", time:"2026-09-18 10:00"}
-  ],
-  lifeServices: [
-    {icon:"☁️", title:"百度网盘", desc:"云存储", url:"https://pan.baidu.com"},
-    {icon:"🅰️", title:"阿里云盘", desc:"不限速云盘", url:"https://www.alipan.com"}
-  ],
-  softwares: [],
+  courses: [], papers: [], notices: [], classItems: [], lifeServices: [],
   ledger: [],
-  diary: [],
-  advisor: [],
-  logs: []
+  ledgerCategories: {expense:["吃饭","买东西","生活用品","交通","娱乐","学习","医疗","其他"], income:["工资","奖学金","补贴","红包","其他"]},
+  diary: [], advisor: [], logs: []
 };
+
+const PAPER_STATUSES = ["阅读中","撰写中","在投","审稿中","已接收","已发表"];
+const PAPER_FILTERS = [
+  {key:"all", label:"全部"},
+  {key:"阅读", label:"阅读", match: function(s){return s==="阅读中";}},
+  {key:"撰写", label:"撰写", match: function(s){return s==="撰写中";}},
+  {key:"已投", label:"已投", match: function(s){return ["在投","审稿中","已接收","已发表"].indexOf(s)>=0;}},
+  {key:"未投", label:"未投", match: function(s){return ["阅读中","撰写中"].indexOf(s)>=0;}}
+];
+const CLASS_TYPES = ["通知","名单","作业","考试","活动"];
 
 let blogData = null;
 let currentCourseIdx = -1;
 let currentNoticeIdx = -1;
+let currentPaperIdx = -1;
+let currentClassIdx = -1;
+let paperFilter = "all";
+let classFilter = "all";
 
-function esc(s){ return String(s||"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
-
-/* 把一条记录里的附件统一成数组，兼容新的 files[] 和旧的 file/fileName */
-function collectFiles(item){
-  if(!item) return [];
-  if(Array.isArray(item.files) && item.files.length) return item.files;
-  if(item.file){
-    return [{name:item.fileName || decodeURIComponent(String(item.file).split("/").pop()||"附件"), url:item.file, type:"文件"}];
-  }
-  return [];
-}
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]);}); }
+function todayStr(){ var d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function nowStr(){ var d=new Date(); return todayStr()+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
 function fmtSize(bytes){
   if(!bytes && bytes!==0) return "";
   if(bytes < 1024) return bytes+" B";
   if(bytes < 1024*1024) return (bytes/1024).toFixed(1)+" KB";
   return (bytes/1024/1024).toFixed(2)+" MB";
 }
+function collectFiles(item){
+  if(!item) return [];
+  if(Array.isArray(item.files) && item.files.length) return item.files;
+  if(item.file) return [{name:item.fileName||"附件", url:item.file, type:"文件"}];
+  return [];
+}
+function fileListHTML(item){
+  var files = collectFiles(item);
+  return files.map(function(f){
+    return '<div class="file-item"><div><div class="name">'+esc(f.name)+'</div><div class="type">'+esc(f.type||"文件")+(f.size?" · "+fmtSize(f.size):"")+'</div></div>'+(f.url?'<a href="'+esc(f.url)+'" target="_blank" rel="noopener">下载</a>':"<span>待上传</span>")+'</div>';
+  }).join("") || '<div class="empty">暂无文件</div>';
+}
 
 async function loadData(){
   try {
-    const res = await fetch("data.json?v=" + Date.now());
-    if(res.ok){
-      blogData = await res.json();
-      for(const k in DEFAULT_DATA){ if(!blogData[k]) blogData[k] = DEFAULT_DATA[k]; }
-    } else {
-      blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-    }
+    var res = await fetch("data.json?v=" + Date.now());
+    if(res.ok){ blogData = await res.json(); }
+    else { blogData = JSON.parse(JSON.stringify(DEFAULT_DATA)); }
   } catch(e) {
     blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
   }
-  if(blogData.siteConfig){
-    document.getElementById("titleH1").textContent = blogData.siteConfig.title || "思齐个人主页";
-    document.getElementById("titleP").textContent = blogData.siteConfig.subtitle || "";
-  }
+  for(var k in DEFAULT_DATA){ if(blogData[k]==null) blogData[k] = DEFAULT_DATA[k]; }
+  if(!blogData.siteConfig || typeof blogData.siteConfig!=="object") blogData.siteConfig = {};
+  blogData.siteConfig = Object.assign({}, DEFAULT_DATA.siteConfig, blogData.siteConfig);
+  if(!Array.isArray(blogData.categories) || !blogData.categories.length) blogData.categories = DEFAULT_DATA.categories;
+  if(!Array.isArray(blogData.tags)) blogData.tags = DEFAULT_DATA.tags;
+  if(!Array.isArray(blogData.quickLinks)) blogData.quickLinks = DEFAULT_DATA.quickLinks;
+  if(!blogData.ledgerCategories) blogData.ledgerCategories = DEFAULT_DATA.ledgerCategories;
+
+  document.getElementById("titleH1").textContent = blogData.siteConfig.title || "思齐个人主页";
+  document.getElementById("titleP").textContent = blogData.siteConfig.subtitle || "";
   renderAll();
 }
 
+function renderProfile(){
+  var sc = blogData.siteConfig;
+  var av = document.getElementById("profileAvatar");
+  if(/^https?:\/\//.test(sc.avatar||"")){ av.innerHTML = '<img src="'+esc(sc.avatar)+'" alt="头像">'; }
+  else { av.textContent = (sc.avatar||"思").slice(0,2); }
+  document.getElementById("profileName").textContent = sc.name || "思齐";
+  document.getElementById("profileBio").textContent = sc.bio || "";
+}
+
+function renderCategories(){
+  var map = {courses:(blogData.courses||[]).length, papers:(blogData.papers||[]).length, notices:(blogData.notices||[]).length, class:(blogData.classItems||[]).length};
+  document.getElementById("catList").innerHTML = (blogData.categories||[]).map(function(c){
+    return '<div class="cat-item" onclick="switchTab(\''+esc(c.section||"home")+'\')"><span>'+esc(c.icon||"")+' '+esc(c.name)+'</span><span class="count">'+(map[c.section]||0)+'</span></div>';
+  }).join("") || '';
+}
+
+function renderTags(){
+  document.getElementById("tagList").innerHTML = (blogData.tags||[]).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>';}).join("") || '';
+}
+
+function renderQuickLinks(){
+  document.getElementById("quickLinks").innerHTML = (blogData.quickLinks||[]).map(function(l){
+    return '<div class="quick-link"><a href="'+esc(l.url)+'" target="_blank" rel="noopener"><span>'+esc(l.icon||"")+' '+esc(l.title)+'</span><span>→</span></a></div>';
+  }).join("") || '';
+}
+
+function renderFilters(){
+  document.getElementById("paperFilters").innerHTML = PAPER_FILTERS.map(function(f){
+    return '<button class="'+(paperFilter===f.key?"active":"")+'" onclick="setPaperFilter(\''+f.key+'\')">'+f.label+'</button>';
+  }).join("");
+  var types = ["all"].concat(CLASS_TYPES);
+  document.getElementById("classFilters").innerHTML = types.map(function(t){
+    return '<button class="'+(classFilter===t?"active":"")+'" onclick="setClassFilter(\''+t+'\')">'+(t==="all"?"全部":t)+'</button>';
+  }).join("");
+}
+
+function setPaperFilter(k){ paperFilter = k; renderFilters(); renderPapers(); }
+function setClassFilter(k){ classFilter = k; renderFilters(); renderClass(); }
+
 function renderAll(){
-  // Home list
-  const homeItems = [];
-  (blogData.courses||[]).forEach((c,i)=>homeItems.push({type:"课程", icon:c.icon||"📚", title:c.title, desc:c.desc, time:c.time||"", action:()=>openCourse(i)}));
-  (blogData.papers||[]).forEach(p=>homeItems.push({type:"论文", icon:"📝", title:p.title, desc:p.desc, time:p.time||""}));
-  (blogData.notices||[]).forEach((n,i)=>homeItems.push({type:"通知", icon:"🔔", title:n.title, desc:n.content, time:n.time||"", action:()=>openNotice(i)}));
-  document.getElementById("homeList").innerHTML = homeItems.map(a=>`
-    <div class="article-card" onclick="${a.action?a.action:""}">
-      <div class="article-cover">${a.icon}</div>
-      <div class="article-body">
-        <div class="article-title">${esc(a.title)}</div>
-        <div class="article-meta"><span>${a.type}</span>${a.time?`<span class="time">🕐 ${a.time}</span>`:""}</div>
-        <div class="article-desc">${esc(a.desc||"")}</div>
-      </div>
-    </div>`).join("") || '<div class="empty">暂无内容</div>';
-
-  // Courses
-  document.getElementById("coursesList").innerHTML = (blogData.courses||[]).map((c,i)=>`
-    <div class="article-card" onclick="openCourse(${i})">
-      <div class="article-cover">${c.icon||"📐"}</div>
-      <div class="article-body">
-        <div class="article-title">${esc(c.title)}</div>
-        <div class="article-meta"><span>${collectFiles(c).length} 个文件</span><span>进度 ${c.progress||0}%</span>${c.time?`<span class="time">🕐 ${c.time}</span>`:""}</div>
-        <div class="article-desc">${esc(c.desc)}</div>
-      </div>
-    </div>`).join("") || '<div class="empty">暂无课程</div>';
-
-  // Papers
-  document.getElementById("papersList").innerHTML = (blogData.papers||[]).map(p=>`
-    <div class="article-card">
-      <div class="article-body">
-        <div class="article-title">${esc(p.title)}</div>
-        <div class="article-meta"><span>${p.status}</span>${p.year?`<span>${p.year}</span>`:""}${p.time?`<span class="time">🕐 ${p.time}</span>`:""}</div>
-        <div class="article-tags">${(p.tags||[]).map(t=>`<span class="tag-chip">${t}</span>`).join("")}</div>
-      </div>
-    </div>`).join("") || '<div class="empty">暂无论文</div>';
-
-  // Notices
-  document.getElementById("noticesList").innerHTML = (blogData.notices||[]).map((n,i)=>`
-    <div class="article-card" onclick="openNotice(${i})">
-      <div class="article-body">
-        <div class="article-title">${esc(n.title)}</div>
-        <div class="article-meta"><span>${n.source}</span><span>${n.date}</span>${n.time?`<span class="time">🕐 ${n.time}</span>`:""}</div>
-        <div class="article-desc">${esc(n.content||"").slice(0,80)}...</div>
-      </div>
-    </div>`).join("") || '<div class="empty">暂无通知</div>';
-
-  // Class
-  document.getElementById("classList").innerHTML = (blogData.classItems||[]).map(c=>`
-    <div class="article-card">
-      <div class="article-body">
-        <div class="article-title">${esc(c.title)}</div>
-        <div class="article-meta"><span>${c.type}</span><span>${c.date||""}</span>${c.time?`<span class="time">🕐 ${c.time}</span>`:""}</div>
-        <div class="article-desc">${esc(c.content||"")}</div>
-      </div>
-    </div>`).join("") || '<div class="empty">暂无班级事务</div>';
-
-  // Life
-  document.getElementById("lifeList").innerHTML = (blogData.lifeServices||[]).map(s=>`
-    <a href="${s.url}" target="_blank" style="text-decoration:none;color:inherit">
-      <div class="article-card">
-        <div class="article-body" style="text-align:center">
-          <div style="font-size:2rem;margin-bottom:8px">${s.icon||"🔗"}</div>
-          <div class="article-title">${esc(s.title)}</div>
-          <div class="article-desc">${esc(s.desc)}</div>
-        </div>
-      </div>
-    </a>`).join("") || '<div class="empty">暂无</div>';
-
+  renderProfile();
+  renderCategories();
+  renderTags();
+  renderQuickLinks();
+  renderFilters();
+  renderHome();
+  renderCourses();
+  renderPapers();
+  renderNotices();
+  renderClass();
+  renderLife();
   renderLedger();
   renderDiary();
   renderAdvisor();
 
-  // About
-  document.getElementById("aboutContent").textContent = (blogData.siteConfig && blogData.siteConfig.about) || "暂无介绍";
+  document.getElementById("aboutContent").textContent = blogData.siteConfig.about || "暂无介绍";
 
-  // Stats
-  document.getElementById("cntCourses").textContent = (blogData.courses||[]).length;
-  document.getElementById("cntPapers").textContent = (blogData.papers||[]).length;
-  document.getElementById("cntNotices").textContent = (blogData.notices||[]).length;
-  document.getElementById("cntClass").textContent = (blogData.classItems||[]).length;
-  document.getElementById("statArticles").textContent = (blogData.courses||[]).length + (blogData.papers||[]).length + (blogData.notices||[]).length;
+  document.getElementById("statArticles").textContent = (blogData.courses||[]).length + (blogData.papers||[]).length + (blogData.notices||[]).length + (blogData.classItems||[]).length;
   document.getElementById("statCourses").textContent = (blogData.courses||[]).length;
   document.getElementById("statPapers").textContent = (blogData.papers||[]).length;
 }
 
+function renderHome(){
+  var items = [];
+  (blogData.courses||[]).forEach(function(c,i){ items.push({type:"课程", icon:c.icon||"📚", title:c.title, desc:c.desc, time:c.time||"", click:"openCourse("+i+")"}); });
+  (blogData.papers||[]).forEach(function(p,i){ items.push({type:"论文", icon:"📝", title:p.title, desc:p.abstract||p.desc, time:p.time||"", click:"openPaper("+i+")"}); });
+  (blogData.notices||[]).forEach(function(n,i){ items.push({type:"通知", icon:"🔔", title:n.title, desc:n.content, time:n.time||"", click:"openNotice("+i+")"}); });
+  (blogData.classItems||[]).forEach(function(c,i){ items.push({type:"班级", icon:"👥", title:c.title, desc:c.content, time:c.time||"", click:"openClass("+i+")"}); });
+  document.getElementById("homeList").innerHTML = items.map(function(a){
+    return '<div class="article-card" onclick="'+a.click+'"><div class="article-cover">'+a.icon+'</div><div class="article-body"><div class="article-title">'+esc(a.title)+'</div><div class="article-meta"><span>'+a.type+'</span>'+(a.time?'<span class="time">🕐 '+a.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(a.desc||"").slice(0,120))+'</div></div></div>';
+  }).join("") || '<div class="empty">暂无内容</div>';
+}
+
+function renderCourses(){
+  document.getElementById("coursesList").innerHTML = (blogData.courses||[]).map(function(c,i){
+    return '<div class="article-card" onclick="openCourse('+i+')"><div class="article-cover">'+(c.icon||"📐")+'</div><div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+collectFiles(c).length+' 个文件</span><span>进度 '+(c.progress||0)+'%</span>'+(c.time?'<span class="time">🕐 '+c.time+'</span>':"")+'</div><div class="article-desc">'+esc(c.desc)+'</div></div></div>';
+  }).join("") || '<div class="empty">暂无课程</div>';
+}
 function openCourse(idx){
   currentCourseIdx = idx;
-  const c = blogData.courses[idx];
+  var c = blogData.courses[idx];
   document.getElementById("cdIcon").textContent = c.icon||"📐";
   document.getElementById("cdName").textContent = c.title;
   document.getElementById("cdIntro").textContent = c.intro||"";
   document.getElementById("cdProgressBar").style.width = (c.progress||0)+"%";
   document.getElementById("cdProgressText").textContent = "学习进度："+(c.progress||0)+"%";
-  const courseFiles = collectFiles(c);
-  document.getElementById("cdFiles").innerHTML = courseFiles.map(f=>`
-    <div class="file-item">
-      <div><div class="name">${esc(f.name)}</div><div class="type">${esc(f.type||"文件")}${f.size?" · "+fmtSize(f.size):""}</div></div>
-      ${f.url?`<a href="${esc(f.url)}" target="_blank" rel="noopener">下载</a>`:"<span>待上传</span>"}
-    </div>`).join("") || '<div class="empty">暂无文件</div>';
+  document.getElementById("cdFiles").innerHTML = fileListHTML(c);
   setPageTitle("courseDetail", c.title, "");
   showSection("courseDetail");
 }
-
 function backToCourses(){ showSection("courses"); setPageTitle("courses"); currentCourseIdx=-1; }
 
+function renderPapers(){
+  var all = blogData.papers||[];
+  var f = PAPER_FILTERS.filter(function(x){return x.key===paperFilter;})[0];
+  var list = (f && f.match) ? all.filter(function(p){return f.match(p.status);}) : all;
+  document.getElementById("papersList").innerHTML = list.map(function(p){
+    var idx = all.indexOf(p);
+    return '<div class="article-card" onclick="openPaper('+idx+')"><div class="article-body"><div class="article-title">'+esc(p.title)+'</div><div class="article-meta"><span>'+esc(p.status)+'</span>'+(p.year?'<span>'+esc(p.year)+'</span>':"")+(p.time?'<span class="time">🕐 '+p.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(p.abstract||p.desc||"").slice(0,100))+'</div><div class="article-tags">'+((p.tags||[]).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>';}).join(""))+'</div></div></div>';
+  }).join("") || '<div class="empty">暂无匹配的论文</div>';
+}
+function openPaper(idx){
+  currentPaperIdx = idx;
+  var p = blogData.papers[idx];
+  document.getElementById("pdTitle").textContent = p.title;
+  document.getElementById("pdMeta").innerHTML = '<span>'+esc(p.status)+'</span>'+(p.year?'<span>'+esc(p.year)+'</span>':"");
+  document.getElementById("pdTags").innerHTML = (p.tags||[]).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>';}).join("");
+  var ab = document.getElementById("pdAbstract");
+  if(p.abstract){ ab.style.display="block"; ab.textContent = "摘要：" + p.abstract; }
+  else { ab.style.display="none"; }
+  document.getElementById("pdDesc").textContent = p.desc || "";
+  document.getElementById("pdFiles").innerHTML = fileListHTML(p);
+  setPageTitle("paperDetail", p.title, "");
+  showSection("paperDetail");
+}
+function backToPapers(){ showSection("papers"); setPageTitle("papers"); currentPaperIdx=-1; }
+
+function renderNotices(){
+  document.getElementById("noticesList").innerHTML = (blogData.notices||[]).map(function(n,i){
+    return '<div class="article-card" onclick="openNotice('+i+')"><div class="article-body"><div class="article-title">'+esc(n.title)+'</div><div class="article-meta"><span>'+esc(n.source)+'</span><span>'+esc(n.date)+'</span>'+(n.time?'<span class="time">🕐 '+n.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(n.content||"").slice(0,100))+'</div></div></div>';
+  }).join("") || '<div class="empty">暂无通知</div>';
+}
 function openNotice(idx){
   currentNoticeIdx = idx;
-  const n = blogData.notices[idx];
+  var n = blogData.notices[idx];
   document.getElementById("ndTitle").textContent = n.title;
-  document.getElementById("ndMeta").textContent = n.source + " · " + n.date;
+  document.getElementById("ndMeta").textContent = (n.source||"") + " · " + (n.date||"");
   document.getElementById("ndContent").textContent = n.content||"";
   setPageTitle("noticeDetail", n.title, "");
   showSection("noticeDetail");
 }
-
 function backToNotices(){ showSection("notices"); setPageTitle("notices"); currentNoticeIdx=-1; }
+
+function renderClass(){
+  var all = blogData.classItems||[];
+  var list = classFilter==="all" ? all : all.filter(function(c){return c.type===classFilter;});
+  document.getElementById("classList").innerHTML = list.map(function(c){
+    var idx = all.indexOf(c);
+    return '<div class="article-card" onclick="openClass('+idx+')"><div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+esc(c.type)+'</span><span>'+esc(c.date||"")+'</span>'+(c.time?'<span class="time">🕐 '+c.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(c.content||"").slice(0,100))+'</div></div></div>';
+  }).join("") || '<div class="empty">暂无内容</div>';
+}
+function openClass(idx){
+  currentClassIdx = idx;
+  var c = blogData.classItems[idx];
+  document.getElementById("clDetailTitle").textContent = c.title;
+  document.getElementById("clDetailMeta").textContent = (c.type||"") + " · " + (c.date||"");
+  document.getElementById("clDetailContent").textContent = c.content||"";
+  document.getElementById("clDetailFiles").innerHTML = fileListHTML(c);
+  setPageTitle("classDetail", c.title, "");
+  showSection("classDetail");
+}
+function backToClass(){ showSection("class"); setPageTitle("class"); currentClassIdx=-1; }
+
+function renderLife(){
+  document.getElementById("lifeList").innerHTML = (blogData.lifeServices||[]).map(function(s){
+    return '<a href="'+esc(s.url)+'" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><div class="article-card" style="margin-bottom:0"><div class="article-body" style="text-align:center"><div style="font-size:2rem;margin-bottom:8px">'+esc(s.icon||"🔗")+'</div><div class="article-title">'+esc(s.title)+'</div><div class="article-desc">'+esc(s.desc)+'</div></div></div></a>';
+  }).join("") || '<div class="empty">暂无</div>';
+}
+
+function updateLgCategories(){
+  var type = document.getElementById("lgType").value;
+  var cats = (blogData.ledgerCategories||{})[type] || ["其他"];
+  document.getElementById("lgCategory").innerHTML = cats.map(function(c){return '<option>'+esc(c)+'</option>';}).join("");
+}
+function renderLedger(){
+  var records = blogData.ledger||[];
+  var ym = todayStr().slice(0,7);
+  var inc=0, exp=0;
+  records.forEach(function(r){ if(String(r.date||"").indexOf(ym)===0){ r.type==="income"?inc+=parseFloat(r.amount):exp+=parseFloat(r.amount); }});
+  document.getElementById("statInc").textContent = "¥"+inc.toFixed(0);
+  document.getElementById("statExp").textContent = "¥"+exp.toFixed(0);
+  document.getElementById("statBal").textContent = "¥"+(inc-exp).toFixed(0);
+  document.getElementById("ledgerList").innerHTML = records.slice().reverse().map(function(r){
+    return '<div class="ledger-item" style="border-left-color:'+(r.type==="income"?"#10b981":"#ef4444")+'"><div><div class="date">'+esc(r.date)+' · '+esc(r.category||"其他")+'</div><div>'+esc(r.desc||"无备注")+'</div></div><div class="amount" style="color:'+(r.type==="income"?"#10b981":"#ef4444")+'">'+(r.type==="income"?"+":"-")+'¥'+(parseFloat(r.amount)||0).toFixed(2)+'</div></div>';
+  }).join("") || '<div class="empty">暂无记录</div>';
+  updateLgCategories();
+}
+async function addLedgerFromFront(){
+  var amt = parseFloat(document.getElementById("lgAmt").value);
+  var desc = document.getElementById("lgDesc").value.trim();
+  var type = document.getElementById("lgType").value;
+  var category = document.getElementById("lgCategory").value;
+  var hint = document.getElementById("lgHint");
+  if(!amt || amt<=0){ if(hint){ hint.textContent="请输入金额"; hint.style.color="#ef4444"; } return; }
+  var token = (localStorage.getItem("benyia_gh_token")||"").trim();
+  if(!token){ if(hint){ hint.textContent="记账需要在管理后台「站点设置」里保存 GitHub Token（仅你自己的浏览器）"; hint.style.color="#ef4444"; } return; }
+  hint.textContent = "保存中…"; hint.style.color = "#64748b";
+  try{
+    var h = {"Authorization":"Bearer "+token, "Accept":"application/vnd.github+json", "Content-Type":"application/json"};
+    var raw = await (await fetch("data.json?v="+Date.now(), {cache:"no-store"})).json();
+    var meta = await (await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/data.json?ref=main&t="+Date.now(), {headers:h, cache:"no-store"})).json();
+    raw.ledger = raw.ledger || [];
+    raw.ledger.push({date:todayStr(), type:type, amount:amt, desc:desc, category:category});
+    var bytes = new TextEncoder().encode(JSON.stringify(raw, null, 2));
+    var bin = ""; var CHUNK = 0x8000;
+    for(var i=0;i<bytes.length;i+=CHUNK) bin += String.fromCharCode.apply(null, bytes.subarray(i, i+CHUNK));
+    var content = btoa(bin);
+    var r = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/data.json", {method:"PUT", headers:h, body:JSON.stringify({message:"记账", content:content, branch:"main", sha:meta.sha})});
+    if(!r.ok){ var m="HTTP "+r.status; try{ var j=await r.json(); if(j.message) m+="："+j.message; }catch(e){} throw new Error(m); }
+    blogData = raw;
+    document.getElementById("lgAmt").value=""; document.getElementById("lgDesc").value="";
+    renderLedger();
+    hint.textContent = "✅ 已记一笔，稍等约 1 分钟前台生效"; hint.style.color = "#059669";
+  }catch(e){ hint.textContent = "保存失败："+e.message; hint.style.color = "#ef4444"; }
+}
+
+function renderDiary(){
+  document.getElementById("diaryList").innerHTML = (blogData.diary||[]).slice().reverse().map(function(d){
+    return '<div class="diary-item"><div class="diary-date">'+esc(d.date)+'</div><div class="diary-content">'+esc(d.content)+'</div></div>';
+  }).join("") || '<div class="empty">暂无日记</div>';
+}
+function renderAdvisor(){
+  document.getElementById("advisorList").innerHTML = (blogData.advisor||[]).slice().reverse().map(function(d){
+    return '<div class="diary-item"><div class="diary-date">'+esc(d.date)+'</div><div class="diary-content">'+esc(d.content)+'</div></div>';
+  }).join("") || '<div class="empty">暂无记录</div>';
+}
+
+function doSearch(q){
+  var box = document.getElementById("searchResults");
+  q = q.trim().toLowerCase();
+  if(!q){ box.classList.remove("show"); return; }
+  var results = [];
+  (blogData.courses||[]).forEach(function(c,i){ if((c.title+c.desc+(c.intro||"")).toLowerCase().indexOf(q)>=0) results.push({type:"课程", title:c.title, click:"openCourse("+i+")"}); });
+  (blogData.papers||[]).forEach(function(p,i){ if((p.title+(p.abstract||"")+(p.desc||"")).toLowerCase().indexOf(q)>=0) results.push({type:"论文", title:p.title, click:"openPaper("+i+")"}); });
+  (blogData.notices||[]).forEach(function(n,i){ if((n.title+(n.content||"")).toLowerCase().indexOf(q)>=0) results.push({type:"通知", title:n.title, click:"openNotice("+i+")"}); });
+  (blogData.classItems||[]).forEach(function(c,i){ if((c.title+(c.content||"")).toLowerCase().indexOf(q)>=0) results.push({type:"班级", title:c.title, click:"openClass("+i+")"}); });
+  document.getElementById("searchResults").innerHTML = results.slice(0,15).map(function(r){
+    return '<div class="search-result-item" onclick="document.getElementById(\'searchResults\').classList.remove(\'show\');document.getElementById(\'searchInput\').value=\'\';'+r.click+'"><div class="type">'+r.type+'</div><div class="title">'+esc(r.title)+'</div></div>';
+  }).join("") || '<div class="search-result-item" style="color:var(--text3)">无结果</div>';
+  box.classList.add("show");
+}
 
 function setPageTitle(key, h1, p){
   document.getElementById("titleH1").textContent = h1 || (PAGE_TITLES[key]?PAGE_TITLES[key][0]:"思齐个人主页");
   document.getElementById("titleP").textContent = p !== undefined ? p : (PAGE_TITLES[key]?PAGE_TITLES[key][1]:"");
 }
-
 function showSection(name){
-  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(function(s){s.classList.remove("active");});
   document.getElementById("sec-"+name).classList.add("active");
   window.scrollTo(0,0);
 }
-
 function switchTab(t){
-  document.querySelectorAll(".nav-links button").forEach(b=>b.classList.remove("active"));
-  const btn = document.querySelector(`.nav-links button[data-t="${t}"]`);
+  document.querySelectorAll(".nav-links button").forEach(function(b){b.classList.remove("active");});
+  var btn = document.querySelector('.nav-links button[data-t="'+t+'"]');
   if(btn) btn.classList.add("active");
   setPageTitle(t);
   showSection(t);
 }
+document.querySelectorAll(".nav-links button").forEach(function(btn){ btn.onclick = function(){switchTab(btn.dataset.t);}; });
 
-document.querySelectorAll(".nav-links button").forEach(btn=>{
-  btn.onclick = ()=>switchTab(btn.dataset.t);
-});
-
-function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
-function nowStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
-
-async function addLedgerFromFront(){
-  const amt = parseFloat(document.getElementById("lgAmt").value);
-  const desc = document.getElementById("lgDesc").value.trim();
-  const type = document.getElementById("lgType").value;
-  const hint = document.getElementById("lgHint");
-  if(!amt || amt<=0){ if(hint){ hint.textContent="请输入金额"; hint.style.color="#ef4444"; } return; }
-
-  const token = (localStorage.getItem("benyia_gh_token")||"").trim();
-  if(!token){
-    if(hint){ hint.textContent="请先在管理后台「站点设置」里保存 GitHub Token，才能从前台记账"; hint.style.color="#ef4444"; }
-    return;
-  }
-
-  hint.textContent = "保存中…"; hint.style.color = "#64748b";
-  try{
-    const h = {"Authorization":"Bearer "+token, "Accept":"application/vnd.github+json", "Content-Type":"application/json"};
-    /* 拉最新数据 + 最新 sha，避免覆盖后台刚保存的内容 */
-    const raw = await (await fetch("data.json?v="+Date.now(), {cache:"no-store"})).json();
-    const meta = await (await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/data.json?ref=main&t="+Date.now(), {headers:h, cache:"no-store"})).json();
-    raw.ledger = raw.ledger || [];
-    raw.ledger.push({date:todayStr(), type, amount:amt, desc});
-
-    const bytes = new TextEncoder().encode(JSON.stringify(raw, null, 2));
-    let bin = ""; const CHUNK = 0x8000;
-    for(let i=0;i<bytes.length;i+=CHUNK) bin += String.fromCharCode.apply(null, bytes.subarray(i, i+CHUNK));
-    const content = btoa(bin);
-
-    const payload = {message:"记账", content, branch:"main", sha: meta.sha};
-    const r = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/data.json", {method:"PUT", headers:h, body:JSON.stringify(payload)});
-    if(!r.ok){ let m="HTTP "+r.status; try{ const j=await r.json(); if(j.message) m+="："+j.message; }catch(e){} throw new Error(m); }
-
-    blogData = raw;
-    document.getElementById("lgAmt").value = "";
-    document.getElementById("lgDesc").value = "";
-    renderLedger();
-    hint.textContent = "✅ 已记一笔，稍等约 1 分钟前台生效";
-    hint.style.color = "#059669";
-  }catch(e){
-    hint.textContent = "保存失败："+e.message;
-    hint.style.color = "#ef4444";
-  }
-}
-
-function renderLedger(){
-  const records = blogData.ledger||[];
-  const ym = todayStr().slice(0,7);
-  let inc=0, exp=0;
-  records.forEach(r=>{ if(r.date.startsWith(ym)){ r.type==="income"?inc+=parseFloat(r.amount):exp+=parseFloat(r.amount); }});
-  document.getElementById("statInc").textContent = "¥"+inc.toFixed(0);
-  document.getElementById("statExp").textContent = "¥"+exp.toFixed(0);
-  document.getElementById("statBal").textContent = "¥"+(inc-exp).toFixed(0);
-  document.getElementById("ledgerList").innerHTML = records.slice().reverse().map(r=>`
-    <div class="timeline-item" style="border-left-color:${r.type==="income"?"#10b981":"#ef4444"}">
-      <div class="date">${esc(r.date)}</div>
-      <div class="title">${esc(r.desc||"无备注")} <span style="float:right">${r.type==="income"?"+":"-"}¥${parseFloat(r.amount).toFixed(2)}</span></div>
-    </div>`).join("") || '<div class="empty">暂无记录</div>';
-}
-
-function renderDiary(){
-  document.getElementById("diaryList").innerHTML = (blogData.diary||[]).slice().reverse().map(d=>`
-    <div class="diary-item">
-      <div class="diary-date">${esc(d.date)}</div>
-      <div class="diary-content">${esc(d.content)}</div>
-    </div>`).join("") || '<div class="empty">暂无日记</div>';
-}
-
-function renderAdvisor(){
-  document.getElementById("advisorList").innerHTML = (blogData.advisor||[]).slice().reverse().map(d=>`
-    <div class="diary-item">
-      <div class="diary-date">${esc(d.date)}</div>
-      <div class="diary-content">${esc(d.content)}</div>
-    </div>`).join("") || '<div class="empty">暂无记录</div>';
-}
-
-function doSearch(q){
-  const box = document.getElementById("searchResults");
-  q = q.trim().toLowerCase();
-  if(!q){ box.classList.remove("show"); return; }
-  const results = [];
-  blogData.courses.forEach((c,i)=>{
-    if((c.title+c.desc+(c.intro||"")).toLowerCase().includes(q))
-      results.push({type:"课程", title:c.title, action:()=>openCourse(i)});
-  });
-  blogData.papers.forEach(p=>{
-    if((p.title+(p.desc||"")).toLowerCase().includes(q))
-      results.push({type:"论文", title:p.title});
-  });
-  blogData.notices.forEach((n,i)=>{
-    if((n.title+(n.content||"")).toLowerCase().includes(q))
-      results.push({type:"通知", title:n.title, action:()=>openNotice(i)});
-  });
-  document.getElementById("searchResults").innerHTML = results.slice(0,15).map(r=>`
-    <div class="search-result-item" onclick='document.getElementById("searchResults").classList.remove("show");document.getElementById("searchInput").value="";${r.action?r.action:""}'>
-      <div class="type">${r.type}</div>
-      <div class="title">${esc(r.title)}</div>
-    </div>`).join("") || '<div class="search-result-item" style="color:var(--text3)">无结果</div>';
-  box.classList.add("show");
-}
-
-document.addEventListener("click", e=>{
+document.addEventListener("click", function(e){
   if(!e.target.closest(".nav-search")) document.getElementById("searchResults").classList.remove("show");
 });
 

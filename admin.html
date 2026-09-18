@@ -131,6 +131,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
           <input type="password" id="ghToken" placeholder="ghp_... 或 github_pat_..." autocomplete="off">
           <button class="btn btn-ghost btn-sm" onclick="toggleTokenView()" id="tokenViewBtn">显示</button>
           <button class="btn btn-primary btn-sm" onclick="saveToken()">保存 Token</button>
+          <button class="btn btn-ghost btn-sm" onclick="testToken()" id="tokenTestBtn">测试连接</button>
           <button class="btn btn-ghost btn-sm" onclick="clearToken()">清除</button>
         </div>
         <div class="status-msg" id="tokenStatus"></div>
@@ -477,20 +478,71 @@ function toggleTokenView(){
   i.type = show ? "text" : "password";
   $("tokenViewBtn").textContent = show ? "隐藏" : "显示";
 }
+function tokenFingerprint(t){
+  /* 只显示首尾各 4 位 + 长度，不泄露完整 Token */
+  if(!t) return "(空)";
+  if(t.length<=12) return t.slice(0,2)+"…"+t.slice(-2)+" (长度 "+t.length+")";
+  return t.slice(0,4)+"…"+t.slice(-4)+" (长度 "+t.length+")";
+}
 function saveToken(){
-  const t=$("ghToken").value.trim();
+  const raw=$("ghToken").value;
+  const t=raw.replace(/\s+/g,"");   /* 去掉粘贴时混进来的空格/换行/制表符 */
   const st=$("tokenStatus");
   if(!t){ st.className="status-msg err"; st.textContent="请先粘贴 Token"; return; }
+  if(!/^(ghp_|github_pat_)/.test(t)){
+    st.className="status-msg err";
+    st.textContent="这不像 GitHub Token（应以 ghp_ 或 github_pat_ 开头），你粘的是："+tokenFingerprint(t);
+    return;
+  }
+  const removed = raw.length - t.length;
   localStorage.setItem(TOKEN_KEY, t);
   st.className="status-msg ok";
-  st.textContent="✅ Token 已保存在本浏览器，可以开始保存/上传了";
+  st.textContent="✅ 已保存 "+tokenFingerprint(t)+(removed?("，并自动去掉了 "+removed+" 个空白字符"):"")+"。建议点「测试连接」确认可用。";
   showToast("Token 已保存");
+}
+
+/* 立即验证 Token 是否真的能用，错误当场暴露 */
+async function testToken(){
+  const st=$("tokenStatus");
+  const btn=$("tokenTestBtn");
+  const t=($("ghToken").value||"").replace(/\s+/g,"") || getStoredToken();
+  if(!t){ st.className="status-msg err"; st.textContent="输入框是空的，请先粘贴 Token"; return; }
+  if(btn){ btn.disabled=true; btn.textContent="测试中…"; }
+  st.className="status-msg"; st.textContent="正在连接 GitHub…";
+  try{
+    const res = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO,{
+      headers:{"Authorization":"Bearer "+t,"Accept":"application/vnd.github+json"},
+      cache:"no-store"
+    });
+    if(res.ok){
+      const j = await res.json();
+      const canPush = j.permissions && j.permissions.push;
+      st.className = canPush ? "status-msg ok" : "status-msg warn";
+      st.textContent = canPush
+        ? "✅ Token 可用：仓库 "+j.full_name+"，有写入权限"
+        : "⚠️ Token 能读仓库但没有写入权限，请确认勾选了 repo";
+    } else if(res.status===401){
+      const who = await fetch("https://api.github.com/user",{headers:{"Authorization":"Bearer "+t}}).then(r=>r.status).catch(()=>0);
+      st.className="status-msg err";
+      st.textContent = who===401
+        ? "❌ GitHub 不认识这串 Token（401）。你输入的："+tokenFingerprint(t)+" —— 请确认完整复制、没有漏字符"
+        : "❌ 401：Token 有效但无权访问该仓库";
+    } else {
+      st.className="status-msg err";
+      st.textContent = "❌ 测试失败：HTTP "+res.status;
+    }
+  }catch(e){
+    st.className="status-msg err";
+    st.textContent="❌ 网络错误："+e.message;
+  }finally{
+    if(btn){ btn.disabled=false; btn.textContent="测试连接"; }
+  }
 }
 function clearToken(){
   localStorage.removeItem(TOKEN_KEY);
   $("ghToken").value="";
   $("tokenStatus").className="status-msg warn";
-  $("tokenStatus").textContent="Token 已清除，保存和上传将不可用";
+  $("tokenStatus").textContent="Token 已清除。请重新粘贴后再点「保存 Token」。";
 }
 
 /* ============================================================
@@ -499,7 +551,7 @@ function clearToken(){
 async function initPanel(){
   $("ghToken").value = getStoredToken();
   $("tokenStatus").textContent = getStoredToken()
-    ? "已保存 Token（保存在本浏览器）"
+    ? "已保存 Token：" + tokenFingerprint(getStoredToken()) + "（存在本浏览器）"
     : "尚未设置 Token，保存和上传会失败";
   $("tokenStatus").className = "status-msg " + (getStoredToken() ? "ok" : "err");
   $("nDate").value = todayStr();

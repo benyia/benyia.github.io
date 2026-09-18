@@ -142,6 +142,15 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .diary-content{font-size:.9rem;white-space:pre-wrap;line-height:1.7}
 
 .empty{text-align:center;padding:40px;color:var(--text3);font-size:.88rem}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:12px}
+.gallery img{width:100%;height:140px;object-fit:cover;border-radius:10px;border:1px solid var(--border)}
+.roster-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap;backdrop-filter:blur(10px)}
+.roster-photo{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#34d399);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;overflow:hidden;flex:0 0 72px}
+.roster-info{flex:1;min-width:220px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px 18px}
+.roster-row{font-size:.86rem;display:flex;gap:8px}
+.roster-row .k{color:var(--text3);flex:0 0 72px}
+.roster-row .v{color:var(--text);font-weight:500;word-break:break-all}
+.icon-img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .footer{text-align:center;padding:32px;color:var(--text3);font-size:.82rem;border-top:1px solid var(--border);margin-top:20px;background:rgba(255,255,255,.55)}
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -170,7 +179,9 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       <button data-t="papers">论文</button>
       <button data-t="notices">通知</button>
       <button data-t="class">班级</button>
+      <button data-t="roster">名单</button>
       <button data-t="life">生活服务</button>
+      <button data-t="media">影音</button>
       <button data-t="ledger">记账</button>
       <button data-t="diary">日记</button>
       <button data-t="advisor">导师指导</button>
@@ -274,8 +285,17 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       <div id="clDetailFiles"></div>
     </div>
 
+    <div class="section" id="sec-roster">
+      <div id="rosterList"></div>
+    </div>
+
     <div class="section" id="sec-life">
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px" id="lifeList"></div>
+    </div>
+
+    <div class="section" id="sec-media">
+      <div class="filter-bar" id="mediaFilters"></div>
+      <div id="mediaList"></div>
     </div>
 
     <div class="section" id="sec-ledger">
@@ -338,7 +358,9 @@ const PAGE_TITLES = {
   papers: ["论文", "学术论文与研究进展"],
   notices: ["学校通知", "重要通知与公告"],
   class: ["班级事务", "通知、名单与活动"],
+  roster: ["班级名单", "同学个人信息"],
   life: ["生活服务", "常用网站与工具"],
+  media: ["影音", "音乐 / 视频 / 图片"],
   ledger: ["生活记账", "记录每一笔开销"],
   diary: ["日记", "记录生活点滴"],
   advisor: ["导师指导", "与导师交流记录"],
@@ -387,6 +409,7 @@ let currentPaperIdx = -1;
 let currentClassIdx = -1;
 let paperFilter = "all";
 let classFilter = "all";
+let mediaFilter = "all";
 
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]);}); }
 function todayStr(){ var d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
@@ -397,6 +420,40 @@ function fmtSize(bytes){
   if(bytes < 1024*1024) return (bytes/1024).toFixed(1)+" KB";
   return (bytes/1024/1024).toFixed(2)+" MB";
 }
+function collectImages(item){
+  if(!item || !Array.isArray(item.images)) return [];
+  return item.images.filter(function(x){ return x && x.url; });
+}
+function isImgUrl(v){
+  v = String(v||"").trim();
+  return /^(https?:)?///.test(v) || /^files//.test(v) || /^data:image/.test(v) || /^.?/?[^s]+.(png|jpe?g|gif|webp|svg|bmp)$/i.test(v);
+}
+function iconHTML(icon, fallback){
+  var v = String(icon||"").trim();
+  if(isImgUrl(v)) return '<img src="'+esc(v)+'" style="width:100%;height:100%;object-fit:cover" alt="">';
+  return esc(v || fallback || "📄");
+}
+function coverHTML(item, iconFallback){
+  var imgs = collectImages(item);
+  if(imgs.length) return '<div class="article-cover" style="padding:0;overflow:hidden"><img src="'+esc(imgs[0].url)+'" style="width:100%;height:100%;object-fit:cover" alt=""></div>';
+  var ic = (item && item.icon) || iconFallback || "📄";
+  return '<div class="article-cover">'+iconHTML(ic, "📄")+'</div>';
+}
+function imgStrip(item){
+  var imgs = collectImages(item);
+  if(!imgs.length) return "";
+  return '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">'+imgs.map(function(f){
+    return '<img src="'+esc(f.url)+'" style="width:72px;height:72px;object-fit:cover;border-radius:8px" alt="">';
+  }).join("")+'</div>';
+}
+function galleryHTML(item){
+  var imgs = collectImages(item);
+  if(!imgs.length) return "";
+  return '<div class="gallery">'+imgs.map(function(f){
+    return '<a href="'+esc(f.url)+'" target="_blank" rel="noopener"><img src="'+esc(f.url)+'" alt=""></a>';
+  }).join("")+'</div>';
+}
+
 function collectFiles(item){
   if(!item) return [];
   if(Array.isArray(item.files) && item.files.length) return item.files;
@@ -433,9 +490,7 @@ async function loadData(){
 
 function renderProfile(){
   var sc = blogData.siteConfig;
-  var av = document.getElementById("profileAvatar");
-  if(/^https?:\/\//.test(sc.avatar||"")){ av.innerHTML = '<img src="'+esc(sc.avatar)+'" alt="头像">'; }
-  else { av.textContent = (sc.avatar||"思").slice(0,2); }
+  document.getElementById("profileAvatar").innerHTML = iconHTML(sc.avatar, "思");
   document.getElementById("profileName").textContent = sc.name || "思齐";
   document.getElementById("profileBio").textContent = sc.bio || "";
 }
@@ -443,7 +498,8 @@ function renderProfile(){
 function renderCategories(){
   var map = {courses:(blogData.courses||[]).length, papers:(blogData.papers||[]).length, notices:(blogData.notices||[]).length, class:(blogData.classItems||[]).length};
   document.getElementById("catList").innerHTML = (blogData.categories||[]).map(function(c){
-    return '<div class="cat-item" onclick="switchTab(\''+esc(c.section||"home")+'\')"><span>'+esc(c.icon||"")+' '+esc(c.name)+'</span><span class="count">'+(map[c.section]||0)+'</span></div>';
+    var ic = isImgUrl(c.icon) ? '<img src="'+esc(c.icon)+'" style="width:16px;height:16px;object-fit:cover;border-radius:4px;vertical-align:-3px">' : esc(c.icon||"");
+    return '<div class="cat-item" onclick="switchTab(\''+esc(c.section||"home")+'\')"><span>'+ic+' '+esc(c.name)+'</span><span class="count">'+(map[c.section]||0)+'</span></div>';
   }).join("") || '';
 }
 
@@ -453,7 +509,8 @@ function renderTags(){
 
 function renderQuickLinks(){
   document.getElementById("quickLinks").innerHTML = (blogData.quickLinks||[]).map(function(l){
-    return '<div class="quick-link"><a href="'+esc(l.url)+'" target="_blank" rel="noopener"><span>'+esc(l.icon||"")+' '+esc(l.title)+'</span><span>→</span></a></div>';
+    var ic = isImgUrl(l.icon) ? '<img src="'+esc(l.icon)+'" style="width:16px;height:16px;object-fit:cover;border-radius:4px;vertical-align:-3px">' : esc(l.icon||"");
+    return '<div class="quick-link"><a href="'+esc(l.url)+'" target="_blank" rel="noopener"><span>'+ic+' '+esc(l.title)+'</span><span>→</span></a></div>';
   }).join("") || '';
 }
 
@@ -464,6 +521,10 @@ function renderFilters(){
   var types = ["all"].concat(CLASS_TYPES);
   document.getElementById("classFilters").innerHTML = types.map(function(t){
     return '<button class="'+(classFilter===t?"active":"")+'" onclick="setClassFilter(\''+t+'\')">'+(t==="all"?"全部":t)+'</button>';
+  }).join("");
+  var mf = [["all","全部"],["music","音乐"],["video","视频"],["image","图片"]];
+  document.getElementById("mediaFilters").innerHTML = mf.map(function(x){
+    return '<button class="'+(mediaFilter===x[0]?"active":"")+'" onclick="setMediaFilter(\''+x[0]+'\')">'+x[1]+'</button>';
   }).join("");
 }
 
@@ -482,6 +543,8 @@ function renderAll(){
   renderNotices();
   renderClass();
   renderLife();
+  renderMedia();
+  renderRoster();
   renderLedger();
   renderDiary();
   renderAdvisor();
@@ -495,18 +558,18 @@ function renderAll(){
 
 function renderHome(){
   var items = [];
-  (blogData.courses||[]).forEach(function(c,i){ items.push({type:"课程", icon:c.icon||"📚", title:c.title, desc:c.desc, time:c.time||"", click:"openCourse("+i+")"}); });
-  (blogData.papers||[]).forEach(function(p,i){ items.push({type:"论文", icon:"📝", title:p.title, desc:p.abstract||p.desc, time:p.time||"", click:"openPaper("+i+")"}); });
-  (blogData.notices||[]).forEach(function(n,i){ items.push({type:"通知", icon:"🔔", title:n.title, desc:n.content, time:n.time||"", click:"openNotice("+i+")"}); });
-  (blogData.classItems||[]).forEach(function(c,i){ items.push({type:"班级", icon:"👥", title:c.title, desc:c.content, time:c.time||"", click:"openClass("+i+")"}); });
+  (blogData.courses||[]).forEach(function(c,i){ items.push({type:"课程", item:c, icon:c.icon||"📚", title:c.title, desc:c.desc, time:c.time||"", click:"openCourse("+i+")"}); });
+  (blogData.papers||[]).forEach(function(p,i){ items.push({type:"论文", item:p, icon:"📝", title:p.title, desc:p.abstract||p.desc, time:p.time||"", click:"openPaper("+i+")"}); });
+  (blogData.notices||[]).forEach(function(n,i){ items.push({type:"通知", item:n, icon:"🔔", title:n.title, desc:n.content, time:n.time||"", click:"openNotice("+i+")"}); });
+  (blogData.classItems||[]).forEach(function(c,i){ items.push({type:"班级", item:c, icon:"👥", title:c.title, desc:c.content, time:c.time||"", click:"openClass("+i+")"}); });
   document.getElementById("homeList").innerHTML = items.map(function(a){
-    return '<div class="article-card" onclick="'+a.click+'"><div class="article-cover">'+a.icon+'</div><div class="article-body"><div class="article-title">'+esc(a.title)+'</div><div class="article-meta"><span>'+a.type+'</span>'+(a.time?'<span class="time">🕐 '+a.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(a.desc||"").slice(0,120))+'</div></div></div>';
+    return '<div class="article-card" onclick="'+a.click+'">'+coverHTML(a.item, a.icon)+'<div class="article-body"><div class="article-title">'+esc(a.title)+'</div><div class="article-meta"><span>'+a.type+'</span>'+(a.time?'<span class="time">🕐 '+a.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(a.desc||"").slice(0,120))+'</div></div></div>';
   }).join("") || '<div class="empty">暂无内容</div>';
 }
 
 function renderCourses(){
   document.getElementById("coursesList").innerHTML = (blogData.courses||[]).map(function(c,i){
-    return '<div class="article-card" onclick="openCourse('+i+')"><div class="article-cover">'+(c.icon||"📐")+'</div><div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+collectFiles(c).length+' 个文件</span><span>进度 '+(c.progress||0)+'%</span>'+(c.time?'<span class="time">🕐 '+c.time+'</span>':"")+'</div><div class="article-desc">'+esc(c.desc)+'</div></div></div>';
+    return '<div class="article-card" onclick="openCourse('+i+')">'+coverHTML(c, c.icon||"📐")+'<div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+collectFiles(c).length+' 个文件</span><span>进度 '+(c.progress||0)+'%</span>'+(c.time?'<span class="time">🕐 '+c.time+'</span>':"")+'</div><div class="article-desc">'+esc(c.desc)+'</div></div></div>';
   }).join("") || '<div class="empty">暂无课程</div>';
 }
 function openCourse(idx){
@@ -517,7 +580,7 @@ function openCourse(idx){
   document.getElementById("cdIntro").textContent = c.intro||"";
   document.getElementById("cdProgressBar").style.width = (c.progress||0)+"%";
   document.getElementById("cdProgressText").textContent = "学习进度："+(c.progress||0)+"%";
-  document.getElementById("cdFiles").innerHTML = fileListHTML(c);
+  document.getElementById("cdFiles").innerHTML = galleryHTML(c) + fileListHTML(c);
   setPageTitle("courseDetail", c.title, "");
   showSection("courseDetail");
 }
@@ -529,7 +592,7 @@ function renderPapers(){
   var list = (f && f.match) ? all.filter(function(p){return f.match(p.status);}) : all;
   document.getElementById("papersList").innerHTML = list.map(function(p){
     var idx = all.indexOf(p);
-    return '<div class="article-card" onclick="openPaper('+idx+')"><div class="article-body"><div class="article-title">'+esc(p.title)+'</div><div class="article-meta"><span>'+esc(p.status)+'</span>'+(p.year?'<span>'+esc(p.year)+'</span>':"")+(p.time?'<span class="time">🕐 '+p.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(p.abstract||p.desc||"").slice(0,100))+'</div><div class="article-tags">'+((p.tags||[]).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>';}).join(""))+'</div></div></div>';
+    return '<div class="article-card" onclick="openPaper('+idx+')">'+coverHTML(p, "📝")+'<div class="article-body"><div class="article-title">'+esc(p.title)+'</div><div class="article-meta"><span>'+esc(p.status)+'</span>'+(p.year?'<span>'+esc(p.year)+'</span>':"")+(p.time?'<span class="time">🕐 '+p.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(p.abstract||p.desc||"").slice(0,100))+'</div><div class="article-tags">'+((p.tags||[]).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>';}).join(""))+'</div>'+imgStrip(p)+'</div></div>';
   }).join("") || '<div class="empty">暂无匹配的论文</div>';
 }
 function openPaper(idx){
@@ -542,7 +605,7 @@ function openPaper(idx){
   if(p.abstract){ ab.style.display="block"; ab.textContent = "摘要：" + p.abstract; }
   else { ab.style.display="none"; }
   document.getElementById("pdDesc").textContent = p.desc || "";
-  document.getElementById("pdFiles").innerHTML = fileListHTML(p);
+  document.getElementById("pdFiles").innerHTML = galleryHTML(p) + fileListHTML(p);
   setPageTitle("paperDetail", p.title, "");
   showSection("paperDetail");
 }
@@ -550,7 +613,7 @@ function backToPapers(){ showSection("papers"); setPageTitle("papers"); currentP
 
 function renderNotices(){
   document.getElementById("noticesList").innerHTML = (blogData.notices||[]).map(function(n,i){
-    return '<div class="article-card" onclick="openNotice('+i+')"><div class="article-body"><div class="article-title">'+esc(n.title)+'</div><div class="article-meta"><span>'+esc(n.source)+'</span><span>'+esc(n.date)+'</span>'+(n.time?'<span class="time">🕐 '+n.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(n.content||"").slice(0,100))+'</div></div></div>';
+    return '<div class="article-card" onclick="openNotice('+i+')">'+coverHTML(n, "🔔")+'<div class="article-body"><div class="article-title">'+esc(n.title)+'</div><div class="article-meta"><span>'+esc(n.source)+'</span><span>'+esc(n.date)+'</span>'+(n.time?'<span class="time">🕐 '+n.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(n.content||"").slice(0,100))+'</div>'+imgStrip(n)+'</div></div>';
   }).join("") || '<div class="empty">暂无通知</div>';
 }
 function openNotice(idx){
@@ -569,7 +632,7 @@ function renderClass(){
   var list = classFilter==="all" ? all : all.filter(function(c){return c.type===classFilter;});
   document.getElementById("classList").innerHTML = list.map(function(c){
     var idx = all.indexOf(c);
-    return '<div class="article-card" onclick="openClass('+idx+')"><div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+esc(c.type)+'</span><span>'+esc(c.date||"")+'</span>'+(c.time?'<span class="time">🕐 '+c.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(c.content||"").slice(0,100))+'</div></div></div>';
+    return '<div class="article-card" onclick="openClass('+idx+')">'+coverHTML(c, "👥")+'<div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+esc(c.type)+'</span><span>'+esc(c.date||"")+'</span>'+(c.time?'<span class="time">🕐 '+c.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(c.content||"").slice(0,100))+'</div>'+imgStrip(c)+'</div></div>';
   }).join("") || '<div class="empty">暂无内容</div>';
 }
 function openClass(idx){
@@ -578,15 +641,36 @@ function openClass(idx){
   document.getElementById("clDetailTitle").textContent = c.title;
   document.getElementById("clDetailMeta").textContent = (c.type||"") + " · " + (c.date||"");
   document.getElementById("clDetailContent").textContent = c.content||"";
-  document.getElementById("clDetailFiles").innerHTML = fileListHTML(c);
+  document.getElementById("clDetailFiles").innerHTML = galleryHTML(c) + fileListHTML(c);
   setPageTitle("classDetail", c.title, "");
   showSection("classDetail");
 }
 function backToClass(){ showSection("class"); setPageTitle("class"); currentClassIdx=-1; }
 
+function setMediaFilter(k){ mediaFilter = k; renderFilters(); renderMedia(); }
+function renderMedia(){
+  var all = blogData.media||[];
+  var list = mediaFilter==="all" ? all : all.filter(function(m){return m.type===mediaFilter;});
+  document.getElementById("mediaList").innerHTML = list.map(function(m){
+    var f = collectFiles(m)[0];
+    var icon = m.type==="music"?"🎵":m.type==="video"?"🎬":"🖼️";
+    var img = (m.type==="image" && f && f.url) ? '<img src="'+esc(f.url)+'" style="width:100%;border-radius:8px;margin-bottom:10px" alt="">' : '';
+    var dl = (f && f.url) ? '<div style="margin-top:10px"><a class="btn" href="'+esc(f.url)+'" download target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.82rem">下载 '+esc(f.name)+'</a></div>' : '';
+    if(m.url) dl += '<div style="margin-top:10px"><a class="btn" href="'+esc(m.url)+'" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.82rem">打开链接</a></div>';
+    return '<div class="article-card"><div class="article-body">'+img+'<div class="article-title">'+icon+' '+esc(m.title)+'</div>'+(m.desc?'<div class="article-desc">'+esc(m.desc)+'</div>':"")+dl+'</div></div>';
+  }).join("") || '<div class="empty">暂无内容</div>';
+}
+
 function renderLife(){
   document.getElementById("lifeList").innerHTML = (blogData.lifeServices||[]).map(function(s){
-    return '<a href="'+esc(s.url)+'" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><div class="article-card" style="margin-bottom:0"><div class="article-body" style="text-align:center"><div style="font-size:2rem;margin-bottom:8px">'+esc(s.icon||"🔗")+'</div><div class="article-title">'+esc(s.title)+'</div><div class="article-desc">'+esc(s.desc)+'</div></div></div></a>';
+    var files = collectFiles(s);
+    var fileLinks = files.map(function(f){
+      return '<div style="margin-top:6px"><a class="btn" href="'+esc(f.url)+'" download target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.78rem">下载 '+esc(f.name)+'</a></div>';
+    }).join("");
+    var ic = isImgUrl(s.icon) ? '<img src="'+esc(s.icon)+'" style="width:48px;height:48px;object-fit:cover;border-radius:10px">' : '<span style="font-size:2rem">'+esc(s.icon||"🔗")+'</span>';
+    var open = s.url ? '<a href="'+esc(s.url)+'" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">' : '<div>';
+    var close = s.url ? '</a>' : '</div>';
+    return open+'<div class="article-card" style="margin-bottom:0"><div class="article-body" style="text-align:center"><div style="margin-bottom:8px">'+ic+'</div><div class="article-title">'+esc(s.title)+'</div><div class="article-desc">'+esc(s.desc)+'</div>'+fileLinks+imgStrip(s)+'</div></div>'+close;
   }).join("") || '<div class="empty">暂无</div>';
 }
 
@@ -639,13 +723,44 @@ async function addLedgerFromFront(){
 
 function renderDiary(){
   document.getElementById("diaryList").innerHTML = (blogData.diary||[]).slice().reverse().map(function(d){
-    return '<div class="diary-item"><div class="diary-date">'+esc(d.date)+'</div><div class="diary-content">'+esc(d.content)+'</div></div>';
+    return '<div class="diary-item"><div class="diary-date">'+esc(d.date)+'</div><div class="diary-content">'+esc(d.content)+'</div>'+galleryHTML(d)+'</div>';
   }).join("") || '<div class="empty">暂无日记</div>';
 }
 function renderAdvisor(){
   document.getElementById("advisorList").innerHTML = (blogData.advisor||[]).slice().reverse().map(function(d){
-    return '<div class="diary-item"><div class="diary-date">'+esc(d.date)+'</div><div class="diary-content">'+esc(d.content)+'</div></div>';
+    return '<div class="diary-item"><div class="diary-date">'+esc(d.date)+(d.time?' '+esc(d.time):"")+'</div><div class="diary-content">'+esc(d.content)+'</div>'+galleryHTML(d)+'</div>';
   }).join("") || '<div class="empty">暂无记录</div>';
+}
+
+function renderRoster(){
+  var list = blogData.roster||[];
+  var show = !!(blogData.rosterConfig && blogData.rosterConfig.showSensitive);
+  document.getElementById("rosterList").innerHTML = list.map(function(r){
+    var photo = r.photo ? '<div class="roster-photo">'+iconHTML(r.photo, (r.name||"?").slice(0,1))+'</div>' : '<div class="roster-photo">'+esc((r.name||"?").slice(0,1))+'</div>';
+    var rows = [];
+    function add(label, val, sensitive){
+      if(!val) return;
+      if(sensitive && !show) return;
+      rows.push('<div class="roster-row"><span class="k">'+label+'</span><span class="v">'+esc(val)+'</span></div>');
+    }
+    add("学号", r.studentId);
+    add("姓名", r.name);
+    add("性别", r.gender);
+    add("班级", r.className);
+    add("学院", r.college);
+    add("专业", r.major);
+    add("宿舍号", r.dorm);
+    add("导师", r.advisor);
+    add("民族", r.ethnicity);
+    add("政治面貌", r.political);
+    add("出生日期", r.birthday, true);
+    add("电话", r.phone, true);
+    add("邮箱", r.email, true);
+    add("身份证号", r.idCard, true);
+    add("家庭住址", r.homeAddress, true);
+    add("备注", r.note);
+    return '<div class="roster-card">'+photo+'<div class="roster-info">'+rows.join("")+'</div>'+galleryHTML(r)+'</div>';
+  }).join("") || '<div class="empty">暂无名单</div>';
 }
 
 function doSearch(q){

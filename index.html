@@ -24,7 +24,7 @@ body{
 }
 body::before{
   content:"";position:fixed;top:0;left:0;right:0;bottom:0;
-  background:rgba(240,253,244,.85);z-index:-1;
+  background:rgba(255,255,255,.38);z-index:-1;
 }
 
 /* Top Nav */
@@ -49,7 +49,7 @@ body::before{
 .nav-admin{padding:8px 14px;background:var(--primary);color:#fff;border-radius:8px;text-decoration:none;font-size:.85rem;white-space:nowrap}
 
 /* Page Title */
-.page-title{background:linear-gradient(135deg,rgba(209,250,229,.9),rgba(167,243,208,.9));padding:32px 24px;text-align:center;border-bottom:1px solid var(--border)}
+.page-title{background:rgba(255,255,255,.55);padding:32px 24px;text-align:center;border-bottom:1px solid var(--border)}
 .page-title h1{font-size:1.8rem;font-weight:800;margin-bottom:4px}
 .page-title p{color:var(--text2);font-size:.95rem}
 
@@ -147,7 +147,7 @@ body::before{
 
 .empty{text-align:center;padding:40px;color:var(--text3);font-size:.88rem}
 
-.footer{text-align:center;padding:32px;color:var(--text3);font-size:.82rem;border-top:1px solid var(--border);margin-top:20px}
+.footer{text-align:center;padding:32px;color:var(--text3);font-size:.82rem;border-top:1px solid var(--border);margin-top:20px;background:rgba(255,255,255,.55)}
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
@@ -281,9 +281,13 @@ body::before{
         <div class="stat-card expense"><div class="num" id="statExp">¥0</div><div class="label">本月支出</div></div>
         <div class="stat-card"><div class="num" id="statBal">¥0</div><div class="label">本月结余</div></div>
       </div>
-      <div class="ledger-form" style="justify-content:center">
-        <span style="font-size:.86rem;color:var(--text2)">记账请到 <a href="admin.html" style="color:var(--primary)">管理后台</a> → 「记账」</span>
+      <div class="ledger-form">
+        <select id="lgType"><option value="expense">支出</option><option value="income">收入</option></select>
+        <input type="number" id="lgAmt" placeholder="金额">
+        <input type="text" id="lgDesc" placeholder="备注">
+        <button class="btn" onclick="addLedgerFromFront()">记一笔</button>
       </div>
+      <div id="lgHint" style="font-size:.8rem;color:var(--text3);margin-bottom:12px"></div>
       <div id="ledgerList"></div>
     </div>
 
@@ -365,7 +369,6 @@ const DEFAULT_DATA = {
     {icon:"🅰️", title:"阿里云盘", desc:"不限速云盘", url:"https://www.alipan.com"}
   ],
   softwares: [],
-  timeline: [],
   ledger: [],
   diary: [],
   advisor: [],
@@ -556,6 +559,49 @@ document.querySelectorAll(".nav-links button").forEach(btn=>{
 
 function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function nowStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
+
+async function addLedgerFromFront(){
+  const amt = parseFloat(document.getElementById("lgAmt").value);
+  const desc = document.getElementById("lgDesc").value.trim();
+  const type = document.getElementById("lgType").value;
+  const hint = document.getElementById("lgHint");
+  if(!amt || amt<=0){ if(hint){ hint.textContent="请输入金额"; hint.style.color="#ef4444"; } return; }
+
+  const token = (localStorage.getItem("benyia_gh_token")||"").trim();
+  if(!token){
+    if(hint){ hint.textContent="请先在管理后台「站点设置」里保存 GitHub Token，才能从前台记账"; hint.style.color="#ef4444"; }
+    return;
+  }
+
+  hint.textContent = "保存中…"; hint.style.color = "#64748b";
+  try{
+    const h = {"Authorization":"Bearer "+token, "Accept":"application/vnd.github+json", "Content-Type":"application/json"};
+    /* 拉最新数据 + 最新 sha，避免覆盖后台刚保存的内容 */
+    const raw = await (await fetch("data.json?v="+Date.now(), {cache:"no-store"})).json();
+    const meta = await (await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/data.json?ref=main&t="+Date.now(), {headers:h, cache:"no-store"})).json();
+    raw.ledger = raw.ledger || [];
+    raw.ledger.push({date:todayStr(), type, amount:amt, desc});
+
+    const bytes = new TextEncoder().encode(JSON.stringify(raw, null, 2));
+    let bin = ""; const CHUNK = 0x8000;
+    for(let i=0;i<bytes.length;i+=CHUNK) bin += String.fromCharCode.apply(null, bytes.subarray(i, i+CHUNK));
+    const content = btoa(bin);
+
+    const payload = {message:"记账", content, branch:"main", sha: meta.sha};
+    const r = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/data.json", {method:"PUT", headers:h, body:JSON.stringify(payload)});
+    if(!r.ok){ let m="HTTP "+r.status; try{ const j=await r.json(); if(j.message) m+="："+j.message; }catch(e){} throw new Error(m); }
+
+    blogData = raw;
+    document.getElementById("lgAmt").value = "";
+    document.getElementById("lgDesc").value = "";
+    renderLedger();
+    hint.textContent = "✅ 已记一笔，稍等约 1 分钟前台生效";
+    hint.style.color = "#059669";
+  }catch(e){
+    hint.textContent = "保存失败："+e.message;
+    hint.style.color = "#ef4444";
+  }
+}
 
 function renderLedger(){
   const records = blogData.ledger||[];

@@ -795,6 +795,15 @@ async function saveData(action){
     renderLogs();
   }
 
+  /* 保存前拉取最新数据：保留本页面不认识的顶层字段，避免旧页面把新加的字段覆盖掉 */
+  try{
+    const latestRes = await fetch(DATA_PATH+"?v="+Date.now(), {cache:"no-store"});
+    if(latestRes.ok){
+      const latest = await latestRes.json();
+      for(const k in latest){ if(blogData[k]===undefined) blogData[k] = latest[k]; }
+    }
+  }catch(e){}
+
   const body = JSON.stringify(blogData, null, 2);
   /* 用 TextEncoder + 分块避免超大字符串把 btoa 撑爆 */
   let content;

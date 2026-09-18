@@ -44,7 +44,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .tag-chip{display:inline-block;padding:2px 8px;background:var(--primary-light);color:var(--primary);border-radius:99px;font-size:.75px;margin:2px}
 .log-list{font-size:.82rem;color:var(--text2)}
 .log-list .log-item{padding:6px 0;border-bottom:1px dashed var(--border)}
-.notice{padding:10px 16px;background:var(--primary-light);border-radius:8px;margin-bottom:16px;font-size:.85rem;color:#065f46}
+.toast{position:fixed;top:20px;right:20px;padding:12px 24px;border-radius:8px;color:#fff;font-size:.9rem;z-index:1000;animation:slideIn .3s ease}
+.toast.success{background:#10b981}
+.toast.error{background:#ef4444}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
 </style>
 </head>
 <body>
@@ -64,7 +67,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     </div>
   </div>
   <div class="container">
-    <div class="notice" id="saveNotice" style="display:none">✅ 已自动保存到 GitHub</div>
     <div class="stat-bar">
       <div class="card"><div class="num" id="statC">0</div><div>课程</div></div>
       <div class="card"><div class="num" id="statP">0</div><div>论文</div></div>
@@ -221,7 +223,7 @@ const GH_TOKEN = "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";
 const ADMIN_PWD = "syj3008338";
 
 const DEFAULT_DATA = {
-  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6"},
+  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。"},
   courses:[],papers:[],notices:[],classItems:[],lifeServices:[],softwares:[],
   timeline:[],ledger:[],diary:[],advisor:[],logs:[]
 };
@@ -230,22 +232,36 @@ let blogData=null, dataSha="";
 
 function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
+function showToast(msg, isError){
+  const t=document.createElement("div");
+  t.className="toast "+(isError?"error":"success");
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 3000);
+}
+
 function login(){
   const p=document.getElementById("pwdInput").value;
   if(p===ADMIN_PWD){
     document.getElementById("loginScreen").style.display="none";
     document.getElementById("mainPanel").style.display="block";
     loadData();
-  } else alert("密码错误");
+  } else showToast("密码错误", true);
 }
 function logout(){location.reload();}
 
 async function loadData(){
   try{
     const res=await fetch("data.json?v="+Date.now());
-    if(res.ok){blogData=await res.json();for(const k in DEFAULT_DATA){if(!blogData[k])blogData[k]=DEFAULT_DATA[k];}}
-    else blogData=JSON.parse(JSON.stringify(DEFAULT_DATA));
-  }catch(e){blogData=JSON.parse(JSON.stringify(DEFAULT_DATA));}
+    if(res.ok){
+      blogData=await res.json();
+      for(const k in DEFAULT_DATA){if(!blogData[k])blogData[k]=DEFAULT_DATA[k];}
+    } else {
+      blogData=JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+  }catch(e){
+    blogData=JSON.parse(JSON.stringify(DEFAULT_DATA));
+  }
   renderAll();
 }
 
@@ -257,28 +273,42 @@ async function saveData(action){
   }
   try{
     const content=btoa(unescape(encodeURIComponent(JSON.stringify(blogData,null,2))));
-    if(!dataSha){
-      try{
-        const res=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`);
-        if(res.ok){const d=await res.json();dataSha=d.sha;}
-      }catch(e){}
-    }
-    const r=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`,{
-      method:"PUT",
-      headers:{"Authorization":"token "+GH_TOKEN,"Content-Type":"application/json"},
-      body:JSON.stringify({message:"Update: "+(action||"blog"),content,sha:dataSha})
+    
+    // 获取当前文件 sha
+    const getRes=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`,{
+      headers:{"Authorization":"token "+GH_TOKEN}
     });
-    if(r.ok){
-      const d=await r.json();dataSha=d.content.sha;
-      showNotice();
+    if(getRes.ok){
+      const getData=await getRes.json();
+      dataSha=getData.sha;
     }
-  }catch(e){console.error("保存失败",e);alert("保存失败: "+e.message);}
-}
-
-function showNotice(){
-  const n=document.getElementById("saveNotice");
-  n.style.display="block";
-  setTimeout(()=>n.style.display="none",2000);
+    
+    // 上传新内容
+    const putRes=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`,{
+      method:"PUT",
+      headers:{
+        "Authorization":"token "+GH_TOKEN,
+        "Content-Type":"application/json",
+        "Accept":"application/vnd.github.v3+json"
+      },
+      body:JSON.stringify({
+        message:"Update: "+(action||"blog"),
+        content:content,
+        sha:dataSha
+      })
+    });
+    
+    if(putRes.ok){
+      showToast("✅ 保存成功！");
+    } else {
+      const errText=await putRes.text();
+      showToast("❌ 保存失败: "+putRes.status, true);
+      console.error("保存失败:", putRes.status, errText);
+    }
+  }catch(e){
+    showToast("❌ 网络错误: "+e.message, true);
+    console.error("保存异常:", e);
+  }
 }
 
 function renderAll(){
@@ -306,7 +336,7 @@ function addCourse(){
   const desc=document.getElementById("cDesc").value.trim();
   const progress=parseInt(document.getElementById("cProgress").value)||0;
   const intro=document.getElementById("cIntro").value.trim();
-  if(!title){alert("请输入课程名称");return;}
+  if(!title){showToast("请输入课程名称", true);return;}
   blogData.courses.push({icon,title,desc,intro,progress,files:[]});
   saveData("添加课程："+title);
   renderCourses();
@@ -329,7 +359,7 @@ function addPaper(){
   const year=document.getElementById("pYear").value;
   const desc=document.getElementById("pDesc").value;
   const tags=[...document.querySelectorAll(".paper-tag:checked")].map(c=>c.value);
-  if(!title){alert("请输入论文标题");return;}
+  if(!title){showToast("请输入论文标题", true);return;}
   blogData.papers.push({title,status,year,desc,tags,file:"",fileName:""});
   saveData("添加论文："+title);
   renderPapers();
@@ -351,7 +381,7 @@ function addNotice(){
   const source=document.getElementById("nSource").value.trim();
   const date=document.getElementById("nDate").value||new Date().toISOString().slice(0,10);
   const content=document.getElementById("nContent").value.trim();
-  if(!title){alert("请输入标题");return;}
+  if(!title){showToast("请输入标题", true);return;}
   blogData.notices.push({title,source,date,level:"normal",content});
   saveData("发布通知："+title);
   renderNotices();
@@ -371,7 +401,7 @@ function addClass(){
   const type=document.getElementById("clType").value;
   const date=document.getElementById("clDate").value||new Date().toISOString().slice(0,10);
   const content=document.getElementById("clContent").value.trim();
-  if(!title){alert("请输入标题");return;}
+  if(!title){showToast("请输入标题", true);return;}
   blogData.classItems.push({title,type,date,content,file:"",fileName:""});
   saveData("添加班级事务："+title);
   renderClass();
@@ -391,7 +421,7 @@ function addLife(){
   const title=document.getElementById("lsTitle").value.trim();
   const desc=document.getElementById("lsDesc").value.trim();
   const url=document.getElementById("lsUrl").value.trim();
-  if(!title||!url){alert("请输入名称和链接");return;}
+  if(!title||!url){showToast("请输入名称和链接", true);return;}
   blogData.lifeServices.push({icon,title,desc,url});
   saveData("添加生活服务："+title);
   renderLife();
@@ -410,7 +440,7 @@ function addTimeline(){
   const date=document.getElementById("tlDate").value;
   const title=document.getElementById("tlTitle").value.trim();
   const desc=document.getElementById("tlDesc").value.trim();
-  if(!date||!title){alert("请输入日期和事件标题");return;}
+  if(!date||!title){showToast("请输入日期和事件标题", true);return;}
   blogData.timeline.push({date,title,desc});
   saveData("添加时间记录："+title);
   renderTimeline();
@@ -439,7 +469,7 @@ function delLedger(i){
 
 function addDiary(){
   const content=document.getElementById("diaryContent").value.trim();
-  if(!content){alert("请写点内容");return;}
+  if(!content){showToast("请写点内容", true);return;}
   blogData.diary.push({date:new Date().toISOString().slice(0,10),content});
   saveData("写日记");
   renderDiary();
@@ -459,7 +489,7 @@ function delDiary(i){
 
 function addAdvisor(){
   const content=document.getElementById("advContent").value.trim();
-  if(!content){alert("请写点内容");return;}
+  if(!content){showToast("请写点内容", true);return;}
   blogData.advisor.push({date:new Date().toISOString().slice(0,10),content});
   saveData("添加导师指导记录");
   renderAdvisor();

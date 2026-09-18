@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理后台 | 思齐的个人主页</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#2563eb;--primary-light:#dbeafe;--primary-dark:#1d4ed8;--bg:#f1f5f9;--card:#fff;--text:#1e293b;--text2:#64748b;--text3:#94a3b8;--border:#e2e8f0;--danger:#ef4444;--success:#10b981;--radius:8px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+a{color:var(--primary);text-decoration:none}
+
+/* 登录页 */
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh}
+.login-box{background:var(--card);border-radius:12px;padding:40px;width:360px;box-shadow:0 10px 40px rgba(0,0,0,.1)}
+.login-box h2{text-align:center;margin-bottom:24px;font-size:1.4rem}
+.login-box input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:.95rem;margin-bottom:16px;font-family:inherit}
+.login-box input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+.login-box .btn{width:100%;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:.95rem;cursor:pointer;font-family:inherit}
+.login-box .btn:hover{background:var(--primary-dark)}
+.login-error{color:var(--danger);font-size:.85rem;text-align:center;margin-top:8px;display:none}
+
+/* 主后台 */
+.admin-header{background:var(--card);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.admin-header h1{font-size:1.1rem}
+.admin-header .actions{display:flex;gap:10px}
+.btn{padding:7px 16px;border-radius:6px;border:none;font-size:.85rem;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-outline{background:var(--card);color:var(--text2);border:1px solid var(--border)}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+.btn-danger{background:#fef2f2;color:var(--danger)}
+.btn-danger:hover{background:#fee2e2}
+.btn-sm{padding:4px 10px;font-size:.8rem}
+
+.admin-body{max-width:900px;margin:0 auto;padding:24px}
+.tabs{display:flex;gap:4px;margin-bottom:24px;flex-wrap:wrap}
+.tab{padding:8px 16px;border-radius:6px;font-size:.88rem;cursor:pointer;background:transparent;border:none;color:var(--text2);font-family:inherit}
+.tab:hover{background:var(--primary-light);color:var(--primary)}
+.tab.active{background:var(--primary);color:#fff}
+
+.panel{display:none}
+.panel.active{display:block}
+.panel h3{font-size:1.05rem;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+
+.item-row{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start}
+.item-row .row-body{flex:1}
+.item-row .row-title{font-weight:600;font-size:.92rem;margin-bottom:2px}
+.item-row .row-meta{font-size:.8rem;color:var(--text3)}
+.item-row .row-actions{display:flex;gap:6px;flex-shrink:0}
+
+.add-form{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px}
+.add-form h4{font-size:.9rem;margin-bottom:12px;color:var(--text2)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.form-grid input,.form-grid select,.form-grid textarea{padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:.88rem;font-family:inherit;width:100%}
+.form-grid textarea{grid-column:1/-1;min-height:60px;resize:vertical}
+.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{outline:none;border-color:var(--primary)}
+
+.data-tools{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.empty{text-align:center;padding:32px;color:var(--text3);font-size:.88rem}
+
+@media(max-width:640px){
+.admin-body{padding:16px}
+.form-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- 登录页 -->
+<div class="login-wrap" id="loginPage">
+  <div class="login-box">
+    <h2>思齐的博客后台</h2>
+    <input type="password" id="pwdInput" placeholder="请输入管理密码" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn" onclick="doLogin()">登 录</button>
+    <div class="login-error" id="loginError">密码错误</div>
+  </div>
+</div>
+
+<!-- 后台主界面 -->
+<div id="adminMain" style="display:none">
+  <div class="admin-header">
+    <h1>管理后台</h1>
+    <div class="actions">
+      <a href="index.html" class="btn btn-outline">查看前台</a>
+      <button class="btn btn-outline" onclick="doLogout()">退出登录</button>
+    </div>
+  </div>
+  <div class="admin-body">
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-t="courses">课程</button>
+      <button class="tab" data-t="papers">论文</button>
+      <button class="tab" data-t="notices">通知</button>
+      <button class="tab" data-t="class">班级</button>
+      <button class="tab" data-t="life">生活服务</button>
+      <button class="tab" data-t="softwares">软件下载</button>
+      <button class="tab" data-t="data">数据管理</button>
+    </div>
+
+    <!-- 课程 -->
+    <div class="panel active" id="panel-courses">
+      <h3>我的课程</h3>
+      <div class="add-form">
+        <h4>添加课程</h4>
+        <div class="form-grid">
+          <input id="c_icon" placeholder="图标 emoji（如 📐）">
+          <input id="c_title" placeholder="课程名称">
+          <input id="c_desc" placeholder="描述">
+          <input id="c_link" placeholder="链接 URL">
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addItem('courses')">添加</button>
+      </div>
+      <div id="list-courses"></div>
+    </div>
+
+    <!-- 论文 -->
+    <div class="panel" id="panel-papers">
+      <h3>论文管理</h3>
+      <div class="add-form">
+        <h4>添加论文</h4>
+        <div class="form-grid">
+          <input id="p_title" placeholder="论文标题">
+          <select id="p_status"><option>已发表</option><option>在投</option><option>阅读中</option></select>
+          <input id="p_year" placeholder="年份（如 2026）">
+          <input id="p_desc" placeholder="备注">
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addItem('papers')">添加</button>
+      </div>
+      <div id="list-papers"></div>
+    </div>
+
+    <!-- 通知 -->
+    <div class="panel" id="panel-notices">
+      <h3>学校通知</h3>
+      <div class="add-form">
+        <h4>添加通知</h4>
+        <div class="form-grid">
+          <input id="n_title" placeholder="通知标题">
+          <input id="n_source" placeholder="来源（如 研究生院）">
+          <input id="n_date" type="date">
+          <select id="n_level"><option value="red">重要</option><option value="orange">关注</option><option value="blue">一般</option></select>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addItem('notices')">添加</button>
+      </div>
+      <div id="list-notices"></div>
+    </div>
+
+    <!-- 班级 -->
+    <div class="panel" id="panel-class">
+      <h3>班级事务</h3>
+      <div class="add-form">
+        <h4>添加班级事项</h4>
+        <div class="form-grid">
+          <input id="cl_title" placeholder="标题">
+          <select id="cl_type"><option>通知</option><option>活动</option></select>
+          <input id="cl_date" type="date">
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addItem('classItems')">添加</button>
+      </div>
+      <div id="list-classItems"></div>
+    </div>
+
+    <!-- 生活服务 -->
+    <div class="panel" id="panel-life">
+      <h3>生活服务</h3>
+      <div class="add-form">
+        <h4>添加服务链接</h4>
+        <div class="form-grid">
+          <input id="l_icon" placeholder="图标 emoji">
+          <input id="l_title" placeholder="名称">
+          <input id="l_desc" placeholder="描述">
+          <input id="l_url" placeholder="链接 URL">
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addItem('lifeServices')">添加</button>
+      </div>
+      <div id="list-lifeServices"></div>
+    </div>
+
+    <!-- 软件下载 -->
+    <div class="panel" id="panel-softwares">
+      <h3>软件下载</h3>
+      <div class="add-form">
+        <h4>添加软件</h4>
+        <div class="form-grid">
+          <input id="s_icon" placeholder="图标 emoji">
+          <input id="s_title" placeholder="软件名称">
+          <input id="s_desc" placeholder="描述">
+          <input id="s_url" placeholder="下载链接 URL">
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addItem('softwares')">添加</button>
+      </div>
+      <div id="list-softwares"></div>
+    </div>
+
+    <!-- 数据管理 -->
+    <div class="panel" id="panel-data">
+      <h3>数据管理</h3>
+      <p style="font-size:.88rem;color:var(--text2);margin-bottom:16px">
+        博客内容数据保存在你当前浏览器中。导出备份后，可以在其他设备导入恢复。
+      </p>
+      <div class="data-tools">
+        <button class="btn btn-outline" onclick="exportData()">导出数据（下载备份）</button>
+        <button class="btn btn-outline" onclick="document.getElementById('importFile').click()">导入数据</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+        <button class="btn btn-danger" onclick="resetData()">恢复默认内容</button>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;font-size:.85rem;color:var(--text2)">
+        <p><strong>注意：</strong></p>
+        <p>· 前台的"记账"、"日记"、"导师指导"数据是个人私密数据，只存在你自己浏览器里，不在此管理</p>
+        <p>· 如果你换了电脑或浏览器，博客的课程、通知等内容会恢复默认，请记得导出备份</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ADMIN_PWD = "syj3008338"; // 默认密码，可修改
+
+// ===== 登录 =====
+function doLogin(){
+  const pwd = document.getElementById("pwdInput").value;
+  if(pwd === ADMIN_PWD){
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("adminMain").style.display="block";
+    renderAll();
+  } else {
+    document.getElementById("loginError").style.display="block";
+  }
+}
+function doLogout(){
+  localStorage.removeItem("benyia_admin_auth");
+  location.reload();
+}
+
+// ===== 数据 =====
+const DEFAULTS = {
+  courses: [
+    {icon:"📐", title:"自动控制原理", desc:"教材、PPT、课后习题答案", link:"#"},
+    {icon:"🧠", title:"神经网络与深度学习", desc:"课件、上机指导、参考书", link:"#"},
+    {icon:"💻", title:"计算机控制系统", desc:"教材、章节PPT、习题解答", link:"#"},
+    {icon:"⚙️", title:"现代控制理论", desc:"状态空间分析、最优控制", link:"#"}
+  ],
+  papers: [
+    {title:"基于深度学习的故障诊断方法研究", status:"在投", year:"2026", desc:""},
+    {title:"自适应控制算法综述", status:"阅读中", year:"", desc:"参考文献"}
+  ],
+  notices: [
+    {title:"2026年秋季学期选课通知", source:"研究生院", date:"2026-09-01", level:"red"},
+    {title:"研究生奖学金评定工作安排", source:"学院", date:"2026-09-10", level:"orange"},
+    {title:"图书馆数据库访问方式变更通知", source:"图书馆", date:"2026-09-05", level:"blue"}
+  ],
+  classItems: [
+    {title:"组会时间调整为每周四下午2点", type:"通知", date:"2026-09-15"},
+    {title:"班级聚餐（时间待定）", type:"活动", date:""}
+  ],
+  lifeServices: [
+    {icon:"🛒", title:"淘宝", desc:"购物", url:"https://www.taobao.com"},
+    {icon:"🚄", title:"12306", desc:"火车票预订", url:"https://www.12306.cn"},
+    {icon:"🍜", title:"饿了么", desc:"外卖订餐", url:"https://www.ele.me"},
+    {icon:"🗺️", title:"百度地图", desc:"导航出行", url:"https://map.baidu.com"},
+    {icon:"💡", title:"知乎", desc:"知识问答", url:"https://www.zhihu.com"},
+    {icon:"🐙", title:"GitHub", desc:"代码托管", url:"https://github.com"}
+  ],
+  softwares: [
+    {icon:"🐍", title:"Python", desc:"多版本下载", url:"https://www.python.org/downloads/"},
+    {icon:"📝", title:"VS Code", desc:"代码编辑器", url:"https://code.visualstudio.com/"},
+    {icon:"📊", title:"Anaconda", desc:"Python 数据科学发行版", url:"https://www.anaconda.com/download"},
+    {icon:"🔢", title:"MATLAB", desc:"数学计算与仿真", url:"https://www.mathworks.com/products/matlab.html"},
+    {icon:"🔧", title:"Vivado", desc:"FPGA 开发工具", url:"https://www.xilinx.com/products/design-tools/vivado.html"},
+    {icon:"📦", title:"Git", desc:"版本控制工具", url:"https://git-scm.com/downloads"}
+  ]
+};
+
+function getBlog(){
+  try {
+    const b = JSON.parse(localStorage.getItem("benyia_blog"));
+    if(b) return b;
+  } catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULTS));
+}
+function saveBlog(b){ localStorage.setItem("benyia_blog", JSON.stringify(b)); }
+
+// ===== Tab 切换 =====
+document.querySelectorAll(".tab").forEach(t=>{
+  t.onclick=()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    document.getElementById("panel-"+t.dataset.t).classList.add("active");
+  };
+});
+
+// ===== 渲染列表 =====
+function renderList(key, fields, labelFn){
+  const b = getBlog();
+  const list = b[key] || [];
+  const el = document.getElementById("list-"+key);
+  if(!list.length){ el.innerHTML='<div class="empty">暂无内容，添加一条吧</div>'; return; }
+  el.innerHTML = list.map((item,i)=>`
+    <div class="item-row">
+      <div class="row-body">
+        <div class="row-title">${labelFn(item)}</div>
+        <div class="row-meta">${fields.map(f=>`${item[f]||""}`).filter(Boolean).join(" · ")}</div>
+      </div>
+      <div class="row-actions">
+        <button class="btn btn-outline btn-sm" onclick="editItem('${key}',${i})">编辑</button>
+        <button class="btn btn-danger btn-sm" onclick="delItem('${key}',${i})">删除</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function renderAll(){
+  renderList("courses", ["icon","desc","link"], i=>i.title);
+  renderList("papers", ["status","year","desc"], i=>i.title);
+  renderList("notices", ["source","date"], i=>i.title);
+  renderList("classItems", ["type","date"], i=>i.title);
+  renderList("lifeServices", ["desc","url"], i=>i.title);
+  renderList("softwares", ["desc","url"], i=>i.title);
+}
+
+// ===== 添加 =====
+function addItem(key){
+  const b = getBlog();
+  if(!b[key]) b[key]=[];
+  let item = {};
+  switch(key){
+    case "courses":
+      item = {icon:val("c_icon"), title:val("c_title"), desc:val("c_desc"), link:val("c_link")||"#"};
+      clearInputs(["c_icon","c_title","c_desc","c_link"]); break;
+    case "papers":
+      item = {title:val("p_title"), status:val("p_status"), year:val("p_year"), desc:val("p_desc")};
+      clearInputs(["p_title","p_year","p_desc"]); break;
+    case "notices":
+      item = {title:val("n_title"), source:val("n_source"), date:val("n_date"), level:val("n_level")};
+      clearInputs(["n_title","n_source","n_date"]); break;
+    case "classItems":
+      item = {title:val("cl_title"), type:val("cl_type"), date:val("cl_date")};
+      clearInputs(["cl_title","cl_date"]); break;
+    case "lifeServices":
+      item = {icon:val("l_icon"), title:val("l_title"), desc:val("l_desc"), url:val("l_url")};
+      clearInputs(["l_icon","l_title","l_desc","l_url"]); break;
+    case "softwares":
+      item = {icon:val("s_icon"), title:val("s_title"), desc:val("s_desc"), url:val("s_url")};
+      clearInputs(["s_icon","s_title","s_desc","s_url"]); break;
+  }
+  if(!item.title){ alert("标题不能为空"); return; }
+  b[key].push(item);
+  saveBlog(b);
+  renderAll();
+}
+
+function val(id){ return document.getElementById(id).value.trim(); }
+function clearInputs(ids){ ids.forEach(id=>document.getElementById(id).value=""); }
+
+// ===== 删除 =====
+function delItem(key, idx){
+  if(!confirm("确定删除？")) return;
+  const b = getBlog();
+  b[key].splice(idx,1);
+  saveBlog(b);
+  renderAll();
+}
+
+// ===== 编辑 =====
+function editItem(key, idx){
+  const b = getBlog();
+  const item = b[key][idx];
+  const newTitle = prompt("编辑标题：", item.title);
+  if(newTitle === null) return;
+  item.title = newTitle;
+  const newDesc = prompt("编辑描述（可选）：", item.desc || item.source || item.status || "");
+  if(newDesc !== null){
+    if(item.desc !== undefined) item.desc = newDesc;
+    else if(item.source !== undefined) item.source = newDesc;
+  }
+  saveBlog(b);
+  renderAll();
+}
+
+// ===== 导出/导入 =====
+function exportData(){
+  const b = getBlog();
+  const blob = new Blob([JSON.stringify(b, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "benyia_blog_backup.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function importData(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    try {
+      const data = JSON.parse(ev.target.result);
+      saveBlog(data);
+      renderAll();
+      alert("导入成功！");
+    } catch(err){ alert("文件格式错误"); }
+  };
+  reader.readAsText(file);
+}
+function resetData(){
+  if(!confirm("确定恢复默认内容？当前修改会丢失！")) return;
+  localStorage.removeItem("benyia_blog");
+  renderAll();
+}
+</script>
+</body>
+</html>

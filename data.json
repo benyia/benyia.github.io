@@ -145,7 +145,14 @@
       "desc": "研究生开题答辩"
     }
   ],
-  "ledger": [],
+  "ledger": [
+    {
+      "date": "2026-09-18",
+      "type": "expense",
+      "amount": 14,
+      "desc": "花生米，鸡架"
+    }
+  ],
   "diary": [],
   "advisor": [],
   "logs": [

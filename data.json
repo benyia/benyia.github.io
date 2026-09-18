@@ -1,7 +1,11 @@
 {
   "siteConfig": {
     "title": "思齐个人主页",
-    "subtitle": "钟爱奥迪A6"
+    "subtitle": "钟爱奥迪A6",
+    "about": "你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",
+    "avatar": "思",
+    "name": "思齐",
+    "bio": "控制工程研究生 · 记录学习与生活"
   },
   "courses": [
     {
@@ -13,15 +17,12 @@
       "files": [
         {
           "name": "第1章 绪论.pdf",
-          "url": "https://benyia.github.io/benyia.github.io/files/1789738888760_第1章_绪论.pdf",
-          "type": "PDF"
-        },
-        {
-          "name": "第1章 绪论.pdf",
-          "url": "https://benyia.github.io/benyia.github.io/files/1789738892078_第1章_绪论.pdf",
+          "url": "files/1789738888760_第1章_绪论.pdf",
           "type": "PDF"
         }
-      ]
+      ],
+      "abstract": "",
+      "tags": []
     },
     {
       "icon": "🧠",
@@ -29,7 +30,9 @@
       "desc": "课件、上机指导、参考书",
       "intro": "深度学习基础、CNN、RNN、Transformer等模型原理与实践应用。",
       "progress": 30,
-      "files": []
+      "files": [],
+      "abstract": "",
+      "tags": []
     }
   ],
   "papers": [
@@ -43,7 +46,9 @@
         "中文"
       ],
       "file": "",
-      "fileName": ""
+      "fileName": "",
+      "files": [],
+      "abstract": ""
     },
     {
       "title": "Adaptive Control: A Survey",
@@ -55,7 +60,9 @@
         "英文"
       ],
       "file": "",
-      "fileName": ""
+      "fileName": "",
+      "files": [],
+      "abstract": "参考文献综述"
     }
   ],
   "notices": [
@@ -74,7 +81,8 @@
       "date": "2026-09-15",
       "content": "全体同学注意，本周组会时间调整为周四下午2点，地点实验室。",
       "file": "",
-      "fileName": ""
+      "fileName": "",
+      "files": []
     },
     {
       "title": "体检",
@@ -82,7 +90,8 @@
       "date": "2026-09-01",
       "content": "根据学校要求，新生入学时需要进行体检，体检费用为30元/人，体检需要抽血，当天早上6点半空腹进行抽血，大家交完费用后，体检表随后会统一下发给各位同学。这是体检须知和体检时间安排，请大家及时查收。",
       "file": "",
-      "fileName": ""
+      "fileName": "",
+      "files": []
     }
   ],
   "lifeServices": [
@@ -119,38 +128,13 @@
       "fileName": ""
     }
   ],
-  "softwares": [
-    {
-      "icon": "🐍",
-      "title": "Python",
-      "desc": "多版本下载",
-      "url": "https://www.python.org/downloads/"
-    },
-    {
-      "icon": "📝",
-      "title": "VS Code",
-      "desc": "代码编辑器",
-      "url": "https://code.visualstudio.com/"
-    }
-  ],
-  "timeline": [
-    {
-      "date": "2026-09-01",
-      "title": "秋季学期开始",
-      "desc": "新学期正式开学"
-    },
-    {
-      "date": "2026-10-15",
-      "title": "开题报告",
-      "desc": "研究生开题答辩"
-    }
-  ],
   "ledger": [
     {
       "date": "2026-09-18",
       "type": "expense",
       "amount": 14,
-      "desc": "花生米，鸡架"
+      "desc": "花生米，鸡架",
+      "category": "其他"
     }
   ],
   "diary": [],
@@ -171,22 +155,6 @@
     {
       "time": "2026-09-18 23:24",
       "action": "删除论文"
-    },
-    {
-      "time": "2026-09-18 23:18",
-      "action": "添加论文：1111"
-    },
-    {
-      "time": "2026-09-18 23:18",
-      "action": "记账：¥1111.00"
-    },
-    {
-      "time": "2026-09-18 23:18",
-      "action": "发布通知：1111"
-    },
-    {
-      "time": "2026-09-18 23:17",
-      "action": "添加论文：1111"
     },
     {
       "time": "2026/9/18 21:45:57",
@@ -212,5 +180,74 @@
       "time": "2026/9/18 21:41:32",
       "action": "编辑课程：自动控制原理"
     }
-  ]
+  ],
+  "categories": [
+    {
+      "icon": "📚",
+      "name": "课程学习",
+      "section": "courses"
+    },
+    {
+      "icon": "📝",
+      "name": "论文",
+      "section": "papers"
+    },
+    {
+      "icon": "🔔",
+      "name": "学校通知",
+      "section": "notices"
+    },
+    {
+      "icon": "👥",
+      "name": "班级事务",
+      "section": "class"
+    }
+  ],
+  "tags": [
+    "控制工程",
+    "深度学习",
+    "FPGA",
+    "Python"
+  ],
+  "quickLinks": [
+    {
+      "icon": "☁️",
+      "title": "百度网盘",
+      "url": "https://pan.baidu.com"
+    },
+    {
+      "icon": "🚄",
+      "title": "12306",
+      "url": "https://www.12306.cn"
+    },
+    {
+      "icon": "🐙",
+      "title": "GitHub",
+      "url": "https://github.com"
+    },
+    {
+      "icon": "💡",
+      "title": "知乎",
+      "url": "https://www.zhihu.com"
+    }
+  ],
+  "ledgerCategories": {
+    "expense": [
+      "吃饭",
+      "买东西",
+      "生活用品",
+      "交通",
+      "娱乐",
+      "学习",
+      "医疗",
+      "其他"
+    ],
+    "income": [
+      "工资",
+      "奖学金",
+      "补贴",
+      "红包",
+      "其他"
+    ]
+  }
 }

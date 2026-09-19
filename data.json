@@ -7,8 +7,8 @@
     "defaultImage": "",
     "columns": "2",
     "defaultAvatar": "",
-    "loginHint": "",
-    "coverPan": false,
+    "loginHint": "s3069988193@163.com",
+    "coverPan": true,
     "coverPanSec": 5,
     "name": "思齐",
     "bio": "控制工程研究生 · 记录学习与生活"
@@ -284,6 +284,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-19 10:56",
+      "action": "修改站点设置"
+    },
     {
       "time": "2026-09-19 10:53",
       "action": "修改站点设置"

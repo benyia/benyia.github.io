@@ -228,6 +228,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-19 09:20",
+      "action": "编辑名单：史晏杰"
+    },
+    {
       "time": "2026-09-19 09:19",
       "action": "编辑通知：学校举行2026级新生开学典礼暨军训总结大会"
     },
@@ -466,7 +470,8 @@
       "homeAddress": "",
       "note": "",
       "photo": "",
-      "images": []
+      "images": [],
+      "show": false
     }
   ],
   "rosterConfig": {

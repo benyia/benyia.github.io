@@ -250,6 +250,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-19 09:57",
+      "action": "编辑名单：史晏杰"
+    },
+    {
       "time": "2026-09-19 09:55",
       "action": "修改站点设置"
     },
@@ -599,7 +603,7 @@
       "political": "共青团员",
       "homeAddress": "",
       "note": "",
-      "photo": "",
+      "photo": "files/1789783018217_1_pohb49f2_人物.png",
       "images": [],
       "show": true,
       "hide": [

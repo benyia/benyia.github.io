@@ -395,7 +395,7 @@ const PAGE_TITLES = {
 };
 
 const DEFAULT_DATA = {
-  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", name:"思齐", bio:"控制工程研究生", defaultImage:"files/default-cover.jpg"},
+  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", name:"思齐", bio:"控制工程研究生", defaultImage:"files/default-cover.jpg", defaultAvatar:"files/default-avatar.png"},
   categories: [
     {icon:"📚", name:"课程学习", section:"courses"},
     {icon:"📝", name:"论文", section:"papers"},
@@ -744,11 +744,23 @@ function renderMedia(){
   var list = mediaFilter==="all" ? all : all.filter(function(m){return m.type===mediaFilter;});
   document.getElementById("mediaList").innerHTML = list.map(function(m){
     var f = collectFiles(m)[0];
-    var icon = m.type==="music"?"🎵":m.type==="video"?"🎬":"🖼️";
-    var img = (m.type==="image" && f && f.url) ? '<img src="'+esc(f.url)+'" style="width:100%;border-radius:8px;margin-bottom:10px" alt="">' : '';
-    var dl = (f && f.url) ? '<div style="margin-top:10px"><a class="btn" href="'+esc(f.url)+'" download target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.82rem">下载 '+esc(f.name)+'</a></div>' : '';
-    if(m.url) dl += '<div style="margin-top:10px"><a class="btn" href="'+esc(m.url)+'" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.82rem">打开链接</a></div>';
-    return '<div class="article-card"><div class="article-body">'+img+'<div class="article-title">'+icon+' '+esc(m.title)+'</div>'+(m.desc?'<div class="article-desc">'+esc(m.desc)+'</div>':"")+dl+'</div></div>';
+    var icon = m.type==="music" ? "🎵" : (m.type==="video" ? "🎬" : "🖼️");
+    var player = "";
+    if(f && f.url){
+      var nm = String(f.name||"");
+      var dot = nm.lastIndexOf(".");
+      var ext = dot >= 0 ? nm.slice(dot+1).toLowerCase() : "";
+      if(["mp3","wav","m4a","ogg","flac","aac","wma"].indexOf(ext) >= 0){
+        player = '<audio controls preload="metadata" src="'+esc(f.url)+'" style="width:100%;max-width:420px;margin-bottom:10px"></audio>';
+      }else if(["mp4","webm","mov","mkv","avi","m4v"].indexOf(ext) >= 0){
+        player = '<video controls preload="metadata" src="'+esc(f.url)+'" style="width:100%;border-radius:10px;margin-bottom:10px"></video>';
+      }else if(m.type==="image"){
+        player = '<img src="'+esc(f.url)+'" style="width:100%;border-radius:8px;margin-bottom:10px" alt="">';
+      }
+    }
+    var dl = (f && f.url) ? '<div style="margin-top:8px"><a class="btn" href="'+esc(f.url)+'" download target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.78rem">下载 '+esc(f.name)+'</a></div>' : '';
+    if(m.url) dl += '<div style="margin-top:8px"><a class="btn" href="'+esc(m.url)+'" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.78rem">打开链接</a></div>';
+    return '<div class="article-card"><div class="article-body">'+player+'<div class="article-title">'+icon+' '+esc(m.title)+'</div>'+(m.desc?'<div class="article-desc">'+esc(m.desc)+'</div>':"")+dl+'</div></div>';
   }).join("") || '<div class="empty">暂无内容</div>';
 }
 
@@ -855,8 +867,21 @@ function renderDiary(){
   }).join("") || '<div class="empty">暂无日记</div>';
 }
 function renderAdvisor(){
-  document.getElementById("advisorList").innerHTML = (blogData.advisor||[]).slice().reverse().map(function(d){
-    return '<div class="diary-item"><div class="diary-date">'+(d.count?('第 '+d.count+' 次指导 · '):"")+esc(d.date)+(d.time?' '+esc(d.time):"")+'</div><div class="diary-content">'+esc(d.content)+'</div>'+galleryHTML(d)+'</div>';
+  var list = (blogData.advisor||[]).slice().reverse();
+  document.getElementById("advisorList").innerHTML = list.map(function(d, idx){
+    var title = (d.count ? ("第 " + d.count + " 次指导") : "指导记录");
+    if(d.date) title += " · " + d.date;
+    if(d.time) title += " " + d.time;
+    var preview = String(d.content||"").split(String.fromCharCode(10)).join(" ").trim();
+    if(preview.length > 46) preview = preview.slice(0,46) + "…";
+    return '<details class="diary-item"'+(idx===0?" open":"")+'>'
+      + '<summary class="diary-summary">'
+      +   '<span class="diary-summary-main"><span class="diary-summary-title">'+esc(title)+'</span>'
+      +   (preview?'<span class="diary-summary-preview">'+esc(preview)+'</span>':"")+'</span>'
+      +   '<span class="diary-summary-arrow">▼</span>'
+      + '</summary>'
+      + '<div class="diary-body"><div class="diary-content">'+esc(d.content)+'</div>'+galleryHTML(d)+'</div>'
+      + '</details>';
   }).join("") || '<div class="empty">暂无记录</div>';
 }
 
@@ -872,9 +897,8 @@ function renderRoster(){
   var globalShow = !!(blogData.rosterConfig && blogData.rosterConfig.showSensitive);
   document.getElementById("rosterList").innerHTML = list.map(function(r){
     var hide = r.hide || [];
-    var photo = r.photo
-      ? '<div class="roster-photo">'+iconHTML(r.photo, (r.name||"?").slice(0,1))+'</div>'
-      : '<div class="roster-photo">'+esc((r.name||"?").slice(0,1))+'</div>';
+    var photoSrc = r.photo || (blogData.siteConfig && blogData.siteConfig.defaultAvatar) || "files/default-avatar.png";
+    var photo = '<div class="roster-photo"><img src="'+esc(photoSrc)+'" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=&#39;none&#39;;var n=this.nextElementSibling;if(n){n.style.display=&#39;flex&#39;;}"><span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.4rem">'+esc((r.name||"?").slice(0,1))+'</span></div>';
     var rows = FIELDS.filter(function(f){
       var k = f[0];
       if(!r[k]) return false;

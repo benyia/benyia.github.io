@@ -159,6 +159,9 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .list-cols.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .list-cols .article-card{margin-bottom:0}
 .list-cols .article-cover{height:110px}
+/* 封面图片自动上下滚动：background-position 从 0% 到 100% 正好覆盖 cover 裁切范围 */
+.article-cover.cover-pan{background-size:cover;background-repeat:no-repeat;background-position:50% 0;animation:panBg var(--pan-dur,14s) linear infinite}
+@keyframes panBg{from{background-position:50% 0}to{background-position:50% 100%}}
 @media(max-width:1000px){.list-cols.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.list-cols{grid-template-columns:1fr !important}}
 .diary-title{font-size:1.05rem;font-weight:700;margin:2px 0 10px}
@@ -395,7 +398,7 @@ const PAGE_TITLES = {
 };
 
 const DEFAULT_DATA = {
-  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", name:"思齐", bio:"控制工程研究生", defaultImage:"files/default-cover.jpg", defaultAvatar:"files/default-avatar.png"},
+  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", name:"思齐", bio:"控制工程研究生", defaultImage:"files/default-cover.jpg", defaultAvatar:"files/default-avatar.png", coverPan:true, coverPanSec:14},
   categories: [
     {icon:"📚", name:"课程学习", section:"courses"},
     {icon:"📝", name:"论文", section:"papers"},
@@ -468,9 +471,18 @@ function iconHTML(icon, fallback){
 }
 function coverHTML(item, iconFallback){
   var imgs = collectImages(item);
-  if(imgs.length) return '<div class="article-cover" style="padding:0;overflow:hidden"><img src="'+esc(imgs[0].url)+'" style="width:100%;height:100%;object-fit:cover" alt=""></div>';
-  var def = (blogData.siteConfig && blogData.siteConfig.defaultImage) || "";
-  if(def) return '<div class="article-cover" style="padding:0;overflow:hidden"><img src="'+esc(def)+'" style="width:100%;height:100%;object-fit:cover" alt=""></div>';
+  var sc = blogData.siteConfig || {};
+  var def = sc.defaultImage || "";
+  var src = imgs.length ? imgs[0].url : def;
+  if(src){
+    var panOn = (sc.coverPan !== false);
+    var sec = parseInt(sc.coverPanSec, 10);
+    if(!sec || sec < 3) sec = 14;
+    if(panOn){
+      return '<div class="article-cover cover-pan" style="background-image:url(' + esc(src) + ');--pan-dur:' + sec + 's"></div>';
+    }
+    return '<div class="article-cover" style="padding:0;overflow:hidden"><img src="'+esc(src)+'" style="width:100%;height:100%;object-fit:cover" alt=""></div>';
+  }
   var ic = (item && item.icon) || iconFallback || "📄";
   return '<div class="article-cover">'+iconHTML(ic, "📄")+'</div>';
 }

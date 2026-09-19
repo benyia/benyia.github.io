@@ -222,6 +222,13 @@
       "amount": 14,
       "desc": "花生米，鸡架",
       "category": "其他"
+    },
+    {
+      "date": "2026-09-19",
+      "type": "expense",
+      "amount": 20,
+      "desc": "deepseek",
+      "category": "买东西"
     }
   ],
   "diary": [

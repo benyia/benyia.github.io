@@ -650,7 +650,16 @@ function renderCourses(){
 function openCourse(idx){
   currentCourseIdx = idx;
   var c = blogData.courses[idx];
-  document.getElementById("cdIcon").textContent = c.icon||"📐";
+  var icEl = document.getElementById("cdIcon");
+  var icVal = c.icon || "📐";
+  if(isImgUrl(icVal)){
+    /* 图标是上传的图片：详情页只显示标题，图片在下方画廊里已经有了 */
+    icEl.style.display = "none";
+    icEl.textContent = "";
+  }else{
+    icEl.style.display = "block";
+    icEl.textContent = icVal;
+  }
   document.getElementById("cdName").textContent = c.title;
   document.getElementById("cdIntro").textContent = c.intro||"";
   document.getElementById("cdProgressBar").style.width = (c.progress||0)+"%";

@@ -231,6 +231,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-19 09:45",
+      "action": "编辑名单：史晏杰"
+    },
+    {
       "time": "2026-09-19 09:42",
       "action": "编辑生活服务：百度网盘"
     },
@@ -560,9 +564,9 @@
       "images": [],
       "show": true,
       "hide": [
+        "birthday",
         "phone",
-        "note",
-        "birthday"
+        "note"
       ]
     }
   ],

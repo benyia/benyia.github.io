@@ -186,10 +186,17 @@
     {
       "icon": "files/1789780026334_1_ekd3rm8j_淘宝.png",
       "title": "淘宝",
-      "desc": "",
+      "desc": "购买",
       "url": "https://www.taobao.com/",
       "files": [],
-      "images": []
+      "images": [
+        {
+          "name": "淘宝.png",
+          "url": "files/1789780121318_2_v44nko79_淘宝.png",
+          "type": "PNG",
+          "size": 3165
+        }
+      ]
     }
   ],
   "ledger": [
@@ -225,6 +232,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-19 09:08",
+      "action": "编辑生活服务：淘宝"
+    },
     {
       "time": "2026-09-19 09:07",
       "action": "添加生活服务：淘宝"

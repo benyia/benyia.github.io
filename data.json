@@ -199,12 +199,12 @@
       "images": []
     },
     {
-      "icon": "📁",
+      "icon": "files/1789782855282_18_15atjl8o_123云盘.png",
       "title": "123云盘",
       "desc": "不限速云盘",
       "url": "https://www.123pan.com",
-      "file": "",
-      "fileName": ""
+      "files": [],
+      "images": []
     },
     {
       "icon": "files/1789782153736_9_yqopq1ps_淘宝.png",
@@ -249,6 +249,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-19 09:54",
+      "action": "编辑生活服务：123云盘"
+    },
     {
       "time": "2026-09-19 09:54",
       "action": "编辑生活服务：夸克网盘"

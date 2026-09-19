@@ -93,9 +93,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 <body>
 
 <div class="login-screen" id="loginScreen">
-  <h1>登录</h1>
-  <label class="lg-label" for="userInput">账号</label>
-  <input type="text" class="lg-input" id="userInput" placeholder="用户名或邮箱地址" autocomplete="username" onkeydown="if(event.key==='Enter')login()">
+  <h1>🔐 管理后台</h1>
   <label class="lg-label" for="pwdInput">密码</label>
   <div class="lg-pwdwrap">
     <input type="password" class="lg-input" id="pwdInput" placeholder="请输入密码" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
@@ -106,7 +104,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     <span class="lg-link" onclick="forgotPwd()">忘记密码？</span>
   </div>
   <button type="button" class="lg-submit" onclick="login()">登录</button>
-  <div class="login-hint" id="loginHint">默认密码 syj3008338，登录后可在「站点设置」中修改</div>
+  <div class="login-hint" id="loginHint"></div>
 </div>
 
 <div class="main" id="mainPanel">
@@ -184,10 +182,6 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         </div>
         <div class="form-row">
           <input type="text" id="cfgLoginHint" placeholder="登录页提示文字（留空=不显示；建议不要写真实密码）">
-        </div>
-        <div class="form-row">
-          <input type="text" id="cfgLoginUser" placeholder="登录账号（留空=不校验账号，只校验密码）">
-          <button class="btn btn-primary btn-sm" onclick="saveLoginUser()">保存账号</button>
         </div>
         <div class="form-row"><textarea id="cfgAbout" placeholder="关于我的介绍..." style="min-height:150px"></textarea></div>
         <button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
@@ -626,7 +620,6 @@ const FILES_DIR = "files";
 const ADMIN_PWD = "syj3008338";
 const PWD_KEY = "benyia_admin_pwd";
 const TOKEN_KEY = "benyia_gh_token";
-const USER_KEY = "benyia_admin_user";
 
 /* 上传单个文件的建议上限（GitHub contents API 限制，超过请用 Git LFS 或网盘） */
 const MAX_FILE_MB = 100;
@@ -1005,16 +998,13 @@ function togglePwdView(){
     var h = d && d.siteConfig ? d.siteConfig.loginHint : null;
     var box = document.getElementById("loginHint");
     if(box && h !== null && h !== undefined) box.textContent = h;
+    else if(box && !box.textContent) box.textContent = "";
   }catch(e){}
 })();
 
-function getUser(){ return localStorage.getItem(USER_KEY) || ""; }
 function isLogged(){ try{ return localStorage.getItem("benyia_logged")==="1" || sessionStorage.getItem("benyia_logged")==="1"; }catch(e){ return false; } }
 function login(){
   var p = $("pwdInput").value;
-  var u = $("userInput") ? $("userInput").value.trim() : "";
-  var wantUser = getUser();
-  if(wantUser && u !== wantUser){ showToast("账号或密码错误", "error"); return; }
   if(p === getPwd()){
     try{
       if($("keepLogin") && $("keepLogin").checked) localStorage.setItem("benyia_logged","1");
@@ -1024,7 +1014,7 @@ function login(){
     $("mainPanel").style.display="block";
     initPanel();
   } else {
-    showToast("账号或密码错误", "error");
+    showToast("密码错误", "error");
   }
 }
 function forgotPwd(){
@@ -1034,13 +1024,6 @@ function logout(){
   try{ sessionStorage.removeItem("benyia_logged"); localStorage.removeItem("benyia_logged"); }catch(e){}
   location.reload();
 }
-function saveLoginUser(){
-  var u = $("cfgLoginUser").value.trim();
-  localStorage.setItem(USER_KEY, u);
-  showToast(u ? ("✅ 登录账号已设为：" + u) : "✅ 已取消账号校验（只校验密码）");
-  $("cfgLoginUser").placeholder = u ? "" : "登录账号（留空=不校验账号，只校验密码）";
-}
-
 function changePwd(){
   const a=$("pwdNew").value, b=$("pwdNew2").value;
   const st=$("pwdStatus");
@@ -1646,7 +1629,6 @@ function renderAll(){
   $("cfgColumns").value = sc.columns || "1";
   $("cfgDefaultAvatar").value = sc.defaultAvatar || "";
   $("cfgLoginHint").value = (sc.loginHint === undefined ? "" : sc.loginHint);
-  $("cfgLoginUser").value = getUser();
   $("cfgName").value   = sc.name || "";
   $("cfgBio").value    = sc.bio || "";
   $("tagsInput").value = (blogData.tags||[]).join(",");

@@ -230,6 +230,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-19 09:24",
+      "action": "编辑快速链接：deepseek"
+    },
+    {
       "time": "2026-09-19 09:20",
       "action": "修改站点设置"
     },
@@ -440,7 +444,7 @@
       "url": "https://www.zhihu.com"
     },
     {
-      "icon": "files/1789750469796_1_jr62fxot_微信图片_20260919005412_101_51.png",
+      "icon": "files/1789781089768_1_jgs7xaxv_DeeepSeek.png",
       "title": "deepseek",
       "url": "https://chat.deepseek.com/"
     }

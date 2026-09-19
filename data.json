@@ -250,6 +250,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-19 10:08",
+      "action": "添加名单：赵亮"
+    },
+    {
       "time": "2026-09-19 10:05",
       "action": "编辑课程：计算机控制系统"
     },
@@ -639,6 +643,28 @@
         "phone",
         "note"
       ]
+    },
+    {
+      "studentId": "221013028",
+      "name": "赵亮",
+      "gender": "男",
+      "className": "22测控一班",
+      "college": "能源与电气工程学院",
+      "major": "控制工程",
+      "dorm": "6309",
+      "phone": "18336705182",
+      "email": "",
+      "idCard": "",
+      "birthday": "",
+      "ethnicity": "",
+      "advisor": "",
+      "political": "",
+      "homeAddress": "",
+      "note": "",
+      "photo": "",
+      "images": [],
+      "show": true,
+      "hide": []
     }
   ],
   "rosterConfig": {

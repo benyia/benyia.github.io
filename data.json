@@ -229,6 +229,10 @@
   "logs": [
     {
       "time": "2026-09-19 09:20",
+      "action": "名单：隐藏敏感信息"
+    },
+    {
+      "time": "2026-09-19 09:20",
       "action": "名单：前台显示"
     },
     {
@@ -479,6 +483,6 @@
     }
   ],
   "rosterConfig": {
-    "showSensitive": true
+    "showSensitive": false
   }
 }

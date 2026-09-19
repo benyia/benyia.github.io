@@ -230,6 +230,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-19 09:35",
+      "action": "编辑快速链接：知乎"
+    },
+    {
       "time": "2026-09-19 09:34",
       "action": "编辑快速链接：GitHub"
     },
@@ -487,7 +491,7 @@
       "url": "https://github.com"
     },
     {
-      "icon": "💡",
+      "icon": "files/1789781716946_6_tauae3kj_知乎.png",
       "title": "知乎",
       "url": "https://www.zhihu.com"
     },

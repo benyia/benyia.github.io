@@ -185,7 +185,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         </div>
         <div class="form-row">
           <label style="font-size:.88rem;display:flex;align-items:center;gap:6px"><input type="checkbox" id="cfgCoverPan"> 鼠标悬停时封面自动滑动</label>
-          <label style="font-size:.88rem;display:flex;align-items:center;gap:6px">滑动时长：<input type="number" id="cfgCoverPanSec" min="1" max="60" step="1" value="6" style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:8px"> 秒（越小越快）</label>
+          <label style="font-size:.88rem;display:flex;align-items:center;gap:6px">滑动时长：<input type="number" id="cfgCoverPanSec" min="1" max="60" step="1" value="3" style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:8px"> 秒（越小越快）</label>
         </div>
         <div class="form-row"><textarea id="cfgAbout" placeholder="关于我的介绍..." style="min-height:150px"></textarea></div>
         <button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
@@ -629,7 +629,7 @@ const TOKEN_KEY = "benyia_gh_token";
 const MAX_FILE_MB = 100;
 
 const DEFAULT_DATA = {
-  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",avatar:"思",name:"思齐",bio:"控制工程研究生",coverPan:true,coverPanSec:6},
+  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",avatar:"思",name:"思齐",bio:"控制工程研究生",coverPan:true,coverPanSec:3},
   categories:[
     {icon:"📚",name:"课程学习",section:"courses"},
     {icon:"📝",name:"论文",section:"papers"},
@@ -1634,7 +1634,7 @@ function renderAll(){
   $("cfgDefaultAvatar").value = sc.defaultAvatar || "";
   $("cfgLoginHint").value = (sc.loginHint === undefined ? "" : sc.loginHint);
   $("cfgCoverPan").checked = (sc.coverPan !== false);
-  $("cfgCoverPanSec").value = (sc.coverPanSec || 6);
+  $("cfgCoverPanSec").value = (sc.coverPanSec || 3);
   $("cfgName").value   = sc.name || "";
   $("cfgBio").value    = sc.bio || "";
   $("tagsInput").value = (blogData.tags||[]).join(",");
@@ -2165,7 +2165,7 @@ function saveSiteConfig(){
     defaultAvatar: $("cfgDefaultAvatar").value.trim(),
     loginHint: $("cfgLoginHint").value,
     coverPan: $("cfgCoverPan").checked,
-    coverPanSec: parseInt($("cfgCoverPanSec").value, 10) || 6,
+    coverPanSec: parseInt($("cfgCoverPanSec").value, 10) || 3,
     name: $("cfgName").value.trim() || "思齐",
     bio: $("cfgBio").value.trim()
   };

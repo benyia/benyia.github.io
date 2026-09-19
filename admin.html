@@ -390,6 +390,8 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <button class="btn btn-ghost btn-sm" onclick="pickIcon('rPhoto')">上传照片</button>
           <label style="font-size:.85rem;display:flex;align-items:center;gap:5px"><input type="checkbox" id="rShow" checked> 前台显示</label>
         </div>
+        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">👁️ 前台可见字段</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">取消勾选 = 前台隐藏该项（如电话、邮箱）</span></div>
+        <div id="rosterFields" style="margin-bottom:12px;font-size:.82rem;display:flex;flex-wrap:wrap;gap:10px 14px"></div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 其他图片</b></div>
         <div id="imgList_roster" style="margin-bottom:6px"></div>
         <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('roster')">添加图片</button></div>
@@ -400,7 +402,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       </div>
       <div class="card">
         <h2>名单管理</h2>
-        <div class="note">⚠️ 身份证号、家庭住址、电话、邮箱是敏感信息。<b>默认不在公开页面显示</b>，需要时才在下面打勾。</div>
+        <div class="note">⚠️ 每个人的每一项都可以单独控制：下面每个人后面那排小勾选框，<b>取消勾选 = 前台隐藏该项</b>（比如只藏电话、留邮箱）。「整条显示」控制这个人整体是否出现在前台。</div>
         <div class="form-row">
           <label style="font-size:.85rem;display:flex;align-items:center;gap:6px"><input type="checkbox" id="rShowSensitive" onchange="toggleRosterSensitive()"> 在公开页面显示敏感信息</label>
         </div>
@@ -788,6 +790,7 @@ async function initPanel(){
   $("nDate").value = todayStr();
   $("clDate").value = todayStr();
   $("lgDate").value = todayStr();
+  renderRosterFields();
   await syncNow(true);
 }
 
@@ -1056,6 +1059,23 @@ function setImgDrafts(key, arr){
 }
 
 /* ---------- 名单 ---------- */
+const ROSTER_FIELDS = [
+  ["studentId","学号"], ["name","姓名"], ["gender","性别"], ["className","班级"],
+  ["college","学院"], ["major","专业"], ["dorm","宿舍号"], ["advisor","导师"],
+  ["ethnicity","民族"], ["political","政治面貌"], ["birthday","出生日期"],
+  ["phone","电话"], ["email","邮箱"], ["idCard","身份证号"], ["homeAddress","家庭住址"], ["note","备注"]
+];
+function renderRosterFields(){
+  var box = document.getElementById("rosterFields");
+  if(!box) return;
+  box.innerHTML = ROSTER_FIELDS.map(function(f){
+    return '<label style="display:flex;align-items:center;gap:4px;white-space:nowrap"><input type="checkbox" class="rfield" value="'+f[0]+'" checked> '+f[1]+'</label>';
+  }).join("");
+}
+function getHiddenFields(){
+  return Array.prototype.slice.call(document.querySelectorAll(".rfield")).filter(function(c){ return !c.checked; }).map(function(c){ return c.value; });
+}
+
 let editingRoster = null;
 function saveRoster(){
   var name = $("rName").value.trim();
@@ -1067,7 +1087,7 @@ function saveRoster(){
     idCard:$("rIdCard").value.trim(), birthday:$("rBirthday").value.trim(), ethnicity:$("rEthnicity").value.trim(),
     advisor:$("rAdvisor").value.trim(), political:$("rPolitical").value.trim(),
     homeAddress:$("rAddress").value.trim(), note:$("rNote").value.trim(),
-    photo:$("rPhoto").value.trim(), images:(imgDrafts.roster||[]).slice(), show: $("rShow").checked
+    photo:$("rPhoto").value.trim(), images:(imgDrafts.roster||[]).slice(), show: $("rShow").checked, hide: getHiddenFields()
   };
   blogData.roster = blogData.roster || [];
   if(editingRoster===null){ blogData.roster.push(item); saveData("添加名单："+name); }
@@ -1085,6 +1105,8 @@ function editRoster(i){
   $("rAdvisor").value=r.advisor||""; $("rPolitical").value=r.political||"";
   $("rAddress").value=r.homeAddress||""; $("rNote").value=r.note||""; $("rPhoto").value=r.photo||"";
   $("rShow").checked = (r.show !== false);
+  var hid = r.hide || [];
+  Array.prototype.slice.call(document.querySelectorAll(".rfield")).forEach(function(c){ c.checked = (hid.indexOf(c.value) < 0); });
   setImgDrafts("roster", r.images);
   $("rosterFormTitle").textContent = "编辑名单：" + (r.name||"");
   $("rosterEditBar").classList.add("on");
@@ -1096,6 +1118,7 @@ function cancelRosterEdit(){
   editingRoster = null;
   ["rStudentId","rName","rClass","rCollege","rMajor","rDorm","rPhone","rEmail","rIdCard","rBirthday","rEthnicity","rAdvisor","rPolitical","rAddress","rNote","rPhoto"].forEach(function(id){ $(id).value=""; });
   $("rGender").value = ""; $("rShow").checked = true;
+  Array.prototype.slice.call(document.querySelectorAll(".rfield")).forEach(function(c){ c.checked = true; });
   setImgDrafts("roster", []);
   $("rosterFormTitle").textContent = "添加名单成员";
   $("rosterEditBar").classList.remove("on");
@@ -1119,8 +1142,27 @@ function renderRoster(){
     if(r.dorm) parts.push("宿舍 "+esc(r.dorm));
     if(r.advisor) parts.push("导师 "+esc(r.advisor));
     var on = (r.show !== false);
-    return '<div class="item-row"><div class="info"><div class="title">'+esc(r.name)+(on?"":' <span style="font-size:.72rem;color:#ef4444">（前台隐藏）</span>')+'</div><div class="desc">'+parts.join(" · ")+'</div></div><div class="actions"><label style="font-size:.8rem;display:flex;align-items:center;gap:4px"><input type="checkbox" '+(on?"checked":"")+' data-ri="'+i+'" onclick="toggleRosterShow(this)"> 显示</label><button class="btn btn-ghost btn-sm" onclick="editRoster('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delRoster('+i+')">删除</button></div></div>';
+    var hid = r.hide || [];
+    var fieldBoxes = ROSTER_FIELDS.map(function(f){
+      var vis = (hid.indexOf(f[0]) < 0);
+      return '<label style="display:inline-flex;align-items:center;gap:3px;white-space:nowrap;color:'+(vis?"#475569":"#cbd5e1")+'"><input type="checkbox" '+(vis?"checked":"")+' data-ri="'+i+'" data-field="'+f[0]+'" onclick="toggleRosterField(this)"> '+f[1]+'</label>';
+    }).join("");
+    return '<div class="item-row"><div class="info"><div class="title">'+esc(r.name)+(on?"":' <span style="font-size:.72rem;color:#ef4444">（前台隐藏）</span>')+'</div><div class="desc">'+parts.join(" · ")+'</div>'
+      + '<div style="margin-top:8px;font-size:.76rem;display:flex;flex-wrap:wrap;gap:6px 12px;padding-top:8px;border-top:1px dashed #e2e8f0">'+fieldBoxes+'</div>'
+      + '</div><div class="actions"><label style="font-size:.8rem;display:flex;align-items:center;gap:4px"><input type="checkbox" '+(on?"checked":"")+' data-ri="'+i+'" onclick="toggleRosterShow(this)"> 整条显示</label><button class="btn btn-ghost btn-sm" onclick="editRoster('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delRoster('+i+')">删除</button></div></div>';
   }).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无名单</div>';
+}
+function toggleRosterField(cb){
+  var i = parseInt(cb.getAttribute("data-ri"),10);
+  var key = cb.getAttribute("data-field");
+  var r = blogData.roster[i];
+  if(!r) return;
+  r.hide = r.hide || [];
+  var idx = r.hide.indexOf(key);
+  if(cb.checked){ if(idx >= 0) r.hide.splice(idx,1); }
+  else { if(idx < 0) r.hide.push(key); }
+  saveData("名单字段可见性：" + key + (cb.checked ? " 显示" : " 隐藏"));
+  renderRoster();
 }
 function toggleRosterShow(cb){
   var i = parseInt(cb.getAttribute("data-ri"),10);

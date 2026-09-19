@@ -576,6 +576,17 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
   </div>
 </div>
 
+<div id="upProgressBox" style="display:none;position:fixed;bottom:22px;right:22px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.16);padding:14px 18px;z-index:1800;width:320px">
+  <div id="upProgressName" style="font-size:.82rem;margin-bottom:9px;word-break:break-all;color:var(--text)"></div>
+  <div style="height:9px;background:#e2e8f0;border-radius:99px;overflow:hidden">
+    <div id="upProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--primary),#34d399);transition:width .15s linear"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;margin-top:7px;font-size:.76rem;color:var(--text2)">
+    <span id="upProgressText">准备中…</span>
+    <span id="upProgressPct">0%</span>
+  </div>
+</div>
+
 <div id="imgModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,.72);z-index:2000;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)closeImgModal()">
   <div style="background:#fff;border-radius:14px;max-width:880px;width:100%;max-height:92vh;overflow:auto;padding:20px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
@@ -1292,6 +1303,41 @@ function hideProgress(kind){
   if(b) b.style.width = "0%";
 }
 
+/* ---------- 上传进度条 ---------- */
+function showUploadProgress(name){
+  var box = document.getElementById("upProgressBox");
+  if(!box) return;
+  document.getElementById("upProgressName").textContent = "正在上传：" + name;
+  document.getElementById("upProgressBar").style.width = "0%";
+  document.getElementById("upProgressPct").textContent = "0%";
+  document.getElementById("upProgressText").textContent = "准备中…";
+  box.style.display = "block";
+}
+function setUploadProgress(pct, loaded, total){
+  var b = document.getElementById("upProgressBar");
+  var p = document.getElementById("upProgressPct");
+  var t = document.getElementById("upProgressText");
+  if(b) b.style.width = pct + "%";
+  if(p) p.textContent = pct + "%";
+  if(t && loaded !== undefined) t.textContent = fmtSize(loaded) + " / " + fmtSize(total);
+}
+function finishUploadProgress(ok, msg){
+  var b = document.getElementById("upProgressBar");
+  var p = document.getElementById("upProgressPct");
+  var t = document.getElementById("upProgressText");
+  if(ok){
+    if(b) b.style.width = "100%";
+    if(p) p.textContent = "100%";
+    if(t) t.textContent = msg || "上传完成 ✅";
+  }else{
+    if(t) t.textContent = msg || "上传失败 ❌";
+  }
+  setTimeout(function(){
+    var box = document.getElementById("upProgressBox");
+    if(box) box.style.display = "none";
+  }, ok ? 1200 : 4000);
+}
+
 /* 刚上传的文件：GitHub Pages 还没发布，预览时加时间戳绕过缓存 */
 var freshFiles = {};
 function previewSrc(path){
@@ -1307,45 +1353,72 @@ async function uploadFile(file, kind){
   }
   if(!getStoredToken()) throw new Error("请先在「站点设置」里填写 GitHub Token");
 
-  const status = kindEl(kind,"UpStatus");
-  if(status && file.size > 2*1024*1024){
-    status.textContent = "正在编码「"+file.name+"」("+fmtSize(file.size)+")，大文件需要几秒…";
-    await new Promise(r=>setTimeout(r, 50));
-  }
-  const content = await fileToBase64(file);
+  var status = kindEl(kind, "UpStatus");
+  showUploadProgress(file.name);
+  if(status){ status.textContent = "正在编码 " + file.name + " …"; }
+  setUploadProgress(0);
+  if(file.size > 2*1024*1024){ await new Promise(function(r){ setTimeout(r, 50); }); }
 
-  let lastErr = "";
-  for(let attempt=1; attempt<=4; attempt++){
-    const safe = buildFilePath(file.name);                 /* 每次重试都换一个新路径 */
-    const apiPath = safe.split("/").map(encodeURIComponent).join("/");
-    const body = JSON.stringify({message:"Upload: "+file.name, content, branch:GH_BRANCH});
-    let res = null, json = null;
-    try{
-      res = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+apiPath, {
-        method:"PUT",
-        headers:Object.assign({}, ghHeaders(), {"Content-Type":"application/json"}),
-        body: body
-      });
-      try{ json = await res.json(); }catch(e){}
-    }catch(e){
-      lastErr = "网络错误："+e.message;
-      await new Promise(r=>setTimeout(r, 700*attempt));
-      continue;
-    }
+  var content = await fileToBase64(file);
+  var totalSize = file.size;
+  setUploadProgress(0, 0, totalSize);
 
-    if(res.ok){
-      freshFiles[safe] = Date.now();
-      return {name:file.name, url:safe, type:(file.name.split(".").pop()||"file").toUpperCase(), size:file.size};
-    }
-
-    lastErr = "HTTP "+res.status + (json && json.message ? ("："+json.message) : "");
-    if(attempt < 4 && (res.status===409 || res.status===422 || res.status>=500)){
+  var lastErr = "";
+  var lastStatus = 0;
+  for(var attempt=1; attempt<=4; attempt++){
+    var safe = buildFilePath(file.name);
+    var apiPath = safe.split("/").map(encodeURIComponent).join("/");
+    var body = JSON.stringify({message:"Upload: "+file.name, content:content, branch:GH_BRANCH});
+    if(attempt > 1){
       if(status) status.textContent = "上传冲突，正在重试（"+attempt+"/4）…";
-      await new Promise(r=>setTimeout(r, 700*attempt));
-      continue;
+      document.getElementById("upProgressText").textContent = "重试 " + attempt + "/4…";
+      setUploadProgress(0, 0, totalSize);
+      await new Promise(function(r){ setTimeout(r, 700*attempt); });
     }
-    break;
+    try{
+      await new Promise(function(resolve, reject){
+        var xhr = new XMLHttpRequest();
+        xhr.open("PUT", "https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+apiPath);
+        var hh = ghHeaders();
+        Object.keys(hh).forEach(function(k){ xhr.setRequestHeader(k, hh[k]); });
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.timeout = 600000;
+        xhr.upload.onprogress = function(e){
+          if(!e.lengthComputable) return;
+          var pct = Math.round(e.loaded / e.total * 100);
+          if(pct > 99) pct = 99;                       /* 99% 留给服务端处理 */
+          setUploadProgress(pct, Math.round(totalSize * pct / 100), totalSize);
+          if(status) status.textContent = "上传中 " + pct + "%　" + file.name;
+        };
+        xhr.onload = function(){
+          if(xhr.status >= 200 && xhr.status < 300){ resolve(); return; }
+          var m = "HTTP " + xhr.status;
+          try{ var j = JSON.parse(xhr.responseText); if(j.message) m += "：" + j.message; }catch(e){}
+          var err = new Error(m);
+          err.status = xhr.status;
+          reject(err);
+        };
+        xhr.onerror = function(){ reject(new Error("网络错误")); };
+        xhr.ontimeout = function(){ reject(new Error("上传超时")); };
+        xhr.send(body);
+      });
+
+      freshFiles[safe] = Date.now();
+      setUploadProgress(100, totalSize, totalSize);
+      finishUploadProgress(true, "上传完成 ✅ " + fmtSize(totalSize));
+      if(status) status.textContent = "✅ 已上传：" + file.name + "（记得点保存）";
+      return {name:file.name, url:safe, type:(file.name.split(".").pop()||"file").toUpperCase(), size:file.size};
+    }catch(e){
+      lastErr = e.message;
+      lastStatus = e.status || 0;
+      if(attempt < 4 && (lastStatus === 409 || lastStatus === 422 || lastStatus >= 500 || !lastStatus)){
+        continue;
+      }
+      break;
+    }
   }
+  finishUploadProgress(false, "上传失败 ❌ " + lastErr);
+  if(status) status.textContent = "❌ 上传失败：" + lastErr;
   throw new Error(lastErr);
 }
 

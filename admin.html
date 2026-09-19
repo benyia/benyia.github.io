@@ -14,7 +14,11 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .login-screen input{width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:12px;font-size:.95rem}
 .login-screen button{width:100%;padding:12px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:1rem;cursor:pointer}
 .login-screen button:hover{background:#059669}
-.login-hint{font-size:.78rem;color:var(--text3);text-align:center;margin-top:14px;line-height:1.5}
+.login-hint{font-size:.78rem;color:var(--text3);text-align:center;margin-top:14px;line-height:1.5;white-space:pre-wrap}
+.pwd-wrap{position:relative;margin-bottom:12px}
+.pwd-wrap input{margin-bottom:0;padding-right:70px}
+.pwd-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:none;background:#f1f5f9;color:var(--text2);border-radius:6px;padding:6px 10px;font-size:.78rem;cursor:pointer}
+.pwd-toggle:hover{background:#e2e8f0}
 .main{display:none}
 .topbar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px}
 .topbar h1{font-size:1.1rem}
@@ -84,9 +88,12 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 
 <div class="login-screen" id="loginScreen">
   <h1>🔐 管理后台</h1>
-  <input type="password" id="pwdInput" placeholder="请输入管理密码" onkeydown="if(event.key==='Enter')login()">
+  <div class="pwd-wrap">
+    <input type="password" id="pwdInput" placeholder="请输入管理密码" onkeydown="if(event.key==='Enter')login()">
+    <button type="button" class="pwd-toggle" id="pwdToggle" onclick="togglePwdView()">显示</button>
+  </div>
   <button onclick="login()">登录</button>
-  <div class="login-hint">默认密码 syj3008338，登录后可在「站点设置」中修改</div>
+  <div class="login-hint" id="loginHint">默认密码 syj3008338，登录后可在「站点设置」中修改</div>
 </div>
 
 <div class="main" id="mainPanel">
@@ -161,6 +168,9 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="form-row">
           <input type="text" id="cfgDefaultAvatar" placeholder="名单默认头像(图片路径，留空用内置)" style="flex:2">
           <button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultAvatar')">上传</button><span id="prev_cfgDefaultAvatar"></span>
+        </div>
+        <div class="form-row">
+          <input type="text" id="cfgLoginHint" placeholder="登录页提示文字（留空=不显示；建议不要写真实密码）">
         </div>
         <div class="form-row"><textarea id="cfgAbout" placeholder="关于我的介绍..." style="min-height:150px"></textarea></div>
         <button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
@@ -642,10 +652,24 @@ var imgModalCtx = null;
 
 function imgModalError(el){
   var msg = document.getElementById("imgModalMsg");
-  /* 第一次失败：换回原始（相对）路径再试一次 */
+  var ctx = imgModalCtx || {};
+  var raw = ctx.rawUrl || "";
+  /* 新上传的文件：GitHub Pages 还在发布，自动重试（最多 12 次，每次 3 秒） */
+  if(raw && freshFiles[raw]){
+    ctx._retry = (ctx._retry || 0) + 1;
+    if(ctx._retry <= 12){
+      msg.style.color = "#d97706";
+      msg.textContent = "⏳ 这张图刚上传，GitHub 还在发布中…自动重试 " + ctx._retry + "/12";
+      setTimeout(function(){
+        var u = raw + (raw.indexOf("?") >= 0 ? "&" : "?") + "t=" + Date.now();
+        document.getElementById("imgModalBig").src = u;
+      }, 3000);
+      return;
+    }
+  }
+  /* 换回原始（相对）路径再试一次 */
   if(!el._retried){
     el._retried = true;
-    var raw = imgModalCtx && imgModalCtx.rawUrl;
     if(raw && raw !== el.getAttribute("src")){
       msg.style.color = "#d97706";
       msg.textContent = "绝对地址加载失败，改用原始路径重试…";
@@ -667,8 +691,9 @@ function openImgModal(url, opt){
   document.getElementById("imgModalTitle").textContent = opt.title || "图片预览";
   var bigEl = document.getElementById("imgModalBig");
   bigEl._retried = false;
-  bigEl.src = abs;
-  document.getElementById("imgModalPreview").innerHTML = '<img src="'+esc(abs)+'" style="width:100%;height:100%;object-fit:cover;display:block">';
+  imgModalCtx._retry = 0;
+  bigEl.src = previewSrc(abs);
+  document.getElementById("imgModalPreview").innerHTML = '<img src="'+esc(previewSrc(abs))+'" style="width:100%;height:100%;object-fit:cover;display:block">';
   document.getElementById("imgModalOpen").href = abs;
   document.getElementById("imgModalUrl").innerHTML = abs ? ('原图地址：<a href="'+esc(abs)+'" target="_blank">'+esc(abs)+'</a>') : "（没有图片地址）";
   document.getElementById("imgModalMsg").textContent = abs ? "" : "⚠️ 没有拿到图片地址，请重新上传";
@@ -756,7 +781,8 @@ async function applyEditedBlob(blob, note){
   imgModalCtx.url = newUrl;
   var abs2 = newUrl;
   try { abs2 = new URL(newUrl, location.href).href; } catch(e) {}
-  document.getElementById("imgModalBig").src = abs2;
+  freshFiles[newUrl] = Date.now();
+  document.getElementById("imgModalBig").src = previewSrc(abs2);
   document.getElementById("imgModalPreview").innerHTML = '<img src="'+esc(abs2)+'" style="width:100%;height:100%;object-fit:cover;display:block">';
   document.getElementById("imgModalOpen").href = abs2;
   document.getElementById("imgModalUrl").innerHTML = '原图地址：<a href="'+esc(abs2)+'" target="_blank">'+esc(abs2)+'</a>';
@@ -858,7 +884,7 @@ function refreshIconPrev(id){
   if(!inp || !box) return;
   var v = String(inp.value||"").trim();
   if(isAdminImg(v)){
-    box.innerHTML = '<img src="'+esc(v)+'" data-url="'+esc(v)+'" data-input="'+esc(id)+'" data-title="图标预览" onclick="openImgFrom(this)" style="width:38px;height:38px;object-fit:cover;border-radius:6px;border:1px solid #e2e8f0;vertical-align:middle;margin-left:4px;cursor:zoom-in">';
+    box.innerHTML = '<img src="'+esc(previewSrc(v))+'" data-url="'+esc(v)+'" data-input="'+esc(id)+'" data-title="图标预览" onclick="openImgFrom(this)" style="width:38px;height:38px;object-fit:cover;border-radius:6px;border:1px solid #e2e8f0;vertical-align:middle;margin-left:4px;cursor:zoom-in">';
   }else if(v){
     box.innerHTML = '<span style="font-size:1.3rem;margin-left:4px;vertical-align:middle">'+esc(v)+'</span>';
   }else{
@@ -944,6 +970,26 @@ async function fetchDataSha(){
 /* ============================================================
    登录 / 密码
    ============================================================ */
+function togglePwdView(){
+  var i = document.getElementById("pwdInput");
+  var b = document.getElementById("pwdToggle");
+  if(!i || !b) return;
+  var show = (i.type === "password");
+  i.type = show ? "text" : "password";
+  b.textContent = show ? "隐藏" : "显示";
+}
+/* 登录页提示文字：从 data.json 的 siteConfig.loginHint 读取（公开，无需登录） */
+(async function loadLoginHint(){
+  try{
+    var r = await fetch("data.json?t=" + Date.now(), { cache: "no-store" });
+    if(!r.ok) return;
+    var d = await r.json();
+    var h = d && d.siteConfig ? d.siteConfig.loginHint : null;
+    var box = document.getElementById("loginHint");
+    if(box && h !== null && h !== undefined) box.textContent = h;
+  }catch(e){}
+})();
+
 function login(){
   const p = $("pwdInput").value;
   if(p === getPwd()){
@@ -1223,6 +1269,15 @@ function hideProgress(kind){
   if(b) b.style.width = "0%";
 }
 
+/* 刚上传的文件：GitHub Pages 还没发布，预览时加时间戳绕过缓存 */
+var freshFiles = {};
+function previewSrc(path){
+  var p = String(path || "");
+  if(!p) return p;
+  if(freshFiles[p]) return p + (p.indexOf("?") >= 0 ? "&" : "?") + "t=" + freshFiles[p];
+  return p;
+}
+
 async function uploadFile(file, kind){
   if(file.size > MAX_FILE_MB*1024*1024){
     throw new Error("「"+file.name+"」有 "+fmtSize(file.size)+"，超过 GitHub 单文件上限 "+MAX_FILE_MB+"MB。大文件请先传到网盘，再用「外链地址」粘链接。");
@@ -1256,6 +1311,7 @@ async function uploadFile(file, kind){
     }
 
     if(res.ok){
+      freshFiles[safe] = Date.now();
       return {name:file.name, url:safe, type:(file.name.split(".").pop()||"file").toUpperCase(), size:file.size};
     }
 
@@ -1313,7 +1369,7 @@ function renderImgDrafts(key){
   var box = $("imgList_"+key);
   if(!box) return;
   box.innerHTML = (imgDrafts[key]||[]).map(function(f,i){
-    return '<span style="display:inline-block;position:relative;margin:4px"><img src="'+esc(f.url)+'" data-url="'+esc(f.url)+'" data-dkey="'+esc(key)+'" data-didx="'+i+'" data-title="预览 / 编辑图片" onclick="openImgFrom(this)" style="width:88px;height:88px;object-fit:cover;border-radius:8px;vertical-align:middle;border:1px solid #e2e8f0;cursor:zoom-in"><button class="btn btn-danger btn-sm" style="position:absolute;top:-8px;right:-8px;padding:1px 6px" data-imgkey="'+esc(key)+'" data-imgidx="'+i+'" onclick="removeImgBtn(this)">×</button></span>';
+    return '<span style="display:inline-block;position:relative;margin:4px"><img src="'+esc(previewSrc(f.url))+'" data-url="'+esc(f.url)+'" data-dkey="'+esc(key)+'" data-didx="'+i+'" data-title="预览 / 编辑图片" onclick="openImgFrom(this)" style="width:88px;height:88px;object-fit:cover;border-radius:8px;vertical-align:middle;border:1px solid #e2e8f0;cursor:zoom-in"><button class="btn btn-danger btn-sm" style="position:absolute;top:-8px;right:-8px;padding:1px 6px" data-imgkey="'+esc(key)+'" data-imgidx="'+i+'" onclick="removeImgBtn(this)">×</button></span>';
   }).join("") || '<span style="font-size:.8rem;color:#94a3b8">还没有图片</span>';
 }
 function removeImgBtn(btn){
@@ -1553,6 +1609,7 @@ function renderAll(){
   $("cfgDefaultImage").value = sc.defaultImage || "";
   $("cfgColumns").value = sc.columns || "1";
   $("cfgDefaultAvatar").value = sc.defaultAvatar || "";
+  $("cfgLoginHint").value = (sc.loginHint === undefined ? "" : sc.loginHint);
   $("cfgName").value   = sc.name || "";
   $("cfgBio").value    = sc.bio || "";
   $("tagsInput").value = (blogData.tags||[]).join(",");
@@ -1584,7 +1641,7 @@ function imgRows(images, kind, idx){
   var arr = images||[];
   if(!arr.length) return "";
   return '<div style="margin-top:6px">'+arr.map(function(f,i){
-    return '<span style="display:inline-block;position:relative;margin:2px"><img src="'+esc(f.url)+'" data-url="'+esc(f.url)+'" data-rkind="'+esc(kind)+'" data-ridx="'+idx+'" data-iidx="'+i+'" data-title="预览 / 编辑图片" onclick="openImgFrom(this)" style="width:60px;height:60px;object-fit:cover;border-radius:6px;vertical-align:middle;border:1px solid #e2e8f0;cursor:zoom-in"><button class="btn btn-ghost btn-sm" style="position:absolute;top:-8px;right:-8px;padding:0 5px" data-imgkind="'+esc(kind)+'" data-imgrow="'+idx+'" data-imgidx="'+i+'" onclick="delImageBtn(this)">×</button></span>';
+    return '<span style="display:inline-block;position:relative;margin:2px"><img src="'+esc(previewSrc(f.url))+'" data-url="'+esc(f.url)+'" data-rkind="'+esc(kind)+'" data-ridx="'+idx+'" data-iidx="'+i+'" data-title="预览 / 编辑图片" onclick="openImgFrom(this)" style="width:60px;height:60px;object-fit:cover;border-radius:6px;vertical-align:middle;border:1px solid #e2e8f0;cursor:zoom-in"><button class="btn btn-ghost btn-sm" style="position:absolute;top:-8px;right:-8px;padding:0 5px" data-imgkind="'+esc(kind)+'" data-imgrow="'+idx+'" data-imgidx="'+i+'" onclick="delImageBtn(this)">×</button></span>';
   }).join("")+'</div>';
 }
 function delImageBtn(btn){
@@ -2081,6 +2138,7 @@ function saveSiteConfig(){
     defaultImage: $("cfgDefaultImage").value.trim(),
     columns: $("cfgColumns").value || "1",
     defaultAvatar: $("cfgDefaultAvatar").value.trim(),
+    loginHint: $("cfgLoginHint").value,
     name: $("cfgName").value.trim() || "思齐",
     bio: $("cfgBio").value.trim()
   };

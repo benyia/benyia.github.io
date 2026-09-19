@@ -189,14 +189,7 @@
       "desc": "购买",
       "url": "https://www.taobao.com/",
       "files": [],
-      "images": [
-        {
-          "name": "淘宝.png",
-          "url": "files/1789780121318_2_v44nko79_淘宝.png",
-          "type": "PNG",
-          "size": 3165
-        }
-      ]
+      "images": []
     }
   ],
   "ledger": [
@@ -232,6 +225,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-19 09:10",
+      "action": "移除图片"
+    },
     {
       "time": "2026-09-19 09:08",
       "action": "编辑生活服务：淘宝"

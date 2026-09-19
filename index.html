@@ -151,6 +151,14 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .roster-row .k{color:var(--text3);flex:0 0 72px}
 .roster-row .v{color:var(--text);font-weight:500;word-break:break-all}
 .folder-title{font-size:.86rem;font-weight:600;margin:14px 0 6px;color:var(--primary-dark)}
+.list-cols{display:grid;gap:16px;align-items:start}
+.list-cols.cols-1{grid-template-columns:1fr}
+.list-cols.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.list-cols.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.list-cols .article-card{margin-bottom:0}
+.list-cols .article-cover{height:110px}
+@media(max-width:1000px){.list-cols.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.list-cols{grid-template-columns:1fr !important}}
 .diary-title{font-size:1.05rem;font-weight:700;margin:2px 0 10px}
 .diary-media{margin-top:10px}
 .diary-media audio{width:100%;max-width:440px;margin-top:8px}
@@ -282,6 +290,7 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
         <div class="article-meta" id="ndMeta"></div>
         <p class="intro" id="ndContent"></p>
       </div>
+      <div id="ndFiles"></div>
     </div>
 
     <div class="section" id="sec-class">
@@ -574,6 +583,14 @@ function renderFilters(){
 function setPaperFilter(k){ paperFilter = k; renderFilters(); renderPapers(); }
 function setClassFilter(k){ classFilter = k; renderFilters(); renderClass(); }
 
+function applyColumns(){
+  var n = String((blogData.siteConfig && blogData.siteConfig.columns) || "1");
+  if(["1","2","3"].indexOf(n) < 0) n = "1";
+  ["homeList","coursesList","papersList","noticesList","classList"].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.className = "list-cols cols-" + n;
+  });
+}
 function renderAll(){
   renderProfile();
   renderCategories();
@@ -591,6 +608,7 @@ function renderAll(){
   renderLedger();
   renderDiary();
   renderAdvisor();
+  applyColumns();
 
   document.getElementById("aboutContent").textContent = blogData.siteConfig.about || "暂无介绍";
 
@@ -682,6 +700,7 @@ function openNotice(idx){
   document.getElementById("ndTitle").textContent = n.title;
   document.getElementById("ndMeta").textContent = (n.source||"") + " · " + (n.date||"");
   document.getElementById("ndContent").textContent = n.content||"";
+  document.getElementById("ndFiles").innerHTML = galleryHTML(n) + fileListGrouped(n);
   setPageTitle("noticeDetail", n.title, "");
   showSection("noticeDetail");
 }
@@ -831,7 +850,7 @@ function renderAdvisor(){
 }
 
 function renderRoster(){
-  var list = blogData.roster||[];
+  var list = (blogData.roster||[]).filter(function(r){ return r.show !== false; });
   var show = !!(blogData.rosterConfig && blogData.rosterConfig.showSensitive);
   document.getElementById("rosterList").innerHTML = list.map(function(r){
     var photo = r.photo ? '<div class="roster-photo">'+iconHTML(r.photo, (r.name||"?").slice(0,1))+'</div>' : '<div class="roster-photo">'+esc((r.name||"?").slice(0,1))+'</div>';

@@ -149,6 +149,15 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         </div>
         <div class="form-row"><input type="text" id="cfgTitle" placeholder="网站标题"><input type="text" id="cfgSub" placeholder="副标题"></div>
         <div class="form-row"><input type="text" id="cfgDefaultImage" placeholder="默认图片(没上传图片时显示，可留空)" style="flex:2"><button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultImage')">上传</button></div>
+        <div class="form-row">
+          <label style="font-size:.88rem;display:flex;align-items:center;gap:8px">前台帖子显示：
+            <select id="cfgColumns" style="padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-family:inherit">
+              <option value="1">单列</option>
+              <option value="2">双列</option>
+              <option value="3">多列（三列）</option>
+            </select>
+          </label>
+        </div>
         <div class="form-row"><textarea id="cfgAbout" placeholder="关于我的介绍..." style="min-height:150px"></textarea></div>
         <button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
       </div>
@@ -286,7 +295,8 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     <!-- ===== 通知 ===== -->
     <div class="panel" id="panel-notices">
       <div class="card">
-        <h2>发布通知</h2>
+        <h2 id="noticeFormTitle">发布通知</h2>
+        <div class="editing-bar" id="noticeEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelNoticeEdit()">取消编辑</a></div>
         <div class="form-row">
           <input type="text" id="nTitle" placeholder="通知标题" style="flex:2">
           <input type="text" id="nSource" placeholder="来源(如研究生院)" style="flex:1">
@@ -297,7 +307,18 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div id="imgList_notice" style="margin-bottom:6px"></div>
         <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('notice')">添加图片</button></div>
 
-        <button class="btn btn-primary" onclick="addNotice()">发布通知</button>
+        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 通知附件</b></div>
+        <div class="file-list" id="nfFiles"></div>
+        <div class="upload-box" onclick="document.getElementById('nfFileInput').click()">
+          <div class="up-hint">点击选择文件并上传</div>
+          <div class="up-status" id="nfUpStatus">支持多选；单个文件不超过 100MB</div>
+          <div class="progress-track" id="nfProgressTrack"><div class="progress-bar" id="nfProgressBar"></div></div>
+        </div>
+        <input type="file" id="nfFileInput" multiple style="display:none" onchange="onNoticeFiles(event)">
+        <div style="margin-top:12px">
+          <button class="btn btn-primary" id="nSubmit" onclick="addNotice()">发布通知</button>
+          <button class="btn btn-ghost" id="nCancel" onclick="cancelNoticeEdit()" style="display:none">取消</button>
+        </div>
       </div>
       <div class="card"><h2>通知列表</h2><div id="noticeList"></div></div>
     </div>
@@ -367,6 +388,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="form-row">
           <input type="text" id="rPhoto" placeholder="照片(图片URL，或点右侧上传)" style="flex:2">
           <button class="btn btn-ghost btn-sm" onclick="pickIcon('rPhoto')">上传照片</button>
+          <label style="font-size:.85rem;display:flex;align-items:center;gap:5px"><input type="checkbox" id="rShow" checked> 前台显示</label>
         </div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 其他图片</b></div>
         <div id="imgList_roster" style="margin-bottom:6px"></div>
@@ -570,7 +592,7 @@ let saving = false;
 /* 编辑态：null 表示新增，数字表示正在编辑的下标 */
 const editing = {course:null, paper:null, class:null};
 /* 表单里已上传的文件列表 */
-const drafts  = {course:[], paper:[], class:[], life:[], media:[], dmedia:[]};
+const drafts  = {course:[], paper:[], class:[], life:[], media:[], dmedia:[], nf:[]};
 
 /* ============================================================
    小工具
@@ -1045,7 +1067,7 @@ function saveRoster(){
     idCard:$("rIdCard").value.trim(), birthday:$("rBirthday").value.trim(), ethnicity:$("rEthnicity").value.trim(),
     advisor:$("rAdvisor").value.trim(), political:$("rPolitical").value.trim(),
     homeAddress:$("rAddress").value.trim(), note:$("rNote").value.trim(),
-    photo:$("rPhoto").value.trim(), images:(imgDrafts.roster||[]).slice()
+    photo:$("rPhoto").value.trim(), images:(imgDrafts.roster||[]).slice(), show: $("rShow").checked
   };
   blogData.roster = blogData.roster || [];
   if(editingRoster===null){ blogData.roster.push(item); saveData("添加名单："+name); }
@@ -1062,6 +1084,7 @@ function editRoster(i){
   $("rIdCard").value=r.idCard||""; $("rBirthday").value=r.birthday||""; $("rEthnicity").value=r.ethnicity||"";
   $("rAdvisor").value=r.advisor||""; $("rPolitical").value=r.political||"";
   $("rAddress").value=r.homeAddress||""; $("rNote").value=r.note||""; $("rPhoto").value=r.photo||"";
+  $("rShow").checked = (r.show !== false);
   setImgDrafts("roster", r.images);
   $("rosterFormTitle").textContent = "编辑名单：" + (r.name||"");
   $("rosterEditBar").classList.add("on");
@@ -1072,7 +1095,7 @@ function editRoster(i){
 function cancelRosterEdit(){
   editingRoster = null;
   ["rStudentId","rName","rClass","rCollege","rMajor","rDorm","rPhone","rEmail","rIdCard","rBirthday","rEthnicity","rAdvisor","rPolitical","rAddress","rNote","rPhoto"].forEach(function(id){ $(id).value=""; });
-  $("rGender").value = "";
+  $("rGender").value = ""; $("rShow").checked = true;
   setImgDrafts("roster", []);
   $("rosterFormTitle").textContent = "添加名单成员";
   $("rosterEditBar").classList.remove("on");
@@ -1095,8 +1118,16 @@ function renderRoster(){
     if(r.college) parts.push(esc(r.college));
     if(r.dorm) parts.push("宿舍 "+esc(r.dorm));
     if(r.advisor) parts.push("导师 "+esc(r.advisor));
-    return '<div class="item-row"><div class="info"><div class="title">'+esc(r.name)+'</div><div class="desc">'+parts.join(" · ")+'</div></div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editRoster('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delRoster('+i+')">删除</button></div></div>';
+    var on = (r.show !== false);
+    return '<div class="item-row"><div class="info"><div class="title">'+esc(r.name)+(on?"":' <span style="font-size:.72rem;color:#ef4444">（前台隐藏）</span>')+'</div><div class="desc">'+parts.join(" · ")+'</div></div><div class="actions"><label style="font-size:.8rem;display:flex;align-items:center;gap:4px"><input type="checkbox" '+(on?"checked":"")+' data-ri="'+i+'" onclick="toggleRosterShow(this)"> 显示</label><button class="btn btn-ghost btn-sm" onclick="editRoster('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delRoster('+i+')">删除</button></div></div>';
   }).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无名单</div>';
+}
+function toggleRosterShow(cb){
+  var i = parseInt(cb.getAttribute("data-ri"),10);
+  if(!blogData.roster[i]) return;
+  blogData.roster[i].show = cb.checked;
+  saveData(cb.checked ? "名单：前台显示" : "名单：前台隐藏");
+  renderRoster();
 }
 function toggleRosterSensitive(){
   blogData.rosterConfig = blogData.rosterConfig || {};
@@ -1194,6 +1225,7 @@ function onCourseFiles(e){
   e.target.value = "";
 }
 function onDmediaFiles(e){ var v=e.target.files; handleFiles(v,"dmedia"); e.target.value=""; }
+function onNoticeFiles(e){ var v=e.target.files; handleFiles(v,"nf"); e.target.value=""; }
 function onPaperFiles(e){ const v=e.target.files; handleFiles(v,"paper"); e.target.value=""; }
 function onClassFiles(e){ const v=e.target.files; handleFiles(v,"class"); e.target.value=""; }
 function onLifeFiles(e){ const v=e.target.files; handleFiles(v,"life"); e.target.value=""; }
@@ -1209,6 +1241,7 @@ function renderAll(){
   $("cfgAbout").value = sc.about || "";
   $("cfgAvatar").value = sc.avatar || "";
   $("cfgDefaultImage").value = sc.defaultImage || "";
+  $("cfgColumns").value = sc.columns || "1";
   $("cfgName").value   = sc.name || "";
   $("cfgBio").value    = sc.bio || "";
   $("tagsInput").value = (blogData.tags||[]).join(",");
@@ -1402,33 +1435,66 @@ function delPaper(i){
 }
 
 /* ---------- 通知 ---------- */
+let editingNotice = null;
 function addNotice(){
   var title=$("nTitle").value.trim();
   if(!title){ showToast("请输入标题","error"); return; }
-  blogData.notices.push({
+  var files = (drafts.nf||[]).slice();
+  var item = {
     title: title,
     source:$("nSource").value.trim(),
     date:$("nDate").value||todayStr(),
     level:"normal",
     content:$("nContent").value.trim(),
     images:(imgDrafts.notice||[]).slice(),
+    files: files,
     time: nowStr()
-  });
-  saveData("发布通知："+title);
+  };
+  blogData.notices = blogData.notices || [];
+  if(editingNotice === null){
+    blogData.notices.push(item);
+    saveData("发布通知："+title);
+  }else{
+    blogData.notices[editingNotice] = item;
+    saveData("编辑通知："+title);
+  }
+  cancelNoticeEdit();
   renderAll();
-  ["nTitle","nSource","nContent"].forEach(function(id){$(id).value="";});
-  $("nDate").value=todayStr();
+}
+function editNotice(i){
+  var n = blogData.notices[i];
+  editingNotice = i;
+  $("nTitle").value = n.title||""; $("nSource").value = n.source||"";
+  $("nDate").value = n.date||todayStr(); $("nContent").value = n.content||"";
+  setImgDrafts("notice", n.images);
+  drafts.nf = (n.files||[]).slice();
+  renderDraftFiles("nf");
+  $("noticeFormTitle").textContent = "编辑通知：" + (n.title||"");
+  $("noticeEditBar").classList.add("on");
+  $("nSubmit").textContent = "保存修改";
+  $("nCancel").style.display = "inline-block";
+  var box = document.getElementById("panel-notices");
+  if(box && box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
+}
+function cancelNoticeEdit(){
+  editingNotice = null;
+  ["nTitle","nSource","nContent"].forEach(function(id){ $(id).value=""; });
+  $("nDate").value = todayStr();
   setImgDrafts("notice", []);
+  drafts.nf = []; renderDraftFiles("nf");
+  $("noticeFormTitle").textContent = "发布通知";
+  $("noticeEditBar").classList.remove("on");
+  $("nSubmit").textContent = "发布通知";
+  $("nCancel").style.display = "none";
 }
 function renderNotices(){
-  $("noticeList").innerHTML=(blogData.notices||[]).map((n,i)=>`
-    <div class="item-row">
-      <div class="info"><div class="title">${esc(n.title)}</div><div class="desc">${esc(n.source)} · ${esc(n.date)}</div></div>
-      <button class="btn btn-danger btn-sm" onclick="delNotice(${i})">删除</button>
-    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+  $("noticeList").innerHTML=(blogData.notices||[]).map(function(n,i){
+    return '<div class="item-row"><div class="info"><div class="title">'+esc(n.title)+'</div><div class="desc">'+esc(n.source||"")+' · '+esc(n.date||"")+'</div>'+fileRows(n.files,"notices",i)+imgRows(n.images,"notices",i)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editNotice('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delNotice('+i+')">删除</button></div></div>';
+  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delNotice(i){
   if(!confirm("确定删除？")) return;
+  if(editingNotice === i) cancelNoticeEdit();
   blogData.notices.splice(i,1);
   saveData("删除通知");
   renderAll();
@@ -1701,6 +1767,7 @@ function saveSiteConfig(){
     about: $("cfgAbout").value,
     avatar: $("cfgAvatar").value.trim() || "思",
     defaultImage: $("cfgDefaultImage").value.trim(),
+    columns: $("cfgColumns").value || "1",
     name: $("cfgName").value.trim() || "思齐",
     bio: $("cfgBio").value.trim()
   };

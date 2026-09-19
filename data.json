@@ -156,12 +156,12 @@
   ],
   "lifeServices": [
     {
-      "icon": "☁️",
+      "icon": "files/1789782169413_10_pvy9bgby_百度网盘.png",
       "title": "百度网盘",
       "desc": "云存储 / 文件分享",
       "url": "https://pan.baidu.com",
-      "file": "",
-      "fileName": ""
+      "files": [],
+      "images": []
     },
     {
       "icon": "🅰️",
@@ -230,6 +230,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-19 09:42",
+      "action": "编辑生活服务：百度网盘"
+    },
     {
       "time": "2026-09-19 09:42",
       "action": "编辑生活服务：淘宝"

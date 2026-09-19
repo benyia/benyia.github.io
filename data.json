@@ -231,6 +231,10 @@
   "logs": [
     {
       "time": "2026-09-19 09:34",
+      "action": "编辑快速链接：GitHub"
+    },
+    {
+      "time": "2026-09-19 09:34",
       "action": "编辑快速链接：12306"
     },
     {
@@ -478,7 +482,7 @@
       "url": "https://www.12306.cn"
     },
     {
-      "icon": "🐙",
+      "icon": "files/1789781679883_5_yfhy0qi1_github.png",
       "title": "GitHub",
       "url": "https://github.com"
     },

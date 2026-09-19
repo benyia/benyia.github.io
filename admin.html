@@ -183,6 +183,10 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="form-row">
           <input type="text" id="cfgLoginHint" placeholder="登录页提示文字（留空=不显示；建议不要写真实密码）">
         </div>
+        <div class="form-row">
+          <label style="font-size:.88rem;display:flex;align-items:center;gap:6px"><input type="checkbox" id="cfgCoverPan"> 封面图片自动上下滚动</label>
+          <label style="font-size:.88rem;display:flex;align-items:center;gap:6px">速度：<input type="number" id="cfgCoverPanSec" min="3" max="180" step="1" value="14" style="width:86px;padding:6px 10px;border:1px solid var(--border);border-radius:8px"> 秒 / 趟（越小越快）</label>
+        </div>
         <div class="form-row"><textarea id="cfgAbout" placeholder="关于我的介绍..." style="min-height:150px"></textarea></div>
         <button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
       </div>
@@ -625,7 +629,7 @@ const TOKEN_KEY = "benyia_gh_token";
 const MAX_FILE_MB = 100;
 
 const DEFAULT_DATA = {
-  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",avatar:"思",name:"思齐",bio:"控制工程研究生"},
+  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",avatar:"思",name:"思齐",bio:"控制工程研究生",coverPan:true,coverPanSec:14},
   categories:[
     {icon:"📚",name:"课程学习",section:"courses"},
     {icon:"📝",name:"论文",section:"papers"},
@@ -1629,6 +1633,8 @@ function renderAll(){
   $("cfgColumns").value = sc.columns || "1";
   $("cfgDefaultAvatar").value = sc.defaultAvatar || "";
   $("cfgLoginHint").value = (sc.loginHint === undefined ? "" : sc.loginHint);
+  $("cfgCoverPan").checked = (sc.coverPan !== false);
+  $("cfgCoverPanSec").value = (sc.coverPanSec || 14);
   $("cfgName").value   = sc.name || "";
   $("cfgBio").value    = sc.bio || "";
   $("tagsInput").value = (blogData.tags||[]).join(",");
@@ -2158,6 +2164,8 @@ function saveSiteConfig(){
     columns: $("cfgColumns").value || "1",
     defaultAvatar: $("cfgDefaultAvatar").value.trim(),
     loginHint: $("cfgLoginHint").value,
+    coverPan: $("cfgCoverPan").checked,
+    coverPanSec: parseInt($("cfgCoverPanSec").value, 10) || 14,
     name: $("cfgName").value.trim() || "思齐",
     bio: $("cfgBio").value.trim()
   };

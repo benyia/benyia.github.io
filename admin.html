@@ -143,12 +143,12 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <h2>🎨 个人信息与站点设置</h2>
         <div class="form-row">
           <input type="text" id="cfgAvatar" placeholder="头像(emoji 或图片URL)" style="flex:1">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgAvatar')">图片</button>
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgAvatar')">图片</button><span id="prev_cfgAvatar"></span>
           <input type="text" id="cfgName" placeholder="姓名" style="flex:1">
           <input type="text" id="cfgBio" placeholder="一句话简介" style="flex:2">
         </div>
         <div class="form-row"><input type="text" id="cfgTitle" placeholder="网站标题"><input type="text" id="cfgSub" placeholder="副标题"></div>
-        <div class="form-row"><input type="text" id="cfgDefaultImage" placeholder="默认图片(没上传图片时显示，可留空)" style="flex:2"><button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultImage')">上传</button></div>
+        <div class="form-row"><input type="text" id="cfgDefaultImage" placeholder="默认图片(没上传图片时显示，可留空)" style="flex:2"><button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultImage')">上传</button><span id="prev_cfgDefaultImage"></span></div>
         <div class="form-row">
           <label style="font-size:.88rem;display:flex;align-items:center;gap:8px">前台帖子显示：
             <select id="cfgColumns" style="padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-family:inherit">
@@ -157,6 +157,10 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
               <option value="3">多列（三列）</option>
             </select>
           </label>
+        </div>
+        <div class="form-row">
+          <input type="text" id="cfgDefaultAvatar" placeholder="名单默认头像(图片路径，留空用内置)" style="flex:2">
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultAvatar')">上传</button><span id="prev_cfgDefaultAvatar"></span>
         </div>
         <div class="form-row"><textarea id="cfgAbout" placeholder="关于我的介绍..." style="min-height:150px"></textarea></div>
         <button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
@@ -167,7 +171,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div id="catManageList" style="margin-bottom:10px"></div>
         <div class="form-row">
           <input type="text" id="catIcon" placeholder="图标" style="flex:0.5">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('catIcon')">图片</button>
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('catIcon')">图片</button><span id="prev_catIcon"></span>
           <input type="text" id="catName" placeholder="分类名" style="flex:1">
           <select id="catSection" style="flex:1">
             <option value="courses">课程</option>
@@ -190,7 +194,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div id="quickLinkManageList" style="margin-bottom:10px"></div>
         <div class="form-row">
           <input type="text" id="qlIcon" placeholder="图标" style="flex:0.5">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('qlIcon')">图片</button>
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('qlIcon')">图片</button><span id="prev_qlIcon"></span>
           <input type="text" id="qlTitle" placeholder="名称" style="flex:1">
           <input type="text" id="qlUrl" placeholder="链接URL" style="flex:2">
           <button class="btn btn-ghost btn-sm" onclick="addQuickLink()">添加</button>
@@ -225,7 +229,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="editing-bar" id="courseEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelEdit('course')">取消编辑</a></div>
         <div class="form-row">
           <input type="text" id="cIcon" placeholder="图标(如📐)" style="flex:0.5">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('cIcon')">图片</button>
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('cIcon')">图片</button><span id="prev_cIcon"></span>
           <input type="text" id="cTitle" placeholder="课程名称">
           <input type="text" id="cDesc" placeholder="简介">
           <input type="number" id="cProgress" placeholder="进度%" class="progress-input" value="0">
@@ -387,7 +391,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="form-row"><input type="text" id="rNote" placeholder="备注"></div>
         <div class="form-row">
           <input type="text" id="rPhoto" placeholder="照片(图片URL，或点右侧上传)" style="flex:2">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('rPhoto')">上传照片</button>
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('rPhoto')">上传照片</button><span id="prev_rPhoto"></span>
           <label style="font-size:.85rem;display:flex;align-items:center;gap:5px"><input type="checkbox" id="rShow" checked> 前台显示</label>
         </div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">👁️ 前台可见字段</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">取消勾选 = 前台隐藏该项（如电话、邮箱）</span></div>
@@ -421,7 +425,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <h2 id="lifeFormTitle">添加生活服务链接</h2>
         <div class="form-row">
           <input type="text" id="lsIcon" placeholder="图标" style="flex:0.5">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('lsIcon')">图片</button>
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('lsIcon')">图片</button><span id="prev_lsIcon"></span>
           <input type="text" id="lsTitle" placeholder="名称" style="flex:1">
           <input type="text" id="lsDesc" placeholder="描述" style="flex:1">
           <input type="text" id="lsUrl" placeholder="链接URL" style="flex:1.5">
@@ -600,6 +604,21 @@ const drafts  = {course:[], paper:[], class:[], life:[], media:[], dmedia:[], nf
    小工具
    ============================================================ */
 function $(id){ return document.getElementById(id); }
+var ICON_FIELDS = ["cfgAvatar","cIcon","lsIcon","catIcon","qlIcon","rPhoto","cfgDefaultImage","cfgDefaultAvatar"];
+function refreshIconPrev(id){
+  var inp = $(id), box = $("prev_" + id);
+  if(!inp || !box) return;
+  var v = String(inp.value||"").trim();
+  if(isAdminImg(v)){
+    box.innerHTML = '<a href="'+esc(v)+'" target="_blank"><img src="'+esc(v)+'" style="width:38px;height:38px;object-fit:cover;border-radius:6px;border:1px solid #e2e8f0;vertical-align:middle;margin-left:4px"></a>';
+  }else if(v){
+    box.innerHTML = '<span style="font-size:1.3rem;margin-left:4px;vertical-align:middle">'+esc(v)+'</span>';
+  }else{
+    box.innerHTML = '';
+  }
+}
+function refreshAllIconPrevs(){ ICON_FIELDS.forEach(refreshIconPrev); }
+
 function isAdminImg(v){
   v = String(v||"").trim();
   if(!v) return false;
@@ -1037,6 +1056,7 @@ async function onIconFile(e){
     showToast("正在上传图标…");
     var meta = await uploadFile(f, "img");
     $(target).value = meta.url;
+    refreshIconPrev(target);
     showToast("图标已上传，记得保存");
   }catch(err){ showToast("图标上传失败："+err.message, "error"); }
 }
@@ -1045,7 +1065,7 @@ function renderImgDrafts(key){
   var box = $("imgList_"+key);
   if(!box) return;
   box.innerHTML = (imgDrafts[key]||[]).map(function(f,i){
-    return '<span style="display:inline-block;position:relative;margin:4px"><img src="'+esc(f.url)+'" style="width:64px;height:64px;object-fit:cover;border-radius:6px;vertical-align:middle"><button class="btn btn-danger btn-sm" style="position:absolute;top:-8px;right:-8px;padding:1px 6px" data-imgkey="'+esc(key)+'" data-imgidx="'+i+'" onclick="removeImgBtn(this)">×</button></span>';
+    return '<span style="display:inline-block;position:relative;margin:4px"><a href="'+esc(f.url)+'" target="_blank" title="点击看原图"><img src="'+esc(f.url)+'" style="width:88px;height:88px;object-fit:cover;border-radius:8px;vertical-align:middle;border:1px solid #e2e8f0"></a><button class="btn btn-danger btn-sm" style="position:absolute;top:-8px;right:-8px;padding:1px 6px" data-imgkey="'+esc(key)+'" data-imgidx="'+i+'" onclick="removeImgBtn(this)">×</button></span>';
   }).join("") || '<span style="font-size:.8rem;color:#94a3b8">还没有图片</span>';
 }
 function removeImgBtn(btn){
@@ -1284,12 +1304,14 @@ function renderAll(){
   $("cfgAvatar").value = sc.avatar || "";
   $("cfgDefaultImage").value = sc.defaultImage || "";
   $("cfgColumns").value = sc.columns || "1";
+  $("cfgDefaultAvatar").value = sc.defaultAvatar || "";
   $("cfgName").value   = sc.name || "";
   $("cfgBio").value    = sc.bio || "";
   $("tagsInput").value = (blogData.tags||[]).join(",");
   renderCatManage();
   renderQuickLinkManage();
   updateLgCategories();
+  refreshAllIconPrevs();
 
   let fileCount = 0;
   ["courses","papers","classItems"].forEach(k=>{
@@ -1314,7 +1336,7 @@ function imgRows(images, kind, idx){
   var arr = images||[];
   if(!arr.length) return "";
   return '<div style="margin-top:6px">'+arr.map(function(f,i){
-    return '<span style="display:inline-block;position:relative;margin:2px"><img src="'+esc(f.url)+'" style="width:44px;height:44px;object-fit:cover;border-radius:6px;vertical-align:middle"><button class="btn btn-ghost btn-sm" style="position:absolute;top:-8px;right:-8px;padding:0 5px" data-imgkind="'+esc(kind)+'" data-imgrow="'+idx+'" data-imgidx="'+i+'" onclick="delImageBtn(this)">×</button></span>';
+    return '<span style="display:inline-block;position:relative;margin:2px"><a href="'+esc(f.url)+'" target="_blank" title="点击看原图"><img src="'+esc(f.url)+'" style="width:60px;height:60px;object-fit:cover;border-radius:6px;vertical-align:middle;border:1px solid #e2e8f0"></a><button class="btn btn-ghost btn-sm" style="position:absolute;top:-8px;right:-8px;padding:0 5px" data-imgkind="'+esc(kind)+'" data-imgrow="'+idx+'" data-imgidx="'+i+'" onclick="delImageBtn(this)">×</button></span>';
   }).join("")+'</div>';
 }
 function delImageBtn(btn){
@@ -1810,6 +1832,7 @@ function saveSiteConfig(){
     avatar: $("cfgAvatar").value.trim() || "思",
     defaultImage: $("cfgDefaultImage").value.trim(),
     columns: $("cfgColumns").value || "1",
+    defaultAvatar: $("cfgDefaultAvatar").value.trim(),
     name: $("cfgName").value.trim() || "思齐",
     bio: $("cfgBio").value.trim()
   };
@@ -1974,6 +1997,11 @@ document.querySelectorAll(".tabs button").forEach(btn=>{
 /* 离开页面前提醒未保存 */
 window.addEventListener("beforeunload", (e)=>{
   if(saving){ e.preventDefault(); e.returnValue=""; }
+});
+
+document.addEventListener("input", function(e){
+  var t = e.target;
+  if(t && t.id && ICON_FIELDS.indexOf(t.id) >= 0) refreshIconPrev(t.id);
 });
 
 /* 打开页面时如果本会话已登录过，直接进后台 */

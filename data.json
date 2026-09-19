@@ -184,7 +184,7 @@
       "fileName": ""
     },
     {
-      "icon": "files/1789780026334_1_ekd3rm8j_淘宝.png",
+      "icon": "files/1789780453968_3_snlkl2if_劵.png",
       "title": "淘宝",
       "desc": "购买",
       "url": "https://www.taobao.com/",
@@ -225,6 +225,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-19 09:14",
+      "action": "编辑生活服务：淘宝"
+    },
     {
       "time": "2026-09-19 09:10",
       "action": "移除图片"

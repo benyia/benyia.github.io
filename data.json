@@ -182,6 +182,14 @@
       "url": "https://www.123pan.com",
       "file": "",
       "fileName": ""
+    },
+    {
+      "icon": "files/1789780026334_1_ekd3rm8j_淘宝.png",
+      "title": "淘宝",
+      "desc": "",
+      "url": "https://www.taobao.com/",
+      "files": [],
+      "images": []
     }
   ],
   "ledger": [
@@ -217,6 +225,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-19 09:07",
+      "action": "添加生活服务：淘宝"
+    },
     {
       "time": "2026-09-19 01:07",
       "action": "编辑课程：计算机控制系统"

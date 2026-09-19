@@ -168,9 +168,19 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .list-cols.cols-2 .article-tags,.list-cols.cols-3 .article-tags{max-height:2em;overflow:hidden}
 /* 图片缩略条也不撑高卡片 */
 .list-cols.cols-2 .article-body > div:last-child,.list-cols.cols-3 .article-body > div:last-child{max-height:90px;overflow:hidden}
-/* 封面图片：平时停在顶部；鼠标移到卡片上，图片缓缓滑到底，露出完整图片 */
-.article-cover.cover-pan{background-size:cover;background-repeat:no-repeat;background-position:50% 0;transition:background-position var(--pan-dur,6s) ease-in-out}
-.article-card:hover .article-cover.cover-pan{background-position:50% 100%}
+/* 封面图片：平时静止；鼠标移上去缓缓滑动，把完整图片走一遍
+   方向由 JS 按图片比例自动判定（pan-y 纵向 / pan-x 横向） */
+.article-cover.cover-pan{background-size:cover;background-repeat:no-repeat;transition:background-position var(--pan-dur,3s) ease-in-out}
+.article-cover.cover-pan.pan-y{background-position:50% 0}
+.article-card:hover .article-cover.cover-pan.pan-y{background-position:50% 100%}
+.article-cover.cover-pan.pan-x{background-position:0 50%}
+.article-card:hover .article-cover.cover-pan.pan-x{background-position:100% 50%}
+@media (hover:none){
+  .article-cover.cover-pan.pan-y{animation:panY var(--pan-dur,3s) ease-in-out infinite alternate}
+  .article-cover.cover-pan.pan-x{animation:panX var(--pan-dur,3s) ease-in-out infinite alternate}
+}
+@keyframes panY{from{background-position:50% 0}to{background-position:50% 100%}}
+@keyframes panX{from{background-position:0 50%}to{background-position:100% 50%}}
 @media(max-width:1000px){.list-cols.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.list-cols{grid-template-columns:1fr !important}}
 .diary-title{font-size:1.05rem;font-weight:700;margin:2px 0 10px}
@@ -407,7 +417,7 @@ const PAGE_TITLES = {
 };
 
 const DEFAULT_DATA = {
-  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", name:"思齐", bio:"控制工程研究生", defaultImage:"files/default-cover.jpg", defaultAvatar:"files/default-avatar.png", coverPan:true, coverPanSec:6},
+  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", name:"思齐", bio:"控制工程研究生", defaultImage:"files/default-cover.jpg", defaultAvatar:"files/default-avatar.png", coverPan:true, coverPanSec:3},
   categories: [
     {icon:"📚", name:"课程学习", section:"courses"},
     {icon:"📝", name:"论文", section:"papers"},
@@ -486,9 +496,9 @@ function coverHTML(item, iconFallback){
   if(src){
     var panOn = (sc.coverPan !== false);
     var sec = parseInt(sc.coverPanSec, 10);
-    if(!sec || sec < 2) sec = 6;
+    if(!sec || sec < 1) sec = 3;
     if(panOn){
-      return '<div class="article-cover cover-pan" style="background-image:url(' + esc(src) + ');--pan-dur:' + sec + 's"></div>';
+      return '<div class="article-cover cover-pan" data-bg="' + esc(src) + '" style="background-image:url(' + esc(src) + ');--pan-dur:' + sec + 's"></div>';
     }
     return '<div class="article-cover" style="padding:0;overflow:hidden"><img src="'+esc(src)+'" style="width:100%;height:100%;object-fit:cover" alt=""></div>';
   }
@@ -614,6 +624,31 @@ function applyColumns(){
     if(el) el.className = "list-cols cols-" + n;
   });
 }
+/* 按图片比例自动决定往哪个方向滑：图片比框更"高"就纵向滑，否则横向滑 */
+function initCoverPan(){
+  var els = document.querySelectorAll(".article-cover.cover-pan");
+  Array.prototype.forEach.call(els, function(el){
+    if(el.getAttribute("data-pan-axis")) return;
+    var url = el.getAttribute("data-bg");
+    if(!url) return;
+    var boxW = el.clientWidth, boxH = el.clientHeight;
+    if(!boxW || !boxH) return;              /* 还在隐藏的栏目里，等显示后再算 */
+    var im = new Image();
+    im.onload = function(){
+      var ia = im.naturalWidth / im.naturalHeight;
+      var ba = boxW / boxH;
+      var axis = (ia < ba) ? "pan-y" : "pan-x";
+      el.classList.add(axis);
+      el.setAttribute("data-pan-axis", axis);
+    };
+    im.onerror = function(){
+      el.classList.add("pan-y");
+      el.setAttribute("data-pan-axis", "pan-y");
+    };
+    im.src = url;
+  });
+}
+
 function renderAll(){
   renderProfile();
   renderCategories();
@@ -632,6 +667,7 @@ function renderAll(){
   renderDiary();
   renderAdvisor();
   applyColumns();
+  setTimeout(initCoverPan, 60);
 
   document.getElementById("aboutContent").textContent = blogData.siteConfig.about || "暂无介绍";
 
@@ -1059,6 +1095,7 @@ function showSection(name){
   document.querySelectorAll(".section").forEach(function(s){s.classList.remove("active");});
   document.getElementById("sec-"+name).classList.add("active");
   window.scrollTo(0,0);
+  setTimeout(initCoverPan, 60);
 }
 function switchTab(t){
   document.querySelectorAll(".nav-links button").forEach(function(b){b.classList.remove("active");});

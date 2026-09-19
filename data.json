@@ -230,6 +230,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-19 09:33",
+      "action": "编辑快速链接：百度网盘"
+    },
+    {
       "time": "2026-09-19 09:30",
       "action": "名单字段可见性：homeAddress 显示"
     },
@@ -460,7 +464,7 @@
   ],
   "quickLinks": [
     {
-      "icon": "☁️",
+      "icon": "files/1789781586331_1_f8l7s8np_百度网盘.png",
       "title": "百度网盘",
       "url": "https://pan.baidu.com"
     },
@@ -527,9 +531,7 @@
       "images": [],
       "show": true,
       "hide": [
-        "idCard",
         "phone",
-        "email",
         "note",
         "birthday"
       ]

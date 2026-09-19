@@ -230,6 +230,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-19 09:26",
+      "action": "名单字段可见性：idCard 隐藏"
+    },
+    {
       "time": "2026-09-19 09:24",
       "action": "编辑快速链接：deepseek"
     },
@@ -489,7 +493,10 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": true
+      "show": true,
+      "hide": [
+        "idCard"
+      ]
     }
   ],
   "rosterConfig": {

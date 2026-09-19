@@ -5,7 +5,7 @@
     "about": "你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",
     "avatar": "files/1789782355800_12_g6ia1gng_头像.jpg",
     "defaultImage": "",
-    "columns": "2",
+    "columns": "1",
     "name": "思齐",
     "bio": "控制工程研究生 · 记录学习与生活"
   },
@@ -183,28 +183,28 @@
       "images": []
     },
     {
-      "icon": "files/1789782826634_16_vqh3c96j_阿里云盘.png",
+      "icon": "🅰️",
       "title": "阿里云盘",
       "desc": "不限速云盘",
       "url": "https://www.alipan.com",
-      "files": [],
-      "images": []
+      "file": "",
+      "fileName": ""
     },
     {
-      "icon": "files/1789782839864_17_5hovkqm1_夸克网盘.png",
+      "icon": "✨",
       "title": "夸克网盘",
       "desc": "夸克云存储",
       "url": "https://pan.quark.cn",
-      "files": [],
-      "images": []
+      "file": "",
+      "fileName": ""
     },
     {
-      "icon": "files/1789782855282_18_15atjl8o_123云盘.png",
+      "icon": "📁",
       "title": "123云盘",
       "desc": "不限速云盘",
       "url": "https://www.123pan.com",
-      "files": [],
-      "images": []
+      "file": "",
+      "fileName": ""
     },
     {
       "icon": "files/1789782153736_9_yqopq1ps_淘宝.png",
@@ -250,16 +250,8 @@
   ],
   "logs": [
     {
-      "time": "2026-09-19 09:54",
-      "action": "编辑生活服务：123云盘"
-    },
-    {
-      "time": "2026-09-19 09:54",
-      "action": "编辑生活服务：夸克网盘"
-    },
-    {
-      "time": "2026-09-19 09:53",
-      "action": "编辑生活服务：阿里云盘"
+      "time": "2026-09-19 09:55",
+      "action": "修改站点设置"
     },
     {
       "time": "2026-09-19 09:52",

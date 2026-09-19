@@ -850,33 +850,30 @@ function renderAdvisor(){
 }
 
 function renderRoster(){
+  var FIELDS = [
+    ["studentId","学号"], ["name","姓名"], ["gender","性别"], ["className","班级"],
+    ["college","学院"], ["major","专业"], ["dorm","宿舍号"], ["advisor","导师"],
+    ["ethnicity","民族"], ["political","政治面貌"], ["birthday","出生日期"],
+    ["phone","电话"], ["email","邮箱"], ["idCard","身份证号"], ["homeAddress","家庭住址"], ["note","备注"]
+  ];
+  var SENSITIVE = ["idCard", "homeAddress", "phone", "email", "birthday"];
   var list = (blogData.roster||[]).filter(function(r){ return r.show !== false; });
-  var show = !!(blogData.rosterConfig && blogData.rosterConfig.showSensitive);
+  var globalShow = !!(blogData.rosterConfig && blogData.rosterConfig.showSensitive);
   document.getElementById("rosterList").innerHTML = list.map(function(r){
-    var photo = r.photo ? '<div class="roster-photo">'+iconHTML(r.photo, (r.name||"?").slice(0,1))+'</div>' : '<div class="roster-photo">'+esc((r.name||"?").slice(0,1))+'</div>';
-    var rows = [];
-    function add(label, val, sensitive){
-      if(!val) return;
-      if(sensitive && !show) return;
-      rows.push('<div class="roster-row"><span class="k">'+label+'</span><span class="v">'+esc(val)+'</span></div>');
-    }
-    add("学号", r.studentId);
-    add("姓名", r.name);
-    add("性别", r.gender);
-    add("班级", r.className);
-    add("学院", r.college);
-    add("专业", r.major);
-    add("宿舍号", r.dorm);
-    add("导师", r.advisor);
-    add("民族", r.ethnicity);
-    add("政治面貌", r.political);
-    add("出生日期", r.birthday, true);
-    add("电话", r.phone, true);
-    add("邮箱", r.email, true);
-    add("身份证号", r.idCard, true);
-    add("家庭住址", r.homeAddress, true);
-    add("备注", r.note);
-    return '<div class="roster-card">'+photo+'<div class="roster-info">'+rows.join("")+'</div>'+galleryHTML(r)+'</div>';
+    var hide = r.hide || [];
+    var photo = r.photo
+      ? '<div class="roster-photo">'+iconHTML(r.photo, (r.name||"?").slice(0,1))+'</div>'
+      : '<div class="roster-photo">'+esc((r.name||"?").slice(0,1))+'</div>';
+    var rows = FIELDS.filter(function(f){
+      var k = f[0];
+      if(!r[k]) return false;
+      if(hide.indexOf(k) >= 0) return false;
+      if(SENSITIVE.indexOf(k) >= 0 && !globalShow) return false;
+      return true;
+    }).map(function(f){
+      return '<div class="roster-row"><span class="k">'+f[1]+'</span><span class="v">'+esc(r[f[0]])+'</span></div>';
+    }).join("");
+    return '<div class="roster-card">'+photo+'<div class="roster-info">'+rows+'</div>'+galleryHTML(r)+'</div>';
   }).join("") || '<div class="empty">暂无名单</div>';
 }
 

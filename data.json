@@ -231,6 +231,10 @@
   "logs": [
     {
       "time": "2026-09-19 09:27",
+      "action": "名单：公开敏感信息"
+    },
+    {
+      "time": "2026-09-19 09:27",
       "action": "名单字段可见性：phone 隐藏"
     },
     {
@@ -510,11 +514,12 @@
         "idCard",
         "homeAddress",
         "birthday",
-        "phone"
+        "phone",
+        "email"
       ]
     }
   ],
   "rosterConfig": {
-    "showSensitive": false
+    "showSensitive": true
   }
 }

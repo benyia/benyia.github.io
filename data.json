@@ -230,6 +230,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-19 09:27",
+      "action": "名单字段可见性：homeAddress 隐藏"
+    },
+    {
       "time": "2026-09-19 09:26",
       "action": "名单字段可见性：idCard 隐藏"
     },
@@ -495,7 +499,8 @@
       "images": [],
       "show": true,
       "hide": [
-        "idCard"
+        "idCard",
+        "homeAddress"
       ]
     }
   ],

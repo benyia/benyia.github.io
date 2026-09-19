@@ -231,6 +231,10 @@
   "logs": [
     {
       "time": "2026-09-19 09:27",
+      "action": "名单字段可见性：birthday 显示"
+    },
+    {
+      "time": "2026-09-19 09:27",
       "action": "名单字段可见性：note 隐藏"
     },
     {
@@ -517,7 +521,6 @@
       "hide": [
         "idCard",
         "homeAddress",
-        "birthday",
         "phone",
         "email",
         "note"

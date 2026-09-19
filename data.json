@@ -183,12 +183,12 @@
       "images": []
     },
     {
-      "icon": "🅰️",
+      "icon": "files/1789782826634_16_vqh3c96j_阿里云盘.png",
       "title": "阿里云盘",
       "desc": "不限速云盘",
       "url": "https://www.alipan.com",
-      "file": "",
-      "fileName": ""
+      "files": [],
+      "images": []
     },
     {
       "icon": "✨",
@@ -249,6 +249,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-19 09:53",
+      "action": "编辑生活服务：阿里云盘"
+    },
     {
       "time": "2026-09-19 09:52",
       "action": "编辑课程：计算机控制系统"

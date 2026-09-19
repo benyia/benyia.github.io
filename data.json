@@ -191,12 +191,12 @@
       "images": []
     },
     {
-      "icon": "✨",
+      "icon": "files/1789782839864_17_5hovkqm1_夸克网盘.png",
       "title": "夸克网盘",
       "desc": "夸克云存储",
       "url": "https://pan.quark.cn",
-      "file": "",
-      "fileName": ""
+      "files": [],
+      "images": []
     },
     {
       "icon": "📁",
@@ -249,6 +249,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-19 09:54",
+      "action": "编辑生活服务：夸克网盘"
+    },
     {
       "time": "2026-09-19 09:53",
       "action": "编辑生活服务：阿里云盘"

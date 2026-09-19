@@ -33,12 +33,14 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .nav-search input{padding:8px 14px 8px 36px;border:1px solid var(--border);border-radius:99px;font-size:.85rem;width:200px;outline:none;transition:all .2s;background:#fff}
 .nav-search input:focus{border-color:var(--primary);width:240px}
 .nav-search .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.5;font-size:.85rem}
-.search-results{position:absolute;top:120%;right:0;background:var(--card);border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.15);width:350px;max-height:400px;overflow-y:auto;display:none;z-index:100}
+.search-results{position:absolute;top:120%;right:0;background:var(--card);border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.15);width:440px;max-height:74vh;overflow-y:auto;display:none;z-index:100}
 .search-results.show{display:block}
-.search-result-item{padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border)}
+.search-result-item{padding:9px 16px;cursor:pointer;border-bottom:1px solid var(--border)}
 .search-result-item:hover{background:#f8fafc}
 .search-result-item .type{font-size:.72rem;color:var(--primary);font-weight:600}
 .search-result-item .title{font-size:.88rem}
+.search-result-item .snip{font-size:.75rem;color:var(--text3);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.search-result-item .snip b{color:var(--primary-dark);font-weight:700}
 
 /* Page Title */
 .page-title{background:rgba(255,255,255,.55);padding:32px 24px;text-align:center;border-bottom:1px solid var(--border)}
@@ -886,18 +888,121 @@ function renderRoster(){
   }).join("") || '<div class="empty">暂无名单</div>';
 }
 
+/* 把前台的“所有东西”建成一张可搜索的表 */
+function buildSearchIndex(){
+  var idx = [];
+  function push(type, title, parts, click){
+    idx.push({type:type, title:String(title||""), text:parts.filter(Boolean).join("  "), click:click||""});
+  }
+  function fileNames(x){ return collectFiles(x).map(function(f){ return f.name; }).join(" "); }
+
+  (blogData.courses||[]).forEach(function(c,i){
+    push("课程", c.title, [c.title, c.desc, c.intro, (c.tags||[]).join(" "), fileNames(c), (c.progress||0)+"%"], "openCourse(" + i + ")");
+  });
+  (blogData.papers||[]).forEach(function(p,i){
+    push("论文", p.title, [p.title, p.abstract, p.desc, (p.tags||[]).join(" "), p.year, p.status, fileNames(p)], "openPaper(" + i + ")");
+  });
+  (blogData.notices||[]).forEach(function(n,i){
+    push("通知", n.title, [n.title, n.source, n.content, n.date, fileNames(n)], "openNotice(" + i + ")");
+  });
+  (blogData.classItems||[]).forEach(function(c,i){
+    push("班级", c.title, [c.title, c.type, c.content, c.date, fileNames(c)], "openClass(" + i + ")");
+  });
+  (blogData.diary||[]).forEach(function(d){
+    var t = d.title || autoTitle(d.content, d.date);
+    push("日记", t, [t, d.content, d.date, (d.media||[]).map(function(m){ return m.name; }).join(" ")], "switchTab('diary')");
+  });
+  (blogData.advisor||[]).forEach(function(a){
+    push("导师指导", (a.count ? ("第" + a.count + "次指导 · ") : "") + (a.date || ""), [a.content, a.date, String(a.count || "")], "switchTab('advisor')");
+  });
+
+  /* 名单：只索引前台真正可见的字段，隐藏的不进索引 */
+  var SENS = ["idCard", "homeAddress", "phone", "email", "birthday"];
+  var gShow = !!(blogData.rosterConfig && blogData.rosterConfig.showSensitive);
+  var RF = [["studentId","学号"],["name","姓名"],["gender","性别"],["className","班级"],["college","学院"],["major","专业"],["dorm","宿舍号"],["advisor","导师"],["ethnicity","民族"],["political","政治面貌"],["birthday","出生日期"],["phone","电话"],["email","邮箱"],["idCard","身份证号"],["homeAddress","家庭住址"],["note","备注"]];
+  (blogData.roster||[]).filter(function(r){ return r.show !== false; }).forEach(function(r){
+    var hid = r.hide || [];
+    var parts = [];
+    RF.forEach(function(f){
+      var k = f[0];
+      if(!r[k]) return;
+      if(hid.indexOf(k) >= 0) return;
+      if(SENS.indexOf(k) >= 0 && !gShow) return;
+      parts.push(r[k]);
+    });
+    push("名单", r.name, parts, "switchTab('roster')");
+  });
+
+  (blogData.lifeServices||[]).forEach(function(x){
+    push("生活服务", x.title, [x.title, x.desc, x.url, fileNames(x)], "switchTab('life')");
+  });
+  (blogData.media||[]).forEach(function(m){
+    push("影音", m.title, [m.title, m.desc, m.type, fileNames(m)], "switchTab('life')");
+  });
+  (blogData.quickLinks||[]).forEach(function(l){
+    push("快速链接", l.title, [l.title, l.url], "");
+  });
+  (blogData.categories||[]).forEach(function(c){
+    push("分类", c.name, [c.name], "switchTab('" + (c.section || "home") + "')");
+  });
+  (blogData.tags||[]).forEach(function(t){
+    push("标签", t, [t], "switchTab('home')");
+  });
+  (blogData.ledger||[]).forEach(function(r){
+    push("记账", (r.category || "其他") + " ¥" + (parseFloat(r.amount) || 0).toFixed(2), [r.desc, r.category, r.date, String(r.amount || "")], "switchTab('ledger')");
+  });
+
+  idx.forEach(function(x){ x.tl = x.title.toLowerCase(); x.xl = x.text.toLowerCase(); });
+  return idx;
+}
+
+/* 命中位置前后截一小段做预览 */
+function snippetOf(r, q){
+  var pos = r.xl.indexOf(q);
+  if(pos < 0) return "";
+  var start = Math.max(0, pos - 16);
+  var txt = r.text.slice(start, start + 58);
+  if(start > 0) txt = "…" + txt;
+  if(start + 58 < r.text.length) txt = txt + "…";
+  var safe = esc(txt);
+  var qi = safe.toLowerCase().indexOf(esc(q).toLowerCase());
+  if(qi >= 0) safe = safe.slice(0, qi) + "<b>" + safe.slice(qi, qi + q.length) + "</b>" + safe.slice(qi + q.length);
+  return safe;
+}
+
+function gotoSearchResult(el){
+  document.getElementById("searchResults").classList.remove("show");
+  document.getElementById("searchInput").value = "";
+  var code = el.getAttribute("data-c");
+  if(code){ try { (new Function(code))(); } catch(e) { } }
+}
+
 function doSearch(q){
   var box = document.getElementById("searchResults");
-  q = q.trim().toLowerCase();
+  q = String(q||"").trim().toLowerCase();
   if(!q){ box.classList.remove("show"); return; }
-  var results = [];
-  (blogData.courses||[]).forEach(function(c,i){ if((c.title+c.desc+(c.intro||"")).toLowerCase().indexOf(q)>=0) results.push({type:"课程", title:c.title, click:"openCourse("+i+")"}); });
-  (blogData.papers||[]).forEach(function(p,i){ if((p.title+(p.abstract||"")+(p.desc||"")).toLowerCase().indexOf(q)>=0) results.push({type:"论文", title:p.title, click:"openPaper("+i+")"}); });
-  (blogData.notices||[]).forEach(function(n,i){ if((n.title+(n.content||"")).toLowerCase().indexOf(q)>=0) results.push({type:"通知", title:n.title, click:"openNotice("+i+")"}); });
-  (blogData.classItems||[]).forEach(function(c,i){ if((c.title+(c.content||"")).toLowerCase().indexOf(q)>=0) results.push({type:"班级", title:c.title, click:"openClass("+i+")"}); });
-  document.getElementById("searchResults").innerHTML = results.slice(0,15).map(function(r){
-    return '<div class="search-result-item" onclick="document.getElementById(\'searchResults\').classList.remove(\'show\');document.getElementById(\'searchInput\').value=\'\';'+r.click+'"><div class="type">'+r.type+'</div><div class="title">'+esc(r.title)+'</div></div>';
-  }).join("") || '<div class="search-result-item" style="color:var(--text3)">无结果</div>';
+
+  var idx = buildSearchIndex();
+  var hits = idx.filter(function(x){ return x.tl.indexOf(q) >= 0 || x.xl.indexOf(q) >= 0; });
+
+  /* 标题命中的排前面，然后按类型归拢 */
+  hits.sort(function(a, b){
+    var at = a.tl.indexOf(q) >= 0 ? 0 : 1;
+    var bt = b.tl.indexOf(q) >= 0 ? 0 : 1;
+    if(at !== bt) return at - bt;
+    return a.type.localeCompare(b.type);
+  });
+
+  var head = '<div class="search-result-item" style="color:var(--text3);font-size:.76rem;cursor:default">找到 ' + hits.length + ' 条相关内容</div>';
+  var body = hits.slice(0, 40).map(function(r){
+    var snip = (r.tl.indexOf(q) >= 0) ? "" : snippetOf(r, q);
+    return '<div class="search-result-item" data-c="' + esc(r.click) + '" onclick="gotoSearchResult(this)">'
+      + '<div class="type">' + r.type + '</div>'
+      + '<div class="title">' + esc(r.title) + '</div>'
+      + (snip ? '<div class="snip">' + snip + '</div>' : '')
+      + '</div>';
+  }).join("");
+  box.innerHTML = head + (body || '<div class="search-result-item" style="color:var(--text3)">没找到，换个关键词试试</div>');
   box.classList.add("show");
 }
 

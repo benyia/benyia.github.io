@@ -559,8 +559,12 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     </div>
     <div style="display:flex;gap:20px;flex-wrap:wrap">
       <div style="flex:1;min-width:240px">
-        <div style="font-size:.8rem;color:#64748b;margin-bottom:6px">原图</div>
-        <img id="imgModalBig" style="max-width:100%;max-height:44vh;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc">
+        <div style="font-size:.8rem;color:#64748b;margin-bottom:6px">原图（在图上按住拖动即可框选裁剪区域）</div>
+        <div id="cropWrap" style="position:relative;display:inline-block;max-width:100%;line-height:0">
+          <img id="imgModalBig" onerror="imgModalError(this)" style="max-width:100%;max-height:44vh;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;cursor:crosshair;user-select:none">
+          <div id="cropRect" style="display:none;position:absolute;border:2px dashed #10b981;background:rgba(16,185,129,.18);pointer-events:none;box-sizing:border-box"></div>
+        </div>
+        <div id="imgModalUrl" style="font-size:.72rem;color:#94a3b8;margin-top:8px;word-break:break-all"></div>
       </div>
       <div style="flex:0 0 250px">
         <div style="font-size:.8rem;color:#64748b;margin-bottom:6px">前台卡片显示效果（封面裁切）</div>
@@ -572,6 +576,8 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       <button class="btn btn-ghost btn-sm" onclick="rotateModalImage(-90)">↺ 左转 90°</button>
       <button class="btn btn-ghost btn-sm" onclick="rotateModalImage(90)">↻ 右转 90°</button>
       <button class="btn btn-ghost btn-sm" onclick="rotateModalImage(180)">↕ 转 180°</button>
+      <button class="btn btn-primary btn-sm" onclick="cropModalImage()">✂️ 裁剪选区</button>
+      <button class="btn btn-ghost btn-sm" onclick="clearCrop()">清除选区</button>
       <a class="btn btn-ghost btn-sm" id="imgModalOpen" target="_blank" rel="noopener" style="text-decoration:none">新窗口打开</a>
       <button class="btn btn-danger btn-sm" onclick="deleteModalImage()">删除这张图</button>
     </div>
@@ -634,15 +640,40 @@ const drafts  = {course:[], paper:[], class:[], life:[], media:[], dmedia:[], nf
 function $(id){ return document.getElementById(id); }
 var imgModalCtx = null;
 
+function imgModalError(el){
+  var msg = document.getElementById("imgModalMsg");
+  /* 第一次失败：换回原始（相对）路径再试一次 */
+  if(!el._retried){
+    el._retried = true;
+    var raw = imgModalCtx && imgModalCtx.rawUrl;
+    if(raw && raw !== el.getAttribute("src")){
+      msg.style.color = "#d97706";
+      msg.textContent = "绝对地址加载失败，改用原始路径重试…";
+      el.src = raw;
+      return;
+    }
+  }
+  msg.style.color = "#ef4444";
+  msg.textContent = "❌ 图片加载失败。尝试过：" + el.getAttribute("src") + (el.src !== el.getAttribute("src") ? ("  /  " + el.src) : "");
+  var u = document.getElementById("imgModalUrl");
+  if(u) u.innerHTML = '地址：<a href="'+esc(el.src)+'" target="_blank">'+esc(el.src)+'</a>';
+}
 function openImgModal(url, opt){
   opt = opt || {};
-  imgModalCtx = { url: url, inputId: opt.inputId || null, draftKey: opt.draftKey || null, draftIdx: (opt.draftIdx === undefined ? null : opt.draftIdx), rowKind: opt.rowKind || null, rowIdx: (opt.rowIdx === undefined ? null : opt.rowIdx), imgIdx: (opt.imgIdx === undefined ? null : opt.imgIdx) };
+  var abs = "";
+  try { abs = url ? new URL(url, location.href).href : ""; } catch(e) { abs = String(url||""); }
+  imgModalCtx = { url: abs, rawUrl: String(url||""), inputId: opt.inputId || null, draftKey: opt.draftKey || null, draftIdx: (opt.draftIdx === undefined ? null : opt.draftIdx), rowKind: opt.rowKind || null, rowIdx: (opt.rowIdx === undefined ? null : opt.rowIdx), imgIdx: (opt.imgIdx === undefined ? null : opt.imgIdx) };
+  clearCrop();
   document.getElementById("imgModalTitle").textContent = opt.title || "图片预览";
-  document.getElementById("imgModalBig").src = url;
-  document.getElementById("imgModalPreview").innerHTML = '<img src="'+esc(url)+'" style="width:100%;height:100%;object-fit:cover;display:block">';
-  document.getElementById("imgModalOpen").href = url;
-  document.getElementById("imgModalMsg").textContent = "";
+  var bigEl = document.getElementById("imgModalBig");
+  bigEl._retried = false;
+  bigEl.src = abs;
+  document.getElementById("imgModalPreview").innerHTML = '<img src="'+esc(abs)+'" style="width:100%;height:100%;object-fit:cover;display:block">';
+  document.getElementById("imgModalOpen").href = abs;
+  document.getElementById("imgModalUrl").innerHTML = abs ? ('原图地址：<a href="'+esc(abs)+'" target="_blank">'+esc(abs)+'</a>') : "（没有图片地址）";
+  document.getElementById("imgModalMsg").textContent = abs ? "" : "⚠️ 没有拿到图片地址，请重新上传";
   document.getElementById("imgModal").style.display = "flex";
+  setTimeout(initCropDrag, 30);
 }
 function closeImgModal(){
   document.getElementById("imgModal").style.display = "none";
@@ -660,6 +691,111 @@ function openImgFrom(el){
   });
   return false;
 }
+var cropStart = null, cropBox = null;
+function clearCrop(){
+  cropStart = null; cropBox = null;
+  var r = document.getElementById("cropRect");
+  if(r){ r.style.display = "none"; r.style.width = "0px"; r.style.height = "0px"; }
+}
+function updateCropRect(){
+  var img = document.getElementById("imgModalBig");
+  var box = document.getElementById("cropRect");
+  if(!box || !cropBox){ return; }
+  if(cropBox.w < 4 || cropBox.h < 4){ box.style.display = "none"; return; }
+  box.style.display = "block";
+  box.style.left = cropBox.x + "px";
+  box.style.top = cropBox.y + "px";
+  box.style.width = cropBox.w + "px";
+  box.style.height = cropBox.h + "px";
+  cropBox.dispW = img.clientWidth;
+  cropBox.dispH = img.clientHeight;
+}
+function initCropDrag(){
+  var img = document.getElementById("imgModalBig");
+  if(!img || img._cropBound) return;
+  img._cropBound = true;
+  img.addEventListener("mousedown", function(e){
+    var r = img.getBoundingClientRect();
+    var sx = e.clientX - r.left, sy = e.clientY - r.top;
+    cropStart = { x: sx, y: sy };
+    cropBox = { x: sx, y: sy, w: 0, h: 0, dispW: r.width, dispH: r.height };
+    updateCropRect();
+    e.preventDefault();
+  });
+  document.addEventListener("mousemove", function(e){
+    if(!cropStart) return;
+    var r = img.getBoundingClientRect();
+    var x = Math.max(0, Math.min(r.width, e.clientX - r.left));
+    var y = Math.max(0, Math.min(r.height, e.clientY - r.top));
+    cropBox = { x: Math.min(cropStart.x, x), y: Math.min(cropStart.y, y), w: Math.abs(x - cropStart.x), h: Math.abs(y - cropStart.y), dispW: r.width, dispH: r.height };
+    updateCropRect();
+  });
+  document.addEventListener("mouseup", function(){ cropStart = null; });
+}
+/* 把处理好的图片上传并替换掉原来的引用 */
+async function applyEditedBlob(blob, note){
+  var file = new File([blob], "edited.png", { type: "image/png" });
+  var meta = await uploadFile(file, "img");
+  var newUrl = meta.url;
+  var ctx = imgModalCtx;
+  if(ctx.inputId){
+    document.getElementById(ctx.inputId).value = newUrl;
+    refreshIconPrev(ctx.inputId);
+  }
+  if(ctx.draftKey !== null && ctx.draftIdx !== null && imgDrafts[ctx.draftKey]){
+    imgDrafts[ctx.draftKey][ctx.draftIdx].url = newUrl;
+    renderImgDrafts(ctx.draftKey);
+  }
+  if(ctx.rowKind && ctx.rowIdx !== null && ctx.imgIdx !== null && blogData[ctx.rowKind] && blogData[ctx.rowKind][ctx.rowIdx]){
+    var arr = blogData[ctx.rowKind][ctx.rowIdx].images || [];
+    if(arr[ctx.imgIdx]){ arr[ctx.imgIdx].url = newUrl; arr[ctx.imgIdx].name = "edited.png"; }
+    blogData[ctx.rowKind][ctx.rowIdx].images = arr;
+    saveData(note || "编辑图片");
+    renderAll();
+  }
+  imgModalCtx.url = newUrl;
+  var abs2 = newUrl;
+  try { abs2 = new URL(newUrl, location.href).href; } catch(e) {}
+  document.getElementById("imgModalBig").src = abs2;
+  document.getElementById("imgModalPreview").innerHTML = '<img src="'+esc(abs2)+'" style="width:100%;height:100%;object-fit:cover;display:block">';
+  document.getElementById("imgModalOpen").href = abs2;
+  document.getElementById("imgModalUrl").innerHTML = '原图地址：<a href="'+esc(abs2)+'" target="_blank">'+esc(abs2)+'</a>';
+  clearCrop();
+  return newUrl;
+}
+async function cropModalImage(){
+  var msg = document.getElementById("imgModalMsg");
+  if(!imgModalCtx) return;
+  if(!cropBox || cropBox.w < 5 || cropBox.h < 5){
+    msg.style.color = "#d97706";
+    msg.textContent = "请先在左边的图片上按住鼠标拖动，框出要保留的区域";
+    return;
+  }
+  msg.style.color = "#64748b";
+  msg.textContent = "正在裁剪并上传…";
+  try{
+    var img = await loadImgEl(imgModalCtx.url);
+    var dw = cropBox.dispW || document.getElementById("imgModalBig").clientWidth;
+    var dh = cropBox.dispH || document.getElementById("imgModalBig").clientHeight;
+    var sx = cropBox.x * (img.naturalWidth / dw);
+    var sy = cropBox.y * (img.naturalHeight / dh);
+    var sw = cropBox.w * (img.naturalWidth / dw);
+    var sh = cropBox.h * (img.naturalHeight / dh);
+    var cv = document.createElement("canvas");
+    cv.width = Math.max(1, Math.round(sw));
+    cv.height = Math.max(1, Math.round(sh));
+    cv.getContext("2d").drawImage(img, sx, sy, sw, sh, 0, 0, cv.width, cv.height);
+    var blob = await new Promise(function(res){ cv.toBlob(res, "image/png"); });
+    if(!blob) throw new Error("canvas 导出失败");
+    await applyEditedBlob(blob, "裁剪图片");
+    msg.style.color = "#059669";
+    msg.textContent = "✅ 裁剪完成（" + cv.width + "×" + cv.height + "），别忘了点「保存」！";
+  }catch(e){
+    msg.style.color = "#ef4444";
+    msg.textContent = "❌ 裁剪失败：" + e.message;
+  }
+}
+
 function loadImgEl(url){
   return new Promise(function(res, rej){
     var im = new Image();
@@ -685,33 +821,9 @@ async function rotateModalImage(deg){
     c2.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2);
     var blob = await new Promise(function(res){ cv.toBlob(res, "image/png"); });
     if(!blob) throw new Error("canvas 导出失败");
-    var file = new File([blob], "rotated.png", { type: "image/png" });
-    var meta = await uploadFile(file, "img");
-    var newUrl = meta.url;
-
-    var ctx = imgModalCtx;
-    if(ctx.inputId){
-      document.getElementById(ctx.inputId).value = newUrl;
-      refreshIconPrev(ctx.inputId);
-    }
-    if(ctx.draftKey !== null && ctx.draftIdx !== null && imgDrafts[ctx.draftKey]){
-      imgDrafts[ctx.draftKey][ctx.draftIdx].url = newUrl;
-      renderImgDrafts(ctx.draftKey);
-    }
-    if(ctx.rowKind && ctx.rowIdx !== null && ctx.imgIdx !== null && blogData[ctx.rowKind] && blogData[ctx.rowKind][ctx.rowIdx]){
-      var arr = blogData[ctx.rowKind][ctx.rowIdx].images || [];
-      if(arr[ctx.imgIdx]){ arr[ctx.imgIdx].url = newUrl; arr[ctx.imgIdx].name = "rotated.png"; }
-      blogData[ctx.rowKind][ctx.rowIdx].images = arr;
-      saveData("旋转图片");
-      renderAll();
-    }
-
-    imgModalCtx.url = newUrl;
-    document.getElementById("imgModalBig").src = newUrl;
-    document.getElementById("imgModalPreview").innerHTML = '<img src="'+esc(newUrl)+'" style="width:100%;height:100%;object-fit:cover;display:block">';
-    document.getElementById("imgModalOpen").href = newUrl;
+    await applyEditedBlob(blob, "旋转图片");
     msg.style.color = "#059669";
-    msg.textContent = "✅ 已旋转并上传为新图。别忘了点「保存」让它生效！";
+    msg.textContent = "✅ 已旋转并上传为" + cv.width + "×" + cv.height + "，别忘了点「保存」！";
   }catch(e){
     msg.style.color = "#ef4444";
     msg.textContent = "❌ 失败：" + e.message;

@@ -188,7 +188,7 @@
       "fileName": ""
     },
     {
-      "icon": "files/1789780453968_3_snlkl2if_劵.png",
+      "icon": "files/1789782153736_9_yqopq1ps_淘宝.png",
       "title": "淘宝",
       "desc": "购买",
       "url": "https://www.taobao.com/",
@@ -230,6 +230,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-19 09:42",
+      "action": "编辑生活服务：淘宝"
+    },
     {
       "time": "2026-09-19 09:41",
       "action": "删除导师记录"

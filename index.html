@@ -205,6 +205,39 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
 /* About */
 .about-content{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;backdrop-filter:blur(10px);line-height:1.8;white-space:pre-wrap;font-size:.95rem}
 
+/* ===== 时间标签：LED 数字时钟卡片 ===== */
+.clock-card{position:relative;padding:18px 14px 14px;text-align:center;overflow:hidden;z-index:1;
+  background:linear-gradient(150deg,rgba(255,255,255,.98),rgba(236,253,245,.92));
+  transition:transform .38s cubic-bezier(.34,1.56,.64,1),box-shadow .38s ease;
+  transform-origin:top center}
+.clock-card::before,.clock-card::after{content:"";position:absolute;border-radius:50%;filter:blur(14px);opacity:.55;transition:transform .5s ease;z-index:-1}
+.clock-card::before{width:72px;height:72px;background:#a7f3d0;top:-24px;right:-24px}
+.clock-card::after{width:58px;height:58px;background:#bae6fd;bottom:-22px;left:-20px}
+.clock-card:hover{transform:scale(1.07) translateY(-3px);box-shadow:0 18px 46px rgba(16,185,129,.3);z-index:60}
+.clock-card:hover::before{transform:translate(-7px,9px) scale(1.3)}
+.clock-card:hover::after{transform:translate(8px,-7px) scale(1.3)}
+.clock-display{display:flex;align-items:center;justify-content:center;gap:1px}
+.seg-digit{position:relative;width:29px;height:48px;flex:0 0 auto}
+.seg{position:absolute;background:rgba(30,41,59,.06);transition:background .28s ease,box-shadow .28s ease}
+.seg.on{background:linear-gradient(135deg,#334155 0%,#526173 100%);box-shadow:0 0 7px rgba(51,65,85,.4)}
+.seg.a,.seg.g,.seg.d{left:3px;right:3px;height:7px;clip-path:polygon(16% 0,84% 0,100% 50%,84% 100%,16% 100%,0 50%)}
+.seg.a{top:0}
+.seg.g{top:50%;transform:translateY(-50%)}
+.seg.d{bottom:0}
+.seg.b,.seg.c,.seg.f,.seg.e{width:7px;height:calc(50% - 5px);clip-path:polygon(50% 0,100% 14%,100% 86%,50% 100%,0 86%,0 14%)}
+.seg.f{top:3px;left:0}
+.seg.b{top:3px;right:0}
+.seg.e{bottom:3px;left:0}
+.seg.c{bottom:3px;right:0}
+.seg-colon{position:relative;width:9px;height:48px;flex:0 0 auto}
+.seg-colon i{position:absolute;left:50%;width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#334155,#526173);transform:translateX(-50%);animation:colonPulse 1s ease-in-out infinite}
+.seg-colon i:first-child{top:15px}
+.seg-colon i:last-child{bottom:15px;animation-delay:.15s}
+@keyframes colonPulse{0%,100%{opacity:1;box-shadow:0 0 7px rgba(51,65,85,.4)}50%{opacity:.25;box-shadow:none}}
+.clock-meta{margin-top:10px}
+.clock-date{font-size:.8rem;color:var(--text2);font-weight:500}
+.clock-greet{font-size:.76rem;color:var(--primary-dark);margin-top:3px;font-weight:600}
+
 /* Responsive */
 @media(max-width:900px){
   .main{grid-template-columns:1fr}
@@ -375,13 +408,20 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
 
   <!-- Right Column -->
   <div class="right-col">
+    <div class="side-card clock-card" id="clockCard">
+      <div class="clock-display" id="clockDisplay"></div>
+      <div class="clock-meta">
+        <div class="clock-date" id="clockDate"></div>
+        <div class="clock-greet" id="clockGreet"></div>
+      </div>
+    </div>
     <div class="side-card">
       <h3>站点统计</h3>
       <div class="stat-grid">
         <div class="stat-item"><div class="num" id="statArticles">0</div><div class="label">文章数</div></div>
         <div class="stat-item"><div class="num" id="statCourses">0</div><div class="label">课程数</div></div>
         <div class="stat-item"><div class="num" id="statPapers">0</div><div class="label">论文数</div></div>
-        <div class="stat-item"><div class="num" id="statDays">171</div><div class="label">建站天数</div></div>
+        <div class="stat-item"><div class="num" id="statDays">1</div><div class="label">建站天数</div></div>
       </div>
     </div>
     <div class="side-card">
@@ -969,7 +1009,7 @@ function renderRoster(){
   }).join("") || '<div class="empty">暂无名单</div>';
 }
 
-/* 把前台的“所有东西”建成一张可搜索的表 */
+/* 把前台的"所有东西"建成一张可搜索的表 */
 function buildSearchIndex(){
   var idx = [];
   function push(type, title, parts, click){
@@ -1109,6 +1149,59 @@ document.querySelectorAll(".nav-links button").forEach(function(btn){ btn.onclic
 document.addEventListener("click", function(e){
   if(!e.target.closest(".nav-search")) document.getElementById("searchResults").classList.remove("show");
 });
+
+/* ===== 时间标签：LED 数字时钟（纯 CSS 七段数码管，无外部依赖） ===== */
+var CLOCK_SEGS = ["a","b","c","d","e","f","g"];
+var CLOCK_MAP = {
+  "0":["a","b","c","d","e","f"],
+  "1":["b","c"],
+  "2":["a","b","g","e","d"],
+  "3":["a","b","c","d","g"],
+  "4":["f","g","b","c"],
+  "5":["a","f","g","c","d"],
+  "6":["a","f","g","e","d","c"],
+  "7":["a","b","c"],
+  "8":["a","b","c","d","e","f","g"],
+  "9":["a","b","c","d","f","g"]
+};
+function buildClock(){
+  var box = document.getElementById("clockDisplay");
+  var html = "";
+  for(var pos=0; pos<6; pos++){
+    html += '<span class="seg-digit" data-d="'+pos+'">' +
+      CLOCK_SEGS.map(function(s){ return '<i class="seg '+s+'" data-s="'+s+'"></i>'; }).join("") +
+      '</span>';
+    if(pos===1 || pos===3) html += '<span class="seg-colon"><i></i><i></i></span>';
+  }
+  box.innerHTML = html;
+}
+function updateClock(){
+  var d = new Date();
+  var p2 = function(n){ return String(n).padStart(2,"0"); };
+  var chars = (p2(d.getHours())+p2(d.getMinutes())+p2(d.getSeconds())).split("");
+  var digits = document.querySelectorAll("#clockDisplay .seg-digit");
+  for(var i=0;i<6;i++){
+    var on = CLOCK_MAP[chars[i]] || [];
+    var segs = digits[i].querySelectorAll(".seg");
+    for(var j=0;j<segs.length;j++){
+      segs[j].classList.toggle("on", on.indexOf(segs[j].getAttribute("data-s")) >= 0);
+    }
+  }
+  var weeks = ["周日","周一","周二","周三","周四","周五","周六"];
+  document.getElementById("clockDate").textContent =
+    d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日 "+weeks[d.getDay()];
+  var h = d.getHours(), greet;
+  if(h>=5 && h<9)      greet = "早上好 ☀️";
+  else if(h<11)        greet = "上午好 🌿";
+  else if(h<13)        greet = "中午好 🍚";
+  else if(h<18)        greet = "下午好 ☕";
+  else if(h<23)        greet = "晚上好 🌙";
+  else                 greet = "夜深了 😴";
+  document.getElementById("clockGreet").textContent = greet;
+}
+buildClock();
+updateClock();
+setInterval(updateClock, 1000);
 
 loadData();
 </script>

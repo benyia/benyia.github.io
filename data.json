@@ -115,10 +115,21 @@
         "阅读",
         "英文"
       ],
-      "file": "",
-      "fileName": "",
-      "files": [],
-      "abstract": "参考文献综述"
+      "file": "https://pan.baidu.com/s/1bQTVqKjXTfdkf5KKfiQvqw 提取码: 6npf",
+      "fileName": "test",
+      "files": [
+        {
+          "name": "test",
+          "url": "https://pan.baidu.com/s/1bQTVqKjXTfdkf5KKfiQvqw 提取码: 6npf",
+          "type": "链接",
+          "size": 0,
+          "folder": "",
+          "external": true
+        }
+      ],
+      "abstract": "参考文献综述",
+      "images": [],
+      "time": "2026-09-23 09:13"
     },
     {
       "title": "自治式水下机器人导航与控制若干问题研究",
@@ -304,6 +315,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-23 09:13",
+      "action": "编辑论文：Adaptive Control: A Survey"
+    },
     {
       "time": "2026-09-19 11:18",
       "action": "发布通知：师生互选"

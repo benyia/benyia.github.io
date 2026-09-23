@@ -317,6 +317,10 @@
   "logs": [
     {
       "time": "2026-09-23 15:11",
+      "action": "名单字段可见性：dorm 隐藏"
+    },
+    {
+      "time": "2026-09-23 15:11",
       "action": "名单字段可见性：homeAddress 隐藏"
     },
     {
@@ -825,7 +829,9 @@
       "photo": "",
       "images": [],
       "show": false,
-      "hide": []
+      "hide": [
+        "dorm"
+      ]
     }
   ],
   "rosterConfig": {

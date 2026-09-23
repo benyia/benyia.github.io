@@ -339,6 +339,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-23 15:31",
+      "action": "编辑快速链接：GitHub"
+    },
+    {
       "time": "2026-09-23 15:30",
       "action": "添加班级事务：女同学寝室调整"
     },
@@ -733,10 +737,6 @@
     {
       "time": "2026/9/18 21:45:51",
       "action": "添加班级事务：体检"
-    },
-    {
-      "time": "2026/9/18 21:45:50",
-      "action": "添加班级事务：体检"
     }
   ],
   "categories": [
@@ -774,14 +774,9 @@
       "url": "https://pan.baidu.com"
     },
     {
-      "icon": "files/1789781663382_3_h12x8rqo_12306.png",
-      "title": "12306",
-      "url": "https://www.12306.cn"
-    },
-    {
       "icon": "files/1789781679883_5_yfhy0qi1_github.png",
       "title": "GitHub",
-      "url": "https://github.com"
+      "url": "https://github.com/benyia"
     },
     {
       "icon": "files/1789781716946_6_tauae3kj_知乎.png",

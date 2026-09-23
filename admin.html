@@ -273,6 +273,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <div class="progress-track" id="cProgressTrack"><div class="progress-bar" id="cProgressBar"></div></div>
         </div>
         <input type="file" id="cFileInput" multiple style="display:none" onchange="onCourseFiles(event)">
+        <div style="margin-top:6px"><button class="btn btn-ghost btn-sm" onclick="addExternalFileBtn('course')">🔗 添加网盘外链（大文件推荐）</button></div>
         <div style="margin-top:12px">
           <button class="btn btn-primary" id="cSubmit" onclick="saveCourse()">添加课程</button>
           <button class="btn btn-ghost" id="cCancel" onclick="cancelEdit('course')" style="display:none">取消</button>
@@ -313,6 +314,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <div class="progress-track" id="pProgressTrack"><div class="progress-bar" id="pProgressBar"></div></div>
         </div>
         <input type="file" id="pFileInput" multiple style="display:none" onchange="onPaperFiles(event)">
+        <div style="margin-top:6px"><button class="btn btn-ghost btn-sm" onclick="addExternalFileBtn('paper')">🔗 添加网盘外链（大文件推荐）</button></div>
         <div style="margin-top:12px">
           <button class="btn btn-primary" id="pSubmit" onclick="savePaper()">添加论文</button>
           <button class="btn btn-ghost" id="pCancel" onclick="cancelEdit('paper')" style="display:none">取消</button>
@@ -344,6 +346,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <div class="progress-track" id="nfProgressTrack"><div class="progress-bar" id="nfProgressBar"></div></div>
         </div>
         <input type="file" id="nfFileInput" multiple style="display:none" onchange="onNoticeFiles(event)">
+        <div style="margin-top:6px"><button class="btn btn-ghost btn-sm" onclick="addExternalFileBtn('nf')">🔗 添加网盘外链（大文件推荐）</button></div>
         <div style="margin-top:12px">
           <button class="btn btn-primary" id="nSubmit" onclick="addNotice()">发布通知</button>
           <button class="btn btn-ghost" id="nCancel" onclick="cancelNoticeEdit()" style="display:none">取消</button>
@@ -375,6 +378,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <div class="progress-track" id="clProgressTrack"><div class="progress-bar" id="clProgressBar"></div></div>
         </div>
         <input type="file" id="clFileInput" multiple style="display:none" onchange="onClassFiles(event)">
+        <div style="margin-top:6px"><button class="btn btn-ghost btn-sm" onclick="addExternalFileBtn('class')">🔗 添加网盘外链（大文件推荐）</button></div>
         <div style="margin-top:12px">
           <button class="btn btn-primary" id="clSubmit" onclick="saveClass()">添加</button>
           <button class="btn btn-ghost" id="clCancel" onclick="cancelEdit('class')" style="display:none">取消</button>
@@ -1692,6 +1696,23 @@ function onPaperFiles(e){ const v=e.target.files; handleFiles(v,"paper"); e.targ
 function onClassFiles(e){ const v=e.target.files; handleFiles(v,"class"); e.target.value=""; }
 function onLifeFiles(e){ const v=e.target.files; handleFiles(v,"life"); e.target.value=""; }
 function onMediaFiles(e){ const v=e.target.files; handleFiles(v,"media"); e.target.value=""; }
+
+/* ---------- 网盘外链文件（跳过 GitHub 上传，适合大 PDF / 音频 / 视频）---------- */
+function addExternalFileBtn(kind){
+  var url = prompt("粘贴网盘分享链接（百度网盘/阿里云盘等）。\n如果有提取码，建议直接写在名字或链接后面方便自己识别：");
+  if(url === null) return;
+  url = url.trim();
+  if(!url){ showToast("链接不能为空", "error"); return; }
+  if(!/^https?:\/\//i.test(url)){ showToast("链接需要以 http:// 或 https:// 开头", "error"); return; }
+  var name = prompt("给这个文件起个名字（会显示在前台）：", "") || url;
+  name = name.trim() || url;
+  var extMatch = name.match(/\.([a-zA-Z0-9]{1,5})$/);
+  var type = extMatch ? extMatch[1].toUpperCase() : "链接";
+  drafts[kind] = drafts[kind] || [];
+  drafts[kind].push({name:name, url:url, type:type, size:0, folder:"", external:true});
+  renderDraftFiles(kind);
+  showToast("已添加外链，别忘了点下方「保存」");
+}
 
 /* ============================================================
    渲染

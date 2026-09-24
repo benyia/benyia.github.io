@@ -491,6 +491,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-24 21:39",
+      "action": "添加快速链接：阿里巴巴矢量图库"
+    },
+    {
       "time": "2026-09-24 21:31",
       "action": "编辑课程：新时代中国特色社会主义理论与实践"
     },
@@ -885,10 +889,6 @@
     {
       "time": "2026-09-19 09:20",
       "action": "编辑名单：史晏杰"
-    },
-    {
-      "time": "2026-09-19 09:19",
-      "action": "编辑通知：学校举行2026级新生开学典礼暨军训总结大会"
     }
   ],
   "categories": [
@@ -963,6 +963,11 @@
       "icon": "files/1790250892796_2_nsjxcxc1_校徽.png",
       "title": "沈阳工业大学",
       "url": "https://main.sut.edu.cn/web/guest/242"
+    },
+    {
+      "icon": "files/1790257190083_1_ljshgxnb_阿里巴巴.jpg",
+      "title": "阿里巴巴矢量图库",
+      "url": "https://www.iconfont.cn/?spm=a313x.search_index.i3.d4d0a486a.21e03a81QKijMm"
     }
   ],
   "ledgerCategories": {

@@ -431,6 +431,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-24 19:54",
+      "action": "编辑快速链接：沈阳工业大学"
+    },
+    {
       "time": "2026-09-24 19:51",
       "action": "修改站点设置"
     },
@@ -825,10 +829,6 @@
     {
       "time": "2026-09-19 01:07",
       "action": "编辑课程：计算机控制系统"
-    },
-    {
-      "time": "2026-09-19 01:05",
-      "action": "编辑课程：计算机控制系统"
     }
   ],
   "categories": [
@@ -881,7 +881,7 @@
       "url": "https://www.cnki.net/"
     },
     {
-      "icon": "files/1790249203689_2_98lc3s5b_校徽.png",
+      "icon": "files/1790250892796_2_nsjxcxc1_校徽.png",
       "title": "沈阳工业大学",
       "url": "https://main.sut.edu.cn/web/guest/242"
     }
@@ -1017,5 +1017,6 @@
   ],
   "rosterConfig": {
     "showSensitive": false
-  }
+  },
+  "friendLinks": []
 }

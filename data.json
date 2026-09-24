@@ -6,8 +6,8 @@
     "avatar": "files/1789782355800_12_g6ia1gng_头像.jpg",
     "defaultImage": "",
     "columns": "2",
-    "defaultAvatar": "",
-    "loginHint": "s3069988193@163.com",
+    "defaultAvatar": "files/1790249671695_1_glmmh3lg_人物.png",
+    "loginHint": "",
     "coverPan": true,
     "coverPanSec": 5,
     "name": "思齐",
@@ -424,6 +424,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-24 19:34",
+      "action": "修改站点设置"
+    },
+    {
       "time": "2026-09-24 19:26",
       "action": "编辑快速链接：沈阳工业大学"
     },
@@ -818,10 +822,6 @@
     {
       "time": "2026-09-19 01:02",
       "action": "编辑课程：计算机控制系统"
-    },
-    {
-      "time": "2026-09-19 00:59",
-      "action": "写日记"
     }
   ],
   "categories": [

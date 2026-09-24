@@ -75,8 +75,8 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .page-title h1{font-size:1.8rem;font-weight:800;margin-bottom:4px}
 .page-title p{color:var(--text2);font-size:.95rem}
 
-/* Main Layout */
-.main{max-width:1200px;margin:0 auto;padding:24px;display:grid;grid-template-columns:240px 1fr 240px;gap:24px}
+/* Main Layout：左=导航侧栏，中=正文，右=文章信息/目录/资料等一切非正文内容 */
+.main{max-width:1320px;margin:0 auto;padding:24px;display:grid;grid-template-columns:236px minmax(0,1fr) 300px;gap:22px}
 .left-col,.right-col{display:flex;flex-direction:column;gap:20px}
 .center-col{min-width:0}
 
@@ -248,7 +248,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .rtoc-fab.show{display:flex}
 .rtoc-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:89;display:none}
 .rtoc-mask.show{display:block}
-/* 桌面端目录是左栏里的卡片；右下角那个悬浮面板只在窄屏当抽屉用，宽屏一律不出现 */
+/* 桌面端目录是右侧栏里的卡片；窄屏才靠悬浮按钮兜底 */
 @media(min-width:761px){
   .rtoc{display:none !important}
   .rtoc-fab{display:none !important}
@@ -300,6 +300,17 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .friend-form .ff-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .btn-primary{border:none;background:var(--primary);color:#fff;border-radius:9px;padding:9px 20px;font-size:.86rem;font-family:inherit;cursor:pointer}
 .btn-primary:hover{background:var(--primary-dark)}
+/* 前台填写表单（写日记 / 指导记录 / 友链申请共用一套外观） */
+.front-form{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:18px;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+.front-form h4{font-size:.98rem;margin-bottom:4px}
+.front-form .ff-hint{font-size:.78rem;color:var(--text3);margin-bottom:12px;line-height:1.7}
+.front-form .ff-hint code{background:var(--soft);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:.76rem}
+.front-form .ff-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.front-form input,.front-form textarea{padding:9px 12px;border:1px solid var(--border);border-radius:9px;font-size:.86rem;font-family:inherit;background:var(--bg);color:var(--text);outline:none;flex:1;min-width:140px}
+.front-form input:focus,.front-form textarea:focus{border-color:var(--primary);background:#fff}
+.front-form textarea{width:100%;min-height:110px;resize:vertical;line-height:1.8}
+.front-form .ff-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.front-form .ff-status{font-size:.8rem;color:var(--text3);line-height:1.6;flex:1;min-width:180px}
 .theme-btn{border:1px solid var(--border);background:var(--card);border-radius:9px;padding:7px 11px;cursor:pointer;font-size:.92rem;line-height:1;color:var(--text);margin-right:8px}
 .theme-btn:hover{border-color:var(--primary)}
 @media(max-width:760px){
@@ -320,13 +331,19 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .roster-row .k{color:var(--text3);flex:0 0 72px}
 .roster-row .v{color:var(--text);font-weight:500;word-break:break-all}
 .folder-title{font-size:.86rem;font-weight:600;margin:14px 0 6px;color:var(--primary-dark)}
-/* ===== 卡片式详情：把大段文字拆成有层次的卡片，而不是一坨文本 ===== */
-.detail-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px;align-items:start}
-@media(min-width:820px){ .detail-grid{grid-template-columns:minmax(0,1fr) 280px} .detail-main{grid-column:1;min-width:0} .detail-side{grid-column:2} }
-@media(min-width:1200px){ .detail-grid{grid-template-columns:minmax(0,1fr) 300px} }
+/* ===== 卡片式详情：正文留在中间，信息/目录/资料都放右侧栏 ===== */
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
 .info-card+.info-card{margin-top:16px}
 .info-card h3{font-size:.92rem;margin-bottom:12px;padding-left:10px;border-left:3px solid var(--primary);display:flex;align-items:center;gap:6px}
+/* 右侧栏里的档案卡：窄一些，字号收一点 */
+.side-card .kv-list{gap:7px}
+.side-card .kv{font-size:.82rem}
+.side-card .kv .k{flex:0 0 auto}
+.side-card .kv .v{text-align:right}
+.side-card .file-item{padding:8px 10px}
+.side-card .file-item .name{font-size:.82rem}
+.side-card .folder-title{margin-top:12px}
+.side-card .toc-card-list{max-height:none;overflow:visible}
 .hero-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;backdrop-filter:blur(10px);box-shadow:var(--shadow);margin-bottom:16px}
 .hero-banner{height:132px;background:var(--cover-grad);display:flex;align-items:center;justify-content:center;font-size:3rem;overflow:hidden}
 .hero-banner img{width:100%;height:100%;object-fit:cover}
@@ -507,11 +524,6 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
       <div class="tag-list" id="tagList"></div>
       <div style="margin-top:10px"><a href="javascript:;" onclick="openTag('')" style="font-size:.8rem;color:var(--primary-dark);text-decoration:none">查看全部标签 ›</a></div>
     </div>
-    <!-- 文章目录：打开文章时自动出现（放在「标签」下面） -->
-    <div class="side-card toc-card" id="tocCard" style="display:none">
-      <h3>文章目录</h3>
-      <div class="toc-card-list" id="tocCardList"></div>
-    </div>
   </div>
 
   <!-- Center Column -->
@@ -537,15 +549,8 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
           <div class="progress-ring" id="cdProgressText">学习进度：0%</div>
         </div>
       </div>
-      <div class="detail-grid">
-        <div class="detail-main">
-          <div class="reader-card"><div class="md-body" id="cdIntro"></div></div>
-        </div>
-        <div class="detail-side">
-          <div class="info-card"><h3>📊 课程信息</h3><div class="kv-list" id="cdInfo"></div></div>
-        </div>
-      </div>
-      <div class="info-card"><h3>📎 课程资料</h3><div id="cdFiles"></div></div>
+      <!-- 正文之外的都放右侧栏：见 right-col 里的「文章信息 / 文章目录 / 资料附件」卡片 -->
+      <div class="reader-card"><div class="md-body" id="cdIntro"></div></div>
     </div>
 
     <div class="section" id="sec-papers">
@@ -575,18 +580,11 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
       <div class="hero-card" id="noticeDetailBox">
         <div class="hero-body">
           <h2 id="ndTitle"></h2>
-          <div class="notice-meta-cards" id="ndMetaCards"></div>
+          <div class="chip-row" id="ndChips"></div>
         </div>
       </div>
-      <div class="detail-grid">
-        <div class="detail-main">
-          <div class="reader-card"><div class="md-body" id="ndContent"></div></div>
-        </div>
-        <div class="detail-side">
-          <div class="info-card"><h3>ℹ️ 基本信息</h3><div class="kv-list" id="ndInfo"></div></div>
-        </div>
-      </div>
-      <div class="info-card"><h3>📎 附件</h3><div id="ndFiles"></div></div>
+      <!-- 正文之外的都放右侧栏 -->
+      <div class="reader-card"><div class="md-body" id="ndContent"></div></div>
     </div>
 
     <div class="section" id="sec-class">
@@ -634,6 +632,23 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
     </div>
 
     <div class="section" id="sec-diary">
+      <!-- 前台直接写日记（和「记一笔」一样，需要浏览器里存过 GitHub Token） -->
+      <div class="front-form" id="diaryFormBox">
+        <h4>✍️ 写一篇日记</h4>
+        <div class="ff-hint">支持 Markdown：<code>## 小标题</code>、<code>**加粗**</code>、<code>- 列表</code>、<code>![图](图片地址)</code>；图片地址可以先在后台「添加图片」上传后复制过来。</div>
+        <div class="ff-row">
+          <input type="text" id="fdTitle" placeholder="标题（留空就取正文第一行）">
+          <input type="date" id="fdDate" style="flex:0 0 160px">
+        </div>
+        <div class="ff-row">
+          <input type="text" id="fdTags" placeholder="标签，逗号分隔（如：深度学习,随笔）">
+        </div>
+        <textarea id="fdContent" placeholder="今天想记点什么……"></textarea>
+        <div class="ff-actions">
+          <button class="btn-primary" type="button" onclick="addDiaryFromFront()">保存日记</button>
+          <span class="ff-status" id="fdStatus"></span>
+        </div>
+      </div>
       <div id="diaryList"></div>
     </div>
 
@@ -644,6 +659,24 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
     </div>
 
     <div class="section" id="sec-advisor">
+      <!-- 前台直接写指导记录 -->
+      <div class="front-form" id="advisorFormBox">
+        <h4>📝 记一次导师指导</h4>
+        <div class="ff-hint">支持 Markdown 排版，和写日记一样。</div>
+        <div class="ff-row">
+          <input type="date" id="faDate" style="flex:1">
+          <input type="time" id="faTime" style="flex:1">
+          <input type="number" id="faCount" placeholder="第几次指导" style="flex:1">
+        </div>
+        <div class="ff-row">
+          <input type="text" id="faTags" placeholder="标签，逗号分隔（如：导师,科研方向）">
+        </div>
+        <textarea id="faContent" placeholder="这次和导师聊了什么……"></textarea>
+        <div class="ff-actions">
+          <button class="btn-primary" type="button" onclick="addAdvisorFromFront()">保存记录</button>
+          <span class="ff-status" id="faStatus"></span>
+        </div>
+      </div>
       <div id="advisorList"></div>
     </div>
 
@@ -681,8 +714,23 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
     </div>
   </div>
 
-  <!-- Right Column -->
+  <!-- Right Column：正文之外的东西都放这里（文章信息 / 目录 / 资料附件 / 统计 / 链接） -->
   <div class="right-col">
+    <!-- 文章信息：课程信息 / 基本信息 / 文章信息，按打开的页面自动切换 -->
+    <div class="side-card" id="sideInfoCard" style="display:none">
+      <h3 id="sideInfoTitle">文章信息</h3>
+      <div class="kv-list" id="sideInfoBody"></div>
+    </div>
+    <!-- 文章目录 -->
+    <div class="side-card toc-card" id="tocCard" style="display:none">
+      <h3>📑 文章目录</h3>
+      <div class="toc-card-list" id="tocCardList"></div>
+    </div>
+    <!-- 资料 / 附件 -->
+    <div class="side-card" id="sideFilesCard" style="display:none">
+      <h3 id="sideFilesTitle">📎 资料附件</h3>
+      <div id="sideFilesBody"></div>
+    </div>
     <div class="side-card">
       <h3>站点统计</h3>
       <div class="stat-grid">
@@ -1129,6 +1177,7 @@ function renderAll(){
   renderAdvisor();
   renderFriends();
   renderTagView(currentTag);
+  initFrontForms();
   applyColumns();
   setTimeout(initCoverPan, 60);
 
@@ -1239,12 +1288,12 @@ function openCourse(idx){
     + '<span class="info-chip">📈 进度 <b>'+progress+'%</b></span>'
     + (c.time ? '<span class="info-chip">🕐 '+esc(c.time)+'</span>' : '');
 
-  /* 课程信息卡片 */
-  document.getElementById("cdInfo").innerHTML =
+  /* 课程信息 → 右侧栏「文章信息」卡片 */
+  showSideInfo("📊 课程信息",
       '<div class="kv"><span class="k">课程名称</span><span class="v">'+esc(c.title)+'</span></div>'
     + '<div class="kv"><span class="k">资料数量</span><span class="v">'+files.length+' 个</span></div>'
     + '<div class="kv"><span class="k">学习进度</span><span class="v">'+progress+'%</span></div>'
-    + (c.time ? '<div class="kv"><span class="k">更新时间</span><span class="v">'+esc(c.time)+'</span></div>' : '');
+    + (c.time ? '<div class="kv"><span class="k">更新时间</span><span class="v">'+esc(c.time)+'</span></div>' : ''));
 
   /* 课程介绍按 Markdown 渲染，写了 ## 小标题就会自动生成目录 */
   var introBox = document.getElementById("cdIntro");
@@ -1253,7 +1302,8 @@ function openCourse(idx){
   buildToc(introBox);
   document.getElementById("cdProgressBar").style.width = progress+"%";
   document.getElementById("cdProgressText").innerHTML = "学习进度：<b>"+progress+"%</b>";
-  document.getElementById("cdFiles").innerHTML = galleryHTML(c) + fileListGrouped(c);
+  /* 资料/附件 → 右侧栏 */
+  showSideFiles("📎 课程资料", galleryHTML(c) + fileListGrouped(c));
   setPageTitle("courseDetail", c.title, "");
   showSection("courseDetail");
 }
@@ -1710,23 +1760,26 @@ function openNotice(idx){
   currentNoticeIdx = idx;
   var n = blogData.notices[idx];
   document.getElementById("ndTitle").textContent = n.title;
-  /* 基本信息做成卡片，不再是一行挤在一起的灰字 */
   var files = collectFiles(n);
-  document.getElementById("ndMetaCards").innerHTML =
-      '<div class="meta-card"><div class="mk">来源</div><div class="mv">'+esc(n.source||"未注明")+'</div></div>'
-    + '<div class="meta-card"><div class="mk">日期</div><div class="mv">'+esc(n.date||"—")+'</div></div>'
-    + (n.time ? '<div class="meta-card"><div class="mk">发布时间</div><div class="mv">'+esc(n.time)+'</div></div>' : '')
-    + '<div class="meta-card"><div class="mk">附件</div><div class="mv">'+files.length+' 个</div></div>';
-  document.getElementById("ndInfo").innerHTML =
+  /* 标题下面只留一排小圆片，详细信息去右侧栏 */
+  document.getElementById("ndChips").innerHTML =
+      (n.source ? '<span class="info-chip">🏛 '+esc(n.source)+'</span>' : '')
+    + (n.date ? '<span class="info-chip">📅 '+esc(n.date)+'</span>' : '')
+    + (n.time ? '<span class="info-chip">🕐 '+esc(n.time)+'</span>' : '')
+    + '<span class="info-chip green">📎 <b>'+files.length+'</b> 个附件</span>';
+  /* 基本信息 → 右侧栏「文章信息」卡片 */
+  showSideInfo("ℹ️ 基本信息",
       '<div class="kv"><span class="k">来源</span><span class="v">'+esc(n.source||"未注明")+'</span></div>'
     + '<div class="kv"><span class="k">日期</span><span class="v">'+esc(n.date||"—")+'</span></div>'
     + (n.time ? '<div class="kv"><span class="k">发布时间</span><span class="v">'+esc(n.time)+'</span></div>' : '')
-    + '<div class="kv"><span class="k">附件数量</span><span class="v">'+files.length+' 个</span></div>';
+    + '<div class="kv"><span class="k">附件数量</span><span class="v">'+files.length+' 个</span></div>'
+    + ((n.tags||[]).length ? '<div class="kv"><span class="k">标签</span><span class="v">'+n.tags.map(function(t){return '<a href="javascript:;" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')" style="color:var(--primary-dark);text-decoration:none">'+esc(t)+'</a>';}).join("、")+'</span></div>' : ''));
   var box = document.getElementById("ndContent");
   box.innerHTML = mdRenderHTML(n.content) || '<div class="empty">这条通知还没有正文</div>';
   box.className = "md-body";
   buildToc(box);
-  document.getElementById("ndFiles").innerHTML = galleryHTML(n) + fileListGrouped(n);
+  /* 附件 → 右侧栏 */
+  showSideFiles("📎 附件", galleryHTML(n) + fileListGrouped(n));
   setPageTitle("noticeDetail", n.title, "");
   showSection("noticeDetail");
 }
@@ -1842,6 +1895,113 @@ async function addLedgerFromFront(){
     renderLedger();
     hint.textContent = "✅ 已记一笔，稍等约 1 分钟前台生效"; hint.style.color = "#059669";
   }catch(e){ hint.textContent = "保存失败："+e.message; hint.style.color = "#ef4444"; }
+}
+
+/* ============================================================
+   前台写入（和「记一笔」同一套）：拉线上最新 data.json → 改 → 提交
+   需要浏览器里存过 GitHub Token（后台「站点设置」保存一次即可）
+   ============================================================ */
+function frontToken(){
+  try { return (localStorage.getItem("benyia_gh_token") || "").trim(); } catch(e){ return ""; }
+}
+async function pushDataChange(mutate, commitMessage){
+  var token = frontToken();
+  if(!token) throw new Error("需要先在管理后台「站点设置」里保存 GitHub Token（只存在你自己的浏览器里）");
+  var h = { "Authorization":"Bearer "+token, "Accept":"application/vnd.github+json", "Content-Type":"application/json" };
+  /* 以线上为准，避免把别的改动覆盖掉 */
+  var metaRes = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/data.json?ref=main&t="+Date.now(), { headers:h, cache:"no-store" });
+  if(!metaRes.ok) throw new Error("读取线上数据失败（HTTP " + metaRes.status + "），请检查 Token 是否有效");
+  var meta = await metaRes.json();
+  var latest = JSON.parse(decodeURIComponent(escape(atob(String(meta.content||"").replace(/\s/g,"")))));
+  mutate(latest);
+  var bytes = new TextEncoder().encode(JSON.stringify(latest, null, 2));
+  var bin = "", CHUNK = 0x8000;
+  for(var i = 0; i < bytes.length; i += CHUNK) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
+  var put = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/data.json", {
+    method: "PUT", headers: h,
+    body: JSON.stringify({ message: commitMessage || "前台更新", content: btoa(bin), branch: "main", sha: meta.sha })
+  });
+  if(!put.ok){
+    var m = "HTTP " + put.status;
+    try { var j = await put.json(); if(j.message) m += "：" + j.message; } catch(e){}
+    throw new Error(m);
+  }
+  /* 本地立即生效，不用等 Pages 构建 */
+  blogData = latest;
+  return latest;
+}
+function sayStatus(id, text, color){
+  var el = document.getElementById(id);
+  if(!el) return;
+  el.textContent = text;
+  el.style.color = color || "var(--text3)";
+}
+function parseTagsText(v){
+  var out = [];
+  String(v == null ? "" : v).split(/[,，、;；]+/).forEach(function(t){
+    t = t.trim();
+    if(t && out.indexOf(t) < 0) out.push(t);
+  });
+  return out;
+}
+async function addDiaryFromFront(){
+  var content = (document.getElementById("fdContent").value || "").trim();
+  var title = (document.getElementById("fdTitle").value || "").trim();
+  var tags = parseTagsText(document.getElementById("fdTags").value);
+  var date = document.getElementById("fdDate").value || todayStr();
+  if(!content && !title){ sayStatus("fdStatus", "请先写点内容", "#ef4444"); return; }
+  if(!title) title = autoTitle(content, date);
+  sayStatus("fdStatus", "保存中…（正在写入 GitHub）");
+  try{
+    await pushDataChange(function(d){
+      d.diary = d.diary || [];
+      d.diary.push({ date: date, title: title, content: content, tags: tags, images: [], media: [], time: nowStr() });
+    }, "前台写日记：" + title);
+    document.getElementById("fdContent").value = "";
+    document.getElementById("fdTitle").value = "";
+    document.getElementById("fdTags").value = "";
+    renderDiary();
+    sayStatus("fdStatus", "✅ 已保存并生效（线上约 1 分钟后同步）", "var(--primary-dark)");
+  }catch(e){
+    sayStatus("fdStatus", "保存失败：" + e.message, "#ef4444");
+  }
+}
+async function addAdvisorFromFront(){
+  var content = (document.getElementById("faContent").value || "").trim();
+  var date = document.getElementById("faDate").value || todayStr();
+  var time = document.getElementById("faTime").value || "";
+  var count = parseInt(document.getElementById("faCount").value, 10) || 0;
+  var tags = parseTagsText(document.getElementById("faTags").value);
+  if(!content){ sayStatus("faStatus", "请先写点内容", "#ef4444"); return; }
+  sayStatus("faStatus", "保存中…（正在写入 GitHub）");
+  try{
+    await pushDataChange(function(d){
+      d.advisor = d.advisor || [];
+      d.advisor.push({ date: date, time: time, count: count, content: content, tags: tags, images: [], files: [] });
+    }, "前台记录导师指导");
+    document.getElementById("faContent").value = "";
+    document.getElementById("faCount").value = "";
+    document.getElementById("faTags").value = "";
+    renderAdvisor();
+    sayStatus("faStatus", "✅ 已保存并生效（线上约 1 分钟后同步）", "var(--primary-dark)");
+  }catch(e){
+    sayStatus("faStatus", "保存失败：" + e.message, "#ef4444");
+  }
+}
+
+/* 前台表单初始化：日期默认今天，并提示 Token 状态 */
+function initFrontForms(){
+  var today = todayStr();
+  var d = document.getElementById("fdDate");
+  var a = document.getElementById("faDate");
+  if(d && !d.value) d.value = today;
+  if(a && !a.value) a.value = today;
+  var hasToken = !!frontToken();
+  var hint = hasToken ? "" : "提示：保存需要在后台「站点设置」里保存一次 GitHub Token（只存在你自己的浏览器里）。";
+  if(!hasToken){
+    sayStatus("fdStatus", hint);
+    sayStatus("faStatus", hint);
+  }
 }
 
 function autoTitle(text, date){
@@ -2058,11 +2218,44 @@ function setPageTitle(key, h1, p){
   document.getElementById("titleH1").textContent = h1 || (PAGE_TITLES[key]?PAGE_TITLES[key][0]:"思齐个人主页");
   document.getElementById("titleP").textContent = p !== undefined ? p : (PAGE_TITLES[key]?PAGE_TITLES[key][1]:"");
 }
+/* ============================================================
+   右侧栏：正文之外的一切（文章信息 / 目录 / 资料附件）
+   ============================================================ */
+function showSideInfo(title, html){
+  var card = document.getElementById("sideInfoCard");
+  var t = document.getElementById("sideInfoTitle");
+  var b = document.getElementById("sideInfoBody");
+  if(!card || !t || !b) return;
+  if(!html){ card.style.display = "none"; b.innerHTML = ""; return; }
+  t.textContent = title || "文章信息";
+  b.innerHTML = html;
+  card.style.display = "";
+}
+function showSideFiles(title, html){
+  var card = document.getElementById("sideFilesCard");
+  var t = document.getElementById("sideFilesTitle");
+  var b = document.getElementById("sideFilesBody");
+  if(!card || !t || !b) return;
+  if(!html){ card.style.display = "none"; b.innerHTML = ""; return; }
+  t.textContent = title || "📎 资料附件";
+  b.innerHTML = html;
+  card.style.display = "";
+}
+/* 回到列表页时把文章专属的侧栏卡片收起来 */
+function clearSideArticle(){
+  showSideInfo("", "");
+  showSideFiles("", "");
+}
+
 function showSection(name){
   document.querySelectorAll(".section").forEach(function(s){s.classList.remove("active");});
   document.getElementById("sec-"+name).classList.add("active");
   /* 详情页在 showSection 之后才填内容并 buildToc，这里先清空上一个页面的目录 */
   renderToc([]);
+  /* 只有文章详情页才显示「文章信息 / 目录 / 资料」这三张卡 */
+  if(name !== "courseDetail" && name !== "noticeDetail" && name !== "classDetail" && name !== "paperDetail"){
+    clearSideArticle();
+  }
   window.scrollTo(0,0);
   setTimeout(initCoverPan, 60);
 }

@@ -392,7 +392,6 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 /* ===== 标签聚合 ===== */
 .tag-cloud{display:flex;flex-wrap:wrap;gap:8px}
 .tag-cloud .tag-chip{padding:6px 13px;font-size:.82rem}
-.tag-cloud .tag-chip b{opacity:.65;font-weight:600;margin-left:4px}
 .tag-count{font-size:.8rem;color:var(--text3);margin-bottom:12px}
 .tag-group-title{font-size:.92rem;font-weight:700;margin:20px 0 10px;padding-left:10px;border-left:3px solid var(--primary);display:flex;justify-content:space-between;align-items:center}
 
@@ -568,8 +567,13 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
           <div class="progress-ring" id="cdProgressText">学习进度：0%</div>
         </div>
       </div>
-      <!-- 正文之外的都放右侧栏：见 right-col 里的「文章信息 / 文章目录 / 资料附件」卡片 -->
+      <!-- 正文 -->
       <div class="reader-card"><div class="md-body" id="cdIntro"></div></div>
+      <!-- 资料/附件：紧跟在正文下面 -->
+      <div class="info-card" id="articleFiles" style="display:none">
+        <h3 id="articleFilesTitle">📎 课程资料</h3>
+        <div id="articleFilesBody"></div>
+      </div>
     </div>
 
     <div class="section" id="sec-papers">
@@ -586,10 +590,14 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
           <div class="chip-row" id="pdChips"></div>
         </div>
       </div>
-      <!-- 正文（摘要 + 备注）留在中间，其余进右侧栏 -->
+      <!-- 正文（摘要 + 备注），文件紧跟在下面 -->
       <div class="reader-card">
         <div class="md-body" id="pdAbstract"></div>
         <div class="md-body" id="pdDesc" style="margin-top:18px;padding-top:16px;border-top:1px dashed var(--border)"></div>
+      </div>
+      <div class="info-card" id="articleFiles" style="display:none">
+        <h3 id="articleFilesTitle">📎 论文文件</h3>
+        <div id="articleFilesBody"></div>
       </div>
     </div>
 
@@ -606,8 +614,13 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
           <div class="chip-row" id="ndChips"></div>
         </div>
       </div>
-      <!-- 正文之外的都放右侧栏 -->
+      <!-- 正文 -->
       <div class="reader-card"><div class="md-body" id="ndContent"></div></div>
+      <!-- 附件：紧跟在正文下面 -->
+      <div class="info-card" id="articleFiles" style="display:none">
+        <h3 id="articleFilesTitle">📎 附件</h3>
+        <div id="articleFilesBody"></div>
+      </div>
     </div>
 
     <div class="section" id="sec-class">
@@ -755,11 +768,7 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
       <h3>📑 文章目录</h3>
       <div class="toc-card-list" id="tocCardList"></div>
     </div>
-    <!-- 资料 / 附件 -->
-    <div class="side-card" id="sideFilesCard" style="display:none">
-      <h3 id="sideFilesTitle">📎 资料附件</h3>
-      <div id="sideFilesBody"></div>
-    </div>
+    <!-- 资料 / 附件（现在跟在正文下面，这里不再放） -->
     <div class="side-card">
       <h3>站点统计</h3>
       <div class="stat-grid">
@@ -1022,10 +1031,9 @@ function renderCategories(){
 }
 
 function renderTags(){
-  var idx = tagIndex();
+  /* 标签后面不带数量，只显示标签本身 */
   document.getElementById("tagList").innerHTML = (blogData.tags||[]).map(function(t){
-    var n = idx[t] ? idx[t].items.length : 0;
-    return '<span class="tag-chip" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')" title="查看该标签下的全部内容">'+esc(t)+(n?'<b> '+n+'</b>':"")+'</span>';
+    return '<span class="tag-chip" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')" title="查看该标签下的全部内容">'+esc(t)+'</span>';
   }).join("") || '';
 }
 
@@ -1089,7 +1097,7 @@ function renderTagView(active){
   var keys = Object.keys(idx);
   var cloud = keys.map(function(t){
     var on = (t === active) ? ' style="background:var(--primary);color:#fff"' : "";
-    return '<span class="tag-chip"'+on+' onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')">'+esc(t)+'<b> '+idx[t].items.length+'</b></span>';
+    return '<span class="tag-chip"'+on+' onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')">'+esc(t)+'</span>';
   }).join("");
   document.getElementById("tagCloudBox").innerHTML = keys.length
     ? '<div class="info-card"><h3>🏷️ 全部标签</h3><div class="tag-cloud">'+cloud+'</div></div>'
@@ -1097,18 +1105,16 @@ function renderTagView(active){
 
   var box = document.getElementById("tagPostsBox");
   if(!active){
-    var total = 0;
-    keys.forEach(function(t){ total += idx[t].items.length; });
-    box.innerHTML = '<div class="tag-count">共 '+keys.length+' 个标签、'+total+' 条内容。点上面的标签查看全部相关内容。</div>';
+    box.innerHTML = '<div class="tag-count">点上面的标签，查看全部相关内容。</div>';
     return;
   }
   var entry = idx[active];
   if(!entry){ box.innerHTML = '<div class="tag-count">没有找到标签「'+esc(active)+'」</div>'; return; }
   var byKind = {};
   entry.items.forEach(function(it){ (byKind[it.kind] = byKind[it.kind] || []).push(it); });
-  var html = '<div class="tag-count">标签「<b>'+esc(active)+'</b>」下共 '+entry.items.length+' 条内容</div>';
+  var html = '<div class="tag-count">标签「<b>'+esc(active)+'</b>」下的内容</div>';
   Object.keys(byKind).forEach(function(kind){
-    html += '<div class="tag-group-title"><span>'+esc(byKind[kind][0].icon)+' '+esc(kind)+'</span><span style="font-size:.78rem;color:var(--text3);font-weight:400">'+byKind[kind].length+' 条</span></div>';
+    html += '<div class="tag-group-title"><span>'+esc(byKind[kind][0].icon)+' '+esc(kind)+'</span></div>';
     html += '<div class="list-cols cols-1">' + byKind[kind].map(function(it){
       return '<div class="article-card" onclick="'+it.click+'"><div class="article-body">'
         + '<div class="article-title">'+esc(it.title)+'</div>'
@@ -2554,15 +2560,16 @@ function showSideInfo(title, html){
   b.innerHTML = html;
   card.style.display = "";
 }
+/* 资料/附件：紧跟在文章正文下面（正文之外的其它信息才放右侧栏） */
 function showSideFiles(title, html){
-  var card = document.getElementById("sideFilesCard");
-  var t = document.getElementById("sideFilesTitle");
-  var b = document.getElementById("sideFilesBody");
-  if(!card || !t || !b) return;
-  if(!html){ card.style.display = "none"; b.innerHTML = ""; return; }
+  var box = document.getElementById("articleFiles");
+  var t = document.getElementById("articleFilesTitle");
+  var b = document.getElementById("articleFilesBody");
+  if(!box || !t || !b) return;
+  if(!html){ box.style.display = "none"; b.innerHTML = ""; return; }
   t.textContent = title || "📎 资料附件";
   b.innerHTML = html;
-  card.style.display = "";
+  box.style.display = "";
 }
 /* 回到列表页时把文章专属的侧栏卡片收起来 */
 function clearSideArticle(){

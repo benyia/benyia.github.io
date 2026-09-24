@@ -185,7 +185,33 @@
       ]
     }
   ],
-  "papers": [],
+  "papers": [
+    {
+      "title": "基于FPGA 的多路信号收发器设计",
+      "status": "已发表",
+      "year": "2026",
+      "desc": "本科论文",
+      "abstract": "<div style=\"text-align: center;\"><span style=\"font-family: 宋体; font-size: 18pt;\">摘要</span></div>&nbsp; &nbsp;针对激光雷达测试过程中点云数据高速采集、网络传输及遥控遥测需求，本设计<span style=\"font-family: inherit; font-size: 0.92rem;\">基于FPGA 硬件平台设计了一套多路信号收发器系统。设计了LVDS 信号收发电路，</span><span style=\"font-family: inherit; font-size: 0.92rem;\">完成差分信号与单端信号转换，转换后信号进入FPGA。设计了FPGA 程序完成数据</span><span style=\"font-family: inherit; font-size: 0.92rem;\">采集、缓存与协议装，通过千兆以太网基于UDP 协议将点云数据实时发送至电脑端，</span><span style=\"font-family: inherit; font-size: 0.92rem;\">供后续分析与显示。同时，电脑端也可以通过以太网发送测试点云数据至FPGA，FPGA</span><span style=\"font-family: inherit; font-size: 0.92rem;\">将其转换为LVDS 差分信号传至雷达。此外，还设计了一组RS-422 双向通信链路，用</span><span style=\"font-family: inherit; font-size: 0.92rem;\">于发送遥感指令并接收雷达返回的测信息。搭建了实物实验平台，对LVDS 数据传</span><span style=\"font-family: inherit; font-size: 0.92rem;\">输、以太网通讯和RS-422 通信功能进行了验证，本设计为多协议高速信号转换系统提</span><div>供了工程参考。</div><div><br></div><div><b>关键词：</b>FPGA，LVDS，千兆网口，RS-422</div>",
+      "abstractIsHTML": true,
+      "tags": [
+        "中文",
+        "查重"
+      ],
+      "files": [
+        {
+          "name": "8.毕业论文设计定稿.pdf",
+          "url": "files/1790258461085_1_nmf61nmq_8.毕业论文设计定稿.pdf",
+          "type": "PDF",
+          "size": 6376419,
+          "folder": ""
+        }
+      ],
+      "images": [],
+      "file": "files/1790258461085_1_nmf61nmq_8.毕业论文设计定稿.pdf",
+      "fileName": "8.毕业论文设计定稿.pdf",
+      "time": "2026-09-24 22:01"
+    }
+  ],
   "notices": [
     {
       "title": "2026年秋季学期选课通知",
@@ -490,6 +516,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-24 22:01",
+      "action": "添加论文：基于FPGA 的多路信号收发器设计"
+    },
     {
       "time": "2026-09-24 21:46",
       "action": "编辑友链：番茄助理人fqzlr"
@@ -885,10 +915,6 @@
     {
       "time": "2026-09-19 09:24",
       "action": "编辑快速链接：deepseek"
-    },
-    {
-      "time": "2026-09-19 09:20",
-      "action": "修改站点设置"
     }
   ],
   "categories": [

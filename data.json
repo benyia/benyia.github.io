@@ -477,7 +477,11 @@
   "logs": [
     {
       "time": "2026-09-24 22:53",
-      "action": "名单：前台隐藏"
+      "action": "名单：前台显示"
+    },
+    {
+      "time": "2026-09-24 22:52",
+      "action": "名单：前台显示"
     },
     {
       "time": "2026-09-24 22:49",
@@ -870,10 +874,6 @@
     {
       "time": "2026-09-19 09:41",
       "action": "删除导师记录"
-    },
-    {
-      "time": "2026-09-19 09:41",
-      "action": "添加导师指导记录"
     }
   ],
   "categories": [
@@ -1015,7 +1015,7 @@
       "note": "",
       "photo": "files/1789783018217_1_pohb49f2_人物.png",
       "images": [],
-      "show": false,
+      "show": true,
       "hide": [
         "note",
         "phone",
@@ -1048,7 +1048,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": false,
+      "show": true,
       "hide": [
         "ethnicity",
         "political",
@@ -1080,7 +1080,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": false,
+      "show": true,
       "hide": []
     }
   ],

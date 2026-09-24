@@ -7,7 +7,7 @@
     "defaultImage": "",
     "columns": "2",
     "defaultAvatar": "",
-    "loginHint": "",
+    "loginHint": "我喜欢的人的生日",
     "coverPan": true,
     "coverPanSec": 5,
     "name": "思齐",
@@ -490,6 +490,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-24 21:25",
+      "action": "修改站点设置"
+    },
+    {
       "time": "2026-09-24 20:17",
       "action": "删除课程"
     },
@@ -884,10 +888,6 @@
     {
       "time": "2026-09-19 09:08",
       "action": "编辑生活服务：淘宝"
-    },
-    {
-      "time": "2026-09-19 09:07",
-      "action": "添加生活服务：淘宝"
     }
   ],
   "categories": [

@@ -19,18 +19,14 @@
   "members": [],
   "services": [],
   "media": [],
-  "ledger": [
-    {
-      "date": "2026-09-24",
-      "type": "expense",
-      "amount": 111,
-      "desc": "111",
-      "category": "吃饭"
-    }
-  ],
+  "ledger": [],
   "diary": [],
   "mentoring": [],
   "logs": [
+    {
+      "time": "2026-09-24 17:47",
+      "action": "删除记账"
+    },
     {
       "time": "2026-09-24 17:32",
       "action": "修改站点设置"

@@ -425,6 +425,10 @@
   "logs": [
     {
       "time": "2026-09-24 19:26",
+      "action": "编辑快速链接：沈阳工业大学"
+    },
+    {
+      "time": "2026-09-24 19:26",
       "action": "添加快速链接：沈阳工业大学"
     },
     {
@@ -818,10 +822,6 @@
     {
       "time": "2026-09-19 00:59",
       "action": "写日记"
-    },
-    {
-      "time": "2026-09-19 00:54",
-      "action": "添加快速链接：deepseek"
     }
   ],
   "categories": [
@@ -874,7 +874,7 @@
       "url": "https://www.cnki.net/"
     },
     {
-      "icon": "🔗",
+      "icon": "files/1790249203689_2_98lc3s5b_校徽.png",
       "title": "沈阳工业大学",
       "url": "https://main.sut.edu.cn/web/guest/242"
     }

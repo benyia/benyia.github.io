@@ -330,6 +330,25 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .rt-content a{color:var(--primary-dark)}
 .rt-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:.76rem;color:var(--text3);margin-top:6px}
 .rt-foot a{color:var(--primary);cursor:pointer}
+
+/* 前台轻量弹窗：替代浏览器自带 prompt（图片地址 / 链接地址 / 表格） */
+.fdlg-mask{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:1300;display:none;align-items:center;justify-content:center;padding:18px}
+.fdlg-mask.show{display:flex}
+.fdlg{background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 24px 60px rgba(15,23,42,.3);width:100%;max-width:520px;padding:20px 22px 16px;backdrop-filter:blur(14px)}
+.fdlg h3{font-size:1.02rem;margin-bottom:9px}
+.fdlg .fdlg-hint{font-size:.84rem;color:var(--text2);line-height:1.7;margin-bottom:12px;white-space:pre-wrap}
+.fdlg input{width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:9px;font-size:.9rem;font-family:inherit;background:var(--bg);color:var(--text);outline:none}
+.fdlg input:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 4px rgba(16,185,129,.13)}
+.fdlg .fdlg-row{display:flex;gap:9px;margin-top:9px;flex-wrap:wrap}
+.fdlg .fdlg-row input{flex:1;min-width:110px}
+.fdlg .fdlg-err{color:#ef4444;font-size:.79rem;margin-top:8px;min-height:1.1em}
+.fdlg .fdlg-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:16px;flex-wrap:wrap}
+.fdlg .fdlg-actions .up{margin-right:auto;background:var(--primary-light);color:var(--primary-dark);font-weight:600}
+.fdlg-btn{padding:9px 22px;border:none;border-radius:9px;font-size:.88rem;font-family:inherit;cursor:pointer}
+.fdlg-btn.primary{background:#2563eb;color:#fff}
+.fdlg-btn.primary:hover{background:#1d4ed8}
+.fdlg-btn.ghost{background:var(--soft);color:var(--text2)}
+.fdlg-btn.ghost:hover{background:#e2e8f0}
 .theme-btn{border:1px solid var(--border);background:var(--card);border-radius:9px;padding:7px 11px;cursor:pointer;font-size:.92rem;line-height:1;color:var(--text);margin-right:8px}
 .theme-btn:hover{border-color:var(--primary)}
 @media(max-width:760px){
@@ -394,6 +413,19 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .tag-cloud .tag-chip{padding:6px 13px;font-size:.82rem}
 .tag-count{font-size:.8rem;color:var(--text3);margin-bottom:12px}
 .tag-group-title{font-size:.92rem;font-weight:700;margin:20px 0 10px;padding-left:10px;border-left:3px solid var(--primary);display:flex;justify-content:space-between;align-items:center}
+/* 标签聚合页里每篇文章自带的分层目录（1 / 1.1 / 1.1.1） */
+.tag-toc{margin-top:12px;border-top:1px dashed var(--border);padding-top:10px}
+.tag-toc-head{font-size:.78rem;font-weight:700;color:var(--text2);margin-bottom:6px}
+.tag-toc-list{display:flex;flex-direction:column;gap:1px}
+.tag-toc-list a,.tag-toc-list span{display:block;font-size:.8rem;line-height:1.6;color:var(--text2);text-decoration:none;padding:3px 6px;border-radius:5px;border-left:2px solid transparent}
+.tag-toc-list a:hover{color:var(--primary);background:var(--soft);border-left-color:var(--primary)}
+.tag-toc-no{display:inline-block;min-width:2.2em;color:var(--text3);font-variant-numeric:tabular-nums}
+.tag-toc-lv1{font-weight:700;color:var(--text)}
+.tag-toc-lv2{padding-left:14px}
+.tag-toc-lv3{padding-left:28px;font-size:.78rem}
+.tag-toc-lv4{padding-left:42px;font-size:.76rem;color:var(--text3)}
+.tag-toc-lv5{padding-left:56px;font-size:.75rem;color:var(--text3)}
+.tag-toc-more{font-size:.75rem;color:var(--text3);padding:4px 6px}
 
 /* 多列布局：同一行卡片等高、内容自动收拢 */
 .list-cols{display:grid;gap:16px;align-items:stretch}
@@ -797,6 +829,23 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
 </aside>
 <button class="rtoc-fab" id="rtocFab" type="button" onclick="openToc()">📑 目录</button>
 
+<!-- 前台轻量弹窗：图片地址 / 链接地址 / 表格，替代浏览器自带 prompt -->
+<div class="fdlg-mask" id="fdlgMask" onclick="if(event.target===this)closeFdlg()">
+  <div class="fdlg" role="dialog" aria-modal="true">
+    <h3 id="fdlgTitle">输入</h3>
+    <div class="fdlg-hint" id="fdlgHint"></div>
+    <input type="text" id="fdlgInput" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();submitFdlg();}">
+    <div class="fdlg-row" id="fdlgRow2" style="display:none"><input type="text" id="fdlgInput2" autocomplete="off"></div>
+    <div class="fdlg-err" id="fdlgErr"></div>
+    <div class="fdlg-actions">
+      <button class="fdlg-btn up" type="button" id="fdlgUp" style="display:none" onclick="fdlgPickFile()">选择文件上传</button>
+      <button class="fdlg-btn ghost" type="button" onclick="closeFdlg()">取消</button>
+      <button class="fdlg-btn primary" type="button" onclick="submitFdlg()" id="fdlgOk">确定</button>
+    </div>
+    <input type="file" id="fdlgFile" multiple style="display:none" onchange="onFdlgFile(event)">
+  </div>
+</div>
+
 <div class="footer">© 2026 思齐个人主页 · Powered by GitHub Pages</div>
 
 <script>
@@ -1058,27 +1107,33 @@ function tagIndex(){
   (blogData.courses||[]).forEach(function(c,i){
     add(c.tags, { kind:"课程", icon:"📚", title:c.title,
       desc:(c.desc||"") + (c.intro ? " " + mdText(c.intro) : ""),
+      body:c.intro || c.desc || "",
       time:c.time||c.date||"", click:"openCourse("+i+")" });
   });
   (blogData.papers||[]).forEach(function(p,i){
     add(p.tags, { kind:"论文", icon:"📝", title:p.title, desc:p.abstract||p.desc||"",
+      body:p.abstract || p.desc || "",
       time:p.time||p.date||"", click:"openPaper("+i+")" });
   });
   (blogData.notices||[]).forEach(function(n,i){
     add(n.tags, { kind:"通知", icon:"🔔", title:n.title, desc:mdText(n.content),
+      body:n.content || "",
       time:n.time||n.date||"", click:"openNotice("+i+")" });
   });
   (blogData.classItems||[]).forEach(function(c,i){
     add(c.tags, { kind:"班级", icon:"👥", title:c.title, desc:mdText(c.content),
+      body:c.content || "",
       time:c.time||c.date||"", click:"openClass("+i+")" });
   });
   (blogData.diary||[]).forEach(function(d,i){
     add(d.tags, { kind:"日记", icon:"📖", title:d.title||autoTitle(d.content, d.date),
-      desc:mdText(d.content), time:d.time||d.date||"", click:"switchTab('diary')" });
+      desc:mdText(d.content), body:d.content || "",
+      time:d.time||d.date||"", click:"switchTab('diary')" });
   });
   (blogData.advisor||[]).forEach(function(a,i){
     add(a.tags, { kind:"导师指导", icon:"🎓", title:(a.count?("第 "+a.count+" 次指导"):"指导记录"),
-      desc:mdText(a.content), time:a.time||a.date||"", click:"switchTab('advisor')" });
+      desc:mdText(a.content), body:a.content || "",
+      time:a.time||a.date||"", click:"switchTab('advisor')" });
   });
   Object.keys(map).forEach(function(k){ map[k].items.sort(byTimeDesc); });
   /* 标签排序：内容多的排前面，其次按原配置顺序 */
@@ -1091,6 +1146,68 @@ function tagIndex(){
     return ia - ib || a.localeCompare(b);
   }).reduce(function(acc, k){ acc[k] = map[k]; return acc; }, {});
   return map;
+}
+/* 抽出文章里的小标题，做成分层目录（像参考站那样：1 / 1.1 / 1.1.1）
+   直接用正则扫 HTML，不依赖 DOM 查询，任何环境下结果都一致 */
+function mdInlineText(s){
+  return String(s == null ? "" : s)
+    .replace(/<[^>]*>/g, "")
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/[`*_~]/g, "")
+    .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+function outlineOfContent(content){
+  var src = String(content || "");
+  if(!src.trim()) return [];
+  var html = looksHTML(src) ? src : mdRender(src);
+  /* 取出所有 h1~h4（带 id 的记下来，方便点击跳转） */
+  var re = /<h([1-4])\b([^>]*)>([\s\S]*?)<\/h\1>/gi;
+  var raw = [], m;
+  while((m = re.exec(html))){
+    var lvl = parseInt(m[1], 10);
+    var idM = String(m[2] || "").match(/\bid\s*=\s*"([^"]+)"/);
+    var txt = mdInlineText(m[3]);
+    if(txt) raw.push({ lvl: lvl, txt: txt, id: idM ? idM[1] : "" });
+  }
+  if(!raw.length) return [];
+  /* 文章里最小的一级标题当作第 1 层：这样「## 一、…」就是 1，而不会变成 1.1 */
+  var base = Math.min.apply(null, raw.map(function(h){ return h.lvl; }));
+  var heads = raw.map(function(h){ return { lvl: h.lvl - base + 1, txt: h.txt, id: h.id }; });
+  /* 按层级编号：1 / 1.1 / 1.1.1 */
+  var counters = [0, 0, 0, 0, 0, 0];
+  heads.forEach(function(h){
+    var i = h.lvl - 1;
+    if(i < 0) i = 0;
+    counters[i] = (counters[i] || 0) + 1;
+    for(var j = i + 1; j < counters.length; j++) counters[j] = 0;
+    var parts = [];
+    for(var k = 0; k <= i; k++) parts.push(counters[k] || (k === 0 ? 1 : 0));
+    h.no = parts.join(".");
+  });
+  return heads;
+}
+/* 一篇文章的目录卡片：有锚点就做成可点跳转的链接 */
+function outlineHTML(item){
+  var heads = outlineOfContent(item.body);
+  if(heads.length < 2) return "";
+  var jumpable = heads.some(function(h){ return h.id; });
+  var list = heads.slice(0, 24).map(function(h){
+    var cls = "tag-toc-lv" + Math.min(5, h.lvl);
+    var label = '<span class="tag-toc-no">'+esc(h.no)+'</span> ' + esc(h.txt);
+    if(jumpable && h.id){
+      return '<a class="'+cls+'" href="#'+esc(h.id)+'" onclick="jumpTo(event,&quot;'+esc(h.id)+'&quot;)">'+label+'</a>';
+    }
+    return '<span class="'+cls+'">'+label+'</span>';
+  }).join("");
+  var more = heads.length > 24 ? '<div class="tag-toc-more">…还有 '+(heads.length - 24)+' 个小标题</div>' : '';
+  return '<div class="tag-toc" onclick="event.stopPropagation()">'
+    + '<div class="tag-toc-head">📑 文章目录</div>'
+    + '<div class="tag-toc-list">'+list+more+'</div>'
+    + '</div>';
 }
 function renderTagView(active){
   var idx = tagIndex();
@@ -1121,6 +1238,7 @@ function renderTagView(active){
         + '<div class="chip-row">'+(it.time?'<span class="info-chip">🕐 '+esc(it.time)+'</span>':"")
         + '<span class="info-chip green">'+esc(it.kind)+'</span></div>'
         + (it.desc?'<div class="article-desc" style="margin-top:10px">'+esc(it.desc.slice(0,110))+'</div>':"")
+        + outlineHTML(it)
         + '</div></div>';
     }).join("") + '</div>';
   });
@@ -2083,9 +2201,141 @@ function frontToolbarHTML(){
   h += '<button type="button" title="清除格式" data-cmd="removeFormat">Tx</button>';
   h += '<span class="rt-sep"></span>';
   h += '<button type="button" title="插入链接" data-act="link">🔗</button>';
-  h += '<button type="button" title="插入图片（网址）" data-act="imgurl">🖼️</button>';
-  h += '<button type="button" title="上传图片" data-act="imgupload">⬆️图片</button>';
+  h += '<button type="button" title="插入图片" data-act="img">🖼️</button>';
+  h += '<button type="button" title="插入表格" data-act="table">▦</button>';
   return h;
+}
+/* ============================================================
+   前台轻量弹窗：和后台一致，不再用浏览器自带的 prompt
+   ============================================================ */
+var fdlgState = { onOk: null, onFile: null, uploading: false };
+function fdlgErr(t){ var e = document.getElementById("fdlgErr"); if(e) e.textContent = t || ""; }
+function closeFdlg(){
+  var m = document.getElementById("fdlgMask");
+  if(m) m.classList.remove("show");
+  var f = document.getElementById("fdlgFile");
+  if(f) f.value = "";
+  fdlgState = { onOk: null, onFile: null, uploading: false };
+}
+function fdlgPickFile(){ if(!fdlgState.uploading){ var f = document.getElementById("fdlgFile"); if(f) f.click(); } }
+async function onFdlgFile(e){
+  var files = Array.prototype.slice.call((e.target && e.target.files) || []);
+  if(e.target) e.target.value = "";
+  if(!files.length || !fdlgState.onFile) return;
+  fdlgState.uploading = true;
+  var btn = document.getElementById("fdlgUp");
+  var old = btn ? btn.textContent : "";
+  if(btn){ btn.disabled = true; btn.textContent = "上传中…"; }
+  try{
+    var urls = await fdlgState.onFile(files);
+    var list = (Array.isArray(urls) ? urls : [urls]).filter(Boolean);
+    if(list.length){
+      var inp = document.getElementById("fdlgInput");
+      if(inp) inp.value = list.join("\n");
+      fdlgErr("✅ 已上传 " + list.length + " 个，点「确定」插入");
+    }
+  }catch(err){
+    fdlgErr("上传失败：" + err.message);
+  }
+  fdlgState.uploading = false;
+  if(btn){ btn.disabled = false; btn.textContent = old || "选择文件上传"; }
+}
+function openFdlg(opt){
+  opt = opt || {};
+  fdlgState.onOk = opt.onOk || null;
+  fdlgState.onFile = opt.onFile || null;
+  document.getElementById("fdlgTitle").textContent = opt.title || "输入";
+  document.getElementById("fdlgHint").textContent = opt.hint || "";
+  document.getElementById("fdlgInput").value = opt.value || "";
+  document.getElementById("fdlgInput").placeholder = opt.placeholder || "";
+  document.getElementById("fdlgInput2").placeholder = opt.placeholder2 || "";
+  document.getElementById("fdlgRow2").style.display = opt.secondInput ? "" : "none";
+  document.getElementById("fdlgInput2").value = "";
+  var up = document.getElementById("fdlgUp");
+  up.style.display = opt.onFile ? "" : "none";
+  up.textContent = opt.uploadLabel || "选择文件上传";
+  fdlgErr("");
+  document.getElementById("fdlgMask").classList.add("show");
+  setTimeout(function(){ try { document.getElementById("fdlgInput").focus(); document.getElementById("fdlgInput").select(); } catch(e){} }, 30);
+}
+function submitFdlg(){
+  if(fdlgState.uploading) return;
+  if(!fdlgState.onOk) return closeFdlg();
+  if(fdlgState.onOk(document.getElementById("fdlgInput").value.trim(), document.getElementById("fdlgInput2").value.trim()) !== false) closeFdlg();
+}
+/* 把图片/链接插到前台编辑器光标处 */
+function frontInsertHTML(html){
+  var ed = document.getElementById("fdContent");
+  if(!ed) return;
+  ed.focus();
+  try { document.execCommand("insertHTML", false, html); }
+  catch(e){ ed.innerHTML += html; }
+}
+/* 插入图片弹窗：填网址 或 上传（上传后自动回填地址） */
+function frontInsertImage(){
+  openFdlg({
+    title: "插入图片",
+    hint: "图片地址（也可以直接粘贴图床链接）\n先点「选择文件上传」也行，上传完地址会自动填进来",
+    placeholder: "https://",
+    okText: "插入",
+    onFile: async function(files){
+      if(!frontToken()) throw new Error("需要先在后台「站点设置」保存 GitHub Token");
+      var out = [];
+      for(var i = 0; i < files.length; i++) out.push(await uploadFrontFile(files[i], "files"));
+      return out;
+    },
+    onOk: function(url){
+      var list = String(url || "").split("\n").map(function(s){ return s.trim(); }).filter(Boolean);
+      if(!list.length){ fdlgErr("请输入图片地址，或先上传一张"); return false; }
+      for(var i = 0; i < list.length; i++){
+        if(!/^(https?:\/\/|files\/|\/)/i.test(list[i])){ fdlgErr("地址要以 https:// 开头（或站内 files/ 路径）"); return false; }
+      }
+      frontInsertHTML(list.map(function(u){ return '<img src="' + esc(u) + '" alt="">'; }).join(""));
+      sayStatus("fdStatus", "✅ 已插入 " + list.length + " 张图片（刚上传的要等 Pages 发布约 1 分钟）", "var(--primary-dark)");
+      return true;
+    }
+  });
+}
+/* 插入链接弹窗 */
+function frontInsertLink(){
+  openFdlg({
+    title: "插入链接",
+    hint: "链接地址（https://...）",
+    placeholder: "https://",
+    secondInput: true,
+    placeholder2: "显示文字（可留空）",
+    okText: "插入",
+    onOk: function(url, text){
+      if(!/^https?:\/\//i.test(url)){ fdlgErr("链接要以 http:// 或 https:// 开头"); return false; }
+      var label = text || url;
+      frontInsertHTML('<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(label) + '</a>&nbsp;');
+      return true;
+    }
+  });
+}
+/* 插入表格弹窗（和参考站那种表格一样，写学习笔记很常用） */
+function frontInsertTable(){
+  openFdlg({
+    title: "插入表格",
+    hint: "填行数和列数（例如 3 行 4 列），插入后可以直接在表格里打字",
+    placeholder: "行数，如 3",
+    secondInput: true,
+    placeholder2: "列数，如 4",
+    okText: "插入表格",
+    onOk: function(rows, cols){
+      var r = Math.min(20, Math.max(1, parseInt(rows, 10) || 3));
+      var c = Math.min(8, Math.max(1, parseInt(cols, 10) || 3));
+      var html = '<table><tbody>';
+      for(var i = 0; i < r; i++){
+        html += "<tr>";
+        for(var j = 0; j < c; j++) html += "<td><br></td>";
+        html += "</tr>";
+      }
+      html += "</tbody></table><p><br></p>";
+      frontInsertHTML(html);
+      return true;
+    }
+  });
 }
 function initFrontRich(key){
   var cfg = FRONT_RICH[key];
@@ -2102,15 +2352,11 @@ function initFrontRich(key){
       var cmd = btn.getAttribute("data-cmd");
       editor.focus();
       if(act === "link"){
-        var url = window.prompt("链接地址", "https://");
-        if(url) document.execCommand("createLink", false, url);
-      }else if(act === "imgurl"){
-        var iu = window.prompt("图片地址（https://...）", "https://");
-        if(iu) document.execCommand("insertHTML", false, '<img src="' + esc(iu) + '" alt="">');
-      }else if(act === "imgupload"){
-        var f = document.getElementById(key + "ImgInput");
-        if(f) f.click();
-        return;
+        frontInsertLink();
+      }else if(act === "img"){
+        frontInsertImage();
+      }else if(act === "table"){
+        frontInsertTable();
       }else if(cmd){
         document.execCommand(cmd, false, btn.getAttribute("data-val") || null);
       }

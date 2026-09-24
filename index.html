@@ -601,10 +601,10 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
       </div>
       <!-- 正文 -->
       <div class="reader-card"><div class="md-body" id="cdIntro"></div></div>
-      <!-- 资料/附件：紧跟在正文下面 -->
-      <div class="info-card" id="articleFiles" style="display:none">
-        <h3 id="articleFilesTitle">📎 课程资料</h3>
-        <div id="articleFilesBody"></div>
+      <!-- 资料/附件：紧跟在正文下面（每个详情区各用各的容器，不能共用 id） -->
+      <div class="info-card" id="articleFiles_courseDetail" style="display:none">
+        <h3 id="articleFilesTitle_courseDetail">📎 课程资料</h3>
+        <div id="articleFilesBody_courseDetail"></div>
       </div>
     </div>
 
@@ -622,14 +622,14 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
           <div class="chip-row" id="pdChips"></div>
         </div>
       </div>
-      <!-- 正文（摘要 + 备注），文件紧跟在下面 -->
+      <!-- 正文（摘要 + 备注），文件紧跟正文 -->
       <div class="reader-card">
         <div class="md-body" id="pdAbstract"></div>
         <div class="md-body" id="pdDesc" style="margin-top:18px;padding-top:16px;border-top:1px dashed var(--border)"></div>
       </div>
-      <div class="info-card" id="articleFiles" style="display:none">
-        <h3 id="articleFilesTitle">📎 论文文件</h3>
-        <div id="articleFilesBody"></div>
+      <div class="info-card" id="articleFiles_paperDetail" style="display:none">
+        <h3 id="articleFilesTitle_paperDetail">📎 论文文件</h3>
+        <div id="articleFilesBody_paperDetail"></div>
       </div>
     </div>
 
@@ -649,9 +649,9 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
       <!-- 正文 -->
       <div class="reader-card"><div class="md-body" id="ndContent"></div></div>
       <!-- 附件：紧跟在正文下面 -->
-      <div class="info-card" id="articleFiles" style="display:none">
-        <h3 id="articleFilesTitle">📎 附件</h3>
-        <div id="articleFilesBody"></div>
+      <div class="info-card" id="articleFiles_noticeDetail" style="display:none">
+        <h3 id="articleFilesTitle_noticeDetail">📎 附件</h3>
+        <div id="articleFilesBody_noticeDetail"></div>
       </div>
     </div>
 
@@ -1456,10 +1456,10 @@ function openCourse(idx){
   buildToc(introBox);
   document.getElementById("cdProgressBar").style.width = progress+"%";
   document.getElementById("cdProgressText").innerHTML = "学习进度：<b>"+progress+"%</b>";
-  /* 资料/附件 → 右侧栏（没有资料就不显示这张卡） */
+  /* 资料/附件 → 正文下面（没有资料就不显示这张卡） */
   var filesHtml = galleryHTML(c) + fileListGrouped(c);
   var hasFiles = collectFiles(c).length > 0;
-  showSideFiles(hasFiles ? "📎 课程资料" : "", hasFiles ? filesHtml : "");
+  showSideFiles("courseDetail", hasFiles ? "📎 课程资料" : "", hasFiles ? filesHtml : "");
   setPageTitle("courseDetail", c.title, "");
   showSection("courseDetail");
 }
@@ -1517,7 +1517,7 @@ function openPaper(idx){
   desc.style.display = (p.desc && String(p.desc).trim()) ? "" : "none";
   buildToc(ab);
   var hasFiles = files.length > 0;
-  showSideFiles(hasFiles ? "📎 论文文件" : "", hasFiles ? (galleryHTML(p) + fileListGrouped(p)) : "");
+  showSideFiles("paperDetail", hasFiles ? "📎 论文文件" : "", hasFiles ? (galleryHTML(p) + fileListGrouped(p)) : "");
   setPageTitle("paperDetail", p.title, "");
   showSection("paperDetail");
 }
@@ -2004,9 +2004,9 @@ function openNotice(idx){
   box.innerHTML = mdRenderHTML(n.content) || '<div class="empty">这条通知还没有正文</div>';
   box.className = "md-body";
   buildToc(box);
-  /* 附件 → 右侧栏（没有附件就不显示这张卡） */
+  /* 附件 → 正文下面（没有附件就不显示这张卡） */
   var nHasFiles = collectFiles(n).length > 0;
-  showSideFiles(nHasFiles ? "📎 附件" : "", nHasFiles ? (galleryHTML(n) + fileListGrouped(n)) : "");
+  showSideFiles("noticeDetail", nHasFiles ? "📎 附件" : "", nHasFiles ? (galleryHTML(n) + fileListGrouped(n)) : "");
   setPageTitle("noticeDetail", n.title, "");
   showSection("noticeDetail");
 }
@@ -2806,11 +2806,13 @@ function showSideInfo(title, html){
   b.innerHTML = html;
   card.style.display = "";
 }
-/* 资料/附件：紧跟在文章正文下面（正文之外的其它信息才放右侧栏） */
-function showSideFiles(title, html){
-  var box = document.getElementById("articleFiles");
-  var t = document.getElementById("articleFilesTitle");
-  var b = document.getElementById("articleFilesBody");
+/* 资料/附件：紧跟在文章正文下面。
+   注意：课程/通知/论文各有各的详情区，必须用各自的容器 id（曾经共用 id 导致附件只显示在课程里） */
+var FILE_SECTIONS = ["courseDetail", "noticeDetail", "paperDetail"];
+function showSideFiles(section, title, html){
+  var box = document.getElementById("articleFiles_" + section);
+  var t = document.getElementById("articleFilesTitle_" + section);
+  var b = document.getElementById("articleFilesBody_" + section);
   if(!box || !t || !b) return;
   if(!html){ box.style.display = "none"; b.innerHTML = ""; return; }
   t.textContent = title || "📎 资料附件";
@@ -2820,7 +2822,7 @@ function showSideFiles(title, html){
 /* 回到列表页时把文章专属的侧栏卡片收起来 */
 function clearSideArticle(){
   showSideInfo("", "");
-  showSideFiles("", "");
+  FILE_SECTIONS.forEach(function(sec){ showSideFiles(sec, "", ""); });
 }
 
 function showSection(name){

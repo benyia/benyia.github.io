@@ -141,6 +141,33 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .rte-content audio,.rte-content video{max-width:100%;margin:6px 0;display:block}
 .rte-plain{width:100%;min-height:260px;padding:14px 16px;border:none;outline:none;font-family:ui-monospace,Consolas,monospace;font-size:.85rem;line-height:1.7;resize:vertical;color:var(--text)}
 .rte-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:.76rem;color:#94a3b8;padding:6px 10px;background:#f8fafc;border-top:1px solid var(--border)}
+
+/* ===== 统一输入弹窗（替代浏览器自带的 prompt，和站点风格一致） ===== */
+.dlg-mask{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:1500;display:none;align-items:center;justify-content:center;padding:20px}
+.dlg-mask.show{display:flex}
+.dlg{background:#fff;border-radius:14px;box-shadow:0 25px 60px rgba(15,23,42,.3);width:100%;max-width:560px;padding:22px 24px 18px;animation:dlgIn .18s ease}
+@keyframes dlgIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.dlg h3{font-size:1.06rem;margin-bottom:10px;font-weight:700}
+.dlg .dlg-hint{font-size:.86rem;color:var(--text2);line-height:1.75;margin-bottom:14px;white-space:pre-wrap}
+.dlg .dlg-input{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:.9rem;font-family:inherit;color:var(--text);background:#fff;outline:none;transition:.2s}
+.dlg .dlg-input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(16,185,129,.14)}
+.dlg .dlg-row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.dlg .dlg-row .dlg-input{flex:1;min-width:150px}
+.dlg .dlg-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.dlg .dlg-actions.left{justify-content:space-between}
+.dlg-btn{padding:9px 24px;border:none;border-radius:10px;font-size:.9rem;font-family:inherit;cursor:pointer;transition:.18s}
+.dlg-btn.primary{background:#2563eb;color:#fff}
+.dlg-btn.primary:hover{background:#1d4ed8}
+.dlg-btn.ghost{background:#f1f5f9;color:#475569}
+.dlg-btn.ghost:hover{background:#e2e8f0}
+.dlg-btn.upload{background:var(--primary-light);color:var(--primary-dark);font-weight:600}
+.dlg-btn.upload:hover{background:var(--primary);color:#fff}
+.dlg .dlg-thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.dlg-thumb{display:flex;flex-direction:column;align-items:center;gap:4px;width:76px;padding:6px;border:1px solid var(--border);border-radius:9px;background:#fff;cursor:pointer;font-size:.68rem;color:var(--text2);font-family:inherit}
+.dlg-thumb:hover{border-color:var(--primary);color:var(--primary-dark)}
+.dlg-thumb img{width:64px;height:52px;object-fit:cover;border-radius:6px;display:block}
+.dlg .dlg-err{color:var(--danger);font-size:.8rem;margin-top:8px;min-height:1.1em}
+@media(max-width:520px){ .dlg{padding:18px 16px 14px} .dlg .dlg-actions{flex-direction:column-reverse} .dlg-btn{width:100%} }
 </style>
 </head>
 <body>
@@ -328,7 +355,10 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         </div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
         <div id="imgList_course" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('course')">添加图片</button></div>
+        <div style="margin-bottom:10px">
+          <button class="btn btn-ghost btn-sm" onclick="pickImgs('course')">添加图片</button>
+          <button class="btn btn-ghost btn-sm" onclick="openImgPicker('course')">🖼️ 插入图片到正文</button>
+        </div>
 
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 课程文件</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">可传多个；填文件夹名即归入该文件夹</span></div>
         <div class="form-row"><input type="text" id="cFolder" placeholder="文件夹名（留空=根目录；填了就传到这个文件夹）"></div>
@@ -378,7 +408,10 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="form-row"><input type="text" id="pTags" placeholder="标签，逗号分隔（如：深度学习,目标检测）—— 用于前台「标签」聚合"></div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
         <div id="imgList_paper" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('paper')">添加图片</button></div>
+        <div style="margin-bottom:10px">
+          <button class="btn btn-ghost btn-sm" onclick="pickImgs('paper')">添加图片</button>
+          <button class="btn btn-ghost btn-sm" onclick="openImgPicker('paper')">🖼️ 插入图片到正文</button>
+        </div>
 
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 论文文件</b></div>
         <div class="file-list" id="pFiles"></div>
@@ -417,7 +450,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           </div>
         </div>
         <div class="md-editor-toolbar">
-          <button class="btn btn-ghost btn-sm" id="nInsertImgBtn" onclick="openImgPicker('notice')" disabled>🖼️ 插入已上传图片</button>
+          <button class="btn btn-ghost btn-sm" id="nInsertImgBtn" onclick="openImgPicker('notice')">🖼️ 插入图片到正文</button>
         </div>
         <div class="md-editor-hint">插入图片：先用下面的「添加图片」上传，再点上面的按钮，图片会插到光标处、和文字混排。</div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
@@ -462,7 +495,10 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         </div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
         <div id="imgList_class" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('class')">添加图片</button></div>
+        <div style="margin-bottom:10px">
+          <button class="btn btn-ghost btn-sm" onclick="pickImgs('class')">添加图片</button>
+          <button class="btn btn-ghost btn-sm" onclick="openImgPicker('class')">🖼️ 插入图片到正文</button>
+        </div>
 
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 附件</b></div>
         <div class="file-list" id="clFiles"></div>
@@ -642,7 +678,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div id="imgList_diary" style="margin-bottom:6px"></div>
         <div style="margin-bottom:10px">
           <button class="btn btn-ghost btn-sm" onclick="pickImgs('diary')">添加图片</button>
-          <button class="btn btn-ghost btn-sm" id="dInsertImgBtn" onclick="openImgPicker('diary')" disabled>🖼️ 插入到正文光标处</button>
+          <button class="btn btn-ghost btn-sm" id="dInsertImgBtn" onclick="openImgPicker('diary')">🖼️ 插入图片到正文</button>
         </div>
 
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🎵 影音 / 📎 附件</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">音乐、视频、其它附件都放这里</span></div>
@@ -715,7 +751,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div id="imgList_advisor" style="margin-bottom:6px"></div>
         <div style="margin-bottom:10px">
           <button class="btn btn-ghost btn-sm" onclick="pickImgs('advisor')">添加图片</button>
-          <button class="btn btn-ghost btn-sm" id="aInsertImgBtn" onclick="openImgPicker('advisor')" disabled>🖼️ 插入到正文光标处</button>
+          <button class="btn btn-ghost btn-sm" id="aInsertImgBtn" onclick="openImgPicker('advisor')">🖼️ 插入图片到正文</button>
         </div>
 
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 附件</b></div>
@@ -793,6 +829,27 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     <div style="font-size:.78rem;color:#94a3b8">点选一张已上传的图片，Markdown 图片语法会插入到光标位置。</div>
     <div class="grid" id="mdImgPickerGrid"></div>
     <div style="margin-top:14px;text-align:right"><button class="btn btn-ghost btn-sm" onclick="closeImgPicker()">关闭</button></div>
+  </div>
+</div>
+
+<!-- 统一输入弹窗：插入图片 / 添加网盘外链都用它，替代浏览器自带的 prompt -->
+<div class="dlg-mask" id="inputDialog" onclick="if(event.target===this)closeInputDialog()">
+  <div class="dlg" role="dialog" aria-modal="true">
+    <h3 id="dlgTitle">输入</h3>
+    <div class="dlg-hint" id="dlgHint"></div>
+    <input type="text" class="dlg-input" id="dlgInput" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();submitInputDialog();}">
+    <div class="dlg-row" id="dlgRow2" style="display:none">
+      <input type="text" class="dlg-input" id="dlgInput2" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();submitInputDialog();}">
+    </div>
+    <div class="dlg-thumbs" id="dlgThumbs" style="display:none"></div>
+    <div class="dlg-err" id="dlgErr"></div>
+    <div class="dlg-actions" id="dlgActions">
+      <button class="btn dlg-btn upload" type="button" id="dlgUpload" style="display:none" onclick="dlgPickFile()">选择文件上传</button>
+      <span style="flex:1"></span>
+      <button class="btn dlg-btn ghost" type="button" onclick="closeInputDialog()">取消</button>
+      <button class="btn dlg-btn primary" type="button" id="dlgOk" onclick="submitInputDialog()">确定</button>
+    </div>
+    <input type="file" id="dlgFile" multiple style="display:none" onchange="onDlgFilePicked(event)">
   </div>
 </div>
 
@@ -1206,6 +1263,151 @@ function uploadBoxCfgByBoxId(boxId){
     if(!e.target.closest || !e.target.closest(".upload-box")) e.preventDefault();
   });
 });
+
+/* ============================================================
+   统一输入弹窗：替代浏览器自带 prompt（就是截图里「输入图片地址」那种框）
+   ============================================================ */
+var dlgState = { onOk: null, onFile: null, before: "", uploadLabel: "选择文件上传", uploading: false, expectUrl: false };
+
+function dlgErr(text){
+  var err = $("dlgErr");
+  if(err) err.textContent = text || "";
+}
+function dlgShow(){
+  var box = $("inputDialog");
+  if(!box) return;
+  box.classList.add("show");
+  dlgErr("");
+  var inp = $("dlgInput");
+  if(inp){
+    inp.value = dlgState.before || "";
+    setTimeout(function(){ try { inp.focus(); inp.select(); } catch(e){} }, 30);
+  }
+}
+function closeInputDialog(){
+  var box = $("inputDialog");
+  if(box) box.classList.remove("show");
+  var f = $("dlgFile");
+  if(f) f.value = "";
+  dlgState = { onOk: null, onFile: null, before: "", uploadLabel: "选择文件上传", uploading: false, expectUrl: false };
+}
+function dlgPickFile(){
+  if(dlgState.uploading) return;
+  var f = $("dlgFile");
+  if(f) f.click();
+}
+/* 选好文件：交给 onFile 上传，成功后把地址填回输入框 */
+async function onDlgFilePicked(e){
+  var files = Array.prototype.slice.call((e.target && e.target.files) || []);
+  if(e.target) e.target.value = "";
+  if(!files.length || !dlgState.onFile) return;
+  dlgState.uploading = true;
+  var btn = $("dlgUpload");
+  var old = btn ? btn.textContent : "";
+  if(btn){ btn.disabled = true; btn.textContent = "上传中…"; }
+  try{
+    var urls = await dlgState.onFile(files);
+    var list = Array.isArray(urls) ? urls.filter(Boolean) : (urls ? [urls] : []);
+    if(list.length){
+      var inp = $("dlgInput");
+      if(inp) inp.value = list.join("\n");
+      dlgErr("✅ 已上传 " + list.length + " 个，点「" + ($("dlgOk") ? $("dlgOk").textContent : "确定") + "」插入");
+    }
+  }catch(err){
+    dlgErr("上传失败：" + err.message);
+  }
+  dlgState.uploading = false;
+  if(btn){ btn.disabled = false; btn.textContent = old || "选择文件上传"; }
+}
+function openInputDialog(opt){
+  opt = opt || {};
+  dlgState.onOk = opt.onOk || null;
+  dlgState.onFile = opt.onFile || null;
+  dlgState.before = opt.value || "";
+  dlgState.uploadLabel = opt.uploadLabel || "选择文件上传";
+  $("dlgTitle").textContent = opt.title || "输入";
+  $("dlgHint").textContent = opt.hint || "";
+  $("dlgInput").value = opt.value || "";
+  $("dlgInput").placeholder = opt.placeholder || "";
+  $("dlgInput2").placeholder = opt.placeholder2 || "";
+  $("dlgRow2").style.display = opt.secondInput ? "" : "none";
+  $("dlgInput2").value = "";
+  $("dlgOk").textContent = opt.okText || "确定";
+  var up = $("dlgUpload");
+  up.style.display = opt.onFile ? "" : "none";
+  up.textContent = dlgState.uploadLabel;
+  dlgShow();
+}
+function submitInputDialog(){
+  if(dlgState.uploading) return;
+  if(!dlgState.onOk) return closeInputDialog();
+  var res = dlgState.onOk($("dlgInput").value.trim(), $("dlgInput2").value.trim());
+  if(res === false) return;   /* 校验没过就不关弹窗 */
+  closeInputDialog();
+}
+
+/* 插入图片：网址 + 可选「选择文件上传」（和截图一致） */
+function insertImageViaDialog(key, after){
+  if(key) lastRteKey = key;
+  openInputDialog({
+    title: "插入图片",
+    hint: "图片地址（也可以直接粘贴图床链接）\n先点「选择文件上传」也行，上传完地址会自动填进来",
+    placeholder: "https://",
+    okText: "插入",
+    onFile: async function(files){
+      var out = [];
+      for(var i = 0; i < files.length; i++){
+        var meta = await uploadFile(files[i], "img");
+        out.push(meta.url);
+      }
+      return out;
+    },
+    onOk: function(url){
+      var list = String(url || "").split("\n").map(function(s){ return s.trim(); }).filter(Boolean);
+      if(!list.length){ dlgErr("请输入图片地址，或先上传一张"); return false; }
+      for(var i = 0; i < list.length; i++){
+        if(!/^(https?:\/\/|files\/|\/)/i.test(list[i])){ dlgErr("地址要以 https:// 开头（或站内 files/ 路径）：" + list[i]); return false; }
+      }
+      rteInsertHTML(list.map(function(u){ return '<img src="' + esc(u) + '" alt="">'; }).join(""), key);
+      if(after) after();
+      showToast("已插入 " + list.length + " 张图片，记得点保存");
+      return true;
+    }
+  });
+}
+
+/* 百度网盘等外链：和截图一致的「粘贴网盘分享链接」弹窗 */
+function addExternalFileViaDialog(kind){
+  openInputDialog({
+    title: "添加网盘外链",
+    hint: "粘贴网盘分享链接（百度网盘/阿里云盘等）\n有提取码建议直接写在链接里，方便自己识别",
+    placeholder: "https://pan.baidu.com/s/...",
+    secondInput: true,
+    placeholder2: "显示名称（留空就用链接末段）",
+    okText: "确定",
+    onOk: function(url, name){
+      var lines = String(url || "").split("\n").map(function(s){ return s.trim(); }).filter(Boolean);
+      if(!lines.length){ dlgErr("链接不能为空"); return false; }
+      for(var i = 0; i < lines.length; i++){
+        if(!/^https?:\/\//i.test(lines[i])){ dlgErr("链接需要以 http:// 或 https:// 开头"); return false; }
+      }
+      drafts[kind] = drafts[kind] || [];
+      lines.forEach(function(u, i){
+        var nm = (lines.length === 1 && name) ? name : "";
+        if(!nm){
+          var seg = String(u).split("?")[0].split("/").filter(Boolean);
+          try { nm = decodeURIComponent(seg[seg.length - 1] || u); } catch(e){ nm = seg[seg.length - 1] || u; }
+          nm = String(nm).slice(0, 40) || u;
+        }
+        var extMatch = String(nm).match(/\.([a-zA-Z0-9]{1,5})$/);
+        drafts[kind].push({ name: nm, url: u, type: extMatch ? extMatch[1].toUpperCase() : "链接", size: 0, folder: "", external: true });
+      });
+      renderDraftFiles(kind);
+      showToast("已添加 " + lines.length + " 个外链，别忘了点保存");
+      return true;
+    }
+  });
+}
 var editorState = {};
 (function initEditorState(){
   Object.keys(RICH_KEYS).forEach(function(k){ editorState[k] = { mode: "rich", savedSel: null }; });
@@ -1603,11 +1805,7 @@ function rteLink(e){
 function rteImage(e){
   if(e && e.preventDefault) e.preventDefault();
   var key = currentRteKeyFromEl(e.currentTarget) || lastFocusedRte();
-  restoreRteSel(key);
-  var url = window.prompt("图片地址（也可以先用下面的「添加图片」上传，再点「插入已上传图片」）", "https://");
-  if(!url) return false;
-  saveRteSel(key);
-  document.execCommand("insertHTML", false, '<img src="' + esc(url) + '" alt="">');
+  insertImageViaDialog(key);
   return false;
 }
 function rteMedia(e, kind){
@@ -1654,8 +1852,9 @@ function rteMath(e){
 }
 
 /* ---- 插入「已上传的图片」到光标处 ---- */
-function rteInsertHTML(html){
-  var key = lastFocusedRte();
+/* 在光标处插入 HTML（默认插到当前聚焦的编辑器，也可以显式指定） */
+function rteInsertHTML(html, key){
+  key = key || lastFocusedRte();
   restoreRteSel(key);
   var ok = false;
   try { ok = document.execCommand("insertHTML", false, html); } catch(e){ ok = false; }
@@ -1666,38 +1865,91 @@ function rteInsertHTML(html){
   saveRteSel(key);
   updateRteCount(key);
 }
+function focusRich(key){
+  var cfg = RICH_KEYS[key];
+  if(!cfg) return;
+  var editor = $(cfg.editor);
+  if(!editor) return;
+  lastRteKey = key;
+  try { editor.focus(); } catch(e){}
+  saveRteSel(key);
+}
 function mdCanInsertImg(){ return !!(imgDrafts.notice && imgDrafts.notice.length); }
 function refreshMdInsertBtn(){
   var b = $("nInsertImgBtn");
   if(b) b.disabled = !mdCanInsertImg();
 }
+/* 「插入图片」统一入口：一个弹窗里既能填网址 / 上传，也能点刚上传的图
+   —— 替代浏览器自带的 prompt */
 function openImgPicker(key){
+  key = key || lastFocusedRte();
+  lastRteKey = key;
   var imgs = (imgDrafts[key] || []);
-  if(!imgs.length){ showToast("请先用下面的「添加图片」上传图片", "error"); return; }
-  $("mdImgPickerGrid").innerHTML = imgs.map(function(f, i){
-    return '<button type="button" data-mi="'+i+'" onclick="pickMdImgFrom(this)"><img src="'+esc(previewSrc(f.url))+'" alt=""><span>'+esc(f.name||("图片"+(i+1)))+'</span></button>';
+  var pills = imgs.map(function(f, i){
+    return '<button type="button" class="dlg-thumb" onclick="pickDraftImg(\'' + esc(key) + "'," + i + ')" title="' + esc(f.name || "") + '">'
+      + '<img src="' + esc(previewSrc(f.url)) + '" alt=""><span>' + esc(String(f.name || ("图片" + (i + 1))).slice(0, 10)) + "</span></button>";
   }).join("");
-  $("mdImgPickerGrid").setAttribute("data-mk", key);
-  $("mdImgPicker").style.display = "flex";
+  openInputDialog({
+    title: "插入图片",
+    hint: "图片地址（也可以直接粘贴图床链接）\n先点「选择文件上传」也行，上传完地址会自动填进来"
+      + (pills ? "\n\n也可以直接点下面已上传的图片：" : ""),
+    placeholder: "https://",
+    okText: "插入",
+    onFile: async function(files){
+      var out = [];
+      for(var i = 0; i < files.length; i++){
+        var meta = await uploadFile(files[i], "img");
+        (imgDrafts[key] = imgDrafts[key] || []).push(meta);
+        out.push(meta.url);
+      }
+      renderImgDrafts(key);
+      refreshMdInsertBtn();
+      return out;
+    },
+    onOk: function(url){
+      var list = String(url || "").split("\n").map(function(s){ return s.trim(); }).filter(Boolean);
+      if(!list.length){ dlgErr("请输入图片地址，或先上传一张"); return false; }
+      for(var i = 0; i < list.length; i++){
+        if(!/^(https?:\/\/|files\/|\/)/i.test(list[i])){ dlgErr("地址要以 https:// 开头（或站内 files/ 路径）：" + list[i]); return false; }
+      }
+      insertImagesToList(list, key);
+      showToast("已插入 " + list.length + " 张图片，记得点保存");
+      return true;
+    }
+  });
+  /* 把「已上传图片」缩略图挂到弹窗里 */
+  var box = $("dlgThumbs");
+  if(box){
+    box.innerHTML = pills;
+    box.style.display = pills ? "" : "none";
+  }
 }
-function closeImgPicker(){ $("mdImgPicker").style.display = "none"; }
-function pickMdImgFrom(btn){
-  var key = $("mdImgPickerGrid").getAttribute("data-mk") || "notice";
-  var i = parseInt(btn.getAttribute("data-mi"), 10);
+/* 按当前模式插入：可视化插 <img>，源码模式插 Markdown */
+function insertImagesToList(list, key){
+  var html = list.map(function(u){ return '<img src="' + esc(u) + '" alt="">'; }).join("");
+  if(getRichMode(key) === "rich"){
+    rteInsertHTML(html, key);
+    return;
+  }
+  var ta = $("rtePlain_" + key);
+  if(!ta) return;
+  var pos = ta.selectionStart == null ? ta.value.length : ta.selectionStart;
+  var txt = list.map(function(u){ return "![" + "图片" + "](" + mdUrl(u) + ")"; }).join("\n");
+  ta.value = ta.value.slice(0, pos) + txt + ta.value.slice(pos);
+}
+/* 点弹窗里的缩略图：直接把那张图插进正文 */
+function pickDraftImg(key, i){
   var f = (imgDrafts[key] || [])[i];
   if(!f) return;
-  if(getRichMode(key) === "rich"){
-    rteInsertHTML('<img src="' + esc(f.url) + '" alt="' + esc(String(f.name || "").replace(/\.[^.]+$/, "")) + '">');
-  }else{
-    var ta = $("rtePlain_" + key);
-    if(ta){
-      var pos = ta.selectionStart == null ? ta.value.length : ta.selectionStart;
-      var txt = "![图片](" + mdUrl(f.url) + ")";
-      ta.value = ta.value.slice(0, pos) + txt + ta.value.slice(pos);
-    }
-  }
-  closeImgPicker();
+  insertImagesToList([f.url], key);
+  closeInputDialog();
   showToast("已插入图片，记得点保存");
+}
+function closeImgPicker(){ closeInputDialog(); }
+function pickMdImgFrom(btn){
+  var key = $("mdImgPickerGrid") ? ($("mdImgPickerGrid").getAttribute("data-mk") || "notice") : "notice";
+  var i = parseInt(btn.getAttribute("data-mi"), 10);
+  pickDraftImg(key, i);
 }
 /* 预览 / 摘要：HTML 和 Markdown 都能处理 */
 function stripMd(s){
@@ -2477,19 +2729,7 @@ function onAdvisorFiles(e){ const v=e.target.files; handleFiles(v,"adv"); e.targ
 
 /* ---------- 网盘外链文件（跳过 GitHub 上传，适合大 PDF / 音频 / 视频）---------- */
 function addExternalFileBtn(kind){
-  var url = prompt("粘贴网盘分享链接（百度网盘/阿里云盘等）。\n如果有提取码，建议直接写在名字或链接后面方便自己识别：");
-  if(url === null) return;
-  url = url.trim();
-  if(!url){ showToast("链接不能为空", "error"); return; }
-  if(!/^https?:\/\//i.test(url)){ showToast("链接需要以 http:// 或 https:// 开头", "error"); return; }
-  var name = prompt("给这个文件起个名字（会显示在前台）：", "") || url;
-  name = name.trim() || url;
-  var extMatch = name.match(/\.([a-zA-Z0-9]{1,5})$/);
-  var type = extMatch ? extMatch[1].toUpperCase() : "链接";
-  drafts[kind] = drafts[kind] || [];
-  drafts[kind].push({name:name, url:url, type:type, size:0, folder:"", external:true});
-  renderDraftFiles(kind);
-  showToast("已添加外链，别忘了点下方「保存」");
+  addExternalFileViaDialog(kind);
 }
 
 /* ============================================================

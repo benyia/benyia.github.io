@@ -398,6 +398,10 @@
   "logs": [
     {
       "time": "2026-09-24 18:58",
+      "action": "名单：前台显示"
+    },
+    {
+      "time": "2026-09-24 18:58",
       "action": "名单字段可见性：advisor 显示"
     },
     {
@@ -791,10 +795,6 @@
     {
       "time": "2026-09-19 00:23",
       "action": "添加论文：11111"
-    },
-    {
-      "time": "2026-09-19 00:18",
-      "action": "修改站点设置"
     }
   ],
   "categories": [
@@ -945,7 +945,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": false,
+      "show": true,
       "hide": [
         "ethnicity",
         "political",
@@ -954,7 +954,8 @@
         "idCard",
         "homeAddress",
         "note",
-        "email"
+        "email",
+        "advisor"
       ]
     },
     {

@@ -244,29 +244,33 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .rtoc a.toc-lv2{padding-left:20px}
 .rtoc a.toc-lv3{padding-left:34px;font-size:.79rem}
 .rtoc a.toc-lv4{padding-left:46px;font-size:.77rem;color:var(--text3)}
-.rtoc-fab{position:fixed;right:16px;bottom:24px;z-index:95;display:none;align-items:center;gap:6px;padding:11px 16px;border:none;border-radius:99px;background:var(--primary);color:#fff;font-size:.86rem;font-family:inherit;cursor:pointer;box-shadow:0 8px 24px rgba(16,185,129,.4)}
+.rtoc-fab{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;z-index:95;display:none;align-items:center;gap:6px;padding:11px 18px;border:none;border-radius:99px;background:var(--primary);color:#fff;font-size:.86rem;font-family:inherit;cursor:pointer;box-shadow:0 8px 24px rgba(16,185,129,.4)}
 .rtoc-fab.show{display:flex}
 .rtoc-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:89;display:none}
 .rtoc-mask.show{display:block}
-/* 窄一点的屏幕：目录依然贴在右边，但先让右侧栏卡片退场，把宽度留给正文 */
-@media(max-width:1280px){
-  body.toc-open .right-col{display:none}
+/* 桌面端目录是左栏里的卡片；右下角那个悬浮面板只在窄屏当抽屉用，宽屏一律不出现 */
+@media(min-width:761px){
+  .rtoc{display:none !important}
+  .rtoc-fab{display:none !important}
 }
-/* 760px 以下实在放不下右侧目录了，才改成底部弹层（760px 时正文列还有约 440px） */
+/* 760px 以下：左栏被挤到正文下面了，给一个底部抽屉兜底 */
 @media(max-width:760px){
   .rtoc{top:auto;bottom:0;left:0;right:0;width:auto;max-height:62vh;transform:none;border-radius:16px 16px 0 0;padding:16px 18px 24px;box-shadow:0 -8px 34px rgba(0,0,0,.2);z-index:96}
   .rtoc-close{font-size:1.1rem}
   .rtoc a{padding-top:9px;padding-bottom:9px;font-size:.9rem}
   .rtoc a.toc-lv3,.rtoc a.toc-lv4{font-size:.86rem}
 }
-/* 761~1100px：目录紧凑一点，别抢正文的地方 */
-@media(min-width:761px) and (max-width:1100px){
-  .rtoc{width:196px;padding:12px 10px 10px;right:10px;max-height:70vh}
-  .rtoc a{font-size:.78rem;padding:4px 6px}
-  .rtoc a.toc-lv3{padding-left:28px}
-  .rtoc a.toc-lv4{padding-left:38px;font-size:.74rem}
-  .rtoc-head{font-size:.78rem}
-}
+
+/* 左栏「文章目录」卡片 */
+.toc-card-list{max-height:52vh;overflow-y:auto;margin:-4px -4px 0}
+.toc-card-list a{display:block;font-size:.82rem;line-height:1.55;color:var(--text2);text-decoration:none;padding:5px 8px;border-left:2px solid transparent;border-radius:0 6px 6px 0;transition:color .2s,border-color .2s,background .2s}
+.toc-card-list a:hover{color:var(--primary);background:var(--soft)}
+.toc-card-list a.on{color:var(--primary-dark);border-left-color:var(--primary);background:var(--primary-light);font-weight:600}
+.toc-card-list a.toc-lv1{font-weight:700;color:var(--text)}
+.toc-card-list a.toc-lv2{padding-left:8px}
+.toc-card-list a.toc-lv3{padding-left:20px;font-size:.79rem}
+.toc-card-list a.toc-lv4{padding-left:32px;font-size:.77rem;color:var(--text3)}
+.toc-card-empty{font-size:.8rem;color:var(--text3)}
 
 /* ===== 分页 ===== */
 .pager{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin:22px 0 8px}
@@ -501,6 +505,12 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
     <div class="side-card">
       <h3>标签</h3>
       <div class="tag-list" id="tagList"></div>
+      <div style="margin-top:10px"><a href="javascript:;" onclick="openTag('')" style="font-size:.8rem;color:var(--primary-dark);text-decoration:none">查看全部标签 ›</a></div>
+    </div>
+    <!-- 文章目录：打开文章时自动出现（放在「标签」下面） -->
+    <div class="side-card toc-card" id="tocCard" style="display:none">
+      <h3>文章目录</h3>
+      <div class="toc-card-list" id="tocCardList"></div>
     </div>
   </div>
 
@@ -1520,52 +1530,66 @@ function buildToc(container){
   }
   renderToc(heads);
 }
-function renderToc(heads){
-  var panel = document.getElementById("rtocPanel");
-  var list = document.getElementById("rtocList");
-  var fab = document.getElementById("rtocFab");
-  var mask = document.getElementById("rtocMask");
-  if(!panel || !list) return;
-  closeToc();
-  if(!heads || heads.length < 2){
-    panel.classList.remove("show");
-    if(fab) fab.classList.remove("show");
-    list.innerHTML = "";
-    return;
-  }
-  list.innerHTML = heads.map(function(h){
+/* 目录链接 HTML：左栏卡片和窄屏抽屉共用同一份内容 */
+function tocLinksHTML(heads){
+  return heads.map(function(h){
     return '<a href="#' + esc(h.id) + '" data-toc="' + esc(h.id) + '" class="toc-lv' + h.lvl + '" onclick="jumpTo(event,&quot;' + esc(h.id) + '&quot;)">' + esc(h.txt) + '</a>';
   }).join("");
-  if(fab) fab.classList.add("show");
-  /* 760px 以上目录一直贴在右边；更窄才需要点按钮弹出 */
-  if(window.innerWidth > 760) panel.classList.add("show");
+}
+/* 目录有两处出口：
+   ① 左栏「标签」下面的卡片（主要入口，桌面端）
+   ② 窄屏时左栏被挤到正文下面，用底部悬浮按钮弹出抽屉兜底 */
+function renderToc(heads){
+  var card = document.getElementById("tocCard");
+  var cardList = document.getElementById("tocCardList");
+  var drawer = document.getElementById("rtocPanel");
+  var drawerList = document.getElementById("rtocList");
+  var fab = document.getElementById("rtocFab");
+  var mask = document.getElementById("rtocMask");
+
+  closeToc();
+
+  var has = heads && heads.length >= 2;
+  /* 左栏卡片 */
+  if(card && cardList){
+    if(has){
+      cardList.innerHTML = tocLinksHTML(heads);
+      card.style.display = "";
+    }else{
+      cardList.innerHTML = "";
+      card.style.display = "none";
+    }
+  }
+  /* 抽屉内容 */
+  if(drawerList) drawerList.innerHTML = has ? tocLinksHTML(heads) : "";
+  /* 悬浮按钮只在窄屏出现，且要有目录内容 */
+  if(fab) fab.classList.toggle("show", !!(has && window.innerWidth <= 760));
+  if(drawer && !has) drawer.classList.remove("show");
   if(mask) mask.classList.remove("show");
 }
-/* 目录常驻的最小屏宽，和 CSS 里的 @media(max-width:760px) 对齐 */
+/* 760px 以下才需要抽屉兜底，和 CSS 里的 @media(max-width:760px) 对齐 */
 function tocDocked(){ return window.innerWidth > 760; }
 function openToc(){
-  var panel = document.getElementById("rtocPanel");
+  var drawer = document.getElementById("rtocPanel");
   var mask = document.getElementById("rtocMask");
-  if(panel) panel.classList.add("show");
-  if(!tocDocked()){
+  if(drawer) drawer.classList.add("show");
+  if(tocDocked()){
+    if(mask) mask.classList.remove("show");
+  }else{
     if(mask) mask.classList.add("show");
-    /* 窄屏时目录会盖住右侧栏，先把它让出来 */
-    document.body.classList.add("toc-open");
   }
   updateTocActive();
 }
 function closeToc(){
-  var panel = document.getElementById("rtocPanel");
+  var drawer = document.getElementById("rtocPanel");
   var mask = document.getElementById("rtocMask");
-  if(panel) panel.classList.remove("show");
+  if(drawer) drawer.classList.remove("show");
   if(mask) mask.classList.remove("show");
   document.body.classList.remove("toc-open");
 }
-/* 滚动时高亮当前章节 */
+/* 滚动时高亮当前章节：卡片和抽屉同步高亮 */
 function updateTocActive(){
-  var panel = document.getElementById("rtocPanel");
-  if(!panel || !panel.classList.contains("show")) return;
-  var links = panel.querySelectorAll("a[data-toc]");
+  var links = document.querySelectorAll("#tocCardList a[data-toc], #rtocList a[data-toc]");
   if(!links.length) return;
   var cur = "";
   Array.prototype.forEach.call(links, function(a){
@@ -1581,24 +1605,21 @@ function updateTocActive(){
     a.classList.toggle("on", on);
     if(on) curLink = a;
   });
-  /* 目录比屏幕高时，让高亮那一项自己滚进可视范围，不然高亮会跑到看不见的地方 */
-  if(curLink && panel.scrollHeight > panel.clientHeight + 4 && curLink.scrollIntoView){
-    try { curLink.scrollIntoView({ block: "nearest", behavior: "smooth" }); } catch(e){}
+  /* 目录比容器高时，让高亮那一项自己滚进可视范围，不然高亮会跑到看不见的地方 */
+  if(curLink){
+    var box = curLink.parentNode;
+    if(box && box.scrollHeight > box.clientHeight + 4 && curLink.scrollIntoView){
+      try { curLink.scrollIntoView({ block: "nearest", behavior: "smooth" }); } catch(e){}
+    }
   }
 }
 window.addEventListener("scroll", function(){ window.requestAnimationFrame(updateTocActive); }, { passive: true });
 window.addEventListener("resize", function(){
-  var panel = document.getElementById("rtocPanel");
-  if(!panel) return;
-  var mask = document.getElementById("rtocMask");
-  if(tocDocked()){
-    /* 宽屏：目录常驻右侧，收起遮罩，右栏正常显示 */
-    if(mask) mask.classList.remove("show");
-    document.body.classList.remove("toc-open");
-    if(document.getElementById("rtocFab") && document.getElementById("rtocFab").classList.contains("show")) panel.classList.add("show");
-  }else{
-    closeToc();
-  }
+  /* 宽度变化会切换入口（卡片 / 悬浮抽屉），按当前是否有目录重算一次 */
+  var has = document.querySelectorAll("#tocCardList a[data-toc]").length >= 2;
+  var fab = document.getElementById("rtocFab");
+  if(fab) fab.classList.toggle("show", !!(has && window.innerWidth <= 760));
+  if(tocDocked()) closeToc();
 });
 
 /* ============================================================

@@ -955,6 +955,15 @@
       "url": "https://www.iconfont.cn/?spm=a313x.search_index.i3.d4d0a486a.21e03a81QKijMm"
     }
   ],
+  "friendLinks": [
+    {
+      "name": "番茄助理人fqzlr",
+      "url": "https://blog.fqzlr.top/",
+      "avatar": "files/1790257568508_2_gr2g1r5i_背景图.jpeg",
+      "desc": "教学怎么搭建自己的博客"
+    }
+  ],
+  "friendApplies": [],
   "ledgerCategories": {
     "expense": [
       "吃饭",
@@ -1086,13 +1095,5 @@
   ],
   "rosterConfig": {
     "showSensitive": false
-  },
-  "friendLinks": [
-    {
-      "name": "番茄助理人fqzlr",
-      "url": "https://blog.fqzlr.top/",
-      "avatar": "files/1790257568508_2_gr2g1r5i_背景图.jpeg",
-      "desc": "教学怎么搭建自己的博客"
-    }
-  ]
+  }
 }

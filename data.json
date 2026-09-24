@@ -398,6 +398,10 @@
   "logs": [
     {
       "time": "2026-09-24 18:58",
+      "action": "名单字段可见性：advisor 显示"
+    },
+    {
+      "time": "2026-09-24 18:58",
       "action": "发布通知：test"
     },
     {
@@ -791,10 +795,6 @@
     {
       "time": "2026-09-19 00:18",
       "action": "修改站点设置"
-    },
-    {
-      "time": "2026-09-19 00:15",
-      "action": "名单：公开敏感信息"
     }
   ],
   "categories": [
@@ -947,7 +947,6 @@
       "images": [],
       "show": false,
       "hide": [
-        "advisor",
         "ethnicity",
         "political",
         "birthday",

@@ -476,6 +476,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-24 22:25",
+      "action": "添加一条测试友链申请"
+    },
+    {
       "time": "2026-09-24 22:24",
       "action": "通过友链申请：XQ的研究生指南"
     },
@@ -870,10 +874,6 @@
     {
       "time": "2026-09-19 09:35",
       "action": "编辑快速链接：知乎"
-    },
-    {
-      "time": "2026-09-19 09:34",
-      "action": "编辑快速链接：GitHub"
     }
   ],
   "categories": [
@@ -969,7 +969,16 @@
       "desc": "采用Docsify与Typora所设计的轻量化日常科研记录，研究方向：机器人、机器视觉、单片机、人工智能以及大模型训练。"
     }
   ],
-  "friendApplies": [],
+  "friendApplies": [
+    {
+      "name": "测试友链申请",
+      "url": "https://example-friend.test/",
+      "desc": "这是一条测试申请",
+      "avatar": "",
+      "time": "2026-09-24 22:25",
+      "from": "后台自测"
+    }
+  ],
   "ledgerCategories": {
     "expense": [
       "吃饭",

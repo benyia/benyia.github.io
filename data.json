@@ -7,7 +7,7 @@
     "defaultImage": "",
     "columns": "2",
     "defaultAvatar": "",
-    "loginHint": "s3069988193@163.com",
+    "loginHint": "",
     "coverPan": true,
     "coverPanSec": 5,
     "name": "思齐",
@@ -431,6 +431,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-24 19:51",
+      "action": "修改站点设置"
+    },
+    {
       "time": "2026-09-24 19:35",
       "action": "编辑课程：计算机控制系统"
     },
@@ -825,10 +829,6 @@
     {
       "time": "2026-09-19 01:05",
       "action": "编辑课程：计算机控制系统"
-    },
-    {
-      "time": "2026-09-19 01:02",
-      "action": "编辑课程：计算机控制系统"
     }
   ],
   "categories": [
@@ -886,7 +886,6 @@
       "url": "https://main.sut.edu.cn/web/guest/242"
     }
   ],
-  "friendLinks": [],
   "ledgerCategories": {
     "expense": [
       "吃饭",

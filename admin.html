@@ -705,11 +705,25 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     <!-- ===== 友链 ===== -->
     <div class="panel" id="panel-friends">
       <div class="card">
+        <h2>📮 待处理的友链申请 <span id="applyCount" style="font-size:.8rem;color:var(--text3);font-weight:400"></span></h2>
+        <div class="note">
+          别人在前台「关于我 → 申请友链」提交后，会开一个 GitHub Issue，仓库里的 Action 会自动写进 <code>data.json</code> 的 <code>friendApplies</code>；
+          也可以点「从 GitHub 拉取」直接读 Issues。<br>
+          点某条申请的「通过」就会变成正式友链（显示在前台），点「忽略」直接删掉。
+        </div>
+        <div class="form-row">
+          <button class="btn btn-ghost btn-sm" onclick="syncFriendApplies()" id="applySyncBtn">⬇️ 从 GitHub 拉取申请</button>
+          <button class="btn btn-ghost btn-sm" onclick="addSelfTestApply()">＋ 加一条测试申请</button>
+        </div>
+        <div class="status-msg" id="applyStatus"></div>
+        <div id="applyList" style="margin-top:8px"></div>
+      </div>
+
+      <div class="card">
         <h2 id="friendFormTitle">🔗 添加友链</h2>
         <div class="editing-bar" id="friendEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelFriendEdit()">取消编辑</a></div>
         <div class="note">
-          这里放别人的博客网站，会显示在「关于我」页面和首页右侧。头像可以留空（会用网站名第一个字），也可以点「图片」上传或填图片网址。<br>
-          别人想加友链：让他在前台「关于我 → 申请友链」提交，会开一个 GitHub Issue，你看着办再在这里手动添加即可。
+          这里放别人的博客网站，会显示在「关于我」页面和首页右侧。头像可以留空（会用网站名第一个字），也可以点「图片」上传或填图片网址。
         </div>
         <div class="form-row">
           <input type="text" id="frName" placeholder="网站名称 *" style="flex:1">
@@ -887,6 +901,7 @@ const DEFAULT_DATA = {
     {icon:"💡",title:"知乎",url:"https://www.zhihu.com"}
   ],
   friendLinks:[],
+  friendApplies:[],
   courses:[],papers:[],notices:[],classItems:[],lifeServices:[],
   ledger:[],ledgerCategories:{expense:["吃饭","买东西","生活用品","交通","娱乐","学习","医疗","其他"],income:["工资","奖学金","补贴","红包","其他"]},media:[],roster:[],rosterConfig:{showSensitive:false},diary:[],advisor:[],logs:[]
 };
@@ -3495,9 +3510,127 @@ function delQuickLink(i){
   renderAll();
 }
 
+/* ---------- 友链申请：待处理列表 ---------- */
+function renderFriendApplies(){
+  var el = $("applyList");
+  if(!el) return;
+  var list = blogData.friendApplies || [];
+  var cnt = $("applyCount");
+  if(cnt) cnt.textContent = list.length ? ("（" + list.length + " 条待处理）") : "（暂无）";
+  el.innerHTML = list.map(function(a, i){
+    return '<div class="item-row"><div class="info">'
+      + '<div class="title">'+iconThumb(a.avatar,22)+' '+esc(a.name||"未命名")+'</div>'
+      + '<div class="desc"><a href="'+esc(a.url||"#")+'" target="_blank" rel="noopener">'+esc(a.url||"")+'</a></div>'
+      + (a.desc?'<div class="desc">'+esc(a.desc)+'</div>':"")
+      + (a.time?'<div class="desc">提交于 '+esc(a.time)+'</div>':"")
+      + '</div><div class="actions">'
+      + '<button class="btn btn-primary btn-sm" onclick="approveFriendApply('+i+')">通过</button>'
+      + '<button class="btn btn-danger btn-sm" onclick="rejectFriendApply('+i+')">忽略</button>'
+      + '</div></div>';
+  }).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无待处理的申请。别人在前台提交后会出现在这里。</div>';
+}
+/* 通过：转成正式友链 */
+function approveFriendApply(i){
+  var a = (blogData.friendApplies||[])[i];
+  if(!a) return;
+  blogData.friendLinks = blogData.friendLinks || [];
+  var dup = blogData.friendLinks.some(function(f){ return String(f.url||"") === String(a.url||""); });
+  if(!dup){
+    blogData.friendLinks.push({ name: a.name||"", url: a.url||"", avatar: a.avatar||"", desc: a.desc||"" });
+  }
+  blogData.friendApplies.splice(i, 1);
+  saveData("通过友链申请：" + (a.name||a.url));
+  renderAll();
+  showToast(dup ? "这条已经在友链里了，已从申请列表移除" : "已加入友链：" + (a.name||""));
+}
+function rejectFriendApply(i){
+  var a = (blogData.friendApplies||[])[i];
+  if(!a) return;
+  if(!confirm("忽略这条申请？（" + (a.name||a.url) + "）")) return;
+  blogData.friendApplies.splice(i, 1);
+  saveData("忽略友链申请");
+  renderAll();
+}
+/* 从 GitHub Issues 拉取带「友链申请」标签的 Issue，解析后并入待处理列表 */
+function parseApplyIssue(title, body){
+  var b = String(body||"");
+  function pick(label){
+    var re = new RegExp("\\*\\*" + label + "\\*\\*\\s*[：:]\\s*([^\\n\\r]*)");
+    var m = b.match(re);
+    return m ? m[1].trim() : "";
+  }
+  var name = pick("网站名称") || String(title||"").replace(/^\s*\[友链申请\]\s*/, "").trim();
+  var url = pick("网站地址");
+  var desc = pick("网站简介");
+  var avatar = pick("头像/Logo") || pick("头像") || "";
+  function clean(v){ return (v === "（未填写）" || v === "(未填写)") ? "" : v; }
+  return { name: name, url: url, desc: clean(desc), avatar: clean(avatar), time: "", from: "GitHub Issue" };
+}
+async function syncFriendApplies(){
+  var st = $("applyStatus");
+  var token = getStoredToken();
+  if(!token){
+    if(st){ st.className = "status-msg err"; st.textContent = "请先在「站点设置」里保存 GitHub Token，再回来拉取申请。"; }
+    showToast("请先在「站点设置」里保存 GitHub Token", "error");
+    return;
+  }
+  var btn = $("applySyncBtn");
+  if(btn) btn.disabled = true;
+  if(st){ st.className = "status-msg"; st.textContent = "正在从 GitHub 读取申请…"; }
+  try{
+    var r = await ghApiIssues();
+    if(!r.ok) throw new Error(ghErrorText(r.status, r.json));
+    var issues = Array.isArray(r.json) ? r.json : [];
+    var mine = issues.filter(function(it){
+      var labels = (it.labels||[]).map(function(l){ return typeof l === "string" ? l : (l && l.name) || ""; });
+      return labels.indexOf("友链申请") >= 0 || /^\s*\[友链申请\]/.test(it.title||"");
+    });
+    blogData.friendApplies = blogData.friendApplies || [];
+    var added = 0;
+    mine.forEach(function(it){
+      var a = parseApplyIssue(it.title, it.body);
+      if(!a.url) return;
+      var dup = blogData.friendApplies.some(function(x){ return String(x.url) === a.url; })
+             || (blogData.friendLinks||[]).some(function(x){ return String(x.url) === a.url; });
+      if(dup) return;
+      a.time = (it.created_at || "").slice(0, 16).replace("T", " ");
+      a.issue = it.number;
+      blogData.friendApplies.push(a);
+      added++;
+    });
+    if(added) await saveData("从 GitHub 导入 " + added + " 条友链申请");
+    renderAll();
+    if(st){ st.className = "status-msg ok"; st.textContent = "✅ 读取到 " + mine.length + " 条申请，新增 " + added + " 条"; }
+    showToast(added ? ("已导入 " + added + " 条申请") : "没有新的申请");
+  }catch(e){
+    if(st){ st.className = "status-msg err"; st.textContent = "读取失败：" + e.message; }
+  }
+  if(btn) btn.disabled = false;
+}
+async function ghApiIssues(){
+  var h = ghHeaders();
+  var url = "https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/issues?state=open&per_page=50&t="+Date.now();
+  var res = await fetch(url, { headers: h, cache: "no-store" });
+  var json = null;
+  try { json = await res.json(); } catch(e){ json = null; }
+  return { ok: res.ok, status: res.status, json: json };
+}
+/* 本地自测：造一条申请，验证「通过 → 变成友链」这条链路 */
+function addSelfTestApply(){
+  blogData.friendApplies = blogData.friendApplies || [];
+  blogData.friendApplies.push({
+    name: "测试友链申请", url: "https://example-friend.test/", desc: "这是一条测试申请",
+    avatar: "", time: nowStr(), from: "后台自测"
+  });
+  saveData("添加一条测试友链申请");
+  renderAll();
+  showToast("已添加测试申请，点「通过」试试");
+}
+
 /* ---------- 友链管理（显示在「关于我」页 + 首页右侧） ---------- */
 let editingFriend = null;
 function renderFriendManage(){
+  renderFriendApplies();
   var el = $("friendList");
   if(!el) return;
   el.innerHTML = (blogData.friendLinks||[]).map(function(f,i){

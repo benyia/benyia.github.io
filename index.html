@@ -43,6 +43,24 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .nav-search input{padding:8px 14px 8px 36px;border:1px solid var(--border);border-radius:99px;font-size:.85rem;width:200px;outline:none;transition:all .2s;background:#fff}
 .nav-search input:focus{border-color:var(--primary);width:240px}
 .nav-search .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.5;font-size:.85rem}
+
+/* ===== 手机/平板导航：汉堡按钮 + 抽屉 ===== */
+.nav-burger{display:none;flex-direction:column;justify-content:center;gap:4px;width:38px;height:38px;padding:0 8px;border:1px solid var(--border);background:var(--card);border-radius:10px;cursor:pointer;flex:0 0 auto}
+.nav-burger span{display:block;height:2px;width:100%;background:var(--text);border-radius:2px;transition:transform .25s,opacity .2s}
+.nav-burger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.nav-drawer-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:120;display:none}
+.nav-drawer-mask.show{display:block}
+.nav-drawer{position:fixed;top:0;left:0;bottom:0;width:270px;max-width:82vw;background:var(--card);backdrop-filter:blur(18px);border-right:1px solid var(--border);z-index:121;transform:translateX(-102%);transition:transform .26s ease;display:flex;flex-direction:column;box-shadow:6px 0 30px rgba(15,23,42,.14)}
+.nav-drawer.show{transform:translateX(0)}
+.nav-drawer-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--border);font-weight:700;font-size:.95rem}
+.nav-drawer-close{border:none;background:none;font-size:1rem;color:var(--text2);cursor:pointer;font-family:inherit;padding:4px 8px;border-radius:8px}
+.nav-drawer-close:hover{background:var(--soft)}
+.nav-drawer-list{flex:1;overflow-y:auto;padding:10px}
+.nav-drawer-list button{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:none;background:transparent;color:var(--text);font-size:.95rem;font-family:inherit;text-align:left;border-radius:10px;cursor:pointer;transition:background .18s}
+.nav-drawer-list button:hover{background:var(--primary-light);color:var(--primary-dark)}
+.nav-drawer-list button.active{background:var(--primary);color:#fff;font-weight:600}
 .search-results{position:absolute;top:120%;right:0;background:var(--card);border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.15);width:440px;max-height:74vh;overflow-y:auto;display:none;z-index:100}
 .search-results.show{display:block}
 .search-result-item{padding:9px 16px;cursor:pointer;border-bottom:1px solid var(--border)}
@@ -271,6 +289,45 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .roster-row .k{color:var(--text3);flex:0 0 72px}
 .roster-row .v{color:var(--text);font-weight:500;word-break:break-all}
 .folder-title{font-size:.86rem;font-weight:600;margin:14px 0 6px;color:var(--primary-dark)}
+/* ===== 卡片式详情：把大段文字拆成有层次的卡片，而不是一坨文本 ===== */
+.detail-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px}
+@media(min-width:820px){ .detail-grid{grid-template-columns:1.55fr 1fr} .detail-main{grid-column:1} .detail-side{grid-column:2} }
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+.info-card+.info-card{margin-top:16px}
+.info-card h3{font-size:.92rem;margin-bottom:12px;padding-left:10px;border-left:3px solid var(--primary);display:flex;align-items:center;gap:6px}
+.hero-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;backdrop-filter:blur(10px);box-shadow:var(--shadow);margin-bottom:16px}
+.hero-banner{height:132px;background:var(--cover-grad);display:flex;align-items:center;justify-content:center;font-size:3rem;overflow:hidden}
+.hero-banner img{width:100%;height:100%;object-fit:cover}
+.hero-body{padding:20px 22px}
+.hero-body h2{font-size:1.42rem;margin-bottom:10px;line-height:1.4}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.info-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;font-size:.78rem;background:var(--soft);border:1px solid var(--border);color:var(--text2)}
+.info-chip b{color:var(--text);font-weight:600}
+.info-chip.green{background:var(--primary-light);border-color:transparent;color:var(--primary-dark)}
+.kv-list{display:flex;flex-direction:column;gap:8px}
+.kv{display:flex;justify-content:space-between;gap:12px;font-size:.85rem;padding-bottom:8px;border-bottom:1px dashed var(--border)}
+.kv:last-child{border-bottom:none;padding-bottom:0}
+.kv .k{color:var(--text3);white-space:nowrap}
+.kv .v{color:var(--text);font-weight:500;text-align:right;word-break:break-all}
+.progress-ring{font-size:.9rem;color:var(--text2);margin-top:6px}
+.progress-bar-wrap{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;margin:10px 0 6px;border:1px solid var(--border)}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary),#34d399);border-radius:99px;transition:width .4s}
+/* 通知：正文卡片化 */
+.notice-meta-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.meta-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;backdrop-filter:blur(10px)}
+.meta-card .mk{font-size:.72rem;color:var(--text3);margin-bottom:3px}
+.meta-card .mv{font-size:.9rem;font-weight:600;word-break:break-all}
+/* 文件条目按钮 */
+.file-open{display:inline-block;padding:6px 14px;border-radius:8px;background:var(--primary-light);color:var(--primary-dark);font-size:.78rem;text-decoration:none;font-weight:600;white-space:nowrap;transition:all .2s}
+.file-open:hover{background:var(--primary);color:#fff}
+
+/* ===== 标签聚合 ===== */
+.tag-cloud{display:flex;flex-wrap:wrap;gap:8px}
+.tag-cloud .tag-chip{padding:6px 13px;font-size:.82rem}
+.tag-cloud .tag-chip b{opacity:.65;font-weight:600;margin-left:4px}
+.tag-count{font-size:.8rem;color:var(--text3);margin-bottom:12px}
+.tag-group-title{font-size:.92rem;font-weight:700;margin:20px 0 10px;padding-left:10px;border-left:3px solid var(--primary);display:flex;justify-content:space-between;align-items:center}
+
 /* 多列布局：同一行卡片等高、内容自动收拢 */
 .list-cols{display:grid;gap:16px;align-items:stretch}
 .list-cols.cols-1{grid-template-columns:1fr}
@@ -323,13 +380,35 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
 /* About */
 .about-content{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;backdrop-filter:blur(10px);line-height:1.8;white-space:pre-wrap;font-size:.95rem}
 
-/* Responsive */
+/* Responsive：布局用 Grid/Flex，小屏自动折叠导航 */
+@media(max-width:1100px){
+  .main{grid-template-columns:200px 1fr 200px;gap:18px;padding:20px 18px}
+}
+@media(max-width:1080px){
+  /* 平板：收起右侧栏，主内容占满，左右两栏并排在上面 */
+  .main{grid-template-columns:1fr 1fr;gap:18px}
+  .center-col{grid-column:1 / -1;order:-1}
+  .left-col,.right-col{flex-direction:row;flex-wrap:wrap;gap:16px}
+  .left-col>.side-card,.right-col>.side-card{flex:1 1 260px;min-width:0}
+}
 @media(max-width:900px){
   .main{grid-template-columns:1fr}
-  .left-col,.right-col{order:2}
+  .left-col,.right-col{order:2;flex-direction:column}
+  /* 关键：小屏不再隐藏导航，改用汉堡 + 抽屉 */
   .nav-links{display:none}
-  .nav-search input{width:140px}
-  .nav-search input:focus{width:160px}
+  .nav-burger{display:flex}
+  .nav-search input{width:130px}
+  .nav-search input:focus{width:150px}
+  .topnav{padding:0 14px}
+}
+@media(max-width:560px){
+  .topnav-inner{gap:6px}
+  .nav-brand{font-size:1rem}
+  .nav-search input{width:104px;padding:8px 12px 8px 32px}
+  .nav-search input:focus{width:120px}
+  .page-title{padding:20px 14px}
+  .page-title h1{font-size:1.3rem}
+  .main{padding:12px;gap:14px}
 }
 </style>
 </head>
@@ -337,6 +416,9 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
 
 <nav class="topnav">
   <div class="topnav-inner">
+    <button class="nav-burger" id="navBurger" type="button" onclick="toggleDrawer()" aria-label="打开导航菜单" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
     <a href="/" class="nav-brand"><span class="dot"></span>思齐的博客</a>
     <div class="nav-links" id="navLinks">
       <button class="active" data-t="home">首页</button>
@@ -349,6 +431,7 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
       <button data-t="life">生活服务</button>
       <button data-t="ledger">记账</button>
       <button data-t="diary">日记</button>
+      <button data-t="tags">标签</button>
       <button data-t="about">关于</button>
     </div>
     <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="切换暗色/亮色">🌙</button>
@@ -359,6 +442,16 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
     </div>
   </div>
 </nav>
+
+<!-- 手机/平板：汉堡菜单抽屉（内容由 JS 按 nav-links 自动生成，保证两边一致） -->
+<div class="nav-drawer-mask" id="navMask" onclick="closeDrawer()"></div>
+<aside class="nav-drawer" id="navDrawer" aria-label="站点导航">
+  <div class="nav-drawer-head">
+    <span>站点导航</span>
+    <button type="button" class="nav-drawer-close" onclick="closeDrawer()" aria-label="关闭">✕</button>
+  </div>
+  <div class="nav-drawer-list" id="navDrawerList"></div>
+</aside>
 
 <div class="page-title" id="pageTitle">
   <h1 id="titleH1">思齐个人主页</h1>
@@ -397,14 +490,24 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
 
     <div class="section" id="sec-courseDetail">
       <div class="section-header"><button class="back-btn" onclick="backToCourses()">← 返回</button></div>
-      <div class="detail-header">
-        <div class="icon" id="cdIcon">📐</div>
-        <h2 id="cdName">课程名称</h2>
-        <p class="intro" id="cdIntro"></p>
-        <div class="progress-bar-wrap"><div class="progress-bar" id="cdProgressBar" style="width:0%"></div></div>
-        <div class="progress-text" id="cdProgressText">学习进度：0%</div>
+      <div class="hero-card">
+        <div class="hero-banner" id="cdIcon">📐</div>
+        <div class="hero-body">
+          <h2 id="cdName">课程名称</h2>
+          <div class="chip-row" id="cdChips"></div>
+          <div class="progress-bar-wrap"><div class="progress-bar" id="cdProgressBar" style="width:0%"></div></div>
+          <div class="progress-ring" id="cdProgressText">学习进度：0%</div>
+        </div>
       </div>
-      <div id="cdFiles"></div>
+      <div class="detail-grid">
+        <div class="detail-main">
+          <div class="info-card"><h3>📖 课程介绍</h3><div class="md-body" id="cdIntro"></div></div>
+        </div>
+        <div class="detail-side">
+          <div class="info-card"><h3>📊 课程信息</h3><div class="kv-list" id="cdInfo"></div></div>
+        </div>
+      </div>
+      <div class="info-card"><h3>📎 课程资料</h3><div id="cdFiles"></div></div>
     </div>
 
     <div class="section" id="sec-papers">
@@ -431,12 +534,21 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
 
     <div class="section" id="sec-noticeDetail">
       <div class="section-header"><button class="back-btn" onclick="backToNotices()">← 返回</button></div>
-      <div class="detail-header" id="noticeDetailBox">
-        <h2 id="ndTitle"></h2>
-        <div class="article-meta" id="ndMeta"></div>
-        <p class="intro" id="ndContent"></p>
+      <div class="hero-card" id="noticeDetailBox">
+        <div class="hero-body">
+          <h2 id="ndTitle"></h2>
+          <div class="notice-meta-cards" id="ndMetaCards"></div>
+        </div>
       </div>
-      <div id="ndFiles"></div>
+      <div class="detail-grid">
+        <div class="detail-main">
+          <div class="info-card"><h3>📄 通知正文</h3><div class="md-body" id="ndContent"></div></div>
+        </div>
+        <div class="detail-side">
+          <div class="info-card"><h3>ℹ️ 基本信息</h3><div class="kv-list" id="ndInfo"></div></div>
+        </div>
+      </div>
+      <div class="info-card"><h3>📎 附件</h3><div id="ndFiles"></div></div>
     </div>
 
     <div class="section" id="sec-class">
@@ -485,6 +597,12 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
 
     <div class="section" id="sec-diary">
       <div id="diaryList"></div>
+    </div>
+
+    <!-- 标签聚合：点任意标签，看全部相关内容 -->
+    <div class="section" id="sec-tags">
+      <div id="tagCloudBox"></div>
+      <div id="tagPostsBox"></div>
     </div>
 
     <div class="section" id="sec-advisor">
@@ -575,6 +693,7 @@ const PAGE_TITLES = {
   media: ["影音", "音乐 / 视频 / 图片"],
   ledger: ["生活记账", "记录每一笔开销"],
   diary: ["日记", "记录生活点滴"],
+  tags: ["标签", "按标签聚合全部内容"],
   advisor: ["导师指导", "与导师交流记录"],
   about: ["关于我", "了解更多关于思齐"],
   courseDetail: ["课程详情", ""],
@@ -625,6 +744,8 @@ let classFilter = "all";
 let mediaFilter = "all";
 /* 分页当前页：首页 / 课程 / 通知 / 班级 各记各的 */
 const pageState = { home: 1, courses: 1, notices: 1, class: 1 };
+/* 标签聚合当前选中的标签 */
+let currentTag = "";
 /* 悬浮目录当前高亮的标题 id */
 let tocActiveId = "";
 
@@ -698,6 +819,30 @@ function collectFiles(item){
   if(item.file) return [{name:item.fileName||"附件", url:item.file, type:"文件"}];
   return [];
 }
+/* 文件条目右侧的按钮：
+   —— 自己的文件（files/ 之类的站内路径）：浏览器能直接存，显示「下载」
+   —— 网盘等外链：站外地址下载不了，显示「打开」（新窗口打开） */
+function isExternalFile(url){
+  var u = String(url || "").trim();
+  if(!u) return false;
+  if(/^(https?:)?\/\//i.test(u)){
+    try {
+      var host = new URL(u, location.href).hostname;
+      var self = location.hostname;
+      if(host === self || /(^|\.)github\.io$/i.test(host)) return false;
+      return true;
+    } catch(e){ return true; }
+  }
+  return false;
+}
+function fileActionHTML(url, name){
+  if(!url) return "<span>待上传</span>";
+  if(isExternalFile(url)){
+    return '<a class="file-open" href="'+esc(url)+'" target="_blank" rel="noopener">打开</a>';
+  }
+  return '<a class="file-open" href="'+esc(url)+'" download="'+esc(name||"")+'" target="_blank" rel="noopener">下载</a>';
+}
+
 function fileListGrouped(item){
   var files = collectFiles(item);
   if(!files.length) return '<div class="empty">暂无文件</div>';
@@ -711,7 +856,7 @@ function fileListGrouped(item){
   order.forEach(function(g){
     html += '<div class="folder-title">' + (g ? ('📁 ' + esc(g)) : '📄 文件') + '</div>';
     groups[g].forEach(function(f){
-      html += '<div class="file-item"><div><div class="name">'+esc(f.name)+'</div><div class="type">'+esc(f.type||"文件")+(f.size?" · "+fmtSize(f.size):"")+'</div></div>'+(f.url?'<a href="'+esc(f.url)+'" target="_blank" rel="noopener">下载</a>':"<span>待上传</span>")+'</div>';
+      html += '<div class="file-item"><div><div class="name">'+esc(f.name)+'</div><div class="type">'+esc(f.type||"文件")+(f.size?" · "+fmtSize(f.size):"")+'</div></div>'+fileActionHTML(f.url, f.name)+'</div>';
     });
   });
   return html;
@@ -720,7 +865,7 @@ function fileListGrouped(item){
 function fileListHTML(item){
   var files = collectFiles(item);
   return files.map(function(f){
-    return '<div class="file-item"><div><div class="name">'+esc(f.name)+'</div><div class="type">'+esc(f.type||"文件")+(f.size?" · "+fmtSize(f.size):"")+'</div></div>'+(f.url?'<a href="'+esc(f.url)+'" target="_blank" rel="noopener">下载</a>':"<span>待上传</span>")+'</div>';
+    return '<div class="file-item"><div><div class="name">'+esc(f.name)+'</div><div class="type">'+esc(f.type||"文件")+(f.size?" · "+fmtSize(f.size):"")+'</div></div>'+fileActionHTML(f.url, f.name)+'</div>';
   }).join("") || '<div class="empty">暂无文件</div>';
 }
 
@@ -761,7 +906,112 @@ function renderCategories(){
 }
 
 function renderTags(){
-  document.getElementById("tagList").innerHTML = (blogData.tags||[]).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>';}).join("") || '';
+  var idx = tagIndex();
+  document.getElementById("tagList").innerHTML = (blogData.tags||[]).map(function(t){
+    var n = idx[t] ? idx[t].items.length : 0;
+    return '<span class="tag-chip" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')" title="查看该标签下的全部内容">'+esc(t)+(n?'<b> '+n+'</b>':"")+'</span>';
+  }).join("") || '';
+}
+
+/* ============================================================
+   标签聚合：把课程/论文/通知/班级/日记/导师里的标签汇到一个视图
+   ============================================================ */
+function tagIndex(){
+  var map = {};
+  /* 兼容两种写法：tags: ["a","b"] 或 tags: "a,b" */
+  function norm(tags){
+    if(Array.isArray(tags)) return tags.map(function(x){ return String(x||"").trim(); }).filter(Boolean);
+    if(typeof tags === "string") return tags.split(/[,，、;；\s]+/).map(function(x){ return x.trim(); }).filter(Boolean);
+    return [];
+  }
+  function add(tags, item){
+    norm(tags).forEach(function(t){
+      if(!t) return;
+      if(!map[t]) map[t] = { items: [] };
+      map[t].items.push(item);
+    });
+  }
+  (blogData.courses||[]).forEach(function(c,i){
+    add(c.tags, { kind:"课程", icon:"📚", title:c.title,
+      desc:(c.desc||"") + (c.intro ? " " + mdText(c.intro) : ""),
+      time:c.time||c.date||"", click:"openCourse("+i+")" });
+  });
+  (blogData.papers||[]).forEach(function(p,i){
+    add(p.tags, { kind:"论文", icon:"📝", title:p.title, desc:p.abstract||p.desc||"",
+      time:p.time||p.date||"", click:"openPaper("+i+")" });
+  });
+  (blogData.notices||[]).forEach(function(n,i){
+    add(n.tags, { kind:"通知", icon:"🔔", title:n.title, desc:mdText(n.content),
+      time:n.time||n.date||"", click:"openNotice("+i+")" });
+  });
+  (blogData.classItems||[]).forEach(function(c,i){
+    add(c.tags, { kind:"班级", icon:"👥", title:c.title, desc:mdText(c.content),
+      time:c.time||c.date||"", click:"openClass("+i+")" });
+  });
+  (blogData.diary||[]).forEach(function(d,i){
+    add(d.tags, { kind:"日记", icon:"📖", title:d.title||autoTitle(d.content, d.date),
+      desc:mdText(d.content), time:d.time||d.date||"", click:"switchTab('diary')" });
+  });
+  (blogData.advisor||[]).forEach(function(a,i){
+    add(a.tags, { kind:"导师指导", icon:"🎓", title:(a.count?("第 "+a.count+" 次指导"):"指导记录"),
+      desc:mdText(a.content), time:a.time||a.date||"", click:"switchTab('advisor')" });
+  });
+  Object.keys(map).forEach(function(k){ map[k].items.sort(byTimeDesc); });
+  /* 标签排序：内容多的排前面，其次按原配置顺序 */
+  var order = blogData.tags || [];
+  map = Object.keys(map).sort(function(a,b){
+    var d = map[b].items.length - map[a].items.length;
+    if(d) return d;
+    var ia = order.indexOf(a), ib = order.indexOf(b);
+    if(ia < 0) ia = 999; if(ib < 0) ib = 999;
+    return ia - ib || a.localeCompare(b);
+  }).reduce(function(acc, k){ acc[k] = map[k]; return acc; }, {});
+  return map;
+}
+function renderTagView(active){
+  var idx = tagIndex();
+  var keys = Object.keys(idx);
+  var cloud = keys.map(function(t){
+    var on = (t === active) ? ' style="background:var(--primary);color:#fff"' : "";
+    return '<span class="tag-chip"'+on+' onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')">'+esc(t)+'<b> '+idx[t].items.length+'</b></span>';
+  }).join("");
+  document.getElementById("tagCloudBox").innerHTML = keys.length
+    ? '<div class="info-card"><h3>🏷️ 全部标签</h3><div class="tag-cloud">'+cloud+'</div></div>'
+    : '<div class="empty">还没有任何标签</div>';
+
+  var box = document.getElementById("tagPostsBox");
+  if(!active){
+    var total = 0;
+    keys.forEach(function(t){ total += idx[t].items.length; });
+    box.innerHTML = '<div class="tag-count">共 '+keys.length+' 个标签、'+total+' 条内容。点上面的标签查看全部相关内容。</div>';
+    return;
+  }
+  var entry = idx[active];
+  if(!entry){ box.innerHTML = '<div class="tag-count">没有找到标签「'+esc(active)+'」</div>'; return; }
+  var byKind = {};
+  entry.items.forEach(function(it){ (byKind[it.kind] = byKind[it.kind] || []).push(it); });
+  var html = '<div class="tag-count">标签「<b>'+esc(active)+'</b>」下共 '+entry.items.length+' 条内容</div>';
+  Object.keys(byKind).forEach(function(kind){
+    html += '<div class="tag-group-title"><span>'+esc(byKind[kind][0].icon)+' '+esc(kind)+'</span><span style="font-size:.78rem;color:var(--text3);font-weight:400">'+byKind[kind].length+' 条</span></div>';
+    html += '<div class="list-cols cols-1">' + byKind[kind].map(function(it){
+      return '<div class="article-card" onclick="'+it.click+'"><div class="article-body">'
+        + '<div class="article-title">'+esc(it.title)+'</div>'
+        + '<div class="chip-row">'+(it.time?'<span class="info-chip">🕐 '+esc(it.time)+'</span>':"")
+        + '<span class="info-chip green">'+esc(it.kind)+'</span></div>'
+        + (it.desc?'<div class="article-desc" style="margin-top:10px">'+esc(it.desc.slice(0,110))+'</div>':"")
+        + '</div></div>';
+    }).join("") + '</div>';
+  });
+  box.innerHTML = html;
+}
+function openTag(t){
+  currentTag = String(t || "");
+  setPageTitle("tags", "标签：" + currentTag, "该标签下的全部内容");
+  renderToc([]);
+  showSection("tags");
+  renderTagView(currentTag);
+  setActiveNav("tags");
+  window.scrollTo(0, 0);
 }
 
 function renderQuickLinks(){
@@ -840,6 +1090,7 @@ function renderAll(){
   renderDiary();
   renderAdvisor();
   renderFriends();
+  renderTagView(currentTag);
   applyColumns();
   setTimeout(initCoverPan, 60);
 
@@ -921,30 +1172,49 @@ function renderCourses(){
   arr.sort(function(a,b){ return byTimeDesc(a.c, b.c); });
   renderPaged("courses", "coursesList", "coursesPager", arr, function(it){
     var c = it.c, i = it.i;
-    return '<div class="article-card" onclick="openCourse('+i+')">'+coverHTML(c, c.icon||"📐")+'<div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+collectFiles(c).length+' 个文件</span><span>进度 '+(c.progress||0)+'%</span>'+(c.time?'<span class="time">🕐 '+esc(c.time)+'</span>':"")+'</div><div class="article-desc">'+esc(c.desc)+'</div></div></div>';
+    var nf = collectFiles(c).length, pg = c.progress || 0;
+    return '<div class="article-card" onclick="openCourse('+i+')">'+coverHTML(c, c.icon||"📐")
+      + '<div class="article-body">'
+      +   '<div class="article-title">'+esc(c.title)+'</div>'
+      +   '<div class="chip-row"><span class="info-chip green">📎 '+nf+' 个资料</span><span class="info-chip">📈 '+pg+'%</span>'
+      +   (c.time?'<span class="info-chip">🕐 '+esc(c.time)+'</span>':"")+'</div>'
+      +   '<div class="progress-bar-wrap" style="margin:12px 0 10px"><div class="progress-bar" style="width:'+pg+'%"></div></div>'
+      +   (c.desc?'<div class="article-desc">'+esc(c.desc)+'</div>':"")
+      +   (c.intro?'<div class="article-desc" style="margin-top:6px;color:var(--text3)">'+esc(mdText(c.intro).slice(0,80))+'</div>':"")
+      + '</div></div>';
   }, "暂无课程");
 }
 function openCourse(idx){
   currentCourseIdx = idx;
   var c = blogData.courses[idx];
-  var icEl = document.getElementById("cdIcon");
+  var banner = document.getElementById("cdIcon");
   var icVal = c.icon || "📐";
-  if(isImgUrl(icVal)){
-    /* 图标是上传的图片：详情页只显示标题，图片在下方画廊里已经有了 */
-    icEl.style.display = "none";
-    icEl.textContent = "";
-  }else{
-    icEl.style.display = "block";
-    icEl.textContent = icVal;
-  }
+  /* 顶部横幅：图标是图片就铺满，否则显示大图标 */
+  banner.innerHTML = isImgUrl(icVal) ? '<img src="'+esc(icVal)+'" alt="">' : esc(icVal);
   document.getElementById("cdName").textContent = c.title;
-  /* 课程介绍按 Markdown 渲染，这样写了 ## 小标题就会自动生成目录 */
+
+  var files = collectFiles(c);
+  var progress = c.progress || 0;
+  /* 关键信息做成小圆片，一眼能看完 */
+  document.getElementById("cdChips").innerHTML =
+      '<span class="info-chip green">📎 <b>'+files.length+'</b> 个资料</span>'
+    + '<span class="info-chip">📈 进度 <b>'+progress+'%</b></span>'
+    + (c.time ? '<span class="info-chip">🕐 '+esc(c.time)+'</span>' : '');
+
+  /* 课程信息卡片 */
+  document.getElementById("cdInfo").innerHTML =
+      '<div class="kv"><span class="k">课程名称</span><span class="v">'+esc(c.title)+'</span></div>'
+    + '<div class="kv"><span class="k">资料数量</span><span class="v">'+files.length+' 个</span></div>'
+    + '<div class="kv"><span class="k">学习进度</span><span class="v">'+progress+'%</span></div>'
+    + (c.time ? '<div class="kv"><span class="k">更新时间</span><span class="v">'+esc(c.time)+'</span></div>' : '');
+
+  /* 课程介绍按 Markdown 渲染，写了 ## 小标题就会自动生成目录 */
   var introBox = document.getElementById("cdIntro");
-  introBox.innerHTML = mdRenderHTML(c.intro);
-  introBox.className = "intro md-body";
+  introBox.innerHTML = mdRenderHTML(c.intro) || '<div class="empty">暂无课程介绍</div>';
+  introBox.className = "md-body";
   buildToc(introBox);
-  document.getElementById("cdProgressBar").style.width = (c.progress||0)+"%";
-  document.getElementById("cdProgressText").textContent = "学习进度："+(c.progress||0)+"%";
+  document.getElementById("cdProgressBar").style.width = progress+"%";
+  document.getElementById("cdProgressText").innerHTML = "学习进度：<b>"+progress+"%</b>";
   document.getElementById("cdFiles").innerHTML = galleryHTML(c) + fileListGrouped(c);
   setPageTitle("courseDetail", c.title, "");
   showSection("courseDetail");
@@ -1354,17 +1624,40 @@ function renderNotices(){
   arr.sort(function(a,b){ return byTimeDesc(a.n, b.n); });
   renderPaged("notices", "noticesList", "noticesPager", arr, function(it){
     var n = it.n, i = it.i;
-    return '<div class="article-card" onclick="openNotice('+i+')">'+coverHTML(n, "🔔")+'<div class="article-body"><div class="article-title">'+esc(n.title)+'</div><div class="article-meta"><span>'+esc(n.source)+'</span><span>'+esc(n.date)+'</span>'+(n.time?'<span class="time">🕐 '+esc(n.time)+'</span>':"")+'</div><div class="article-desc">'+esc(mdText(n.content).slice(0,100))+'</div>'+imgStrip(n)+'</div></div>';
+    var body = mdText(n.content);
+    var nf = collectFiles(n).length;
+    return '<div class="article-card" onclick="openNotice('+i+')">'+coverHTML(n, "🔔")
+      + '<div class="article-body">'
+      +   '<div class="article-title">'+esc(n.title)+'</div>'
+      +   '<div class="chip-row">'
+      +     (n.source?'<span class="info-chip">🏛 '+esc(n.source)+'</span>':"")
+      +     (n.date?'<span class="info-chip">📅 '+esc(n.date)+'</span>':"")
+      +     (nf?'<span class="info-chip green">📎 '+nf+' 个附件</span>':"")
+      +   '</div>'
+      +   (body?'<div class="article-desc" style="margin-top:10px">'+esc(body.slice(0,110))+'</div>':'<div class="article-desc" style="margin-top:10px;color:var(--text3)">（暂无正文）</div>')
+      +   imgStrip(n)
+      + '</div></div>';
   }, "暂无通知");
 }
 function openNotice(idx){
   currentNoticeIdx = idx;
   var n = blogData.notices[idx];
   document.getElementById("ndTitle").textContent = n.title;
-  document.getElementById("ndMeta").textContent = (n.source||"") + " · " + (n.date||"");
+  /* 基本信息做成卡片，不再是一行挤在一起的灰字 */
+  var files = collectFiles(n);
+  document.getElementById("ndMetaCards").innerHTML =
+      '<div class="meta-card"><div class="mk">来源</div><div class="mv">'+esc(n.source||"未注明")+'</div></div>'
+    + '<div class="meta-card"><div class="mk">日期</div><div class="mv">'+esc(n.date||"—")+'</div></div>'
+    + (n.time ? '<div class="meta-card"><div class="mk">发布时间</div><div class="mv">'+esc(n.time)+'</div></div>' : '')
+    + '<div class="meta-card"><div class="mk">附件</div><div class="mv">'+files.length+' 个</div></div>';
+  document.getElementById("ndInfo").innerHTML =
+      '<div class="kv"><span class="k">来源</span><span class="v">'+esc(n.source||"未注明")+'</span></div>'
+    + '<div class="kv"><span class="k">日期</span><span class="v">'+esc(n.date||"—")+'</span></div>'
+    + (n.time ? '<div class="kv"><span class="k">发布时间</span><span class="v">'+esc(n.time)+'</span></div>' : '')
+    + '<div class="kv"><span class="k">附件数量</span><span class="v">'+files.length+' 个</span></div>';
   var box = document.getElementById("ndContent");
-  box.innerHTML = mdRenderHTML(n.content);
-  box.className = "intro md-body";
+  box.innerHTML = mdRenderHTML(n.content) || '<div class="empty">这条通知还没有正文</div>';
+  box.className = "md-body";
   buildToc(box);
   document.getElementById("ndFiles").innerHTML = galleryHTML(n) + fileListGrouped(n);
   setPageTitle("noticeDetail", n.title, "");
@@ -1416,7 +1709,7 @@ function renderMedia(){
         player = '<img src="'+esc(f.url)+'" style="width:100%;border-radius:8px;margin-bottom:10px" alt="">';
       }
     }
-    var dl = (f && f.url) ? '<div style="margin-top:8px"><a class="btn" href="'+esc(f.url)+'" download target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.78rem">下载 '+esc(f.name)+'</a></div>' : '';
+    var dl = (f && f.url) ? '<div style="margin-top:8px">'+fileActionHTML(f.url, f.name)+'</div>' : '';
     if(m.url) dl += '<div style="margin-top:8px"><a class="btn" href="'+esc(m.url)+'" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.78rem">打开链接</a></div>';
     return '<div class="article-card"><div class="article-body">'+player+'<div class="article-title">'+icon+' '+esc(m.title)+'</div>'+(m.desc?'<div class="article-desc">'+esc(m.desc)+'</div>':"")+dl+'</div></div>';
   }).join("") || '<div class="empty">暂无内容</div>';
@@ -1426,7 +1719,7 @@ function renderLife(){
   document.getElementById("lifeList").innerHTML = (blogData.lifeServices||[]).map(function(s){
     var files = collectFiles(s);
     var fileLinks = files.map(function(f){
-      return '<div style="margin-top:6px"><a class="btn" href="'+esc(f.url)+'" download target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.78rem">下载 '+esc(f.name)+'</a></div>';
+      return '<div style="margin-top:6px">'+fileActionHTML(f.url, f.name)+'</div>';
     }).join("");
     var ic = isImgUrl(s.icon) ? '<img src="'+esc(s.icon)+'" style="width:48px;height:48px;object-fit:cover;border-radius:10px">' : '<span style="font-size:2rem">'+esc(s.icon||"🔗")+'</span>';
     var open = s.url ? '<a href="'+esc(s.url)+'" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">' : '<div>';
@@ -1511,7 +1804,7 @@ function renderDiary(){
       var player = "";
       if(["mp4","webm","mov","mkv","avi"].indexOf(ext) >= 0) player = '<video controls preload="metadata" src="'+url+'"></video>';
       else if(["mp3","wav","m4a","ogg","flac","aac"].indexOf(ext) >= 0) player = '<audio controls preload="metadata" src="'+url+'"></audio>';
-      return '<div class="diary-media">'+player+'<div><a class="btn" href="'+url+'" download target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.78rem;margin-top:6px">下载 '+esc(nm)+'</a></div></div>';
+      return '<div class="diary-media">'+player+'<div style="margin-top:6px">'+fileActionHTML(url, nm)+'</div></div>';
     }).join("");
     return '<details class="diary-item"'+(idx===0?" open":"")+'>'
       + '<summary class="diary-summary">'
@@ -1701,15 +1994,77 @@ function showSection(name){
   setTimeout(initCoverPan, 60);
 }
 function switchTab(t){
-  document.querySelectorAll(".nav-links button").forEach(function(b){b.classList.remove("active");});
-  var btn = document.querySelector('.nav-links button[data-t="'+t+'"]');
-  if(btn) btn.classList.add("active");
+  setActiveNav(t);
   /* 切栏目时清掉上一个页面的目录 */
   renderToc([]);
   setPageTitle(t);
   showSection(t);
+  /* 标签聚合页需要按当前选中标签重画 */
+  if(t === "tags") renderTagView(currentTag);
+  closeDrawer();
 }
+/* 电脑导航和手机抽屉的高亮保持一致 */
+function setActiveNav(t){
+  document.querySelectorAll(".nav-links button, .nav-drawer-list button").forEach(function(b){
+    b.classList.toggle("active", b.getAttribute("data-t") === t);
+  });
+}
+/* ============================================================
+   手机/平板导航抽屉
+   ============================================================ */
+function buildDrawer(){
+  var list = document.getElementById("navDrawerList");
+  if(!list) return;
+  var buttons = document.querySelectorAll(".nav-links button");
+  list.innerHTML = "";
+  Array.prototype.forEach.call(buttons, function(btn){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "nav-item";
+    b.setAttribute("data-t", btn.getAttribute("data-t"));
+    if(btn.classList.contains("active")) b.classList.add("active");
+    b.textContent = btn.textContent;
+    b.onclick = function(){ switchTab(btn.getAttribute("data-t")); };
+    list.appendChild(b);
+  });
+}
+function toggleDrawer(){ isDrawerOpen() ? closeDrawer() : openDrawer(); }
+function isDrawerOpen(){
+  var d = document.getElementById("navDrawer");
+  return !!(d && d.classList.contains("show"));
+}
+function openDrawer(){
+  var d = document.getElementById("navDrawer"), m = document.getElementById("navMask"), b = document.getElementById("navBurger");
+  buildDrawer();
+  setActiveNav(currentTab());
+  if(d) d.classList.add("show");
+  if(m) m.classList.add("show");
+  if(b){ b.classList.add("open"); b.setAttribute("aria-expanded", "true"); }
+  document.body.style.overflow = "hidden";
+}
+function closeDrawer(){
+  var d = document.getElementById("navDrawer"), m = document.getElementById("navMask"), b = document.getElementById("navBurger");
+  if(d) d.classList.remove("show");
+  if(m) m.classList.remove("show");
+  if(b){ b.classList.remove("open"); b.setAttribute("aria-expanded", "false"); }
+  document.body.style.overflow = "";
+}
+/* 当前在哪个栏目：详情页归属它的列表栏目 */
+function currentTab(){
+  var active = document.querySelector(".section.active");
+  if(!active) return "home";
+  var map = { "sec-home": "home", "sec-courses": "courses", "sec-courseDetail": "courses",
+    "sec-papers": "papers", "sec-paperDetail": "papers", "sec-notices": "notices",
+    "sec-noticeDetail": "notices", "sec-class": "class", "sec-classDetail": "class",
+    "sec-roster": "roster", "sec-life": "life", "sec-media": "life", "sec-ledger": "ledger",
+    "sec-diary": "diary", "sec-tags": "tags", "sec-advisor": "advisor", "sec-about": "about" };
+  return map[active.id] || "home";
+}
+document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeDrawer(); });
+window.addEventListener("resize", function(){ if(window.innerWidth > 900) closeDrawer(); });
+
 document.querySelectorAll(".nav-links button").forEach(function(btn){ btn.onclick = function(){switchTab(btn.dataset.t);}; });
+buildDrawer();
 
 document.addEventListener("click", function(e){
   if(!e.target.closest(".nav-search")) document.getElementById("searchResults").classList.remove("show");

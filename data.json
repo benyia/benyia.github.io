@@ -424,6 +424,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-24 19:13",
+      "action": "删除快速链接"
+    },
+    {
       "time": "2026-09-24 19:04",
       "action": "发布通知：测试test"
     },
@@ -818,10 +822,6 @@
     {
       "time": "2026-09-19 00:49",
       "action": "删除课程"
-    },
-    {
-      "time": "2026-09-19 00:43",
-      "action": "编辑课程：计算机控制系统"
     }
   ],
   "categories": [
@@ -872,11 +872,6 @@
       "icon": "🔗",
       "title": "知网",
       "url": "https://www.cnki.net/"
-    },
-    {
-      "icon": "files/1790148763110_10_cgpzheuc_知网资源.png",
-      "title": "学校图书馆",
-      "url": "https://libraryyirui.sut.edu.cn/"
     }
   ],
   "ledgerCategories": {

@@ -1,39 +1,47 @@
 {
- "site": {
-  "avatar": "https://cdn.jsdelivr.net/gh/benyia/benyia.github.io@main/site/files/20260924-170947-583fc105d116716dbba227422b5595d9.jpg",
-  "bg": "",
-  "name": "思齐",
-  "title": "思齐",
-  "bio": "",
-  "layout": "single",
-  "hoverSlide": false,
-  "slideSec": 6,
-  "categories": [],
-  "tags": [],
-  "links": []
- },
- "courses": [],
- "papers": [],
- "notices": [],
- "affairs": [],
- "members": [],
- "services": [],
- "media": [],
- "ledger": [],
- "diary": [],
- "mentoring": [],
- "logs": [
-  {
-   "time": "2026/9/24 17:11:52",
-   "text": "删除课程："
+  "site": {
+    "avatar": "https://cdn.jsdelivr.net/gh/benyia/benyia.github.io@main/site/files/20260924-170947-583fc105d116716dbba227422b5595d9.jpg",
+    "bg": "",
+    "name": "思齐",
+    "title": "思齐",
+    "bio": "",
+    "layout": "single",
+    "hoverSlide": false,
+    "slideSec": 6,
+    "categories": [],
+    "tags": [],
+    "links": []
   },
-  {
-   "time": "2026/9/24 17:11:48",
-   "text": "新增课程：(未命名)"
-  },
-  {
-   "time": "2026/9/24 17:10:04",
-   "text": "更新站点设置"
-  }
- ]
+  "courses": [],
+  "papers": [],
+  "notices": [],
+  "affairs": [],
+  "members": [],
+  "services": [],
+  "media": [],
+  "ledger": [
+    {
+      "date": "2026-09-24",
+      "type": "expense",
+      "amount": 111,
+      "desc": "111",
+      "category": "吃饭"
+    }
+  ],
+  "diary": [],
+  "mentoring": [],
+  "logs": [
+    {
+      "time": "2026/9/24 17:11:52",
+      "text": "删除课程："
+    },
+    {
+      "time": "2026/9/24 17:11:48",
+      "text": "新增课程：(未命名)"
+    },
+    {
+      "time": "2026/9/24 17:10:04",
+      "text": "更新站点设置"
+    }
+  ]
 }

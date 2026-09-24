@@ -623,9 +623,13 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     <!-- ===== 日记 ===== -->
     <div class="panel" id="panel-diary">
       <div class="card">
-        <h2>写日记</h2>
+        <h2 id="diaryFormTitle">写日记</h2>
+        <div class="editing-bar" id="diaryEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelDiaryEdit()">取消编辑</a></div>
         <div class="form-row"><input type="text" id="diaryTitle" placeholder="标题（留空会自动从正文生成）"></div>
-        <div class="form-row"><input type="text" id="diaryTags" placeholder="标签，逗号分隔（如：深度学习,随笔）—— 用于前台「标签」聚合"></div>
+        <div class="form-row">
+          <input type="text" id="diaryTags" placeholder="标签，逗号分隔（如：深度学习,随笔）—— 用于前台「标签」聚合">
+          <input type="date" id="diaryDate" style="flex:0 0 160px">
+        </div>
         <div class="rte-wrap">
           <div class="rte-toolbar" id="rteBar_diary"></div>
           <div class="rte-content" id="diaryContent" contenteditable="true" data-placeholder="正文……可以像写博客一样写"></div>
@@ -634,19 +638,25 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
             <span><a href="javascript:;" onclick="toggleRichMode('diary')" id="rteMode_diary" style="color:var(--primary)">切换到源码/Markdown</a></span>
           </div>
         </div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
+        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面；可直接拖到下面的框里</span></div>
         <div id="imgList_diary" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('diary')">添加图片</button></div>
+        <div style="margin-bottom:10px">
+          <button class="btn btn-ghost btn-sm" onclick="pickImgs('diary')">添加图片</button>
+          <button class="btn btn-ghost btn-sm" id="dInsertImgBtn" onclick="openImgPicker('diary')" disabled>🖼️ 插入到正文光标处</button>
+        </div>
 
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🎵 影音（音乐 / 视频）</b></div>
+        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🎵 影音 / 📎 附件</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">音乐、视频、其它附件都放这里</span></div>
         <div class="file-list" id="dmediaFiles"></div>
         <div class="upload-box" id="dmediaUploadBox" onclick="document.getElementById('dmediaFileInput').click()">
-          <div class="up-hint">点击上传，或把音乐 / 视频拖到这里</div>
+          <div class="up-hint">点击选择文件，或把文件直接拖到这里上传</div>
           <div class="up-status" id="dmediaUpStatus">单个不超过 100MB；更大的请用网盘外链</div>
           <div class="progress-track" id="dmediaProgressTrack"><div class="progress-bar" id="dmediaProgressBar"></div></div>
         </div>
         <input type="file" id="dmediaFileInput" multiple style="display:none" onchange="onDmediaFiles(event)">
-        <div style="margin-top:12px"><button class="btn btn-primary" onclick="addDiary()">保存日记</button></div>
+        <div style="margin-top:12px">
+          <button class="btn btn-primary" id="diarySubmit" onclick="addDiary()">保存日记</button>
+          <button class="btn btn-ghost" id="diaryCancel" onclick="cancelDiaryEdit()" style="display:none">取消</button>
+        </div>
         <div style="margin-top:10px">
           <button class="btn btn-ghost btn-sm" onclick="exportDiary()">导出日记</button>
           <button class="btn btn-ghost btn-sm" onclick="document.getElementById('diaryImport').click()">导入日记</button>
@@ -685,18 +695,41 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     <!-- ===== 导师指导 ===== -->
     <div class="panel" id="panel-advisor">
       <div class="card">
-        <h2>导师指导记录</h2>
+        <h2 id="advisorFormTitle">导师指导记录</h2>
+        <div class="editing-bar" id="advisorEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelAdvisorEdit()">取消编辑</a></div>
         <div class="form-row">
           <input type="date" id="advDate" style="flex:1">
           <input type="time" id="advTime" style="flex:1">
           <input type="number" id="advCount" placeholder="第几次指导" style="flex:1">
         </div>
-        <div class="form-row"><textarea id="advContent" placeholder="和导师聊了什么..."></textarea></div>
+        <div class="form-row"><input type="text" id="advTags" placeholder="标签，逗号分隔（如：导师,科研方向）—— 用于前台「标签」聚合"></div>
+        <div class="rte-wrap">
+          <div class="rte-toolbar" id="rteBar_advisor"></div>
+          <div class="rte-content" id="advContent" contenteditable="true" data-placeholder="和导师聊了什么……可以排版、插图片"></div>
+          <div class="rte-foot">
+            <span>正文所见即所得</span>
+            <span><a href="javascript:;" onclick="toggleRichMode('advisor')" id="rteMode_advisor" style="color:var(--primary)">切换到源码/Markdown</a></span>
+          </div>
+        </div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
         <div id="imgList_advisor" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('advisor')">添加图片</button></div>
+        <div style="margin-bottom:10px">
+          <button class="btn btn-ghost btn-sm" onclick="pickImgs('advisor')">添加图片</button>
+          <button class="btn btn-ghost btn-sm" id="aInsertImgBtn" onclick="openImgPicker('advisor')" disabled>🖼️ 插入到正文光标处</button>
+        </div>
 
-        <button class="btn btn-primary" onclick="addAdvisor()">保存记录</button>
+        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 附件</b></div>
+        <div class="file-list" id="advFiles"></div>
+        <div class="upload-box" id="advUploadBox" onclick="document.getElementById('advFileInput').click()">
+          <div class="up-hint">点击选择文件，或把文件直接拖到这里上传</div>
+          <div class="up-status" id="advUpStatus">单个不超过 100MB；更大的请用网盘外链</div>
+          <div class="progress-track" id="advProgressTrack"><div class="progress-bar" id="advProgressBar"></div></div>
+        </div>
+        <input type="file" id="advFileInput" multiple style="display:none" onchange="onAdvisorFiles(event)">
+        <div style="margin-top:12px">
+          <button class="btn btn-primary" id="advSubmit" onclick="addAdvisor()">保存记录</button>
+          <button class="btn btn-ghost" id="advCancel" onclick="cancelAdvisorEdit()" style="display:none">取消</button>
+        </div>
       </div>
       <div class="card"><h2>指导记录列表</h2><div id="advisorList"></div></div>
     </div>
@@ -811,7 +844,7 @@ let saving = false;
 /* 编辑态：null 表示新增，数字表示正在编辑的下标 */
 const editing = {course:null, paper:null, class:null};
 /* 表单里已上传的文件列表 */
-const drafts  = {course:[], paper:[], class:[], life:[], media:[], dmedia:[], nf:[]};
+const drafts  = {course:[], paper:[], class:[], life:[], media:[], dmedia:[], nf:[], adv:[]};
 
 /* ============================================================
    小工具
@@ -1093,6 +1126,7 @@ var RICH_KEYS = {
   paper:  { editor: "pAbstract", bar: "rteBar_paper", mode: "rteMode_paper" },
   notice: { editor: "nContent", bar: "rteBar_notice", mode: "rteMode_notice" },
   diary:  { editor: "diaryContent", bar: "rteBar_diary", mode: "rteMode_diary" },
+  advisor:{ editor: "advContent", bar: "rteBar_advisor", mode: "rteMode_advisor" },
   "class":{ editor: "clContent", bar: "rteBar_class", mode: "rteMode_class" }
 };
 /* 逗号/顿号分隔的标签输入 → 数组（去重、去空） */
@@ -1113,7 +1147,8 @@ var UPLOAD_BOXES = [
   { box: "pUploadBox",   input: "pFileInput",   handler: "onPaperFiles",   label: "论文文件" },
   { box: "nfUploadBox",  input: "nfFileInput",  handler: "onNoticeFiles",  label: "通知附件" },
   { box: "clUploadBox",  input: "clFileInput",  handler: "onClassFiles",   label: "班级附件" },
-  { box: "dmediaUploadBox", input: "dmediaFileInput", handler: "onDmediaFiles", label: "日记影音" }
+  { box: "dmediaUploadBox", input: "dmediaFileInput", handler: "onDmediaFiles", label: "日记影音" },
+  { box: "advUploadBox", input: "advFileInput", handler: "onAdvisorFiles", label: "指导附件" }
 ];
 function initDropZones(){
   UPLOAD_BOXES.forEach(function(cfg){
@@ -1876,6 +1911,8 @@ async function initPanel(){
   $("nDate").value = todayStr();
   $("clDate").value = todayStr();
   $("lgDate").value = todayStr();
+  if($("diaryDate")) $("diaryDate").value = todayStr();
+  if($("advDate")) $("advDate").value = todayStr();
   renderRosterFields();
   /* 富文本编辑器先建好工具条，切到对应面板就能直接用（课程/论文/通知/班级/日记） */
   Object.keys(RICH_KEYS).forEach(function(k){ initRte(k); });
@@ -2436,6 +2473,7 @@ function onPaperFiles(e){ const v=e.target.files; handleFiles(v,"paper"); e.targ
 function onClassFiles(e){ const v=e.target.files; handleFiles(v,"class"); e.target.value=""; }
 function onLifeFiles(e){ const v=e.target.files; handleFiles(v,"life"); e.target.value=""; }
 function onMediaFiles(e){ const v=e.target.files; handleFiles(v,"media"); e.target.value=""; }
+function onAdvisorFiles(e){ const v=e.target.files; handleFiles(v,"adv"); e.target.value=""; }
 
 /* ---------- 网盘外链文件（跳过 GitHub 上传，适合大 PDF / 音频 / 视频）---------- */
 function addExternalFileBtn(kind){
@@ -2898,51 +2936,146 @@ function autoTitle(text, date){
   if(first.length > 24) return first.slice(0, 24) + "…";
   return first;
 }
+/* ---------- 日记 ---------- */
+let editingDiary = null;
 function addDiary(){
   var content=getRich("diary");
   var title=$("diaryTitle").value.trim();
   if(!content && !title){ showToast("请写点内容","error"); return; }
   if(!title) title = autoTitle(stripMd(content), todayStr());
-  blogData.diary.push({date:todayStr(), title:title, content:content, contentIsHTML:isRichMode("diary"), tags: parseTagsInput($("diaryTags").value), images:(imgDrafts.diary||[]).slice(), media:(drafts.dmedia||[]).slice(), time:nowStr()});
-  saveData("写日记："+title);
+  var item = {
+    date: $("diaryDate").value || todayStr(),
+    title: title,
+    content: content,
+    contentIsHTML: isRichMode("diary"),
+    tags: parseTagsInput($("diaryTags").value),
+    images: (imgDrafts.diary||[]).slice(),
+    media: (drafts.dmedia||[]).slice(),
+    time: nowStr()
+  };
+  blogData.diary = blogData.diary || [];
+  if(editingDiary === null){
+    blogData.diary.push(item);
+    saveData("写日记："+title);
+  }else{
+    /* 编辑时保留原来的创建时间，只更新内容 */
+    item.time = blogData.diary[editingDiary].time || item.time;
+    blogData.diary[editingDiary] = item;
+    saveData("编辑日记："+title);
+  }
+  cancelDiaryEdit();
   renderAll();
-  loadRich("diary", ""); $("diaryTitle").value=""; $("diaryTags").value="";
+}
+function editDiary(i){
+  var d = blogData.diary[i];
+  editingDiary = i;
+  $("diaryTitle").value = d.title || "";
+  $("diaryDate").value = d.date || todayStr();
+  $("diaryTags").value = (d.tags||[]).join(",");
+  loadRich("diary", d.content || "");
+  setImgDrafts("diary", d.images);
+  drafts.dmedia = (d.media||[]).slice();
+  renderDraftFiles("dmedia");
+  $("diaryFormTitle").textContent = "编辑日记：" + (d.title || d.date || "");
+  $("diaryEditBar").classList.add("on");
+  $("diarySubmit").textContent = "保存修改";
+  $("diaryCancel").style.display = "inline-block";
+  $("panel-diary").scrollIntoView({behavior:"smooth"});
+}
+function cancelDiaryEdit(){
+  editingDiary = null;
+  loadRich("diary", "");
+  $("diaryTitle").value = ""; $("diaryTags").value = "";
+  $("diaryDate").value = todayStr();
   setImgDrafts("diary", []);
   drafts.dmedia = []; renderDraftFiles("dmedia");
+  $("diaryFormTitle").textContent = "写日记";
+  $("diaryEditBar").classList.remove("on");
+  $("diarySubmit").textContent = "保存日记";
+  $("diaryCancel").style.display = "none";
 }
 function renderDiary(){
   var list=(blogData.diary||[]).slice().reverse();
   $("diaryList").innerHTML=list.map(function(d){
     var realIdx=blogData.diary.indexOf(d);
-    return '<div class="item-row"><div class="info"><div class="title">'+esc(d.title||d.date)+'</div><div class="desc" style="white-space:pre-wrap">'+esc(stripMd(d.content).slice(0,120))+'</div><div class="desc">'+esc(d.date)+' · '+((d.media||[]).length)+' 个影音</div>'+imgRows(d.images,"diary",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delDiary('+realIdx+')">删除</button></div>';
+    var tg = (d.tags||[]).map(function(t){ return '<span class="tag-chip">'+esc(t)+'</span>'; }).join("");
+    return '<div class="item-row"><div class="info"><div class="title">'+esc(d.title||d.date)+'</div><div class="desc">'+esc(stripMd(d.content).slice(0,120))+'</div><div class="desc">'+esc(d.date)+' · '+((d.media||[]).length)+' 个影音'+(tg?(' · '+tg):"")+'</div>'+imgRows(d.images,"diary",realIdx)+fileRows(d.media,"diary",realIdx)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editDiary('+realIdx+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delDiary('+realIdx+')">删除</button></div></div>';
   }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delDiary(realIdx){
   if(!confirm("确定删除？")) return;
+  if(editingDiary === realIdx) cancelDiaryEdit();
   blogData.diary.splice(realIdx,1);
   saveData("删除日记");
   renderAll();
 }
 
 /* ---------- 导师指导 ---------- */
+let editingAdvisor = null;
 function addAdvisor(){
-  var content=$("advContent").value.trim();
+  var content=getRich("advisor");
   if(!content){ showToast("请写点内容","error"); return; }
-  blogData.advisor.push({date:$("advDate").value||todayStr(), time:$("advTime").value||"", count:parseInt($("advCount").value,10)||0, content:content, images:(imgDrafts.advisor||[]).slice()});
-  saveData("添加导师指导记录");
+  var item = {
+    date: $("advDate").value || todayStr(),
+    time: $("advTime").value || "",
+    count: parseInt($("advCount").value,10) || 0,
+    content: content,
+    contentIsHTML: isRichMode("advisor"),
+    tags: parseTagsInput($("advTags").value),
+    images: (imgDrafts.advisor||[]).slice(),
+    files: (drafts.adv||[]).slice()
+  };
+  blogData.advisor = blogData.advisor || [];
+  if(editingAdvisor === null){
+    blogData.advisor.push(item);
+    saveData("添加导师指导记录");
+  }else{
+    blogData.advisor[editingAdvisor] = Object.assign({}, blogData.advisor[editingAdvisor], item);
+    saveData("编辑导师指导记录");
+  }
+  cancelAdvisorEdit();
   renderAll();
-  $("advContent").value=""; $("advCount").value="";
+}
+function editAdvisor(i){
+  var d = blogData.advisor[i];
+  editingAdvisor = i;
+  $("advDate").value = d.date || todayStr();
+  $("advTime").value = d.time || "";
+  $("advCount").value = d.count || "";
+  $("advTags").value = (d.tags||[]).join(",");
+  loadRich("advisor", d.content || "");
+  setImgDrafts("advisor", d.images);
+  drafts.adv = (d.files||[]).slice();
+  renderDraftFiles("adv");
+  $("advisorFormTitle").textContent = "编辑指导记录";
+  $("advisorEditBar").classList.add("on");
+  $("advSubmit").textContent = "保存修改";
+  $("advCancel").style.display = "inline-block";
+  $("panel-advisor").scrollIntoView({behavior:"smooth"});
+}
+function cancelAdvisorEdit(){
+  editingAdvisor = null;
+  $("advDate").value = todayStr(); $("advTime").value = ""; $("advCount").value = "";
+  $("advTags").value = "";
+  loadRich("advisor", "");
   setImgDrafts("advisor", []);
+  drafts.adv = []; renderDraftFiles("adv");
+  $("advisorFormTitle").textContent = "导师指导记录";
+  $("advisorEditBar").classList.remove("on");
+  $("advSubmit").textContent = "保存记录";
+  $("advCancel").style.display = "none";
 }
 function renderAdvisor(){
   var list=(blogData.advisor||[]).slice().reverse();
   $("advisorList").innerHTML=list.map(function(d){
     var realIdx=blogData.advisor.indexOf(d);
-    return '<div class="item-row"><div class="info"><div class="title">'+(d.count?('第 '+d.count+' 次指导 · '):"")+esc(d.date)+(d.time?(' '+esc(d.time)):"")+'</div><div class="desc" style="white-space:pre-wrap">'+esc(d.content)+'</div>'+imgRows(d.images,"advisor",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delAdvisor('+realIdx+')">删除</button></div>';
+    var tg = (d.tags||[]).map(function(t){ return '<span class="tag-chip">'+esc(t)+'</span>'; }).join("");
+    return '<div class="item-row"><div class="info"><div class="title">'+(d.count?('第 '+d.count+' 次指导 · '):"")+esc(d.date)+(d.time?(' '+esc(d.time)):"")+'</div><div class="desc">'+esc(stripMd(d.content).slice(0,120))+'</div>'+(tg?'<div class="desc">'+tg+'</div>':"")+imgRows(d.images,"advisor",realIdx)+fileRows(d.files,"advisor",realIdx)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editAdvisor('+realIdx+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delAdvisor('+realIdx+')">删除</button></div></div>';
   }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delAdvisor(realIdx){
   if(!confirm("确定删除？")) return;
+  if(editingAdvisor === realIdx) cancelAdvisorEdit();
   blogData.advisor.splice(realIdx,1);
   saveData("删除导师记录");
   renderAll();

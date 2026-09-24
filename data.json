@@ -963,7 +963,16 @@
       "desc": "教学怎么搭建自己的博客"
     }
   ],
-  "friendApplies": [],
+  "friendApplies": [
+    {
+      "name": "XQ的研究生指南",
+      "url": "https://ruanjianshi.github.io/XQ_BLOG/",
+      "desc": "采用Docsify与Typora所设计的轻量化日常科研记录，研究方向：机器人、机器视觉、单片机、人工智能以及大模型训练。",
+      "avatar": "",
+      "time": "2026-09-24 22:24",
+      "from": "前台友链申请表"
+    }
+  ],
   "ledgerCategories": {
     "expense": [
       "吃饭",

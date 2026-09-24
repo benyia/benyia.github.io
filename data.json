@@ -424,6 +424,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-24 19:24",
+      "action": "添加快速链接：沈阳工业大学"
+    },
+    {
       "time": "2026-09-24 19:14",
       "action": "编辑快速链接：知网"
     },
@@ -818,10 +822,6 @@
     {
       "time": "2026-09-19 00:54",
       "action": "添加快速链接：deepseek"
-    },
-    {
-      "time": "2026-09-19 00:49",
-      "action": "删除论文"
     }
   ],
   "categories": [
@@ -872,6 +872,11 @@
       "icon": "files/1790248467365_3_i20wc6v3_知网资源.png",
       "title": "知网",
       "url": "https://www.cnki.net/"
+    },
+    {
+      "icon": "files/1790249091157_4_tzv7gsil_校徽.png",
+      "title": "沈阳工业大学",
+      "url": "https://main.sut.edu.cn/web/guest/242"
     }
   ],
   "ledgerCategories": {

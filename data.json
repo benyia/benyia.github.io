@@ -491,6 +491,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-24 21:45",
+      "action": "编辑友链：番茄助理人fqzlr"
+    },
+    {
       "time": "2026-09-24 21:44",
       "action": "添加友链：https://blog.fqzlr.top/"
     },
@@ -885,10 +889,6 @@
     {
       "time": "2026-09-19 09:20",
       "action": "名单：隐藏敏感信息"
-    },
-    {
-      "time": "2026-09-19 09:20",
-      "action": "名单：前台显示"
     }
   ],
   "categories": [
@@ -1104,7 +1104,7 @@
   },
   "friendLinks": [
     {
-      "name": "https://blog.fqzlr.top/",
+      "name": "番茄助理人fqzlr",
       "url": "https://blog.fqzlr.top/",
       "avatar": "",
       "desc": "教学怎么搭建自己的博客"

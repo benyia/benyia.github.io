@@ -476,8 +476,8 @@
   ],
   "logs": [
     {
-      "time": "2026-09-24 22:52",
-      "action": "名单：前台显示"
+      "time": "2026-09-24 22:53",
+      "action": "名单：前台隐藏"
     },
     {
       "time": "2026-09-24 22:49",
@@ -1015,7 +1015,7 @@
       "note": "",
       "photo": "files/1789783018217_1_pohb49f2_人物.png",
       "images": [],
-      "show": true,
+      "show": false,
       "hide": [
         "note",
         "phone",
@@ -1080,7 +1080,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": true,
+      "show": false,
       "hide": []
     }
   ],

@@ -98,6 +98,9 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .file-item .fsize{font-size:.75rem;color:var(--text3)}
 .upload-box{border:2px dashed var(--border);border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:.2s;background:#fcfdfe}
 .upload-box:hover{border-color:var(--primary);background:var(--primary-light)}
+/* 拖拽文件到上传框时高亮 */
+.upload-box.dragover{border-color:var(--primary);background:var(--primary-light);transform:scale(1.01)}
+.upload-box.dragover .up-hint{color:var(--primary-dark);font-weight:600}
 .upload-box .up-hint{font-size:.82rem;color:var(--text2);margin-bottom:6px}
 .upload-box .up-status{font-size:.78rem;color:var(--text3);word-break:break-all}
 .progress-track{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:8px;display:none}
@@ -314,7 +317,15 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <input type="text" id="cDesc" placeholder="简介">
           <input type="number" id="cProgress" placeholder="进度%" class="progress-input" value="0">
         </div>
-        <div class="form-row"><textarea id="cIntro" placeholder="课程详细介绍..."></textarea></div>
+        <div class="form-row"><input type="text" id="cTags" placeholder="标签，逗号分隔（如：控制工程,深度学习）—— 用于前台「标签」聚合"></div>
+        <div class="rte-wrap">
+          <div class="rte-toolbar" id="rteBar_course"></div>
+          <div class="rte-content" id="cIntro" contenteditable="true" data-placeholder="课程详细介绍……可以排版、插图片；写「标题1/2」会自动生成目录"></div>
+          <div class="rte-foot">
+            <span>所见即所得；用小标题排版后，前台详情页会自动出目录</span>
+            <span><a href="javascript:;" onclick="toggleRichMode('course')" id="rteMode_course" style="color:var(--primary)">切换到源码/Markdown</a></span>
+          </div>
+        </div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
         <div id="imgList_course" style="margin-bottom:6px"></div>
         <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('course')">添加图片</button></div>
@@ -322,8 +333,8 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 课程文件</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">可传多个；填文件夹名即归入该文件夹</span></div>
         <div class="form-row"><input type="text" id="cFolder" placeholder="文件夹名（留空=根目录；填了就传到这个文件夹）"></div>
         <div class="file-list" id="cFiles"></div>
-        <div class="upload-box" onclick="document.getElementById('cFileInput').click()">
-          <div class="up-hint">点击选择文件并上传（PDF / PPT / 图片 / 压缩包等）</div>
+        <div class="upload-box" id="cUploadBox" onclick="document.getElementById('cFileInput').click()">
+          <div class="up-hint">点击选择文件，或把文件直接拖到这里上传（PDF / PPT / 图片 / 压缩包等）</div>
           <div class="up-status" id="cUpStatus">支持多选；单个文件不超过 100MB</div>
           <div class="progress-track" id="cProgressTrack"><div class="progress-bar" id="cProgressBar"></div></div>
         </div>
@@ -355,16 +366,24 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="查重"> 查重</label>
           <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="投稿"> 投稿</label>
         </div>
-        <div class="form-row"><textarea id="pAbstract" placeholder="摘要 / 简介..." style="min-height:80px"></textarea></div>
+        <div class="rte-wrap">
+          <div class="rte-toolbar" id="rteBar_paper"></div>
+          <div class="rte-content" id="pAbstract" contenteditable="true" data-placeholder="摘要 / 简介……可以直接排版"></div>
+          <div class="rte-foot">
+            <span>所见即所得</span>
+            <span><a href="javascript:;" onclick="toggleRichMode('paper')" id="rteMode_paper" style="color:var(--primary)">切换到源码/Markdown</a></span>
+          </div>
+        </div>
         <div class="form-row"><input type="text" id="pDesc" placeholder="备注"></div>
+        <div class="form-row"><input type="text" id="pTags" placeholder="标签，逗号分隔（如：深度学习,目标检测）—— 用于前台「标签」聚合"></div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
         <div id="imgList_paper" style="margin-bottom:6px"></div>
         <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('paper')">添加图片</button></div>
 
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 论文文件</b></div>
         <div class="file-list" id="pFiles"></div>
-        <div class="upload-box" onclick="document.getElementById('pFileInput').click()">
-          <div class="up-hint">点击选择文件并上传</div>
+        <div class="upload-box" id="pUploadBox" onclick="document.getElementById('pFileInput').click()">
+          <div class="up-hint">点击选择文件，或把文件直接拖到这里上传</div>
           <div class="up-status" id="pUpStatus">支持多选；单个文件不超过 100MB</div>
           <div class="progress-track" id="pProgressTrack"><div class="progress-bar" id="pProgressBar"></div></div>
         </div>
@@ -388,6 +407,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <input type="text" id="nSource" placeholder="来源(如研究生院)" style="flex:1">
           <input type="date" id="nDate" style="flex:1">
         </div>
+        <div class="form-row"><input type="text" id="nTags" placeholder="标签，逗号分隔（如：学校通知,选课）—— 用于前台「标签」聚合"></div>
         <div class="rte-wrap">
           <div class="rte-toolbar" id="rteBar_notice"></div>
           <div class="rte-content" id="nContent" contenteditable="true" data-placeholder="通知正文……可以直接排版：加粗、字号、对齐、列表、插图，写完所见即所得"></div>
@@ -406,8 +426,8 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 通知附件</b></div>
         <div class="file-list" id="nfFiles"></div>
-        <div class="upload-box" onclick="document.getElementById('nfFileInput').click()">
-          <div class="up-hint">点击选择文件并上传</div>
+        <div class="upload-box" id="nfUploadBox" onclick="document.getElementById('nfFileInput').click()">
+          <div class="up-hint">点击选择文件，或把文件直接拖到这里上传</div>
           <div class="up-status" id="nfUpStatus">支持多选；单个文件不超过 100MB</div>
           <div class="progress-track" id="nfProgressTrack"><div class="progress-bar" id="nfProgressBar"></div></div>
         </div>
@@ -431,6 +451,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <select id="clType"><option>通知</option><option>名单</option><option>作业</option><option>考试</option><option>活动</option></select>
           <input type="date" id="clDate" style="flex:1">
         </div>
+        <div class="form-row"><input type="text" id="clTags" placeholder="标签，逗号分隔 —— 用于前台「标签」聚合"></div>
         <div class="rte-wrap">
           <div class="rte-toolbar" id="rteBar_class"></div>
           <div class="rte-content" id="clContent" contenteditable="true" data-placeholder="详细内容……"></div>
@@ -445,8 +466,8 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 附件</b></div>
         <div class="file-list" id="clFiles"></div>
-        <div class="upload-box" onclick="document.getElementById('clFileInput').click()">
-          <div class="up-hint">点击选择文件并上传</div>
+        <div class="upload-box" id="clUploadBox" onclick="document.getElementById('clFileInput').click()">
+          <div class="up-hint">点击选择文件，或把文件直接拖到这里上传</div>
           <div class="up-status" id="clUpStatus">支持多选；单个文件不超过 100MB</div>
           <div class="progress-track" id="clProgressTrack"><div class="progress-bar" id="clProgressBar"></div></div>
         </div>
@@ -604,6 +625,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       <div class="card">
         <h2>写日记</h2>
         <div class="form-row"><input type="text" id="diaryTitle" placeholder="标题（留空会自动从正文生成）"></div>
+        <div class="form-row"><input type="text" id="diaryTags" placeholder="标签，逗号分隔（如：深度学习,随笔）—— 用于前台「标签」聚合"></div>
         <div class="rte-wrap">
           <div class="rte-toolbar" id="rteBar_diary"></div>
           <div class="rte-content" id="diaryContent" contenteditable="true" data-placeholder="正文……可以像写博客一样写"></div>
@@ -618,8 +640,8 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🎵 影音（音乐 / 视频）</b></div>
         <div class="file-list" id="dmediaFiles"></div>
-        <div class="upload-box" onclick="document.getElementById('dmediaFileInput').click()">
-          <div class="up-hint">点击上传音乐 / 视频</div>
+        <div class="upload-box" id="dmediaUploadBox" onclick="document.getElementById('dmediaFileInput').click()">
+          <div class="up-hint">点击上传，或把音乐 / 视频拖到这里</div>
           <div class="up-status" id="dmediaUpStatus">单个不超过 100MB；更大的请用网盘外链</div>
           <div class="progress-track" id="dmediaProgressTrack"><div class="progress-bar" id="dmediaProgressBar"></div></div>
         </div>
@@ -1067,10 +1089,88 @@ function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;
 function mdUrl(u){ return String(u||"").replace(/ /g, "%20").replace(/\(/g, "%28").replace(/\)/g, "%29"); }
 
 var RICH_KEYS = {
+  course: { editor: "cIntro", bar: "rteBar_course", mode: "rteMode_course" },
+  paper:  { editor: "pAbstract", bar: "rteBar_paper", mode: "rteMode_paper" },
   notice: { editor: "nContent", bar: "rteBar_notice", mode: "rteMode_notice" },
   diary:  { editor: "diaryContent", bar: "rteBar_diary", mode: "rteMode_diary" },
   "class":{ editor: "clContent", bar: "rteBar_class", mode: "rteMode_class" }
 };
+/* 逗号/顿号分隔的标签输入 → 数组（去重、去空） */
+function parseTagsInput(v){
+  var out = [];
+  String(v == null ? "" : v).split(/[,，、;；]+/).forEach(function(t){
+    t = t.trim();
+    if(t && out.indexOf(t) < 0) out.push(t);
+  });
+  return out;
+}
+
+/* ============================================================
+   拖拽上传：把文件拖到任意「上传框」即可，不用先点按钮
+   ============================================================ */
+var UPLOAD_BOXES = [
+  { box: "cUploadBox",   input: "cFileInput",   handler: "onCourseFiles",  label: "课程文件" },
+  { box: "pUploadBox",   input: "pFileInput",   handler: "onPaperFiles",   label: "论文文件" },
+  { box: "nfUploadBox",  input: "nfFileInput",  handler: "onNoticeFiles",  label: "通知附件" },
+  { box: "clUploadBox",  input: "clFileInput",  handler: "onClassFiles",   label: "班级附件" },
+  { box: "dmediaUploadBox", input: "dmediaFileInput", handler: "onDmediaFiles", label: "日记影音" }
+];
+function initDropZones(){
+  UPLOAD_BOXES.forEach(function(cfg){
+    var box = $(cfg.box);
+    if(!box || box.getAttribute("data-drop")) return;
+    box.setAttribute("data-drop", "1");
+    ["dragenter", "dragover"].forEach(function(ev){
+      box.addEventListener(ev, function(e){
+        e.preventDefault(); e.stopPropagation();
+        box.classList.add("dragover");
+      });
+    });
+    ["dragleave", "dragend"].forEach(function(ev){
+      box.addEventListener(ev, function(e){
+        e.preventDefault();
+        box.classList.remove("dragover");
+      });
+    });
+    box.addEventListener("drop", function(e){
+      e.preventDefault(); e.stopPropagation();
+      box.classList.remove("dragover");
+      var files = e.dataTransfer && e.dataTransfer.files;
+      handleDroppedFiles(cfg, files);
+    });
+  });
+}
+/* 拖入文件后的处理：优先塞进对应的 input 再走既有上传流程 */
+function handleDroppedFiles(cfg, files){
+  if(!files || !files.length){ showToast("没有拿到文件", "error"); return false; }
+  var input = $(cfg.input);
+  if(!input){ showToast("页面元素缺失：" + cfg.input, "error"); return false; }
+  try {
+    var dt = new DataTransfer();
+    Array.prototype.forEach.call(files, function(f){ dt.items.add(f); });
+    input.files = dt.files;
+  } catch(err){
+    /* 老浏览器不支持给 input.files 赋值：直接调用处理函数 */
+    var fake = { target: { files: files, value: "" } };
+    if(typeof window[cfg.handler] === "function") window[cfg.handler](fake);
+    else { showToast("这个浏览器不支持拖拽赋值，请点按钮选择文件", "error"); return false; }
+    showToast("正在上传 " + files.length + " 个文件（" + cfg.label + "）");
+    return true;
+  }
+  if(typeof window[cfg.handler] === "function") window[cfg.handler]({ target: input });
+  showToast("正在上传 " + files.length + " 个文件（" + cfg.label + "）");
+  return true;
+}
+function uploadBoxCfgByBoxId(boxId){
+  for(var i = 0; i < UPLOAD_BOXES.length; i++){ if(UPLOAD_BOXES[i].box === boxId) return UPLOAD_BOXES[i]; }
+  return null;
+}
+/* 页面上任何地方拖入文件都不让浏览器直接打开它 */
+["dragover", "drop"].forEach(function(ev){
+  document.addEventListener(ev, function(e){
+    if(!e.target.closest || !e.target.closest(".upload-box")) e.preventDefault();
+  });
+});
 var editorState = {};
 (function initEditorState(){
   Object.keys(RICH_KEYS).forEach(function(k){ editorState[k] = { mode: "rich", savedSel: null }; });
@@ -1777,8 +1877,10 @@ async function initPanel(){
   $("clDate").value = todayStr();
   $("lgDate").value = todayStr();
   renderRosterFields();
-  /* 三个富文本编辑器先建好工具条，切到对应面板就能直接用 */
-  initRte("notice"); initRte("diary"); initRte("class");
+  /* 富文本编辑器先建好工具条，切到对应面板就能直接用（课程/论文/通知/班级/日记） */
+  Object.keys(RICH_KEYS).forEach(function(k){ initRte(k); });
+  /* 上传框支持拖拽 */
+  initDropZones();
   await syncNow(true);
 }
 
@@ -2448,7 +2550,9 @@ function saveCourse(){
     icon: $("cIcon").value.trim() || "📚",
     title: title,
     desc: $("cDesc").value.trim(),
-    intro: $("cIntro").value.trim(),
+    intro: getRich("course"),
+    introIsHTML: isRichMode("course"),
+    tags: parseTagsInput($("cTags").value),
     progress: parseInt($("cProgress").value)||0,
     files: drafts.course.slice(),
     images: (imgDrafts.course||[]).slice(),
@@ -2468,7 +2572,9 @@ function editCourse(i){
   var c = blogData.courses[i];
   editing.course = i;
   $("cIcon").value=c.icon||""; $("cTitle").value=c.title||"";
-  $("cDesc").value=c.desc||""; $("cIntro").value=c.intro||"";
+  $("cDesc").value=c.desc||"";
+  loadRich("course", c.intro||"");
+  $("cTags").value = (c.tags||[]).join(",");
   $("cProgress").value=c.progress||0;
   drafts.course = (c.files||[]).slice();
   setImgDrafts("course", c.images);
@@ -2501,13 +2607,16 @@ function savePaper(){
   var title=$("pTitle").value.trim();
   if(!title){ showToast("请输入论文标题","error"); return; }
   var tags=[].slice.call(document.querySelectorAll(".paper-tag:checked")).map(function(c){return c.value;});
+  /* 文本框里的自定义标签和上面勾选的标签合并去重 */
+  parseTagsInput($("pTags").value).forEach(function(t){ if(tags.indexOf(t) < 0) tags.push(t); });
   var files = drafts.paper.slice();
   var item = {
     title: title,
     status:$("pStatus").value,
     year:$("pYear").value.trim(),
     desc:$("pDesc").value.trim(),
-    abstract:$("pAbstract").value.trim(),
+    abstract:getRich("paper"),
+    abstractIsHTML:isRichMode("paper"),
     tags: tags,
     files: files,
     images: (imgDrafts.paper||[]).slice(),
@@ -2529,7 +2638,9 @@ function editPaper(i){
   var p=blogData.papers[i];
   editing.paper=i;
   $("pTitle").value=p.title||""; $("pStatus").value=p.status||"在投";
-  $("pYear").value=p.year||""; $("pDesc").value=p.desc||""; $("pAbstract").value=p.abstract||"";
+  $("pYear").value=p.year||""; $("pDesc").value=p.desc||"";
+  loadRich("paper", p.abstract||"");
+  $("pTags").value=(p.tags||[]).join(",");
   document.querySelectorAll(".paper-tag").forEach(function(c){c.checked=(p.tags||[]).indexOf(c.value)>=0;});
   drafts.paper=(p.files||[]).slice();
   setImgDrafts("paper", p.images);
@@ -2576,6 +2687,7 @@ function addNotice(){
     level:"normal",
     content:getRich("notice"),
     contentIsHTML: rich,
+    tags: parseTagsInput($("nTags").value),
     images:(imgDrafts.notice||[]).slice(),
     files: files,
     time: nowStr()
@@ -2597,6 +2709,7 @@ function editNotice(i){
   $("nTitle").value = n.title||""; $("nSource").value = n.source||"";
   $("nDate").value = n.date||todayStr();
   loadRich("notice", n.content||"");
+  $("nTags").value = (n.tags||[]).join(",");
   setImgDrafts("notice", n.images);
   drafts.nf = (n.files||[]).slice();
   renderDraftFiles("nf");
@@ -2611,6 +2724,7 @@ function cancelNoticeEdit(){
   editingNotice = null;
   $("nTitle").value = ""; $("nSource").value = "";
   loadRich("notice", "");
+  $("nTags").value = "";
   $("nDate").value = todayStr();
   setImgDrafts("notice", []);
   drafts.nf = []; renderDraftFiles("nf");
@@ -2645,6 +2759,7 @@ function saveClass(){
     date:$("clDate").value||todayStr(),
     content:getRich("class"),
     contentIsHTML: isRichMode("class"),
+    tags: parseTagsInput($("clTags").value),
     files: files,
     images:(imgDrafts["class"]||[]).slice(),
     file: files.length?files[0].url:"",
@@ -2667,6 +2782,7 @@ function editClass(i){
   $("clTitle").value=c.title||""; $("clType").value=c.type||"通知";
   $("clDate").value=c.date||todayStr();
   loadRich("class", c.content||"");
+  $("clTags").value = (c.tags||[]).join(",");
   drafts["class"]=(c.files||[]).slice();
   setImgDrafts("class", c.images);
   renderDraftFiles("class");
@@ -2787,10 +2903,10 @@ function addDiary(){
   var title=$("diaryTitle").value.trim();
   if(!content && !title){ showToast("请写点内容","error"); return; }
   if(!title) title = autoTitle(stripMd(content), todayStr());
-  blogData.diary.push({date:todayStr(), title:title, content:content, contentIsHTML:isRichMode("diary"), images:(imgDrafts.diary||[]).slice(), media:(drafts.dmedia||[]).slice(), time:nowStr()});
+  blogData.diary.push({date:todayStr(), title:title, content:content, contentIsHTML:isRichMode("diary"), tags: parseTagsInput($("diaryTags").value), images:(imgDrafts.diary||[]).slice(), media:(drafts.dmedia||[]).slice(), time:nowStr()});
   saveData("写日记："+title);
   renderAll();
-  loadRich("diary", ""); $("diaryTitle").value="";
+  loadRich("diary", ""); $("diaryTitle").value=""; $("diaryTags").value="";
   setImgDrafts("diary", []);
   drafts.dmedia = []; renderDraftFiles("dmedia");
 }
@@ -3082,7 +3198,8 @@ function cancelEdit(kind){
   drafts[kind] = [];
   setImgDrafts(kind, []);
   if(kind==="course"){
-    ["cIcon","cTitle","cDesc","cIntro"].forEach(id=>$(id).value="");
+    ["cIcon","cTitle","cDesc","cTags"].forEach(id=>$(id).value="");
+    loadRich("course", "");
     $("cProgress").value=0;
     $("courseFormTitle").textContent="添加课程";
     $("courseEditBar").classList.remove("on");
@@ -3092,7 +3209,8 @@ function cancelEdit(kind){
     renderDraftFiles("course");
   }
   if(kind==="paper"){
-    $("pTitle").value=""; $("pYear").value=""; $("pDesc").value=""; $("pAbstract").value="";
+    $("pTitle").value=""; $("pYear").value=""; $("pDesc").value=""; $("pTags").value="";
+    loadRich("paper", "");
     document.querySelectorAll(".paper-tag").forEach(c=>c.checked=false);
     $("paperFormTitle").textContent="添加论文";
     $("paperEditBar").classList.remove("on");
@@ -3102,7 +3220,7 @@ function cancelEdit(kind){
     renderDraftFiles("paper");
   }
   if(kind==="class"){
-    $("clTitle").value=""; $("clDate").value=todayStr();
+    $("clTitle").value=""; $("clDate").value=todayStr(); $("clTags").value="";
     loadRich("class", "");
     $("classFormTitle").textContent="添加班级事务";
     $("classEditBar").classList.remove("on");

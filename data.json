@@ -6,8 +6,8 @@
     "avatar": "files/1789782355800_12_g6ia1gng_头像.jpg",
     "defaultImage": "",
     "columns": "2",
-    "defaultAvatar": "files/1790249671695_1_glmmh3lg_人物.png",
-    "loginHint": "",
+    "defaultAvatar": "",
+    "loginHint": "s3069988193@163.com",
     "coverPan": true,
     "coverPanSec": 5,
     "name": "思齐",
@@ -86,8 +86,15 @@
           "external": true
         }
       ],
-      "images": [],
-      "time": "2026-09-23 15:27"
+      "images": [
+        {
+          "name": "计算机控制技术.png",
+          "url": "files/1790249740092_1_vcvvh3b9_计算机控制技术.png",
+          "type": "PNG",
+          "size": 250572
+        }
+      ],
+      "time": "2026-09-24 19:35"
     },
     {
       "icon": "files/1790147654327_2_ecphh3so_cn.png",
@@ -424,8 +431,8 @@
   ],
   "logs": [
     {
-      "time": "2026-09-24 19:34",
-      "action": "修改站点设置"
+      "time": "2026-09-24 19:35",
+      "action": "编辑课程：计算机控制系统"
     },
     {
       "time": "2026-09-24 19:26",

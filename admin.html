@@ -9,22 +9,36 @@
 :root{--primary:#10b981;--primary-light:#d1fae5;--bg:#f0fdf4;--card:#fff;--text:#1e293b;--text2:#64748b;--text3:#94a3b8;--border:#e2e8f0;--radius:12px}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);line-height:1.6;background-image:url("image1.png");background-size:cover;background-attachment:fixed;background-position:center;min-height:100vh}
 body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,.5);z-index:-1}
-.login-screen{max-width:400px;margin:70px auto;padding:36px 32px;background:var(--card);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.09)}
-.login-screen h1{text-align:center;margin-bottom:26px;font-size:1.4rem;font-weight:700}
-.login-screen .lg-label{display:block;font-size:.85rem;color:var(--text2);margin-bottom:7px}
-.login-screen .lg-input{display:block;width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:.92rem;margin-bottom:16px;outline:none;font-family:inherit;background:#fff;color:var(--text);box-sizing:border-box}
-.login-screen .lg-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(16,185,129,.15)}
-.login-screen .lg-pwdwrap{position:relative}
-.login-screen .lg-pwdwrap .lg-input{padding-right:72px}
-.login-screen .lg-eye{position:absolute;right:9px;top:22px;width:auto;padding:5px 11px;background:#f1f5f9;color:#475569;border:none;border-radius:7px;font-size:.75rem;cursor:pointer;line-height:1.4;font-family:inherit}
-.login-screen .lg-eye:hover{background:#e2e8f0}
-.login-screen .lg-row{display:flex;justify-content:space-between;align-items:center;margin:-6px 0 20px;font-size:.82rem}
-.login-screen .lg-check{display:flex;align-items:center;gap:6px;color:var(--text2);cursor:pointer}
-.login-screen .lg-check input{width:auto;margin:0}
-.login-screen .lg-link{color:var(--primary);cursor:pointer}
-.login-screen .lg-submit{display:block;width:100%;padding:13px;background:#111827;color:#fff;border:none;border-radius:10px;font-size:.95rem;cursor:pointer;font-family:inherit;font-weight:600}
-.login-screen .lg-submit:hover{background:#000}
-.login-hint{font-size:.78rem;color:var(--text3);text-align:center;margin-top:18px;line-height:1.6;white-space:pre-wrap}
+/* ===== 登录页 ===== */
+.login-screen{position:relative;max-width:412px;margin:72px auto;padding:38px 34px 30px;background:var(--card);border:1px solid rgba(255,255,255,.7);border-radius:22px;box-shadow:0 22px 60px rgba(15,23,42,.12),0 2px 8px rgba(15,23,42,.04);overflow:hidden;animation:lgIn .35s ease}
+.login-screen::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary),#34d399,#6ee7b7)}
+.lg-brand{text-align:center;margin-bottom:26px}
+.lg-badge{width:58px;height:58px;margin:0 auto 14px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.7rem;background:linear-gradient(135deg,var(--primary),#34d399);box-shadow:0 10px 24px rgba(16,185,129,.32)}
+.login-screen h1{text-align:center;margin:0 0 6px;font-size:1.42rem;font-weight:700;letter-spacing:.3px}
+.lg-sub{text-align:center;font-size:.82rem;color:var(--text3);margin:0}
+.login-screen .lg-label{display:block;font-size:.84rem;font-weight:600;color:var(--text2);margin-bottom:8px}
+.login-screen .lg-input{display:block;width:100%;padding:12px 15px;border:1px solid var(--border);border-radius:12px;font-size:.94rem;outline:none;font-family:inherit;background:#f8fafc;color:var(--text);box-sizing:border-box;transition:border-color .2s,box-shadow .2s,background .2s}
+.login-screen .lg-input:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 4px rgba(16,185,129,.14)}
+.login-screen .lg-pwdwrap{position:relative;margin-bottom:16px}
+.login-screen .lg-pwdwrap .lg-input{padding-right:76px;margin-bottom:0}
+/* 「显示」按钮：贴在输入框内部垂直居中，不再用 top 硬定位（之前就是这里错位） */
+.login-screen .lg-eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:auto;padding:7px 13px;background:rgba(226,232,240,.75);color:#475569;border:none;border-radius:9px;font-size:.76rem;cursor:pointer;line-height:1;font-family:inherit;transition:background .2s,color .2s}
+.login-screen .lg-eye:hover{background:#dbe4ee;color:#1e293b}
+.login-screen .lg-eye:active{transform:translateY(-50%) scale(.97)}
+.login-screen .lg-row{display:flex;justify-content:space-between;align-items:center;margin:0 0 22px;font-size:.82rem}
+.login-screen .lg-check{display:flex;align-items:center;gap:7px;color:var(--text2);cursor:pointer;user-select:none}
+.login-screen .lg-check input{width:15px;height:15px;margin:0;accent-color:var(--primary);cursor:pointer}
+.login-screen .lg-link{color:var(--primary);cursor:pointer;font-weight:500}
+.login-screen .lg-link:hover{text-decoration:underline}
+.login-screen .lg-submit{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border:none;border-radius:12px;font-size:.96rem;cursor:pointer;font-family:inherit;font-weight:600;letter-spacing:.5px;box-shadow:0 8px 20px rgba(15,23,42,.22);transition:transform .15s,box-shadow .2s,opacity .2s}
+.login-screen .lg-submit:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(15,23,42,.28)}
+.login-screen .lg-submit:active{transform:translateY(0) scale(.995)}
+.login-hint{position:relative;font-size:.78rem;color:var(--text3);text-align:center;margin-top:20px;padding-top:16px;line-height:1.6;white-space:pre-wrap}
+.login-hint::before{content:"";position:absolute;top:0;left:22%;right:22%;height:1px;background:var(--border)}
+@keyframes lgIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:460px){
+  .login-screen{margin:36px 16px;padding:30px 22px 24px;border-radius:18px}
+}
 .main{display:none}
 .topbar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px}
 .topbar h1{font-size:1.1rem}
@@ -99,22 +113,51 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .note code{background:#eef2f7;padding:1px 5px;border-radius:4px;font-size:.78rem}
 .editing-bar{background:#fffbeb;border:1px solid #fcd34d;color:#92400e;font-size:.82rem;padding:8px 12px;border-radius:8px;margin-bottom:10px;display:none}
 .editing-bar.on{display:block}
+
+/* ===== 可视化富文本编辑器（所见即所得） ===== */
+.rte-wrap{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;margin-bottom:12px}
+.rte-toolbar{display:flex;flex-wrap:wrap;gap:2px;align-items:center;padding:6px 8px;background:#f8fafc;border-bottom:1px solid var(--border)}
+.rte-toolbar button{min-width:30px;height:30px;padding:0 7px;border:none;background:transparent;border-radius:6px;cursor:pointer;font-size:.86rem;color:#334155;font-family:inherit;line-height:1;display:inline-flex;align-items:center;justify-content:center}
+.rte-toolbar button:hover{background:#e2e8f0}
+.rte-toolbar button.on{background:var(--primary-light);color:var(--primary-dark)}
+.rte-toolbar select{height:30px;padding:0 4px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;font-family:inherit;background:#fff;color:#334155;cursor:pointer;max-width:112px}
+.rte-sep{width:1px;height:20px;background:var(--border);margin:0 4px;display:inline-block}
+.rte-beta{font-size:.6rem;color:#f59e0b;vertical-align:super;margin-left:1px}
+.rte-content{min-height:260px;overflow-y:auto;padding:16px 18px;font-size:.92rem;line-height:1.8;color:var(--text);outline:none;font-family:inherit}
+.rte-content:empty::before{content:attr(data-placeholder);color:#b6c2d1;pointer-events:none}
+.rte-content p{margin:0 0 12px}
+.rte-content h1,.rte-content h2,.rte-content h3,.rte-content h4{margin:18px 0 10px;line-height:1.45;font-weight:700}
+.rte-content h1{font-size:1.5rem}.rte-content h2{font-size:1.28rem}.rte-content h3{font-size:1.12rem}
+.rte-content ul,.rte-content ol{margin:0 0 12px;padding-left:26px}
+.rte-content blockquote{margin:0 0 12px;padding:8px 14px;border-left:3px solid var(--primary);background:#f8fafc;color:var(--text2)}
+.rte-content img{max-width:100%;border-radius:8px;margin:6px 0}
+.rte-content table{border-collapse:collapse;width:100%;margin:0 0 12px}
+.rte-content table td,.rte-content table th{border:1px solid var(--border);padding:7px 10px;font-size:.86rem}
+.rte-content hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+.rte-content a{color:var(--primary-dark)}
+.rte-content audio,.rte-content video{max-width:100%;margin:6px 0;display:block}
+.rte-plain{width:100%;min-height:260px;padding:14px 16px;border:none;outline:none;font-family:ui-monospace,Consolas,monospace;font-size:.85rem;line-height:1.7;resize:vertical;color:var(--text)}
+.rte-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:.76rem;color:#94a3b8;padding:6px 10px;background:#f8fafc;border-top:1px solid var(--border)}
 </style>
 </head>
 <body>
 
 <div class="login-screen" id="loginScreen">
-  <h1>🔐 管理后台</h1>
+  <div class="lg-brand">
+    <div class="lg-badge">🔐</div>
+    <h1>管理后台</h1>
+    <p class="lg-sub">思齐个人主页 · 内容管理</p>
+  </div>
   <label class="lg-label" for="pwdInput">密码</label>
   <div class="lg-pwdwrap">
-    <input type="password" class="lg-input" id="pwdInput" placeholder="请输入密码" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
-    <button type="button" class="lg-eye" id="pwdToggle" onclick="togglePwdView()">显示</button>
+    <input type="password" class="lg-input" id="pwdInput" placeholder="请输入管理密码" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+    <button type="button" class="lg-eye" id="pwdToggle" onclick="togglePwdView()" title="显示 / 隐藏密码">显示</button>
   </div>
   <div class="lg-row">
     <label class="lg-check"><input type="checkbox" id="keepLogin"> 保持登录会话</label>
     <span class="lg-link" onclick="forgotPwd()">忘记密码？</span>
   </div>
-  <button type="button" class="lg-submit" onclick="login()">登录</button>
+  <button type="button" class="lg-submit" onclick="login()">登 录</button>
   <div class="login-hint" id="loginHint"></div>
 </div>
 
@@ -146,6 +189,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       <button data-p="life">生活服务</button>
       <button data-p="ledger">记账</button>
       <button data-p="diary">日记</button>
+      <button data-p="friends">友链</button>
       <button data-p="advisor">导师指导</button>
       <button data-p="logs">修改日志</button>
     </div>
@@ -344,14 +388,18 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <input type="text" id="nSource" placeholder="来源(如研究生院)" style="flex:1">
           <input type="date" id="nDate" style="flex:1">
         </div>
-        <div class="form-row"><textarea id="nContent" placeholder="通知正文（支持 Markdown：图片与文字可混排）..."></textarea></div>
+        <div class="rte-wrap">
+          <div class="rte-toolbar" id="rteBar_notice"></div>
+          <div class="rte-content" id="nContent" contenteditable="true" data-placeholder="通知正文……可以直接排版：加粗、字号、对齐、列表、插图，写完所见即所得"></div>
+          <div class="rte-foot">
+            <span>正文所见即所得，保存后前台就是这个样子</span>
+            <span><a href="javascript:;" onclick="toggleRichMode('notice')" id="rteMode_notice" style="color:var(--primary)">切换到源码/Markdown</a></span>
+          </div>
+        </div>
         <div class="md-editor-toolbar">
           <button class="btn btn-ghost btn-sm" id="nInsertImgBtn" onclick="openImgPicker('notice')" disabled>🖼️ 插入已上传图片</button>
-          <button class="btn btn-ghost btn-sm" onclick="mdWrap('nContent','**','**','粗体')">B 加粗</button>
-          <button class="btn btn-ghost btn-sm" onclick="mdLine('nContent','## ')">H 小标题</button>
-          <button class="btn btn-ghost btn-sm" onclick="mdLine('nContent','- ')">• 列表</button>
         </div>
-        <div class="md-editor-hint">Markdown 排版：先用下面的「添加图片」上传，再点「插入已上传图片」，图片就会出现在光标处，与文字混排显示。</div>
+        <div class="md-editor-hint">插入图片：先用下面的「添加图片」上传，再点上面的按钮，图片会插到光标处、和文字混排。</div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
         <div id="imgList_notice" style="margin-bottom:6px"></div>
         <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('notice')">添加图片</button></div>
@@ -383,7 +431,14 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
           <select id="clType"><option>通知</option><option>名单</option><option>作业</option><option>考试</option><option>活动</option></select>
           <input type="date" id="clDate" style="flex:1">
         </div>
-        <div class="form-row"><textarea id="clContent" placeholder="详细内容..."></textarea></div>
+        <div class="rte-wrap">
+          <div class="rte-toolbar" id="rteBar_class"></div>
+          <div class="rte-content" id="clContent" contenteditable="true" data-placeholder="详细内容……"></div>
+          <div class="rte-foot">
+            <span>正文所见即所得</span>
+            <span><a href="javascript:;" onclick="toggleRichMode('class')" id="rteMode_class" style="color:var(--primary)">切换到源码/Markdown</a></span>
+          </div>
+        </div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
         <div id="imgList_class" style="margin-bottom:6px"></div>
         <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('class')">添加图片</button></div>
@@ -549,7 +604,14 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       <div class="card">
         <h2>写日记</h2>
         <div class="form-row"><input type="text" id="diaryTitle" placeholder="标题（留空会自动从正文生成）"></div>
-        <div class="form-row"><textarea id="diaryContent" placeholder="正文……可以像写博客一样写" style="min-height:150px"></textarea></div>
+        <div class="rte-wrap">
+          <div class="rte-toolbar" id="rteBar_diary"></div>
+          <div class="rte-content" id="diaryContent" contenteditable="true" data-placeholder="正文……可以像写博客一样写"></div>
+          <div class="rte-foot">
+            <span>正文所见即所得，可以加粗、分小标题、插图</span>
+            <span><a href="javascript:;" onclick="toggleRichMode('diary')" id="rteMode_diary" style="color:var(--primary)">切换到源码/Markdown</a></span>
+          </div>
+        </div>
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
         <div id="imgList_diary" style="margin-bottom:6px"></div>
         <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('diary')">添加图片</button></div>
@@ -570,6 +632,32 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
         </div>
       </div>
       <div class="card"><h2>日记列表</h2><div id="diaryList"></div></div>
+    </div>
+
+    <!-- ===== 友链 ===== -->
+    <div class="panel" id="panel-friends">
+      <div class="card">
+        <h2 id="friendFormTitle">🔗 添加友链</h2>
+        <div class="editing-bar" id="friendEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelFriendEdit()">取消编辑</a></div>
+        <div class="note">
+          这里放别人的博客网站，会显示在「关于我」页面和首页右侧。头像可以留空（会用网站名第一个字），也可以点「图片」上传或填图片网址。<br>
+          别人想加友链：让他在前台「关于我 → 申请友链」提交，会开一个 GitHub Issue，你看着办再在这里手动添加即可。
+        </div>
+        <div class="form-row">
+          <input type="text" id="frName" placeholder="网站名称 *" style="flex:1">
+          <input type="text" id="frUrl" placeholder="网站地址 https://... *" style="flex:2">
+        </div>
+        <div class="form-row">
+          <input type="text" id="frAvatar" placeholder="头像 / Logo 图片地址（可留空）" style="flex:2">
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('frAvatar')">图片</button><span id="prev_frAvatar"></span>
+        </div>
+        <div class="form-row"><input type="text" id="frDesc" placeholder="一句话简介（可留空）" style="flex:1"></div>
+        <div style="margin-top:6px">
+          <button class="btn btn-primary" id="frSubmit" onclick="saveFriend()">添加友链</button>
+          <button class="btn btn-ghost" id="frCancel" onclick="cancelFriendEdit()" style="display:none">取消</button>
+        </div>
+      </div>
+      <div class="card"><h2>友链列表</h2><div id="friendList"></div></div>
     </div>
 
     <!-- ===== 导师指导 ===== -->
@@ -686,6 +774,7 @@ const DEFAULT_DATA = {
     {icon:"🐙",title:"GitHub",url:"https://github.com"},
     {icon:"💡",title:"知乎",url:"https://www.zhihu.com"}
   ],
+  friendLinks:[],
   courses:[],papers:[],notices:[],classItems:[],lifeServices:[],
   ledger:[],ledgerCategories:{expense:["吃饭","买东西","生活用品","交通","娱乐","学习","医疗","其他"],income:["工资","奖学金","补贴","红包","其他"]},media:[],roster:[],rosterConfig:{showSensitive:false},diary:[],advisor:[],logs:[]
 };
@@ -936,7 +1025,7 @@ function deleteModalImage(){
   showToast("已移除（记得保存）");
 }
 
-var ICON_FIELDS = ["cfgAvatar","cIcon","lsIcon","catIcon","qlIcon","rPhoto","cfgDefaultImage","cfgDefaultAvatar"];
+var ICON_FIELDS = ["cfgAvatar","cIcon","lsIcon","catIcon","qlIcon","rPhoto","cfgDefaultImage","cfgDefaultAvatar","frAvatar"];
 function refreshIconPrev(id){
   var inp = $(id), box = $("prev_" + id);
   if(!inp || !box) return;
@@ -971,48 +1060,476 @@ function iconThumb(v, size){
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
 /* ============================================================
-   通知正文：Markdown（文字 + 图片混排）
+   可视化富文本编辑器（所见即所得）
+   通知 / 日记 / 班级事务 共用；正文按 HTML 存，老数据仍是 Markdown，两种都能编辑
    ============================================================ */
 /* 文件路径里的空格 / 括号在 Markdown 里会截断链接，这里做最小转义 */
 function mdUrl(u){ return String(u||"").replace(/ /g, "%20").replace(/\(/g, "%28").replace(/\)/g, "%29"); }
 
-function mdWrap(id, pre, post, placeholder){
-  var ta = $(id);
-  if(!ta) return;
-  var s = ta.selectionStart == null ? ta.value.length : ta.selectionStart;
-  var e = ta.selectionEnd == null ? s : ta.selectionEnd;
-  if(s === e){
-    mdInsertText(pre + (placeholder || "") + post, "", "");
-    ta.setSelectionRange(s + pre.length, s + pre.length + (placeholder || "").length);
-  }else{
-    mdInsertText("", pre, post);
+var RICH_KEYS = {
+  notice: { editor: "nContent", bar: "rteBar_notice", mode: "rteMode_notice" },
+  diary:  { editor: "diaryContent", bar: "rteBar_diary", mode: "rteMode_diary" },
+  "class":{ editor: "clContent", bar: "rteBar_class", mode: "rteMode_class" }
+};
+var editorState = {};
+(function initEditorState(){
+  Object.keys(RICH_KEYS).forEach(function(k){ editorState[k] = { mode: "rich", savedSel: null }; });
+})();
+
+function looksRichHTML(s){
+  return /<\/?(p|div|h[1-6]|br|ul|ol|li|strong|b|em|i|u|s|a|img|table|blockquote|pre|code|span|font|figure|hr|sub|sup)\b[^>]*>/i.test(String(s || ""));
+}
+
+/* ---- Markdown → HTML：只在打开富文本时用，仅支持常用语法（够日常排版） ---- */
+function mdEscape(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function inlineMdToHtml(s){
+  var out = mdEscape(s);
+  out = out.replace(/`([^`\n]+)`/g, "<code>$1</code>");
+  out = out.replace(/!\[([^\]]*)\]\(([^)\s]+)[^)]*\)/g, function(m, alt, url){ return '<img src="' + mdUrl(url) + '" alt="' + alt + '">'; });
+  out = out.replace(/\[([^\]]+)\]\(([^)\s]+)[^)]*\)/g, function(m, txt, url){ return '<a href="' + mdUrl(url) + '" target="_blank" rel="noopener">' + txt + "</a>"; });
+  out = out.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  out = out.replace(/__([^_]+)__/g, "<strong>$1</strong>");
+  out = out.replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+  out = out.replace(/~~([^~]+)~~/g, "<s>$1</s>");
+  return out;
+}
+function mdToHtmlLite(src){
+  var lines = String(src == null ? "" : src).replace(/\r\n?/g, "\n").split("\n");
+  var out = [], i = 0;
+  while(i < lines.length){
+    var line = lines[i];
+    if(!line.trim()){ i++; continue; }
+    if(/^\s*```/.test(line)){
+      i++;
+      var code = [];
+      while(i < lines.length && !/^\s*```/.test(lines[i])){ code.push(lines[i]); i++; }
+      i++;
+      out.push("<pre><code>" + mdEscape(code.join("\n")) + "</code></pre>");
+      continue;
+    }
+    var h = line.match(/^\s{0,3}(#{1,6})\s+(.*)$/);
+    if(h){
+      var lv = Math.min(3, h[1].length);
+      out.push("<h" + lv + ">" + inlineMdToHtml(h[2].replace(/\s+#+\s*$/, "")) + "</h" + lv + ">");
+      i++; continue;
+    }
+    if(/^\s*>\s?/.test(line)){
+      var q = [];
+      while(i < lines.length && /^\s*>\s?/.test(lines[i])){ q.push(lines[i].replace(/^\s*>\s?/, "")); i++; }
+      out.push("<blockquote>" + inlineMdToHtml(q.join(" ")) + "</blockquote>");
+      continue;
+    }
+    if(/^\s*([-*_])\s*(\1\s*){2,}$/.test(line)){ out.push("<hr>"); i++; continue; }
+    if(/^\s*([-*+]|\d+[.)])\s+/.test(line)){
+      var ordered = /^\s*\d/.test(line), items = [];
+      while(i < lines.length && /^\s*([-*+]|\d+[.)])\s+/.test(lines[i])){
+        items.push("<li>" + inlineMdToHtml(lines[i].replace(/^\s*([-*+]|\d+[.)])\s+/, "")) + "</li>");
+        i++;
+      }
+      out.push((ordered ? "<ol>" : "<ul>") + items.join("") + (ordered ? "</ol>" : "</ul>"));
+      continue;
+    }
+    var para = [];
+    while(i < lines.length && lines[i].trim() && !/^\s*(#{1,6}\s|>|[-*+]\s|\d+[.)]\s|```)/.test(lines[i])){ para.push(lines[i]); i++; }
+    out.push("<p>" + inlineMdToHtml(para.join("<br>")) + "</p>");
+  }
+  return out.join("") || "<p></p>";
+}
+/* 纯文本（老数据没有 Markdown 标记）转成段落 */
+function plainToHtml(s){
+  return String(s == null ? "" : s).split(/\n{2,}/).map(function(p){
+    return "<p>" + mdEscape(p).replace(/\n/g, "<br>") + "</p>";
+  }).join("") || "<p></p>";
+}
+
+/* ---- 工具条 ---- */
+var RTE_FONTS = [["", "字体"], ["arial", "Arial"], ["georgia", "Georgia"], ["impact", "Impact"], ["tahoma", "Tahoma"], ["宋体", "宋体"], ["微软雅黑", "微软雅黑"], ["楷体", "楷体"], ["黑体", "黑体"]];
+function rteOpts(list, val){
+  return list.map(function(x){
+    if(x.length === 2 && typeof x[1]["indexOf"] === "function"){
+      return '<option value="' + esc(x[0]) + '"' + (x[0] === val ? " selected" : "") + ">" + esc(x[1]) + "</option>";
+    }
+    return "";
+  }).join("");
+}
+function rteToolbarHTML(){
+  var h = "";
+  h += '<button type="button" title="撤销" onmousedown="return rteCmd(event,\'undo\')">↺</button>';
+  h += '<button type="button" title="重做" onmousedown="return rteCmd(event,\'redo\')">↻</button>';
+  h += '<span class="rte-sep"></span>';
+  h += '<select title="段落样式" onchange="rteCmd(this.value);this.selectedIndex=0">'
+     + rteOpts([["", "段落"], ["h1", "标题 1"], ["h2", "标题 2"], ["h3", "标题 3"], ["h4", "标题 4"], ["p", "正文"]])
+     + "</select>";
+  h += '<select title="字体" onchange="rteFont(this.value)">' + rteOpts(RTE_FONTS) + "</select>";
+  h += '<select title="字号" onchange="rteFontSize(this.value)">'
+     + rteOpts([["", "16px"], ["12pt", "12px"], ["14pt", "14px"], ["16pt", "16px"], ["18pt", "18px"], ["24pt", "24px"], ["32pt", "32px"]])
+     + "</select>";
+  h += '<span class="rte-sep"></span>';
+  h += '<button type="button" title="加粗" onmousedown="return rteCmd(event,\'bold\')"><b>B</b></button>';
+  h += '<button type="button" title="斜体" onmousedown="return rteCmd(event,\'italic\')"><i>I</i></button>';
+  h += '<button type="button" title="下划线" onmousedown="return rteCmd(event,\'underline\')"><u>U</u></button>';
+  h += '<button type="button" title="文字颜色" onmousedown="return rteCmd(event,\'foreColor\',rteColorPick())"><span style="border-bottom:3px solid #10b981">A</span></button>';
+  h += '<button type="button" title="背景颜色" onmousedown="return rteCmd(event,\'hiliteColor\',rteColorPick())">🖍️</button>';
+  h += '<button type="button" title="清除格式" onmousedown="return rteCmd(event,\'removeFormat\')">T<sub>x</sub></button>';
+  h += '<span class="rte-sep"></span>';
+  h += '<button type="button" title="左对齐" onmousedown="return rteCmd(event,\'justifyLeft\')">≡</button>';
+  h += '<button type="button" title="居中" onmousedown="return rteCmd(event,\'justifyCenter\')">≣</button>';
+  h += '<button type="button" title="右对齐" onmousedown="return rteCmd(event,\'justifyRight\')">⋮≡</button>';
+  h += '<button type="button" title="两端对齐" onmousedown="return rteCmd(event,\'justifyFull\')">☰</button>';
+  h += '<span class="rte-sep"></span>';
+  h += '<button type="button" title="无序列表" onmousedown="return rteCmd(event,\'insertUnorderedList\')">•≡</button>';
+  h += '<button type="button" title="有序列表" onmousedown="return rteCmd(event,\'insertOrderedList\')">1≡</button>';
+  h += '<button type="button" title="减少缩进" onmousedown="return rteCmd(event,\'outdent\')">⇤</button>';
+  h += '<button type="button" title="增加缩进" onmousedown="return rteCmd(event,\'indent\')">⇥</button>';
+  h += '<span class="rte-sep"></span>';
+  h += '<button type="button" title="插入链接" onmousedown="return rteLink(event)">🔗</button>';
+  h += '<button type="button" title="插入图片（网址）" onmousedown="return rteImage(event)">🖼️</button>';
+  h += '<button type="button" title="插入表格" onmousedown="return rteTable(event)">▦</button>';
+  h += '<button type="button" title="插入分隔线" onmousedown="return rteCmd(event,\'insertHorizontalRule\')">—</button>';
+  h += '<button type="button" title="插入音乐" onmousedown="return rteMedia(event,\'audio\')">🎵</button>';
+  h += '<button type="button" title="插入视频" onmousedown="return rteMedia(event,\'video\')">🎬</button>';
+  h += '<button type="button" title="插入公式占位（Beta）" onmousedown="return rteMath(event)">π<span class="rte-beta">beta</span></button>';
+  return h;
+}
+
+/* ---- 编辑器初始化 / 读写 ---- */
+function initRte(key){
+  var cfg = RICH_KEYS[key];
+  if(!cfg) return;
+  var bar = $(cfg.bar), editor = $(cfg.editor);
+  if(!bar || !editor) return;
+  if(!bar.getAttribute("data-ready")){
+    bar.innerHTML = rteToolbarHTML();
+    bar.setAttribute("data-ready", "1");
+    editor.addEventListener("keyup", function(){ saveRteSel(key); });
+    editor.addEventListener("mouseup", function(){ saveRteSel(key); });
+    editor.addEventListener("blur", function(){ saveRteSel(key); });
+    editor.addEventListener("paste", function(e){
+      /* 从 Word / 网页粘进来的样式太脏，统一按纯文本插入 */
+      var t = e.clipboardData ? e.clipboardData.getData("text/plain") : "";
+      if(!t) return;
+      e.preventDefault();
+      document.execCommand("insertText", false, t);
+    });
+  }
+  editor.addEventListener("input", function(){ updateRteCount(key); });
+  updateRteCount(key);
+}
+function saveRteSel(key){
+  var editor = $(RICH_KEYS[key].editor);
+  if(!editor) return;
+  var sel = window.getSelection();
+  if(sel && sel.rangeCount && editor.contains(sel.anchorNode)){
+    editorState[key].savedSel = sel.getRangeAt(0).cloneRange();
   }
 }
-function mdLine(id, prefix){
-  var ta = $(id);
-  if(!ta) return;
-  mdInsertText(prefix, "", "");
+function restoreRteSel(key){
+  var editor = $(RICH_KEYS[key].editor);
+  var r = editorState[key] && editorState[key].savedSel;
+  if(!editor) return;
+  editor.focus();
+  if(!r) return;
+  try {
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+  } catch(e){}
 }
-/* 在光标处插入文本；有选中文字时用 pre/post 包住，否则插入占位词并选中它 */
-function mdInsertText(text, wrapPre, wrapPost){
-  var ta = document.activeElement;
-  if(!ta || ta.tagName !== "TEXTAREA" || ta.id !== "nContent") ta = $("nContent");
-  if(!ta) return;
-  var s = ta.selectionStart == null ? ta.value.length : ta.selectionStart;
-  var e = ta.selectionEnd == null ? s : ta.selectionEnd;
-  var before = ta.value.slice(0, s), sel = ta.value.slice(s, e), after = ta.value.slice(e);
-  var insert, selStart, selEnd;
-  if(sel){
-    insert = wrapPre + sel + wrapPost;
-    selStart = s; selEnd = s + insert.length;
-  }else{
-    insert = text;
-    selStart = s; selEnd = s + insert.length;
+/* 载入内容：HTML 直接放进去，Markdown 先转成 HTML */
+function loadRich(key, raw){
+  var cfg = RICH_KEYS[key];
+  if(!cfg) return;
+  var editor = $(cfg.editor);
+  if(!editor) return;
+  initRte(key);
+  var s = String(raw == null ? "" : raw);
+  var mode = getRichMode(key);
+  var ta = $("rtePlain_" + key);
+  if(mode === "plain"){
+    /* 源码模式下：同步 textarea，别碰正在编辑的内容 */
+    if(ta) ta.value = s;
+    editor.style.display = "none";
+    return;
   }
-  ta.value = before + insert + after;
-  ta.focus();
-  ta.setSelectionRange(selStart, selEnd);
-  ta.dispatchEvent(new Event("input", {bubbles:true}));
+  editor.style.display = "";
+  editor.setAttribute("contenteditable", "true");
+  editor.innerHTML = !s.trim() ? "" : (looksRichHTML(s) ? s : mdToHtmlLite(s));
+  editorState[key].savedSel = null;
+  updateRteCount(key);
+}
+/* 读内容：rich 模式返回 HTML，plain 模式返回源码 */
+function getRich(key){
+  var cfg = RICH_KEYS[key];
+  if(!cfg) return "";
+  var mode = getRichMode(key);
+  if(mode === "plain"){
+    var ta = $("rtePlain_" + key);
+    return ta ? ta.value.trim() : "";
+  }
+  var editor = $(cfg.editor);
+  if(!editor) return "";
+  var html = String(editor.innerHTML || "").trim();
+  if(html === "<br>" || html === "<p></p>" || html === "<div><br></div>") html = "";
+  return html.trim();
+}
+function isRichMode(key){ return getRichMode(key) === "rich"; }
+function getRichMode(key){ return (editorState[key] && editorState[key].mode) || "rich"; }
+/* 源码 / 所见即所得 来回切换 */
+function toggleRichMode(key){
+  var cfg = RICH_KEYS[key];
+  if(!cfg) return;
+  var editor = $(cfg.editor);
+  var mode = getRichMode(key);
+  if(mode === "rich"){
+    var html = getRich(key);
+    editorState[key].mode = "plain";
+    editor.removeAttribute("contenteditable");
+    editor.style.display = "none";
+    var old = $("rtePlain_" + key);
+    if(old) old.parentNode.removeChild(old);
+    var ta = document.createElement("textarea");
+    ta.className = "rte-plain";
+    ta.id = "rtePlain_" + key;
+    ta.value = looksRichHTML(html) ? htmlToMd(html) : html;
+    editor.parentNode.insertBefore(ta, editor.nextSibling);
+    ta.focus();
+    setModeLink(key, "切换回可视化编辑");
+    showToast("已切到源码模式：这里内容是 Markdown，切回去会自动转换");
+  }else{
+    var ta2 = $("rtePlain_" + key);
+    var src = ta2 ? ta2.value : "";
+    if(ta2) ta2.parentNode.removeChild(ta2);
+    editor.style.display = "";
+    editor.setAttribute("contenteditable", "true");
+    editorState[key].mode = "rich";
+    editor.innerHTML = !src.trim() ? "" : (looksRichHTML(src) ? src : mdToHtmlLite(src));
+    editorState[key].savedSel = null;
+    updateRteCount(key);
+    setModeLink(key, "切换到源码/Markdown");
+    showToast("已切回可视化编辑");
+  }
+}
+function setModeLink(key, text){
+  var a = $(RICH_KEYS[key].mode);
+  if(a) a.textContent = text;
+}
+function updateRteCount(key){
+  var cfg = RICH_KEYS[key];
+  if(!cfg) return;
+  var editor = $(cfg.editor);
+  var n = editor ? (editor.textContent || "").replace(/\s+/g, "").length : 0;
+  var box = $("rteCount_" + key);
+  if(box) box.textContent = n ? ("约 " + n + " 字") : "";
+}
+
+/* HTML → Markdown：只为「切到源码模式」时能继续用 Markdown 编辑 */
+function htmlToMd(html){
+  var d = document.createElement("div");
+  d.innerHTML = String(html || "");
+  function inline(node){
+    var s = "";
+    Array.prototype.forEach.call(node.childNodes, function(n){
+      if(n.nodeType === 3){ s += n.nodeValue; return; }
+      if(n.nodeType !== 1) return;
+      var tag = n.tagName.toLowerCase(), inner = inline(n);
+      if(tag === "br"){ s += "\n"; return; }
+      if(tag === "strong" || tag === "b"){ s += "**" + inner + "**"; return; }
+      if(tag === "em" || tag === "i"){ s += "*" + inner + "*"; return; }
+      if(tag === "u"){ s += "<u>" + inner + "</u>"; return; }
+      if(tag === "s" || tag === "strike" || tag === "del"){ s += "~~" + inner + "~~"; return; }
+      if(tag === "code" && n.parentNode.tagName.toLowerCase() !== "pre"){ s += "`" + inner + "`"; return; }
+      if(tag === "a"){ s += "[" + inner + "](" + (n.getAttribute("href") || "") + ")"; return; }
+      if(tag === "img"){ s += "![" + (n.getAttribute("alt") || "") + "](" + (n.getAttribute("src") || "") + ")"; return; }
+      s += inner;
+    });
+    return s;
+  }
+  function block(node, depth){
+    var out = [], listBuf = null;
+    function flushList(){
+      if(listBuf && listBuf.items.length){
+        out.push(listBuf.items.map(function(it, i){ return (listBuf.ordered ? (i + 1) + ". " : "- ") + it; }).join("\n"));
+      }
+      listBuf = null;
+    }
+    Array.prototype.forEach.call(node.childNodes, function(n){
+      if(n.nodeType === 3){
+        var t = n.nodeValue.replace(/\s+/g, " ").trim();
+        if(t){ flushList(); out.push(t); }
+        return;
+      }
+      if(n.nodeType !== 1) return;
+      var tag = n.tagName.toLowerCase();
+      if(/^h[1-6]$/.test(tag)){ flushList(); out.push("#".repeat(parseInt(tag.slice(1), 10)) + " " + inline(n).trim()); return; }
+      if(tag === "p" || tag === "div"){ flushList(); var tx = inline(n).trim(); if(tx) out.push(tx); return; }
+      if(tag === "ul" || tag === "ol"){
+        flushList();
+        var items = [];
+        Array.prototype.forEach.call(n.children, function(li){
+          if(li.tagName && li.tagName.toLowerCase() === "li") items.push(inline(li).trim());
+        });
+        if(items.length) out.push(items.map(function(it, i){ return (tag === "ol" ? (i + 1) + ". " : "- ") + it; }).join("\n"));
+        return;
+      }
+      if(tag === "blockquote"){ flushList(); out.push(inline(n).split("\n").map(function(l){ return "> " + l; }).join("\n")); return; }
+      if(tag === "pre"){ flushList(); out.push("```\n" + (n.textContent || "").replace(/\n+$/, "") + "\n```"); return; }
+      if(tag === "hr"){ flushList(); out.push("---"); return; }
+      if(tag === "table"){
+        flushList();
+        var rows = [];
+        Array.prototype.forEach.call(n.querySelectorAll("tr"), function(tr){
+          var cells = [];
+          Array.prototype.forEach.call(tr.children, function(td){ cells.push(inline(td).trim()); });
+          rows.push("| " + cells.join(" | ") + " |");
+        });
+        if(rows.length){
+          if(rows.length > 1){
+            var cols = rows[0].split("|").length - 2;
+            rows.splice(1, 0, "|" + new Array(Math.max(1, cols)).join(" --- |") + " --- |");
+          }
+          out.push(rows.join("\n"));
+        }
+        return;
+      }
+      if(tag === "audio"){ flushList(); out.push("[🎵 音乐](" + (n.getAttribute("src") || "") + ")"); return; }
+      if(tag === "video"){ flushList(); out.push("[🎬 视频](" + (n.getAttribute("src") || "") + ")"); return; }
+      flushList();
+      var t2 = inline(n).trim();
+      if(t2) out.push(t2);
+    });
+    flushList();
+    return out.join("\n\n");
+  }
+  return block(d, 0).replace(/\n{3,}/g, "\n\n").trim();
+}
+
+/* ---- 工具条动作 ---- */
+function rteCmd(e, cmd, val){
+  if(e && e.preventDefault) e.preventDefault();
+  var key = (e && e.currentTarget && e.currentTarget.closest) ? currentRteKeyFromEl(e.currentTarget) : null;
+  if(key) restoreRteSel(key);
+  try { document.execCommand(cmd, false, val === undefined ? null : val); } catch(err){}
+  if(key){ saveRteSel(key); updateRteCount(key); }
+  return false;
+}
+function currentRteKeyFromEl(el){
+  var bar = el.closest ? el.closest(".rte-toolbar") : null;
+  if(!bar) return null;
+  var id = bar.id.replace("rteBar_", "");
+  return RICH_KEYS[id] ? id : null;
+}
+function rteColorPick(){
+  var c = window.prompt("输入颜色（如 #10b981 或 red）", "#10b981");
+  return c || null;
+}
+function rteFont(name){
+  if(!name) return;
+  var key = lastFocusedRte();
+  if(key) restoreRteSel(key);
+  try { document.execCommand("fontName", false, name); } catch(e){}
+  if(key){ saveRteSel(key); updateRteCount(key); }
+}
+function rteFontSize(size){
+  if(!size) return;
+  var key = lastFocusedRte();
+  if(key) restoreRteSel(key);
+  /* 没有 fontSize 的 px 选项，用 styleWithCSS + fontSize 的 pt 值近似 */
+  try {
+    document.execCommand("styleWithCSS", false, true);
+    document.execCommand("fontSize", false, "7");
+    var editor = key ? $(RICH_KEYS[key].editor) : null;
+    if(editor){
+      Array.prototype.forEach.call(editor.querySelectorAll('font[size="7"], span[style*="xxx-large"]'), function(el){
+        if(el.tagName.toLowerCase() === "font"){ el.removeAttribute("size"); el.style.fontSize = size; }
+        else el.style.fontSize = size;
+      });
+    }
+  } catch(e){}
+  if(key){ saveRteSel(key); updateRteCount(key); }
+}
+var lastRteKey = "notice";
+function lastFocusedRte(){ return lastRteKey; }
+Object.keys(RICH_KEYS).forEach(function(k){
+  document.addEventListener("focusin", function(e){
+    var editor = $(RICH_KEYS[k].editor);
+    if(editor && (e.target === editor || (editor.contains && editor.contains(e.target)))) lastRteKey = k;
+  });
+});
+function rteLink(e){
+  if(e && e.preventDefault) e.preventDefault();
+  var key = currentRteKeyFromEl(e.currentTarget) || lastFocusedRte();
+  restoreRteSel(key);
+  var url = window.prompt("链接地址（https://...）", "https://");
+  if(!url) return false;
+  saveRteSel(key);
+  document.execCommand("createLink", false, url);
+  return false;
+}
+function rteImage(e){
+  if(e && e.preventDefault) e.preventDefault();
+  var key = currentRteKeyFromEl(e.currentTarget) || lastFocusedRte();
+  restoreRteSel(key);
+  var url = window.prompt("图片地址（也可以先用下面的「添加图片」上传，再点「插入已上传图片」）", "https://");
+  if(!url) return false;
+  saveRteSel(key);
+  document.execCommand("insertHTML", false, '<img src="' + esc(url) + '" alt="">');
+  return false;
+}
+function rteMedia(e, kind){
+  if(e && e.preventDefault) e.preventDefault();
+  var key = currentRteKeyFromEl(e.currentTarget) || lastFocusedRte();
+  restoreRteSel(key);
+  var url = window.prompt(kind === "audio" ? "音乐地址（mp3 等）" : "视频地址（mp4 等）", "https://");
+  if(!url) return false;
+  saveRteSel(key);
+  var tag = kind === "audio" ? "audio" : "video";
+  var extra = kind === "audio" ? "controls" : "controls style=\"max-width:100%\"";
+  document.execCommand("insertHTML", false, "<" + tag + " " + extra + " src=\"" + esc(url) + "\"></" + tag + ">");
+  return false;
+}
+function rteTable(e){
+  if(e && e.preventDefault) e.preventDefault();
+  var key = currentRteKeyFromEl(e.currentTarget) || lastFocusedRte();
+  restoreRteSel(key);
+  var rc = window.prompt("表格大小，格式：行x列", "3x3");
+  if(!rc) return false;
+  var m = String(rc).match(/^(\d+)\s*[x×*]\s*(\d+)$/i);
+  var rows = m ? Math.min(20, parseInt(m[1], 10)) : 3;
+  var cols = m ? Math.min(10, parseInt(m[2], 10)) : 3;
+  var html = "<table><tbody>";
+  for(var r = 0; r < rows; r++){
+    html += "<tr>";
+    for(var c = 0; c < cols; c++) html += "<td><br></td>";
+    html += "</tr>";
+  }
+  html += "</tbody></table><p><br></p>";
+  saveRteSel(key);
+  document.execCommand("insertHTML", false, html);
+  return false;
+}
+function rteMath(e){
+  if(e && e.preventDefault) e.preventDefault();
+  var key = currentRteKeyFromEl(e.currentTarget) || lastFocusedRte();
+  restoreRteSel(key);
+  var f = window.prompt("输入公式（会作为文字插入，可自行改成图片公式）", "E = mc^2");
+  if(!f) return false;
+  saveRteSel(key);
+  document.execCommand("insertHTML", false, "<span style=\"font-style:italic\">" + esc(f) + "</span>");
+  return false;
+}
+
+/* ---- 插入「已上传的图片」到光标处 ---- */
+function rteInsertHTML(html){
+  var key = lastFocusedRte();
+  restoreRteSel(key);
+  var ok = false;
+  try { ok = document.execCommand("insertHTML", false, html); } catch(e){ ok = false; }
+  if(!ok){
+    var editor = $(RICH_KEYS[key].editor);
+    if(editor){ editor.innerHTML += html; }
+  }
+  saveRteSel(key);
+  updateRteCount(key);
 }
 function mdCanInsertImg(){ return !!(imgDrafts.notice && imgDrafts.notice.length); }
 function refreshMdInsertBtn(){
@@ -1034,12 +1551,31 @@ function pickMdImgFrom(btn){
   var i = parseInt(btn.getAttribute("data-mi"), 10);
   var f = (imgDrafts[key] || [])[i];
   if(!f) return;
-  var alt = String(f.name || "").replace(/\.[^.]+$/, "").replace(/[\[\]]/g, "");
-  mdInsertText("![" + alt + "](" + mdUrl(f.url) + ")", "", "");
+  if(getRichMode(key) === "rich"){
+    rteInsertHTML('<img src="' + esc(f.url) + '" alt="' + esc(String(f.name || "").replace(/\.[^.]+$/, "")) + '">');
+  }else{
+    var ta = $("rtePlain_" + key);
+    if(ta){
+      var pos = ta.selectionStart == null ? ta.value.length : ta.selectionStart;
+      var txt = "![图片](" + mdUrl(f.url) + ")";
+      ta.value = ta.value.slice(0, pos) + txt + ta.value.slice(pos);
+    }
+  }
   closeImgPicker();
   showToast("已插入图片，记得点保存");
 }
-function stripMd(s){ return String(s==null?"":s).replace(/!\[([^\]]*)\]\([^)]*\)/g,"$1").replace(/\[([^\]]+)\]\([^)]*\)/g,"$1").replace(/```[\s\S]*?```/g," ").replace(/`([^`]*)`/g,"$1").replace(/^\s{0,3}#{1,6}\s+/gm,"").replace(/^\s*>\s?/gm,"").replace(/^\s*([-*+]|\d+[.)])\s+/gm,"").replace(/\*\*|__|~~/g,"").replace(/[ \t]+/g," ").replace(/\n{2,}/g,"\n").trim(); }
+/* 预览 / 摘要：HTML 和 Markdown 都能处理 */
+function stripMd(s){
+  var t = String(s == null ? "" : s);
+  if(looksRichHTML(t)){
+    return t.replace(/<(script|style)[\s\S]*?<\/\1>/gi, " ")
+      .replace(/<br\s*\/?>/gi, " ").replace(/<\/(p|div|h[1-6]|li|tr|blockquote)>/gi, " ")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+      .replace(/[ \t]+/g, " ").replace(/\n{2,}/g, "\n").trim();
+  }
+  return t.replace(/!\[([^\]]*)\]\([^)]*\)/g,"$1").replace(/\[([^\]]+)\]\([^)]*\)/g,"$1").replace(/```[\s\S]*?```/g," ").replace(/`([^`]*)`/g,"$1").replace(/^\s{0,3}#{1,6}\s+/gm,"").replace(/^\s*>\s?/gm,"").replace(/^\s*([-*+]|\d+[.)])\s+/gm,"").replace(/\*\*|__|~~/g,"").replace(/[ \t]+/g," ").replace(/\n{2,}/g,"\n").trim();
+}
 function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function nowStr(){ const d=new Date(); return todayStr()+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
 
@@ -1241,6 +1777,8 @@ async function initPanel(){
   $("clDate").value = todayStr();
   $("lgDate").value = todayStr();
   renderRosterFields();
+  /* 三个富文本编辑器先建好工具条，切到对应面板就能直接用 */
+  initRte("notice"); initRte("diary"); initRte("class");
   await syncNow(true);
 }
 
@@ -1834,6 +2372,7 @@ function renderAll(){
   $("tagsInput").value = (blogData.tags||[]).join(",");
   renderCatManage();
   renderQuickLinkManage();
+  renderFriendManage();
   updateLgCategories();
   refreshAllIconPrevs();
 
@@ -2029,12 +2568,14 @@ function addNotice(){
   var title=$("nTitle").value.trim();
   if(!title){ showToast("请输入标题","error"); return; }
   var files = (drafts.nf||[]).slice();
+  var rich = isRichMode("notice");
   var item = {
     title: title,
     source:$("nSource").value.trim(),
     date:$("nDate").value||todayStr(),
     level:"normal",
-    content:$("nContent").value.trim(),
+    content:getRich("notice"),
+    contentIsHTML: rich,
     images:(imgDrafts.notice||[]).slice(),
     files: files,
     time: nowStr()
@@ -2054,7 +2595,8 @@ function editNotice(i){
   var n = blogData.notices[i];
   editingNotice = i;
   $("nTitle").value = n.title||""; $("nSource").value = n.source||"";
-  $("nDate").value = n.date||todayStr(); $("nContent").value = n.content||"";
+  $("nDate").value = n.date||todayStr();
+  loadRich("notice", n.content||"");
   setImgDrafts("notice", n.images);
   drafts.nf = (n.files||[]).slice();
   renderDraftFiles("nf");
@@ -2067,7 +2609,8 @@ function editNotice(i){
 }
 function cancelNoticeEdit(){
   editingNotice = null;
-  ["nTitle","nSource","nContent"].forEach(function(id){ $(id).value=""; });
+  $("nTitle").value = ""; $("nSource").value = "";
+  loadRich("notice", "");
   $("nDate").value = todayStr();
   setImgDrafts("notice", []);
   drafts.nf = []; renderDraftFiles("nf");
@@ -2100,7 +2643,8 @@ function saveClass(){
     title: title,
     type:$("clType").value,
     date:$("clDate").value||todayStr(),
-    content:$("clContent").value.trim(),
+    content:getRich("class"),
+    contentIsHTML: isRichMode("class"),
     files: files,
     images:(imgDrafts["class"]||[]).slice(),
     file: files.length?files[0].url:"",
@@ -2121,7 +2665,8 @@ function editClass(i){
   var c=blogData.classItems[i];
   editing["class"]=i;
   $("clTitle").value=c.title||""; $("clType").value=c.type||"通知";
-  $("clDate").value=c.date||todayStr(); $("clContent").value=c.content||"";
+  $("clDate").value=c.date||todayStr();
+  loadRich("class", c.content||"");
   drafts["class"]=(c.files||[]).slice();
   setImgDrafts("class", c.images);
   renderDraftFiles("class");
@@ -2238,14 +2783,14 @@ function autoTitle(text, date){
   return first;
 }
 function addDiary(){
-  var content=$("diaryContent").value.trim();
+  var content=getRich("diary");
   var title=$("diaryTitle").value.trim();
   if(!content && !title){ showToast("请写点内容","error"); return; }
-  if(!title) title = autoTitle(content, todayStr());
-  blogData.diary.push({date:todayStr(), title:title, content:content, images:(imgDrafts.diary||[]).slice(), media:(drafts.dmedia||[]).slice(), time:nowStr()});
+  if(!title) title = autoTitle(stripMd(content), todayStr());
+  blogData.diary.push({date:todayStr(), title:title, content:content, contentIsHTML:isRichMode("diary"), images:(imgDrafts.diary||[]).slice(), media:(drafts.dmedia||[]).slice(), time:nowStr()});
   saveData("写日记："+title);
   renderAll();
-  $("diaryContent").value=""; $("diaryTitle").value="";
+  loadRich("diary", ""); $("diaryTitle").value="";
   setImgDrafts("diary", []);
   drafts.dmedia = []; renderDraftFiles("dmedia");
 }
@@ -2253,7 +2798,7 @@ function renderDiary(){
   var list=(blogData.diary||[]).slice().reverse();
   $("diaryList").innerHTML=list.map(function(d){
     var realIdx=blogData.diary.indexOf(d);
-    return '<div class="item-row"><div class="info"><div class="title">'+esc(d.title||d.date)+'</div><div class="desc" style="white-space:pre-wrap">'+esc(String(d.content||"").slice(0,120))+'</div><div class="desc">'+esc(d.date)+' · '+((d.media||[]).length)+' 个影音</div>'+imgRows(d.images,"diary",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delDiary('+realIdx+')">删除</button></div>';
+    return '<div class="item-row"><div class="info"><div class="title">'+esc(d.title||d.date)+'</div><div class="desc" style="white-space:pre-wrap">'+esc(stripMd(d.content).slice(0,120))+'</div><div class="desc">'+esc(d.date)+' · '+((d.media||[]).length)+' 个影音</div>'+imgRows(d.images,"diary",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delDiary('+realIdx+')">删除</button></div>';
   }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delDiary(realIdx){
@@ -2461,6 +3006,61 @@ function delQuickLink(i){
   renderAll();
 }
 
+/* ---------- 友链管理（显示在「关于我」页 + 首页右侧） ---------- */
+let editingFriend = null;
+function renderFriendManage(){
+  var el = $("friendList");
+  if(!el) return;
+  el.innerHTML = (blogData.friendLinks||[]).map(function(f,i){
+    return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(f.avatar,22)+' '+esc(f.name)+'</div><div class="desc">'+esc(f.url)+'</div>'+(f.desc?'<div class="desc">'+esc(f.desc)+'</div>':"")+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editFriend('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delFriend('+i+')">删除</button></div></div>';
+  }).join("") || '<div style="color:#94a3b8;font-size:.85rem">还没有友链，上面添加一个试试</div>';
+}
+function saveFriend(){
+  var name = $("frName").value.trim();
+  var url = $("frUrl").value.trim();
+  if(!name || !url){ showToast("请填写网站名称和网址","error"); return; }
+  if(!/^https?:\/\//i.test(url)){ showToast("网址要以 http:// 或 https:// 开头","error"); return; }
+  blogData.friendLinks = blogData.friendLinks || [];
+  var item = {
+    name: name,
+    url: url,
+    avatar: $("frAvatar").value.trim(),
+    desc: $("frDesc").value.trim()
+  };
+  if(editingFriend === null){ blogData.friendLinks.push(item); saveData("添加友链："+name); }
+  else { blogData.friendLinks[editingFriend] = item; saveData("编辑友链："+name); }
+  cancelFriendEdit();
+  renderAll();
+}
+function editFriend(i){
+  var f = blogData.friendLinks[i];
+  editingFriend = i;
+  $("frName").value = f.name||""; $("frUrl").value = f.url||"";
+  $("frAvatar").value = f.avatar||""; $("frDesc").value = f.desc||"";
+  refreshIconPrev("frAvatar");
+  $("friendFormTitle").textContent = "✏️ 编辑友链：" + (f.name||"");
+  $("friendEditBar").classList.add("on");
+  $("frSubmit").textContent = "保存修改";
+  $("frCancel").style.display = "inline-block";
+  $("panel-friends").scrollIntoView({behavior:"smooth"});
+}
+function cancelFriendEdit(){
+  editingFriend = null;
+  ["frName","frUrl","frAvatar","frDesc"].forEach(function(id){ var el=$(id); if(el) el.value=""; });
+  refreshIconPrev("frAvatar");
+  $("friendFormTitle").textContent = "🔗 添加友链";
+  $("friendEditBar").classList.remove("on");
+  $("frSubmit").textContent = "添加友链";
+  $("frCancel").style.display = "none";
+}
+function delFriend(i){
+  if(!confirm("确定删除这条友链？")) return;
+  if(editingFriend === i) cancelFriendEdit();
+  blogData.friendLinks.splice(i,1);
+  saveData("删除友链");
+  renderAll();
+}
+
 /* ---------- 记账分类下拉 ---------- */
 function updateLgCategories(){
   var type=$("lgType").value;
@@ -2502,7 +3102,8 @@ function cancelEdit(kind){
     renderDraftFiles("paper");
   }
   if(kind==="class"){
-    $("clTitle").value=""; $("clContent").value=""; $("clDate").value=todayStr();
+    $("clTitle").value=""; $("clDate").value=todayStr();
+    loadRich("class", "");
     $("classFormTitle").textContent="添加班级事务";
     $("classEditBar").classList.remove("on");
     $("clSubmit").textContent="添加";

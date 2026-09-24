@@ -359,6 +359,13 @@
       "amount": 20,
       "desc": "deepseek",
       "category": "买东西"
+    },
+    {
+      "date": "2026-09-24",
+      "type": "expense",
+      "amount": 200,
+      "desc": "充值会员",
+      "category": "其他"
     }
   ],
   "diary": [

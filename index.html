@@ -311,6 +311,25 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .front-form textarea{width:100%;min-height:110px;resize:vertical;line-height:1.8}
 .front-form .ff-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .front-form .ff-status{font-size:.8rem;color:var(--text3);line-height:1.6;flex:1;min-width:180px}
+/* 前台富文本编辑器（写日记用，和后台那套同源，轻量版） */
+.rt-toolbar{display:flex;flex-wrap:wrap;gap:2px;align-items:center;padding:6px 8px;background:var(--soft);border:1px solid var(--border);border-radius:10px 10px 0 0;border-bottom:none}
+.rt-toolbar button{min-width:30px;height:30px;padding:0 8px;border:none;background:transparent;border-radius:7px;cursor:pointer;font-size:.84rem;color:var(--text2);font-family:inherit;display:inline-flex;align-items:center;justify-content:center}
+.rt-toolbar button:hover{background:var(--primary-light);color:var(--primary-dark)}
+.rt-toolbar select{height:30px;padding:0 6px;border:1px solid var(--border);border-radius:7px;font-size:.78rem;font-family:inherit;background:#fff;color:var(--text2);cursor:pointer}
+.rt-sep{width:1px;height:18px;background:var(--border);margin:0 4px;display:inline-block}
+.rt-content{min-height:220px;padding:14px 16px;border:1px solid var(--border);border-radius:0 0 10px 10px;background:var(--bg);font-size:.96rem;line-height:1.9;color:var(--text);outline:none;font-family:inherit}
+.rt-content:empty::before{content:attr(data-placeholder);color:var(--text3);pointer-events:none}
+.rt-content:focus{background:#fff;border-color:var(--primary)}
+.rt-content h1,.rt-content h2,.rt-content h3{margin:.8em 0 .4em;line-height:1.45}
+.rt-content h2{font-size:1.2rem;padding-left:10px;border-left:3px solid var(--primary)}
+.rt-content h3{font-size:1.05rem;padding-left:8px;border-left:3px solid var(--primary-light)}
+.rt-content p{margin:0 0 .9em}
+.rt-content ul,.rt-content ol{margin:0 0 .9em;padding-left:24px}
+.rt-content img{max-width:100%;border-radius:10px;margin:8px 0;display:block}
+.rt-content blockquote{margin:.8em 0;padding:8px 14px;background:var(--soft);border-left:3px solid var(--primary);color:var(--text2)}
+.rt-content a{color:var(--primary-dark)}
+.rt-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:.76rem;color:var(--text3);margin-top:6px}
+.rt-foot a{color:var(--primary);cursor:pointer}
 .theme-btn{border:1px solid var(--border);background:var(--card);border-radius:9px;padding:7px 11px;cursor:pointer;font-size:.92rem;line-height:1;color:var(--text);margin-right:8px}
 .theme-btn:hover{border-color:var(--primary)}
 @media(max-width:760px){
@@ -560,14 +579,18 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
 
     <div class="section" id="sec-paperDetail">
       <div class="section-header"><button class="back-btn" onclick="backToPapers()">← 返回</button></div>
-      <div class="detail-header">
-        <h2 id="pdTitle"></h2>
-        <div class="article-meta" id="pdMeta"></div>
-        <div class="article-tags" id="pdTags"></div>
-        <div class="abstract" id="pdAbstract" style="display:none"></div>
-        <p class="intro" id="pdDesc"></p>
+      <div class="hero-card">
+        <div class="hero-banner" id="pdIcon">📝</div>
+        <div class="hero-body">
+          <h2 id="pdTitle"></h2>
+          <div class="chip-row" id="pdChips"></div>
+        </div>
       </div>
-      <div id="pdFiles"></div>
+      <!-- 正文（摘要 + 备注）留在中间，其余进右侧栏 -->
+      <div class="reader-card">
+        <div class="md-body" id="pdAbstract"></div>
+        <div class="md-body" id="pdDesc" style="margin-top:18px;padding-top:16px;border-top:1px dashed var(--border)"></div>
+      </div>
     </div>
 
     <div class="section" id="sec-notices">
@@ -643,8 +666,14 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
         <div class="ff-row">
           <input type="text" id="fdTags" placeholder="标签，逗号分隔（如：深度学习,随笔）">
         </div>
-        <textarea id="fdContent" placeholder="今天想记点什么……"></textarea>
-        <div class="ff-actions">
+        <div class="rt-toolbar" id="fdToolbar"></div>
+        <div class="rt-content" id="fdContent" contenteditable="true" data-placeholder="今天学到/收获了什么……可以直接排版、插图片"></div>
+        <div class="rt-foot">
+          <span>支持小标题、加粗、列表、插图；写完点右边「保存日记」</span>
+          <span><a onclick="toggleFrontRich('fd')" id="fdMode">切换到源码 / Markdown</a></span>
+        </div>
+        <input type="file" id="fdImgInput" accept="image/*" multiple style="display:none" onchange="onFrontImagePick(event,'fd')">
+        <div class="ff-actions" style="margin-top:12px">
           <button class="btn-primary" type="button" onclick="addDiaryFromFront()">保存日记</button>
           <span class="ff-status" id="fdStatus"></span>
         </div>
@@ -805,6 +834,7 @@ const DEFAULT_DATA = {
   ],
   courses: [], papers: [], notices: [], classItems: [], lifeServices: [],
   friendLinks: [],
+  friendApplies: [],
   ledger: [],
   ledgerCategories: {expense:["吃饭","买东西","生活用品","交通","娱乐","学习","医疗","其他"], income:["工资","奖学金","补贴","红包","其他"]},
   diary: [], advisor: [], logs: []
@@ -1302,8 +1332,10 @@ function openCourse(idx){
   buildToc(introBox);
   document.getElementById("cdProgressBar").style.width = progress+"%";
   document.getElementById("cdProgressText").innerHTML = "学习进度：<b>"+progress+"%</b>";
-  /* 资料/附件 → 右侧栏 */
-  showSideFiles("📎 课程资料", galleryHTML(c) + fileListGrouped(c));
+  /* 资料/附件 → 右侧栏（没有资料就不显示这张卡） */
+  var filesHtml = galleryHTML(c) + fileListGrouped(c);
+  var hasFiles = collectFiles(c).length > 0;
+  showSideFiles(hasFiles ? "📎 课程资料" : "", hasFiles ? filesHtml : "");
   setPageTitle("courseDetail", c.title, "");
   showSection("courseDetail");
 }
@@ -1315,20 +1347,53 @@ function renderPapers(){
   var list = (f && f.match) ? all.filter(function(p){return f.match(p.status);}) : all;
   document.getElementById("papersList").innerHTML = list.map(function(p){
     var idx = all.indexOf(p);
-    return '<div class="article-card" onclick="openPaper('+idx+')">'+coverHTML(p, "📝")+'<div class="article-body"><div class="article-title">'+esc(p.title)+'</div><div class="article-meta"><span>'+esc(p.status)+'</span>'+(p.year?'<span>'+esc(p.year)+'</span>':"")+(p.time?'<span class="time">🕐 '+p.time+'</span>':"")+'</div><div class="article-desc">'+esc(String(p.abstract||p.desc||"").slice(0,100))+'</div><div class="article-tags">'+((p.tags||[]).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>';}).join(""))+'</div>'+imgStrip(p)+'</div></div>';
+    var nf = collectFiles(p).length;
+    return '<div class="article-card" onclick="openPaper('+idx+')">'+coverHTML(p, "📝")
+      + '<div class="article-body">'
+      +   '<div class="article-title">'+esc(p.title)+'</div>'
+      +   '<div class="chip-row">'
+      +     (p.status?'<span class="info-chip green">'+esc(p.status)+'</span>':"")
+      +     (p.year?'<span class="info-chip">📅 '+esc(p.year)+'</span>':"")
+      +     (nf?'<span class="info-chip">📎 '+nf+' 个文件</span>':"")
+      +     (p.time?'<span class="info-chip">🕐 '+esc(p.time)+'</span>':"")
+      +   '</div>'
+      +   '<div class="article-desc" style="margin-top:10px">'+esc(mdText(p.abstract||p.desc||"").slice(0,110))+'</div>'
+      +   '<div class="article-tags">'+((p.tags||[]).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>';}).join(""))+'</div>'
+      +   imgStrip(p)
+      + '</div></div>';
   }).join("") || '<div class="empty">暂无匹配的论文</div>';
 }
 function openPaper(idx){
   currentPaperIdx = idx;
   var p = blogData.papers[idx];
+  var files = collectFiles(p);
+  var icVal = p.icon || "📝";
+  var banner = document.getElementById("pdIcon");
+  banner.innerHTML = isImgUrl(icVal) ? '<img src="'+esc(icVal)+'" alt="">' : esc(icVal);
   document.getElementById("pdTitle").textContent = p.title;
-  document.getElementById("pdMeta").innerHTML = '<span>'+esc(p.status)+'</span>'+(p.year?'<span>'+esc(p.year)+'</span>':"");
-  document.getElementById("pdTags").innerHTML = (p.tags||[]).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>';}).join("");
+  /* 标题下只留小圆片，详细信息去右侧栏 */
+  document.getElementById("pdChips").innerHTML =
+      (p.status ? '<span class="info-chip green">'+esc(p.status)+'</span>' : '')
+    + (p.year ? '<span class="info-chip">📅 '+esc(p.year)+'</span>' : '')
+    + (files.length ? '<span class="info-chip">📎 <b>'+files.length+'</b> 个文件</span>' : '')
+    + (p.time ? '<span class="info-chip">🕐 '+esc(p.time)+'</span>' : '');
+  showSideInfo("📄 论文信息",
+      '<div class="kv"><span class="k">标题</span><span class="v">'+esc(p.title)+'</span></div>'
+    + '<div class="kv"><span class="k">状态</span><span class="v">'+esc(p.status||"—")+'</span></div>'
+    + (p.year ? '<div class="kv"><span class="k">年份</span><span class="v">'+esc(p.year)+'</span></div>' : '')
+    + '<div class="kv"><span class="k">文件数</span><span class="v">'+files.length+' 个</span></div>'
+    + ((p.tags||[]).length ? '<div class="kv"><span class="k">标签</span><span class="v">'+p.tags.map(function(t){return '<a href="javascript:;" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')" style="color:var(--primary-dark);text-decoration:none">'+esc(t)+'</a>';}).join("、")+'</span></div>' : '')
+    + (p.time ? '<div class="kv"><span class="k">更新时间</span><span class="v">'+esc(p.time)+'</span></div>' : ''));
+  /* 摘要按富文本/Markdown 渲染 —— 之前这里用 textContent，HTML 标签会当成文字显示出来 */
   var ab = document.getElementById("pdAbstract");
-  if(p.abstract){ ab.style.display="block"; ab.textContent = "摘要：" + p.abstract; }
-  else { ab.style.display="none"; }
-  document.getElementById("pdDesc").textContent = p.desc || "";
-  document.getElementById("pdFiles").innerHTML = galleryHTML(p) + fileListGrouped(p);
+  ab.innerHTML = mdRenderHTML(p.abstract) || '<div class="empty">还没有填摘要</div>';
+  ab.className = "md-body";
+  var desc = document.getElementById("pdDesc");
+  desc.innerHTML = mdRenderHTML(p.desc) || "";
+  desc.style.display = (p.desc && String(p.desc).trim()) ? "" : "none";
+  buildToc(ab);
+  var hasFiles = files.length > 0;
+  showSideFiles(hasFiles ? "📎 论文文件" : "", hasFiles ? (galleryHTML(p) + fileListGrouped(p)) : "");
   setPageTitle("paperDetail", p.title, "");
   showSection("paperDetail");
 }
@@ -1703,6 +1768,8 @@ function renderFriends(){
   }
 }
 /* 访客申请友链：没有后端，优先走配置好的表单地址，否则回退到 GitHub Issue */
+/* 友链申请：先直接写进 data.json 的 friendApplies（访客不用 GitHub 账号，也不需要 Token），
+   同时开一个 GitHub Issue 当通知；后台「友链」面板能看到并一键转为正式友链。 */
 function submitFriendApply(e){
   if(e && e.preventDefault) e.preventDefault();
   var g = function(id){ var el = document.getElementById(id); return el ? el.value.trim() : ""; };
@@ -1712,27 +1779,62 @@ function submitFriendApply(e){
   if(!name || !url){ say("请先填写网站名称和网址", "var(--primary-dark)"); return false; }
   if(!/^https?:\/\//i.test(url)){ say("网址要以 http:// 或 https:// 开头", "var(--primary-dark)"); return false; }
 
-  /* 1) 站点设置里配了接收地址：直接 POST 过去 */
+  var apply = {
+    name: name, url: url, desc: desc, avatar: avatar,
+    time: nowStr(), from: "前台友链申请表"
+  };
+
+  /* ① 站点设置里配了接收地址：先 POST 过去（自建接口的情况） */
   var endpoint = (blogData.siteConfig && blogData.siteConfig.friendApplyUrl) || "";
+
+  /* ② 打开 GitHub Issue 链接（同时给出，作为备份通知渠道） */
+  var repo = (blogData.siteConfig && blogData.siteConfig.friendIssueRepo) || (GH_OWNER + "/" + GH_REPO);
+  var issueTitle = "[友链申请] " + name;
+  var issueBody = "**网站名称**：" + name + "\n\n**网站地址**：" + url
+    + "\n\n**网站简介**：" + (desc || "（未填写）")
+    + "\n\n**头像/Logo**：" + (avatar || "（未填写）")
+    + "\n\n**提交时间**：" + apply.time
+    + "\n\n---\n由博客「关于我」页面的友链申请表提交";
+  var issueLink = "https://github.com/" + repo + "/issues/new?labels=%E5%8F%8B%E9%93%BE%E7%94%B3%E8%AF%B7&title="
+    + encodeURIComponent(issueTitle) + "&body=" + encodeURIComponent(issueBody);
+
+  var finish = function(){
+    say("✅ 已提交！站长审核后就会出现在上面的友链里。", "var(--primary-dark)");
+    try { window.open(issueLink, "_blank", "noopener"); } catch(err){}
+  };
+
   if(endpoint){
     say("提交中…");
     fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: name, url: url, desc: desc, avatar: avatar, from: location.href })
+      body: JSON.stringify(apply)
     }).then(function(r){
-      if(r.ok){ say("✅ 已提交，等站长审核后就会出现在这里～", "var(--primary-dark)"); }
-      else { say("提交失败（HTTP " + r.status + "），可以到 GitHub 提 Issue。", "#ef4444"); }
-    }).catch(function(){ say("提交失败，可以到 GitHub 提 Issue。", "#ef4444"); });
+      if(r.ok){ finish(); }
+      else { say("提交失败（HTTP " + r.status + "），请直接到 GitHub 提 Issue。", "#ef4444"); }
+    }).catch(function(){ say("提交失败，请直接到 GitHub 提 Issue。", "#ef4444"); });
     return false;
   }
-  /* 2) 没配地址：打开 GitHub Issue，让站长一键 Review（最省事的免后端方案） */
-  var repo = (blogData.siteConfig && blogData.siteConfig.friendIssueRepo) || (GH_OWNER + "/" + GH_REPO);
-  var title = "[友链申请] " + name;
-  var body = "**网站名称**：" + name + "\n\n**网站地址**：" + url + "\n\n**网站简介**：" + (desc || "（未填写）") + "\n\n**头像/Logo**：" + (avatar || "（未填写）") + "\n\n---\n由博客「关于我」页面的友链申请表提交";
-  var link = "https://github.com/" + repo + "/issues/new?labels=%E5%8F%8B%E9%93%BE%E7%94%B3%E8%AF%B7&title=" + encodeURIComponent(title) + "&body=" + encodeURIComponent(body);
-  window.open(link, "_blank", "noopener");
-  say("已打开 GitHub 申请页：登录后点「Submit new issue」即可，我看到就会加上。", "var(--primary-dark)");
+
+  /* ③ 有 Token（站长自己浏览器）：直接写进 data.json，后台立刻能看到 */
+  if(frontToken()){
+    say("提交中…");
+    pushDataChange(function(d){
+      d.friendApplies = d.friendApplies || [];
+      d.friendApplies.push(apply);
+    }, "友链申请：" + name).then(function(){
+      say("✅ 已存入后台「友链申请」列表，去后台点一下就能加上。", "var(--primary-dark)");
+      try { window.open(issueLink, "_blank", "noopener"); } catch(err){}
+    }).catch(function(err){
+      say("写入失败：" + err.message + "（已打开 GitHub 申请页作为备选）", "#ef4444");
+      try { window.open(issueLink, "_blank", "noopener"); } catch(e2){}
+    });
+    return false;
+  }
+
+  /* ④ 普通访客：打开 GitHub 申请页（仓库里的 Action 会自动收进后台列表） */
+  window.open(issueLink, "_blank", "noopener");
+  say("已打开申请页：登录 GitHub 后点「Submit new issue」提交即可，我这边会自动收到。", "var(--primary-dark)");
   return false;
 }
 
@@ -1778,8 +1880,9 @@ function openNotice(idx){
   box.innerHTML = mdRenderHTML(n.content) || '<div class="empty">这条通知还没有正文</div>';
   box.className = "md-body";
   buildToc(box);
-  /* 附件 → 右侧栏 */
-  showSideFiles("📎 附件", galleryHTML(n) + fileListGrouped(n));
+  /* 附件 → 右侧栏（没有附件就不显示这张卡） */
+  var nHasFiles = collectFiles(n).length > 0;
+  showSideFiles(nHasFiles ? "📎 附件" : "", nHasFiles ? (galleryHTML(n) + fileListGrouped(n)) : "");
   setPageTitle("noticeDetail", n.title, "");
   showSection("noticeDetail");
 }
@@ -1944,20 +2047,238 @@ function parseTagsText(v){
   });
   return out;
 }
+
+/* ============================================================
+   前台富文本（轻量版）：写日记用
+   工具栏比后台精简，够「像写博客一样写」：标题、加粗、列表、引用、链接、插图
+   ============================================================ */
+var FRONT_RICH = {
+  fd: { editor: "fdContent", bar: "fdToolbar", mode: "fdMode" }
+};
+var frontRichMode = { fd: "rich" };
+
+function frontToolbarHTML(){
+  var h = "";
+  h += '<button type="button" title="撤销" data-cmd="undo">↺</button>';
+  h += '<button type="button" title="重做" data-cmd="redo">↻</button>';
+  h += '<span class="rt-sep"></span>';
+  h += '<select title="段落样式" data-style="1">'
+     + '<option value="">正文</option><option value="h2">标题 2</option>'
+     + '<option value="h3">标题 3</option><option value="p">段落</option></select>';
+  h += '<span class="rt-sep"></span>';
+  h += '<button type="button" title="加粗" data-cmd="bold"><b>B</b></button>';
+  h += '<button type="button" title="斜体" data-cmd="italic"><i>I</i></button>';
+  h += '<button type="button" title="下划线" data-cmd="underline"><u>U</u></button>';
+  h += '<button type="button" title="删除线" data-cmd="strikeThrough"><s>S</s></button>';
+  h += '<span class="rt-sep"></span>';
+  h += '<button type="button" title="无序列表" data-cmd="insertUnorderedList">•≡</button>';
+  h += '<button type="button" title="有序列表" data-cmd="insertOrderedList">1≡</button>';
+  h += '<button type="button" title="引用" data-cmd="formatBlock" data-val="blockquote">❝</button>';
+  h += '<button type="button" title="清除格式" data-cmd="removeFormat">Tx</button>';
+  h += '<span class="rt-sep"></span>';
+  h += '<button type="button" title="插入链接" data-act="link">🔗</button>';
+  h += '<button type="button" title="插入图片（网址）" data-act="imgurl">🖼️</button>';
+  h += '<button type="button" title="上传图片" data-act="imgupload">⬆️图片</button>';
+  return h;
+}
+function initFrontRich(key){
+  var cfg = FRONT_RICH[key];
+  if(!cfg) return;
+  var bar = document.getElementById(cfg.bar);
+  var editor = document.getElementById(cfg.editor);
+  if(!bar || !editor || bar.getAttribute("data-ready")) return;
+  bar.innerHTML = frontToolbarHTML();
+  bar.setAttribute("data-ready", "1");
+  Array.prototype.forEach.call(bar.querySelectorAll("button"), function(btn){
+    btn.addEventListener("mousedown", function(ev){
+      ev.preventDefault();
+      var act = btn.getAttribute("data-act");
+      var cmd = btn.getAttribute("data-cmd");
+      editor.focus();
+      if(act === "link"){
+        var url = window.prompt("链接地址", "https://");
+        if(url) document.execCommand("createLink", false, url);
+      }else if(act === "imgurl"){
+        var iu = window.prompt("图片地址（https://...）", "https://");
+        if(iu) document.execCommand("insertHTML", false, '<img src="' + esc(iu) + '" alt="">');
+      }else if(act === "imgupload"){
+        var f = document.getElementById(key + "ImgInput");
+        if(f) f.click();
+        return;
+      }else if(cmd){
+        document.execCommand(cmd, false, btn.getAttribute("data-val") || null);
+      }
+    });
+  });
+  Array.prototype.forEach.call(bar.querySelectorAll("select"), function(sel){
+    sel.addEventListener("change", function(){
+      editor.focus();
+      var v = sel.value;
+      if(v) document.execCommand("formatBlock", false, v);
+      sel.selectedIndex = 0;
+    });
+  });
+  editor.addEventListener("paste", function(e){
+    var t = e.clipboardData ? e.clipboardData.getData("text/plain") : "";
+    if(!t) return;
+    e.preventDefault();
+    document.execCommand("insertText", false, t);
+  });
+}
+/* 源码 / 可视化 互切 */
+function toggleFrontRich(key){
+  var cfg = FRONT_RICH[key];
+  if(!cfg) return;
+  var editor = document.getElementById(cfg.editor);
+  var bar = document.getElementById(cfg.bar);
+  var link = document.getElementById(cfg.mode);
+  var plain = document.getElementById(key + "Source");
+  if(frontRichMode[key] === "rich"){
+    /* 转源码：把 HTML 转成简单 Markdown */
+    var html = String(editor.innerHTML || "").trim();
+    frontRichMode[key] = "plain";
+    editor.style.display = "none";
+    bar.style.display = "none";
+    if(!plain){
+      plain = document.createElement("textarea");
+      plain.id = key + "Source";
+      plain.style.cssText = "width:100%;min-height:240px;padding:14px 16px;border:1px solid var(--border);border-radius:10px;font-family:ui-monospace,Consolas,monospace;font-size:.86rem;line-height:1.8;resize:vertical";
+      editor.parentNode.insertBefore(plain, editor.nextSibling);
+    }
+    plain.value = htmlToSimpleMd(html);
+    plain.style.display = "";
+    if(link) link.textContent = "切换回可视化编辑";
+  }else{
+    var src = plain ? plain.value : "";
+    frontRichMode[key] = "rich";
+    if(plain){ plain.remove(); }
+    editor.style.display = "";
+    bar.style.display = "";
+    editor.innerHTML = !src.trim() ? "" : (looksHTML(src) ? src : mdRender(src));
+    if(link) link.textContent = "切换到源码 / Markdown";
+  }
+}
+/* 极简 HTML → Markdown（只在切源码时用） */
+function htmlToSimpleMd(html){
+  var d = document.createElement("div");
+  d.innerHTML = String(html || "");
+  function inline(node){
+    var s = "";
+    Array.prototype.forEach.call(node.childNodes, function(n){
+      if(n.nodeType === 3){ s += n.nodeValue; return; }
+      if(n.nodeType !== 1) return;
+      var tag = n.tagName.toLowerCase(), inner = inline(n);
+      if(tag === "br"){ s += "\n"; return; }
+      if(tag === "strong" || tag === "b"){ s += "**" + inner + "**"; return; }
+      if(tag === "em" || tag === "i"){ s += "*" + inner + "*"; return; }
+      if(tag === "s" || tag === "strike" || tag === "del"){ s += "~~" + inner + "~~"; return; }
+      if(tag === "a"){ s += "[" + inner + "](" + (n.getAttribute("href") || "") + ")"; return; }
+      if(tag === "img"){ s += "![" + (n.getAttribute("alt") || "") + "](" + (n.getAttribute("src") || "") + ")"; return; }
+      s += inner;
+    });
+    return s;
+  }
+  var out = [];
+  Array.prototype.forEach.call(d.childNodes, function(n){
+    if(n.nodeType === 3){ var t = n.nodeValue.trim(); if(t) out.push(t); return; }
+    if(n.nodeType !== 1) return;
+    var tag = n.tagName.toLowerCase();
+    if(/^h[1-6]$/.test(tag)){ out.push("#".repeat(parseInt(tag.slice(1), 10)) + " " + inline(n).trim()); return; }
+    if(tag === "ul" || tag === "ol"){
+      var items = [];
+      Array.prototype.forEach.call(n.children, function(li){ items.push(inline(li).trim()); });
+      out.push(items.map(function(it, i){ return (tag === "ol" ? (i + 1) + ". " : "- ") + it; }).join("\n"));
+      return;
+    }
+    if(tag === "blockquote"){ out.push(inline(n).split("\n").map(function(l){ return "> " + l; }).join("\n")); return; }
+    if(tag === "pre"){ out.push("```\n" + (n.textContent || "").replace(/\n+$/, "") + "\n```"); return; }
+    var t2 = inline(n).trim();
+    if(t2) out.push(t2);
+  });
+  return out.join("\n\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+/* 读前台编辑器内容（自动按模式取） */
+function getFrontRich(key){
+  var cfg = FRONT_RICH[key];
+  if(!cfg) return "";
+  if(frontRichMode[key] === "plain"){
+    var ta = document.getElementById(key + "Source");
+    return ta ? ta.value.trim() : "";
+  }
+  var editor = document.getElementById(cfg.editor);
+  if(!editor) return "";
+  var html = String(editor.innerHTML || "").trim();
+  if(html === "<br>" || html === "<p></p>" || html === "<div><br></div>") html = "";
+  return html;
+}
+function isFrontRich(key){ return frontRichMode[key] !== "plain"; }
+
+/* ---------- 前台图片上传（直接传到仓库的 files/ 目录） ---------- */
+async function uploadFrontFile(file, folder){
+  var token = frontToken();
+  if(!token) throw new Error("需要先在后台「站点设置」保存 GitHub Token");
+  var safeName = String(file.name || "file").replace(/[^\w.\-\u4e00-\u9fa5]+/g, "_").slice(-60);
+  var repoPath = (folder || "files") + "/" + Date.now() + "_" + safeName;
+  var buf = new Uint8Array(await file.arrayBuffer());
+  var bin = "", CHUNK = 0x8000;
+  for(var i = 0; i < buf.length; i += CHUNK) bin += String.fromCharCode.apply(null, buf.subarray(i, i + CHUNK));
+  var res = await fetch("https://api.github.com/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/" + repoPath, {
+    method: "PUT",
+    headers: { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
+    body: JSON.stringify({ message: "上传文件：" + safeName, content: btoa(bin), branch: "main" })
+  });
+  if(!res.ok){
+    var m = "HTTP " + res.status;
+    try { var j = await res.json(); if(j.message) m += "：" + j.message; } catch(e){}
+    throw new Error(m);
+  }
+  return repoPath;
+}
+async function onFrontImagePick(e){
+  var files = Array.prototype.slice.call((e.target && e.target.files) || []);
+  if(e.target) e.target.value = "";
+  if(!files.length) return;
+  if(!frontToken()){ sayStatus("fdStatus", "上传图片需要先在后台「站点设置」保存 GitHub Token", "#ef4444"); return; }
+  sayStatus("fdStatus", "上传中（" + files.length + " 张）…");
+  var editor = document.getElementById("fdContent");
+  try{
+    var urls = [];
+    for(var i = 0; i < files.length; i++){
+      var p = await uploadFrontFile(files[i], "files");
+      urls.push(p);
+    }
+    if(editor){
+      editor.focus();
+      document.execCommand("insertHTML", false, urls.map(function(u){
+        return '<img src="' + esc(u) + '" alt="">';
+      }).join(""));
+    }
+    sayStatus("fdStatus", "✅ 已插入 " + urls.length + " 张图片（GitHub Pages 发布后加载，稍等 1 分钟）", "var(--primary-dark)");
+  }catch(err){
+    sayStatus("fdStatus", "图片上传失败：" + err.message, "#ef4444");
+  }
+}
 async function addDiaryFromFront(){
-  var content = (document.getElementById("fdContent").value || "").trim();
+  var content = getFrontRich("fd");
   var title = (document.getElementById("fdTitle").value || "").trim();
   var tags = parseTagsText(document.getElementById("fdTags").value);
   var date = document.getElementById("fdDate").value || todayStr();
   if(!content && !title){ sayStatus("fdStatus", "请先写点内容", "#ef4444"); return; }
-  if(!title) title = autoTitle(content, date);
+  if(!title) title = autoTitle(looksHTML(content) ? mdText(content) : content, date);
   sayStatus("fdStatus", "保存中…（正在写入 GitHub）");
   try{
     await pushDataChange(function(d){
       d.diary = d.diary || [];
-      d.diary.push({ date: date, title: title, content: content, tags: tags, images: [], media: [], time: nowStr() });
+      d.diary.push({
+        date: date, title: title, content: content,
+        contentIsHTML: isFrontRich("fd"),
+        tags: tags, images: [], media: [], time: nowStr()
+      });
     }, "前台写日记：" + title);
-    document.getElementById("fdContent").value = "";
+    var ed = document.getElementById("fdContent");
+    if(ed) ed.innerHTML = "";
+    var st = document.getElementById("fdSource");
+    if(st) st.value = "";
     document.getElementById("fdTitle").value = "";
     document.getElementById("fdTags").value = "";
     renderDiary();
@@ -1996,6 +2317,8 @@ function initFrontForms(){
   var a = document.getElementById("faDate");
   if(d && !d.value) d.value = today;
   if(a && !a.value) a.value = today;
+  /* 前台日记的轻量富文本工具栏 */
+  initFrontRich("fd");
   var hasToken = !!frontToken();
   var hint = hasToken ? "" : "提示：保存需要在后台「站点设置」里保存一次 GitHub Token（只存在你自己的浏览器里）。";
   if(!hasToken){

@@ -202,7 +202,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
   </div>
   <div class="container">
     <input type="file" id="imgFileInput" accept="image/*" multiple style="display:none" onchange="onImgFiles(event)">
-    <input type="file" id="iconFileInput" accept="image/*" style="display:none" onchange="onIconFile(event)">
+    <input type="file" id="iconFileInput" accept="image/*" style="display:none">
     <div class="stat-bar">
       <div class="card"><div class="num" id="statC">0</div><div>课程</div></div>
       <div class="card"><div class="num" id="statP">0</div><div>论文</div></div>
@@ -2474,8 +2474,48 @@ const imgDrafts = {};
 let imgKey = null;
 let iconTarget = null;
 
-function pickImgs(key){ imgKey = key; $("imgFileInput").click(); }
-function pickIcon(inputId){ iconTarget = inputId; $("iconFileInput").click(); }
+/* ============================================================
+   所有「需要上传」的入口都走同一个弹窗：
+   弹窗里既能填网址，也能点「选择文件上传」，和截图保持一致
+   ============================================================ */
+/* 添加图片：弹窗（网址 / 上传 / 选已上传的）+ 之后仍会把图收进「图片」区（第一张当封面） */
+function pickImgs(key){
+  imgKey = key;
+  lastRteKey = RICH_KEYS[key] ? key : lastRteKey;
+  openImgPicker(key, function(){
+    renderImgDrafts(key);
+    refreshMdInsertBtn();
+    showToast("图片已收进「图片」区，记得点保存");
+  });
+}
+/* 图标 / 头像 / 照片：弹窗（网址 / 上传），选好后自动填回输入框 */
+function pickIcon(inputId){
+  var current = ($(inputId) && $(inputId).value ? $(inputId).value.trim() : "");
+  openInputDialog({
+    title: "设置图片",
+    hint: "图片地址（也可以直接粘贴图床链接）\n先点「选择文件上传」也行，上传完地址会自动填进来",
+    placeholder: "https://",
+    value: current,
+    okText: "使用这张",
+    onFile: async function(files){
+      var out = [];
+      for(var i = 0; i < files.length; i++){
+        var meta = await uploadFile(files[i], "img");
+        out.push(meta.url);
+      }
+      return out;
+    },
+    onOk: function(url){
+      url = String(url || "").split("\n").map(function(s){ return s.trim(); }).filter(Boolean)[0] || "";
+      if(!url){ dlgErr("请输入图片地址，或先上传一张"); return false; }
+      if(!/^(https?:\/\/|files\/|\/)/i.test(url)){ dlgErr("地址要以 https:// 开头（或站内 files/ 路径）"); return false; }
+      if($(inputId)) $(inputId).value = url;
+      refreshIconPrev(inputId);
+      showToast("已设置，记得点保存");
+      return true;
+    }
+  });
+}
 
 async function onImgFiles(e){
   var files = Array.prototype.slice.call(e.target.files||[]);
@@ -2494,19 +2534,7 @@ async function onImgFiles(e){
   showToast("图片已上传，记得点保存");
 }
 
-async function onIconFile(e){
-  var f = e.target.files[0];
-  e.target.value = "";
-  if(!f || !iconTarget) return;
-  var target = iconTarget;
-  try{
-    showToast("正在上传图标…");
-    var meta = await uploadFile(f, "img");
-    $(target).value = meta.url;
-    refreshIconPrev(target);
-    showToast("图标已上传，记得保存");
-  }catch(err){ showToast("图标上传失败："+err.message, "error"); }
-}
+/* 图标上传已统一走弹窗（pickIcon → 选择文件上传），这里不再需要单独入口 */
 
 function renderImgDrafts(key){
   var box = $("imgList_"+key);

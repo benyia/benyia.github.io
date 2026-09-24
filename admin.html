@@ -93,491 +93,487 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 <body>
 
 <div class="login-screen" id="loginScreen">
-  <h1>🔐 管理后台</h1>
-  <label class="lg-label" for="pwdInput">密码</label>
-  <div class="lg-pwdwrap">
-    <input type="password" class="lg-input" id="pwdInput" placeholder="请输入密码" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
-    <button type="button" class="lg-eye" id="pwdToggle" onclick="togglePwdView()">显示</button>
-  </div>
-  <div class="lg-row">
-    <label class="lg-check"><input type="checkbox" id="keepLogin"> 保持登录会话</label>
-    <span class="lg-link" onclick="forgotPwd()">忘记密码？</span>
-  </div>
-  <button type="button" class="lg-submit" onclick="login()">登录</button>
-  <div class="login-hint" id="loginHint"></div>
+<h1>🔐 管理后台</h1>
+<label class="lg-label" for="pwdInput">密码</label>
+<div class="lg-pwdwrap">
+<input type="password" class="lg-input" id="pwdInput" placeholder="请输入密码" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+<button type="button" class="lg-eye" id="pwdToggle" onclick="togglePwdView()">显示</button>
+</div>
+<div class="lg-row">
+<label class="lg-check"><input type="checkbox" id="keepLogin"> 保持登录会话</label>
+<span class="lg-link" onclick="forgotPwd()">忘记密码？</span>
+</div>
+<button type="button" class="lg-submit" onclick="login()">登录</button>
+<div class="login-hint" id="loginHint"></div>
 </div>
 
 <div class="main" id="mainPanel">
-  <div class="topbar">
-    <h1>思齐博客管理后台</h1>
-    <div>
-      <a href="./" target="_blank">查看前台</a> ·
-      <span id="syncState" style="font-size:.8rem;color:var(--text3)">未同步</span> ·
-      <a onclick="logout()">退出</a>
-    </div>
-  </div>
-  <div class="container">
-    <input type="file" id="imgFileInput" accept="image/*" multiple style="display:none" onchange="onImgFiles(event)">
-    <input type="file" id="iconFileInput" accept="image/*" style="display:none" onchange="onIconFile(event)">
-    <div class="stat-bar">
-      <div class="card"><div class="num" id="statC">0</div><div>课程</div></div>
-      <div class="card"><div class="num" id="statP">0</div><div>论文</div></div>
-      <div class="card"><div class="num" id="statN">0</div><div>通知</div></div>
-      <div class="card"><div class="num" id="statF">0</div><div>已上传文件</div></div>
-    </div>
-    <div class="tabs">
-      <button class="active" data-p="site">站点设置</button>
-      <button data-p="courses">课程</button>
-      <button data-p="papers">论文</button>
-      <button data-p="notices">通知</button>
-      <button data-p="class">班级事务</button>
-      <button data-p="roster">名单</button>
-      <button data-p="life">生活服务</button>
-      <button data-p="ledger">记账</button>
-      <button data-p="diary">日记</button>
-      <button data-p="advisor">导师指导</button>
-      <button data-p="logs">修改日志</button>
-    </div>
+<div class="topbar">
+<h1>思齐博客管理后台</h1>
+<div>
+<a href="./" target="_blank">查看前台</a> ·
+<span id="syncState" style="font-size:.8rem;color:var(--text3)">未同步</span> ·
+<a onclick="logout()">退出</a>
+</div>
+</div>
+<div class="container">
+<input type="file" id="imgFileInput" accept="image/*" multiple style="display:none" onchange="onImgFiles(event)">
+<input type="file" id="iconFileInput" accept="image/*" style="display:none" onchange="onIconFile(event)">
+<div class="stat-bar">
+<div class="card"><div class="num" id="statC">0</div><div>课程</div></div>
+<div class="card"><div class="num" id="statP">0</div><div>论文</div></div>
+<div class="card"><div class="num" id="statN">0</div><div>通知</div></div>
+<div class="card"><div class="num" id="statF">0</div><div>已上传文件</div></div>
+</div>
+<div class="tabs">
+<button class="active" data-p="site">站点设置</button>
+<button data-p="courses">课程</button>
+<button data-p="papers">论文</button>
+<button data-p="notices">通知</button>
+<button data-p="class">班级事务</button>
+<button data-p="roster">名单</button>
+<button data-p="life">生活服务</button>
+<button data-p="ledger">记账</button>
+<button data-p="diary">日记</button>
+<button data-p="advisor">导师指导</button>
+<button data-p="logs">修改日志</button>
+</div>
 
-    <!-- ===== 站点设置 ===== -->
-    <div class="panel active" id="panel-site">
-      <div class="card">
-        <h2>🔑 GitHub 上传设置（必读）</h2>
-        <div class="note">
-          保存和上传文件需要通过 GitHub Token 验证身份。<b>Token 只保存在你自己的浏览器里</b>，不会写进网页，也不会出现在公开仓库中。<br>
-          获取方式：GitHub → 右上角头像 → <code>Settings</code> → <code>Developer settings</code> → <code>Personal access tokens</code> → <code>Tokens (classic)</code> → <code>Generate new token (classic)</code>，勾选 <code>repo</code> 权限，生成后粘贴到下面。
-        </div>
-        <div class="token-box">
-          <input type="password" id="ghToken" placeholder="ghp_... 或 github_pat_..." autocomplete="off">
-          <button class="btn btn-ghost btn-sm" onclick="toggleTokenView()" id="tokenViewBtn">显示</button>
-          <button class="btn btn-primary btn-sm" onclick="saveToken()">保存 Token</button>
-          <button class="btn btn-ghost btn-sm" onclick="testToken()" id="tokenTestBtn">测试连接</button>
-          <button class="btn btn-ghost btn-sm" onclick="clearToken()">清除</button>
-        </div>
-        <div class="status-msg" id="tokenStatus"></div>
-      </div>
+<!-- ===== 站点设置 ===== -->
+<div class="panel active" id="panel-site">
+<div class="card">
+<h2>🔑 GitHub 上传设置（必读）</h2>
+<div class="note">
+保存和上传文件需要通过 GitHub Token 验证身份。<b>Token 只保存在你自己的浏览器里</b>，不会写进网页，也不会出现在公开仓库中。<br>
+获取方式：GitHub → 右上角头像 → <code>Settings</code> → <code>Developer settings</code> → <code>Personal access tokens</code> → <code>Tokens (classic)</code> → <code>Generate new token (classic)</code>，勾选 <code>repo</code> 权限，生成后粘贴到下面。
+</div>
+<div class="token-box">
+<input type="password" id="ghToken" placeholder="ghp_... 或 github_pat_..." autocomplete="off">
+<button class="btn btn-ghost btn-sm" onclick="toggleTokenView()" id="tokenViewBtn">显示</button>
+<button class="btn btn-primary btn-sm" onclick="saveToken()">保存 Token</button>
+<button class="btn btn-ghost btn-sm" onclick="testToken()" id="tokenTestBtn">测试连接</button>
+<button class="btn btn-ghost btn-sm" onclick="clearToken()">清除</button>
+</div>
+<div class="status-msg" id="tokenStatus"></div>
+</div>
 
-      <div class="card">
-        <h2>🎨 个人信息与站点设置</h2>
-        <div class="form-row">
-          <input type="text" id="cfgAvatar" placeholder="头像(emoji 或图片URL)" style="flex:1">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgAvatar')">图片</button><span id="prev_cfgAvatar"></span>
-          <input type="text" id="cfgName" placeholder="姓名" style="flex:1">
-          <input type="text" id="cfgBio" placeholder="一句话简介" style="flex:2">
-        </div>
-        <div class="form-row"><input type="text" id="cfgTitle" placeholder="网站标题"><input type="text" id="cfgSub" placeholder="副标题"></div>
-        <div class="form-row"><input type="text" id="cfgDefaultImage" placeholder="默认图片(没上传图片时显示，可留空)" style="flex:2"><button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultImage')">上传</button><span id="prev_cfgDefaultImage"></span></div>
-        <div class="form-row">
-          <label style="font-size:.88rem;display:flex;align-items:center;gap:8px">前台帖子显示：
-            <select id="cfgColumns" style="padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-family:inherit">
-              <option value="1">单列</option>
-              <option value="2">双列</option>
-              <option value="3">多列（三列）</option>
-            </select>
-          </label>
-        </div>
-        <div class="form-row">
-          <input type="text" id="cfgDefaultAvatar" placeholder="名单默认头像(图片路径，留空用内置)" style="flex:2">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultAvatar')">上传</button><span id="prev_cfgDefaultAvatar"></span>
-        </div>
-        <div class="form-row">
-          <input type="text" id="cfgLoginHint" placeholder="登录页提示文字（留空=不显示；建议不要写真实密码）">
-        </div>
-        <div class="form-row">
-          <label style="font-size:.88rem;display:flex;align-items:center;gap:6px"><input type="checkbox" id="cfgCoverPan"> 鼠标悬停时封面自动滑动</label>
-          <label style="font-size:.88rem;display:flex;align-items:center;gap:6px">滑动时长：<input type="number" id="cfgCoverPanSec" min="1" max="60" step="1" value="3" style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:8px"> 秒（越小越快）</label>
-        </div>
-        <div class="form-row"><textarea id="cfgAbout" placeholder="关于我的介绍..." style="min-height:150px"></textarea></div>
-        <button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
-      </div>
+<div class="card">
+<h2>🎨 个人信息与站点设置</h2>
+<div class="form-row">
+<input type="text" id="cfgAvatar" placeholder="头像(emoji 或图片URL)" style="flex:1">
+<button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgAvatar')">图片</button><span id="prev_cfgAvatar"></span>
+<input type="text" id="cfgName" placeholder="姓名" style="flex:1">
+<input type="text" id="cfgBio" placeholder="一句话简介" style="flex:2">
+</div>
+<div class="form-row"><input type="text" id="cfgTitle" placeholder="网站标题"><input type="text" id="cfgSub" placeholder="副标题"></div>
+<div class="form-row"><input type="text" id="cfgDefaultImage" placeholder="默认图片(没上传图片时显示，可留空)" style="flex:2"><button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultImage')">上传</button><span id="prev_cfgDefaultImage"></span></div>
+<div class="form-row">
+<label style="font-size:.88rem;display:flex;align-items:center;gap:8px">前台帖子显示：
+<select id="cfgColumns" style="padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-family:inherit">
+<option value="1">单列</option>
+<option value="2">双列</option>
+<option value="3">多列（三列）</option>
+</select>
+</label>
+</div>
+<div class="form-row">
+<input type="text" id="cfgDefaultAvatar" placeholder="名单默认头像(图片路径，留空用内置)" style="flex:2">
+<button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultAvatar')">上传</button><span id="prev_cfgDefaultAvatar"></span>
+</div>
+<div class="form-row">
+<input type="text" id="cfgLoginHint" placeholder="登录页提示文字（留空=不显示；建议不要写真实密码）">
+</div>
+<div class="form-row">
+<label style="font-size:.88rem;display:flex;align-items:center;gap:6px"><input type="checkbox" id="cfgCoverPan"> 鼠标悬停时封面自动滑动</label>
+<label style="font-size:.88rem;display:flex;align-items:center;gap:6px">滑动时长：<input type="number" id="cfgCoverPanSec" min="1" max="60" step="1" value="3" style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:8px"> 秒（越小越快）</label>
+</div>
+<div class="form-row"><textarea id="cfgAbout" placeholder="关于我的介绍..." style="min-height:150px"></textarea></div>
+<button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
+</div>
 
-      <div class="card">
-        <h2>🏷️ 分类管理（首页左侧）</h2>
-        <div id="catManageList" style="margin-bottom:10px"></div>
-        <div class="form-row">
-          <input type="text" id="catIcon" placeholder="图标" style="flex:0.5">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('catIcon')">图片</button><span id="prev_catIcon"></span>
-          <input type="text" id="catName" placeholder="分类名" style="flex:1">
-          <select id="catSection" style="flex:1">
-            <option value="courses">课程</option>
-            <option value="papers">论文</option>
-            <option value="notices">通知</option>
-            <option value="class">班级</option>
-          </select>
-          <button class="btn btn-ghost btn-sm" onclick="addCategory()">添加分类</button>
-        </div>
-      </div>
+<div class="card">
+<h2>🏷️ 分类管理（首页左侧）</h2>
+<div id="catManageList" style="margin-bottom:10px"></div>
+<div class="form-row">
+<input type="text" id="catIcon" placeholder="图标" style="flex:0.5">
+<button class="btn btn-ghost btn-sm" onclick="pickIcon('catIcon')">图片</button><span id="prev_catIcon"></span>
+<input type="text" id="catName" placeholder="分类名" style="flex:1">
+<select id="catSection" style="flex:1">
+<option value="courses">课程</option>
+<option value="papers">论文</option>
+<option value="notices">通知</option>
+<option value="class">班级</option>
+</select>
+<button class="btn btn-ghost btn-sm" onclick="addCategory()">添加分类</button>
+</div>
+</div>
 
-      <div class="card">
-        <h2>#️⃣ 标签管理</h2>
-        <div class="form-row"><input type="text" id="tagsInput" placeholder="标签，用逗号分隔，如：控制工程,深度学习,FPGA"></div>
-        <button class="btn btn-primary" onclick="saveTags()">保存标签</button>
-      </div>
+<div class="card">
+<h2>#️⃣ 标签管理</h2>
+<div class="form-row"><input type="text" id="tagsInput" placeholder="标签，用逗号分隔，如：控制工程,深度学习,FPGA"></div>
+<button class="btn btn-primary" onclick="saveTags()">保存标签</button>
+</div>
 
-      <div class="card">
-        <h2 id="qlFormTitle">🔗 快速链接管理（首页右侧）</h2>
-        <div id="quickLinkManageList" style="margin-bottom:10px"></div>
-        <div class="form-row">
-          <input type="text" id="qlIcon" placeholder="图标" style="flex:0.5">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('qlIcon')">图片</button><span id="prev_qlIcon"></span>
-          <input type="text" id="qlTitle" placeholder="名称" style="flex:1">
-          <input type="text" id="qlUrl" placeholder="链接URL" style="flex:2">
-          <button class="btn btn-ghost btn-sm" onclick="addQuickLink()">添加</button>
-        </div>
-      </div>
+<div class="card">
+<h2 id="qlFormTitle">🔗 快速链接管理（首页右侧）</h2>
+<div id="quickLinkManageList" style="margin-bottom:10px"></div>
+<div class="form-row">
+<input type="text" id="qlIcon" placeholder="图标" style="flex:0.5">
+<button class="btn btn-ghost btn-sm" onclick="pickIcon('qlIcon')">图片</button><span id="prev_qlIcon"></span>
+<input type="text" id="qlTitle" placeholder="名称" style="flex:1">
+<input type="text" id="qlUrl" placeholder="链接URL" style="flex:2">
+<button class="btn btn-ghost btn-sm" onclick="addQuickLink()">添加</button>
+</div>
+</div>
 
-      <div class="card">
-        <h2>🔒 修改管理密码</h2>
-        <div class="note">密码保存在本浏览器中。请先清除浏览器数据前记好新密码，忘记后可在代码里把 <code>ADMIN_PWD</code> 改回默认值。</div>
-        <div class="form-row">
-          <input type="password" id="pwdNew" placeholder="新密码" autocomplete="off">
-          <input type="password" id="pwdNew2" placeholder="再输一次" autocomplete="off">
-        </div>
-        <button class="btn btn-primary" onclick="changePwd()">修改密码</button>
-        <div class="status-msg" id="pwdStatus"></div>
-      </div>
+<div class="card">
+<h2>🔒 修改管理密码</h2>
+<div class="note">密码保存在本浏览器中。请先清除浏览器数据前记好新密码，忘记后可在代码里把 <code>ADMIN_PWD</code> 改回默认值。</div>
+<div class="form-row">
+<input type="password" id="pwdNew" placeholder="新密码" autocomplete="off">
+<input type="password" id="pwdNew2" placeholder="再输一次" autocomplete="off">
+</div>
+<button class="btn btn-primary" onclick="changePwd()">修改密码</button>
+<div class="status-msg" id="pwdStatus"></div>
+</div>
 
-      <div class="card">
-        <h2>💾 数据备份</h2>
-        <div class="note">把当前数据导出成 JSON 文件保存到本地，作为备份。</div>
-        <div class="form-row">
-          <button class="btn btn-ghost" onclick="exportData()">导出 data.json</button>
-          <button class="btn btn-ghost" onclick="syncNow()">立即从 GitHub 重新拉取</button>
-        </div>
-      </div>
-    </div>
+<div class="card">
+<h2>💾 数据备份</h2>
+<div class="note">把当前数据导出成 JSON 文件保存到本地，作为备份。</div>
+<div class="form-row">
+<button class="btn btn-ghost" onclick="exportData()">导出 data.json</button>
+<button class="btn btn-ghost" onclick="syncNow()">立即从 GitHub 重新拉取</button>
+</div>
+</div>
+</div>
 
-    <!-- ===== 课程 ===== -->
-    <div class="panel" id="panel-courses">
-      <div class="card">
-        <h2 id="courseFormTitle">添加课程</h2>
-        <div class="editing-bar" id="courseEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelEdit('course')">取消编辑</a></div>
-        <div class="form-row">
-          <input type="text" id="cIcon" placeholder="图标(如📐)" style="flex:0.5">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('cIcon')">图片</button><span id="prev_cIcon"></span>
-          <input type="text" id="cTitle" placeholder="课程名称">
-          <input type="text" id="cDesc" placeholder="简介">
-          <input type="number" id="cProgress" placeholder="进度%" class="progress-input" value="0">
-        </div>
-        <div class="form-row"><textarea id="cIntro" placeholder="课程详细介绍..."></textarea></div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
-        <div id="imgList_course" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('course')">添加图片</button></div>
+<!-- ===== 课程 ===== -->
+<div class="panel" id="panel-courses">
+<div class="card">
+<h2 id="courseFormTitle">添加课程</h2>
+<div class="editing-bar" id="courseEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelEdit('course')">取消编辑</a></div>
+<div class="form-row">
+<input type="text" id="cIcon" placeholder="图标(如📐)" style="flex:0.5">
+<button class="btn btn-ghost btn-sm" onclick="pickIcon('cIcon')">图片</button><span id="prev_cIcon"></span>
+<input type="text" id="cTitle" placeholder="课程名称">
+<input type="text" id="cDesc" placeholder="简介">
+<input type="number" id="cProgress" placeholder="进度%" class="progress-input" value="0">
+</div>
+<div class="form-row"><textarea id="cIntro" placeholder="课程详细介绍..."></textarea></div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
+<div id="imgList_course" style="margin-bottom:6px"></div>
+<div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('course')">添加图片</button></div>
 
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 课程文件</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">可传多个；填文件夹名即归入该文件夹</span></div>
-        <div class="form-row"><input type="text" id="cFolder" placeholder="文件夹名（留空=根目录；填了就传到这个文件夹）"></div>
-        <div class="file-list" id="cFiles"></div>
-        <div class="upload-box" onclick="document.getElementById('cFileInput').click()">
-          <div class="up-hint">点击选择文件并上传（PDF / PPT / 图片 / 压缩包等）</div>
-          <div class="up-status" id="cUpStatus">支持多选；单个文件不超过 100MB</div>
-          <div class="progress-track" id="cProgressTrack"><div class="progress-bar" id="cProgressBar"></div></div>
-        </div>
-        <input type="file" id="cFileInput" multiple style="display:none" onchange="onCourseFiles(event)">
-        <div style="margin-top:6px"><button class="btn btn-ghost btn-sm" onclick="addExternalFileBtn('course')">🔗 添加网盘外链（大文件推荐）</button></div>
-        <div style="margin-top:12px">
-          <button class="btn btn-primary" id="cSubmit" onclick="saveCourse()">添加课程</button>
-          <button class="btn btn-ghost" id="cCancel" onclick="cancelEdit('course')" style="display:none">取消</button>
-        </div>
-      </div>
-      <div class="card"><h2>课程列表</h2><div id="courseList"></div></div>
-    </div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 课程文件</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">可传多个；填文件夹名即归入该文件夹</span></div>
+<div class="form-row"><input type="text" id="cFolder" placeholder="文件夹名（留空=根目录；填了就传到这个文件夹）"></div>
+<div class="file-list" id="cFiles"></div>
+<div class="upload-box" onclick="document.getElementById('cFileInput').click()">
+<div class="up-hint">点击选择文件并上传（PDF / PPT / 图片 / 压缩包等）</div>
+<div class="up-status" id="cUpStatus">支持多选；单个文件不超过 100MB</div>
+<div class="progress-track" id="cProgressTrack"><div class="progress-bar" id="cProgressBar"></div></div>
+</div>
+<input type="file" id="cFileInput" multiple style="display:none" onchange="onCourseFiles(event)">
+<div style="margin-top:12px">
+<button class="btn btn-primary" id="cSubmit" onclick="saveCourse()">添加课程</button>
+<button class="btn btn-ghost" id="cCancel" onclick="cancelEdit('course')" style="display:none">取消</button>
+</div>
+</div>
+<div class="card"><h2>课程列表</h2><div id="courseList"></div></div>
+</div>
 
-    <!-- ===== 论文 ===== -->
-    <div class="panel" id="panel-papers">
-      <div class="card">
-        <h2 id="paperFormTitle">添加论文</h2>
-        <div class="editing-bar" id="paperEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelEdit('paper')">取消编辑</a></div>
-        <div class="form-row">
-          <input type="text" id="pTitle" placeholder="论文标题" style="flex:2">
-          <select id="pStatus"><option>在投</option><option>审稿中</option><option>已接收</option><option>已发表</option><option>撰写中</option><option>阅读中</option></select>
-          <input type="text" id="pYear" placeholder="年份" style="flex:0.5">
-        </div>
-        <div class="form-row">
-          <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="阅读"> 阅读</label>
-          <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="撰写"> 撰写</label>
-          <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="中文"> 中文</label>
-          <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="英文"> 英文</label>
-          <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="查重"> 查重</label>
-          <label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="投稿"> 投稿</label>
-        </div>
-        <div class="form-row"><textarea id="pAbstract" placeholder="摘要 / 简介..." style="min-height:80px"></textarea></div>
-        <div class="form-row"><input type="text" id="pDesc" placeholder="备注"></div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
-        <div id="imgList_paper" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('paper')">添加图片</button></div>
+<!-- ===== 论文 ===== -->
+<div class="panel" id="panel-papers">
+<div class="card">
+<h2 id="paperFormTitle">添加论文</h2>
+<div class="editing-bar" id="paperEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelEdit('paper')">取消编辑</a></div>
+<div class="form-row">
+<input type="text" id="pTitle" placeholder="论文标题" style="flex:2">
+<select id="pStatus"><option>在投</option><option>审稿中</option><option>已接收</option><option>已发表</option><option>撰写中</option><option>阅读中</option></select>
+<input type="text" id="pYear" placeholder="年份" style="flex:0.5">
+</div>
+<div class="form-row">
+<label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="阅读"> 阅读</label>
+<label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="撰写"> 撰写</label>
+<label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="中文"> 中文</label>
+<label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="英文"> 英文</label>
+<label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="查重"> 查重</label>
+<label style="font-size:.85rem;display:flex;align-items:center;gap:4px"><input type="checkbox" class="paper-tag" value="投稿"> 投稿</label>
+</div>
+<div class="form-row"><textarea id="pAbstract" placeholder="摘要 / 简介..." style="min-height:80px"></textarea></div>
+<div class="form-row"><input type="text" id="pDesc" placeholder="备注"></div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
+<div id="imgList_paper" style="margin-bottom:6px"></div>
+<div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('paper')">添加图片</button></div>
 
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 论文文件</b></div>
-        <div class="file-list" id="pFiles"></div>
-        <div class="upload-box" onclick="document.getElementById('pFileInput').click()">
-          <div class="up-hint">点击选择文件并上传</div>
-          <div class="up-status" id="pUpStatus">支持多选；单个文件不超过 100MB</div>
-          <div class="progress-track" id="pProgressTrack"><div class="progress-bar" id="pProgressBar"></div></div>
-        </div>
-        <input type="file" id="pFileInput" multiple style="display:none" onchange="onPaperFiles(event)">
-        <div style="margin-top:6px"><button class="btn btn-ghost btn-sm" onclick="addExternalFileBtn('paper')">🔗 添加网盘外链（大文件推荐）</button></div>
-        <div style="margin-top:12px">
-          <button class="btn btn-primary" id="pSubmit" onclick="savePaper()">添加论文</button>
-          <button class="btn btn-ghost" id="pCancel" onclick="cancelEdit('paper')" style="display:none">取消</button>
-        </div>
-      </div>
-      <div class="card"><h2>论文列表</h2><div id="paperList"></div></div>
-    </div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 论文文件</b></div>
+<div class="file-list" id="pFiles"></div>
+<div class="upload-box" onclick="document.getElementById('pFileInput').click()">
+<div class="up-hint">点击选择文件并上传</div>
+<div class="up-status" id="pUpStatus">支持多选；单个文件不超过 100MB</div>
+<div class="progress-track" id="pProgressTrack"><div class="progress-bar" id="pProgressBar"></div></div>
+</div>
+<input type="file" id="pFileInput" multiple style="display:none" onchange="onPaperFiles(event)">
+<div style="margin-top:12px">
+<button class="btn btn-primary" id="pSubmit" onclick="savePaper()">添加论文</button>
+<button class="btn btn-ghost" id="pCancel" onclick="cancelEdit('paper')" style="display:none">取消</button>
+</div>
+</div>
+<div class="card"><h2>论文列表</h2><div id="paperList"></div></div>
+</div>
 
-    <!-- ===== 通知 ===== -->
-    <div class="panel" id="panel-notices">
-      <div class="card">
-        <h2 id="noticeFormTitle">发布通知</h2>
-        <div class="editing-bar" id="noticeEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelNoticeEdit()">取消编辑</a></div>
-        <div class="form-row">
-          <input type="text" id="nTitle" placeholder="通知标题" style="flex:2">
-          <input type="text" id="nSource" placeholder="来源(如研究生院)" style="flex:1">
-          <input type="date" id="nDate" style="flex:1">
-        </div>
-        <div class="form-row"><textarea id="nContent" placeholder="通知正文..."></textarea></div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
-        <div id="imgList_notice" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('notice')">添加图片</button></div>
+<!-- ===== 通知 ===== -->
+<div class="panel" id="panel-notices">
+<div class="card">
+<h2 id="noticeFormTitle">发布通知</h2>
+<div class="editing-bar" id="noticeEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelNoticeEdit()">取消编辑</a></div>
+<div class="form-row">
+<input type="text" id="nTitle" placeholder="通知标题" style="flex:2">
+<input type="text" id="nSource" placeholder="来源(如研究生院)" style="flex:1">
+<input type="date" id="nDate" style="flex:1">
+</div>
+<div class="form-row"><textarea id="nContent" placeholder="通知正文..."></textarea></div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
+<div id="imgList_notice" style="margin-bottom:6px"></div>
+<div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('notice')">添加图片</button></div>
 
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 通知附件</b></div>
-        <div class="file-list" id="nfFiles"></div>
-        <div class="upload-box" onclick="document.getElementById('nfFileInput').click()">
-          <div class="up-hint">点击选择文件并上传</div>
-          <div class="up-status" id="nfUpStatus">支持多选；单个文件不超过 100MB</div>
-          <div class="progress-track" id="nfProgressTrack"><div class="progress-bar" id="nfProgressBar"></div></div>
-        </div>
-        <input type="file" id="nfFileInput" multiple style="display:none" onchange="onNoticeFiles(event)">
-        <div style="margin-top:6px"><button class="btn btn-ghost btn-sm" onclick="addExternalFileBtn('nf')">🔗 添加网盘外链（大文件推荐）</button></div>
-        <div style="margin-top:12px">
-          <button class="btn btn-primary" id="nSubmit" onclick="addNotice()">发布通知</button>
-          <button class="btn btn-ghost" id="nCancel" onclick="cancelNoticeEdit()" style="display:none">取消</button>
-        </div>
-      </div>
-      <div class="card"><h2>通知列表</h2><div id="noticeList"></div></div>
-    </div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 通知附件</b></div>
+<div class="file-list" id="nfFiles"></div>
+<div class="upload-box" onclick="document.getElementById('nfFileInput').click()">
+<div class="up-hint">点击选择文件并上传</div>
+<div class="up-status" id="nfUpStatus">支持多选；单个文件不超过 100MB</div>
+<div class="progress-track" id="nfProgressTrack"><div class="progress-bar" id="nfProgressBar"></div></div>
+</div>
+<input type="file" id="nfFileInput" multiple style="display:none" onchange="onNoticeFiles(event)">
+<div style="margin-top:12px">
+<button class="btn btn-primary" id="nSubmit" onclick="addNotice()">发布通知</button>
+<button class="btn btn-ghost" id="nCancel" onclick="cancelNoticeEdit()" style="display:none">取消</button>
+</div>
+</div>
+<div class="card"><h2>通知列表</h2><div id="noticeList"></div></div>
+</div>
 
-    <!-- ===== 班级事务 ===== -->
-    <div class="panel" id="panel-class">
-      <div class="card">
-        <h2 id="classFormTitle">添加班级事务</h2>
-        <div class="editing-bar" id="classEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelEdit('class')">取消编辑</a></div>
-        <div class="form-row">
-          <input type="text" id="clTitle" placeholder="标题" style="flex:2">
-          <select id="clType"><option>通知</option><option>名单</option><option>作业</option><option>考试</option><option>活动</option></select>
-          <input type="date" id="clDate" style="flex:1">
-        </div>
-        <div class="form-row"><textarea id="clContent" placeholder="详细内容..."></textarea></div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
-        <div id="imgList_class" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('class')">添加图片</button></div>
+<!-- ===== 班级事务 ===== -->
+<div class="panel" id="panel-class">
+<div class="card">
+<h2 id="classFormTitle">添加班级事务</h2>
+<div class="editing-bar" id="classEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelEdit('class')">取消编辑</a></div>
+<div class="form-row">
+<input type="text" id="clTitle" placeholder="标题" style="flex:2">
+<select id="clType"><option>通知</option><option>名单</option><option>作业</option><option>考试</option><option>活动</option></select>
+<input type="date" id="clDate" style="flex:1">
+</div>
+<div class="form-row"><textarea id="clContent" placeholder="详细内容..."></textarea></div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
+<div id="imgList_class" style="margin-bottom:6px"></div>
+<div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('class')">添加图片</button></div>
 
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 附件</b></div>
-        <div class="file-list" id="clFiles"></div>
-        <div class="upload-box" onclick="document.getElementById('clFileInput').click()">
-          <div class="up-hint">点击选择文件并上传</div>
-          <div class="up-status" id="clUpStatus">支持多选；单个文件不超过 100MB</div>
-          <div class="progress-track" id="clProgressTrack"><div class="progress-bar" id="clProgressBar"></div></div>
-        </div>
-        <input type="file" id="clFileInput" multiple style="display:none" onchange="onClassFiles(event)">
-        <div style="margin-top:6px"><button class="btn btn-ghost btn-sm" onclick="addExternalFileBtn('class')">🔗 添加网盘外链（大文件推荐）</button></div>
-        <div style="margin-top:12px">
-          <button class="btn btn-primary" id="clSubmit" onclick="saveClass()">添加</button>
-          <button class="btn btn-ghost" id="clCancel" onclick="cancelEdit('class')" style="display:none">取消</button>
-        </div>
-      </div>
-      <div class="card"><h2>班级事务列表</h2><div id="classList"></div></div>
-    </div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 附件</b></div>
+<div class="file-list" id="clFiles"></div>
+<div class="upload-box" onclick="document.getElementById('clFileInput').click()">
+<div class="up-hint">点击选择文件并上传</div>
+<div class="up-status" id="clUpStatus">支持多选；单个文件不超过 100MB</div>
+<div class="progress-track" id="clProgressTrack"><div class="progress-bar" id="clProgressBar"></div></div>
+</div>
+<input type="file" id="clFileInput" multiple style="display:none" onchange="onClassFiles(event)">
+<div style="margin-top:12px">
+<button class="btn btn-primary" id="clSubmit" onclick="saveClass()">添加</button>
+<button class="btn btn-ghost" id="clCancel" onclick="cancelEdit('class')" style="display:none">取消</button>
+</div>
+</div>
+<div class="card"><h2>班级事务列表</h2><div id="classList"></div></div>
+</div>
 
-    <!-- ===== 名单 ===== -->
-    <div class="panel" id="panel-roster">
-      <div class="card">
-        <h2 id="rosterFormTitle">添加名单成员</h2>
-        <div class="editing-bar" id="rosterEditBar">正在编辑 —— <a onclick="cancelRosterEdit()">取消编辑</a></div>
-        <div class="form-row">
-          <input type="text" id="rStudentId" placeholder="学号" style="flex:1">
-          <input type="text" id="rName" placeholder="姓名" style="flex:1">
-          <select id="rGender" style="flex:0.7"><option value="">性别</option><option>男</option><option>女</option></select>
-        </div>
-        <div class="form-row">
-          <input type="text" id="rClass" placeholder="班级" style="flex:1">
-          <input type="text" id="rCollege" placeholder="学院" style="flex:1">
-          <input type="text" id="rMajor" placeholder="专业" style="flex:1">
-        </div>
-        <div class="form-row">
-          <input type="text" id="rDorm" placeholder="宿舍号" style="flex:1">
-          <input type="text" id="rPhone" placeholder="电话" style="flex:1">
-          <input type="text" id="rEmail" placeholder="邮箱" style="flex:1">
-        </div>
-        <div class="form-row">
-          <input type="text" id="rIdCard" placeholder="身份证号" style="flex:1.5">
-          <input type="text" id="rBirthday" placeholder="出生日期(2000-01-01)" style="flex:1">
-          <input type="text" id="rEthnicity" placeholder="民族" style="flex:0.8">
-        </div>
-        <div class="form-row">
-          <input type="text" id="rAdvisor" placeholder="导师" style="flex:1">
-          <input type="text" id="rPolitical" placeholder="政治面貌" style="flex:1">
-        </div>
-        <div class="form-row"><input type="text" id="rAddress" placeholder="家庭住址"></div>
-        <div class="form-row"><input type="text" id="rNote" placeholder="备注"></div>
-        <div class="form-row">
-          <input type="text" id="rPhoto" placeholder="照片(图片URL，或点右侧上传)" style="flex:2">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('rPhoto')">上传照片</button><span id="prev_rPhoto"></span>
-          <label style="font-size:.85rem;display:flex;align-items:center;gap:5px"><input type="checkbox" id="rShow" checked> 前台显示</label>
-        </div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">👁️ 前台可见字段</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">取消勾选 = 前台隐藏该项（如电话、邮箱）</span></div>
-        <div id="rosterFields" style="margin-bottom:12px;font-size:.82rem;display:flex;flex-wrap:wrap;gap:10px 14px"></div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 其他图片</b></div>
-        <div id="imgList_roster" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('roster')">添加图片</button></div>
-        <div style="margin-top:6px">
-          <button class="btn btn-primary" id="rSubmit" onclick="saveRoster()">添加成员</button>
-          <button class="btn btn-ghost" id="rCancel" onclick="cancelRosterEdit()" style="display:none">取消</button>
-        </div>
-      </div>
-      <div class="card">
-        <h2>名单管理</h2>
-        <div class="note">⚠️ 每个人的每一项都可以单独控制：下面每个人后面那排小勾选框，<b>取消勾选 = 前台隐藏该项</b>（比如只藏电话、留邮箱）。「整条显示」控制这个人整体是否出现在前台。</div>
-        <div class="form-row">
-          <label style="font-size:.85rem;display:flex;align-items:center;gap:6px"><input type="checkbox" id="rShowSensitive" onchange="toggleRosterSensitive()"> 在公开页面显示敏感信息</label>
-        </div>
-        <div class="form-row">
-          <button class="btn btn-ghost btn-sm" onclick="exportRoster()">导出名单</button>
-          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('rosterImport').click()">导入名单</button>
-          <input type="file" id="rosterImport" accept=".json" style="display:none" onchange="importJSON(this.files[0],'roster');this.value=''">
-        </div>
-        <div id="rosterList"></div>
-      </div>
-    </div>
+<!-- ===== 名单 ===== -->
+<div class="panel" id="panel-roster">
+<div class="card">
+<h2 id="rosterFormTitle">添加名单成员</h2>
+<div class="editing-bar" id="rosterEditBar">正在编辑 —— <a onclick="cancelRosterEdit()">取消编辑</a></div>
+<div class="form-row">
+<input type="text" id="rStudentId" placeholder="学号" style="flex:1">
+<input type="text" id="rName" placeholder="姓名" style="flex:1">
+<select id="rGender" style="flex:0.7"><option value="">性别</option><option>男</option><option>女</option></select>
+</div>
+<div class="form-row">
+<input type="text" id="rClass" placeholder="班级" style="flex:1">
+<input type="text" id="rCollege" placeholder="学院" style="flex:1">
+<input type="text" id="rMajor" placeholder="专业" style="flex:1">
+</div>
+<div class="form-row">
+<input type="text" id="rDorm" placeholder="宿舍号" style="flex:1">
+<input type="text" id="rPhone" placeholder="电话" style="flex:1">
+<input type="text" id="rEmail" placeholder="邮箱" style="flex:1">
+</div>
+<div class="form-row">
+<input type="text" id="rIdCard" placeholder="身份证号" style="flex:1.5">
+<input type="text" id="rBirthday" placeholder="出生日期(2000-01-01)" style="flex:1">
+<input type="text" id="rEthnicity" placeholder="民族" style="flex:0.8">
+</div>
+<div class="form-row">
+<input type="text" id="rAdvisor" placeholder="导师" style="flex:1">
+<input type="text" id="rPolitical" placeholder="政治面貌" style="flex:1">
+</div>
+<div class="form-row"><input type="text" id="rAddress" placeholder="家庭住址"></div>
+<div class="form-row"><input type="text" id="rNote" placeholder="备注"></div>
+<div class="form-row">
+<input type="text" id="rPhoto" placeholder="照片(图片URL，或点右侧上传)" style="flex:2">
+<button class="btn btn-ghost btn-sm" onclick="pickIcon('rPhoto')">上传照片</button><span id="prev_rPhoto"></span>
+<label style="font-size:.85rem;display:flex;align-items:center;gap:5px"><input type="checkbox" id="rShow" checked> 前台显示</label>
+</div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">👁️ 前台可见字段</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">取消勾选 = 前台隐藏该项（如电话、邮箱）</span></div>
+<div id="rosterFields" style="margin-bottom:12px;font-size:.82rem;display:flex;flex-wrap:wrap;gap:10px 14px"></div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 其他图片</b></div>
+<div id="imgList_roster" style="margin-bottom:6px"></div>
+<div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('roster')">添加图片</button></div>
+<div style="margin-top:6px">
+<button class="btn btn-primary" id="rSubmit" onclick="saveRoster()">添加成员</button>
+<button class="btn btn-ghost" id="rCancel" onclick="cancelRosterEdit()" style="display:none">取消</button>
+</div>
+</div>
+<div class="card">
+<h2>名单管理</h2>
+<div class="note">⚠️ 每个人的每一项都可以单独控制：下面每个人后面那排小勾选框，<b>取消勾选 = 前台隐藏该项</b>（比如只藏电话、留邮箱）。「整条显示」控制这个人整体是否出现在前台。</div>
+<div class="form-row">
+<label style="font-size:.85rem;display:flex;align-items:center;gap:6px"><input type="checkbox" id="rShowSensitive" onchange="toggleRosterSensitive()"> 在公开页面显示敏感信息</label>
+</div>
+<div class="form-row">
+<button class="btn btn-ghost btn-sm" onclick="exportRoster()">导出名单</button>
+<button class="btn btn-ghost btn-sm" onclick="document.getElementById('rosterImport').click()">导入名单</button>
+<input type="file" id="rosterImport" accept=".json" style="display:none" onchange="importJSON(this.files[0],'roster');this.value=''">
+</div>
+<div id="rosterList"></div>
+</div>
+</div>
 
-    <!-- ===== 生活服务 ===== -->
-    <div class="panel" id="panel-life">
-      <div class="card">
-        <h2 id="lifeFormTitle">添加生活服务链接</h2>
-        <div class="form-row">
-          <input type="text" id="lsIcon" placeholder="图标" style="flex:0.5">
-          <button class="btn btn-ghost btn-sm" onclick="pickIcon('lsIcon')">图片</button><span id="prev_lsIcon"></span>
-          <input type="text" id="lsTitle" placeholder="名称" style="flex:1">
-          <input type="text" id="lsDesc" placeholder="描述" style="flex:1">
-          <input type="text" id="lsUrl" placeholder="链接URL" style="flex:1.5">
-        </div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
-        <div id="imgList_life" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('life')">添加图片</button></div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 附件（可上传文件供下载）</b></div>
-        <div class="file-list" id="lifeFiles"></div>
-        <div class="upload-box" onclick="document.getElementById('lifeFileInput').click()">
-          <div class="up-hint">点击选择文件并上传</div>
-          <div class="up-status" id="lifeUpStatus">支持多选；单个文件不超过 100MB</div>
-          <div class="progress-track" id="lifeProgressTrack"><div class="progress-bar" id="lifeProgressBar"></div></div>
-        </div>
-        <input type="file" id="lifeFileInput" multiple style="display:none" onchange="onLifeFiles(event)">
-        <div style="margin-top:12px"><button class="btn btn-primary" onclick="addLife()">添加</button></div>
-      </div>
-      <div class="card"><h2>生活服务列表</h2><div id="lifeList"></div></div>
+<!-- ===== 生活服务 ===== -->
+<div class="panel" id="panel-life">
+<div class="card">
+<h2 id="lifeFormTitle">添加生活服务链接</h2>
+<div class="form-row">
+<input type="text" id="lsIcon" placeholder="图标" style="flex:0.5">
+<button class="btn btn-ghost btn-sm" onclick="pickIcon('lsIcon')">图片</button><span id="prev_lsIcon"></span>
+<input type="text" id="lsTitle" placeholder="名称" style="flex:1">
+<input type="text" id="lsDesc" placeholder="描述" style="flex:1">
+<input type="text" id="lsUrl" placeholder="链接URL" style="flex:1.5">
+</div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
+<div id="imgList_life" style="margin-bottom:6px"></div>
+<div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('life')">添加图片</button></div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 附件（可上传文件供下载）</b></div>
+<div class="file-list" id="lifeFiles"></div>
+<div class="upload-box" onclick="document.getElementById('lifeFileInput').click()">
+<div class="up-hint">点击选择文件并上传</div>
+<div class="up-status" id="lifeUpStatus">支持多选；单个文件不超过 100MB</div>
+<div class="progress-track" id="lifeProgressTrack"><div class="progress-bar" id="lifeProgressBar"></div></div>
+</div>
+<input type="file" id="lifeFileInput" multiple style="display:none" onchange="onLifeFiles(event)">
+<div style="margin-top:12px"><button class="btn btn-primary" onclick="addLife()">添加</button></div>
+</div>
+<div class="card"><h2>生活服务列表</h2><div id="lifeList"></div></div>
 
-      <div class="card">
-        <h2>添加音乐 / 视频 / 图片</h2>
-        <div class="form-row">
-          <select id="mType" style="flex:0.6"><option value="music">音乐</option><option value="video">视频</option><option value="image">图片</option></select>
-          <input type="text" id="mTitle" placeholder="标题" style="flex:1.2">
-          <input type="text" id="mDesc" placeholder="描述" style="flex:1.5">
-        </div>
-        <div class="form-row"><input type="text" id="mUrl" placeholder="外链地址(可选，适合大视频：网盘/视频站链接)"></div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
-        <div id="imgList_media" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('media')">添加图片</button></div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 文件（音乐/视频/图片）</b></div>
-        <div class="file-list" id="mediaFiles"></div>
-        <div class="upload-box" onclick="document.getElementById('mediaFileInput').click()">
-          <div class="up-hint">点击选择文件并上传</div>
-          <div class="up-status" id="mediaUpStatus">单个文件不超过 100MB</div>
-          <div class="progress-track" id="mediaProgressTrack"><div class="progress-bar" id="mediaProgressBar"></div></div>
-        </div>
-        <input type="file" id="mediaFileInput" multiple style="display:none" onchange="onMediaFiles(event)">
-        <div style="margin-top:12px"><button class="btn btn-primary" onclick="saveMedia()">添加</button></div>
-      </div>
-      <div class="card"><h2>影音列表</h2><div id="mediaList"></div></div>
-    </div>
+<div class="card">
+<h2>添加音乐 / 视频 / 图片</h2>
+<div class="form-row">
+<select id="mType" style="flex:0.6"><option value="music">音乐</option><option value="video">视频</option><option value="image">图片</option></select>
+<input type="text" id="mTitle" placeholder="标题" style="flex:1.2">
+<input type="text" id="mDesc" placeholder="描述" style="flex:1.5">
+</div>
+<div class="form-row"><input type="text" id="mUrl" placeholder="外链地址(可选，适合大视频：网盘/视频站链接)"></div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
+<div id="imgList_media" style="margin-bottom:6px"></div>
+<div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('media')">添加图片</button></div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 文件（音乐/视频/图片）</b></div>
+<div class="file-list" id="mediaFiles"></div>
+<div class="upload-box" onclick="document.getElementById('mediaFileInput').click()">
+<div class="up-hint">点击选择文件并上传</div>
+<div class="up-status" id="mediaUpStatus">单个文件不超过 100MB</div>
+<div class="progress-track" id="mediaProgressTrack"><div class="progress-bar" id="mediaProgressBar"></div></div>
+</div>
+<input type="file" id="mediaFileInput" multiple style="display:none" onchange="onMediaFiles(event)">
+<div style="margin-top:12px"><button class="btn btn-primary" onclick="saveMedia()">添加</button></div>
+</div>
+<div class="card"><h2>影音列表</h2><div id="mediaList"></div></div>
+</div>
 
-    <!-- ===== 记账 ===== -->
-    <div class="panel" id="panel-ledger">
-      <div class="card">
-        <h2>记一笔</h2>
-        <div class="form-row">
-          <select id="lgType" onchange="updateLgCategories()"><option value="expense">支出</option><option value="income">收入</option></select>
-          <select id="lgCategory" style="flex:1"></select>
-          <input type="number" id="lgAmount" placeholder="金额" step="0.01" style="flex:1">
-          <input type="date" id="lgDate" style="flex:1">
-          <input type="time" id="lgTime" style="flex:1">
-          <input type="text" id="lgDesc" placeholder="备注" style="flex:2">
-        </div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🧾 账单 / 票据</b></div>
-        <div id="imgList_ledger" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('ledger')">上传账单</button></div>
-        <button class="btn btn-primary" onclick="addLedger()">保存</button>
-        <div style="margin-top:10px;font-size:.88rem">
-          合计：收入 ¥<b id="lgIn">0.00</b> · 支出 ¥<b id="lgOut">0.00</b> · 结余 ¥<b id="lgNet">0.00</b>
-        </div>
-        <div style="margin-top:10px">
-          <button class="btn btn-ghost btn-sm" onclick="exportLedger()">导出记账</button>
-          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('ledgerImport').click()">导入记账</button>
-          <input type="file" id="ledgerImport" accept=".json" style="display:none" onchange="importJSON(this.files[0],'ledger');this.value=''">
-        </div>
-      </div>
-      <div class="card"><h2>记账列表</h2><div id="ledgerList"></div></div>
-    </div>
+<!-- ===== 记账 ===== -->
+<div class="panel" id="panel-ledger">
+<div class="card">
+<h2>记一笔</h2>
+<div class="form-row">
+<select id="lgType" onchange="updateLgCategories()"><option value="expense">支出</option><option value="income">收入</option></select>
+<select id="lgCategory" style="flex:1"></select>
+<input type="number" id="lgAmount" placeholder="金额" step="0.01" style="flex:1">
+<input type="date" id="lgDate" style="flex:1">
+<input type="time" id="lgTime" style="flex:1">
+<input type="text" id="lgDesc" placeholder="备注" style="flex:2">
+</div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🧾 账单 / 票据</b></div>
+<div id="imgList_ledger" style="margin-bottom:6px"></div>
+<div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('ledger')">上传账单</button></div>
+<button class="btn btn-primary" onclick="addLedger()">保存</button>
+<div style="margin-top:10px;font-size:.88rem">
+合计：收入 ¥<b id="lgIn">0.00</b> · 支出 ¥<b id="lgOut">0.00</b> · 结余 ¥<b id="lgNet">0.00</b>
+</div>
+<div style="margin-top:10px">
+<button class="btn btn-ghost btn-sm" onclick="exportLedger()">导出记账</button>
+<button class="btn btn-ghost btn-sm" onclick="document.getElementById('ledgerImport').click()">导入记账</button>
+<input type="file" id="ledgerImport" accept=".json" style="display:none" onchange="importJSON(this.files[0],'ledger');this.value=''">
+</div>
+</div>
+<div class="card"><h2>记账列表</h2><div id="ledgerList"></div></div>
+</div>
 
-    <!-- ===== 日记 ===== -->
-    <div class="panel" id="panel-diary">
-      <div class="card">
-        <h2>写日记</h2>
-        <div class="form-row"><input type="text" id="diaryTitle" placeholder="标题（留空会自动从正文生成）"></div>
-        <div class="form-row"><textarea id="diaryContent" placeholder="正文……可以像写博客一样写" style="min-height:150px"></textarea></div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
-        <div id="imgList_diary" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('diary')">添加图片</button></div>
+<!-- ===== 日记 ===== -->
+<div class="panel" id="panel-diary">
+<div class="card">
+<h2>写日记</h2>
+<div class="form-row"><input type="text" id="diaryTitle" placeholder="标题（留空会自动从正文生成）"></div>
+<div class="form-row"><textarea id="diaryContent" placeholder="正文……可以像写博客一样写" style="min-height:150px"></textarea></div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
+<div id="imgList_diary" style="margin-bottom:6px"></div>
+<div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('diary')">添加图片</button></div>
 
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🎵 影音（音乐 / 视频）</b></div>
-        <div class="file-list" id="dmediaFiles"></div>
-        <div class="upload-box" onclick="document.getElementById('dmediaFileInput').click()">
-          <div class="up-hint">点击上传音乐 / 视频</div>
-          <div class="up-status" id="dmediaUpStatus">单个不超过 100MB；更大的请用网盘外链</div>
-          <div class="progress-track" id="dmediaProgressTrack"><div class="progress-bar" id="dmediaProgressBar"></div></div>
-        </div>
-        <input type="file" id="dmediaFileInput" multiple style="display:none" onchange="onDmediaFiles(event)">
-        <div style="margin-top:12px"><button class="btn btn-primary" onclick="addDiary()">保存日记</button></div>
-        <div style="margin-top:10px">
-          <button class="btn btn-ghost btn-sm" onclick="exportDiary()">导出日记</button>
-          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('diaryImport').click()">导入日记</button>
-          <input type="file" id="diaryImport" accept=".json" style="display:none" onchange="importJSON(this.files[0],'diary');this.value=''">
-        </div>
-      </div>
-      <div class="card"><h2>日记列表</h2><div id="diaryList"></div></div>
-    </div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🎵 影音（音乐 / 视频）</b></div>
+<div class="file-list" id="dmediaFiles"></div>
+<div class="upload-box" onclick="document.getElementById('dmediaFileInput').click()">
+<div class="up-hint">点击上传音乐 / 视频</div>
+<div class="up-status" id="dmediaUpStatus">单个不超过 100MB；更大的请用网盘外链</div>
+<div class="progress-track" id="dmediaProgressTrack"><div class="progress-bar" id="dmediaProgressBar"></div></div>
+</div>
+<input type="file" id="dmediaFileInput" multiple style="display:none" onchange="onDmediaFiles(event)">
+<div style="margin-top:12px"><button class="btn btn-primary" onclick="addDiary()">保存日记</button></div>
+<div style="margin-top:10px">
+<button class="btn btn-ghost btn-sm" onclick="exportDiary()">导出日记</button>
+<button class="btn btn-ghost btn-sm" onclick="document.getElementById('diaryImport').click()">导入日记</button>
+<input type="file" id="diaryImport" accept=".json" style="display:none" onchange="importJSON(this.files[0],'diary');this.value=''">
+</div>
+</div>
+<div class="card"><h2>日记列表</h2><div id="diaryList"></div></div>
+</div>
 
-    <!-- ===== 导师指导 ===== -->
-    <div class="panel" id="panel-advisor">
-      <div class="card">
-        <h2>导师指导记录</h2>
-        <div class="form-row">
-          <input type="date" id="advDate" style="flex:1">
-          <input type="time" id="advTime" style="flex:1">
-          <input type="number" id="advCount" placeholder="第几次指导" style="flex:1">
-        </div>
-        <div class="form-row"><textarea id="advContent" placeholder="和导师聊了什么..."></textarea></div>
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
-        <div id="imgList_advisor" style="margin-bottom:6px"></div>
-        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('advisor')">添加图片</button></div>
+<!-- ===== 导师指导 ===== -->
+<div class="panel" id="panel-advisor">
+<div class="card">
+<h2>导师指导记录</h2>
+<div class="form-row">
+<input type="date" id="advDate" style="flex:1">
+<input type="time" id="advTime" style="flex:1">
+<input type="number" id="advCount" placeholder="第几次指导" style="flex:1">
+</div>
+<div class="form-row"><textarea id="advContent" placeholder="和导师聊了什么..."></textarea></div>
+<div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 图片</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
+<div id="imgList_advisor" style="margin-bottom:6px"></div>
+<div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('advisor')">添加图片</button></div>
 
-        <button class="btn btn-primary" onclick="addAdvisor()">保存记录</button>
-      </div>
-      <div class="card"><h2>指导记录列表</h2><div id="advisorList"></div></div>
-    </div>
+<button class="btn btn-primary" onclick="addAdvisor()">保存记录</button>
+</div>
+<div class="card"><h2>指导记录列表</h2><div id="advisorList"></div></div>
+</div>
 
-    <!-- ===== 日志 ===== -->
-    <div class="panel" id="panel-logs">
-      <div class="card"><h2>修改日志</h2><div class="log-list" id="logList"></div></div>
-    </div>
-  </div>
+<!-- ===== 日志 ===== -->
+<div class="panel" id="panel-logs">
+<div class="card"><h2>修改日志</h2><div class="log-list" id="logList"></div></div>
+</div>
+</div>
 </div>
 
 <div id="upProgressBox" style="display:none;position:fixed;bottom:22px;right:22px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.16);padding:14px 18px;z-index:1800;width:320px">
@@ -592,43 +588,43 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 </div>
 
 <div id="imgModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,.72);z-index:2000;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)closeImgModal()">
-  <div style="background:#fff;border-radius:14px;max-width:880px;width:100%;max-height:92vh;overflow:auto;padding:20px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <b id="imgModalTitle" style="font-size:1rem">图片预览</b>
-      <button class="btn btn-ghost btn-sm" onclick="closeImgModal()">关闭</button>
-    </div>
-    <div style="display:flex;gap:20px;flex-wrap:wrap">
-      <div style="flex:1;min-width:240px">
-        <div style="font-size:.8rem;color:#64748b;margin-bottom:6px">原图（在图上按住拖动即可框选裁剪区域）</div>
-        <div id="cropWrap" style="position:relative;display:inline-block;max-width:100%;line-height:0">
-          <img id="imgModalBig" onerror="imgModalError(this)" style="max-width:100%;max-height:44vh;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;cursor:crosshair;user-select:none">
-          <div id="cropRect" style="display:none;position:absolute;border:2px dashed #10b981;background:rgba(16,185,129,.18);pointer-events:none;box-sizing:border-box"></div>
-        </div>
-        <div id="imgModalUrl" style="font-size:.72rem;color:#94a3b8;margin-top:8px;word-break:break-all"></div>
-      </div>
-      <div style="flex:0 0 250px">
-        <div style="font-size:.8rem;color:#64748b;margin-bottom:6px">前台卡片显示效果（封面裁切）</div>
-        <div style="width:100%;height:150px;border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;background:#f1f5f9" id="imgModalPreview"></div>
-        <div style="font-size:.75rem;color:#94a3b8;margin-top:6px">前台按 cover 铺满裁切，多余部分会被裁掉</div>
-      </div>
-    </div>
-    <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button class="btn btn-ghost btn-sm" onclick="rotateModalImage(-90)">↺ 左转 90°</button>
-      <button class="btn btn-ghost btn-sm" onclick="rotateModalImage(90)">↻ 右转 90°</button>
-      <button class="btn btn-ghost btn-sm" onclick="rotateModalImage(180)">↕ 转 180°</button>
-      <button class="btn btn-primary btn-sm" onclick="cropModalImage()">✂️ 裁剪选区</button>
-      <button class="btn btn-ghost btn-sm" onclick="clearCrop()">清除选区</button>
-      <a class="btn btn-ghost btn-sm" id="imgModalOpen" target="_blank" rel="noopener" style="text-decoration:none">新窗口打开</a>
-      <button class="btn btn-danger btn-sm" onclick="deleteModalImage()">删除这张图</button>
-    </div>
-    <div id="imgModalMsg" style="font-size:.82rem;margin-top:12px;min-height:1.2em"></div>
-  </div>
+<div style="background:#fff;border-radius:14px;max-width:880px;width:100%;max-height:92vh;overflow:auto;padding:20px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+<b id="imgModalTitle" style="font-size:1rem">图片预览</b>
+<button class="btn btn-ghost btn-sm" onclick="closeImgModal()">关闭</button>
+</div>
+<div style="display:flex;gap:20px;flex-wrap:wrap">
+<div style="flex:1;min-width:240px">
+<div style="font-size:.8rem;color:#64748b;margin-bottom:6px">原图（在图上按住拖动即可框选裁剪区域）</div>
+<div id="cropWrap" style="position:relative;display:inline-block;max-width:100%;line-height:0">
+<img id="imgModalBig" onerror="imgModalError(this)" style="max-width:100%;max-height:44vh;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;cursor:crosshair;user-select:none">
+<div id="cropRect" style="display:none;position:absolute;border:2px dashed #10b981;background:rgba(16,185,129,.18);pointer-events:none;box-sizing:border-box"></div>
+</div>
+<div id="imgModalUrl" style="font-size:.72rem;color:#94a3b8;margin-top:8px;word-break:break-all"></div>
+</div>
+<div style="flex:0 0 250px">
+<div style="font-size:.8rem;color:#64748b;margin-bottom:6px">前台卡片显示效果（封面裁切）</div>
+<div style="width:100%;height:150px;border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;background:#f1f5f9" id="imgModalPreview"></div>
+<div style="font-size:.75rem;color:#94a3b8;margin-top:6px">前台按 cover 铺满裁切，多余部分会被裁掉</div>
+</div>
+</div>
+<div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+<button class="btn btn-ghost btn-sm" onclick="rotateModalImage(-90)">↺ 左转 90°</button>
+<button class="btn btn-ghost btn-sm" onclick="rotateModalImage(90)">↻ 右转 90°</button>
+<button class="btn btn-ghost btn-sm" onclick="rotateModalImage(180)">↕ 转 180°</button>
+<button class="btn btn-primary btn-sm" onclick="cropModalImage()">✂️ 裁剪选区</button>
+<button class="btn btn-ghost btn-sm" onclick="clearCrop()">清除选区</button>
+<a class="btn btn-ghost btn-sm" id="imgModalOpen" target="_blank" rel="noopener" style="text-decoration:none">新窗口打开</a>
+<button class="btn btn-danger btn-sm" onclick="deleteModalImage()">删除这张图</button>
+</div>
+<div id="imgModalMsg" style="font-size:.82rem;margin-top:12px;min-height:1.2em"></div>
+</div>
 </div>
 
 <script>
 /* ============================================================
-   配置
-   ============================================================ */
+  配置
+  ============================================================ */
 const GH_OWNER = "benyia";
 const GH_REPO  = "benyia.github.io";
 const GH_BRANCH = "main";
@@ -644,27 +640,27 @@ const TOKEN_KEY = "benyia_gh_token";
 const MAX_FILE_MB = 100;
 
 const DEFAULT_DATA = {
-  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",avatar:"思",name:"思齐",bio:"控制工程研究生",coverPan:true,coverPanSec:3},
-  categories:[
-    {icon:"📚",name:"课程学习",section:"courses"},
-    {icon:"📝",name:"论文",section:"papers"},
-    {icon:"🔔",name:"学校通知",section:"notices"},
-    {icon:"👥",name:"班级事务",section:"class"}
-  ],
-  tags:["控制工程","深度学习","FPGA","Python"],
-  quickLinks:[
-    {icon:"☁️",title:"百度网盘",url:"https://pan.baidu.com"},
-    {icon:"🚄",title:"12306",url:"https://www.12306.cn"},
-    {icon:"🐙",title:"GitHub",url:"https://github.com"},
-    {icon:"💡",title:"知乎",url:"https://www.zhihu.com"}
-  ],
-  courses:[],papers:[],notices:[],classItems:[],lifeServices:[],
-  ledger:[],ledgerCategories:{expense:["吃饭","买东西","生活用品","交通","娱乐","学习","医疗","其他"],income:["工资","奖学金","补贴","红包","其他"]},media:[],roster:[],rosterConfig:{showSensitive:false},diary:[],advisor:[],logs:[]
+siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",avatar:"思",name:"思齐",bio:"控制工程研究生",coverPan:true,coverPanSec:3},
+categories:[
+{icon:"📚",name:"课程学习",section:"courses"},
+{icon:"📝",name:"论文",section:"papers"},
+{icon:"🔔",name:"学校通知",section:"notices"},
+{icon:"👥",name:"班级事务",section:"class"}
+],
+tags:["控制工程","深度学习","FPGA","Python"],
+quickLinks:[
+{icon:"☁️",title:"百度网盘",url:"https://pan.baidu.com"},
+{icon:"🚄",title:"12306",url:"https://www.12306.cn"},
+{icon:"🐙",title:"GitHub",url:"https://github.com"},
+{icon:"💡",title:"知乎",url:"https://www.zhihu.com"}
+],
+courses:[],papers:[],notices:[],classItems:[],lifeServices:[],
+ledger:[],ledgerCategories:{expense:["吃饭","买东西","生活用品","交通","娱乐","学习","医疗","其他"],income:["工资","奖学金","补贴","红包","其他"]},media:[],roster:[],rosterConfig:{showSensitive:false},diary:[],advisor:[],logs:[]
 };
 
 /* ============================================================
-   全局状态
-   ============================================================ */
+  全局状态
+  ============================================================ */
 let blogData = null;
 let dataSha = "";
 let saving = false;
@@ -675,269 +671,269 @@ const editing = {course:null, paper:null, class:null};
 const drafts  = {course:[], paper:[], class:[], life:[], media:[], dmedia:[], nf:[]};
 
 /* ============================================================
-   小工具
-   ============================================================ */
+  小工具
+  ============================================================ */
 function $(id){ return document.getElementById(id); }
 var imgModalCtx = null;
 
 function imgModalError(el){
-  var msg = document.getElementById("imgModalMsg");
-  var ctx = imgModalCtx || {};
-  var raw = ctx.rawUrl || "";
-  /* 新上传的文件：GitHub Pages 还在发布，自动重试（最多 12 次，每次 3 秒） */
-  if(raw && freshFiles[raw]){
-    ctx._retry = (ctx._retry || 0) + 1;
-    if(ctx._retry <= 12){
-      msg.style.color = "#d97706";
-      msg.textContent = "⏳ 这张图刚上传，GitHub 还在发布中…自动重试 " + ctx._retry + "/12";
-      setTimeout(function(){
-        var u = raw + (raw.indexOf("?") >= 0 ? "&" : "?") + "t=" + Date.now();
-        document.getElementById("imgModalBig").src = u;
-      }, 3000);
-      return;
-    }
-  }
-  /* 换回原始（相对）路径再试一次 */
-  if(!el._retried){
-    el._retried = true;
-    if(raw && raw !== el.getAttribute("src")){
-      msg.style.color = "#d97706";
-      msg.textContent = "绝对地址加载失败，改用原始路径重试…";
-      el.src = raw;
-      return;
-    }
-  }
-  msg.style.color = "#ef4444";
-  msg.textContent = "❌ 图片加载失败。尝试过：" + el.getAttribute("src") + (el.src !== el.getAttribute("src") ? ("  /  " + el.src) : "");
-  var u = document.getElementById("imgModalUrl");
-  if(u) u.innerHTML = '地址：<a href="'+esc(el.src)+'" target="_blank">'+esc(el.src)+'</a>';
+var msg = document.getElementById("imgModalMsg");
+var ctx = imgModalCtx || {};
+var raw = ctx.rawUrl || "";
+/* 新上传的文件：GitHub Pages 还在发布，自动重试（最多 12 次，每次 3 秒） */
+if(raw && freshFiles[raw]){
+ctx._retry = (ctx._retry || 0) + 1;
+if(ctx._retry <= 12){
+msg.style.color = "#d97706";
+msg.textContent = "⏳ 这张图刚上传，GitHub 还在发布中…自动重试 " + ctx._retry + "/12";
+setTimeout(function(){
+var u = raw + (raw.indexOf("?") >= 0 ? "&" : "?") + "t=" + Date.now();
+document.getElementById("imgModalBig").src = u;
+}, 3000);
+return;
+}
+}
+/* 换回原始（相对）路径再试一次 */
+if(!el._retried){
+el._retried = true;
+if(raw && raw !== el.getAttribute("src")){
+msg.style.color = "#d97706";
+msg.textContent = "绝对地址加载失败，改用原始路径重试…";
+el.src = raw;
+return;
+}
+}
+msg.style.color = "#ef4444";
+msg.textContent = "❌ 图片加载失败。尝试过：" + el.getAttribute("src") + (el.src !== el.getAttribute("src") ? ("  /  " + el.src) : "");
+var u = document.getElementById("imgModalUrl");
+if(u) u.innerHTML = '地址：<a href="'+esc(el.src)+'" target="_blank">'+esc(el.src)+'</a>';
 }
 function openImgModal(url, opt){
-  opt = opt || {};
-  var abs = "";
-  try { abs = url ? new URL(url, location.href).href : ""; } catch(e) { abs = String(url||""); }
-  imgModalCtx = { url: abs, rawUrl: String(url||""), inputId: opt.inputId || null, draftKey: opt.draftKey || null, draftIdx: (opt.draftIdx === undefined ? null : opt.draftIdx), rowKind: opt.rowKind || null, rowIdx: (opt.rowIdx === undefined ? null : opt.rowIdx), imgIdx: (opt.imgIdx === undefined ? null : opt.imgIdx) };
-  clearCrop();
-  document.getElementById("imgModalTitle").textContent = opt.title || "图片预览";
-  var bigEl = document.getElementById("imgModalBig");
-  bigEl._retried = false;
-  imgModalCtx._retry = 0;
-  bigEl.src = previewSrc(abs);
-  document.getElementById("imgModalPreview").innerHTML = '<img src="'+esc(previewSrc(abs))+'" style="width:100%;height:100%;object-fit:cover;display:block">';
-  document.getElementById("imgModalOpen").href = abs;
-  document.getElementById("imgModalUrl").innerHTML = abs ? ('原图地址：<a href="'+esc(abs)+'" target="_blank">'+esc(abs)+'</a>') : "（没有图片地址）";
-  document.getElementById("imgModalMsg").textContent = abs ? "" : "⚠️ 没有拿到图片地址，请重新上传";
-  document.getElementById("imgModal").style.display = "flex";
-  setTimeout(initCropDrag, 30);
+opt = opt || {};
+var abs = "";
+try { abs = url ? new URL(url, location.href).href : ""; } catch(e) { abs = String(url||""); }
+imgModalCtx = { url: abs, rawUrl: String(url||""), inputId: opt.inputId || null, draftKey: opt.draftKey || null, draftIdx: (opt.draftIdx === undefined ? null : opt.draftIdx), rowKind: opt.rowKind || null, rowIdx: (opt.rowIdx === undefined ? null : opt.rowIdx), imgIdx: (opt.imgIdx === undefined ? null : opt.imgIdx) };
+clearCrop();
+document.getElementById("imgModalTitle").textContent = opt.title || "图片预览";
+var bigEl = document.getElementById("imgModalBig");
+bigEl._retried = false;
+imgModalCtx._retry = 0;
+bigEl.src = previewSrc(abs);
+document.getElementById("imgModalPreview").innerHTML = '<img src="'+esc(previewSrc(abs))+'" style="width:100%;height:100%;object-fit:cover;display:block">';
+document.getElementById("imgModalOpen").href = abs;
+document.getElementById("imgModalUrl").innerHTML = abs ? ('原图地址：<a href="'+esc(abs)+'" target="_blank">'+esc(abs)+'</a>') : "（没有图片地址）";
+document.getElementById("imgModalMsg").textContent = abs ? "" : "⚠️ 没有拿到图片地址，请重新上传";
+document.getElementById("imgModal").style.display = "flex";
+setTimeout(initCropDrag, 30);
 }
 function closeImgModal(){
-  document.getElementById("imgModal").style.display = "none";
-  imgModalCtx = null;
+document.getElementById("imgModal").style.display = "none";
+imgModalCtx = null;
 }
 function openImgFrom(el){
-  openImgModal(el.getAttribute("data-url"), {
-    title: el.getAttribute("data-title") || "图片预览",
-    inputId: el.getAttribute("data-input") || null,
-    draftKey: el.getAttribute("data-dkey") || null,
-    draftIdx: el.getAttribute("data-didx") !== null ? parseInt(el.getAttribute("data-didx"), 10) : null,
-    rowKind: el.getAttribute("data-rkind") || null,
-    rowIdx: el.getAttribute("data-ridx") !== null ? parseInt(el.getAttribute("data-ridx"), 10) : null,
-    imgIdx: el.getAttribute("data-iidx") !== null ? parseInt(el.getAttribute("data-iidx"), 10) : null
-  });
-  return false;
+openImgModal(el.getAttribute("data-url"), {
+title: el.getAttribute("data-title") || "图片预览",
+inputId: el.getAttribute("data-input") || null,
+draftKey: el.getAttribute("data-dkey") || null,
+draftIdx: el.getAttribute("data-didx") !== null ? parseInt(el.getAttribute("data-didx"), 10) : null,
+rowKind: el.getAttribute("data-rkind") || null,
+rowIdx: el.getAttribute("data-ridx") !== null ? parseInt(el.getAttribute("data-ridx"), 10) : null,
+imgIdx: el.getAttribute("data-iidx") !== null ? parseInt(el.getAttribute("data-iidx"), 10) : null
+});
+return false;
 }
 var cropStart = null, cropBox = null;
 function clearCrop(){
-  cropStart = null; cropBox = null;
-  var r = document.getElementById("cropRect");
-  if(r){ r.style.display = "none"; r.style.width = "0px"; r.style.height = "0px"; }
+cropStart = null; cropBox = null;
+var r = document.getElementById("cropRect");
+if(r){ r.style.display = "none"; r.style.width = "0px"; r.style.height = "0px"; }
 }
 function updateCropRect(){
-  var img = document.getElementById("imgModalBig");
-  var box = document.getElementById("cropRect");
-  if(!box || !cropBox){ return; }
-  if(cropBox.w < 4 || cropBox.h < 4){ box.style.display = "none"; return; }
-  box.style.display = "block";
-  box.style.left = cropBox.x + "px";
-  box.style.top = cropBox.y + "px";
-  box.style.width = cropBox.w + "px";
-  box.style.height = cropBox.h + "px";
-  cropBox.dispW = img.clientWidth;
-  cropBox.dispH = img.clientHeight;
+var img = document.getElementById("imgModalBig");
+var box = document.getElementById("cropRect");
+if(!box || !cropBox){ return; }
+if(cropBox.w < 4 || cropBox.h < 4){ box.style.display = "none"; return; }
+box.style.display = "block";
+box.style.left = cropBox.x + "px";
+box.style.top = cropBox.y + "px";
+box.style.width = cropBox.w + "px";
+box.style.height = cropBox.h + "px";
+cropBox.dispW = img.clientWidth;
+cropBox.dispH = img.clientHeight;
 }
 function initCropDrag(){
-  var img = document.getElementById("imgModalBig");
-  if(!img || img._cropBound) return;
-  img._cropBound = true;
-  img.addEventListener("mousedown", function(e){
-    var r = img.getBoundingClientRect();
-    var sx = e.clientX - r.left, sy = e.clientY - r.top;
-    cropStart = { x: sx, y: sy };
-    cropBox = { x: sx, y: sy, w: 0, h: 0, dispW: r.width, dispH: r.height };
-    updateCropRect();
-    e.preventDefault();
-  });
-  document.addEventListener("mousemove", function(e){
-    if(!cropStart) return;
-    var r = img.getBoundingClientRect();
-    var x = Math.max(0, Math.min(r.width, e.clientX - r.left));
-    var y = Math.max(0, Math.min(r.height, e.clientY - r.top));
-    cropBox = { x: Math.min(cropStart.x, x), y: Math.min(cropStart.y, y), w: Math.abs(x - cropStart.x), h: Math.abs(y - cropStart.y), dispW: r.width, dispH: r.height };
-    updateCropRect();
-  });
-  document.addEventListener("mouseup", function(){ cropStart = null; });
+var img = document.getElementById("imgModalBig");
+if(!img || img._cropBound) return;
+img._cropBound = true;
+img.addEventListener("mousedown", function(e){
+var r = img.getBoundingClientRect();
+var sx = e.clientX - r.left, sy = e.clientY - r.top;
+cropStart = { x: sx, y: sy };
+cropBox = { x: sx, y: sy, w: 0, h: 0, dispW: r.width, dispH: r.height };
+updateCropRect();
+e.preventDefault();
+});
+document.addEventListener("mousemove", function(e){
+if(!cropStart) return;
+var r = img.getBoundingClientRect();
+var x = Math.max(0, Math.min(r.width, e.clientX - r.left));
+var y = Math.max(0, Math.min(r.height, e.clientY - r.top));
+cropBox = { x: Math.min(cropStart.x, x), y: Math.min(cropStart.y, y), w: Math.abs(x - cropStart.x), h: Math.abs(y - cropStart.y), dispW: r.width, dispH: r.height };
+updateCropRect();
+});
+document.addEventListener("mouseup", function(){ cropStart = null; });
 }
 /* 把处理好的图片上传并替换掉原来的引用 */
 async function applyEditedBlob(blob, note){
-  var file = new File([blob], "edited.png", { type: "image/png" });
-  var meta = await uploadFile(file, "img");
-  var newUrl = meta.url;
-  var ctx = imgModalCtx;
-  if(ctx.inputId){
-    document.getElementById(ctx.inputId).value = newUrl;
-    refreshIconPrev(ctx.inputId);
-  }
-  if(ctx.draftKey !== null && ctx.draftIdx !== null && imgDrafts[ctx.draftKey]){
-    imgDrafts[ctx.draftKey][ctx.draftIdx].url = newUrl;
-    renderImgDrafts(ctx.draftKey);
-  }
-  if(ctx.rowKind && ctx.rowIdx !== null && ctx.imgIdx !== null && blogData[ctx.rowKind] && blogData[ctx.rowKind][ctx.rowIdx]){
-    var arr = blogData[ctx.rowKind][ctx.rowIdx].images || [];
-    if(arr[ctx.imgIdx]){ arr[ctx.imgIdx].url = newUrl; arr[ctx.imgIdx].name = "edited.png"; }
-    blogData[ctx.rowKind][ctx.rowIdx].images = arr;
-    saveData(note || "编辑图片");
-    renderAll();
-  }
-  imgModalCtx.url = newUrl;
-  var abs2 = newUrl;
-  try { abs2 = new URL(newUrl, location.href).href; } catch(e) {}
-  freshFiles[newUrl] = Date.now();
-  document.getElementById("imgModalBig").src = previewSrc(abs2);
-  document.getElementById("imgModalPreview").innerHTML = '<img src="'+esc(abs2)+'" style="width:100%;height:100%;object-fit:cover;display:block">';
-  document.getElementById("imgModalOpen").href = abs2;
-  document.getElementById("imgModalUrl").innerHTML = '原图地址：<a href="'+esc(abs2)+'" target="_blank">'+esc(abs2)+'</a>';
-  clearCrop();
-  return newUrl;
+var file = new File([blob], "edited.png", { type: "image/png" });
+var meta = await uploadFile(file, "img");
+var newUrl = meta.url;
+var ctx = imgModalCtx;
+if(ctx.inputId){
+document.getElementById(ctx.inputId).value = newUrl;
+refreshIconPrev(ctx.inputId);
+}
+if(ctx.draftKey !== null && ctx.draftIdx !== null && imgDrafts[ctx.draftKey]){
+imgDrafts[ctx.draftKey][ctx.draftIdx].url = newUrl;
+renderImgDrafts(ctx.draftKey);
+}
+if(ctx.rowKind && ctx.rowIdx !== null && ctx.imgIdx !== null && blogData[ctx.rowKind] && blogData[ctx.rowKind][ctx.rowIdx]){
+var arr = blogData[ctx.rowKind][ctx.rowIdx].images || [];
+if(arr[ctx.imgIdx]){ arr[ctx.imgIdx].url = newUrl; arr[ctx.imgIdx].name = "edited.png"; }
+blogData[ctx.rowKind][ctx.rowIdx].images = arr;
+saveData(note || "编辑图片");
+renderAll();
+}
+imgModalCtx.url = newUrl;
+var abs2 = newUrl;
+try { abs2 = new URL(newUrl, location.href).href; } catch(e) {}
+freshFiles[newUrl] = Date.now();
+document.getElementById("imgModalBig").src = previewSrc(abs2);
+document.getElementById("imgModalPreview").innerHTML = '<img src="'+esc(abs2)+'" style="width:100%;height:100%;object-fit:cover;display:block">';
+document.getElementById("imgModalOpen").href = abs2;
+document.getElementById("imgModalUrl").innerHTML = '原图地址：<a href="'+esc(abs2)+'" target="_blank">'+esc(abs2)+'</a>';
+clearCrop();
+return newUrl;
 }
 async function cropModalImage(){
-  var msg = document.getElementById("imgModalMsg");
-  if(!imgModalCtx) return;
-  if(!cropBox || cropBox.w < 5 || cropBox.h < 5){
-    msg.style.color = "#d97706";
-    msg.textContent = "请先在左边的图片上按住鼠标拖动，框出要保留的区域";
-    return;
-  }
-  msg.style.color = "#64748b";
-  msg.textContent = "正在裁剪并上传…";
-  try{
-    var img = await loadImgEl(imgModalCtx.url);
-    var dw = cropBox.dispW || document.getElementById("imgModalBig").clientWidth;
-    var dh = cropBox.dispH || document.getElementById("imgModalBig").clientHeight;
-    var sx = cropBox.x * (img.naturalWidth / dw);
-    var sy = cropBox.y * (img.naturalHeight / dh);
-    var sw = cropBox.w * (img.naturalWidth / dw);
-    var sh = cropBox.h * (img.naturalHeight / dh);
-    var cv = document.createElement("canvas");
-    cv.width = Math.max(1, Math.round(sw));
-    cv.height = Math.max(1, Math.round(sh));
-    cv.getContext("2d").drawImage(img, sx, sy, sw, sh, 0, 0, cv.width, cv.height);
-    var blob = await new Promise(function(res){ cv.toBlob(res, "image/png"); });
-    if(!blob) throw new Error("canvas 导出失败");
-    await applyEditedBlob(blob, "裁剪图片");
-    msg.style.color = "#059669";
-    msg.textContent = "✅ 裁剪完成（" + cv.width + "×" + cv.height + "），别忘了点「保存」！";
-  }catch(e){
-    msg.style.color = "#ef4444";
-    msg.textContent = "❌ 裁剪失败：" + e.message;
-  }
+var msg = document.getElementById("imgModalMsg");
+if(!imgModalCtx) return;
+if(!cropBox || cropBox.w < 5 || cropBox.h < 5){
+msg.style.color = "#d97706";
+msg.textContent = "请先在左边的图片上按住鼠标拖动，框出要保留的区域";
+return;
+}
+msg.style.color = "#64748b";
+msg.textContent = "正在裁剪并上传…";
+try{
+var img = await loadImgEl(imgModalCtx.url);
+var dw = cropBox.dispW || document.getElementById("imgModalBig").clientWidth;
+var dh = cropBox.dispH || document.getElementById("imgModalBig").clientHeight;
+var sx = cropBox.x * (img.naturalWidth / dw);
+var sy = cropBox.y * (img.naturalHeight / dh);
+var sw = cropBox.w * (img.naturalWidth / dw);
+var sh = cropBox.h * (img.naturalHeight / dh);
+var cv = document.createElement("canvas");
+cv.width = Math.max(1, Math.round(sw));
+cv.height = Math.max(1, Math.round(sh));
+cv.getContext("2d").drawImage(img, sx, sy, sw, sh, 0, 0, cv.width, cv.height);
+var blob = await new Promise(function(res){ cv.toBlob(res, "image/png"); });
+if(!blob) throw new Error("canvas 导出失败");
+await applyEditedBlob(blob, "裁剪图片");
+msg.style.color = "#059669";
+msg.textContent = "✅ 裁剪完成（" + cv.width + "×" + cv.height + "），别忘了点「保存」！";
+}catch(e){
+msg.style.color = "#ef4444";
+msg.textContent = "❌ 裁剪失败：" + e.message;
+}
 }
 
 function loadImgEl(url){
-  return new Promise(function(res, rej){
-    var im = new Image();
-    im.onload = function(){ res(im); };
-    im.onerror = function(){ rej(new Error("图片加载失败（外站图片可能不支持编辑）")); };
-    im.src = url;
-  });
+return new Promise(function(res, rej){
+var im = new Image();
+im.onload = function(){ res(im); };
+im.onerror = function(){ rej(new Error("图片加载失败（外站图片可能不支持编辑）")); };
+im.src = url;
+});
 }
 async function rotateModalImage(deg){
-  if(!imgModalCtx) return;
-  var msg = document.getElementById("imgModalMsg");
-  msg.style.color = "#64748b";
-  msg.textContent = "正在旋转并重新上传…";
-  try{
-    var img = await loadImgEl(imgModalCtx.url);
-    var swap = (deg === 90 || deg === -90 || deg === 270);
-    var cv = document.createElement("canvas");
-    cv.width = swap ? img.naturalHeight : img.naturalWidth;
-    cv.height = swap ? img.naturalWidth : img.naturalHeight;
-    var c2 = cv.getContext("2d");
-    c2.translate(cv.width / 2, cv.height / 2);
-    c2.rotate(deg * Math.PI / 180);
-    c2.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2);
-    var blob = await new Promise(function(res){ cv.toBlob(res, "image/png"); });
-    if(!blob) throw new Error("canvas 导出失败");
-    await applyEditedBlob(blob, "旋转图片");
-    msg.style.color = "#059669";
-    msg.textContent = "✅ 已旋转并上传为" + cv.width + "×" + cv.height + "，别忘了点「保存」！";
-  }catch(e){
-    msg.style.color = "#ef4444";
-    msg.textContent = "❌ 失败：" + e.message;
-  }
+if(!imgModalCtx) return;
+var msg = document.getElementById("imgModalMsg");
+msg.style.color = "#64748b";
+msg.textContent = "正在旋转并重新上传…";
+try{
+var img = await loadImgEl(imgModalCtx.url);
+var swap = (deg === 90 || deg === -90 || deg === 270);
+var cv = document.createElement("canvas");
+cv.width = swap ? img.naturalHeight : img.naturalWidth;
+cv.height = swap ? img.naturalWidth : img.naturalHeight;
+var c2 = cv.getContext("2d");
+c2.translate(cv.width / 2, cv.height / 2);
+c2.rotate(deg * Math.PI / 180);
+c2.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2);
+var blob = await new Promise(function(res){ cv.toBlob(res, "image/png"); });
+if(!blob) throw new Error("canvas 导出失败");
+await applyEditedBlob(blob, "旋转图片");
+msg.style.color = "#059669";
+msg.textContent = "✅ 已旋转并上传为" + cv.width + "×" + cv.height + "，别忘了点「保存」！";
+}catch(e){
+msg.style.color = "#ef4444";
+msg.textContent = "❌ 失败：" + e.message;
+}
 }
 function deleteModalImage(){
-  if(!imgModalCtx) return;
-  if(!confirm("从当前内容里移除这张图片？（GitHub 上的文件不会被删）")) return;
-  var ctx = imgModalCtx;
-  if(ctx.inputId){
-    document.getElementById(ctx.inputId).value = "";
-    refreshIconPrev(ctx.inputId);
-  }
-  if(ctx.draftKey !== null && ctx.draftIdx !== null && imgDrafts[ctx.draftKey]){
-    imgDrafts[ctx.draftKey].splice(ctx.draftIdx, 1);
-    renderImgDrafts(ctx.draftKey);
-  }
-  if(ctx.rowKind && ctx.rowIdx !== null && ctx.imgIdx !== null && blogData[ctx.rowKind] && blogData[ctx.rowKind][ctx.rowIdx]){
-    var arr = blogData[ctx.rowKind][ctx.rowIdx].images || [];
-    arr.splice(ctx.imgIdx, 1);
-    blogData[ctx.rowKind][ctx.rowIdx].images = arr;
-    saveData("删除图片");
-    renderAll();
-  }
-  closeImgModal();
-  showToast("已移除（记得保存）");
+if(!imgModalCtx) return;
+if(!confirm("从当前内容里移除这张图片？（GitHub 上的文件不会被删）")) return;
+var ctx = imgModalCtx;
+if(ctx.inputId){
+document.getElementById(ctx.inputId).value = "";
+refreshIconPrev(ctx.inputId);
+}
+if(ctx.draftKey !== null && ctx.draftIdx !== null && imgDrafts[ctx.draftKey]){
+imgDrafts[ctx.draftKey].splice(ctx.draftIdx, 1);
+renderImgDrafts(ctx.draftKey);
+}
+if(ctx.rowKind && ctx.rowIdx !== null && ctx.imgIdx !== null && blogData[ctx.rowKind] && blogData[ctx.rowKind][ctx.rowIdx]){
+var arr = blogData[ctx.rowKind][ctx.rowIdx].images || [];
+arr.splice(ctx.imgIdx, 1);
+blogData[ctx.rowKind][ctx.rowIdx].images = arr;
+saveData("删除图片");
+renderAll();
+}
+closeImgModal();
+showToast("已移除（记得保存）");
 }
 
 var ICON_FIELDS = ["cfgAvatar","cIcon","lsIcon","catIcon","qlIcon","rPhoto","cfgDefaultImage","cfgDefaultAvatar"];
 function refreshIconPrev(id){
-  var inp = $(id), box = $("prev_" + id);
-  if(!inp || !box) return;
-  var v = String(inp.value||"").trim();
-  if(isAdminImg(v)){
-    box.innerHTML = '<img src="'+esc(previewSrc(v))+'" data-url="'+esc(v)+'" data-input="'+esc(id)+'" data-title="图标预览" onclick="openImgFrom(this)" style="width:38px;height:38px;object-fit:cover;border-radius:6px;border:1px solid #e2e8f0;vertical-align:middle;margin-left:4px;cursor:zoom-in">';
-  }else if(v){
-    box.innerHTML = '<span style="font-size:1.3rem;margin-left:4px;vertical-align:middle">'+esc(v)+'</span>';
-  }else{
-    box.innerHTML = '';
-  }
+var inp = $(id), box = $("prev_" + id);
+if(!inp || !box) return;
+var v = String(inp.value||"").trim();
+if(isAdminImg(v)){
+box.innerHTML = '<img src="'+esc(previewSrc(v))+'" data-url="'+esc(v)+'" data-input="'+esc(id)+'" data-title="图标预览" onclick="openImgFrom(this)" style="width:38px;height:38px;object-fit:cover;border-radius:6px;border:1px solid #e2e8f0;vertical-align:middle;margin-left:4px;cursor:zoom-in">';
+}else if(v){
+box.innerHTML = '<span style="font-size:1.3rem;margin-left:4px;vertical-align:middle">'+esc(v)+'</span>';
+}else{
+box.innerHTML = '';
+}
 }
 function refreshAllIconPrevs(){ ICON_FIELDS.forEach(refreshIconPrev); }
 
 function isAdminImg(v){
-  v = String(v||"").trim();
-  if(!v) return false;
-  if(v.indexOf("data:image") === 0) return true;
-  if(v.indexOf("http://") === 0 || v.indexOf("https://") === 0) return true;
-  if(v.indexOf("//") === 0) return true;
-  if(v.indexOf("files/") === 0) return true;
-  if(v.indexOf("/") === 0) return true;
-  if(/[.](png|jpe?g|gif|webp|svg|bmp|avif|ico)$/i.test(v)) return true;
-  return false;
+v = String(v||"").trim();
+if(!v) return false;
+if(v.indexOf("data:image") === 0) return true;
+if(v.indexOf("http://") === 0 || v.indexOf("https://") === 0) return true;
+if(v.indexOf("//") === 0) return true;
+if(v.indexOf("files/") === 0) return true;
+if(v.indexOf("/") === 0) return true;
+if(/[.](png|jpe?g|gif|webp|svg|bmp|avif|ico)$/i.test(v)) return true;
+return false;
 }
 function iconThumb(v, size){
-  size = size || 28;
-  if(isAdminImg(v)) return '<img src="'+esc(v)+'" style="width:'+size+'px;height:'+size+'px;object-fit:cover;border-radius:6px;vertical-align:middle">';
-  return esc(v||"");
+size = size || 28;
+if(isAdminImg(v)) return '<img src="'+esc(v)+'" style="width:'+size+'px;height:'+size+'px;object-fit:cover;border-radius:6px;vertical-align:middle">';
+return esc(v||"");
 }
 
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
@@ -945,366 +941,366 @@ function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.get
 function nowStr(){ const d=new Date(); return todayStr()+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
 
 function showToast(msg, type){
-  const t=document.createElement("div");
-  t.className="toast "+(type||"success");
-  t.textContent=msg;
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(), type==="error"?5000:3000);
+const t=document.createElement("div");
+t.className="toast "+(type||"success");
+t.textContent=msg;
+document.body.appendChild(t);
+setTimeout(()=>t.remove(), type==="error"?5000:3000);
 }
 function fmtSize(bytes){
-  if(!bytes && bytes!==0) return "";
-  if(bytes < 1024) return bytes+" B";
-  if(bytes < 1024*1024) return (bytes/1024).toFixed(1)+" KB";
-  return (bytes/1024/1024).toFixed(2)+" MB";
+if(!bytes && bytes!==0) return "";
+if(bytes < 1024) return bytes+" B";
+if(bytes < 1024*1024) return (bytes/1024).toFixed(1)+" KB";
+return (bytes/1024/1024).toFixed(2)+" MB";
 }
 function getPwd(){ return localStorage.getItem(PWD_KEY) || ADMIN_PWD; }
 function getStoredToken(){ return (localStorage.getItem(TOKEN_KEY)||"").trim(); }
 
 /* ============================================================
-   GitHub API
-   ============================================================ */
+  GitHub API
+  ============================================================ */
 function ghHeaders(){
-  return { "Authorization":"Bearer "+getStoredToken(), "Accept":"application/vnd.github+json" };
+return { "Authorization":"Bearer "+getStoredToken(), "Accept":"application/vnd.github+json" };
 }
 
 /**
- * 统一的 GitHub API 请求。返回 {ok, status, json}
- * 失败时不抛异常，由调用方根据 status 决定提示文案。
- */
+* 统一的 GitHub API 请求。返回 {ok, status, json}
+* 失败时不抛异常，由调用方根据 status 决定提示文案。
+*/
 async function ghApi(path, options){
-  const opt = options || {};
-  const url = "https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+path+(opt.query||"");
-  const headers = Object.assign({}, ghHeaders(), opt.headers||{});
-  const res = await fetch(url, {method:opt.method||"GET", headers, body:opt.body, cache:"no-store"});
-  let json = null;
-  try { json = await res.json(); } catch(e){ json = null; }
-  return {ok:res.ok, status:res.status, json};
+const opt = options || {};
+const url = "https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+path+(opt.query||"");
+const headers = Object.assign({}, ghHeaders(), opt.headers||{});
+const res = await fetch(url, {method:opt.method||"GET", headers, body:opt.body, cache:"no-store"});
+let json = null;
+try { json = await res.json(); } catch(e){ json = null; }
+return {ok:res.ok, status:res.status, json};
 }
 
 function ghErrorText(status, json){
-  const msg = json && json.message ? json.message : "";
-  if(status===401) return "Token 无效或已过期，请到「站点设置」重新设置 Token";
-  if(status===403) return "Token 权限不足（需要 repo 权限）或触发限流："+msg;
-  if(status===404) return "找不到仓库，请确认 Token 有 repo 权限："+msg;
-  if(status===409 || status===422) return "文件冲突，正在重试…";
-  return "GitHub 返回 "+status+(msg?("："+msg):"");
+const msg = json && json.message ? json.message : "";
+if(status===401) return "Token 无效或已过期，请到「站点设置」重新设置 Token";
+if(status===403) return "Token 权限不足（需要 repo 权限）或触发限流："+msg;
+if(status===404) return "找不到仓库，请确认 Token 有 repo 权限："+msg;
+if(status===409 || status===422) return "文件冲突，正在重试…";
+return "GitHub 返回 "+status+(msg?("："+msg):"");
 }
 
 /* 取 data.json 最新的 sha（保存前必须拿最新的，否则会 409 冲突） */
 async function fetchDataSha(){
-  const r = await ghApi(DATA_PATH, {query:"?ref="+GH_BRANCH+"&t="+Date.now()});
-  if(r.ok && r.json && r.json.sha){ dataSha = r.json.sha; return dataSha; }
-  return "";
+const r = await ghApi(DATA_PATH, {query:"?ref="+GH_BRANCH+"&t="+Date.now()});
+if(r.ok && r.json && r.json.sha){ dataSha = r.json.sha; return dataSha; }
+return "";
 }
 
 /* ============================================================
-   登录 / 密码
-   ============================================================ */
+  登录 / 密码
+  ============================================================ */
 function togglePwdView(){
-  var i = document.getElementById("pwdInput");
-  var b = document.getElementById("pwdToggle");
-  if(!i || !b) return;
-  var show = (i.type === "password");
-  i.type = show ? "text" : "password";
-  b.textContent = show ? "隐藏" : "显示";
+var i = document.getElementById("pwdInput");
+var b = document.getElementById("pwdToggle");
+if(!i || !b) return;
+var show = (i.type === "password");
+i.type = show ? "text" : "password";
+b.textContent = show ? "隐藏" : "显示";
 }
 /* 登录页提示文字：从 data.json 的 siteConfig.loginHint 读取（公开，无需登录） */
 (async function loadLoginHint(){
-  try{
-    var r = await fetch("data.json?t=" + Date.now(), { cache: "no-store" });
-    if(!r.ok) return;
-    var d = await r.json();
-    var h = d && d.siteConfig ? d.siteConfig.loginHint : null;
-    var box = document.getElementById("loginHint");
-    if(box && h !== null && h !== undefined) box.textContent = h;
-    else if(box && !box.textContent) box.textContent = "";
-  }catch(e){}
+try{
+var r = await fetch("data.json?t=" + Date.now(), { cache: "no-store" });
+if(!r.ok) return;
+var d = await r.json();
+var h = d && d.siteConfig ? d.siteConfig.loginHint : null;
+var box = document.getElementById("loginHint");
+if(box && h !== null && h !== undefined) box.textContent = h;
+else if(box && !box.textContent) box.textContent = "";
+}catch(e){}
 })();
 
 function isLogged(){ try{ return localStorage.getItem("benyia_logged")==="1" || sessionStorage.getItem("benyia_logged")==="1"; }catch(e){ return false; } }
 function login(){
-  var p = $("pwdInput").value;
-  if(p === getPwd()){
-    try{
-      if($("keepLogin") && $("keepLogin").checked) localStorage.setItem("benyia_logged","1");
-      else sessionStorage.setItem("benyia_logged","1");
-    }catch(e){}
-    $("loginScreen").style.display="none";
-    $("mainPanel").style.display="block";
-    initPanel();
-  } else {
-    showToast("密码错误", "error");
-  }
+var p = $("pwdInput").value;
+if(p === getPwd()){
+try{
+if($("keepLogin") && $("keepLogin").checked) localStorage.setItem("benyia_logged","1");
+else sessionStorage.setItem("benyia_logged","1");
+}catch(e){}
+$("loginScreen").style.display="none";
+$("mainPanel").style.display="block";
+initPanel();
+} else {
+showToast("密码错误", "error");
+}
 }
 function forgotPwd(){
-  showToast("密码保存在你本浏览器里；忘记可在代码里把 ADMIN_PWD 改回默认值，或清除浏览器数据", "info");
+showToast("密码保存在你本浏览器里；忘记可在代码里把 ADMIN_PWD 改回默认值，或清除浏览器数据", "info");
 }
 function logout(){
-  try{ sessionStorage.removeItem("benyia_logged"); localStorage.removeItem("benyia_logged"); }catch(e){}
-  location.reload();
+try{ sessionStorage.removeItem("benyia_logged"); localStorage.removeItem("benyia_logged"); }catch(e){}
+location.reload();
 }
 function changePwd(){
-  const a=$("pwdNew").value, b=$("pwdNew2").value;
-  const st=$("pwdStatus");
-  if(!a || a.length<4){ st.className="status-msg err"; st.textContent="密码至少 4 位"; return; }
-  if(a!==b){ st.className="status-msg err"; st.textContent="两次输入不一致"; return; }
-  localStorage.setItem(PWD_KEY, a);
-  $("pwdNew").value=""; $("pwdNew2").value="";
-  st.className="status-msg ok"; st.textContent="✅ 密码已修改（保存在本浏览器）";
+const a=$("pwdNew").value, b=$("pwdNew2").value;
+const st=$("pwdStatus");
+if(!a || a.length<4){ st.className="status-msg err"; st.textContent="密码至少 4 位"; return; }
+if(a!==b){ st.className="status-msg err"; st.textContent="两次输入不一致"; return; }
+localStorage.setItem(PWD_KEY, a);
+$("pwdNew").value=""; $("pwdNew2").value="";
+st.className="status-msg ok"; st.textContent="✅ 密码已修改（保存在本浏览器）";
 }
 
 /* ============================================================
-   Token 管理
-   ============================================================ */
+  Token 管理
+  ============================================================ */
 function toggleTokenView(){
-  const i=$("ghToken");
-  const show = i.type==="password";
-  i.type = show ? "text" : "password";
-  $("tokenViewBtn").textContent = show ? "隐藏" : "显示";
+const i=$("ghToken");
+const show = i.type==="password";
+i.type = show ? "text" : "password";
+$("tokenViewBtn").textContent = show ? "隐藏" : "显示";
 }
 function tokenFingerprint(t){
-  /* 只显示首尾各 4 位 + 长度，不泄露完整 Token */
-  if(!t) return "(空)";
-  if(t.length<=12) return t.slice(0,2)+"…"+t.slice(-2)+" (长度 "+t.length+")";
-  return t.slice(0,4)+"…"+t.slice(-4)+" (长度 "+t.length+")";
+/* 只显示首尾各 4 位 + 长度，不泄露完整 Token */
+if(!t) return "(空)";
+if(t.length<=12) return t.slice(0,2)+"…"+t.slice(-2)+" (长度 "+t.length+")";
+return t.slice(0,4)+"…"+t.slice(-4)+" (长度 "+t.length+")";
 }
 function saveToken(){
-  const raw=$("ghToken").value;
-  const t=raw.replace(/\s+/g,"");   /* 去掉粘贴时混进来的空格/换行/制表符 */
-  const st=$("tokenStatus");
-  if(!t){ st.className="status-msg err"; st.textContent="请先粘贴 Token"; return; }
-  if(!/^(ghp_|github_pat_)/.test(t)){
-    st.className="status-msg err";
-    st.textContent="这不像 GitHub Token（应以 ghp_ 或 github_pat_ 开头），你粘的是："+tokenFingerprint(t);
-    return;
-  }
-  const removed = raw.length - t.length;
-  localStorage.setItem(TOKEN_KEY, t);
-  st.className="status-msg ok";
-  st.textContent="✅ 已保存 "+tokenFingerprint(t)+(removed?("，并自动去掉了 "+removed+" 个空白字符"):"")+"。建议点「测试连接」确认可用。";
-  showToast("Token 已保存");
+const raw=$("ghToken").value;
+const t=raw.replace(/\s+/g,"");   /* 去掉粘贴时混进来的空格/换行/制表符 */
+const st=$("tokenStatus");
+if(!t){ st.className="status-msg err"; st.textContent="请先粘贴 Token"; return; }
+if(!/^(ghp_|github_pat_)/.test(t)){
+st.className="status-msg err";
+st.textContent="这不像 GitHub Token（应以 ghp_ 或 github_pat_ 开头），你粘的是："+tokenFingerprint(t);
+return;
+}
+const removed = raw.length - t.length;
+localStorage.setItem(TOKEN_KEY, t);
+st.className="status-msg ok";
+st.textContent="✅ 已保存 "+tokenFingerprint(t)+(removed?("，并自动去掉了 "+removed+" 个空白字符"):"")+"。建议点「测试连接」确认可用。";
+showToast("Token 已保存");
 }
 
 /* 立即验证 Token 是否真的能用，错误当场暴露 */
 async function testToken(){
-  const st=$("tokenStatus");
-  const btn=$("tokenTestBtn");
-  const t=($("ghToken").value||"").replace(/\s+/g,"") || getStoredToken();
-  if(!t){ st.className="status-msg err"; st.textContent="输入框是空的，请先粘贴 Token"; return; }
-  if(btn){ btn.disabled=true; btn.textContent="测试中…"; }
-  st.className="status-msg"; st.textContent="正在连接 GitHub…";
-  try{
-    const res = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO,{
-      headers:{"Authorization":"Bearer "+t,"Accept":"application/vnd.github+json"},
-      cache:"no-store"
-    });
-    if(res.ok){
-      const j = await res.json();
-      const canPush = j.permissions && j.permissions.push;
-      st.className = canPush ? "status-msg ok" : "status-msg warn";
-      st.textContent = canPush
-        ? "✅ Token 可用：仓库 "+j.full_name+"，有写入权限"
-        : "⚠️ Token 能读仓库但没有写入权限，请确认勾选了 repo";
-    } else if(res.status===401){
-      const who = await fetch("https://api.github.com/user",{headers:{"Authorization":"Bearer "+t}}).then(r=>r.status).catch(()=>0);
-      st.className="status-msg err";
-      st.textContent = who===401
-        ? "❌ GitHub 不认识这串 Token（401）。你输入的："+tokenFingerprint(t)+" —— 请确认完整复制、没有漏字符"
-        : "❌ 401：Token 有效但无权访问该仓库";
-    } else {
-      st.className="status-msg err";
-      st.textContent = "❌ 测试失败：HTTP "+res.status;
-    }
-  }catch(e){
-    st.className="status-msg err";
-    st.textContent="❌ 网络错误："+e.message;
-  }finally{
-    if(btn){ btn.disabled=false; btn.textContent="测试连接"; }
-  }
+const st=$("tokenStatus");
+const btn=$("tokenTestBtn");
+const t=($("ghToken").value||"").replace(/\s+/g,"") || getStoredToken();
+if(!t){ st.className="status-msg err"; st.textContent="输入框是空的，请先粘贴 Token"; return; }
+if(btn){ btn.disabled=true; btn.textContent="测试中…"; }
+st.className="status-msg"; st.textContent="正在连接 GitHub…";
+try{
+const res = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO,{
+headers:{"Authorization":"Bearer "+t,"Accept":"application/vnd.github+json"},
+cache:"no-store"
+});
+if(res.ok){
+const j = await res.json();
+const canPush = j.permissions && j.permissions.push;
+st.className = canPush ? "status-msg ok" : "status-msg warn";
+st.textContent = canPush
+? "✅ Token 可用：仓库 "+j.full_name+"，有写入权限"
+: "⚠️ Token 能读仓库但没有写入权限，请确认勾选了 repo";
+} else if(res.status===401){
+const who = await fetch("https://api.github.com/user",{headers:{"Authorization":"Bearer "+t}}).then(r=>r.status).catch(()=>0);
+st.className="status-msg err";
+st.textContent = who===401
+? "❌ GitHub 不认识这串 Token（401）。你输入的："+tokenFingerprint(t)+" —— 请确认完整复制、没有漏字符"
+: "❌ 401：Token 有效但无权访问该仓库";
+} else {
+st.className="status-msg err";
+st.textContent = "❌ 测试失败：HTTP "+res.status;
+}
+}catch(e){
+st.className="status-msg err";
+st.textContent="❌ 网络错误："+e.message;
+}finally{
+if(btn){ btn.disabled=false; btn.textContent="测试连接"; }
+}
 }
 function clearToken(){
-  localStorage.removeItem(TOKEN_KEY);
-  $("ghToken").value="";
-  $("tokenStatus").className="status-msg warn";
-  $("tokenStatus").textContent="Token 已清除。请重新粘贴后再点「保存 Token」。";
+localStorage.removeItem(TOKEN_KEY);
+$("ghToken").value="";
+$("tokenStatus").className="status-msg warn";
+$("tokenStatus").textContent="Token 已清除。请重新粘贴后再点「保存 Token」。";
 }
 
 /* ============================================================
-   启动
-   ============================================================ */
+  启动
+  ============================================================ */
 async function initPanel(){
-  $("ghToken").value = getStoredToken();
-  $("tokenStatus").textContent = getStoredToken()
-    ? "已保存 Token：" + tokenFingerprint(getStoredToken()) + "（存在本浏览器）"
-    : "尚未设置 Token，保存和上传会失败";
-  $("tokenStatus").className = "status-msg " + (getStoredToken() ? "ok" : "err");
-  $("nDate").value = todayStr();
-  $("clDate").value = todayStr();
-  $("lgDate").value = todayStr();
-  renderRosterFields();
-  await syncNow(true);
+$("ghToken").value = getStoredToken();
+$("tokenStatus").textContent = getStoredToken()
+? "已保存 Token：" + tokenFingerprint(getStoredToken()) + "（存在本浏览器）"
+: "尚未设置 Token，保存和上传会失败";
+$("tokenStatus").className = "status-msg " + (getStoredToken() ? "ok" : "err");
+$("nDate").value = todayStr();
+$("clDate").value = todayStr();
+$("lgDate").value = todayStr();
+renderRosterFields();
+await syncNow(true);
 }
 
 /* 从 GitHub 重新拉取 data.json（真源是仓库里的 data.json） */
 async function syncNow(silent){
-  setSyncState("加载中…");
-  try{
-    const res = await fetch(DATA_PATH+"?v="+Date.now(), {cache:"no-store"});
-    if(res.ok){
-      blogData = await res.json();
-    } else {
-      throw new Error("HTTP "+res.status);
-    }
-  }catch(e){
-    blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-    showToast("读取 data.json 失败："+e.message, "error");
-  }
-  /* 补齐缺失字段 */
-  for(const k in DEFAULT_DATA){ if(blogData[k]==null) blogData[k] = DEFAULT_DATA[k]; }
-  if(!blogData.siteConfig || typeof blogData.siteConfig!=="object"){
-    blogData.siteConfig = Object.assign({}, DEFAULT_DATA.siteConfig);
-  }
+setSyncState("加载中…");
+try{
+const res = await fetch(DATA_PATH+"?v="+Date.now(), {cache:"no-store"});
+if(res.ok){
+blogData = await res.json();
+} else {
+throw new Error("HTTP "+res.status);
+}
+}catch(e){
+blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+showToast("读取 data.json 失败："+e.message, "error");
+}
+/* 补齐缺失字段 */
+for(const k in DEFAULT_DATA){ if(blogData[k]==null) blogData[k] = DEFAULT_DATA[k]; }
+if(!blogData.siteConfig || typeof blogData.siteConfig!=="object"){
+blogData.siteConfig = Object.assign({}, DEFAULT_DATA.siteConfig);
+}
 
-  dataSha = "";
-  if(getStoredToken()){ try{ await fetchDataSha(); }catch(e){} }
+dataSha = "";
+if(getStoredToken()){ try{ await fetchDataSha(); }catch(e){} }
 
-  renderAll();
-  setSyncState(getStoredToken() ? "已就绪" : "未设置 Token");
-  if(!silent) showToast("已从 GitHub 重新拉取数据");
+renderAll();
+setSyncState(getStoredToken() ? "已就绪" : "未设置 Token");
+if(!silent) showToast("已从 GitHub 重新拉取数据");
 }
 
 function setSyncState(text){
-  const el=$("syncState"); if(el) el.textContent = text;
+const el=$("syncState"); if(el) el.textContent = text;
 }
 
 /* ============================================================
-   保存 data.json（带冲突自动重试）
-   ============================================================ */
+  保存 data.json（带冲突自动重试）
+  ============================================================ */
 async function saveData(action){
-  const token = getStoredToken();
-  if(!token){
-    showToast("请先在「站点设置」里填写 GitHub Token", "error");
-    return false;
-  }
-  if(saving){
-    showToast("上一次保存还在进行中，请稍候", "info");
-    return false;
-  }
-  saving = true;
-  setSyncState("保存中…");
+const token = getStoredToken();
+if(!token){
+showToast("请先在「站点设置」里填写 GitHub Token", "error");
+return false;
+}
+if(saving){
+showToast("上一次保存还在进行中，请稍候", "info");
+return false;
+}
+saving = true;
+setSyncState("保存中…");
 
-  if(action){
-    blogData.logs = blogData.logs || [];
-    blogData.logs.unshift({time:nowStr(), action});
-    if(blogData.logs.length>100) blogData.logs = blogData.logs.slice(0,100);
-    renderLogs();
-  }
+if(action){
+blogData.logs = blogData.logs || [];
+blogData.logs.unshift({time:nowStr(), action});
+if(blogData.logs.length>100) blogData.logs = blogData.logs.slice(0,100);
+renderLogs();
+}
 
-  /* 保存前拉取最新数据：保留本页面不认识的顶层字段，避免旧页面把新加的字段覆盖掉 */
-  try{
-    const latestRes = await fetch(DATA_PATH+"?v="+Date.now(), {cache:"no-store"});
-    if(latestRes.ok){
-      const latest = await latestRes.json();
-      for(const k in latest){ if(blogData[k]===undefined) blogData[k] = latest[k]; }
-    }
-  }catch(e){}
+/* 保存前拉取最新数据：保留本页面不认识的顶层字段，避免旧页面把新加的字段覆盖掉 */
+try{
+const latestRes = await fetch(DATA_PATH+"?v="+Date.now(), {cache:"no-store"});
+if(latestRes.ok){
+const latest = await latestRes.json();
+for(const k in latest){ if(blogData[k]===undefined) blogData[k] = latest[k]; }
+}
+}catch(e){}
 
-  const body = JSON.stringify(blogData, null, 2);
-  /* 用 TextEncoder + 分块避免超大字符串把 btoa 撑爆 */
-  let content;
-  try{
-    const bytes = new TextEncoder().encode(body);
-    let bin = "";
-    const CHUNK = 0x8000;
-    for(let i=0;i<bytes.length;i+=CHUNK){
-      bin += String.fromCharCode.apply(null, bytes.subarray(i, i+CHUNK));
-    }
-    content = btoa(bin);
-  }catch(e){
-    saving=false; setSyncState("保存失败");
-    showToast("数据编码失败："+e.message, "error");
-    return false;
-  }
+const body = JSON.stringify(blogData, null, 2);
+/* 用 TextEncoder + 分块避免超大字符串把 btoa 撑爆 */
+let content;
+try{
+const bytes = new TextEncoder().encode(body);
+let bin = "";
+const CHUNK = 0x8000;
+for(let i=0;i<bytes.length;i+=CHUNK){
+bin += String.fromCharCode.apply(null, bytes.subarray(i, i+CHUNK));
+}
+content = btoa(bin);
+}catch(e){
+saving=false; setSyncState("保存失败");
+showToast("数据编码失败："+e.message, "error");
+return false;
+}
 
-  let lastErr = "";
-  for(let attempt=1; attempt<=3; attempt++){
-    try{
-      if(!dataSha) await fetchDataSha();
-      const payload = {message:"Update: "+(action||"blog"), content, branch:GH_BRANCH};
-      if(dataSha) payload.sha = dataSha;
+let lastErr = "";
+for(let attempt=1; attempt<=3; attempt++){
+try{
+if(!dataSha) await fetchDataSha();
+const payload = {message:"Update: "+(action||"blog"), content, branch:GH_BRANCH};
+if(dataSha) payload.sha = dataSha;
 
-      const r = await ghApi(DATA_PATH, {
-        method:"PUT",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(payload)
-      });
+const r = await ghApi(DATA_PATH, {
+method:"PUT",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify(payload)
+});
 
-      if(r.ok){
-        dataSha = (r.json && r.json.content && r.json.content.sha) ? r.json.content.sha : "";
-        saving = false;
-        setSyncState("已保存 "+nowStr());
-        showToast("✅ 保存成功，稍等 1 分钟前台就会更新");
-        return true;
-      }
+if(r.ok){
+dataSha = (r.json && r.json.content && r.json.content.sha) ? r.json.content.sha : "";
+saving = false;
+setSyncState("已保存 "+nowStr());
+showToast("✅ 保存成功，稍等 1 分钟前台就会更新");
+return true;
+}
 
-      lastErr = ghErrorText(r.status, r.json);
-      /* 冲突：重新取 sha 再试 */
-      if(r.status===409 || r.status===422){
-        dataSha = "";
-        await fetchDataSha();
-        await new Promise(res=>setTimeout(res, 400*attempt));
-        continue;
-      }
-      break;
-    }catch(e){
-      lastErr = "网络错误："+e.message;
-      await new Promise(res=>setTimeout(res, 500*attempt));
-    }
-  }
+lastErr = ghErrorText(r.status, r.json);
+/* 冲突：重新取 sha 再试 */
+if(r.status===409 || r.status===422){
+dataSha = "";
+await fetchDataSha();
+await new Promise(res=>setTimeout(res, 400*attempt));
+continue;
+}
+break;
+}catch(e){
+lastErr = "网络错误："+e.message;
+await new Promise(res=>setTimeout(res, 500*attempt));
+}
+}
 
-  saving = false;
-  setSyncState("保存失败");
-  showToast("❌ 保存失败："+lastErr, "error");
-  return false;
+saving = false;
+setSyncState("保存失败");
+showToast("❌ 保存失败："+lastErr, "error");
+return false;
 }
 
 /* ============================================================
-   文件上传
-   ============================================================ */
+  文件上传
+  ============================================================ */
 function fileToBase64(file){
-  return new Promise((resolve, reject)=>{
-    const reader = new FileReader();
-    reader.onload = ()=>resolve(String(reader.result).split(",")[1]);
-    reader.onerror = ()=>reject(new Error("读取文件失败"));
-    reader.readAsDataURL(file);
-  });
+return new Promise((resolve, reject)=>{
+const reader = new FileReader();
+reader.onload = ()=>resolve(String(reader.result).split(",")[1]);
+reader.onerror = ()=>reject(new Error("读取文件失败"));
+reader.readAsDataURL(file);
+});
 }
 
 /* 清理文件名并生成存放路径 */
 let _upSeq = 0;
 function buildFilePath(name){
-  _upSeq++;
-  const safe = String(name).replace(/[^\w.\-\u4e00-\u9fa5]/g, "_").slice(-60);
-  const rnd = Math.random().toString(36).slice(2, 10);
-  return FILES_DIR + "/" + Date.now() + "_" + _upSeq + "_" + rnd + "_" + safe;
+_upSeq++;
+const safe = String(name).replace(/[^\w.\-\u4e00-\u9fa5]/g, "_").slice(-60);
+const rnd = Math.random().toString(36).slice(2, 10);
+return FILES_DIR + "/" + Date.now() + "_" + _upSeq + "_" + rnd + "_" + safe;
 }
 
 /* 后台元素命名兼容：课程用 c 前缀、论文 p、班级 cl */
 var KIND_PREFIX = { course:"c", paper:"p", "class":"cl", life:"life", media:"media" };
 function kindEl(kind, suffix){
-  var p = KIND_PREFIX[kind] || kind;
-  return $(p + suffix) || $(kind + suffix);
+var p = KIND_PREFIX[kind] || kind;
+return $(p + suffix) || $(kind + suffix);
 }
 
 function setProgress(kind, pct){
-  var t = kindEl(kind,"ProgressTrack"), b = kindEl(kind,"ProgressBar");
-  if(t) t.classList.add("on");
-  if(b) b.style.width = pct+"%";
+var t = kindEl(kind,"ProgressTrack"), b = kindEl(kind,"ProgressBar");
+if(t) t.classList.add("on");
+if(b) b.style.width = pct+"%";
 }
 function hideProgress(kind){
-  var t = kindEl(kind,"ProgressTrack"), b = kindEl(kind,"ProgressBar");
-  if(t) t.classList.remove("on");
-  if(b) b.style.width = "0%";
+var t = kindEl(kind,"ProgressTrack"), b = kindEl(kind,"ProgressBar");
+if(t) t.classList.remove("on");
+if(b) b.style.width = "0%";
 }
 
 /* ---------- 上传进度条 ---------- */
@@ -1345,18 +1341,31 @@ function finishUploadProgress(ok, msg){
 /* 刚上传的文件：GitHub Pages 还没发布，预览时加时间戳绕过缓存 */
 var freshFiles = {};
 function previewSrc(path){
-  var p = String(path || "");
-  if(!p) return p;
-  if(freshFiles[p]) return p + (p.indexOf("?") >= 0 ? "&" : "?") + "t=" + freshFiles[p];
-  return p;
+var p = String(path || "");
+if(!p) return p;
+if(freshFiles[p]) return p + (p.indexOf("?") >= 0 ? "&" : "?") + "t=" + freshFiles[p];
+return p;
 }
 
 async function uploadFile(file, kind){
-  if(file.size > MAX_FILE_MB*1024*1024){
-    throw new Error("「"+file.name+"」有 "+fmtSize(file.size)+"，超过 GitHub 单文件上限 "+MAX_FILE_MB+"MB。大文件请先传到网盘，再用「外链地址」粘链接。");
-  }
-  if(!getStoredToken()) throw new Error("请先在「站点设置」里填写 GitHub Token");
+if(file.size > MAX_FILE_MB*1024*1024){
+throw new Error("「"+file.name+"」有 "+fmtSize(file.size)+"，超过 GitHub 单文件上限 "+MAX_FILE_MB+"MB。大文件请先传到网盘，再用「外链地址」粘链接。");
+}
+if(!getStoredToken()) throw new Error("请先在「站点设置」里填写 GitHub Token");
 
+  const status = kindEl(kind,"UpStatus");
+  if(status && file.size > 2*1024*1024){
+    status.textContent = "正在编码「"+file.name+"」("+fmtSize(file.size)+")，大文件需要几秒…";
+    await new Promise(r=>setTimeout(r, 50));
+  }
+  const content = await fileToBase64(file);
+
+  let lastErr = "";
+  for(let attempt=1; attempt<=4; attempt++){
+    const safe = buildFilePath(file.name);                 /* 每次重试都换一个新路径 */
+    const apiPath = safe.split("/").map(encodeURIComponent).join("/");
+    const body = JSON.stringify({message:"Upload: "+file.name, content, branch:GH_BRANCH});
+    let res = null, json = null;
   var status = kindEl(kind, "UpStatus");
   showUploadProgress(file.name);
   if(status){ status.textContent = "正在编码 " + file.name + " …"; }
@@ -1379,7 +1388,11 @@ async function uploadFile(file, kind){
       setUploadProgress(0, 0, totalSize);
       await new Promise(function(r){ setTimeout(r, 700*attempt); });
     }
-    try{
+try{
+      res = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+apiPath, {
+        method:"PUT",
+        headers:Object.assign({}, ghHeaders(), {"Content-Type":"application/json"}),
+        body: body
       await new Promise(function(resolve, reject){
         var xhr = new XMLHttpRequest();
         xhr.open("PUT", "https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+apiPath);
@@ -1405,13 +1418,20 @@ async function uploadFile(file, kind){
         xhr.onerror = function(){ reject(new Error("网络错误")); };
         xhr.ontimeout = function(){ reject(new Error("上传超时")); };
         xhr.send(body);
-      });
+});
+      try{ json = await res.json(); }catch(e){}
+    }catch(e){
+      lastErr = "网络错误："+e.message;
+      await new Promise(r=>setTimeout(r, 700*attempt));
+      continue;
+    }
 
-      freshFiles[safe] = Date.now();
+    if(res.ok){
+freshFiles[safe] = Date.now();
       setUploadProgress(100, totalSize, totalSize);
       finishUploadProgress(true, "上传完成 ✅ " + fmtSize(totalSize));
       if(status) status.textContent = "✅ 已上传：" + file.name + "（记得点保存）";
-      return {name:file.name, url:safe, type:(file.name.split(".").pop()||"file").toUpperCase(), size:file.size};
+return {name:file.name, url:safe, type:(file.name.split(".").pop()||"file").toUpperCase(), size:file.size};
     }catch(e){
       lastErr = e.message;
       lastStatus = e.status || 0;
@@ -1419,11 +1439,19 @@ async function uploadFile(file, kind){
         continue;
       }
       break;
+}
+
+    lastErr = "HTTP "+res.status + (json && json.message ? ("："+json.message) : "");
+    if(attempt < 4 && (res.status===409 || res.status===422 || res.status>=500)){
+      if(status) status.textContent = "上传冲突，正在重试（"+attempt+"/4）…";
+      await new Promise(r=>setTimeout(r, 700*attempt));
+      continue;
     }
-  }
+    break;
+}
   finishUploadProgress(false, "上传失败 ❌ " + lastErr);
   if(status) status.textContent = "❌ 上传失败：" + lastErr;
-  throw new Error(lastErr);
+throw new Error(lastErr);
 }
 
 /* ---------- 通用图片 / 图标上传 ---------- */
@@ -1435,260 +1463,260 @@ function pickImgs(key){ imgKey = key; $("imgFileInput").click(); }
 function pickIcon(inputId){ iconTarget = inputId; $("iconFileInput").click(); }
 
 async function onImgFiles(e){
-  var files = Array.prototype.slice.call(e.target.files||[]);
-  e.target.value = "";
-  if(!files.length || !imgKey) return;
-  var key = imgKey;
-  imgDrafts[key] = imgDrafts[key] || [];
-  for(var i=0;i<files.length;i++){
-    try{
-      showToast("正在上传图片…");
-      var meta = await uploadFile(files[i], "img");
-      imgDrafts[key].push(meta);
-      renderImgDrafts(key);
-    }catch(err){ showToast("图片上传失败："+err.message, "error"); return; }
-  }
-  showToast("图片已上传，记得点保存");
+var files = Array.prototype.slice.call(e.target.files||[]);
+e.target.value = "";
+if(!files.length || !imgKey) return;
+var key = imgKey;
+imgDrafts[key] = imgDrafts[key] || [];
+for(var i=0;i<files.length;i++){
+try{
+showToast("正在上传图片…");
+var meta = await uploadFile(files[i], "img");
+imgDrafts[key].push(meta);
+renderImgDrafts(key);
+}catch(err){ showToast("图片上传失败："+err.message, "error"); return; }
+}
+showToast("图片已上传，记得点保存");
 }
 
 async function onIconFile(e){
-  var f = e.target.files[0];
-  e.target.value = "";
-  if(!f || !iconTarget) return;
-  var target = iconTarget;
-  try{
-    showToast("正在上传图标…");
-    var meta = await uploadFile(f, "img");
-    $(target).value = meta.url;
-    refreshIconPrev(target);
-    showToast("图标已上传，记得保存");
-  }catch(err){ showToast("图标上传失败："+err.message, "error"); }
+var f = e.target.files[0];
+e.target.value = "";
+if(!f || !iconTarget) return;
+var target = iconTarget;
+try{
+showToast("正在上传图标…");
+var meta = await uploadFile(f, "img");
+$(target).value = meta.url;
+refreshIconPrev(target);
+showToast("图标已上传，记得保存");
+}catch(err){ showToast("图标上传失败："+err.message, "error"); }
 }
 
 function renderImgDrafts(key){
-  var box = $("imgList_"+key);
-  if(!box) return;
-  box.innerHTML = (imgDrafts[key]||[]).map(function(f,i){
-    return '<span style="display:inline-block;position:relative;margin:4px"><img src="'+esc(previewSrc(f.url))+'" data-url="'+esc(f.url)+'" data-dkey="'+esc(key)+'" data-didx="'+i+'" data-title="预览 / 编辑图片" onclick="openImgFrom(this)" style="width:88px;height:88px;object-fit:cover;border-radius:8px;vertical-align:middle;border:1px solid #e2e8f0;cursor:zoom-in"><button class="btn btn-danger btn-sm" style="position:absolute;top:-8px;right:-8px;padding:1px 6px" data-imgkey="'+esc(key)+'" data-imgidx="'+i+'" onclick="removeImgBtn(this)">×</button></span>';
-  }).join("") || '<span style="font-size:.8rem;color:#94a3b8">还没有图片</span>';
+var box = $("imgList_"+key);
+if(!box) return;
+box.innerHTML = (imgDrafts[key]||[]).map(function(f,i){
+return '<span style="display:inline-block;position:relative;margin:4px"><img src="'+esc(previewSrc(f.url))+'" data-url="'+esc(f.url)+'" data-dkey="'+esc(key)+'" data-didx="'+i+'" data-title="预览 / 编辑图片" onclick="openImgFrom(this)" style="width:88px;height:88px;object-fit:cover;border-radius:8px;vertical-align:middle;border:1px solid #e2e8f0;cursor:zoom-in"><button class="btn btn-danger btn-sm" style="position:absolute;top:-8px;right:-8px;padding:1px 6px" data-imgkey="'+esc(key)+'" data-imgidx="'+i+'" onclick="removeImgBtn(this)">×</button></span>';
+}).join("") || '<span style="font-size:.8rem;color:#94a3b8">还没有图片</span>';
 }
 function removeImgBtn(btn){
-  var key = btn.getAttribute("data-imgkey");
-  var i = parseInt(btn.getAttribute("data-imgidx"),10);
-  if(imgDrafts[key]){ imgDrafts[key].splice(i,1); renderImgDrafts(key); }
+var key = btn.getAttribute("data-imgkey");
+var i = parseInt(btn.getAttribute("data-imgidx"),10);
+if(imgDrafts[key]){ imgDrafts[key].splice(i,1); renderImgDrafts(key); }
 }
 function setImgDrafts(key, arr){
-  imgDrafts[key] = (arr||[]).slice();
-  renderImgDrafts(key);
+imgDrafts[key] = (arr||[]).slice();
+renderImgDrafts(key);
 }
 
 /* ---------- 名单 ---------- */
 const ROSTER_FIELDS = [
-  ["studentId","学号"], ["name","姓名"], ["gender","性别"], ["className","班级"],
-  ["college","学院"], ["major","专业"], ["dorm","宿舍号"], ["advisor","导师"],
-  ["ethnicity","民族"], ["political","政治面貌"], ["birthday","出生日期"],
-  ["phone","电话"], ["email","邮箱"], ["idCard","身份证号"], ["homeAddress","家庭住址"], ["note","备注"]
+["studentId","学号"], ["name","姓名"], ["gender","性别"], ["className","班级"],
+["college","学院"], ["major","专业"], ["dorm","宿舍号"], ["advisor","导师"],
+["ethnicity","民族"], ["political","政治面貌"], ["birthday","出生日期"],
+["phone","电话"], ["email","邮箱"], ["idCard","身份证号"], ["homeAddress","家庭住址"], ["note","备注"]
 ];
 function renderRosterFields(){
-  var box = document.getElementById("rosterFields");
-  if(!box) return;
-  box.innerHTML = ROSTER_FIELDS.map(function(f){
-    return '<label style="display:flex;align-items:center;gap:4px;white-space:nowrap"><input type="checkbox" class="rfield" value="'+f[0]+'" checked> '+f[1]+'</label>';
-  }).join("");
+var box = document.getElementById("rosterFields");
+if(!box) return;
+box.innerHTML = ROSTER_FIELDS.map(function(f){
+return '<label style="display:flex;align-items:center;gap:4px;white-space:nowrap"><input type="checkbox" class="rfield" value="'+f[0]+'" checked> '+f[1]+'</label>';
+}).join("");
 }
 function getHiddenFields(){
-  return Array.prototype.slice.call(document.querySelectorAll(".rfield")).filter(function(c){ return !c.checked; }).map(function(c){ return c.value; });
+return Array.prototype.slice.call(document.querySelectorAll(".rfield")).filter(function(c){ return !c.checked; }).map(function(c){ return c.value; });
 }
 
 let editingRoster = null;
 function saveRoster(){
-  var name = $("rName").value.trim();
-  if(!name){ showToast("请输入姓名","error"); return; }
-  var item = {
-    studentId:$("rStudentId").value.trim(), name:name, gender:$("rGender").value,
-    className:$("rClass").value.trim(), college:$("rCollege").value.trim(), major:$("rMajor").value.trim(),
-    dorm:$("rDorm").value.trim(), phone:$("rPhone").value.trim(), email:$("rEmail").value.trim(),
-    idCard:$("rIdCard").value.trim(), birthday:$("rBirthday").value.trim(), ethnicity:$("rEthnicity").value.trim(),
-    advisor:$("rAdvisor").value.trim(), political:$("rPolitical").value.trim(),
-    homeAddress:$("rAddress").value.trim(), note:$("rNote").value.trim(),
-    photo:$("rPhoto").value.trim(), images:(imgDrafts.roster||[]).slice(), show: $("rShow").checked, hide: getHiddenFields()
-  };
-  blogData.roster = blogData.roster || [];
-  if(editingRoster===null){ blogData.roster.push(item); saveData("添加名单："+name); }
-  else { blogData.roster[editingRoster] = item; saveData("编辑名单："+name); }
-  cancelRosterEdit();
-  renderAll();
+var name = $("rName").value.trim();
+if(!name){ showToast("请输入姓名","error"); return; }
+var item = {
+studentId:$("rStudentId").value.trim(), name:name, gender:$("rGender").value,
+className:$("rClass").value.trim(), college:$("rCollege").value.trim(), major:$("rMajor").value.trim(),
+dorm:$("rDorm").value.trim(), phone:$("rPhone").value.trim(), email:$("rEmail").value.trim(),
+idCard:$("rIdCard").value.trim(), birthday:$("rBirthday").value.trim(), ethnicity:$("rEthnicity").value.trim(),
+advisor:$("rAdvisor").value.trim(), political:$("rPolitical").value.trim(),
+homeAddress:$("rAddress").value.trim(), note:$("rNote").value.trim(),
+photo:$("rPhoto").value.trim(), images:(imgDrafts.roster||[]).slice(), show: $("rShow").checked, hide: getHiddenFields()
+};
+blogData.roster = blogData.roster || [];
+if(editingRoster===null){ blogData.roster.push(item); saveData("添加名单："+name); }
+else { blogData.roster[editingRoster] = item; saveData("编辑名单："+name); }
+cancelRosterEdit();
+renderAll();
 }
 function editRoster(i){
-  var r = blogData.roster[i];
-  editingRoster = i;
-  $("rStudentId").value=r.studentId||""; $("rName").value=r.name||""; $("rGender").value=r.gender||"";
-  $("rClass").value=r.className||""; $("rCollege").value=r.college||""; $("rMajor").value=r.major||"";
-  $("rDorm").value=r.dorm||""; $("rPhone").value=r.phone||""; $("rEmail").value=r.email||"";
-  $("rIdCard").value=r.idCard||""; $("rBirthday").value=r.birthday||""; $("rEthnicity").value=r.ethnicity||"";
-  $("rAdvisor").value=r.advisor||""; $("rPolitical").value=r.political||"";
-  $("rAddress").value=r.homeAddress||""; $("rNote").value=r.note||""; $("rPhoto").value=r.photo||"";
-  $("rShow").checked = (r.show !== false);
-  var hid = r.hide || [];
-  Array.prototype.slice.call(document.querySelectorAll(".rfield")).forEach(function(c){ c.checked = (hid.indexOf(c.value) < 0); });
-  setImgDrafts("roster", r.images);
-  $("rosterFormTitle").textContent = "编辑名单：" + (r.name||"");
-  $("rosterEditBar").classList.add("on");
-  $("rSubmit").textContent = "保存修改";
-  $("rCancel").style.display = "inline-block";
-  $("panel-roster").scrollIntoView({behavior:"smooth"});
+var r = blogData.roster[i];
+editingRoster = i;
+$("rStudentId").value=r.studentId||""; $("rName").value=r.name||""; $("rGender").value=r.gender||"";
+$("rClass").value=r.className||""; $("rCollege").value=r.college||""; $("rMajor").value=r.major||"";
+$("rDorm").value=r.dorm||""; $("rPhone").value=r.phone||""; $("rEmail").value=r.email||"";
+$("rIdCard").value=r.idCard||""; $("rBirthday").value=r.birthday||""; $("rEthnicity").value=r.ethnicity||"";
+$("rAdvisor").value=r.advisor||""; $("rPolitical").value=r.political||"";
+$("rAddress").value=r.homeAddress||""; $("rNote").value=r.note||""; $("rPhoto").value=r.photo||"";
+$("rShow").checked = (r.show !== false);
+var hid = r.hide || [];
+Array.prototype.slice.call(document.querySelectorAll(".rfield")).forEach(function(c){ c.checked = (hid.indexOf(c.value) < 0); });
+setImgDrafts("roster", r.images);
+$("rosterFormTitle").textContent = "编辑名单：" + (r.name||"");
+$("rosterEditBar").classList.add("on");
+$("rSubmit").textContent = "保存修改";
+$("rCancel").style.display = "inline-block";
+$("panel-roster").scrollIntoView({behavior:"smooth"});
 }
 function cancelRosterEdit(){
-  editingRoster = null;
-  ["rStudentId","rName","rClass","rCollege","rMajor","rDorm","rPhone","rEmail","rIdCard","rBirthday","rEthnicity","rAdvisor","rPolitical","rAddress","rNote","rPhoto"].forEach(function(id){ $(id).value=""; });
-  $("rGender").value = ""; $("rShow").checked = true;
-  Array.prototype.slice.call(document.querySelectorAll(".rfield")).forEach(function(c){ c.checked = true; });
-  setImgDrafts("roster", []);
-  $("rosterFormTitle").textContent = "添加名单成员";
-  $("rosterEditBar").classList.remove("on");
-  $("rSubmit").textContent = "添加成员";
-  $("rCancel").style.display = "none";
+editingRoster = null;
+["rStudentId","rName","rClass","rCollege","rMajor","rDorm","rPhone","rEmail","rIdCard","rBirthday","rEthnicity","rAdvisor","rPolitical","rAddress","rNote","rPhoto"].forEach(function(id){ $(id).value=""; });
+$("rGender").value = ""; $("rShow").checked = true;
+Array.prototype.slice.call(document.querySelectorAll(".rfield")).forEach(function(c){ c.checked = true; });
+setImgDrafts("roster", []);
+$("rosterFormTitle").textContent = "添加名单成员";
+$("rosterEditBar").classList.remove("on");
+$("rSubmit").textContent = "添加成员";
+$("rCancel").style.display = "none";
 }
 function delRoster(i){
-  if(!confirm("确定删除？")) return;
-  if(editingRoster===i) cancelRosterEdit();
-  blogData.roster.splice(i,1);
-  saveData("删除名单");
-  renderAll();
+if(!confirm("确定删除？")) return;
+if(editingRoster===i) cancelRosterEdit();
+blogData.roster.splice(i,1);
+saveData("删除名单");
+renderAll();
 }
 function renderRoster(){
-  $("rosterList").innerHTML = (blogData.roster||[]).map(function(r,i){
-    var parts = [];
-    if(r.studentId) parts.push("学号 "+esc(r.studentId));
-    if(r.gender) parts.push(esc(r.gender));
-    if(r.className) parts.push(esc(r.className));
-    if(r.college) parts.push(esc(r.college));
-    if(r.dorm) parts.push("宿舍 "+esc(r.dorm));
-    if(r.advisor) parts.push("导师 "+esc(r.advisor));
-    var on = (r.show !== false);
-    var hid = r.hide || [];
-    var fieldBoxes = ROSTER_FIELDS.map(function(f){
-      var vis = (hid.indexOf(f[0]) < 0);
-      return '<label style="display:inline-flex;align-items:center;gap:3px;white-space:nowrap;color:'+(vis?"#475569":"#cbd5e1")+'"><input type="checkbox" '+(vis?"checked":"")+' data-ri="'+i+'" data-field="'+f[0]+'" onclick="toggleRosterField(this)"> '+f[1]+'</label>';
-    }).join("");
-    return '<div class="item-row"><div class="info"><div class="title">'+esc(r.name)+(on?"":' <span style="font-size:.72rem;color:#ef4444">（前台隐藏）</span>')+'</div><div class="desc">'+parts.join(" · ")+'</div>'
-      + '<div style="margin-top:8px;font-size:.76rem;display:flex;flex-wrap:wrap;gap:6px 12px;padding-top:8px;border-top:1px dashed #e2e8f0">'+fieldBoxes+'</div>'
-      + '</div><div class="actions"><label style="font-size:.8rem;display:flex;align-items:center;gap:4px"><input type="checkbox" '+(on?"checked":"")+' data-ri="'+i+'" onclick="toggleRosterShow(this)"> 整条显示</label><button class="btn btn-ghost btn-sm" onclick="editRoster('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delRoster('+i+')">删除</button></div></div>';
-  }).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无名单</div>';
+$("rosterList").innerHTML = (blogData.roster||[]).map(function(r,i){
+var parts = [];
+if(r.studentId) parts.push("学号 "+esc(r.studentId));
+if(r.gender) parts.push(esc(r.gender));
+if(r.className) parts.push(esc(r.className));
+if(r.college) parts.push(esc(r.college));
+if(r.dorm) parts.push("宿舍 "+esc(r.dorm));
+if(r.advisor) parts.push("导师 "+esc(r.advisor));
+var on = (r.show !== false);
+var hid = r.hide || [];
+var fieldBoxes = ROSTER_FIELDS.map(function(f){
+var vis = (hid.indexOf(f[0]) < 0);
+return '<label style="display:inline-flex;align-items:center;gap:3px;white-space:nowrap;color:'+(vis?"#475569":"#cbd5e1")+'"><input type="checkbox" '+(vis?"checked":"")+' data-ri="'+i+'" data-field="'+f[0]+'" onclick="toggleRosterField(this)"> '+f[1]+'</label>';
+}).join("");
+return '<div class="item-row"><div class="info"><div class="title">'+esc(r.name)+(on?"":' <span style="font-size:.72rem;color:#ef4444">（前台隐藏）</span>')+'</div><div class="desc">'+parts.join(" · ")+'</div>'
++ '<div style="margin-top:8px;font-size:.76rem;display:flex;flex-wrap:wrap;gap:6px 12px;padding-top:8px;border-top:1px dashed #e2e8f0">'+fieldBoxes+'</div>'
++ '</div><div class="actions"><label style="font-size:.8rem;display:flex;align-items:center;gap:4px"><input type="checkbox" '+(on?"checked":"")+' data-ri="'+i+'" onclick="toggleRosterShow(this)"> 整条显示</label><button class="btn btn-ghost btn-sm" onclick="editRoster('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delRoster('+i+')">删除</button></div></div>';
+}).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无名单</div>';
 }
 function toggleRosterField(cb){
-  var i = parseInt(cb.getAttribute("data-ri"),10);
-  var key = cb.getAttribute("data-field");
-  var r = blogData.roster[i];
-  if(!r) return;
-  r.hide = r.hide || [];
-  var idx = r.hide.indexOf(key);
-  if(cb.checked){ if(idx >= 0) r.hide.splice(idx,1); }
-  else { if(idx < 0) r.hide.push(key); }
-  saveData("名单字段可见性：" + key + (cb.checked ? " 显示" : " 隐藏"));
-  renderRoster();
+var i = parseInt(cb.getAttribute("data-ri"),10);
+var key = cb.getAttribute("data-field");
+var r = blogData.roster[i];
+if(!r) return;
+r.hide = r.hide || [];
+var idx = r.hide.indexOf(key);
+if(cb.checked){ if(idx >= 0) r.hide.splice(idx,1); }
+else { if(idx < 0) r.hide.push(key); }
+saveData("名单字段可见性：" + key + (cb.checked ? " 显示" : " 隐藏"));
+renderRoster();
 }
 function toggleRosterShow(cb){
-  var i = parseInt(cb.getAttribute("data-ri"),10);
-  if(!blogData.roster[i]) return;
-  blogData.roster[i].show = cb.checked;
-  saveData(cb.checked ? "名单：前台显示" : "名单：前台隐藏");
-  renderRoster();
+var i = parseInt(cb.getAttribute("data-ri"),10);
+if(!blogData.roster[i]) return;
+blogData.roster[i].show = cb.checked;
+saveData(cb.checked ? "名单：前台显示" : "名单：前台隐藏");
+renderRoster();
 }
 function toggleRosterSensitive(){
-  blogData.rosterConfig = blogData.rosterConfig || {};
-  blogData.rosterConfig.showSensitive = $("rShowSensitive").checked;
-  saveData(blogData.rosterConfig.showSensitive ? "名单：公开敏感信息" : "名单：隐藏敏感信息");
+blogData.rosterConfig = blogData.rosterConfig || {};
+blogData.rosterConfig.showSensitive = $("rShowSensitive").checked;
+saveData(blogData.rosterConfig.showSensitive ? "名单：公开敏感信息" : "名单：隐藏敏感信息");
 }
 function exportRoster(){ downloadJSON("roster-"+todayStr()+".json", blogData.roster||[]); showToast("已导出名单 JSON"); }
 
 async function handleFiles(fileList, kind, folder){
-  var files = Array.prototype.slice.call(fileList||[]);
-  if(!files.length) return;
-  var status = kindEl(kind,"UpStatus");
-  var done = 0;
-  for(var i=0;i<files.length;i++){
-    var f = files[i];
-    try{
-      if(status) status.textContent = "上传中（"+(done+1)+"/"+files.length+"）："+f.name;
-      var meta = await uploadFile(f, kind);
-      meta.folder = folder || "";
-      drafts[kind].push(meta);
-      done++;
-      renderDraftFiles(kind);
-    }catch(e){
-      if(status) status.textContent = "❌ 上传失败："+e.message;
-      showToast("上传失败："+e.message, "error");
-      hideProgress(kind);
-      renderDraftFiles(kind);
-      return;
-    }
-  }
-  hideProgress(kind);
-  if(status) status.textContent = "✅ 已上传 "+done+" 个文件（记得点下方按钮保存）";
-  showToast("已上传 "+done+" 个文件，别忘了点保存");
-  renderDraftFiles(kind);
+var files = Array.prototype.slice.call(fileList||[]);
+if(!files.length) return;
+var status = kindEl(kind,"UpStatus");
+var done = 0;
+for(var i=0;i<files.length;i++){
+var f = files[i];
+try{
+if(status) status.textContent = "上传中（"+(done+1)+"/"+files.length+"）："+f.name;
+var meta = await uploadFile(f, kind);
+meta.folder = folder || "";
+drafts[kind].push(meta);
+done++;
+renderDraftFiles(kind);
+}catch(e){
+if(status) status.textContent = "❌ 上传失败："+e.message;
+showToast("上传失败："+e.message, "error");
+hideProgress(kind);
+renderDraftFiles(kind);
+return;
+}
+}
+hideProgress(kind);
+if(status) status.textContent = "✅ 已上传 "+done+" 个文件（记得点下方按钮保存）";
+showToast("已上传 "+done+" 个文件，别忘了点保存");
+renderDraftFiles(kind);
 }
 
 function removeDraftFileBtn(btn){
-  var kind = btn.getAttribute("data-fkind");
-  var i = parseInt(btn.getAttribute("data-fidx"),10);
-  if(drafts[kind]){ drafts[kind].splice(i,1); renderDraftFiles(kind); }
+var kind = btn.getAttribute("data-fkind");
+var i = parseInt(btn.getAttribute("data-fidx"),10);
+if(drafts[kind]){ drafts[kind].splice(i,1); renderDraftFiles(kind); }
 }
 function renderDraftFiles(kind){
-  var box = kindEl(kind,"Files");
-  if(!box) return;
-  var list = drafts[kind]||[];
-  if(!list.length){ box.innerHTML = '<div style="font-size:.82rem;color:#94a3b8">还没有文件</div>'; return; }
-  var groups = {}, order = [];
-  list.forEach(function(f,i){
-    var g = f.folder || "";
-    if(!groups[g]){ groups[g] = []; order.push(g); }
-    groups[g].push({f:f, i:i});
-  });
-  var html = "";
-  order.forEach(function(g){
-    html += '<div style="margin:8px 0 4px;font-size:.85rem;font-weight:600">' + (g ? ('📁 '+esc(g)) : '📄 根目录（未归类）');
-    if(g){
-      html += ' <button class="btn btn-ghost btn-sm" data-fk="'+esc(kind)+'" data-fn="'+esc(g)+'" onclick="renameFolderBtn(this)">重命名</button>';
-      html += ' <button class="btn btn-danger btn-sm" data-fk="'+esc(kind)+'" data-fn="'+esc(g)+'" onclick="deleteFolderBtn(this)">删除文件夹</button>';
-    }
-    html += '</div>';
-    groups[g].forEach(function(it){
-      html += '<div class="file-item"><span class="fname">📄 '+esc(it.f.name)+'</span><span class="fsize">'+esc(it.f.type||"")+(it.f.size?(" · "+fmtSize(it.f.size)):"")+'</span><button class="btn btn-danger btn-sm" data-fkind="'+esc(kind)+'" data-fidx="'+it.i+'" onclick="removeDraftFileBtn(this)">移除</button></div>';
-    });
-  });
-  box.innerHTML = html;
+var box = kindEl(kind,"Files");
+if(!box) return;
+var list = drafts[kind]||[];
+if(!list.length){ box.innerHTML = '<div style="font-size:.82rem;color:#94a3b8">还没有文件</div>'; return; }
+var groups = {}, order = [];
+list.forEach(function(f,i){
+var g = f.folder || "";
+if(!groups[g]){ groups[g] = []; order.push(g); }
+groups[g].push({f:f, i:i});
+});
+var html = "";
+order.forEach(function(g){
+html += '<div style="margin:8px 0 4px;font-size:.85rem;font-weight:600">' + (g ? ('📁 '+esc(g)) : '📄 根目录（未归类）');
+if(g){
+html += ' <button class="btn btn-ghost btn-sm" data-fk="'+esc(kind)+'" data-fn="'+esc(g)+'" onclick="renameFolderBtn(this)">重命名</button>';
+html += ' <button class="btn btn-danger btn-sm" data-fk="'+esc(kind)+'" data-fn="'+esc(g)+'" onclick="deleteFolderBtn(this)">删除文件夹</button>';
+}
+html += '</div>';
+groups[g].forEach(function(it){
+html += '<div class="file-item"><span class="fname">📄 '+esc(it.f.name)+'</span><span class="fsize">'+esc(it.f.type||"")+(it.f.size?(" · "+fmtSize(it.f.size)):"")+'</span><button class="btn btn-danger btn-sm" data-fkind="'+esc(kind)+'" data-fidx="'+it.i+'" onclick="removeDraftFileBtn(this)">移除</button></div>';
+});
+});
+box.innerHTML = html;
 }
 function renameFolderBtn(btn){ renameFolder(btn.getAttribute("data-fk"), btn.getAttribute("data-fn")); }
 function deleteFolderBtn(btn){ deleteFolderDraft(btn.getAttribute("data-fk"), btn.getAttribute("data-fn")); }
 function renameFolder(kind, name){
-  var nn = prompt("文件夹新名称：", name);
-  if(nn === null) return;
-  nn = nn.trim();
-  if(!nn){ showToast("名称不能为空","error"); return; }
-  (drafts[kind]||[]).forEach(function(f){ if((f.folder||"") === name) f.folder = nn; });
-  renderDraftFiles(kind);
-  showToast("文件夹已重命名（记得点保存）");
+var nn = prompt("文件夹新名称：", name);
+if(nn === null) return;
+nn = nn.trim();
+if(!nn){ showToast("名称不能为空","error"); return; }
+(drafts[kind]||[]).forEach(function(f){ if((f.folder||"") === name) f.folder = nn; });
+renderDraftFiles(kind);
+showToast("文件夹已重命名（记得点保存）");
 }
 function deleteFolderDraft(kind, name){
-  var n = (drafts[kind]||[]).filter(function(f){ return (f.folder||"") === name; }).length;
-  if(!confirm("删除文件夹「"+name+"」及其中 "+n+" 个文件？（记得点保存才生效）")) return;
-  drafts[kind] = (drafts[kind]||[]).filter(function(f){ return (f.folder||"") !== name; });
-  renderDraftFiles(kind);
-  showToast("文件夹已删除（记得点保存）");
+var n = (drafts[kind]||[]).filter(function(f){ return (f.folder||"") === name; }).length;
+if(!confirm("删除文件夹「"+name+"」及其中 "+n+" 个文件？（记得点保存才生效）")) return;
+drafts[kind] = (drafts[kind]||[]).filter(function(f){ return (f.folder||"") !== name; });
+renderDraftFiles(kind);
+showToast("文件夹已删除（记得点保存）");
 }
 function removeDraftFileBtn(btn){
-  var kind = btn.getAttribute("data-fkind");
-  var i = parseInt(btn.getAttribute("data-fidx"),10);
-  if(drafts[kind]){ drafts[kind].splice(i,1); renderDraftFiles(kind); }
+var kind = btn.getAttribute("data-fkind");
+var i = parseInt(btn.getAttribute("data-fidx"),10);
+if(drafts[kind]){ drafts[kind].splice(i,1); renderDraftFiles(kind); }
 }
 
 function onCourseFiles(e){
-  var v = e.target.files;
-  var folder = $("cFolder") ? $("cFolder").value.trim() : "";
-  handleFiles(v, "course", folder);
-  e.target.value = "";
+var v = e.target.files;
+var folder = $("cFolder") ? $("cFolder").value.trim() : "";
+handleFiles(v, "course", folder);
+e.target.value = "";
 }
 function onDmediaFiles(e){ var v=e.target.files; handleFiles(v,"dmedia"); e.target.value=""; }
 function onNoticeFiles(e){ var v=e.target.files; handleFiles(v,"nf"); e.target.value=""; }
@@ -1697,747 +1725,730 @@ function onClassFiles(e){ const v=e.target.files; handleFiles(v,"class"); e.targ
 function onLifeFiles(e){ const v=e.target.files; handleFiles(v,"life"); e.target.value=""; }
 function onMediaFiles(e){ const v=e.target.files; handleFiles(v,"media"); e.target.value=""; }
 
-/* ---------- 网盘外链文件（跳过 GitHub 上传，适合大 PDF / 音频 / 视频）---------- */
-function addExternalFileBtn(kind){
-  var url = prompt("粘贴网盘分享链接（百度网盘/阿里云盘等）。\n如果有提取码，建议直接写在名字或链接后面方便自己识别：");
-  if(url === null) return;
-  url = url.trim();
-  if(!url){ showToast("链接不能为空", "error"); return; }
-  if(!/^https?:\/\//i.test(url)){ showToast("链接需要以 http:// 或 https:// 开头", "error"); return; }
-  var name = prompt("给这个文件起个名字（会显示在前台）：", "") || url;
-  name = name.trim() || url;
-  var extMatch = name.match(/\.([a-zA-Z0-9]{1,5})$/);
-  var type = extMatch ? extMatch[1].toUpperCase() : "链接";
-  drafts[kind] = drafts[kind] || [];
-  drafts[kind].push({name:name, url:url, type:type, size:0, folder:"", external:true});
-  renderDraftFiles(kind);
-  showToast("已添加外链，别忘了点下方「保存」");
-}
-
 /* ============================================================
-   渲染
-   ============================================================ */
+  渲染
+  ============================================================ */
 function renderAll(){
-  const sc = blogData.siteConfig || DEFAULT_DATA.siteConfig;
-  $("cfgTitle").value = sc.title || "";
-  $("cfgSub").value   = sc.subtitle || "";
-  $("cfgAbout").value = sc.about || "";
-  $("cfgAvatar").value = sc.avatar || "";
-  $("cfgDefaultImage").value = sc.defaultImage || "";
-  $("cfgColumns").value = sc.columns || "1";
-  $("cfgDefaultAvatar").value = sc.defaultAvatar || "";
-  $("cfgLoginHint").value = (sc.loginHint === undefined ? "" : sc.loginHint);
-  $("cfgCoverPan").checked = (sc.coverPan !== false);
-  $("cfgCoverPanSec").value = (sc.coverPanSec || 3);
-  $("cfgName").value   = sc.name || "";
-  $("cfgBio").value    = sc.bio || "";
-  $("tagsInput").value = (blogData.tags||[]).join(",");
-  renderCatManage();
-  renderQuickLinkManage();
-  updateLgCategories();
-  refreshAllIconPrevs();
+const sc = blogData.siteConfig || DEFAULT_DATA.siteConfig;
+$("cfgTitle").value = sc.title || "";
+$("cfgSub").value   = sc.subtitle || "";
+$("cfgAbout").value = sc.about || "";
+$("cfgAvatar").value = sc.avatar || "";
+$("cfgDefaultImage").value = sc.defaultImage || "";
+$("cfgColumns").value = sc.columns || "1";
+$("cfgDefaultAvatar").value = sc.defaultAvatar || "";
+$("cfgLoginHint").value = (sc.loginHint === undefined ? "" : sc.loginHint);
+$("cfgCoverPan").checked = (sc.coverPan !== false);
+$("cfgCoverPanSec").value = (sc.coverPanSec || 3);
+$("cfgName").value   = sc.name || "";
+$("cfgBio").value    = sc.bio || "";
+$("tagsInput").value = (blogData.tags||[]).join(",");
+renderCatManage();
+renderQuickLinkManage();
+updateLgCategories();
+refreshAllIconPrevs();
 
-  let fileCount = 0;
-  ["courses","papers","classItems"].forEach(k=>{
-    (blogData[k]||[]).forEach(it=>{ 
-      if(Array.isArray(it.files)) fileCount += it.files.length;
-      if(it.file) fileCount += 1;
-    });
-  });
-  $("statC").textContent=(blogData.courses||[]).length;
-  $("statP").textContent=(blogData.papers||[]).length;
-  $("statN").textContent=(blogData.notices||[]).length;
-  $("statF").textContent=fileCount;
+let fileCount = 0;
+["courses","papers","classItems"].forEach(k=>{
+(blogData[k]||[]).forEach(it=>{ 
+if(Array.isArray(it.files)) fileCount += it.files.length;
+if(it.file) fileCount += 1;
+});
+});
+$("statC").textContent=(blogData.courses||[]).length;
+$("statP").textContent=(blogData.papers||[]).length;
+$("statN").textContent=(blogData.notices||[]).length;
+$("statF").textContent=fileCount;
 
-  renderCourses();renderPapers();renderNotices();renderClass();renderLife();renderMedia();
-  renderRoster();
-  $("rShowSensitive").checked = !!(blogData.rosterConfig && blogData.rosterConfig.showSensitive);
-  renderLedger();renderDiary();renderAdvisor();renderLogs();
+renderCourses();renderPapers();renderNotices();renderClass();renderLife();renderMedia();
+renderRoster();
+$("rShowSensitive").checked = !!(blogData.rosterConfig && blogData.rosterConfig.showSensitive);
+renderLedger();renderDiary();renderAdvisor();renderLogs();
 }
 
 /* 列表里显示图片缩略图 */
 function imgRows(images, kind, idx){
-  var arr = images||[];
-  if(!arr.length) return "";
-  return '<div style="margin-top:6px">'+arr.map(function(f,i){
-    return '<span style="display:inline-block;position:relative;margin:2px"><img src="'+esc(previewSrc(f.url))+'" data-url="'+esc(f.url)+'" data-rkind="'+esc(kind)+'" data-ridx="'+idx+'" data-iidx="'+i+'" data-title="预览 / 编辑图片" onclick="openImgFrom(this)" style="width:60px;height:60px;object-fit:cover;border-radius:6px;vertical-align:middle;border:1px solid #e2e8f0;cursor:zoom-in"><button class="btn btn-ghost btn-sm" style="position:absolute;top:-8px;right:-8px;padding:0 5px" data-imgkind="'+esc(kind)+'" data-imgrow="'+idx+'" data-imgidx="'+i+'" onclick="delImageBtn(this)">×</button></span>';
-  }).join("")+'</div>';
+var arr = images||[];
+if(!arr.length) return "";
+return '<div style="margin-top:6px">'+arr.map(function(f,i){
+return '<span style="display:inline-block;position:relative;margin:2px"><img src="'+esc(previewSrc(f.url))+'" data-url="'+esc(f.url)+'" data-rkind="'+esc(kind)+'" data-ridx="'+idx+'" data-iidx="'+i+'" data-title="预览 / 编辑图片" onclick="openImgFrom(this)" style="width:60px;height:60px;object-fit:cover;border-radius:6px;vertical-align:middle;border:1px solid #e2e8f0;cursor:zoom-in"><button class="btn btn-ghost btn-sm" style="position:absolute;top:-8px;right:-8px;padding:0 5px" data-imgkind="'+esc(kind)+'" data-imgrow="'+idx+'" data-imgidx="'+i+'" onclick="delImageBtn(this)">×</button></span>';
+}).join("")+'</div>';
 }
 function delImageBtn(btn){
-  var kind = btn.getAttribute("data-imgkind");
-  var idx = parseInt(btn.getAttribute("data-imgrow"),10);
-  var i = parseInt(btn.getAttribute("data-imgidx"),10);
-  if(!blogData[kind] || !blogData[kind][idx]) return;
-  var arr = blogData[kind][idx].images||[];
-  arr.splice(i,1);
-  blogData[kind][idx].images = arr;
-  saveData("移除图片");
-  renderAll();
+var kind = btn.getAttribute("data-imgkind");
+var idx = parseInt(btn.getAttribute("data-imgrow"),10);
+var i = parseInt(btn.getAttribute("data-imgidx"),10);
+if(!blogData[kind] || !blogData[kind][idx]) return;
+var arr = blogData[kind][idx].images||[];
+arr.splice(i,1);
+blogData[kind][idx].images = arr;
+saveData("移除图片");
+renderAll();
 }
 
 /* 列表里显示文件行（已保存的） */
 function fileRows(files, kind, idx){
-  const arr = files||[];
-  if(!arr.length) return "";
-  return `<div style="margin-top:6px">`+arr.map((f,i)=>`
-    <span class="tag-chip">📄 ${esc(f.name)}</span>
-    <button class="btn btn-ghost btn-sm" style="margin:0 6px 2px 0" onclick="delFile('${kind}',${idx},${i})">×</button>
-  `).join("")+`</div>`;
+const arr = files||[];
+if(!arr.length) return "";
+return `<div style="margin-top:6px">`+arr.map((f,i)=>`
+   <span class="tag-chip">📄 ${esc(f.name)}</span>
+   <button class="btn btn-ghost btn-sm" style="margin:0 6px 2px 0" onclick="delFile('${kind}',${idx},${i})">×</button>
+ `).join("")+`</div>`;
 }
 
 async function delFile(kind, idx, fileIdx){
-  if(!confirm("确定从列表中移除这个文件吗？（GitHub 上的文件本身不会被删除）")) return;
-  const arr = blogData[kind][idx].files||[];
-  arr.splice(fileIdx,1);
-  blogData[kind][idx].files = arr;
-  if(kind==="papers" && arr.length){
-    blogData[kind][idx].file = arr[0].url; blogData[kind][idx].fileName = arr[0].name;
-  }
-  if(kind==="classItems" && arr.length){
-    blogData[kind][idx].file = arr[0].url; blogData[kind][idx].fileName = arr[0].name;
-  }
-  renderAll();
-  await saveData("移除文件");
+if(!confirm("确定从列表中移除这个文件吗？（GitHub 上的文件本身不会被删除）")) return;
+const arr = blogData[kind][idx].files||[];
+arr.splice(fileIdx,1);
+blogData[kind][idx].files = arr;
+if(kind==="papers" && arr.length){
+blogData[kind][idx].file = arr[0].url; blogData[kind][idx].fileName = arr[0].name;
+}
+if(kind==="classItems" && arr.length){
+blogData[kind][idx].file = arr[0].url; blogData[kind][idx].fileName = arr[0].name;
+}
+renderAll();
+await saveData("移除文件");
 }
 
 /* ---------- 课程 ---------- */
 function saveCourse(){
-  var title=$("cTitle").value.trim();
-  if(!title){ showToast("请输入课程名称","error"); return; }
-  var item = {
-    icon: $("cIcon").value.trim() || "📚",
-    title: title,
-    desc: $("cDesc").value.trim(),
-    intro: $("cIntro").value.trim(),
-    progress: parseInt($("cProgress").value)||0,
-    files: drafts.course.slice(),
-    images: (imgDrafts.course||[]).slice(),
-    time: nowStr()
-  };
-  if(editing.course===null){
-    blogData.courses.push(item);
-    saveData("添加课程："+title);
-  }else{
-    blogData.courses[editing.course] = Object.assign({}, blogData.courses[editing.course], item);
-    saveData("编辑课程："+title);
-  }
-  cancelEdit("course");
-  renderAll();
+var title=$("cTitle").value.trim();
+if(!title){ showToast("请输入课程名称","error"); return; }
+var item = {
+icon: $("cIcon").value.trim() || "📚",
+title: title,
+desc: $("cDesc").value.trim(),
+intro: $("cIntro").value.trim(),
+progress: parseInt($("cProgress").value)||0,
+files: drafts.course.slice(),
+images: (imgDrafts.course||[]).slice(),
+time: nowStr()
+};
+if(editing.course===null){
+blogData.courses.push(item);
+saveData("添加课程："+title);
+}else{
+blogData.courses[editing.course] = Object.assign({}, blogData.courses[editing.course], item);
+saveData("编辑课程："+title);
+}
+cancelEdit("course");
+renderAll();
 }
 function editCourse(i){
-  var c = blogData.courses[i];
-  editing.course = i;
-  $("cIcon").value=c.icon||""; $("cTitle").value=c.title||"";
-  $("cDesc").value=c.desc||""; $("cIntro").value=c.intro||"";
-  $("cProgress").value=c.progress||0;
-  drafts.course = (c.files||[]).slice();
-  setImgDrafts("course", c.images);
-  renderDraftFiles("course");
-  $("courseFormTitle").textContent="编辑课程："+c.title;
-  $("courseEditBar").classList.add("on");
-  $("cSubmit").textContent="保存修改";
-  $("cCancel").style.display="inline-block";
-  $("panel-courses").scrollIntoView({behavior:"smooth"});
+var c = blogData.courses[i];
+editing.course = i;
+$("cIcon").value=c.icon||""; $("cTitle").value=c.title||"";
+$("cDesc").value=c.desc||""; $("cIntro").value=c.intro||"";
+$("cProgress").value=c.progress||0;
+drafts.course = (c.files||[]).slice();
+setImgDrafts("course", c.images);
+renderDraftFiles("course");
+$("courseFormTitle").textContent="编辑课程："+c.title;
+$("courseEditBar").classList.add("on");
+$("cSubmit").textContent="保存修改";
+$("cCancel").style.display="inline-block";
+$("panel-courses").scrollIntoView({behavior:"smooth"});
 }
 function renderCourses(){
-  $("courseList").innerHTML=(blogData.courses||[]).map(function(c,i){
-    var nfiles = (c.files||[]).length;
-    var folders = {};
-    (c.files||[]).forEach(function(f){ if(f.folder) folders[f.folder] = 1; });
-    var nf = Object.keys(folders).length;
-    return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(c.icon,26)+' '+esc(c.title)+'</div><div class="desc">'+esc(c.desc)+' · 进度 '+(c.progress||0)+'% · '+nfiles+' 个文件'+(nf?(' · '+nf+' 个文件夹'):'')+'</div>'+fileRows(c.files,"courses",i)+imgRows(c.images,"courses",i)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editCourse('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delCourse('+i+')">删除</button></div></div>';
-  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+$("courseList").innerHTML=(blogData.courses||[]).map(function(c,i){
+var nfiles = (c.files||[]).length;
+var folders = {};
+(c.files||[]).forEach(function(f){ if(f.folder) folders[f.folder] = 1; });
+var nf = Object.keys(folders).length;
+return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(c.icon,26)+' '+esc(c.title)+'</div><div class="desc">'+esc(c.desc)+' · 进度 '+(c.progress||0)+'% · '+nfiles+' 个文件'+(nf?(' · '+nf+' 个文件夹'):'')+'</div>'+fileRows(c.files,"courses",i)+imgRows(c.images,"courses",i)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editCourse('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delCourse('+i+')">删除</button></div></div>';
+}).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delCourse(i){
-  if(!confirm("确定删除「"+blogData.courses[i].title+"」？")) return;
-  if(editing.course===i) cancelEdit("course");
-  blogData.courses.splice(i,1);
-  saveData("删除课程");
-  renderAll();
+if(!confirm("确定删除「"+blogData.courses[i].title+"」？")) return;
+if(editing.course===i) cancelEdit("course");
+blogData.courses.splice(i,1);
+saveData("删除课程");
+renderAll();
 }
 
 /* ---------- 论文 ---------- */
 function savePaper(){
-  var title=$("pTitle").value.trim();
-  if(!title){ showToast("请输入论文标题","error"); return; }
-  var tags=[].slice.call(document.querySelectorAll(".paper-tag:checked")).map(function(c){return c.value;});
-  var files = drafts.paper.slice();
-  var item = {
-    title: title,
-    status:$("pStatus").value,
-    year:$("pYear").value.trim(),
-    desc:$("pDesc").value.trim(),
-    abstract:$("pAbstract").value.trim(),
-    tags: tags,
-    files: files,
-    images: (imgDrafts.paper||[]).slice(),
-    file: files.length?files[0].url:"",
-    fileName: files.length?files[0].name:"",
-    time: nowStr()
-  };
-  if(editing.paper===null){
-    blogData.papers.push(item);
-    saveData("添加论文："+title);
-  }else{
-    blogData.papers[editing.paper] = Object.assign({}, blogData.papers[editing.paper], item);
-    saveData("编辑论文："+title);
-  }
-  cancelEdit("paper");
-  renderAll();
+var title=$("pTitle").value.trim();
+if(!title){ showToast("请输入论文标题","error"); return; }
+var tags=[].slice.call(document.querySelectorAll(".paper-tag:checked")).map(function(c){return c.value;});
+var files = drafts.paper.slice();
+var item = {
+title: title,
+status:$("pStatus").value,
+year:$("pYear").value.trim(),
+desc:$("pDesc").value.trim(),
+abstract:$("pAbstract").value.trim(),
+tags: tags,
+files: files,
+images: (imgDrafts.paper||[]).slice(),
+file: files.length?files[0].url:"",
+fileName: files.length?files[0].name:"",
+time: nowStr()
+};
+if(editing.paper===null){
+blogData.papers.push(item);
+saveData("添加论文："+title);
+}else{
+blogData.papers[editing.paper] = Object.assign({}, blogData.papers[editing.paper], item);
+saveData("编辑论文："+title);
+}
+cancelEdit("paper");
+renderAll();
 }
 function editPaper(i){
-  var p=blogData.papers[i];
-  editing.paper=i;
-  $("pTitle").value=p.title||""; $("pStatus").value=p.status||"在投";
-  $("pYear").value=p.year||""; $("pDesc").value=p.desc||""; $("pAbstract").value=p.abstract||"";
-  document.querySelectorAll(".paper-tag").forEach(function(c){c.checked=(p.tags||[]).indexOf(c.value)>=0;});
-  drafts.paper=(p.files||[]).slice();
-  setImgDrafts("paper", p.images);
-  renderDraftFiles("paper");
-  $("paperFormTitle").textContent="编辑论文："+p.title;
-  $("paperEditBar").classList.add("on");
-  $("pSubmit").textContent="保存修改";
-  $("pCancel").style.display="inline-block";
-  $("panel-papers").scrollIntoView({behavior:"smooth"});
+var p=blogData.papers[i];
+editing.paper=i;
+$("pTitle").value=p.title||""; $("pStatus").value=p.status||"在投";
+$("pYear").value=p.year||""; $("pDesc").value=p.desc||""; $("pAbstract").value=p.abstract||"";
+document.querySelectorAll(".paper-tag").forEach(function(c){c.checked=(p.tags||[]).indexOf(c.value)>=0;});
+drafts.paper=(p.files||[]).slice();
+setImgDrafts("paper", p.images);
+renderDraftFiles("paper");
+$("paperFormTitle").textContent="编辑论文："+p.title;
+$("paperEditBar").classList.add("on");
+$("pSubmit").textContent="保存修改";
+$("pCancel").style.display="inline-block";
+$("panel-papers").scrollIntoView({behavior:"smooth"});
 }
 function renderPapers(){
-  $("paperList").innerHTML=(blogData.papers||[]).map((p,i)=>`
-    <div class="item-row">
-      <div class="info">
-        <div class="title">${esc(p.title)}</div>
-        <div class="desc">${esc(p.status)} · ${esc(p.year||"")} ${(p.tags||[]).map(t=>`<span class="tag-chip">${esc(t)}</span>`).join("")}</div>
-        ${fileRows(p.files,"papers",i)}${imgRows(p.images,"papers",i)}
-      </div>
-      <div class="actions">
-        <button class="btn btn-ghost btn-sm" onclick="editPaper(${i})">编辑</button>
-        <button class="btn btn-danger btn-sm" onclick="delPaper(${i})">删除</button>
-      </div>
-    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+$("paperList").innerHTML=(blogData.papers||[]).map((p,i)=>`
+   <div class="item-row">
+     <div class="info">
+       <div class="title">${esc(p.title)}</div>
+       <div class="desc">${esc(p.status)} · ${esc(p.year||"")} ${(p.tags||[]).map(t=>`<span class="tag-chip">${esc(t)}</span>`).join("")}</div>
+       ${fileRows(p.files,"papers",i)}${imgRows(p.images,"papers",i)}
+     </div>
+     <div class="actions">
+       <button class="btn btn-ghost btn-sm" onclick="editPaper(${i})">编辑</button>
+       <button class="btn btn-danger btn-sm" onclick="delPaper(${i})">删除</button>
+     </div>
+   </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delPaper(i){
-  if(!confirm("确定删除「"+blogData.papers[i].title+"」？")) return;
-  if(editing.paper===i) cancelEdit("paper");
-  blogData.papers.splice(i,1);
-  saveData("删除论文");
-  renderAll();
+if(!confirm("确定删除「"+blogData.papers[i].title+"」？")) return;
+if(editing.paper===i) cancelEdit("paper");
+blogData.papers.splice(i,1);
+saveData("删除论文");
+renderAll();
 }
 
 /* ---------- 通知 ---------- */
 let editingNotice = null;
 function addNotice(){
-  var title=$("nTitle").value.trim();
-  if(!title){ showToast("请输入标题","error"); return; }
-  var files = (drafts.nf||[]).slice();
-  var item = {
-    title: title,
-    source:$("nSource").value.trim(),
-    date:$("nDate").value||todayStr(),
-    level:"normal",
-    content:$("nContent").value.trim(),
-    images:(imgDrafts.notice||[]).slice(),
-    files: files,
-    time: nowStr()
-  };
-  blogData.notices = blogData.notices || [];
-  if(editingNotice === null){
-    blogData.notices.push(item);
-    saveData("发布通知："+title);
-  }else{
-    blogData.notices[editingNotice] = item;
-    saveData("编辑通知："+title);
-  }
-  cancelNoticeEdit();
-  renderAll();
+var title=$("nTitle").value.trim();
+if(!title){ showToast("请输入标题","error"); return; }
+var files = (drafts.nf||[]).slice();
+var item = {
+title: title,
+source:$("nSource").value.trim(),
+date:$("nDate").value||todayStr(),
+level:"normal",
+content:$("nContent").value.trim(),
+images:(imgDrafts.notice||[]).slice(),
+files: files,
+time: nowStr()
+};
+blogData.notices = blogData.notices || [];
+if(editingNotice === null){
+blogData.notices.push(item);
+saveData("发布通知："+title);
+}else{
+blogData.notices[editingNotice] = item;
+saveData("编辑通知："+title);
+}
+cancelNoticeEdit();
+renderAll();
 }
 function editNotice(i){
-  var n = blogData.notices[i];
-  editingNotice = i;
-  $("nTitle").value = n.title||""; $("nSource").value = n.source||"";
-  $("nDate").value = n.date||todayStr(); $("nContent").value = n.content||"";
-  setImgDrafts("notice", n.images);
-  drafts.nf = (n.files||[]).slice();
-  renderDraftFiles("nf");
-  $("noticeFormTitle").textContent = "编辑通知：" + (n.title||"");
-  $("noticeEditBar").classList.add("on");
-  $("nSubmit").textContent = "保存修改";
-  $("nCancel").style.display = "inline-block";
-  var box = document.getElementById("panel-notices");
-  if(box && box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
+var n = blogData.notices[i];
+editingNotice = i;
+$("nTitle").value = n.title||""; $("nSource").value = n.source||"";
+$("nDate").value = n.date||todayStr(); $("nContent").value = n.content||"";
+setImgDrafts("notice", n.images);
+drafts.nf = (n.files||[]).slice();
+renderDraftFiles("nf");
+$("noticeFormTitle").textContent = "编辑通知：" + (n.title||"");
+$("noticeEditBar").classList.add("on");
+$("nSubmit").textContent = "保存修改";
+$("nCancel").style.display = "inline-block";
+var box = document.getElementById("panel-notices");
+if(box && box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
 }
 function cancelNoticeEdit(){
-  editingNotice = null;
-  ["nTitle","nSource","nContent"].forEach(function(id){ $(id).value=""; });
-  $("nDate").value = todayStr();
-  setImgDrafts("notice", []);
-  drafts.nf = []; renderDraftFiles("nf");
-  $("noticeFormTitle").textContent = "发布通知";
-  $("noticeEditBar").classList.remove("on");
-  $("nSubmit").textContent = "发布通知";
-  $("nCancel").style.display = "none";
+editingNotice = null;
+["nTitle","nSource","nContent"].forEach(function(id){ $(id).value=""; });
+$("nDate").value = todayStr();
+setImgDrafts("notice", []);
+drafts.nf = []; renderDraftFiles("nf");
+$("noticeFormTitle").textContent = "发布通知";
+$("noticeEditBar").classList.remove("on");
+$("nSubmit").textContent = "发布通知";
+$("nCancel").style.display = "none";
 }
 function renderNotices(){
-  $("noticeList").innerHTML=(blogData.notices||[]).map(function(n,i){
-    return '<div class="item-row"><div class="info"><div class="title">'+esc(n.title)+'</div><div class="desc">'+esc(n.source||"")+' · '+esc(n.date||"")+'</div>'+fileRows(n.files,"notices",i)+imgRows(n.images,"notices",i)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editNotice('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delNotice('+i+')">删除</button></div></div>';
-  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+$("noticeList").innerHTML=(blogData.notices||[]).map(function(n,i){
+return '<div class="item-row"><div class="info"><div class="title">'+esc(n.title)+'</div><div class="desc">'+esc(n.source||"")+' · '+esc(n.date||"")+'</div>'+fileRows(n.files,"notices",i)+imgRows(n.images,"notices",i)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editNotice('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delNotice('+i+')">删除</button></div></div>';
+}).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delNotice(i){
-  if(!confirm("确定删除？")) return;
-  if(editingNotice === i) cancelNoticeEdit();
-  blogData.notices.splice(i,1);
-  saveData("删除通知");
-  renderAll();
+if(!confirm("确定删除？")) return;
+if(editingNotice === i) cancelNoticeEdit();
+blogData.notices.splice(i,1);
+saveData("删除通知");
+renderAll();
 }
 
 /* ---------- 班级事务 ---------- */
 function saveClass(){
-  var title=$("clTitle").value.trim();
-  if(!title){ showToast("请输入标题","error"); return; }
-  var files=drafts["class"].slice();
-  var item={
-    title: title,
-    type:$("clType").value,
-    date:$("clDate").value||todayStr(),
-    content:$("clContent").value.trim(),
-    files: files,
-    images:(imgDrafts["class"]||[]).slice(),
-    file: files.length?files[0].url:"",
-    fileName: files.length?files[0].name:"",
-    time: nowStr()
-  };
-  if(editing["class"]===null){
-    blogData.classItems.push(item);
-    saveData("添加班级事务："+title);
-  }else{
-    blogData.classItems[editing["class"]] = Object.assign({}, blogData.classItems[editing["class"]], item);
-    saveData("编辑班级事务："+title);
-  }
-  cancelEdit("class");
-  renderAll();
+var title=$("clTitle").value.trim();
+if(!title){ showToast("请输入标题","error"); return; }
+var files=drafts["class"].slice();
+var item={
+title: title,
+type:$("clType").value,
+date:$("clDate").value||todayStr(),
+content:$("clContent").value.trim(),
+files: files,
+images:(imgDrafts["class"]||[]).slice(),
+file: files.length?files[0].url:"",
+fileName: files.length?files[0].name:"",
+time: nowStr()
+};
+if(editing["class"]===null){
+blogData.classItems.push(item);
+saveData("添加班级事务："+title);
+}else{
+blogData.classItems[editing["class"]] = Object.assign({}, blogData.classItems[editing["class"]], item);
+saveData("编辑班级事务："+title);
+}
+cancelEdit("class");
+renderAll();
 }
 function editClass(i){
-  var c=blogData.classItems[i];
-  editing["class"]=i;
-  $("clTitle").value=c.title||""; $("clType").value=c.type||"通知";
-  $("clDate").value=c.date||todayStr(); $("clContent").value=c.content||"";
-  drafts["class"]=(c.files||[]).slice();
-  setImgDrafts("class", c.images);
-  renderDraftFiles("class");
-  $("classFormTitle").textContent="编辑班级事务："+c.title;
-  $("classEditBar").classList.add("on");
-  $("clSubmit").textContent="保存修改";
-  $("clCancel").style.display="inline-block";
-  $("panel-class").scrollIntoView({behavior:"smooth"});
+var c=blogData.classItems[i];
+editing["class"]=i;
+$("clTitle").value=c.title||""; $("clType").value=c.type||"通知";
+$("clDate").value=c.date||todayStr(); $("clContent").value=c.content||"";
+drafts["class"]=(c.files||[]).slice();
+setImgDrafts("class", c.images);
+renderDraftFiles("class");
+$("classFormTitle").textContent="编辑班级事务："+c.title;
+$("classEditBar").classList.add("on");
+$("clSubmit").textContent="保存修改";
+$("clCancel").style.display="inline-block";
+$("panel-class").scrollIntoView({behavior:"smooth"});
 }
 function renderClass(){
-  $("classList").innerHTML=(blogData.classItems||[]).map((c,i)=>`
-    <div class="item-row">
-      <div class="info">
-        <div class="title">${esc(c.title)}</div>
-        <div class="desc">${esc(c.type)} · ${esc(c.date)}</div>
-        ${fileRows(c.files,"classItems",i)}${imgRows(c.images,"classItems",i)}
-      </div>
-      <div class="actions">
-        <button class="btn btn-ghost btn-sm" onclick="editClass(${i})">编辑</button>
-        <button class="btn btn-danger btn-sm" onclick="delClass(${i})">删除</button>
-      </div>
-    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+$("classList").innerHTML=(blogData.classItems||[]).map((c,i)=>`
+   <div class="item-row">
+     <div class="info">
+       <div class="title">${esc(c.title)}</div>
+       <div class="desc">${esc(c.type)} · ${esc(c.date)}</div>
+       ${fileRows(c.files,"classItems",i)}${imgRows(c.images,"classItems",i)}
+     </div>
+     <div class="actions">
+       <button class="btn btn-ghost btn-sm" onclick="editClass(${i})">编辑</button>
+       <button class="btn btn-danger btn-sm" onclick="delClass(${i})">删除</button>
+     </div>
+   </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delClass(i){
-  if(!confirm("确定删除？")) return;
-  if(editing["class"]===i) cancelEdit("class");
-  blogData.classItems.splice(i,1);
-  saveData("删除班级事务");
-  renderAll();
+if(!confirm("确定删除？")) return;
+if(editing["class"]===i) cancelEdit("class");
+blogData.classItems.splice(i,1);
+saveData("删除班级事务");
+renderAll();
 }
 
 /* ---------- 生活服务 ---------- */
 function addLife(){
-  var title=$("lsTitle").value.trim();
-  var url=$("lsUrl").value.trim();
-  var files=(drafts.life||[]).slice();
-  if(!title || (!url && !files.length)){ showToast("请输入名称，并填写链接或上传文件","error"); return; }
-  var item = {icon:$("lsIcon").value.trim()||"🔗", title:title, desc:$("lsDesc").value.trim(), url:url, files:files, images:(imgDrafts.life||[]).slice()};
-  blogData.lifeServices = blogData.lifeServices || [];
-  if(editingLife === null){
-    blogData.lifeServices.push(item);
-    saveData("添加生活服务："+title);
-  }else{
-    blogData.lifeServices[editingLife] = item;
-    saveData("编辑生活服务："+title);
-  }
-  cancelLifeEdit();
-  renderAll();
+var title=$("lsTitle").value.trim();
+var url=$("lsUrl").value.trim();
+var files=(drafts.life||[]).slice();
+if(!title || (!url && !files.length)){ showToast("请输入名称，并填写链接或上传文件","error"); return; }
+var item = {icon:$("lsIcon").value.trim()||"🔗", title:title, desc:$("lsDesc").value.trim(), url:url, files:files, images:(imgDrafts.life||[]).slice()};
+blogData.lifeServices = blogData.lifeServices || [];
+if(editingLife === null){
+blogData.lifeServices.push(item);
+saveData("添加生活服务："+title);
+}else{
+blogData.lifeServices[editingLife] = item;
+saveData("编辑生活服务："+title);
+}
+cancelLifeEdit();
+renderAll();
 }
 function renderLife(){
-  $("lifeList").innerHTML=(blogData.lifeServices||[]).map(function(it,i){
-    return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(it.icon,24)+' '+esc(it.title)+'</div><div class="desc">'+esc(it.desc)+(it.url?' · <a href="'+esc(it.url)+'" target="_blank">打开</a>':"")+'</div>'+fileRows(it.files,"lifeServices",i)+imgRows(it.images,"lifeServices",i)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editLife('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delLife('+i+')">删除</button></div></div>';
-  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+$("lifeList").innerHTML=(blogData.lifeServices||[]).map(function(it,i){
+return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(it.icon,24)+' '+esc(it.title)+'</div><div class="desc">'+esc(it.desc)+(it.url?' · <a href="'+esc(it.url)+'" target="_blank">打开</a>':"")+'</div>'+fileRows(it.files,"lifeServices",i)+imgRows(it.images,"lifeServices",i)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editLife('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delLife('+i+')">删除</button></div></div>';
+}).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delLife(i){
-  if(!confirm("确定删除？")) return;
-  blogData.lifeServices.splice(i,1);
-  saveData("删除生活服务");
-  renderAll();
+if(!confirm("确定删除？")) return;
+blogData.lifeServices.splice(i,1);
+saveData("删除生活服务");
+renderAll();
 }
 
 /* ---------- 记账 ---------- */
 function addLedger(){
-  var amount=parseFloat($("lgAmount").value);
-  if(isNaN(amount)||amount<=0){ showToast("请输入正确的金额","error"); return; }
-  blogData.ledger.push({
-    type:$("lgType").value,
-    amount:amount,
-    date:$("lgDate").value||todayStr(),
-    time:$("lgTime").value||"",
-    desc:$("lgDesc").value.trim(),
-    category:$("lgCategory").value||"其他",
-    images:(imgDrafts.ledger||[]).slice()
-  });
-  saveData("记账：¥"+amount.toFixed(2));
-  renderAll();
-  $("lgAmount").value=""; $("lgDesc").value="";
-  setImgDrafts("ledger", []);
+var amount=parseFloat($("lgAmount").value);
+if(isNaN(amount)||amount<=0){ showToast("请输入正确的金额","error"); return; }
+blogData.ledger.push({
+type:$("lgType").value,
+amount:amount,
+date:$("lgDate").value||todayStr(),
+time:$("lgTime").value||"",
+desc:$("lgDesc").value.trim(),
+category:$("lgCategory").value||"其他",
+images:(imgDrafts.ledger||[]).slice()
+});
+saveData("记账：¥"+amount.toFixed(2));
+renderAll();
+$("lgAmount").value=""; $("lgDesc").value="";
+setImgDrafts("ledger", []);
 }
 function renderLedger(){
-  var list=(blogData.ledger||[]).slice().reverse();
-  var income=0, expense=0;
-  (blogData.ledger||[]).forEach(function(r){
-    var a=parseFloat(r.amount)||0;
-    if(r.type==="income") income+=a; else expense+=a;
-  });
-  $("lgIn").textContent=income.toFixed(2);
-  $("lgOut").textContent=expense.toFixed(2);
-  $("lgNet").textContent=(income-expense).toFixed(2);
-  $("ledgerList").innerHTML=list.map(function(r){
-    var realIdx=blogData.ledger.indexOf(r);
-    return '<div class="item-row"><div class="info"><div class="title">'+(r.type==="income"?"收入":"支出")+' ¥'+(parseFloat(r.amount)||0).toFixed(2)+'</div><div class="desc">'+esc(r.date)+(r.time?(' '+esc(r.time)):"")+' · '+esc(r.category||"其他")+' · '+esc(r.desc||"")+'</div>'+imgRows(r.images,"ledger",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delLedger('+realIdx+')">删除</button></div>';
-  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+var list=(blogData.ledger||[]).slice().reverse();
+var income=0, expense=0;
+(blogData.ledger||[]).forEach(function(r){
+var a=parseFloat(r.amount)||0;
+if(r.type==="income") income+=a; else expense+=a;
+});
+$("lgIn").textContent=income.toFixed(2);
+$("lgOut").textContent=expense.toFixed(2);
+$("lgNet").textContent=(income-expense).toFixed(2);
+$("ledgerList").innerHTML=list.map(function(r){
+var realIdx=blogData.ledger.indexOf(r);
+return '<div class="item-row"><div class="info"><div class="title">'+(r.type==="income"?"收入":"支出")+' ¥'+(parseFloat(r.amount)||0).toFixed(2)+'</div><div class="desc">'+esc(r.date)+(r.time?(' '+esc(r.time)):"")+' · '+esc(r.category||"其他")+' · '+esc(r.desc||"")+'</div>'+imgRows(r.images,"ledger",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delLedger('+realIdx+')">删除</button></div>';
+}).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delLedger(realIdx){
-  if(!confirm("确定删除？")) return;
-  blogData.ledger.splice(realIdx,1);
-  saveData("删除记账");
-  renderAll();
+if(!confirm("确定删除？")) return;
+blogData.ledger.splice(realIdx,1);
+saveData("删除记账");
+renderAll();
 }
 
 /* ---------- 日记 ---------- */
 function autoTitle(text, date){
-  var s = String(text||"");
-  var lines = s.split(String.fromCharCode(10));
-  var first = "";
-  for(var i=0;i<lines.length;i++){
-    var t = lines[i].replace(/^[#>*\-\s]+/, "").trim();
-    if(t){ first = t; break; }
-  }
-  first = first.split("  ").join(" ").trim();
-  if(!first) return date || "无标题";
-  if(first.length > 24) return first.slice(0, 24) + "…";
-  return first;
+var s = String(text||"");
+var lines = s.split(String.fromCharCode(10));
+var first = "";
+for(var i=0;i<lines.length;i++){
+var t = lines[i].replace(/^[#>*\-\s]+/, "").trim();
+if(t){ first = t; break; }
+}
+first = first.split("  ").join(" ").trim();
+if(!first) return date || "无标题";
+if(first.length > 24) return first.slice(0, 24) + "…";
+return first;
 }
 function addDiary(){
-  var content=$("diaryContent").value.trim();
-  var title=$("diaryTitle").value.trim();
-  if(!content && !title){ showToast("请写点内容","error"); return; }
-  if(!title) title = autoTitle(content, todayStr());
-  blogData.diary.push({date:todayStr(), title:title, content:content, images:(imgDrafts.diary||[]).slice(), media:(drafts.dmedia||[]).slice(), time:nowStr()});
-  saveData("写日记："+title);
-  renderAll();
-  $("diaryContent").value=""; $("diaryTitle").value="";
-  setImgDrafts("diary", []);
-  drafts.dmedia = []; renderDraftFiles("dmedia");
+var content=$("diaryContent").value.trim();
+var title=$("diaryTitle").value.trim();
+if(!content && !title){ showToast("请写点内容","error"); return; }
+if(!title) title = autoTitle(content, todayStr());
+blogData.diary.push({date:todayStr(), title:title, content:content, images:(imgDrafts.diary||[]).slice(), media:(drafts.dmedia||[]).slice(), time:nowStr()});
+saveData("写日记："+title);
+renderAll();
+$("diaryContent").value=""; $("diaryTitle").value="";
+setImgDrafts("diary", []);
+drafts.dmedia = []; renderDraftFiles("dmedia");
 }
 function renderDiary(){
-  var list=(blogData.diary||[]).slice().reverse();
-  $("diaryList").innerHTML=list.map(function(d){
-    var realIdx=blogData.diary.indexOf(d);
-    return '<div class="item-row"><div class="info"><div class="title">'+esc(d.title||d.date)+'</div><div class="desc" style="white-space:pre-wrap">'+esc(String(d.content||"").slice(0,120))+'</div><div class="desc">'+esc(d.date)+' · '+((d.media||[]).length)+' 个影音</div>'+imgRows(d.images,"diary",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delDiary('+realIdx+')">删除</button></div>';
-  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+var list=(blogData.diary||[]).slice().reverse();
+$("diaryList").innerHTML=list.map(function(d){
+var realIdx=blogData.diary.indexOf(d);
+return '<div class="item-row"><div class="info"><div class="title">'+esc(d.title||d.date)+'</div><div class="desc" style="white-space:pre-wrap">'+esc(String(d.content||"").slice(0,120))+'</div><div class="desc">'+esc(d.date)+' · '+((d.media||[]).length)+' 个影音</div>'+imgRows(d.images,"diary",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delDiary('+realIdx+')">删除</button></div>';
+}).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delDiary(realIdx){
-  if(!confirm("确定删除？")) return;
-  blogData.diary.splice(realIdx,1);
-  saveData("删除日记");
-  renderAll();
+if(!confirm("确定删除？")) return;
+blogData.diary.splice(realIdx,1);
+saveData("删除日记");
+renderAll();
 }
 
 /* ---------- 导师指导 ---------- */
 function addAdvisor(){
-  var content=$("advContent").value.trim();
-  if(!content){ showToast("请写点内容","error"); return; }
-  blogData.advisor.push({date:$("advDate").value||todayStr(), time:$("advTime").value||"", count:parseInt($("advCount").value,10)||0, content:content, images:(imgDrafts.advisor||[]).slice()});
-  saveData("添加导师指导记录");
-  renderAll();
-  $("advContent").value=""; $("advCount").value="";
-  setImgDrafts("advisor", []);
+var content=$("advContent").value.trim();
+if(!content){ showToast("请写点内容","error"); return; }
+blogData.advisor.push({date:$("advDate").value||todayStr(), time:$("advTime").value||"", count:parseInt($("advCount").value,10)||0, content:content, images:(imgDrafts.advisor||[]).slice()});
+saveData("添加导师指导记录");
+renderAll();
+$("advContent").value=""; $("advCount").value="";
+setImgDrafts("advisor", []);
 }
 function renderAdvisor(){
-  var list=(blogData.advisor||[]).slice().reverse();
-  $("advisorList").innerHTML=list.map(function(d){
-    var realIdx=blogData.advisor.indexOf(d);
-    return '<div class="item-row"><div class="info"><div class="title">'+(d.count?('第 '+d.count+' 次指导 · '):"")+esc(d.date)+(d.time?(' '+esc(d.time)):"")+'</div><div class="desc" style="white-space:pre-wrap">'+esc(d.content)+'</div>'+imgRows(d.images,"advisor",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delAdvisor('+realIdx+')">删除</button></div>';
-  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+var list=(blogData.advisor||[]).slice().reverse();
+$("advisorList").innerHTML=list.map(function(d){
+var realIdx=blogData.advisor.indexOf(d);
+return '<div class="item-row"><div class="info"><div class="title">'+(d.count?('第 '+d.count+' 次指导 · '):"")+esc(d.date)+(d.time?(' '+esc(d.time)):"")+'</div><div class="desc" style="white-space:pre-wrap">'+esc(d.content)+'</div>'+imgRows(d.images,"advisor",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delAdvisor('+realIdx+')">删除</button></div>';
+}).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delAdvisor(realIdx){
-  if(!confirm("确定删除？")) return;
-  blogData.advisor.splice(realIdx,1);
-  saveData("删除导师记录");
-  renderAll();
+if(!confirm("确定删除？")) return;
+blogData.advisor.splice(realIdx,1);
+saveData("删除导师记录");
+renderAll();
 }
 
 /* ---------- 日志 ---------- */
 /* ---------- 影音（音乐/视频/图片） ---------- */
 function saveMedia(){
-  var type=$("mType").value;
-  var title=$("mTitle").value.trim();
-  var files=(drafts.media||[]).slice();
-  var url=$("mUrl").value.trim();
-  if(!title || (!files.length && !url)){ showToast("请输入标题，并上传文件或填写外链","error"); return; }
-  blogData.media = blogData.media || [];
-  blogData.media.push({type:type, title:title, desc:$("mDesc").value.trim(), url:url, files:files, images:(imgDrafts.media||[]).slice(), file:files.length?files[0].url:"", fileName:files.length?files[0].name:"", time:nowStr()});
-  saveData("添加"+(type==="music"?"音乐":type==="video"?"视频":"图片")+"："+title);
-  drafts.media=[];
-  renderAll();
-  $("mTitle").value=""; $("mDesc").value=""; $("mUrl").value="";
-  renderDraftFiles("media");
-  setImgDrafts("media", []);
+var type=$("mType").value;
+var title=$("mTitle").value.trim();
+var files=(drafts.media||[]).slice();
+var url=$("mUrl").value.trim();
+if(!title || (!files.length && !url)){ showToast("请输入标题，并上传文件或填写外链","error"); return; }
+blogData.media = blogData.media || [];
+blogData.media.push({type:type, title:title, desc:$("mDesc").value.trim(), url:url, files:files, images:(imgDrafts.media||[]).slice(), file:files.length?files[0].url:"", fileName:files.length?files[0].name:"", time:nowStr()});
+saveData("添加"+(type==="music"?"音乐":type==="video"?"视频":"图片")+"："+title);
+drafts.media=[];
+renderAll();
+$("mTitle").value=""; $("mDesc").value=""; $("mUrl").value="";
+renderDraftFiles("media");
+setImgDrafts("media", []);
 }
 function renderMedia(){
-  $("mediaList").innerHTML=(blogData.media||[]).map(function(m,i){
-    return '<div class="item-row"><div class="info"><div class="title">'+(m.type==="music"?"🎵":m.type==="video"?"🎬":"🖼️")+' '+esc(m.title)+'</div><div class="desc">'+esc(m.desc)+'</div>'+fileRows(m.files,"media",i)+imgRows(m.images,"media",i)+'</div><button class="btn btn-danger btn-sm" onclick="delMedia('+i+')">删除</button></div>';
-  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+$("mediaList").innerHTML=(blogData.media||[]).map(function(m,i){
+return '<div class="item-row"><div class="info"><div class="title">'+(m.type==="music"?"🎵":m.type==="video"?"🎬":"🖼️")+' '+esc(m.title)+'</div><div class="desc">'+esc(m.desc)+'</div>'+fileRows(m.files,"media",i)+imgRows(m.images,"media",i)+'</div><button class="btn btn-danger btn-sm" onclick="delMedia('+i+')">删除</button></div>';
+}).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
 }
 function delMedia(i){
-  if(!confirm("确定删除？")) return;
-  blogData.media.splice(i,1);
-  saveData("删除影音");
-  renderAll();
+if(!confirm("确定删除？")) return;
+blogData.media.splice(i,1);
+saveData("删除影音");
+renderAll();
 }
 
 /* ---------- 导出 / 导入 ---------- */
 function downloadJSON(filename, obj){
-  var blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"});
-  var a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download=filename;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(function(){URL.revokeObjectURL(a.href);},3000);
+var blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"});
+var a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download=filename;
+document.body.appendChild(a); a.click(); a.remove();
+setTimeout(function(){URL.revokeObjectURL(a.href);},3000);
 }
 function exportLedger(){ downloadJSON("ledger-"+todayStr()+".json", blogData.ledger||[]); showToast("已导出记账 JSON"); }
 function exportDiary(){ downloadJSON("diary-"+todayStr()+".json", blogData.diary||[]); showToast("已导出日记 JSON"); }
 function importJSON(file, target){
-  if(!file) return;
-  var reader=new FileReader();
-  reader.onload=function(){
-    try{
-      var arr=JSON.parse(String(reader.result));
-      if(!Array.isArray(arr)) throw new Error("格式应为数组");
-      blogData[target]=(blogData[target]||[]).concat(arr);
-      saveData("导入"+target);
-      renderAll();
-      showToast("已导入 "+arr.length+" 条");
-    }catch(e){ showToast("导入失败："+e.message,"error"); }
-  };
-  reader.readAsText(file);
+if(!file) return;
+var reader=new FileReader();
+reader.onload=function(){
+try{
+var arr=JSON.parse(String(reader.result));
+if(!Array.isArray(arr)) throw new Error("格式应为数组");
+blogData[target]=(blogData[target]||[]).concat(arr);
+saveData("导入"+target);
+renderAll();
+showToast("已导入 "+arr.length+" 条");
+}catch(e){ showToast("导入失败："+e.message,"error"); }
+};
+reader.readAsText(file);
 }
 
 function renderLogs(){
-  $("logList").innerHTML=(blogData.logs||[]).map(l=>`
-    <div class="log-item"><b>${esc(l.time)}</b> — ${esc(l.action)}</div>`).join("")||'<div style="color:#94a3b8">暂无日志</div>';
+$("logList").innerHTML=(blogData.logs||[]).map(l=>`
+   <div class="log-item"><b>${esc(l.time)}</b> — ${esc(l.action)}</div>`).join("")||'<div style="color:#94a3b8">暂无日志</div>';
 }
 
 /* ============================================================
-   站点设置 / 导出
-   ============================================================ */
+  站点设置 / 导出
+  ============================================================ */
 function saveSiteConfig(){
-  blogData.siteConfig = {
-    title: $("cfgTitle").value.trim() || "思齐个人主页",
-    subtitle: $("cfgSub").value.trim(),
-    about: $("cfgAbout").value,
-    avatar: $("cfgAvatar").value.trim() || "思",
-    defaultImage: $("cfgDefaultImage").value.trim(),
-    columns: $("cfgColumns").value || "1",
-    defaultAvatar: $("cfgDefaultAvatar").value.trim(),
-    loginHint: $("cfgLoginHint").value,
-    coverPan: $("cfgCoverPan").checked,
-    coverPanSec: parseInt($("cfgCoverPanSec").value, 10) || 3,
-    name: $("cfgName").value.trim() || "思齐",
-    bio: $("cfgBio").value.trim()
-  };
-  saveData("修改站点设置");
-  renderAll();
+blogData.siteConfig = {
+title: $("cfgTitle").value.trim() || "思齐个人主页",
+subtitle: $("cfgSub").value.trim(),
+about: $("cfgAbout").value,
+avatar: $("cfgAvatar").value.trim() || "思",
+defaultImage: $("cfgDefaultImage").value.trim(),
+columns: $("cfgColumns").value || "1",
+defaultAvatar: $("cfgDefaultAvatar").value.trim(),
+loginHint: $("cfgLoginHint").value,
+coverPan: $("cfgCoverPan").checked,
+coverPanSec: parseInt($("cfgCoverPanSec").value, 10) || 3,
+name: $("cfgName").value.trim() || "思齐",
+bio: $("cfgBio").value.trim()
+};
+saveData("修改站点设置");
+renderAll();
 }
 /* ---------- 生活服务：编辑 ---------- */
 let editingLife = null;
 function editLife(i){
-  var it = blogData.lifeServices[i];
-  editingLife = i;
-  $("lsIcon").value = it.icon||""; $("lsTitle").value = it.title||"";
-  $("lsDesc").value = it.desc||""; $("lsUrl").value = it.url||"";
-  drafts.life = (it.files||[]).slice();
-  setImgDrafts("life", it.images);
-  renderDraftFiles("life");
-  $("lifeFormTitle").textContent = "编辑生活服务：" + (it.title||"");
-  var box = document.getElementById("panel-life");
-  if(box && box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
+var it = blogData.lifeServices[i];
+editingLife = i;
+$("lsIcon").value = it.icon||""; $("lsTitle").value = it.title||"";
+$("lsDesc").value = it.desc||""; $("lsUrl").value = it.url||"";
+drafts.life = (it.files||[]).slice();
+setImgDrafts("life", it.images);
+renderDraftFiles("life");
+$("lifeFormTitle").textContent = "编辑生活服务：" + (it.title||"");
+var box = document.getElementById("panel-life");
+if(box && box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
 }
 function cancelLifeEdit(){
-  editingLife = null;
-  ["lsIcon","lsTitle","lsDesc","lsUrl"].forEach(function(id){ $(id).value=""; });
-  drafts.life = []; renderDraftFiles("life"); setImgDrafts("life", []);
-  $("lifeFormTitle").textContent = "添加生活服务链接";
+editingLife = null;
+["lsIcon","lsTitle","lsDesc","lsUrl"].forEach(function(id){ $(id).value=""; });
+drafts.life = []; renderDraftFiles("life"); setImgDrafts("life", []);
+$("lifeFormTitle").textContent = "添加生活服务链接";
 }
 
 /* ---------- 快速链接：编辑 ---------- */
 let editingQL = null;
 function editQuickLink(i){
-  var l = blogData.quickLinks[i];
-  editingQL = i;
-  $("qlIcon").value = l.icon||""; $("qlTitle").value = l.title||""; $("qlUrl").value = l.url||"";
-  $("qlFormTitle").textContent = "✏️ 编辑快速链接：" + (l.title||"");
-  var box = document.getElementById("panel-site");
-  if(box && box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
+var l = blogData.quickLinks[i];
+editingQL = i;
+$("qlIcon").value = l.icon||""; $("qlTitle").value = l.title||""; $("qlUrl").value = l.url||"";
+$("qlFormTitle").textContent = "✏️ 编辑快速链接：" + (l.title||"");
+var box = document.getElementById("panel-site");
+if(box && box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
 }
 function cancelQuickLinkEdit(){
-  editingQL = null;
-  ["qlIcon","qlTitle","qlUrl"].forEach(function(id){ $(id).value=""; });
-  $("qlFormTitle").textContent = "🔗 快速链接管理（首页右侧）";
+editingQL = null;
+["qlIcon","qlTitle","qlUrl"].forEach(function(id){ $(id).value=""; });
+$("qlFormTitle").textContent = "🔗 快速链接管理（首页右侧）";
 }
 
 /* ---------- 分类管理 ---------- */
 function renderCatManage(){
-  $("catManageList").innerHTML = (blogData.categories||[]).map(function(c,i){
-    return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(c.icon,22)+' '+esc(c.name)+'</div><div class="desc">指向：'+esc(c.section||"")+'</div></div><button class="btn btn-danger btn-sm" onclick="delCategory('+i+')">删除</button></div>';
-  }).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无分类</div>';
+$("catManageList").innerHTML = (blogData.categories||[]).map(function(c,i){
+return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(c.icon,22)+' '+esc(c.name)+'</div><div class="desc">指向：'+esc(c.section||"")+'</div></div><button class="btn btn-danger btn-sm" onclick="delCategory('+i+')">删除</button></div>';
+}).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无分类</div>';
 }
 function addCategory(){
-  var name=$("catName").value.trim();
-  if(!name){ showToast("请输入分类名","error"); return; }
-  blogData.categories = blogData.categories || [];
-  blogData.categories.push({icon:$("catIcon").value.trim()||"📁", name:name, section:$("catSection").value});
-  saveData("添加分类："+name);
-  renderAll();
-  $("catName").value=""; $("catIcon").value="";
+var name=$("catName").value.trim();
+if(!name){ showToast("请输入分类名","error"); return; }
+blogData.categories = blogData.categories || [];
+blogData.categories.push({icon:$("catIcon").value.trim()||"📁", name:name, section:$("catSection").value});
+saveData("添加分类："+name);
+renderAll();
+$("catName").value=""; $("catIcon").value="";
 }
 function delCategory(i){
-  if(!confirm("确定删除？")) return;
-  blogData.categories.splice(i,1);
-  saveData("删除分类");
-  renderAll();
+if(!confirm("确定删除？")) return;
+blogData.categories.splice(i,1);
+saveData("删除分类");
+renderAll();
 }
 
 /* ---------- 标签管理 ---------- */
 function saveTags(){
-  var raw=$("tagsInput").value;
-  blogData.tags = raw.split(/[,，]/).map(function(t){return t.trim();}).filter(Boolean);
-  saveData("修改标签");
-  renderAll();
-  showToast("标签已保存");
+var raw=$("tagsInput").value;
+blogData.tags = raw.split(/[,，]/).map(function(t){return t.trim();}).filter(Boolean);
+saveData("修改标签");
+renderAll();
+showToast("标签已保存");
 }
 
 /* ---------- 快速链接管理 ---------- */
 function renderQuickLinkManage(){
-  $("quickLinkManageList").innerHTML = (blogData.quickLinks||[]).map(function(l,i){
-    return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(l.icon,22)+' '+esc(l.title)+'</div><div class="desc">'+esc(l.url)+'</div></div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editQuickLink('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delQuickLink('+i+')">删除</button></div></div>';
-  }).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无链接</div>';
+$("quickLinkManageList").innerHTML = (blogData.quickLinks||[]).map(function(l,i){
+return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(l.icon,22)+' '+esc(l.title)+'</div><div class="desc">'+esc(l.url)+'</div></div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editQuickLink('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delQuickLink('+i+')">删除</button></div></div>';
+}).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无链接</div>';
 }
 function addQuickLink(){
-  var title=$("qlTitle").value.trim();
-  var url=$("qlUrl").value.trim();
-  if(!title||!url){ showToast("请输入名称和链接","error"); return; }
-  blogData.quickLinks = blogData.quickLinks || [];
-  var item = {icon:$("qlIcon").value.trim()||"🔗", title:title, url:url};
-  if(editingQL === null){ blogData.quickLinks.push(item); saveData("添加快速链接："+title); }
-  else { blogData.quickLinks[editingQL] = item; saveData("编辑快速链接："+title); }
-  cancelQuickLinkEdit();
-  renderAll();
+var title=$("qlTitle").value.trim();
+var url=$("qlUrl").value.trim();
+if(!title||!url){ showToast("请输入名称和链接","error"); return; }
+blogData.quickLinks = blogData.quickLinks || [];
+var item = {icon:$("qlIcon").value.trim()||"🔗", title:title, url:url};
+if(editingQL === null){ blogData.quickLinks.push(item); saveData("添加快速链接："+title); }
+else { blogData.quickLinks[editingQL] = item; saveData("编辑快速链接："+title); }
+cancelQuickLinkEdit();
+renderAll();
 }
 function delQuickLink(i){
-  if(!confirm("确定删除？")) return;
-  blogData.quickLinks.splice(i,1);
-  saveData("删除快速链接");
-  renderAll();
+if(!confirm("确定删除？")) return;
+blogData.quickLinks.splice(i,1);
+saveData("删除快速链接");
+renderAll();
 }
 
 /* ---------- 记账分类下拉 ---------- */
 function updateLgCategories(){
-  var type=$("lgType").value;
-  var cats=(blogData.ledgerCategories||{})[type]||["其他"];
-  $("lgCategory").innerHTML = cats.map(function(c){return '<option>'+esc(c)+'</option>';}).join("");
+var type=$("lgType").value;
+var cats=(blogData.ledgerCategories||{})[type]||["其他"];
+$("lgCategory").innerHTML = cats.map(function(c){return '<option>'+esc(c)+'</option>';}).join("");
 }
 
 function exportData(){
-  const blob = new Blob([JSON.stringify(blogData,null,2)], {type:"application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "data-"+todayStr()+".json";
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href), 3000);
-  showToast("已导出备份文件");
+const blob = new Blob([JSON.stringify(blogData,null,2)], {type:"application/json"});
+const a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "data-"+todayStr()+".json";
+document.body.appendChild(a); a.click(); a.remove();
+setTimeout(()=>URL.revokeObjectURL(a.href), 3000);
+showToast("已导出备份文件");
 }
 function cancelEdit(kind){
-  editing[kind] = null;
-  drafts[kind] = [];
-  setImgDrafts(kind, []);
-  if(kind==="course"){
-    ["cIcon","cTitle","cDesc","cIntro"].forEach(id=>$(id).value="");
-    $("cProgress").value=0;
-    $("courseFormTitle").textContent="添加课程";
-    $("courseEditBar").classList.remove("on");
-    $("cSubmit").textContent="添加课程";
-    $("cCancel").style.display="none";
-    $("cUpStatus").textContent="支持多选；单个文件建议不超过 "+MAX_FILE_MB+"MB";
-    renderDraftFiles("course");
-  }
-  if(kind==="paper"){
-    $("pTitle").value=""; $("pYear").value=""; $("pDesc").value=""; $("pAbstract").value="";
-    document.querySelectorAll(".paper-tag").forEach(c=>c.checked=false);
-    $("paperFormTitle").textContent="添加论文";
-    $("paperEditBar").classList.remove("on");
-    $("pSubmit").textContent="添加论文";
-    $("pCancel").style.display="none";
-    $("pUpStatus").textContent="支持多选；单个文件建议不超过 "+MAX_FILE_MB+"MB";
-    renderDraftFiles("paper");
-  }
-  if(kind==="class"){
-    $("clTitle").value=""; $("clContent").value=""; $("clDate").value=todayStr();
-    $("classFormTitle").textContent="添加班级事务";
-    $("classEditBar").classList.remove("on");
-    $("clSubmit").textContent="添加";
-    $("clCancel").style.display="none";
-    $("clUpStatus").textContent="支持多选；单个文件建议不超过 "+MAX_FILE_MB+"MB";
-    renderDraftFiles("class");
-  }
+editing[kind] = null;
+drafts[kind] = [];
+setImgDrafts(kind, []);
+if(kind==="course"){
+["cIcon","cTitle","cDesc","cIntro"].forEach(id=>$(id).value="");
+$("cProgress").value=0;
+$("courseFormTitle").textContent="添加课程";
+$("courseEditBar").classList.remove("on");
+$("cSubmit").textContent="添加课程";
+$("cCancel").style.display="none";
+$("cUpStatus").textContent="支持多选；单个文件建议不超过 "+MAX_FILE_MB+"MB";
+renderDraftFiles("course");
+}
+if(kind==="paper"){
+$("pTitle").value=""; $("pYear").value=""; $("pDesc").value=""; $("pAbstract").value="";
+document.querySelectorAll(".paper-tag").forEach(c=>c.checked=false);
+$("paperFormTitle").textContent="添加论文";
+$("paperEditBar").classList.remove("on");
+$("pSubmit").textContent="添加论文";
+$("pCancel").style.display="none";
+$("pUpStatus").textContent="支持多选；单个文件建议不超过 "+MAX_FILE_MB+"MB";
+renderDraftFiles("paper");
+}
+if(kind==="class"){
+$("clTitle").value=""; $("clContent").value=""; $("clDate").value=todayStr();
+$("classFormTitle").textContent="添加班级事务";
+$("classEditBar").classList.remove("on");
+$("clSubmit").textContent="添加";
+$("clCancel").style.display="none";
+$("clUpStatus").textContent="支持多选；单个文件建议不超过 "+MAX_FILE_MB+"MB";
+renderDraftFiles("class");
+}
 }
 
 /* ============================================================
-   其它交互
-   ============================================================ */
+  其它交互
+  ============================================================ */
 document.querySelectorAll(".tabs button").forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
-    document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
-    btn.classList.add("active");
-    $("panel-"+btn.dataset.p).classList.add("active");
-  };
+btn.onclick=()=>{
+document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+btn.classList.add("active");
+$("panel-"+btn.dataset.p).classList.add("active");
+};
 });
 
 /* 离开页面前提醒未保存 */
 window.addEventListener("beforeunload", (e)=>{
-  if(saving){ e.preventDefault(); e.returnValue=""; }
+if(saving){ e.preventDefault(); e.returnValue=""; }
 });
 
 document.addEventListener("input", function(e){
-  var t = e.target;
-  if(t && t.id && ICON_FIELDS.indexOf(t.id) >= 0) refreshIconPrev(t.id);
+var t = e.target;
+if(t && t.id && ICON_FIELDS.indexOf(t.id) >= 0) refreshIconPrev(t.id);
 });
 
 /* 打开页面时如果本会话已登录过，直接进后台 */
 (function boot(){
-  if(isLogged()){
-    $("loginScreen").style.display="none";
-    $("mainPanel").style.display="block";
-    initPanel();
-  }
+if(isLogged()){
+$("loginScreen").style.display="none";
+$("mainPanel").style.display="block";
+initPanel();
+}
 })();
 </script>
 </body>

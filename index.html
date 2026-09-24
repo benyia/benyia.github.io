@@ -248,13 +248,24 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .rtoc-fab.show{display:flex}
 .rtoc-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:89;display:none}
 .rtoc-mask.show{display:block}
-/* 1280px 以下目录会压到右侧栏：目录一开就把右栏让出来，互不遮挡 */
+/* 窄一点的屏幕：目录依然贴在右边，但先让右侧栏卡片退场，把宽度留给正文 */
 @media(max-width:1280px){
   body.toc-open .right-col{display:none}
+}
+/* 760px 以下实在放不下右侧目录了，才改成底部弹层（760px 时正文列还有约 440px） */
+@media(max-width:760px){
   .rtoc{top:auto;bottom:0;left:0;right:0;width:auto;max-height:62vh;transform:none;border-radius:16px 16px 0 0;padding:16px 18px 24px;box-shadow:0 -8px 34px rgba(0,0,0,.2);z-index:96}
   .rtoc-close{font-size:1.1rem}
   .rtoc a{padding-top:9px;padding-bottom:9px;font-size:.9rem}
   .rtoc a.toc-lv3,.rtoc a.toc-lv4{font-size:.86rem}
+}
+/* 761~1100px：目录紧凑一点，别抢正文的地方 */
+@media(min-width:761px) and (max-width:1100px){
+  .rtoc{width:196px;padding:12px 10px 10px;right:10px;max-height:70vh}
+  .rtoc a{font-size:.78rem;padding:4px 6px}
+  .rtoc a.toc-lv3{padding-left:28px}
+  .rtoc a.toc-lv4{padding-left:38px;font-size:.74rem}
+  .rtoc-head{font-size:.78rem}
 }
 
 /* ===== 分页 ===== */
@@ -1526,14 +1537,17 @@ function renderToc(heads){
     return '<a href="#' + esc(h.id) + '" data-toc="' + esc(h.id) + '" class="toc-lv' + h.lvl + '" onclick="jumpTo(event,&quot;' + esc(h.id) + '&quot;)">' + esc(h.txt) + '</a>';
   }).join("");
   if(fab) fab.classList.add("show");
-  if(window.innerWidth > 1280) panel.classList.add("show");
+  /* 760px 以上目录一直贴在右边；更窄才需要点按钮弹出 */
+  if(window.innerWidth > 760) panel.classList.add("show");
   if(mask) mask.classList.remove("show");
 }
+/* 目录常驻的最小屏宽，和 CSS 里的 @media(max-width:760px) 对齐 */
+function tocDocked(){ return window.innerWidth > 760; }
 function openToc(){
   var panel = document.getElementById("rtocPanel");
   var mask = document.getElementById("rtocMask");
   if(panel) panel.classList.add("show");
-  if(window.innerWidth <= 1280){
+  if(!tocDocked()){
     if(mask) mask.classList.add("show");
     /* 窄屏时目录会盖住右侧栏，先把它让出来 */
     document.body.classList.add("toc-open");
@@ -1561,17 +1575,24 @@ function updateTocActive(){
   if(!cur) cur = links[0].getAttribute("data-toc");
   if(cur === tocActiveId) return;
   tocActiveId = cur;
+  var curLink = null;
   Array.prototype.forEach.call(links, function(a){
-    a.classList.toggle("on", a.getAttribute("data-toc") === cur);
+    var on = a.getAttribute("data-toc") === cur;
+    a.classList.toggle("on", on);
+    if(on) curLink = a;
   });
+  /* 目录比屏幕高时，让高亮那一项自己滚进可视范围，不然高亮会跑到看不见的地方 */
+  if(curLink && panel.scrollHeight > panel.clientHeight + 4 && curLink.scrollIntoView){
+    try { curLink.scrollIntoView({ block: "nearest", behavior: "smooth" }); } catch(e){}
+  }
 }
 window.addEventListener("scroll", function(){ window.requestAnimationFrame(updateTocActive); }, { passive: true });
 window.addEventListener("resize", function(){
   var panel = document.getElementById("rtocPanel");
   if(!panel) return;
   var mask = document.getElementById("rtocMask");
-  if(window.innerWidth > 1280){
-    /* 宽屏：目录常驻右侧，收起遮罩和右栏让步 */
+  if(tocDocked()){
+    /* 宽屏：目录常驻右侧，收起遮罩，右栏正常显示 */
     if(mask) mask.classList.remove("show");
     document.body.classList.remove("toc-open");
     if(document.getElementById("rtocFab") && document.getElementById("rtocFab").classList.contains("show")) panel.classList.add("show");

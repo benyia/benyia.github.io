@@ -489,7 +489,7 @@
   ],
   "logs": [
     {
-      "time": "2026-09-24 23:29",
+      "time": "2026-09-24 23:31",
       "action": "名单：前台隐藏"
     },
     {
@@ -1049,7 +1049,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": true,
+      "show": false,
       "hide": [
         "ethnicity",
         "political",

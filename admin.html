@@ -867,6 +867,20 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
   </div>
 </div>
 
+<!-- 取色器：替代浏览器 prompt -->
+<div class="dlg-mask" id="colorMask" onclick="if(event.target===this)closeColorPicker()">
+  <div class="dlg" style="max-width:380px">
+    <h3 id="colorTitle">选择颜色</h3>
+    <div class="dlg-hint">点下面的色块或直接输入色值（如 #10b981）</div>
+    <input type="color" id="colorInput" value="#10b981" style="width:100%;height:52px;border:1px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;padding:4px">
+    <div class="dlg-row"><input type="text" class="dlg-input" id="colorHex" placeholder="#10b981" style="font-family:ui-monospace,Consolas,monospace"></div>
+    <div class="dlg-actions">
+      <button class="btn dlg-btn ghost" type="button" onclick="closeColorPicker()">取消</button>
+      <button class="btn dlg-btn primary" type="button" id="colorOk">确定</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ============================================================
    配置
@@ -1520,8 +1534,8 @@ function rteToolbarHTML(){
   h += '<button type="button" title="加粗" onmousedown="return rteCmd(event,\'bold\')"><b>B</b></button>';
   h += '<button type="button" title="斜体" onmousedown="return rteCmd(event,\'italic\')"><i>I</i></button>';
   h += '<button type="button" title="下划线" onmousedown="return rteCmd(event,\'underline\')"><u>U</u></button>';
-  h += '<button type="button" title="文字颜色" onmousedown="return rteCmd(event,\'foreColor\',rteColorPick())"><span style="border-bottom:3px solid #10b981">A</span></button>';
-  h += '<button type="button" title="背景颜色" onmousedown="return rteCmd(event,\'hiliteColor\',rteColorPick())">🖍️</button>';
+  h += '<button type="button" title="文字颜色" onmousedown="return rtePickColor(event,\'foreColor\')"><span style="border-bottom:3px solid #10b981">A</span></button>';
+  h += '<button type="button" title="背景颜色" onmousedown="return rtePickColor(event,\'hiliteColor\')">🖍️</button>';
   h += '<button type="button" title="清除格式" onmousedown="return rteCmd(event,\'removeFormat\')">T<sub>x</sub></button>';
   h += '<span class="rte-sep"></span>';
   h += '<button type="button" title="左对齐" onmousedown="return rteCmd(event,\'justifyLeft\')">≡</button>';
@@ -1770,9 +1784,40 @@ function currentRteKeyFromEl(el){
   var id = bar.id.replace("rteBar_", "");
   return RICH_KEYS[id] ? id : null;
 }
-function rteColorPick(){
-  var c = window.prompt("输入颜色（如 #10b981 或 red）", "#10b981");
-  return c || null;
+/* 文字颜色 / 背景色：用取色器，不再用浏览器 prompt */
+var lastPickedColor = "#10b981";
+function openColorPicker(title, cb){
+  var m = $("colorMask");
+  if(!m) return cb(lastPickedColor);
+  $("colorTitle").textContent = title || "选择颜色";
+  $("colorInput").value = /^#[0-9a-f]{6}$/i.test(lastPickedColor) ? lastPickedColor : "#10b981";
+  $("colorHex").value = lastPickedColor;
+  m.classList.add("show");
+  $("colorOk").onclick = function(){
+    var v = $("colorHex").value.trim() || $("colorInput").value;
+    lastPickedColor = v;
+    m.classList.remove("show");
+    cb(v);
+  };
+  $("colorInput").oninput = function(){ $("colorHex").value = this.value; };
+  setTimeout(function(){ try { $("colorInput").click(); } catch(e){} }, 40);
+}
+function closeColorPicker(){ var m = $("colorMask"); if(m) m.classList.remove("show"); }
+function rteColorPick(cb){ openColorPicker("选择颜色", cb); }
+/* 取色后再执行命令 */
+function rtePickColor(e, cmd){
+  if(e && e.preventDefault) e.preventDefault();
+  var key = currentRteKeyFromEl(e.currentTarget) || lastFocusedRte();
+  restoreRteSel(key);
+  openColorPicker(cmd === "hiliteColor" ? "选择背景颜色" : "选择文字颜色", function(color){
+    if(!color) return;
+    restoreRteSel(key);
+    try { document.execCommand("styleWithCSS", false, true); } catch(err){}
+    try { document.execCommand(cmd, false, color); } catch(err){}
+    saveRteSel(key);
+    updateRteCount(key);
+  });
+  return false;
 }
 function rteFont(name){
   if(!name) return;
@@ -1811,10 +1856,21 @@ function rteLink(e){
   if(e && e.preventDefault) e.preventDefault();
   var key = currentRteKeyFromEl(e.currentTarget) || lastFocusedRte();
   restoreRteSel(key);
-  var url = window.prompt("链接地址（https://...）", "https://");
-  if(!url) return false;
-  saveRteSel(key);
-  document.execCommand("createLink", false, url);
+  openInputDialog({
+    title: "插入链接",
+    hint: "链接地址（https://...）",
+    placeholder: "https://",
+    secondInput: true,
+    placeholder2: "显示文字（可留空）",
+    okText: "插入",
+    onOk: function(url, text){
+      if(!/^https?:\/\//i.test(url)){ dlgErr("链接要以 http:// 或 https:// 开头"); return false; }
+      saveRteSel(key);
+      document.execCommand("insertHTML", false,
+        '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(text || url) + "</a>&nbsp;");
+      return true;
+    }
+  });
   return false;
 }
 function rteImage(e){
@@ -1827,42 +1883,66 @@ function rteMedia(e, kind){
   if(e && e.preventDefault) e.preventDefault();
   var key = currentRteKeyFromEl(e.currentTarget) || lastFocusedRte();
   restoreRteSel(key);
-  var url = window.prompt(kind === "audio" ? "音乐地址（mp3 等）" : "视频地址（mp4 等）", "https://");
-  if(!url) return false;
-  saveRteSel(key);
-  var tag = kind === "audio" ? "audio" : "video";
-  var extra = kind === "audio" ? "controls" : "controls style=\"max-width:100%\"";
-  document.execCommand("insertHTML", false, "<" + tag + " " + extra + " src=\"" + esc(url) + "\"></" + tag + ">");
+  openInputDialog({
+    title: kind === "audio" ? "插入音乐" : "插入视频",
+    hint: kind === "audio" ? "音乐地址（mp3 / m4a 等）" : "视频地址（mp4 / webm 等）",
+    placeholder: "https://",
+    okText: "插入",
+    onOk: function(url){
+      if(!/^https?:\/\//i.test(url)){ dlgErr("地址要以 http:// 或 https:// 开头"); return false; }
+      saveRteSel(key);
+      var tag = kind === "audio" ? "audio" : "video";
+      var extra = kind === "audio" ? "controls" : "controls style=\"max-width:100%\"";
+      document.execCommand("insertHTML", false, "<" + tag + " " + extra + " src=\"" + esc(url) + "\"></" + tag + ">");
+      return true;
+    }
+  });
   return false;
 }
 function rteTable(e){
   if(e && e.preventDefault) e.preventDefault();
   var key = currentRteKeyFromEl(e.currentTarget) || lastFocusedRte();
   restoreRteSel(key);
-  var rc = window.prompt("表格大小，格式：行x列", "3x3");
-  if(!rc) return false;
-  var m = String(rc).match(/^(\d+)\s*[x×*]\s*(\d+)$/i);
-  var rows = m ? Math.min(20, parseInt(m[1], 10)) : 3;
-  var cols = m ? Math.min(10, parseInt(m[2], 10)) : 3;
-  var html = "<table><tbody>";
-  for(var r = 0; r < rows; r++){
-    html += "<tr>";
-    for(var c = 0; c < cols; c++) html += "<td><br></td>";
-    html += "</tr>";
-  }
-  html += "</tbody></table><p><br></p>";
-  saveRteSel(key);
-  document.execCommand("insertHTML", false, html);
+  openInputDialog({
+    title: "插入表格",
+    hint: "填行数和列数，插入后可以直接在表格里打字",
+    placeholder: "行数，如 3",
+    secondInput: true,
+    placeholder2: "列数，如 4",
+    okText: "插入表格",
+    onOk: function(rows, cols){
+      var r = Math.min(20, Math.max(1, parseInt(rows, 10) || 3));
+      var c = Math.min(10, Math.max(1, parseInt(cols, 10) || 3));
+      var html = "<table><tbody>";
+      for(var i = 0; i < r; i++){
+        html += "<tr>";
+        for(var j = 0; j < c; j++) html += "<td><br></td>";
+        html += "</tr>";
+      }
+      html += "</tbody></table><p><br></p>";
+      saveRteSel(key);
+      document.execCommand("insertHTML", false, html);
+      return true;
+    }
+  });
   return false;
 }
 function rteMath(e){
   if(e && e.preventDefault) e.preventDefault();
   var key = currentRteKeyFromEl(e.currentTarget) || lastFocusedRte();
   restoreRteSel(key);
-  var f = window.prompt("输入公式（会作为文字插入，可自行改成图片公式）", "E = mc^2");
-  if(!f) return false;
-  saveRteSel(key);
-  document.execCommand("insertHTML", false, "<span style=\"font-style:italic\">" + esc(f) + "</span>");
+  openInputDialog({
+    title: "插入公式",
+    hint: "输入公式（会作为文字插入，也可以贴图片公式的地址后走「插入图片」）",
+    placeholder: "E = mc^2",
+    okText: "插入",
+    onOk: function(f){
+      if(!f){ dlgErr("请输入公式内容"); return false; }
+      saveRteSel(key);
+      document.execCommand("insertHTML", false, "<span style=\"font-style:italic\">" + esc(f) + "</span>");
+      return true;
+    }
+  });
   return false;
 }
 
@@ -2735,13 +2815,21 @@ function renderDraftFiles(kind){
 function renameFolderBtn(btn){ renameFolder(btn.getAttribute("data-fk"), btn.getAttribute("data-fn")); }
 function deleteFolderBtn(btn){ deleteFolderDraft(btn.getAttribute("data-fk"), btn.getAttribute("data-fn")); }
 function renameFolder(kind, name){
-  var nn = prompt("文件夹新名称：", name);
-  if(nn === null) return;
-  nn = nn.trim();
-  if(!nn){ showToast("名称不能为空","error"); return; }
-  (drafts[kind]||[]).forEach(function(f){ if((f.folder||"") === name) f.folder = nn; });
-  renderDraftFiles(kind);
-  showToast("文件夹已重命名（记得点保存）");
+  openInputDialog({
+    title: "重命名文件夹",
+    hint: "给文件夹「" + name + "」换个名字（记得最后点保存）",
+    placeholder: "文件夹名称",
+    value: name,
+    okText: "重命名",
+    onOk: function(nn){
+      nn = String(nn || "").trim();
+      if(!nn){ dlgErr("名称不能为空"); return false; }
+      (drafts[kind]||[]).forEach(function(f){ if((f.folder||"") === name) f.folder = nn; });
+      renderDraftFiles(kind);
+      showToast("文件夹已重命名（记得点保存）");
+      return true;
+    }
+  });
 }
 function deleteFolderDraft(kind, name){
   var n = (drafts[kind]||[]).filter(function(f){ return (f.folder||"") === name; }).length;

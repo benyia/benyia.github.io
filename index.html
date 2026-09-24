@@ -130,27 +130,34 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .detail-header h2{font-size:1.5rem;margin-bottom:8px}
 .detail-header .intro{color:var(--text2);line-height:1.8;margin-bottom:16px;white-space:pre-wrap}
 .detail-header .abstract{background:var(--soft);border-left:3px solid var(--primary);padding:12px 16px;border-radius:8px;color:var(--text2);line-height:1.8;margin:12px 0;white-space:pre-wrap;font-size:.9rem}
-/* Markdown 正文（通知）：文字与图片混排 */
-.md-body{white-space:normal}
+/* Markdown 正文（通知）：文字与图片混排 —— 阅读体验优先：收窄行宽、放宽松行高 */
+.md-body{white-space:normal;max-width:46em;font-size:1.02rem;letter-spacing:.1px}
 .md-body>*:first-child{margin-top:0}
 .md-body>*:last-child{margin-bottom:0}
-.md-body p{margin:0 0 12px;line-height:1.85;color:var(--text2)}
-.md-body h1,.md-body h2,.md-body h3,.md-body h4,.md-body h5,.md-body h6{color:var(--text);line-height:1.5;margin:20px 0 10px;font-weight:700}
-.md-body h1{font-size:1.35rem;padding-bottom:8px;border-bottom:1px solid var(--border)}
-.md-body h2{font-size:1.18rem;padding-bottom:6px;border-bottom:1px solid var(--border)}
-.md-body h3{font-size:1.05rem}
-.md-body h4,.md-body h5,.md-body h6{font-size:.98rem}
-.md-body img{max-width:100%;height:auto;display:block;margin:14px auto;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.md-body p{margin:0 0 1.15em;line-height:1.95;color:var(--text2)}
+.md-body h1,.md-body h2,.md-body h3,.md-body h4,.md-body h5,.md-body h6{color:var(--text);line-height:1.55;margin:1.9em 0 .7em;font-weight:700;scroll-margin-top:90px}
+.md-body h1{font-size:1.5rem;padding-bottom:10px;border-bottom:2px solid var(--primary-light)}
+.md-body h2{font-size:1.28rem;padding:0 0 8px 12px;border-bottom:1px solid var(--border);border-left:3px solid var(--primary)}
+.md-body h3{font-size:1.1rem;padding-left:10px;border-left:3px solid var(--primary-light)}
+.md-body h4,.md-body h5,.md-body h6{font-size:1rem;color:var(--text)}
+.md-body img{max-width:100%;height:auto;display:block;margin:20px auto;border-radius:12px;box-shadow:0 4px 20px rgba(15,23,42,.12)}
 .md-body a{color:var(--primary-dark);text-decoration:none;border-bottom:1px solid var(--primary-light)}
 .md-body a:hover{border-bottom-color:var(--primary)}
 .md-body strong{color:var(--text);font-weight:700}
-.md-body ul,.md-body ol{margin:0 0 12px;padding-left:24px}
-.md-body li{margin:4px 0;line-height:1.8;color:var(--text2)}
-.md-body blockquote{margin:12px 0;padding:10px 16px;background:#f8fafc;border-left:3px solid var(--primary);border-radius:8px;color:var(--text2)}
+.md-body ul,.md-body ol{margin:0 0 1.15em;padding-left:26px}
+.md-body li{margin:.4em 0;line-height:1.9;color:var(--text2)}
+.md-body blockquote{margin:18px 0;padding:12px 18px;background:var(--soft);border-left:3px solid var(--primary);border-radius:0 10px 10px 0;color:var(--text2);line-height:1.9}
 .md-body blockquote p:last-child{margin-bottom:0}
+.md-body hr{border:none;border-top:1px dashed var(--border);margin:26px 0}
+.md-body table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.92rem}
+.md-body th,.md-body td{border:1px solid var(--border);padding:9px 12px;text-align:left}
+.md-body th{background:var(--soft);font-weight:600;color:var(--text)}
 .md-body code{background:#f1f5f9;border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:.88em;font-family:Consolas,Monaco,"Courier New",monospace;color:#be123c}
 .md-body pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;margin:12px 0}
 .md-body pre code{background:none;border:none;padding:0;color:inherit;font-size:.85rem;line-height:1.7}
+/* 正文外的白卡：把内容从背景里"抬"起来，和图二那种卡片阅读感一致 */
+.reader-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:26px 30px;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+@media(max-width:560px){ .reader-card{padding:18px 16px} .md-body{font-size:.98rem} }
 .md-body hr{border:none;border-top:1px solid var(--border);margin:18px 0}
 .md-body table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.88rem;display:block;overflow-x:auto}
 .md-body th,.md-body td{border:1px solid var(--border);padding:8px 12px;text-align:left}
@@ -229,16 +236,25 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .rtoc.show{display:block}
 .rtoc-head{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;font-weight:700;color:var(--text2);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .rtoc-close{border:none;background:none;color:var(--text3);cursor:pointer;font-size:.9rem;line-height:1;font-family:inherit}
-.rtoc a{display:block;font-size:.82rem;line-height:1.5;color:var(--text2);text-decoration:none;padding:4px 0;border-left:2px solid transparent;padding-left:8px;transition:color .2s,border-color .2s}
-.rtoc a:hover{color:var(--primary)}
-.rtoc a.on{color:var(--primary-dark);border-left-color:var(--primary);font-weight:600}
+.rtoc a{display:block;font-size:.82rem;line-height:1.55;color:var(--text2);text-decoration:none;padding:5px 8px;border-left:2px solid transparent;border-radius:0 6px 6px 0;transition:color .2s,border-color .2s,background .2s}
+.rtoc a:hover{color:var(--primary);background:var(--soft)}
+.rtoc a.on{color:var(--primary-dark);border-left-color:var(--primary);background:var(--primary-light);font-weight:600}
+/* 目录层级缩进：像图二那样一眼看出结构 */
+.rtoc a.toc-lv1{font-weight:700;color:var(--text);padding-left:8px}
+.rtoc a.toc-lv2{padding-left:20px}
+.rtoc a.toc-lv3{padding-left:34px;font-size:.79rem}
+.rtoc a.toc-lv4{padding-left:46px;font-size:.77rem;color:var(--text3)}
 .rtoc-fab{position:fixed;right:16px;bottom:24px;z-index:95;display:none;align-items:center;gap:6px;padding:11px 16px;border:none;border-radius:99px;background:var(--primary);color:#fff;font-size:.86rem;font-family:inherit;cursor:pointer;box-shadow:0 8px 24px rgba(16,185,129,.4)}
 .rtoc-fab.show{display:flex}
 .rtoc-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:89;display:none}
 .rtoc-mask.show{display:block}
+/* 1280px 以下目录会压到右侧栏：目录一开就把右栏让出来，互不遮挡 */
 @media(max-width:1280px){
-  .rtoc{top:auto;bottom:0;left:0;right:0;width:auto;max-height:62vh;transform:none;border-radius:16px 16px 0 0;padding:16px 18px 24px;box-shadow:0 -8px 34px rgba(0,0,0,.2)}
+  body.toc-open .right-col{display:none}
+  .rtoc{top:auto;bottom:0;left:0;right:0;width:auto;max-height:62vh;transform:none;border-radius:16px 16px 0 0;padding:16px 18px 24px;box-shadow:0 -8px 34px rgba(0,0,0,.2);z-index:96}
   .rtoc-close{font-size:1.1rem}
+  .rtoc a{padding-top:9px;padding-bottom:9px;font-size:.9rem}
+  .rtoc a.toc-lv3,.rtoc a.toc-lv4{font-size:.86rem}
 }
 
 /* ===== 分页 ===== */
@@ -290,8 +306,9 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .roster-row .v{color:var(--text);font-weight:500;word-break:break-all}
 .folder-title{font-size:.86rem;font-weight:600;margin:14px 0 6px;color:var(--primary-dark)}
 /* ===== 卡片式详情：把大段文字拆成有层次的卡片，而不是一坨文本 ===== */
-.detail-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px}
-@media(min-width:820px){ .detail-grid{grid-template-columns:1.55fr 1fr} .detail-main{grid-column:1} .detail-side{grid-column:2} }
+.detail-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px;align-items:start}
+@media(min-width:820px){ .detail-grid{grid-template-columns:minmax(0,1fr) 280px} .detail-main{grid-column:1;min-width:0} .detail-side{grid-column:2} }
+@media(min-width:1200px){ .detail-grid{grid-template-columns:minmax(0,1fr) 300px} }
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
 .info-card+.info-card{margin-top:16px}
 .info-card h3{font-size:.92rem;margin-bottom:12px;padding-left:10px;border-left:3px solid var(--primary);display:flex;align-items:center;gap:6px}
@@ -501,7 +518,7 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
       </div>
       <div class="detail-grid">
         <div class="detail-main">
-          <div class="info-card"><h3>📖 课程介绍</h3><div class="md-body" id="cdIntro"></div></div>
+          <div class="reader-card"><div class="md-body" id="cdIntro"></div></div>
         </div>
         <div class="detail-side">
           <div class="info-card"><h3>📊 课程信息</h3><div class="kv-list" id="cdInfo"></div></div>
@@ -542,7 +559,7 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
       </div>
       <div class="detail-grid">
         <div class="detail-main">
-          <div class="info-card"><h3>📄 通知正文</h3><div class="md-body" id="ndContent"></div></div>
+          <div class="reader-card"><div class="md-body" id="ndContent"></div></div>
         </div>
         <div class="detail-side">
           <div class="info-card"><h3>ℹ️ 基本信息</h3><div class="kv-list" id="ndInfo"></div></div>
@@ -1516,13 +1533,19 @@ function openToc(){
   var panel = document.getElementById("rtocPanel");
   var mask = document.getElementById("rtocMask");
   if(panel) panel.classList.add("show");
-  if(window.innerWidth <= 1280 && mask) mask.classList.add("show");
+  if(window.innerWidth <= 1280){
+    if(mask) mask.classList.add("show");
+    /* 窄屏时目录会盖住右侧栏，先把它让出来 */
+    document.body.classList.add("toc-open");
+  }
+  updateTocActive();
 }
 function closeToc(){
   var panel = document.getElementById("rtocPanel");
   var mask = document.getElementById("rtocMask");
   if(panel) panel.classList.remove("show");
   if(mask) mask.classList.remove("show");
+  document.body.classList.remove("toc-open");
 }
 /* 滚动时高亮当前章节 */
 function updateTocActive(){
@@ -1546,9 +1569,11 @@ window.addEventListener("scroll", function(){ window.requestAnimationFrame(updat
 window.addEventListener("resize", function(){
   var panel = document.getElementById("rtocPanel");
   if(!panel) return;
+  var mask = document.getElementById("rtocMask");
   if(window.innerWidth > 1280){
-    var mask = document.getElementById("rtocMask");
+    /* 宽屏：目录常驻右侧，收起遮罩和右栏让步 */
     if(mask) mask.classList.remove("show");
+    document.body.classList.remove("toc-open");
     if(document.getElementById("rtocFab") && document.getElementById("rtocFab").classList.contains("show")) panel.classList.add("show");
   }else{
     closeToc();
@@ -1813,7 +1838,9 @@ function renderDiary(){
       +   '<span class="diary-summary-date">'+esc(d.date)+'</span>'
       +   '<span class="diary-summary-arrow">▼</span>'
       + '</summary>'
-      + '<div class="diary-body"><div class="diary-content md-body">'+mdRender(d.content)+'</div>'+galleryHTML(d)+media+'</div>'
+      + '<div class="diary-body"><div class="diary-content md-body">'+mdRenderHTML(d.content)+'</div>'
+      + ((d.tags||[]).length ? '<div class="chip-row" style="margin-top:10px">'+d.tags.map(function(t){ return '<span class="info-chip" style="cursor:pointer" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')">🏷 '+esc(t)+'</span>'; }).join("")+'</div>' : "")
+      + galleryHTML(d)+media+'</div>'
       + '</details>';
   }).join("") || '<div class="empty">暂无日记</div>';
 }
@@ -1823,15 +1850,19 @@ function renderAdvisor(){
     var title = (d.count ? ("第 " + d.count + " 次指导") : "指导记录");
     if(d.date) title += " · " + d.date;
     if(d.time) title += " " + d.time;
-    var preview = String(d.content||"").split(String.fromCharCode(10)).join(" ").trim();
+    var preview = mdText(d.content).split(String.fromCharCode(10)).join(" ").trim();
     if(preview.length > 46) preview = preview.slice(0,46) + "…";
+    var tags = (d.tags||[]).length
+      ? '<div class="chip-row" style="margin-top:10px">' + d.tags.map(function(t){ return '<span class="info-chip" style="cursor:pointer" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')">🏷 '+esc(t)+'</span>'; }).join("") + '</div>'
+      : "";
+    var files = collectFiles(d).length ? fileListGrouped(d) : "";
     return '<details class="diary-item"'+(idx===0?" open":"")+'>'
       + '<summary class="diary-summary">'
       +   '<span class="diary-summary-main"><span class="diary-summary-title">'+esc(title)+'</span>'
       +   (preview?'<span class="diary-summary-preview">'+esc(preview)+'</span>':"")+'</span>'
       +   '<span class="diary-summary-arrow">▼</span>'
       + '</summary>'
-      + '<div class="diary-body"><div class="diary-content md-body">'+mdRender(d.content)+'</div>'+galleryHTML(d)+'</div>'
+      + '<div class="diary-body"><div class="diary-content md-body">'+mdRenderHTML(d.content)+'</div>'+tags+galleryHTML(d)+files+'</div>'
       + '</details>';
   }).join("") || '<div class="empty">暂无记录</div>';
 }

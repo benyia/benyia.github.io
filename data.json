@@ -32,6 +32,10 @@
   "mentoring": [],
   "logs": [
     {
+      "time": "2026-09-24 17:32",
+      "action": "修改站点设置"
+    },
+    {
       "time": "2026/9/24 17:11:52",
       "text": "删除课程："
     },
@@ -43,5 +47,95 @@
       "time": "2026/9/24 17:10:04",
       "text": "更新站点设置"
     }
-  ]
+  ],
+  "siteConfig": {
+    "title": "思齐个人主页",
+    "subtitle": "钟爱奥迪A6",
+    "about": "你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",
+    "avatar": "files/1790242351877_1_0er1y7pr_583fc105d116716dbba227422b5595d9.jpg",
+    "defaultImage": "",
+    "columns": "1",
+    "defaultAvatar": "",
+    "loginHint": "s3069988193@163.com",
+    "coverPan": true,
+    "coverPanSec": 3,
+    "name": "思齐",
+    "bio": "控制工程研究生"
+  },
+  "categories": [
+    {
+      "icon": "📚",
+      "name": "课程学习",
+      "section": "courses"
+    },
+    {
+      "icon": "📝",
+      "name": "论文",
+      "section": "papers"
+    },
+    {
+      "icon": "🔔",
+      "name": "学校通知",
+      "section": "notices"
+    },
+    {
+      "icon": "👥",
+      "name": "班级事务",
+      "section": "class"
+    }
+  ],
+  "tags": [
+    "控制工程",
+    "深度学习",
+    "FPGA",
+    "Python"
+  ],
+  "quickLinks": [
+    {
+      "icon": "☁️",
+      "title": "百度网盘",
+      "url": "https://pan.baidu.com"
+    },
+    {
+      "icon": "🚄",
+      "title": "12306",
+      "url": "https://www.12306.cn"
+    },
+    {
+      "icon": "🐙",
+      "title": "GitHub",
+      "url": "https://github.com"
+    },
+    {
+      "icon": "💡",
+      "title": "知乎",
+      "url": "https://www.zhihu.com"
+    }
+  ],
+  "classItems": [],
+  "lifeServices": [],
+  "ledgerCategories": {
+    "expense": [
+      "吃饭",
+      "买东西",
+      "生活用品",
+      "交通",
+      "娱乐",
+      "学习",
+      "医疗",
+      "其他"
+    ],
+    "income": [
+      "工资",
+      "奖学金",
+      "补贴",
+      "红包",
+      "其他"
+    ]
+  },
+  "roster": [],
+  "rosterConfig": {
+    "showSensitive": false
+  },
+  "advisor": []
 }

@@ -3,7 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>思齐个人主页</title>
+<meta name="theme-color" content="#10b981">
+<title>思齐个人主页 | 控制工程研究生的学习与生活记录</title>
+
+<!-- 搜索引擎 -->
+<meta name="description" content="思齐的个人主页 —— 控制工程研究生，记录课程资料、论文进展、学习笔记与生活随笔，也收藏常用网站与工具。">
+<meta name="keywords" content="思齐,个人主页,控制工程,研究生,博客,学习笔记,课程资料,论文,日记,沈阳工业大学">
+<meta name="author" content="思齐">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://benyia.github.io/">
+
+<!-- 分享卡片（微信 / QQ / 微博 / Twitter 等） -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="思齐的博客">
+<meta property="og:title" content="思齐个人主页 | 控制工程研究生的学习与生活记录">
+<meta property="og:description" content="控制工程研究生的课程、论文、学习笔记与生活记录。">
+<meta property="og:url" content="https://benyia.github.io/">
+<meta property="og:image" content="https://benyia.github.io/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="思齐个人主页">
+<meta name="twitter:description" content="控制工程研究生的课程、论文、学习笔记与生活记录。">
+<meta name="twitter:image" content="https://benyia.github.io/og-cover.png">
+
+<!-- 图标 -->
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<!-- 结构化数据：让搜索结果更完整 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "思齐个人主页",
+  "alternateName": "思齐的博客",
+  "url": "https://benyia.github.io/",
+  "description": "控制工程研究生的课程、论文、学习笔记与生活记录。",
+  "author": { "@type": "Person", "name": "思齐", "description": "控制工程研究生" }
+}
+</script>
+
+<!-- 关键资源预加载，减少首屏等待 -->
+<link rel="preconnect" href="https://api.github.com">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -26,9 +70,17 @@ html{scroll-behavior:smooth}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
   color:var(--text);line-height:1.6;
-  background-image:url("image1.png");background-size:cover;background-attachment:fixed;background-position:center;min-height:100vh;
+  /* 背景图先给一层渐变（不用等 1MB 图片），图片加载完再加 class 换上 */
+  background:linear-gradient(160deg,#f0fdf4,#ecfdf5 45%,#e0f2fe);min-height:100vh;
 }
 body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:var(--overlay);z-index:-1}
+/* 背景层：用 fixed 伪元素模拟 background-attachment:fixed（iOS Safari 上后者会闪烁甚至不显示） */
+body::after{
+  content:"";position:fixed;top:0;left:0;right:0;bottom:0;z-index:-2;
+  background-image:none;background-size:cover;background-position:center;background-repeat:no-repeat;
+  opacity:0;transition:opacity .5s ease;pointer-events:none;
+}
+body.bg-ready::after{background-image:url("image1.png");opacity:1}
 
 /* Top Nav */
 .topnav{background:var(--nav-bg);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
@@ -846,7 +898,7 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
   </div>
 </div>
 
-<div class="footer">© 2026 思齐个人主页 · Powered by GitHub Pages</div>
+<div class="footer">© <span id="copyYear">2026</span> 思齐个人主页 · Powered by GitHub Pages</div>
 
 <script>
 const GH_OWNER = "benyia";
@@ -1041,6 +1093,26 @@ function fileListHTML(item){
   return files.map(function(f){
     return '<div class="file-item"><div><div class="name">'+esc(f.name)+'</div><div class="type">'+esc(f.type||"文件")+(f.size?" · "+fmtSize(f.size):"")+'</div></div>'+fileActionHTML(f.url, f.name)+'</div>';
   }).join("") || '<div class="empty">暂无文件</div>';
+}
+
+/* ============================================================
+   首屏优化：版权年份自动更新 + 背景图延迟加载
+   背景图约 1MB，先让内容用渐变底渲染出来，空闲时再换上图片
+   ============================================================ */
+function initSiteChrome(){
+  var y = document.getElementById("copyYear");
+  if(y) y.textContent = new Date().getFullYear();
+  loadBgLazy();
+}
+function loadBgLazy(){
+  var mark = function(){ document.body.classList.add("bg-ready"); };
+  var img = new Image();
+  img.onload = mark;
+  img.onerror = mark;   /* 加载失败就保持渐变底，不影响阅读 */
+  var go = function(){ img.src = "image1.png"; };
+  var idle = window.requestIdleCallback || function(cb){ return setTimeout(cb, 800); };
+  if(document.readyState === "complete") idle(go);
+  else window.addEventListener("load", function(){ idle(go); });
 }
 
 async function loadData(){
@@ -2102,22 +2174,14 @@ async function addLedgerFromFront(){
   var category = document.getElementById("lgCategory").value;
   var hint = document.getElementById("lgHint");
   if(!amt || amt<=0){ if(hint){ hint.textContent="请输入金额"; hint.style.color="#ef4444"; } return; }
-  var token = (localStorage.getItem("benyia_gh_token")||"").trim();
-  if(!token){ if(hint){ hint.textContent="记账需要在管理后台「站点设置」里保存 GitHub Token（仅你自己的浏览器）"; hint.style.color="#ef4444"; } return; }
+  if(!frontToken()){ if(hint){ hint.textContent="记账需要在管理后台「站点设置」里保存 GitHub Token（仅你自己的浏览器）"; hint.style.color="#ef4444"; } return; }
   hint.textContent = "保存中…"; hint.style.color = "#64748b";
   try{
-    var h = {"Authorization":"Bearer "+token, "Accept":"application/vnd.github+json", "Content-Type":"application/json"};
-    var raw = await (await fetch("data.json?v="+Date.now(), {cache:"no-store"})).json();
-    var meta = await (await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/data.json?ref=main&t="+Date.now(), {headers:h, cache:"no-store"})).json();
-    raw.ledger = raw.ledger || [];
-    raw.ledger.push({date:todayStr(), type:type, amount:amt, desc:desc, category:category});
-    var bytes = new TextEncoder().encode(JSON.stringify(raw, null, 2));
-    var bin = ""; var CHUNK = 0x8000;
-    for(var i=0;i<bytes.length;i+=CHUNK) bin += String.fromCharCode.apply(null, bytes.subarray(i, i+CHUNK));
-    var content = btoa(bin);
-    var r = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/data.json", {method:"PUT", headers:h, body:JSON.stringify({message:"记账", content:content, branch:"main", sha:meta.sha})});
-    if(!r.ok){ var m="HTTP "+r.status; try{ var j=await r.json(); if(j.message) m+="："+j.message; }catch(e){} throw new Error(m); }
-    blogData = raw;
+    /* 和日记/指导记录走同一套：读最新 → 改 → 提交，冲突自动重试 */
+    await pushDataChange(function(d){
+      d.ledger = d.ledger || [];
+      d.ledger.push({ date: todayStr(), type: type, amount: amt, desc: desc, category: category });
+    }, "记账");
     document.getElementById("lgAmt").value=""; document.getElementById("lgDesc").value="";
     renderLedger();
     hint.textContent = "✅ 已记一笔，稍等约 1 分钟前台生效"; hint.style.color = "#059669";
@@ -2131,31 +2195,43 @@ async function addLedgerFromFront(){
 function frontToken(){
   try { return (localStorage.getItem("benyia_gh_token") || "").trim(); } catch(e){ return ""; }
 }
+/* 读线上最新 data.json（写入前必须先读，避免覆盖别人的改动） */
+async function readRemoteData(h){
+  var res = await fetch("https://api.github.com/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/data.json?ref=main&t=" + Date.now(), { headers: h, cache: "no-store" });
+  if(!res.ok) throw new Error("读取线上数据失败（HTTP " + res.status + "），请检查 Token 是否有效");
+  var meta = await res.json();
+  return { data: JSON.parse(decodeURIComponent(escape(atob(String(meta.content || "").replace(/\s/g, ""))))), sha: meta.sha };
+}
+function b64EncodeUtf8(obj){
+  var bytes = new TextEncoder().encode(JSON.stringify(obj, null, 2));
+  var bin = "", CHUNK = 0x8000;
+  for(var i = 0; i < bytes.length; i += CHUNK) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
+  return btoa(bin);
+}
+/* 写入线上 data.json：遇到 409/422（别人刚改过）自动重读并重试一次，
+   重试时会用全新数据重新执行 mutate，所以不会丢改动、也不会重复添加 */
 async function pushDataChange(mutate, commitMessage){
   var token = frontToken();
   if(!token) throw new Error("需要先在管理后台「站点设置」里保存 GitHub Token（只存在你自己的浏览器里）");
   var h = { "Authorization":"Bearer "+token, "Accept":"application/vnd.github+json", "Content-Type":"application/json" };
-  /* 以线上为准，避免把别的改动覆盖掉 */
-  var metaRes = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/data.json?ref=main&t="+Date.now(), { headers:h, cache:"no-store" });
-  if(!metaRes.ok) throw new Error("读取线上数据失败（HTTP " + metaRes.status + "），请检查 Token 是否有效");
-  var meta = await metaRes.json();
-  var latest = JSON.parse(decodeURIComponent(escape(atob(String(meta.content||"").replace(/\s/g,"")))));
-  mutate(latest);
-  var bytes = new TextEncoder().encode(JSON.stringify(latest, null, 2));
-  var bin = "", CHUNK = 0x8000;
-  for(var i = 0; i < bytes.length; i += CHUNK) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
-  var put = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/data.json", {
-    method: "PUT", headers: h,
-    body: JSON.stringify({ message: commitMessage || "前台更新", content: btoa(bin), branch: "main", sha: meta.sha })
-  });
-  if(!put.ok){
-    var m = "HTTP " + put.status;
-    try { var j = await put.json(); if(j.message) m += "：" + j.message; } catch(e){}
-    throw new Error(m);
+  var lastErr = null;
+  for(var attempt = 0; attempt < 2; attempt++){
+    var remote = await readRemoteData(h);
+    var latest = remote.data;
+    mutate(latest);                       /* 每次都用最新数据重新执行，避免覆盖与重复 */
+    var put = await fetch("https://api.github.com/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/data.json", {
+      method: "PUT", headers: h,
+      body: JSON.stringify({ message: commitMessage || "前台更新", content: b64EncodeUtf8(latest), branch: "main", sha: remote.sha })
+    });
+    if(put.ok){ blogData = latest; return latest; }   /* 本地立即生效，不用等 Pages 构建 */
+    var msg = "HTTP " + put.status;
+    try { var j = await put.json(); if(j.message) msg += "：" + j.message; } catch(e){}
+    lastErr = new Error(msg);
+    /* sha 过期（有人同时写）→ 重读一次再试；其它错误直接抛 */
+    if(put.status !== 409 && put.status !== 422) throw lastErr;
+    await new Promise(function(r){ setTimeout(r, 600); });
   }
-  /* 本地立即生效，不用等 Pages 构建 */
-  blogData = latest;
-  return latest;
+  throw new Error((lastErr ? lastErr.message : "") + "（刚有人同时修改，已重试一次仍冲突，请再点一次保存）");
 }
 function sayStatus(id, text, color){
   var el = document.getElementById(id);
@@ -2914,6 +2990,7 @@ document.addEventListener("click", function(e){
   if(!e.target.closest(".nav-search")) document.getElementById("searchResults").classList.remove("show");
 });
 
+initSiteChrome();
 loadData();
 </script>
 </body>

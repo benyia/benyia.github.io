@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# 后台和本地上传工具不该被收录
+Disallow: /admin.html
+Disallow: /_preview/
+
+Sitemap: https://benyia.github.io/sitemap.xml

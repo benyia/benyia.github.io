@@ -490,6 +490,10 @@
   "logs": [
     {
       "time": "2026-09-25 19:32",
+      "action": "名单字段可见性：email 显示"
+    },
+    {
+      "time": "2026-09-25 19:32",
       "action": "名单字段可见性：birthday 显示"
     },
     {
@@ -883,10 +887,6 @@
     {
       "time": "2026-09-19 10:49",
       "action": "修改站点设置"
-    },
-    {
-      "time": "2026-09-19 10:48",
-      "action": "编辑课程：计算机控制系统"
     }
   ],
   "categories": [
@@ -1019,8 +1019,6 @@
       "show": true,
       "hide": [
         "note",
-        "phone",
-        "email",
         "idCard",
         "homeAddress"
       ]

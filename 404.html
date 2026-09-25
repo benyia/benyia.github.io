@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10b981">
+<title>页面走丢了 · 思齐个人主页</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#10b981;--text:#1e293b;--text2:#64748b;--text3:#94a3b8;--card:rgba(255,255,255,.9);--border:#e2e8f0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  color:var(--text);line-height:1.7;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+  background-image:linear-gradient(135deg,#f0fdf4,#ecfdf5 45%,#e0f2fe);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:44px 38px;max-width:560px;width:100%;
+  text-align:center;box-shadow:0 22px 60px rgba(15,23,42,.1);backdrop-filter:blur(10px)}
+.code{font-size:4.4rem;font-weight:800;line-height:1;letter-spacing:2px;
+  background:linear-gradient(135deg,#10b981,#34d399);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1{font-size:1.25rem;margin:14px 0 8px}
+p{color:var(--text2);font-size:.92rem;margin-bottom:22px}
+.links{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+a.btn{display:inline-block;padding:11px 22px;border-radius:11px;text-decoration:none;font-size:.9rem;transition:all .2s}
+a.primary{background:var(--primary);color:#fff;font-weight:600}
+a.primary:hover{background:#059669;transform:translateY(-1px)}
+a.ghost{background:#f1f5f9;color:var(--text2)}
+a.ghost:hover{background:#e2e8f0}
+.tip{margin-top:24px;padding-top:18px;border-top:1px dashed var(--border);font-size:.82rem;color:var(--text3)}
+.tip code{background:#eef2f7;border-radius:4px;padding:1px 6px;font-size:.8rem}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="code">404</div>
+    <h1>这个页面走丢了</h1>
+    <p>你要找的内容可能已经被移动或删除了。<br>回首页看看，或者用站内搜索找找看。</p>
+    <div class="links">
+      <a class="btn primary" href="/">← 回首页</a>
+      <a class="btn ghost" href="/#courses">看课程</a>
+      <a class="btn ghost" href="/#diary">看日记</a>
+      <a class="btn ghost" href="/#tags">按标签浏览</a>
+    </div>
+    <div class="tip">
+      小提示：站内地址形如 <code>/#课程</code> 的，直接点导航也能到。
+    </div>
+  </div>
+</body>
+</html>

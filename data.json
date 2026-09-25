@@ -490,6 +490,10 @@
   "logs": [
     {
       "time": "2026-09-25 19:32",
+      "action": "名单字段可见性：birthday 显示"
+    },
+    {
+      "time": "2026-09-25 19:32",
       "action": "名单字段可见性：dorm 显示"
     },
     {
@@ -883,10 +887,6 @@
     {
       "time": "2026-09-19 10:48",
       "action": "编辑课程：计算机控制系统"
-    },
-    {
-      "time": "2026-09-19 10:47",
-      "action": "修改站点设置"
     }
   ],
   "categories": [
@@ -1020,10 +1020,6 @@
       "hide": [
         "note",
         "phone",
-        "birthday",
-        "advisor",
-        "ethnicity",
-        "political",
         "email",
         "idCard",
         "homeAddress"

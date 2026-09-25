@@ -524,10 +524,7 @@ details.diary-item{padding:0;overflow:hidden}
 details[open] .diary-summary-arrow{transform:rotate(180deg)}
 .diary-body{padding:0 18px 18px}
 .icon-img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.footer{text-align:center;padding:32px;color:var(--text3);font-size:.82rem;border-top:1px solid var(--border);margin-top:20px;background:var(--title-bg);display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
-/* 页脚「站点设置」按钮：只有站长能看到（有了 Token 才显示） */
-.footer .footer-edit{font-size:.8rem;color:var(--primary-dark);background:var(--primary-light);border:none;border-radius:8px;padding:6px 14px;cursor:pointer;font-family:inherit}
-.footer .footer-edit:hover{background:var(--primary);color:#fff}
+.footer{text-align:center;padding:32px;color:var(--text3);font-size:.82rem;border-top:1px solid var(--border);margin-top:20px;background:var(--title-bg)}
 
 /* ============================================================
    交互细节：滚动入场动画 / 常驻导航 / 悬浮微动 / 骨架屏 / 图片淡入
@@ -586,11 +583,6 @@ html[data-theme="dark"] .course-badge{background:rgba(217,119,6,.18);color:#fbbf
 /* 未完成的课程卡片：左边一条淡黄提示条 */
 .article-card.course-todo{border-left:3px solid #fbbf24}
 
-/* 前台「站点设置」面板 */
-.site-edit{margin-bottom:18px}
-.site-edit .se-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
-.site-edit input[type=text]{flex:1;min-width:150px;padding:9px 12px;border:1px solid var(--border);border-radius:9px;font-size:.86rem;font-family:inherit;background:var(--bg);color:var(--text);outline:none}
-.site-edit input[type=text]:focus{border-color:var(--primary);background:#fff}
 .site-avatar{width:56px;height:56px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,var(--primary),#34d399);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;flex:0 0 56px}
 .site-avatar img{width:100%;height:100%;object-fit:cover}
 
@@ -968,35 +960,7 @@ html[data-theme="dark"] .course-badge{background:rgba(217,119,6,.18);color:#fbbf
   </div>
 </div>
 
-<div class="footer">
-  <span>© <span id="copyYear">2026</span> 思齐个人主页 · Powered by GitHub Pages</span>
-  <button class="footer-edit" id="footerEditBtn" type="button" onclick="toggleSiteEdit()" hidden>✏️ 站点设置</button>
-</div>
-
-<!-- 站长专用：前台直接改站点标题 / 副标题 / 头像 / 简介（需要本机存过 GitHub Token） -->
-<div class="front-form site-edit" id="siteEditBox" hidden>
-  <h4>✏️ 站点设置</h4>
-  <div class="ff-hint">改完点「保存」，全站标题、导航和页脚一起更新（写入 GitHub，约 1 分钟后线上生效）。</div>
-  <div class="se-row">
-    <div class="site-avatar" id="seAvatarPrev">思</div>
-    <input type="text" id="seAvatar" placeholder="头像地址（可点右边上传）" oninput="onSiteAvatarChange()">
-    <button class="btn-primary" type="button" onclick="pickSiteAvatar()">上传头像</button>
-    <input type="file" id="seAvatarFile" accept="image/*" style="display:none" onchange="onSiteAvatarPick(event)">
-  </div>
-  <div class="se-row">
-    <input type="text" id="seTitle" placeholder="站点标题（浏览器标签 & 页头）">
-    <input type="text" id="seSub" placeholder="副标题（如：钟爱奥迪A6）">
-  </div>
-  <div class="se-row">
-    <input type="text" id="seName" placeholder="昵称（左侧名片）">
-    <input type="text" id="seBio" placeholder="一句话简介">
-  </div>
-  <div class="ff-actions">
-    <button class="btn-primary" type="button" onclick="saveSiteEdit()">保存设置</button>
-    <button class="btn-primary" type="button" style="background:var(--text2)" onclick="toggleSiteEdit()">收起</button>
-    <span class="ff-status" id="seStatus"></span>
-  </div>
-</div>
+<div class="footer">© <span id="copyYear">2026</span> 思齐个人主页 · Powered by GitHub Pages</div>
 
 <script>
 const GH_OWNER = "benyia";
@@ -1651,13 +1615,12 @@ function renderAll(){
   applyColumns();
   setTimeout(initCoverPan, 60);
 
-  /* 交互增强：懒加载图片、给各列表挂入场动画、更新页脚设置按钮 */
+  /* 交互增强：懒加载图片、给各列表挂入场动画、应用站点配置 */
   lazyImages(document);
   ["homeList", "coursesList", "papersList", "noticesList", "classList", "lifeList", "mediaList", "diaryList", "advisorList", "ledgerList", "rosterList"]
     .forEach(function(id){ markReveal(document.getElementById(id), ":scope > *"); });
   markReveal(document.querySelector(".left-col"), ":scope > *");
-  var fe = document.getElementById("footerEditBtn");
-  if(fe) fe.hidden = !frontToken();
+  applySiteConfig();
 
   document.getElementById("aboutContent").textContent = blogData.siteConfig.about || "暂无介绍";
 
@@ -1684,91 +1647,18 @@ function courseBadgeHTML(c){
 }
 
 /* ============================================================
-   前台「站点设置」：改标题 / 副标题 / 头像 / 昵称 / 简介
-   （需要本机存过 GitHub Token，改完直接写进 data.json）
+   站点配置 → 页面（标题文案统一在这里改；改内容请到管理后台）
    ============================================================ */
-function toggleSiteEdit(){
-  var box = document.getElementById("siteEditBox");
-  if(!box) return;
-  if(box.hasAttribute("hidden")){
-    fillSiteEditForm();
-    box.removeAttribute("hidden");
-    box.scrollIntoView({ behavior: "smooth", block: "center" });
-  }else{
-    box.setAttribute("hidden", "");
-  }
-}
-function fillSiteEditForm(){
-  var sc = (blogData && blogData.siteConfig) || {};
-  var set = function(id, v){ var el = document.getElementById(id); if(el) el.value = v == null ? "" : v; };
-  set("seTitle", sc.title);
-  set("seSub", sc.subtitle);
-  set("seAvatar", sc.avatar);
-  set("seName", sc.name);
-  set("seBio", sc.bio);
-  refreshSiteAvatarPrev();
-}
-function refreshSiteAvatarPrev(){
-  var box = document.getElementById("seAvatarPrev");
-  var raw = (document.getElementById("seAvatar") || {}).value || "";
-  if(!box) return;
-  box.innerHTML = isImgUrl(raw)
-    ? '<img src="' + esc(previewSafe(raw)) + '" alt="">'
-    : esc(String(raw || "思").slice(0, 1));
-}
-function previewSafe(u){ return String(u || ""); }
-function onSiteAvatarChange(){ refreshSiteAvatarPrev(); }
-function pickSiteAvatar(){ var f = document.getElementById("seAvatarFile"); if(f) f.click(); }
-async function onSiteAvatarPick(e){
-  var files = Array.prototype.slice.call((e.target && e.target.files) || []);
-  if(e.target) e.target.value = "";
-  if(!files.length) return;
-  if(!frontToken()){ sayStatus("seStatus", "需要先有 GitHub Token 才能上传", "#ef4444"); return; }
-  sayStatus("seStatus", "头像上传中…");
-  try{
-    var path = await uploadFrontFile(files[0], "files");
-    var el = document.getElementById("seAvatar");
-    if(el) el.value = path;
-    refreshSiteAvatarPrev();
-    sayStatus("seStatus", "✅ 头像已上传，点「保存设置」生效", "var(--primary-dark)");
-  }catch(err){
-    sayStatus("seStatus", "上传失败：" + err.message, "#ef4444");
-  }
-}
-async function saveSiteEdit(){
-  if(!frontToken()){ sayStatus("seStatus", "需要先在后台「站点设置」保存 GitHub Token", "#ef4444"); return; }
-  var g = function(id){ var el = document.getElementById(id); return el ? el.value.trim() : ""; };
-  var patch = {
-    title: g("seTitle"),
-    subtitle: g("seSub"),
-    avatar: g("seAvatar"),
-    name: g("seName"),
-    bio: g("seBio")
-  };
-  if(!patch.title){ sayStatus("seStatus", "站点标题不能为空", "#ef4444"); return; }
-  sayStatus("seStatus", "保存中…");
-  try{
-    await pushDataChange(function(d){
-      d.siteConfig = d.siteConfig || {};
-      Object.keys(patch).forEach(function(k){ d.siteConfig[k] = patch[k]; });
-    }, "更新站点设置：" + patch.title);
-    applySiteConfig();
-    sayStatus("seStatus", "✅ 已保存并生效（线上约 1 分钟后同步）", "var(--primary-dark)");
-  }catch(err){
-    sayStatus("seStatus", "保存失败：" + err.message, "#ef4444");
-  }
-}
-/* 把 siteConfig 应用到页面上（含标题、导航、名片、页脚） */
 function applySiteConfig(){
   var sc = (blogData && blogData.siteConfig) || {};
   var title = sc.title || "思齐个人主页";
-  document.title = title + " | 控制工程研究生的学习与生活记录";
+  /* 浏览器标签标题：控制长度，避免被标签栏截断 */
+  var tab = title.length > 16 ? title.slice(0, 16) + "…" : title;
+  document.title = tab + " - " + (sc.name || "思齐") + "的博客";
   var h1 = document.getElementById("titleH1"); if(h1) h1.textContent = title;
   var p = document.getElementById("titleP"); if(p) p.textContent = sc.subtitle || "";
   var brand = document.querySelector(".nav-brand");
-  if(brand) brand.innerHTML = '<span class="dot"></span>' + esc(sc.name ? (sc.name + "的博客") : "思齐的博客");
-  renderProfile();
-  renderQuickLinks();
+  if(brand) brand.innerHTML = '<span class="dot"></span>' + esc((sc.name || "思齐") + "的博客");
 }
 
 function itemTime(x){
@@ -2999,7 +2889,8 @@ async function addAdvisorFromFront(){
   }
 }
 
-/* 前台表单初始化：日期默认今天、隐藏访客用不了的写入口、站点设置面板 */
+/* 前台表单初始化：日期默认今天；写入口只对站长（本机存过 Token）显示。
+   注意：站点标题/头像等「站点设置」只在管理后台改，前台不提供编辑入口。 */
 function initFrontForms(){
   var today = todayStr();
   var d = document.getElementById("fdDate");
@@ -3009,22 +2900,16 @@ function initFrontForms(){
   /* 前台日记的轻量富文本工具栏 */
   initFrontRich("fd");
 
-  /* 站长（本浏览器存过 GitHub Token）才显示写入口与站点设置，
-     普通访客看到的是纯内容，不会误以为这些表单能用 */
   var hasToken = !!frontToken();
-  var ownerOnly = ["diaryFormBox", "advisorFormBox", "ledgerFormBox", "ledgerStatsBox",
-                   "ledgerHint", "siteEditBox"];
+  var ownerOnly = ["diaryFormBox", "advisorFormBox", "ledgerFormBox", "ledgerStatsBox", "ledgerHint"];
   ownerOnly.forEach(function(id){
     var el = document.getElementById(id);
     if(!el) return;
     if(hasToken) el.removeAttribute("hidden");
     else el.setAttribute("hidden", "");
   });
-  var note = document.getElementById("visitorNote");
-  if(note) note.style.display = hasToken ? "none" : "none";  /* 默认不打扰访客 */
   var visitorHint = document.getElementById("visitorLedgerNote");
   if(visitorHint) visitorHint.style.display = hasToken ? "none" : "";
-  if(hasToken) fillSiteEditForm();
 }
 
 function autoTitle(text, date){

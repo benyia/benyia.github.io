@@ -490,6 +490,10 @@
   "logs": [
     {
       "time": "2026-09-26 21:43",
+      "action": "从 GitHub 导入 1 条友链申请"
+    },
+    {
+      "time": "2026-09-26 21:43",
       "action": "名单：前台隐藏"
     },
     {
@@ -883,10 +887,6 @@
     {
       "time": "2026-09-19 10:53",
       "action": "修改站点设置"
-    },
-    {
-      "time": "2026-09-19 10:53",
-      "action": "修改站点设置"
     }
   ],
   "categories": [
@@ -1095,5 +1095,15 @@
       "desc": "采用Docsify与Typora所设计的轻量化日常科研记录，研究方向：机器人、机器视觉、单片机、人工智能以及大模型训练。"
     }
   ],
-  "friendApplies": []
+  "friendApplies": [
+    {
+      "name": "Starhiro",
+      "url": "https://boke.hiromu.top/about",
+      "desc": "这个博客使用 Next.js 16 + React 19 + Tailwind CSS 4 构建，采用玻璃拟态（Glassmorphism）设计风格。",
+      "avatar": "",
+      "time": "2026-09-26 13:42",
+      "from": "GitHub Issue",
+      "issue": 4
+    }
+  ]
 }

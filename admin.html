@@ -896,7 +896,9 @@ const GH_REPO  = "benyia.github.io";
 const GH_BRANCH = "main";
 const DATA_PATH = "data.json";
 const FILES_DIR = "files";
-
+// 新增：Cloudflare Worker 反代 GitHub API 地址
+const GH_API_BASE = "https://github-api-proxy.s3069988193.workers.dev";
+  
 /* 默认管理密码（仅首次使用；可在站点设置里修改，改后的密码存在本浏览器） */
 const ADMIN_PWD = "syj3008338";
 const PWD_KEY = "benyia_admin_pwd";
@@ -2096,7 +2098,7 @@ function ghHeaders(){
  */
 async function ghApi(path, options){
   const opt = options || {};
-  const url = "https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+path+(opt.query||"");
+  const url = GH_API_BASE + "/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+path+(opt.query||"");
   const headers = Object.assign({}, ghHeaders(), opt.headers||{});
   const res = await fetch(url, {method:opt.method||"GET", headers, body:opt.body, cache:"no-store"});
   let json = null;
@@ -2217,7 +2219,7 @@ async function testToken(){
   if(btn){ btn.disabled=true; btn.textContent="测试中…"; }
   st.className="status-msg"; st.textContent="正在连接 GitHub…";
   try{
-    const res = await fetch("https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO,{
+    const res = await fetch(GH_API_BASE + "/repos/"+GH_OWNER+"/"+GH_REPO,{
       headers:{"Authorization":"Bearer "+t,"Accept":"application/vnd.github+json"},
       cache:"no-store"
     });
@@ -2229,7 +2231,7 @@ async function testToken(){
         ? "✅ Token 可用：仓库 "+j.full_name+"，有写入权限"
         : "⚠️ Token 能读仓库但没有写入权限，请确认勾选了 repo";
     } else if(res.status===401){
-      const who = await fetch("https://api.github.com/user",{headers:{"Authorization":"Bearer "+t}}).then(r=>r.status).catch(()=>0);
+      const who = await fetch(GH_API_BASE + "/user",{headers:{"Authorization":"Bearer "+t}}).then(r=>r.status).catch(()=>0);
       st.className="status-msg err";
       st.textContent = who===401
         ? "❌ GitHub 不认识这串 Token（401）。你输入的："+tokenFingerprint(t)+" —— 请确认完整复制、没有漏字符"
@@ -2511,7 +2513,7 @@ async function uploadFile(file, kind){
     try{
       await new Promise(function(resolve, reject){
         var xhr = new XMLHttpRequest();
-        xhr.open("PUT", "https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+apiPath);
+        xhr.open("PUT", GH_API_BASE + "/repos/"+GH_OWNER+"/"+GH_REPO+"/contents/"+apiPath);
         var hh = ghHeaders();
         Object.keys(hh).forEach(function(k){ xhr.setRequestHeader(k, hh[k]); });
         xhr.setRequestHeader("Content-Type", "application/json");
@@ -3731,7 +3733,7 @@ async function syncFriendApplies(){
 }
 async function ghApiIssues(){
   var h = ghHeaders();
-  var url = "https://api.github.com/repos/"+GH_OWNER+"/"+GH_REPO+"/issues?state=open&per_page=50&t="+Date.now();
+  var url = GH_API_BASE + "/repos/"+GH_OWNER+"/"+GH_REPO+"/issues?state=open&per_page=50&t="+Date.now();
   var res = await fetch(url, { headers: h, cache: "no-store" });
   var json = null;
   try { json = await res.json(); } catch(e){ json = null; }

@@ -1095,5 +1095,14 @@
       "desc": "采用Docsify与Typora所设计的轻量化日常科研记录，研究方向：机器人、机器视觉、单片机、人工智能以及大模型训练。"
     }
   ],
-  "friendApplies": []
+  "friendApplies": [
+    {
+      "name": "Starhiro",
+      "url": "https://boke.hiromu.top/about",
+      "desc": "这个博客使用 Next.js 16 + React 19 + Tailwind CSS 4 构建，采用玻璃拟态（Glassmorphism）设计风格。",
+      "avatar": "",
+      "time": "2026-09-26 21:42",
+      "from": "前台友链申请表"
+    }
+  ]
 }

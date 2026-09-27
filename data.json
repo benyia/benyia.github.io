@@ -568,6 +568,10 @@
   "logs": [
     {
       "time": "2026-09-27 21:07",
+      "action": "添加音乐：西罕 - 我看过 (cover_ cici_)"
+    },
+    {
+      "time": "2026-09-27 21:07",
       "action": "添加音乐：威仔 _ 阿夏 - 不爱又何必纠缠"
     },
     {
@@ -961,10 +965,6 @@
     {
       "time": "2026-09-24 18:31",
       "action": "编辑快速链接：学校图书馆"
-    },
-    {
-      "time": "2026-09-23 22:42",
-      "action": "编辑快速链接：学校图书馆"
     }
   ],
   "categories": [
@@ -1185,6 +1185,25 @@
       "images": [],
       "file": "files/1790514405775_5_s3eoh9rl_威仔___阿夏_-_不爱又何必纠缠.flac",
       "fileName": "威仔 _ 阿夏 - 不爱又何必纠缠.flac",
+      "time": "2026-09-27 21:07"
+    },
+    {
+      "type": "music",
+      "title": "西罕 - 我看过 (cover_ cici_)",
+      "desc": "",
+      "url": "",
+      "files": [
+        {
+          "name": "西罕 - 我看过 (cover_ cici_).mp3",
+          "url": "files/1790514457306_6_v5rjispy_西罕_-_我看过__cover__cici__.mp3",
+          "type": "MP3",
+          "size": 7472257,
+          "folder": ""
+        }
+      ],
+      "images": [],
+      "file": "files/1790514457306_6_v5rjispy_西罕_-_我看过__cover__cici__.mp3",
+      "fileName": "西罕 - 我看过 (cover_ cici_).mp3",
       "time": "2026-09-27 21:07"
     }
   ],

@@ -422,6 +422,26 @@
       "tags": [
         "班级事务"
       ]
+    },
+    {
+      "title": "第一学期选课",
+      "type": "通知",
+      "date": "2026-09-24",
+      "content": "请学生关注公共选修课开课人数，如果开课人数一直到达不了，请学生做好改选准备。<img src=\"files/1790491040288_1_l3uvvaiv_选课.png\" alt=\"\"><br><img src=\"files/1790491040288_1_l3uvvaiv_选课.png\" alt=\"\"><div><img src=\"files/1790491040288_1_l3uvvaiv_选课.png\" alt=\"\"></div>",
+      "contentIsHTML": true,
+      "tags": [],
+      "files": [],
+      "images": [
+        {
+          "name": "选课.png",
+          "url": "files/1790491040288_1_l3uvvaiv_选课.png",
+          "type": "PNG",
+          "size": 908869
+        }
+      ],
+      "file": "",
+      "fileName": "",
+      "time": "2026-09-27 14:38"
     }
   ],
   "lifeServices": [
@@ -526,6 +546,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-27 14:38",
+      "action": "添加班级事务：第一学期选课"
+    },
     {
       "time": "2026-09-27 14:33",
       "action": "编辑通知：党委常委、副校长杨占旭到人工智能学院调研指导工作"
@@ -921,10 +945,6 @@
     {
       "time": "2026-09-23 15:31",
       "action": "编辑快速链接：GitHub"
-    },
-    {
-      "time": "2026-09-23 15:30",
-      "action": "添加班级事务：女同学寝室调整"
     }
   ],
   "categories": [

@@ -368,16 +368,10 @@
           "url": "files/1790489914065_6_4jb3d42e_yangzhanxu-lab.jpg",
           "type": "JPG",
           "size": 88099
-        },
-        {
-          "name": "yangzhanxu-meeting.jpg",
-          "url": "files/1790489935388_7_rjo8fcmj_yangzhanxu-meeting.jpg",
-          "type": "JPG",
-          "size": 481691
         }
       ],
       "files": [],
-      "time": "2026-09-27 14:29"
+      "time": "2026-09-27 14:33"
     }
   ],
   "classItems": [
@@ -532,6 +526,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-27 14:33",
+      "action": "编辑通知：党委常委、副校长杨占旭到人工智能学院调研指导工作"
+    },
     {
       "time": "2026-09-27 14:31",
       "action": "修改站点设置"
@@ -927,10 +925,6 @@
     {
       "time": "2026-09-23 15:30",
       "action": "添加班级事务：女同学寝室调整"
-    },
-    {
-      "time": "2026-09-23 15:28",
-      "action": "删除论文"
     }
   ],
   "categories": [

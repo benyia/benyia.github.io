@@ -567,6 +567,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-27 21:58",
+      "action": "开关首页卡片"
+    },
+    {
       "time": "2026-09-27 21:11",
       "action": "添加音乐：云朵 - 我的楼兰"
     },
@@ -961,10 +965,6 @@
     {
       "time": "2026-09-23 22:38",
       "action": "编辑生活服务：123云盘"
-    },
-    {
-      "time": "2026-09-23 22:38",
-      "action": "编辑生活服务：夸克网盘"
     }
   ],
   "categories": [
@@ -1217,5 +1217,97 @@
       "desc": "这个博客使用 Next.js 16 + React 19 + Tailwind CSS 4 构建，采用玻璃拟态（Glassmorphism）设计风格。"
     }
   ],
-  "friendApplies": []
+  "friendApplies": [],
+  "homePanels": [
+    {
+      "type": "articles",
+      "on": false,
+      "span": 2,
+      "icon": "📄",
+      "title": "最新文章",
+      "desc": "课程 / 论文 / 通知 / 班级 的最新记录",
+      "btn": "查看全部",
+      "limit": 6
+    },
+    {
+      "type": "profile",
+      "on": true,
+      "span": 1,
+      "icon": "👤",
+      "title": "个人名片",
+      "desc": ""
+    },
+    {
+      "type": "stats",
+      "on": true,
+      "span": 1,
+      "icon": "📊",
+      "title": "站点统计",
+      "desc": ""
+    },
+    {
+      "type": "courses",
+      "on": true,
+      "span": 1,
+      "icon": "📚",
+      "title": "课程进度",
+      "desc": "最近的几门课",
+      "btn": "全部课程",
+      "limit": 4
+    },
+    {
+      "type": "diary",
+      "on": true,
+      "span": 1,
+      "icon": "📖",
+      "title": "最近日记",
+      "desc": "",
+      "btn": "全部日记",
+      "limit": 4
+    },
+    {
+      "type": "media",
+      "on": true,
+      "span": 1,
+      "icon": "🎵",
+      "title": "影音收藏",
+      "desc": "",
+      "btn": "影音",
+      "limit": 4
+    },
+    {
+      "type": "cats",
+      "on": true,
+      "span": 1,
+      "icon": "🗂️",
+      "title": "内容分类",
+      "desc": ""
+    },
+    {
+      "type": "tags",
+      "on": true,
+      "span": 1,
+      "icon": "🏷️",
+      "title": "标签",
+      "desc": ""
+    },
+    {
+      "type": "friends",
+      "on": true,
+      "span": 1,
+      "icon": "🔗",
+      "title": "友情链接",
+      "desc": "",
+      "limit": 5
+    },
+    {
+      "type": "quick",
+      "on": true,
+      "span": 1,
+      "icon": "⚡",
+      "title": "快速链接",
+      "desc": "",
+      "limit": 6
+    }
+  ]
 }

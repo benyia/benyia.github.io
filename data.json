@@ -567,6 +567,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-27 21:06",
+      "action": "添加音乐：马也_Crabbit&Fanko - 海屿你2.0"
+    },
+    {
       "time": "2026-09-27 21:05",
       "action": "添加音乐：菲菲公主（陆绮菲） - 第57次取消发送(加速版)"
     },
@@ -961,10 +965,6 @@
     {
       "time": "2026-09-23 22:38",
       "action": "编辑生活服务：夸克网盘"
-    },
-    {
-      "time": "2026-09-23 22:38",
-      "action": "编辑生活服务：123云盘"
     }
   ],
   "categories": [
@@ -1129,6 +1129,25 @@
       "file": "files/1790514342752_2_jkmqkw2t_菲菲公主_陆绮菲__-_第57次取消发送_加速版_.mp3",
       "fileName": "菲菲公主（陆绮菲） - 第57次取消发送(加速版).mp3",
       "time": "2026-09-27 21:05"
+    },
+    {
+      "type": "music",
+      "title": "马也_Crabbit&Fanko - 海屿你2.0",
+      "desc": "",
+      "url": "",
+      "files": [
+        {
+          "name": "马也_Crabbit&Fanko - 海屿你2.0.mp3",
+          "url": "files/1790514362006_3_zkdzxsc1_马也_Crabbit_Fanko_-_海屿你2.0.mp3",
+          "type": "MP3",
+          "size": 7137936,
+          "folder": ""
+        }
+      ],
+      "images": [],
+      "file": "files/1790514362006_3_zkdzxsc1_马也_Crabbit_Fanko_-_海屿你2.0.mp3",
+      "fileName": "马也_Crabbit&Fanko - 海屿你2.0.mp3",
+      "time": "2026-09-27 21:06"
     }
   ],
   "roster": [

@@ -4,7 +4,7 @@
     "subtitle": "钟爱奥迪A6",
     "about": "你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",
     "avatar": "files/1789782355800_12_g6ia1gng_头像.jpg",
-    "defaultImage": "files/1790322979886_1_pxvzw8ir_小熊.png",
+    "defaultImage": "files/1790486907915_1_li2d6e9e_通知.png",
     "columns": "2",
     "defaultAvatar": "",
     "loginHint": "提示：我喜欢的人的生日",
@@ -490,6 +490,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-27 13:28",
+      "action": "修改站点设置"
+    },
+    {
       "time": "2026-09-27 13:27",
       "action": "修改站点设置"
     },
@@ -883,10 +887,6 @@
     },
     {
       "time": "2026-09-23 15:11",
-      "action": "名单：前台隐藏"
-    },
-    {
-      "time": "2026-09-23 15:09",
       "action": "名单：前台隐藏"
     }
   ],

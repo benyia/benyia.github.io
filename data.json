@@ -567,6 +567,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-27 21:09",
+      "action": "添加音乐：杨丞琳-雨爱"
+    },
+    {
       "time": "2026-09-27 21:07",
       "action": "添加音乐：西罕 - 我看过 (cover_ cici_)"
     },
@@ -961,10 +965,6 @@
     {
       "time": "2026-09-24 18:58",
       "action": "发布通知：test"
-    },
-    {
-      "time": "2026-09-24 18:31",
-      "action": "编辑快速链接：学校图书馆"
     }
   ],
   "categories": [
@@ -1205,6 +1205,25 @@
       "file": "files/1790514457306_6_v5rjispy_西罕_-_我看过__cover__cici__.mp3",
       "fileName": "西罕 - 我看过 (cover_ cici_).mp3",
       "time": "2026-09-27 21:07"
+    },
+    {
+      "type": "music",
+      "title": "杨丞琳-雨爱",
+      "desc": "",
+      "url": "",
+      "files": [
+        {
+          "name": "杨丞琳-雨爱.mp3",
+          "url": "files/1790514479963_7_gtiyy3lr_杨丞琳-雨爱.mp3",
+          "type": "MP3",
+          "size": 10422942,
+          "folder": ""
+        }
+      ],
+      "images": [],
+      "file": "files/1790514479963_7_gtiyy3lr_杨丞琳-雨爱.mp3",
+      "fileName": "杨丞琳-雨爱.mp3",
+      "time": "2026-09-27 21:09"
     }
   ],
   "roster": [

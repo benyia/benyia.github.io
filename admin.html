@@ -217,6 +217,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     </div>
     <div class="tabs">
       <button class="active" data-p="site">站点设置</button>
+      <button data-p="home">首页</button>
       <button data-p="courses">课程</button>
       <button data-p="papers">论文</button>
       <button data-p="notices">通知</button>
@@ -343,6 +344,88 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     </div>
 
     <!-- ===== 课程 ===== -->
+    <!-- ===== 首页：入场欢迎页 + 卡片面板 ===== -->
+    <div class="panel" id="panel-home">
+      <div class="card">
+        <h2>✨ 入场欢迎页</h2>
+        <div class="note">
+          打开网站时全屏出现的那一屏（深色底 + 模糊背景 + 三行字依次淡入）。<br>
+          中间那行「时间问候」会按访客当前时间自动生成，比如「2026年9月27日晚上9点48分，很高兴与你相遇」——你只需要改最后那句提示语。<br>
+          <b>背景图</b>留空就用网站主背景图；想单独换一张就填图片地址。
+        </div>
+        <div class="form-row">
+          <label style="font-size:.88rem;display:flex;align-items:center;gap:6px"><input type="checkbox" id="wkOn"> 开启欢迎页</label>
+          <label style="font-size:.88rem;display:flex;align-items:center;gap:6px">显示时长：<input type="number" id="wkSec" min="1" max="30" step="0.5" value="3.5" style="width:90px;padding:6px 10px;border:1px solid var(--border);border-radius:8px"> 秒（点任意处可跳过）</label>
+        </div>
+        <div class="form-row">
+          <input type="text" id="wkTop" placeholder="第一行，比如：欢迎来到">
+          <input type="text" id="wkName" placeholder="站名前半段（留空=用上面的「姓名」）">
+          <input type="text" id="wkMid" placeholder="中间字符，比如：の" style="max-width:150px">
+          <input type="text" id="wkSuffix" placeholder="后半段，比如：小站">
+        </div>
+        <div class="form-row">
+          <input type="text" id="wkTip" placeholder="提示语，比如：很高兴与你相遇" style="flex:1">
+          <input type="text" id="wkBg" placeholder="背景图（留空=用网站主背景）" style="flex:1">
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('wkBg')">上传</button><span id="prev_wkBg"></span>
+        </div>
+        <button class="btn btn-primary" onclick="saveWelcomeCfg()">保存欢迎页</button>
+      </div>
+
+      <div class="card">
+        <h2>🏠 首页卡片面板</h2>
+        <div class="note">
+          首页现在是一面卡片墙。<b>「最新文章 / 个人名片 / 站点统计 …」这些是系统卡片</b>，会自动读取你现有的内容（<b>只读</b>，不会改你的数据），可以改标题、换图标、调宽度、排序、关掉。<br>
+          <b>「自由卡片」</b>由你自己写标题、正文、图片和链接，当公告板用。<br>
+          宽度：<b>1 列</b>最窄、<b>2 列</b>较宽、<b>整行</b>占满。
+        </div>
+        <div id="hpManageList"></div>
+        <div style="margin-top:12px"><button class="btn btn-ghost btn-sm" onclick="resetHomePanels()">恢复默认 10 张卡片</button></div>
+      </div>
+
+      <div class="card">
+        <h2 id="hpFormTitle">➕ 新增卡片</h2>
+        <div class="form-row">
+          <select id="hpType" style="padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-family:inherit">
+            <option value="note">自由卡片（自己写内容）</option>
+            <option value="articles">最新文章（系统）</option>
+            <option value="profile">个人名片（系统）</option>
+            <option value="stats">站点统计（系统）</option>
+            <option value="courses">课程进度（系统）</option>
+            <option value="diary">最近日记（系统）</option>
+            <option value="media">影音收藏（系统）</option>
+            <option value="cats">内容分类（系统）</option>
+            <option value="tags">标签（系统）</option>
+            <option value="friends">友情链接（系统）</option>
+            <option value="quick">快速链接（系统）</option>
+            <option value="image">图片卡片</option>
+          </select>
+          <input type="text" id="hpIcon" placeholder="图标（emoji 或图片地址）" style="flex:1">
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('hpIcon')">图片</button><span id="prev_hpIcon"></span>
+          <input type="text" id="hpTitle" placeholder="卡片标题" style="flex:1">
+        </div>
+        <div class="form-row">
+          <input type="text" id="hpDesc" placeholder="副标题（可留空）" style="flex:2">
+          <select id="hpSpan" style="padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-family:inherit">
+            <option value="1">宽度：1 列</option>
+            <option value="2">宽度：2 列（宽）</option>
+            <option value="3">宽度：整行</option>
+          </select>
+          <input type="number" id="hpLimit" min="1" max="30" placeholder="显示条数" style="width:110px">
+        </div>
+        <div class="form-row"><textarea id="hpText" placeholder="自由卡片正文（可换行）" style="min-height:100px"></textarea></div>
+        <div class="form-row">
+          <input type="text" id="hpBtn" placeholder="按钮文字（可留空）">
+          <input type="text" id="hpUrl" placeholder="按钮链接（自由 / 图片卡片用）" style="flex:2">
+          <input type="text" id="hpImage" placeholder="图片地址（图片卡片用）" style="flex:2">
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('hpImage')">上传</button><span id="prev_hpImage"></span>
+        </div>
+        <div class="form-row">
+          <button class="btn btn-primary" onclick="saveHomePanel()" id="hpSaveBtn">添加卡片</button>
+          <button class="btn btn-ghost" onclick="cancelHomePanelEdit()" id="hpCancelBtn" style="display:none">取消编辑</button>
+        </div>
+      </div>
+    </div>
+
     <div class="panel" id="panel-courses">
       <div class="card">
         <h2 id="courseFormTitle">添加课程</h2>
@@ -1178,7 +1261,7 @@ function deleteModalImage(){
   showToast("已移除（记得保存）");
 }
 
-var ICON_FIELDS = ["cfgAvatar","cIcon","lsIcon","catIcon","qlIcon","rPhoto","cfgDefaultImage","cfgDefaultAvatar","frAvatar"];
+var ICON_FIELDS = ["cfgAvatar","cIcon","lsIcon","catIcon","qlIcon","rPhoto","cfgDefaultImage","cfgDefaultAvatar","frAvatar","wkBg","hpIcon","hpImage"];
 function refreshIconPrev(id){
   var inp = $(id), box = $("prev_" + id);
   if(!inp || !box) return;
@@ -2896,6 +2979,7 @@ function renderAll(){
   renderCatManage();
   renderQuickLinkManage();
   renderFriendManage();
+  renderHomeManage();
   updateLgCategories();
   refreshAllIconPrevs();
 
@@ -3541,7 +3625,9 @@ function saveSiteConfig(){
     coverPan: $("cfgCoverPan").checked,
     coverPanSec: parseInt($("cfgCoverPanSec").value, 10) || 3,
     name: $("cfgName").value.trim() || "思齐",
-    bio: $("cfgBio").value.trim()
+    bio: $("cfgBio").value.trim(),
+    /* 欢迎页设置由「首页」面板单独保存，这里必须原样带过去，否则会被覆盖掉 */
+    welcome: (blogData.siteConfig && blogData.siteConfig.welcome) || undefined
   };
   saveData("修改站点设置");
   renderAll();
@@ -3581,6 +3667,171 @@ function cancelQuickLinkEdit(){
   editingQL = null;
   ["qlIcon","qlTitle","qlUrl"].forEach(function(id){ $(id).value=""; });
   $("qlFormTitle").textContent = "🔗 快速链接管理（首页右侧）";
+}
+
+/* ---------- 首页：入场欢迎页 + 卡片面板 ---------- */
+var HP_TYPES = { note:"自由卡片", articles:"最新文章", profile:"个人名片", stats:"站点统计",
+  courses:"课程进度", diary:"最近日记", media:"影音收藏", cats:"内容分类", tags:"标签",
+  friends:"友情链接", quick:"快速链接", image:"图片卡片" };
+var HP_SPANS = { 1:"1 列", 2:"2 列", 3:"整行" };
+var HP_DEFAULT = [
+  {type:"articles", on:true, span:2, icon:"📄", title:"最新文章", desc:"课程 / 论文 / 通知 / 班级 的最新记录", btn:"查看全部", limit:6},
+  {type:"profile",  on:true, span:1, icon:"👤", title:"个人名片", desc:""},
+  {type:"stats",    on:true, span:1, icon:"📊", title:"站点统计", desc:""},
+  {type:"courses",  on:true, span:1, icon:"📚", title:"课程进度", desc:"最近的几门课", btn:"全部课程", limit:4},
+  {type:"diary",    on:true, span:1, icon:"📖", title:"最近日记", desc:"", btn:"全部日记", limit:4},
+  {type:"media",    on:true, span:1, icon:"🎵", title:"影音收藏", desc:"", btn:"影音", limit:4},
+  {type:"cats",     on:true, span:1, icon:"🗂️", title:"内容分类", desc:""},
+  {type:"tags",     on:true, span:1, icon:"🏷️", title:"标签", desc:""},
+  {type:"friends",  on:true, span:1, icon:"🔗", title:"友情链接", desc:"", limit:5},
+  {type:"quick",    on:true, span:1, icon:"⚡", title:"快速链接", desc:"", limit:6}
+];
+var editingHP = null;
+/* 读：没配过就返回空对象，但不写进 blogData（免得给 data.json 塞空壳） */
+function wkRead(){
+  return (blogData.siteConfig && blogData.siteConfig.welcome) || {};
+}
+/* 写：真正保存时才创建 */
+function wkCfg(){
+  if(!blogData.siteConfig) blogData.siteConfig = {};
+  if(!blogData.siteConfig.welcome || typeof blogData.siteConfig.welcome !== "object") blogData.siteConfig.welcome = {};
+  return blogData.siteConfig.welcome;
+}
+function hpPanels(){
+  if(!Array.isArray(blogData.homePanels) || !blogData.homePanels.length){
+    blogData.homePanels = JSON.parse(JSON.stringify(HP_DEFAULT));
+  }
+  return blogData.homePanels;
+}
+function renderHomeManage(){
+  var w = wkRead();
+  if(!$("wkOn")) return;
+  $("wkOn").checked = (w.on !== false);
+  $("wkSec").value = (w.sec || 3.5);
+  /* 没配过的字段直接显示实际生效的默认值，别留空白让人以为没设置 */
+  $("wkTop").value = (w.top || "欢迎来到");
+  $("wkName").value = w.name || "";
+  $("wkMid").value = (w.mid === undefined ? "の" : w.mid);
+  $("wkSuffix").value = (w.suffix === undefined ? "小站" : w.suffix);
+  $("wkTip").value = (w.tip || "很高兴与你相遇");
+  $("wkBg").value = w.bg || "";
+  renderHomePanelList();
+}
+function saveWelcomeCfg(){
+  var w = wkCfg();
+  w.on = $("wkOn").checked;
+  w.sec = parseFloat($("wkSec").value) || 3.5;
+  w.top = $("wkTop").value.trim() || "欢迎来到";
+  w.name = $("wkName").value.trim();
+  w.mid = $("wkMid").value;
+  w.suffix = $("wkSuffix").value;
+  w.tip = $("wkTip").value.trim() || "很高兴与你相遇";
+  w.bg = $("wkBg").value.trim();
+  saveData("修改入场欢迎页");
+  renderAll();
+  showToast("欢迎页已保存");
+}
+function renderHomePanelList(){
+  var list = hpPanels();
+  $("hpManageList").innerHTML = list.map(function(p, i){
+    return '<div class="item-row"' + (p.on === false ? ' style="opacity:.55"' : '') + '>'
+      + '<div class="info"><div class="title">' + iconThumb(p.icon, 22) + ' ' + esc(p.title || "未命名卡片") + '</div>'
+      + '<div class="desc">' + esc(HP_TYPES[p.type] || p.type || "自由卡片") + ' · ' + esc(HP_SPANS[Number(p.span) || 1] || "1 列")
+      + (p.on === false ? ' · 已关闭' : '') + '</div></div>'
+      + '<div class="actions">'
+      + '<button class="btn btn-ghost btn-sm" onclick="moveHomePanel(' + i + ',-1)">↑</button>'
+      + '<button class="btn btn-ghost btn-sm" onclick="moveHomePanel(' + i + ',1)">↓</button>'
+      + '<button class="btn btn-ghost btn-sm" onclick="toggleHomePanel(' + i + ')">' + (p.on === false ? '开启' : '关闭') + '</button>'
+      + '<button class="btn btn-ghost btn-sm" onclick="editHomePanel(' + i + ')">编辑</button>'
+      + '<button class="btn btn-danger btn-sm" onclick="delHomePanel(' + i + ')">删除</button>'
+      + '</div></div>';
+  }).join("") || '<div style="color:#94a3b8;font-size:.85rem">还没有卡片，点下面添加</div>';
+}
+function editHomePanel(i){
+  var p = hpPanels()[i];
+  if(!p) return;
+  editingHP = i;
+  $("hpType").value = p.type || "note";
+  $("hpIcon").value = p.icon || "";
+  $("hpTitle").value = p.title || "";
+  $("hpDesc").value = p.desc || "";
+  $("hpSpan").value = String(Number(p.span) || 1);
+  $("hpLimit").value = p.limit || "";
+  $("hpText").value = p.text || "";
+  $("hpBtn").value = p.btn || "";
+  $("hpUrl").value = p.url || "";
+  $("hpImage").value = p.image || "";
+  $("hpFormTitle").textContent = "✏️ 编辑卡片：" + (p.title || "未命名卡片");
+  $("hpSaveBtn").textContent = "保存修改";
+  $("hpCancelBtn").style.display = "";
+  refreshIconPrev("hpIcon"); refreshIconPrev("hpImage");
+  if($("hpFormTitle").scrollIntoView) $("hpFormTitle").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+function cancelHomePanelEdit(){
+  editingHP = null;
+  ["hpIcon","hpTitle","hpDesc","hpLimit","hpText","hpBtn","hpUrl","hpImage"].forEach(function(id){ if($(id)) $(id).value = ""; });
+  if($("hpSpan")) $("hpSpan").value = "1";
+  if($("hpType")) $("hpType").value = "note";
+  $("hpFormTitle").textContent = "➕ 新增卡片";
+  $("hpSaveBtn").textContent = "添加卡片";
+  $("hpCancelBtn").style.display = "none";
+  refreshIconPrev("hpIcon"); refreshIconPrev("hpImage");
+}
+function saveHomePanel(){
+  var title = $("hpTitle").value.trim();
+  if(!title){ showToast("请填卡片标题", "error"); return; }
+  var item = {
+    type: $("hpType").value || "note",
+    on: true,
+    span: parseInt($("hpSpan").value, 10) || 1,
+    icon: $("hpIcon").value.trim(),
+    title: title,
+    desc: $("hpDesc").value.trim(),
+    text: $("hpText").value,
+    btn: $("hpBtn").value.trim(),
+    url: $("hpUrl").value.trim(),
+    image: $("hpImage").value.trim()
+  };
+  var lim = parseInt($("hpLimit").value, 10);
+  if(lim > 0) item.limit = lim;
+  if(editingHP === null){
+    hpPanels().push(item);
+    saveData("添加首页卡片：" + title);
+  } else {
+    item.on = hpPanels()[editingHP].on !== false;      /* 保留原来的开关状态 */
+    hpPanels()[editingHP] = item;
+    saveData("编辑首页卡片：" + title);
+  }
+  cancelHomePanelEdit();
+  renderAll();
+  showToast("已保存");
+}
+function delHomePanel(i){
+  if(!confirm("确定删除这张卡片？")) return;
+  hpPanels().splice(i, 1);
+  if(editingHP === i) cancelHomePanelEdit();
+  saveData("删除首页卡片");
+  renderAll();
+}
+function moveHomePanel(i, d){
+  var list = hpPanels(), j = i + d;
+  if(j < 0 || j >= list.length) return;
+  var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+  saveData("调整首页卡片顺序");
+  renderAll();
+}
+function toggleHomePanel(i){
+  var list = hpPanels();
+  list[i].on = (list[i].on === false);
+  saveData("开关首页卡片");
+  renderAll();
+}
+function resetHomePanels(){
+  if(!confirm("恢复成默认的 10 张卡片？你自己加的卡片会没掉。")) return;
+  blogData.homePanels = JSON.parse(JSON.stringify(HP_DEFAULT));
+  saveData("恢复默认首页卡片");
+  renderAll();
+  showToast("已恢复默认");
 }
 
 /* ---------- 分类管理 ---------- */

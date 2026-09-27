@@ -250,13 +250,17 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 
       <div class="card">
         <h2>🎨 个人信息与站点设置</h2>
+        <div class="note">
+          <b>头像</b>：填图片地址就同时用在前台左栏和<b>浏览器标签的小图标</b>上；填 emoji / 文字则标签图标保持内置图标。<br>
+          <b>网站标题</b>：浏览器标签上显示的就是它（前台顶部大标题也用它），<b>不会再自动加「XX的博客」后缀</b>。
+        </div>
         <div class="form-row">
-          <input type="text" id="cfgAvatar" placeholder="头像(emoji 或图片URL)" style="flex:1">
+          <input type="text" id="cfgAvatar" placeholder="头像：emoji 或图片地址（同时用作浏览器标签图标）" style="flex:1">
           <button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgAvatar')">图片</button><span id="prev_cfgAvatar"></span>
           <input type="text" id="cfgName" placeholder="姓名" style="flex:1">
           <input type="text" id="cfgBio" placeholder="一句话简介" style="flex:2">
         </div>
-        <div class="form-row"><input type="text" id="cfgTitle" placeholder="网站标题"><input type="text" id="cfgSub" placeholder="副标题"></div>
+        <div class="form-row"><input type="text" id="cfgTitle" placeholder="网站标题（浏览器标签上显示的就是它）"><input type="text" id="cfgSub" placeholder="副标题"></div>
         <div class="form-row"><input type="text" id="cfgDefaultImage" placeholder="默认图片(没上传图片时显示，可留空)" style="flex:2"><button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultImage')">上传</button><span id="prev_cfgDefaultImage"></span></div>
         <div class="form-row">
           <label style="font-size:.88rem;display:flex;align-items:center;gap:8px">前台帖子显示：

@@ -766,23 +766,35 @@ html[data-theme="dark"] .course-badge{background:rgba(217,119,6,.18);color:#fbbf
   .mp-sheet{background:rgba(255,255,255,.98)}
   html[data-theme="dark"] .mp-sheet{background:rgba(20,29,45,.98)}
 }
-.mp-sheet-head{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding-bottom:10px;border-bottom:1px solid var(--border)}
-.mp-sheet-tab{
-  flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 10px;
-  border:1px solid transparent;border-radius:12px;background:transparent;color:var(--text2);
-  font-size:.88rem;font-family:inherit;cursor:pointer;
-  transition:background .2s,color .2s,border-color .2s;
+.mp-sheet-head{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:2px 4px 12px;border-bottom:1px solid var(--border)}
+.mp-sheet-title{flex:1;min-width:0;display:flex;align-items:center;gap:8px;font-size:.95rem;font-weight:700;color:var(--text)}
+.mp-sheet-title em{
+  font-style:normal;font-size:.74rem;font-weight:600;color:var(--primary-dark);
+  background:var(--primary-light);border-radius:99px;padding:2px 9px;font-variant-numeric:tabular-nums;
 }
-.mp-sheet-tab em{font-style:normal;font-size:.76rem;opacity:.75;font-variant-numeric:tabular-nums}
-.mp-sheet-tab:hover{color:var(--primary-dark)}
-.mp-sheet-tab.on{background:var(--primary-light);border-color:var(--primary);color:var(--primary-dark);font-weight:600}
-.mp-sheet-tab.off{opacity:.45;cursor:not-allowed}
 .mp-sheet-close{
   flex:0 0 auto;width:34px;height:34px;border:none;border-radius:50%;background:transparent;
   color:var(--text2);font-size:1rem;font-family:inherit;cursor:pointer;
   transition:background .18s,color .18s;
 }
 .mp-sheet-close:hover{background:var(--primary-light);color:var(--primary-dark)}
+/* 搜索框 */
+.mp-sheet-search{flex:0 0 auto;position:relative;margin:12px 4px 2px}
+.mp-sheet-search input{
+  width:100%;padding:9px 34px;border:1px solid var(--border);border-radius:12px;
+  font-size:.85rem;font-family:inherit;color:var(--text);background:var(--soft);outline:none;
+  transition:border-color .2s,background .2s,box-shadow .2s;
+}
+.mp-sheet-search input::placeholder{color:var(--text3)}
+.mp-sheet-search input:focus{border-color:var(--primary);background:var(--card);box-shadow:0 0 0 3px var(--primary-light)}
+.mp-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:.85rem;opacity:.55;pointer-events:none}
+.mp-search-clear{
+  position:absolute;right:7px;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;padding:0;border:none;border-radius:50%;background:transparent;
+  color:var(--text2);font-size:.78rem;font-family:inherit;line-height:1;cursor:pointer;
+  transition:background .18s,color .18s;
+}
+.mp-search-clear:hover{background:var(--primary-light);color:var(--primary-dark)}
 .mp-sheet-body{flex:1;min-height:0;overflow-y:auto;padding:10px 2px 4px}
 .mp-sheet-foot{
   flex:0 0 auto;padding-top:10px;border-top:1px solid var(--border);
@@ -811,11 +823,8 @@ html[data-theme="dark"] .course-badge{background:rgba(217,119,6,.18);color:#fbbf
 .mp-row-act{flex:0 0 auto;display:flex;align-items:center;color:var(--text2)}
 .mp-row-act svg{width:16px;height:16px;fill:currentColor}
 .mp-row.on .mp-row-act{color:var(--primary-dark)}
+.mp-row mark{background:var(--primary-light);color:var(--primary-dark);border-radius:3px;padding:0 1px}
 
-/* 歌词 */
-.mp-lyrics{text-align:center;padding:6px 4px 10px;font-size:.9rem;line-height:2.1;color:var(--text2)}
-.mp-lyrics p{transition:color .25s}
-.mp-lyrics p.cur{color:var(--primary-dark);font-weight:700}
 .mp-empty{padding:34px 16px;text-align:center;color:var(--text2);font-size:.84rem;line-height:1.95}
 
 /* 右下角迷你条 */
@@ -1257,13 +1266,17 @@ html[data-theme="dark"] .course-badge{background:rgba(217,119,6,.18);color:#fbbf
   </div>
 </div>
 
-<!-- 🎵 歌曲列表 / 歌词：独立的弹出界面（点播放器卡片打开） -->
+<!-- 🎵 歌曲列表：独立的弹出界面（点播放器卡片打开），支持按歌名 / 歌手搜索 -->
 <div class="mp-sheet-mask" id="mpSheetMask" onclick="mpCloseSheet()"></div>
 <div class="mp-sheet" id="mpSheet" role="dialog" aria-modal="true" aria-label="歌曲列表">
   <div class="mp-sheet-head">
-    <button class="mp-sheet-tab on" id="mpSheetTabList" type="button" onclick="mpSetTab('list')">☰ 歌曲<em id="mpSheetCount">0</em></button>
-    <button class="mp-sheet-tab" id="mpSheetTabLyric" type="button" onclick="mpSetTab('lyric')">🎵 歌词</button>
+    <span class="mp-sheet-title">🎵 <span id="mpSheetLabel">歌曲</span><em id="mpSheetCount">0</em></span>
     <button class="mp-sheet-close" type="button" onclick="mpCloseSheet()" aria-label="关闭">✕</button>
+  </div>
+  <div class="mp-sheet-search">
+    <span class="mp-search-icon">🔍</span>
+    <input type="text" id="mpSearch" placeholder="搜索歌名 / 歌手 / 关键词" autocomplete="off" oninput="mpDoSearch(this.value)" aria-label="搜索歌曲">
+    <button class="mp-search-clear" id="mpSearchClear" type="button" onclick="mpClearSearch()" aria-label="清空搜索" hidden>✕</button>
   </div>
   <div class="mp-sheet-body" id="mpSheetBody"></div>
   <div class="mp-sheet-foot" id="mpSheetFoot"></div>
@@ -3626,9 +3639,9 @@ var MP_ICON = {
 
 var mpAudio = null, mpReady = false, mpBound = false;
 var mpTracks = [], mpIndex = -1;
-var mpMode = 0, mpTab = "list", mpSheetOn = false;
+var mpMode = 0, mpSheetOn = false, mpQuery = "";
 var mpMiniClosed = false, mpRafPending = false, mpDragging = false;
-var mpLyricIdx = -1, mpMuted = false, mpLastVol = 80;
+var mpMuted = false, mpLastVol = 80;
 
 function mpEl(id){ return document.getElementById(id); }
 function mpFmt(sec){
@@ -3648,23 +3661,6 @@ function mpVolumeNow(){
   return mpLastVol;
 }
 
-/* ---- 歌词：普通一行一句，也认 [mm:ss.xx] 时间轴 ---- */
-function mpParseLyrics(raw){
-  var out = [];
-  String(raw || "").split(/\r?\n/).forEach(function(line){
-    line = line.trim();
-    if(!line) return;
-    if(/^\[[a-zA-Z]+:/.test(line)) return;                 /* [ti:] [ar:] 之类元信息 */
-    var m = line.match(/^\[(\d{1,2}):(\d{1,2})(?:[.:](\d{1,3}))?\]\s*(.*)$/);
-    if(m){
-      var text = m[4].trim();
-      if(text) out.push({ t: Number(m[1]) * 60 + Number(m[2]) + (m[3] ? Number("0." + m[3]) : 0), s: text });
-      return;
-    }
-    out.push({ t: -1, s: line });
-  });
-  return out;
-}
 /* 文件名「歌手 - 歌名.mp3」里没有单独的歌手字段时，自动拆一下 */
 function mpParseTrack(m, idx, f){
   var fileName = String(m.fileName || "").replace(/\.[^.\\/]+$/, "");
@@ -3676,17 +3672,22 @@ function mpParseTrack(m, idx, f){
   }
   if(!artist) artist = "未知歌手";
   var desc = String(m.desc || "").trim();
-  var lyrics = String(m.lyrics || "").trim();
-  if(!lyrics && desc.indexOf("\n") >= 0) lyrics = desc;
-  var lines = mpParseLyrics(lyrics), timed = false;
-  for(var i = 0; i < lines.length; i++){ if(lines[i].t >= 0){ timed = true; break; } }
   var imgs = collectImages(m);
-  return {
+  var t = {
     title: title, artist: artist, src: String(f.url || ""),
     cover: imgs.length ? String(imgs[0].url || "") : "",
-    producer: (!lyrics && desc && desc.indexOf("\n") < 0) ? desc : "",
-    lines: lines, timed: timed
+    producer: desc
   };
+  /* 搜索关键词：歌名 + 歌手 + 原始文件名 + 备注，全部小写 */
+  t.key = (t.title + " " + t.artist + " " + fileName + " " + desc + " " + String(f.name || "")).toLowerCase();
+  return t;
+}
+/* 关键词匹配：空格分开的多个词要全部命中（AND），空词忽略 */
+function mpMatch(t, q){
+  if(!q) return true;
+  var parts = q.split(/\s+/).filter(Boolean);
+  for(var i = 0; i < parts.length; i++){ if(t.key.indexOf(parts[i]) < 0) return false; }
+  return true;
 }
 
 /* ---- 初始化 ---- */
@@ -3716,7 +3717,6 @@ function mpInit(){
 
   applyVolume(v0);
   mpPaintIcons();
-  mpPaintTabs();
   mpBindBar();
   mpBindImgFallback();
   mpBindGlobal();
@@ -3761,7 +3761,6 @@ function renderMusic(){
   mpTracks = list;
   if(changed){
     mpIndex = keep >= 0 ? keep : (list.length ? 0 : -1);
-    mpLyricIdx = -1;
     if(mpIndex >= 0) mpSetSrc(mpIndex);
   } else if(mpIndex < 0 && list.length){
     mpIndex = 0;
@@ -3795,7 +3794,7 @@ function mpPaint(){
   var eq = mpEl("mpEq"); if(eq) eq.classList.toggle("playing", playing);
   mpPaintIcons();
   mpPaintFront();
-  mpPaintOpenBtn();
+  mpPaintCount();
   mpPaintSheet();
   mpPaintProgress();
   mpSyncMediaSession();
@@ -3820,40 +3819,57 @@ function mpPaintIcons(){
   var p2 = mpEl("mpMiniPlay"); if(p2) p2.setAttribute("aria-label", playing ? "暂停" : "播放");
   var mm = mpEl("mpMute"); if(mm) mm.setAttribute("aria-label", muted ? "取消静音" : "静音");
 }
-/* 前面板那行紫色小字 */
+/* 前面板那行绿色小字 */
 function mpPaintFront(){
   var t = mpTracks[mpIndex] || null;
   var el = mpEl("mpLyric");
   if(!el) return;
   var total = mpTracks.length, line;
   if(!t) line = total ? ("共 " + total + " 首 · 点击播放") : "还没有音乐 · 去后台「影音」上传一首";
-  else if(t.timed && t.lines[mpLyricIdx]) line = t.lines[mpLyricIdx].s;
-  else if(t.producer) line = "制作人：" + t.producer;
-  else if(t.lines.length) line = t.lines[0].s;
+  else if(t.producer) line = t.producer;
   else line = "共 " + total + " 首 · 点击播放";
   el.textContent = line;
 }
-function mpPaintOpenBtn(){
+/* 搜索命中的歌曲下标 */
+function mpFiltered(){
+  var out = [];
+  for(var i = 0; i < mpTracks.length; i++){ if(mpMatch(mpTracks[i], mpQuery)) out.push(i); }
+  return out;
+}
+/* 数量徽标：卡片按钮 + 弹层标题 */
+function mpPaintCount(){
   var n = mpEl("mpOpenListCount");
   if(n) n.textContent = mpTracks.length + " 首";
   var c = mpEl("mpSheetCount");
-  if(c) c.textContent = mpTracks.length;
+  if(c) c.textContent = mpFiltered().length;
+  var label = mpEl("mpSheetLabel");
+  if(label) label.textContent = mpQuery ? "搜索结果" : "歌曲";
 }
-function mpPaintTabs(){
-  var a = mpEl("mpSheetTabLyric"), b = mpEl("mpSheetTabList");
-  var t = mpTracks[mpIndex] || null;
-  var hasLyric = !!(t && t.lines && t.lines.length);
-  if(a){
-    a.classList.toggle("on", mpTab === "lyric");
-    a.classList.toggle("off", !hasLyric);
-    a.title = hasLyric ? "看歌词" : "这首歌还没有歌词";
+/* 搜索命中的字标黄：先在原文上匹配、再逐段转义，避免注入 */
+function mpHi(s){
+  var raw = String(s == null ? "" : s);
+  if(!mpQuery) return esc(raw);
+  var parts = mpQuery.split(/\s+/).filter(Boolean);
+  if(!parts.length) return esc(raw);
+  var re;
+  try{
+    re = new RegExp("(" + parts.map(function(p){ return p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }).join("|") + ")", "gi");
+  }catch(e){ return esc(raw); }
+  var out = "", last = 0, m;
+  while((m = re.exec(raw))){
+    out += esc(raw.slice(last, m.index)) + "<mark>" + esc(m[0]) + "</mark>";
+    last = m.index + m[0].length;
+    if(m[0] === "") re.lastIndex++;
   }
-  if(b) b.classList.toggle("on", mpTab === "list");
+  return out + esc(raw.slice(last));
 }
 function mpListHTML(){
   if(!mpTracks.length) return '<div class="mp-empty">歌单还是空的<br>去后台「影音」上传一首吧 🎵</div>';
+  var list = mpFiltered();
+  if(!list.length) return '<div class="mp-empty">没找到和「' + esc(mpQuery) + '」有关的歌<br><br>换个歌名或歌手再试试</div>';
   var playing = mpIsPlaying();
-  return '<div class="mp-list">' + mpTracks.map(function(t, i){
+  return '<div class="mp-list">' + list.map(function(i){
+    var t = mpTracks[i];
     var on = i === mpIndex;
     var thumb = t.cover
       ? '<span class="mp-thumb"><img src="' + esc(t.cover) + '" alt=""></span>'
@@ -3862,22 +3878,12 @@ function mpListHTML(){
     return '<div class="mp-row' + (on ? " on" : "") + '" data-i="' + i + '" onclick="mpPlayAt(' + i + ')" role="button" tabindex="0" title="播放 ' + esc(t.title) + '">'
       + '<span class="mp-idx">' + idx + '</span>'
       + thumb
-      + '<div class="mp-row-txt"><div class="mp-row-name">' + esc(t.title) + '</div><div class="mp-row-artist">' + esc(t.artist) + '</div></div>'
+      + '<div class="mp-row-txt"><div class="mp-row-name">' + mpHi(t.title) + '</div><div class="mp-row-artist">' + mpHi(t.artist) + '</div></div>'
       + '<span class="mp-row-act">' + (on && playing ? MP_ICON.pause : MP_ICON.play) + '</span>'
       + '</div>';
   }).join("") + '</div>';
 }
-function mpLyricHTML(){
-  var t = mpTracks[mpIndex] || null;
-  if(!t) return '<div class="mp-empty">还没有音乐<br>去后台「影音」上传一首，就会出现在这里 🎵</div>';
-  if(!t.lines.length){
-    return '<div class="mp-empty">这首歌还没有歌词<br><br>在后台「影音」里给这条音乐填「备注」即可<br>一行一句，也支持 [mm:ss] 时间轴</div>';
-  }
-  return '<div class="mp-lyrics">' + t.lines.map(function(l, i){
-    return '<p' + (t.timed && i === mpLyricIdx ? ' class="cur"' : '') + '>' + esc(l.s) + '</p>';
-  }).join("") + '</div>';
-}
-/* 独立的歌曲列表 / 歌词 界面 */
+/* 独立的歌曲列表界面 */
 function mpPaintSheet(){
   var sheet = mpEl("mpSheet"), mask = mpEl("mpSheetMask"), body = mpEl("mpSheetBody"), foot = mpEl("mpSheetFoot");
   if(!sheet || !mask) return;
@@ -3885,28 +3891,29 @@ function mpPaintSheet(){
   mask.classList.toggle("show", !!mpSheetOn);
   if(!mpSheetOn) return;
   var t = mpTracks[mpIndex] || null;
-  /* 切到一首没歌词的歌时，自动退回歌曲列表，别停在空白歌词页 */
-  if(mpTab === "lyric" && (!t || !t.lines.length)) mpTab = "list";
   var keep = body ? body.scrollTop : 0;
-  if(body) body.innerHTML = (mpTab === "lyric") ? mpLyricHTML() : mpListHTML();
-  if(body && keep && mpTab === "list") body.scrollTop = keep;   /* 重渲染别丢滚动位置 */
+  if(body) body.innerHTML = mpListHTML();
+  if(body && keep && !mpQuery) body.scrollTop = keep;   /* 重渲染别丢滚动位置 */
   if(foot){
     foot.innerHTML = t
       ? ('当前播放：<b>' + esc(t.title) + '</b> · ' + esc(t.artist))
       : "还没有音乐";
   }
-  mpPaintTabs();
+  var inp = mpEl("mpSearch");
+  if(inp && inp.value !== mpQuery) inp.value = mpQuery;
+  var clr = mpEl("mpSearchClear");
+  if(clr) clr.hidden = !mpQuery;
+  mpPaintCount();
 }
-function mpOpenSheet(tab){
+function mpOpenSheet(){
   mpInit();
-  if(typeof tab === "string") mpTab = tab;
-  var t = mpTracks[mpIndex] || null;
-  if(mpTab === "lyric" && (!t || !t.lines.length)) mpTab = "list";   /* 没歌词就直接显示歌曲列表 */
   mpSheetOn = true;
+  mpQuery = "";
+  var inp = mpEl("mpSearch");
+  if(inp) inp.value = "";
   var body = mpEl("mpSheetBody");
   if(body) body.scrollTop = 0;
   mpPaintSheet();
-  if(mpTab === "lyric"){ mpLyricIdx = -2; mpPaintProgress(); }
   document.body.style.overflow = "hidden";
 }
 function mpCloseSheet(){
@@ -3914,6 +3921,21 @@ function mpCloseSheet(){
   mpSheetOn = false;
   mpPaintSheet();
   document.body.style.overflow = "";
+}
+function mpDoSearch(v){
+  mpQuery = String(v == null ? "" : v).trim().toLowerCase();
+  var body = mpEl("mpSheetBody");
+  if(body) body.scrollTop = 0;
+  mpPaintSheet();
+}
+function mpClearSearch(){
+  mpQuery = "";
+  var inp = mpEl("mpSearch");
+  if(inp){
+    inp.value = "";
+    if(inp.focus){ try{ inp.focus(); }catch(e){ /* 忽略 */ } }
+  }
+  mpPaintSheet();
 }
 function mpPaintProgress(){
   var cur = 0, dur = 0;
@@ -3927,29 +3949,6 @@ function mpPaintProgress(){
   var c = mpEl("mpCur"); if(c) c.textContent = mpFmt(cur);
   var d = mpEl("mpDur"); if(d) d.textContent = mpFmt(dur);
   var bar = mpEl("mpBar"); if(bar) bar.setAttribute("aria-valuenow", String(Math.round(pct)));
-
-  var t = mpTracks[mpIndex], i;
-  if(!t || !t.timed || !t.lines.length) return;
-  var idx = -1;
-  for(i = 0; i < t.lines.length; i++){ if(cur + 0.2 >= t.lines[i].t) idx = i; else break; }
-  if(idx === mpLyricIdx) return;
-  mpLyricIdx = idx;
-  var front = mpEl("mpLyric");
-  if(front && t.lines[idx]) front.textContent = t.lines[idx].s;
-  if(!mpSheetOn) return;
-  var foot = mpEl("mpSheetFoot");
-  if(foot){
-    foot.innerHTML = '当前播放：<b>' + esc(t.title) + '</b> · ' + esc(t.artist)
-      + (t.lines[idx] ? (' · ' + esc(t.lines[idx].s)) : '');
-  }
-  if(mpTab !== "lyric") return;
-  var box = mpEl("mpSheetBody");
-  if(!box || !box.querySelectorAll) return;
-  var ps = box.querySelectorAll(".mp-lyrics p");
-  for(i = 0; i < ps.length; i++){ if(ps[i].classList) ps[i].classList.toggle("cur", i === idx); }
-  if(idx >= 0 && ps[idx] && ps[idx].scrollIntoView){
-    try{ ps[idx].scrollIntoView({ block: "nearest" }); }catch(e){ /* 忽略 */ }
-  }
 }
 function mpSyncMediaSession(){
   try{
@@ -3969,7 +3968,6 @@ function mpPlayAt(i){
   if(i < 0 || i >= mpTracks.length) return;
   if(i === mpIndex && mpIsPlaying()){ mpPause(); return; }
   mpIndex = i;
-  mpLyricIdx = -1;
   mpSetSrc(i);
   mpPlay();
   mpPaint();
@@ -4012,7 +4010,6 @@ function mpNext(fromEnd){
   }
   void fromEnd;
   mpIndex = i;
-  mpLyricIdx = -1;
   mpSetSrc(i);
   mpPlay();
   mpPaint();
@@ -4033,7 +4030,6 @@ function mpPrev(){
     return;
   }
   mpIndex = i;
-  mpLyricIdx = -1;
   mpSetSrc(i);
   mpPlay();
   mpPaint();
@@ -4079,18 +4075,6 @@ function mpToggleMute(){
   mpInit();
   if(mpMuted || mpVolumeNow() === 0) applyVolume(mpLastVol > 0 ? mpLastVol : 80);
   else applyVolume(0);
-}
-function mpSetTab(tab){
-  mpInit();
-  if(tab === "lyric"){
-    var t0 = mpTracks[mpIndex] || null;
-    if(!t0 || !t0.lines.length) return;                /* 没歌词，这个页签不响应 */
-  }
-  mpTab = tab;
-  var body = mpEl("mpSheetBody");
-  if(body) body.scrollTop = 0;
-  mpPaintSheet();
-  if(mpTab === "lyric"){ mpLyricIdx = -2; mpPaintProgress(); }
 }
 function mpGoHome(){
   mpCloseSheet();
@@ -4193,7 +4177,9 @@ function mpBindGlobal(){
   window.addEventListener("hashchange", onMove);
   window.addEventListener("popstate", onMove);
   document.addEventListener("keydown", function(e){
-    if(e.key === "Escape" && mpSheetOn) mpCloseSheet();
+    if(e.key !== "Escape" || !mpSheetOn) return;
+    if(mpQuery){ mpClearSearch(); return; }        /* 先清搜索词，再关界面 */
+    mpCloseSheet();
   });
 }
 

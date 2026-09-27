@@ -933,103 +933,6 @@ body.wk-lock{overflow:hidden}
 }
 
 /* ============================================================
-   🏠 首页卡片面板墙
-   ============================================================ */
-.hp-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;align-items:start}
-.hp-card{
-  grid-column:span 4;position:relative;min-width:0;padding:20px;border-radius:var(--radius);
-  background:var(--card);border:var(--glass-border);box-shadow:var(--shadow),var(--glass-hi);
-  backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
-  transition:box-shadow .28s,border-color .28s,transform .28s cubic-bezier(.22,1,.36,1);
-}
-.hp-card.s2{grid-column:span 8}
-.hp-card.s3{grid-column:span 12}
-.hp-card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(15,23,42,.14),var(--glass-hi);border-color:rgba(16,185,129,.42)}
-html[data-theme="dark"] .hp-card:hover{box-shadow:0 18px 44px rgba(0,0,0,.5),var(--glass-hi)}
-/* 跟着鼠标走的柔光（JS 写 --mx / --my） */
-.hp-card::after{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;
-  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(16,185,129,.14),transparent 62%);
-}
-.hp-card:hover::after{opacity:1}
-.hp-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.hp-ico{
-  flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;
-  font-size:1.15rem;background:var(--primary-light);color:var(--primary-dark);overflow:hidden;
-}
-.hp-ico img{width:100%;height:100%;object-fit:cover}
-.hp-tt{flex:1;min-width:0}
-.hp-title,.hp-desc,.hp-row-n,.hp-row-m{display:block}
-.hp-title{font-size:.98rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hp-desc{font-size:.76rem;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hp-body{font-size:.86rem;color:var(--text2);line-height:1.85}
-.hp-text{white-space:pre-wrap;word-break:break-word}
-.hp-btn{
-  display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:7px 14px;border-radius:99px;
-  border:1px solid var(--border);background:transparent;color:var(--primary-dark);
-  font-size:.78rem;font-family:inherit;cursor:pointer;text-decoration:none;
-  transition:background .2s,border-color .2s;
-}
-.hp-btn:hover{background:var(--primary-light);border-color:var(--primary)}
-.hp-empty{color:var(--text3);font-size:.8rem;padding:16px 10px;text-align:center;border:1px dashed var(--border);border-radius:12px;line-height:1.8}
-/* 「最新文章」面板里的紧凑列表 */
-.hp-list{display:flex;flex-direction:column;gap:2px;margin:-2px 0 0}
-.hp-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;cursor:pointer;transition:background .18s}
-.hp-row:hover{background:var(--primary-light)}
-.hp-row-i{flex:0 0 auto;width:20px;text-align:center;font-size:.72rem;color:var(--text3);font-variant-numeric:tabular-nums}
-.hp-row-t{flex:1;min-width:0}
-.hp-row-n{font-size:.85rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hp-row-m{font-size:.72rem;color:var(--text3);margin-top:1px}
-.hp-row-a{flex:0 0 auto;font-size:.74rem;color:var(--text3);font-variant-numeric:tabular-nums}
-a.hp-row{text-decoration:none;color:inherit}
-/* 个人名片 */
-.hp-prof{display:flex;align-items:center;gap:12px}
-.hp-av{
-  flex:0 0 auto;width:52px;height:52px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;
-  background:var(--cover-grad);font-size:1.35rem;font-weight:700;color:var(--primary-dark);
-}
-.hp-av img{width:100%;height:100%;object-fit:cover}
-.hp-prof-t{flex:1;min-width:0}
-.hp-prof-n{display:block;font-size:1rem;font-weight:700;color:var(--text)}
-.hp-prof-b{display:block;font-size:.75rem;color:var(--text3);margin-top:3px;line-height:1.5}
-.hp-kv{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px dashed var(--border);font-size:.78rem;color:var(--text3)}
-.hp-kv b{font-size:1.05rem;color:var(--primary-dark);font-variant-numeric:tabular-nums}
-/* 站点统计：数字会滚动 */
-.hp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 6px;text-align:center}
-.hp-stat{display:flex;flex-direction:column;gap:2px}
-.hp-stat b{font-size:1.3rem;font-weight:700;color:var(--primary-dark);font-variant-numeric:tabular-nums;line-height:1.2}
-.hp-stat i{font-style:normal;font-size:.72rem;color:var(--text3)}
-/* 课程进度条 */
-.hp-prog{display:block;height:4px;border-radius:99px;background:var(--primary-light);margin-top:6px;overflow:hidden}
-.hp-prog i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--primary-dark))}
-/* 标签小胶囊 */
-.hp-chips{display:flex;flex-wrap:wrap;gap:6px}
-.hp-chip{
-  display:inline-block;padding:4px 10px;border-radius:99px;background:var(--primary-light);color:var(--primary-dark);
-  font-size:.74rem;cursor:pointer;transition:transform .18s,background .18s,color .18s;
-}
-.hp-chip:hover{transform:translateY(-1px);background:var(--primary);color:#fff}
-/* 入场：错峰淡入上浮（JS 加 .anim / .in，JS 万一没跑也不会看不见） */
-.hp-grid.anim .hp-card{opacity:0;transform:translateY(16px)}
-.hp-grid.anim .hp-card.in{
-  opacity:1;transform:none;
-  transition:opacity .55s ease,transform .55s cubic-bezier(.22,1,.36,1),box-shadow .28s,border-color .28s;
-}
-.hp-grid.anim .hp-card.in:hover{transform:translateY(-4px)}
-@media(max-width:1080px){
-  .hp-card,.hp-card.s2{grid-column:span 6}
-}
-@media(max-width:760px){
-  .hp-card,.hp-card.s2,.hp-card.s3{grid-column:span 12}
-  .hp-grid{gap:14px}
-  .hp-card{padding:16px}
-}
-@media (prefers-reduced-motion:reduce){
-  .hp-grid.anim .hp-card{opacity:1;transform:none}
-  .hp-card:hover{transform:none}
-}
-
-/* ============================================================
    🏠 首页三栏：中间内容卡片 / 左栏介绍公告 / 右栏动态统计
    ============================================================ */
 /* 顶部分类筛选 */
@@ -1096,19 +999,6 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
 .lc-stats b{font-size:1rem;color:var(--primary-dark);font-variant-numeric:tabular-nums}
 .lc-notice-text{font-size:.84rem;color:var(--text2);line-height:1.85;white-space:pre-wrap}
 
-/* 右栏：动态时间线 */
-.feed-list{display:flex;flex-direction:column;gap:12px}
-.feed-item{position:relative;padding-left:16px}
-.feed-item::before{content:"";position:absolute;left:3px;top:7px;bottom:-13px;width:1px;background:var(--border)}
-.feed-item:last-child::before{display:none}
-.feed-dot{
-  position:absolute;left:0;top:5px;width:7px;height:7px;border-radius:50%;
-  background:var(--primary);box-shadow:0 0 0 3px var(--primary-light);
-}
-.feed-date{font-size:.7rem;color:var(--text3);font-variant-numeric:tabular-nums}
-.feed-text{font-size:.82rem;color:var(--text2);line-height:1.6;margin-top:2px}
-.feed-empty{font-size:.8rem;color:var(--text3)}
-
 /* 右栏：统计列表 */
 .stat-list{display:flex;flex-direction:column;gap:0}
 .stat-row{display:flex;align-items:center;justify-content:space-between;padding:8px 2px;font-size:.84rem;color:var(--text2)}
@@ -1138,7 +1028,6 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
     <a href="/" class="nav-brand"><span class="dot"></span>思齐的博客</a>
     <div class="nav-links" id="navLinks">
       <button class="active" data-t="home">首页</button>
-      <button data-t="panels">面板</button>
       <button data-t="courses">课程</button>
       <button data-t="papers">论文</button>
       <button data-t="notices">通知</button>
@@ -1209,16 +1098,11 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
 
   <!-- Center Column -->
   <div class="center-col">
-    <!-- 首页：分类筛选 + 内容卡片（每页 6 条 + 分页码） -->
+    <!-- 首页：分类筛选 + 内容卡片（每页 10 条 + 分页码） -->
     <div class="section active" id="sec-home">
       <div class="home-filter" id="homeFilter"></div>
       <div id="homeList"></div>
       <div class="pager" id="homePager"></div>
-    </div>
-
-    <!-- 面板：原来的卡片墙搬到这里，导航里有独立入口 -->
-    <div class="section" id="sec-panels">
-      <div class="hp-grid" id="hpGrid"></div>
     </div>
 
     <div class="section" id="sec-courses">
@@ -1467,11 +1351,11 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
         <span>☰ 歌曲列表</span><span class="mp-openlist-n" id="mpOpenListCount">0 首</span>
       </button>
     </div>
-    <!-- 动态：按时间把最近新增/更新的内容列出来（只读，自动生成） -->
-    <div class="side-card" id="feedCard">
-      <h3>📌 动态</h3>
-      <div class="feed-list" id="feedList"></div>
-      <div style="margin-top:10px"><a href="javascript:;" onclick="switchTab('home')" style="font-size:.8rem;color:var(--primary-dark);text-decoration:none">查看更多动态 ›</a></div>
+    <!-- 快速链接：原来右栏就有，现在放回播放器下面 -->
+    <div class="side-card">
+      <h3>⚡ 快速访问</h3>
+      <div class="quick-links collapsed" id="quickLinks"></div>
+      <button class="links-toggle" id="quickLinksToggle" type="button" onclick="toggleQuickLinks()" hidden></button>
     </div>
     <!-- 站点统计 -->
     <div class="side-card" id="statCard">
@@ -1484,11 +1368,6 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
       <div class="side-card toc-card" id="tocCard" style="display:none">
         <h3>📑 文章目录</h3>
         <div class="toc-card-list" id="tocCardList"></div>
-      </div>
-      <div class="side-card">
-        <h3>快速链接</h3>
-        <div class="quick-links collapsed" id="quickLinks"></div>
-        <button class="links-toggle" id="quickLinksToggle" type="button" onclick="toggleQuickLinks()" hidden></button>
       </div>
     </div>
   </div>
@@ -1552,12 +1431,22 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
 const GH_OWNER = "benyia";
 const GH_REPO = "benyia.github.io";
 
-/* 列表分页：每页条数（首页 / 课程 / 通知 / 班级） */
+/* 列表分页：每页条数（课程 / 通知 / 班级） */
 const PAGE_SIZE = 6;
+/* 首页内容卡片每页条数 */
+const HOME_PAGE_SIZE = 10;
+/* 首页默认显示哪几类内容（后台「首页」里可勾选） */
+const HOME_SECTIONS = [
+  { key: "courses",    name: "课程",   icon: "📚" },
+  { key: "papers",     name: "论文",   icon: "📝" },
+  { key: "notices",    name: "通知",   icon: "🔔" },
+  { key: "classItems", name: "班级",   icon: "👥" },
+  { key: "diary",      name: "日记",   icon: "📖" }
+];
+const HOME_SECTIONS_DEFAULT = ["courses", "papers", "notices", "classItems"];
 
 const PAGE_TITLES = {
   home: ["思齐个人主页", "钟爱奥迪A6"],
-  panels: ["面板", "首页卡片一览"],
   courses: ["我的课程", "课程资料与学习资源"],
   papers: ["论文", "学术论文与研究进展"],
   notices: ["学校通知", "重要通知与公告"],
@@ -1969,18 +1858,6 @@ function renderNotice(){
   body.innerHTML = '<div class="lc-notice-text">' + esc(txt) + '</div>'
     + (sc.noticeUrl ? '<a class="hp-btn" href="' + esc(sc.noticeUrl) + '" target="_blank" rel="noopener" style="margin-top:12px">' + esc(sc.noticeBtn || "了解更多") + ' →</a>' : "");
 }
-/* 动态时间线：直接读后台的修改日志，最近 6 条 */
-function renderFeed(){
-  var box = document.getElementById("feedList");
-  if(!box) return;
-  var logs = (blogData.logs || []).slice(0, 6);
-  box.innerHTML = logs.length ? logs.map(function(l){
-    var t = String(l.time || "");
-    return '<div class="feed-item"><span class="feed-dot"></span>'
-      + '<div class="feed-date">' + esc(t.slice(0, 10)) + (t.length > 10 ? " " + esc(t.slice(11, 16)) : "") + '</div>'
-      + '<div class="feed-text">' + esc(l.action || "") + '</div></div>';
-  }).join("") : '<div class="feed-empty">还没有动态</div>';
-}
 /* 统计：全是本地数量，不依赖任何外部服务 */
 function renderStats(){
   var box = document.getElementById("statList");
@@ -2266,10 +2143,8 @@ function renderAll(){
   renderTags();
   renderQuickLinks();
   renderFilters();
-  renderHomePanels();
   initWelcome();
   renderNotice();
-  renderFeed();
   renderHome();
   renderCourses();
   renderPapers();
@@ -2365,19 +2240,20 @@ function byTimeDesc(a, b){
 /* ============================================================
    分页：每页 PAGE_SIZE 条，底部数字页码 + 上一页/下一页
    ============================================================ */
-function renderPaged(key, listId, pagerId, items, buildCard, emptyText){
+function renderPaged(key, listId, pagerId, items, buildCard, emptyText, pageSize){
   var box = document.getElementById(listId);
   var pagerBox = document.getElementById(pagerId);
   if(!box) return;
+  var size = Math.max(1, Number(pageSize) || PAGE_SIZE);
   var total = items.length;
-  var pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  var pages = Math.max(1, Math.ceil(total / size));
   var page = pageState[key] || 1;
   if(page > pages) page = pages;
   if(page < 1) page = 1;
   pageState[key] = page;
 
-  var slice = items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-  box.innerHTML = slice.map(function(it, i){ return buildCard(it, (page - 1) * PAGE_SIZE + i); }).join("")
+  var slice = items.slice((page - 1) * size, page * size);
+  box.innerHTML = slice.map(function(it, i){ return buildCard(it, (page - 1) * size + i); }).join("")
     || '<div class="empty">' + (emptyText || "暂无内容") + '</div>';
   /* 新渲染出来的卡片：进视口才淡入上浮，并让图片懒加载 */
   markReveal(box, ":scope > *");
@@ -2423,8 +2299,19 @@ function plainText(s){
     .replace(/&lt;/gi, "<").replace(/&gt;/gi, ">")
     .replace(/&quot;/gi, '"').replace(/&#39;/gi, "'").replace(/&amp;/gi, "&");
 }
+/* 首页显示哪几类内容：后台「首页」里勾选，没配过就用默认四类 */
+function homeSections(){
+  var sc = blogData.siteConfig || {};
+  var arr = sc.homeSections;
+  if(!Array.isArray(arr)) arr = HOME_SECTIONS_DEFAULT;
+  return HOME_SECTIONS.filter(function(s){ return arr.indexOf(s.key) >= 0; }).map(function(s){ return s.key; });
+}
+function homeSectionsOn(){
+  var on = homeSections();
+  return { courses: on.indexOf("courses") >= 0, papers: on.indexOf("papers") >= 0, notices: on.indexOf("notices") >= 0, classItems: on.indexOf("classItems") >= 0, diary: on.indexOf("diary") >= 0 };
+}
 function homeItems(){
-  var out = [];
+  var out = [], on = homeSectionsOn();
   function add(type, obj, icon, title, text, click){
     var full = stripMd(plainText(text)).replace(/\s+/g, " ").trim();
     out.push({
@@ -2436,11 +2323,12 @@ function homeItems(){
       click: click
     });
   }
-  (blogData.courses||[]).forEach(function(c,i){ add("课程", c, c.icon||"📚", c.title, c.intro||c.desc, "openCourse("+i+")"); });
-  (blogData.papers||[]).forEach(function(p,i){ add("论文", p, "📝", p.title, p.abstract||p.desc, "openPaper("+i+")"); });
-  (blogData.notices||[]).forEach(function(n,i){ add("通知", n, "🔔", n.title, n.content, "openNotice("+i+")"); });
-  (blogData.classItems||[]).forEach(function(c,i){ add("班级", c, "👥", c.title, c.content, "openClass("+i+")"); });
-  out.sort(byTimeDesc);
+  if(on.courses)    (blogData.courses||[]).forEach(function(c,i){ add("课程", c, c.icon||"📚", c.title, c.intro||c.desc, "openCourse("+i+")"); });
+  if(on.papers)     (blogData.papers||[]).forEach(function(p,i){ add("论文", p, "📝", p.title, p.abstract||p.desc, "openPaper("+i+")"); });
+  if(on.notices)    (blogData.notices||[]).forEach(function(n,i){ add("通知", n, "🔔", n.title, n.content, "openNotice("+i+")"); });
+  if(on.classItems) (blogData.classItems||[]).forEach(function(c,i){ add("班级", c, "👥", c.title, c.content, "openClass("+i+")"); });
+  if(on.diary)      (blogData.diary||[]).forEach(function(d,i){ add("日记", d, "📖", d.title || "无标题", d.content, "switchTab('diary')"); });
+  out.sort(byTimeDesc);          /* 最新的排最前面 */
   return out;
 }
 function homeCardHTML(a){
@@ -2472,15 +2360,17 @@ function renderHome(){
   items.forEach(function(a){ counts[a.type] = (counts[a.type] || 0) + 1; });
   var bar = document.getElementById("homeFilter");
   if(bar){
-    bar.innerHTML = ["all", "课程", "论文", "通知", "班级"].filter(function(k){
-      return k === "all" || counts[k];
-    }).map(function(k){
+    /* 只列「后台允许在首页显示」的类型 */
+    var types = HOME_SECTIONS.filter(function(s){ return homeSections().indexOf(s.key) >= 0; }).map(function(s){ return s.name; });
+    var keys = ["all"].concat(types.filter(function(k){ return counts[k]; }));
+    if(homeFilterKey !== "all" && keys.indexOf(homeFilterKey) < 0) homeFilterKey = "all";
+    bar.innerHTML = keys.map(function(k){
       return '<button class="hf-pill' + (homeFilterKey === k ? " on" : "") + '" type="button" onclick="setHomeFilter(\'' + k + '\')">'
         + (k === "all" ? "全部" : k) + "<em>" + (counts[k] || 0) + "</em></button>";
     }).join("");
   }
   var list = homeFilterKey === "all" ? items : items.filter(function(a){ return a.type === homeFilterKey; });
-  renderPaged("home", "homeList", "homePager", list, homeCardHTML, "暂无内容");
+  renderPaged("home", "homeList", "homePager", list, homeCardHTML, "暂无内容", HOME_PAGE_SIZE);
 }
 
 function renderCourses(){
@@ -3999,7 +3889,7 @@ function closeDrawer(){
 function currentTab(){
   var active = document.querySelector(".section.active");
   if(!active) return "home";
-  var map = { "sec-home": "home", "sec-panels": "panels", "sec-courses": "courses", "sec-courseDetail": "courses",
+  var map = { "sec-home": "home", "sec-courses": "courses", "sec-courseDetail": "courses",
     "sec-papers": "papers", "sec-paperDetail": "papers", "sec-notices": "notices",
     "sec-noticeDetail": "notices", "sec-class": "class", "sec-classDetail": "class",
     "sec-roster": "roster", "sec-life": "life", "sec-media": "life", "sec-ledger": "ledger",
@@ -4661,230 +4551,6 @@ function initWelcome(){
   var sec = Number(cfg.sec); if(!(sec > 0)) sec = 3.5;
   wkDeadline = wkStartAt + sec * 1000;
   wkTick();
-}
-
-/* ============================================================
-   🏠 首页卡片面板墙（卡片在后台「首页」里增删改排序）
-   ============================================================ */
-function hpList(){
-  var arr = (blogData && Array.isArray(blogData.homePanels)) ? blogData.homePanels : null;
-  if(!arr || !arr.length) arr = (DEFAULT_DATA.homePanels || []);
-  return arr.filter(function(p){ return p && p.on !== false; });
-}
-function hpIconHTML(icon){
-  var v = String(icon || "").trim();
-  if(!v) return "▦";
-  if(isImgUrl(v)) return '<img src="' + esc(v) + '" alt="">';
-  return esc(v);
-}
-/* 「最新文章」面板：只读地取现有内容，不动任何数据 */
-function hpArticleItems(limit){
-  var items = [];
-  (blogData.courses||[]).forEach(function(c,i){ items.push({type:"课程", item:c, title:c.title, time:c.time||"", click:"openCourse("+i+")"}); });
-  (blogData.papers||[]).forEach(function(p,i){ items.push({type:"论文", item:p, title:p.title, time:p.time||"", click:"openPaper("+i+")"}); });
-  (blogData.notices||[]).forEach(function(n,i){ items.push({type:"通知", item:n, title:n.title, time:n.time||n.date||"", click:"openNotice("+i+")"}); });
-  (blogData.classItems||[]).forEach(function(c,i){ items.push({type:"班级", item:c, title:c.title, time:c.time||c.date||"", click:"openClass("+i+")"}); });
-  items.sort(byTimeDesc);
-  return items.slice(0, Math.max(1, Number(limit) || 6));
-}
-/* 各类型面板的正文：全部只读地取现有数据，不移动也不修改任何内容 */
-function hpBodyHTML(p){
-  var t = p.type || "note", sc = blogData.siteConfig || {};
-  var lim = Math.max(1, Number(p.limit) || 5);
-
-  if(t === "articles"){
-    var items = hpArticleItems(p.limit);
-    if(!items.length) return '<div class="hp-empty">还没有内容</div>';
-    return '<div class="hp-list">' + items.map(function(a, i){
-      return '<div class="hp-row" onclick="' + a.click + '">'
-        + '<span class="hp-row-i">' + String(i + 1).padStart(2, "0") + '</span>'
-        + '<span class="hp-row-t"><span class="hp-row-n">' + esc(a.title) + '</span>'
-        + '<span class="hp-row-m">' + a.type + (a.time ? " · " + esc(a.time) : "") + '</span></span></div>';
-    }).join("") + '</div>';
-  }
-
-  if(t === "profile"){
-    var av = String(sc.avatar || "思");
-    var avHtml = isImgUrl(av) ? '<img src="' + esc(av) + '" alt="">' : esc(av);
-    var total = (blogData.courses||[]).length + (blogData.papers||[]).length + (blogData.notices||[]).length + (blogData.classItems||[]).length;
-    return '<div class="hp-prof"><span class="hp-av">' + avHtml + '</span>'
-      + '<span class="hp-prof-t"><span class="hp-prof-n">' + esc(sc.name || sc.title || "站长") + '</span>'
-      + '<span class="hp-prof-b">' + esc(sc.bio || sc.subtitle || "") + '</span></span></div>'
-      + '<div class="hp-kv"><span>文章</span><b>' + total + '</b></div>';
-  }
-
-  if(t === "stats"){
-    var st = [
-      ["文章", (blogData.courses||[]).length + (blogData.papers||[]).length + (blogData.notices||[]).length + (blogData.classItems||[]).length],
-      ["课程", (blogData.courses||[]).length],
-      ["论文", (blogData.papers||[]).length],
-      ["通知", (blogData.notices||[]).length],
-      ["日记", (blogData.diary||[]).length],
-      ["影音", (blogData.media||[]).length]
-    ];
-    return '<div class="hp-stats">' + st.map(function(x){
-      return '<span class="hp-stat"><b class="hp-num" data-n="' + x[1] + '">0</b><i>' + x[0] + '</i></span>';
-    }).join("") + '</div>';
-  }
-
-  if(t === "courses"){
-    var cs = (blogData.courses||[]).map(function(c, i){ return { c: c, i: i }; })
-      .sort(function(a, b){ return byTimeDesc(a.c, b.c); }).slice(0, lim);
-    if(!cs.length) return '<div class="hp-empty">还没有课程</div>';
-    return '<div class="hp-list">' + cs.map(function(o){
-      var pg = Math.max(0, Math.min(100, Number(o.c.progress || 0)));
-      return '<div class="hp-row" onclick="openCourse(' + o.i + ')">'
-        + '<span class="hp-row-t"><span class="hp-row-n">' + esc(o.c.title) + '</span>'
-        + '<span class="hp-prog"><i style="width:' + pg + '%"></i></span></span>'
-        + '<span class="hp-row-a">' + pg + '%</span></div>';
-    }).join("") + '</div>';
-  }
-
-  if(t === "diary"){
-    var ds = (blogData.diary||[]).slice().sort(byTimeDesc).slice(0, lim);
-    if(!ds.length) return '<div class="hp-empty">还没有日记</div>';
-    return '<div class="hp-list">' + ds.map(function(d){
-      return '<div class="hp-row" onclick="switchTab(\'diary\')">'
-        + '<span class="hp-row-t"><span class="hp-row-n">' + esc(d.title || "无标题") + '</span>'
-        + '<span class="hp-row-m">' + esc(String(d.time || d.date || "")) + " · " + esc(mdText(String(d.content || "")).slice(0, 40)) + '</span></span></div>';
-    }).join("") + '</div>';
-  }
-
-  if(t === "media"){
-    var ms = (blogData.media||[]).slice().sort(byTimeDesc).slice(0, lim);
-    if(!ms.length) return '<div class="hp-empty">还没有影音</div>';
-    return '<div class="hp-list">' + ms.map(function(m){
-      var ic = m.type === "music" ? "🎵" : (m.type === "video" ? "🎬" : "🖼️");
-      return '<div class="hp-row" onclick="switchTab(\'life\')">'
-        + '<span class="hp-row-i">' + ic + '</span>'
-        + '<span class="hp-row-t"><span class="hp-row-n">' + esc(m.title || "") + '</span>'
-        + '<span class="hp-row-m">' + esc(String(m.time || "")) + '</span></span></div>';
-    }).join("") + '</div>';
-  }
-
-  if(t === "cats"){
-    var cmap = { courses: (blogData.courses||[]).length, papers: (blogData.papers||[]).length, notices: (blogData.notices||[]).length, class: (blogData.classItems||[]).length };
-    var cs2 = blogData.categories || [];
-    if(!cs2.length) return '<div class="hp-empty">还没有分类</div>';
-    return '<div class="hp-list">' + cs2.map(function(c){
-      var ic = isImgUrl(c.icon) ? '<img src="' + esc(c.icon) + '" style="width:15px;height:15px;border-radius:4px;vertical-align:-2px" alt="">' : esc(c.icon || "📁");
-      return '<div class="hp-row" onclick="switchTab(\'' + esc(c.section || "home") + '\')">'
-        + '<span class="hp-row-i">' + ic + '</span>'
-        + '<span class="hp-row-t"><span class="hp-row-n">' + esc(c.name) + '</span></span>'
-        + '<span class="hp-row-a">' + (cmap[c.section] || 0) + '</span></div>';
-    }).join("") + '</div>';
-  }
-
-  if(t === "tags"){
-    var tg = blogData.tags || [];
-    if(!tg.length) return '<div class="hp-empty">还没有标签</div>';
-    return '<div class="hp-chips">' + tg.map(function(x){
-      return '<span class="hp-chip" onclick="openTag(\'' + esc(x).replace(/'/g, "\\'") + '\')">' + esc(x) + '</span>';
-    }).join("") + '</div>';
-  }
-
-  if(t === "friends"){
-    var fs = (blogData.friendLinks || []).filter(function(f){ return f && f.url; });
-    if(!fs.length) return '<div class="hp-empty">还没有友情链接</div>';
-    return '<div class="hp-list">' + fs.slice(0, lim).map(function(f){
-      return '<a class="hp-row" href="' + esc(f.url) + '" target="_blank" rel="noopener">'
-        + '<span class="hp-row-t"><span class="hp-row-n">' + esc(f.name || f.title || f.url) + '</span>'
-        + (f.desc ? '<span class="hp-row-m">' + esc(f.desc) + '</span>' : '') + '</span>'
-        + '<span class="hp-row-a">→</span></a>';
-    }).join("") + '</div>';
-  }
-
-  if(t === "quick"){
-    var qs = blogData.quickLinks || [];
-    if(!qs.length) return '<div class="hp-empty">还没有快速链接</div>';
-    return '<div class="hp-list">' + qs.slice(0, lim).map(function(l){
-      var ic = isImgUrl(l.icon) ? '<img src="' + esc(l.icon) + '" style="width:16px;height:16px;border-radius:4px;vertical-align:-3px" alt="">' : esc(l.icon || "🔗");
-      return '<a class="hp-row" href="' + esc(l.url) + '" target="_blank" rel="noopener">'
-        + '<span class="hp-row-i">' + ic + '</span>'
-        + '<span class="hp-row-t"><span class="hp-row-n">' + esc(l.title) + '</span></span>'
-        + '<span class="hp-row-a">→</span></a>';
-    }).join("") + '</div>';
-  }
-
-  if(t === "image"){
-    if(p.image || p.url){
-      return '<a href="' + esc(p.url || p.image) + '" target="_blank" rel="noopener">'
-        + '<img src="' + esc(p.image || p.url) + '" style="width:100%;border-radius:12px;display:block" alt=""></a>'
-        + (p.text ? '<div class="hp-text" style="margin-top:10px">' + esc(p.text) + '</div>' : '');
-    }
-    return '<div class="hp-empty">这张卡片还没设置图片<br>去后台「首页」里编辑它</div>';
-  }
-
-  /* note：自由卡片 */
-  var body = String(p.text || "").trim();
-  return body ? '<div class="hp-text">' + esc(body) + '</div>'
-    : '<div class="hp-empty">这张卡片还没写内容<br>去后台「首页」里编辑它</div>';
-}
-/* 面板底部的按钮：系统面板带你跳到对应栏目，自由卡片走自己的链接 */
-function hpFootHTML(p){
-  var t = p.type || "note";
-  var go = function(tab, label){ return '<button class="hp-btn" type="button" onclick="switchTab(\'' + tab + '\')">' + esc(label || p.btn || "查看") + ' →</button>'; };
-  if(t === "articles") return go("home", p.btn || "查看全部");
-  if(t === "courses")  return go("courses",  p.btn || "全部课程");
-  if(t === "diary")    return go("diary",    p.btn || "全部日记");
-  if(t === "media")    return go("life",     p.btn || "影音");
-
-  if(p.url) return '<a class="hp-btn" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.btn || "了解更多") + ' →</a>';
-  return "";
-}
-function hpCardHTML(p, idx){
-  var span = Number(p.span) || 1;
-  var cls = "hp-card" + (span >= 3 ? " s3" : (span === 2 ? " s2" : ""));
-  return '<div class="' + cls + '">'
-    + '<div class="hp-head"><span class="hp-ico">' + hpIconHTML(p.icon) + '</span>'
-    + '<span class="hp-tt"><span class="hp-title">' + esc(p.title || "未命名卡片") + '</span>'
-    + (p.desc ? '<span class="hp-desc">' + esc(p.desc) + '</span>' : '')
-    + '</span></div>'
-    + '<div class="hp-body">' + hpBodyHTML(p) + '</div>'
-    + hpFootHTML(p)
-    + '</div>';
-}
-/* 站点统计的数字滚动 */
-function hpCountUp(root){
-  var nums = root.querySelectorAll(".hp-num[data-n]");
-  for(var i = 0; i < nums.length; i++){
-    (function(el){
-      var target = Number(el.getAttribute("data-n")) || 0;
-      if(target <= 0){ el.textContent = "0"; return; }
-      var start = Date.now(), dur = 700;
-      var step = function(){
-        var k = Math.min(1, (Date.now() - start) / dur);
-        var eased = 1 - Math.pow(1 - k, 3);            /* easeOutCubic */
-        el.textContent = String(Math.round(target * eased));
-        if(k < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    })(nums[i]);
-  }
-}
-function renderHomePanels(){
-  var grid = document.getElementById("hpGrid");
-  if(!grid) return;
-  var list = hpList();
-  grid.classList.add("anim");
-  grid.innerHTML = list.length ? list.map(hpCardHTML).join("")
-    : '<div class="hp-empty">还没有首页卡片，去后台「首页」里添加</div>';
-  var cards = grid.querySelectorAll(".hp-card");
-  for(var i = 0; i < cards.length; i++){
-    (function(el, n){ setTimeout(function(){ el.classList.add("in"); }, 60 + n * 70); })(cards[i], i);
-  }
-  setTimeout(function(){ hpCountUp(grid); }, 260);      /* 数字滚动 */
-  setTimeout(function(){                                  /* 兜底：定时器被节流也要能看见 */
-    var rest = grid.querySelectorAll(".hp-card:not(.in)");
-    for(var j = 0; j < rest.length; j++) rest[j].classList.add("in");
-  }, 1600);
-  grid.onmousemove = function(e){                          /* 跟着鼠标的柔光 */
-    var t = e.target && e.target.closest ? e.target.closest(".hp-card") : null;
-    if(!t) return;
-    var r = t.getBoundingClientRect();
-    t.style.setProperty("--mx", (e.clientX - r.left) + "px");
-    t.style.setProperty("--my", (e.clientY - r.top) + "px");
-  };
 }
 
 /* 欢迎页：页面一进来就先显示并开始计时，数据到了再按后台设置刷新文案 */

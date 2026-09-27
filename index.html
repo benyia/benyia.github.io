@@ -328,8 +328,8 @@ body.bg-ready::after{background-image:url("image1.png");opacity:1}
   .rtoc a.toc-lv3,.rtoc a.toc-lv4{font-size:.86rem}
 }
 
-/* 左栏「文章目录」卡片 */
-.toc-card-list{max-height:52vh;overflow-y:auto;margin:-4px -4px 0}
+/* 右侧栏「文章目录」卡片（打开文章时整块粘住，见 .rail-sticky） */
+.toc-card-list{max-height:52vh;overflow-y:auto;margin:-4px -4px 0;overflow-x:hidden}
 .toc-card-list a{display:block;font-size:.82rem;line-height:1.55;color:var(--text2);text-decoration:none;padding:5px 8px;border-left:2px solid transparent;border-radius:0 6px 6px 0;transition:color .2s,border-color .2s,background .2s}
 .toc-card-list a:hover{color:var(--primary);background:var(--soft)}
 .toc-card-list a.on{color:var(--primary-dark);border-left-color:var(--primary);background:var(--primary-light);font-weight:600}
@@ -357,6 +357,10 @@ body.bg-ready::after{background-image:url("image1.png");opacity:1}
 .friend-meta{min-width:0;flex:1}
 .friend-name{font-size:.9rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .friend-desc{font-size:.76rem;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* 左栏「友情链接」卡片：窄栏里长名字自动换行，不撑破卡片 */
+#friendSideCard .quick-link a{align-items:flex-start}
+#friendSideCard .quick-link span:first-child{flex:1 1 auto;min-width:0;padding-right:6px;line-height:1.5;word-break:break-word}
+#friendSideCard .quick-link span:last-child{flex:0 0 auto}
 .friend-form{background:var(--card);border:var(--glass-border);border-radius:12px;padding:18px;margin-top:16px;backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass)}
 .friend-form h4{font-size:.95rem;margin-bottom:4px}
 .friend-form .ff-hint{font-size:.78rem;color:var(--text3);margin-bottom:12px;line-height:1.7}
@@ -449,6 +453,17 @@ body.bg-ready::after{background-image:url("image1.png");opacity:1}
 .side-card .file-item .name{font-size:.82rem}
 .side-card .folder-title{margin-top:12px}
 .side-card .toc-card-list{max-height:none;overflow:visible}
+/* ===== 打开文章时：右侧栏「目录 + 快速链接」整块粘住，一直跟着文章走 =====
+   整块粘住而不是只粘目录卡片，后面的卡片才不会滚到目录上面去 */
+.rail-sticky{display:flex;flex-direction:column;gap:20px;min-width:0}
+body.article-open.toc-on .rail-sticky{position:sticky;top:76px;max-height:calc(100vh - 96px);overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain}
+/* 小标题特别多时，目录卡片自己滚，不把整块撑出屏幕 */
+.toc-card .toc-card-list{max-height:46vh;overflow-y:auto;overflow-x:hidden}
+/* 平板/手机：右栏被折成一行卡片，粘性会压到旁边的卡上，直接关掉 */
+@media(max-width:1080px){
+  body.article-open.toc-on .rail-sticky{position:static;max-height:none;overflow:visible}
+  .toc-card .toc-card-list{max-height:none;overflow:visible}
+}
 .hero-card{background:var(--card);border:var(--glass-border);border-radius:var(--radius);overflow:hidden;backdrop-filter:var(--glass-strong);-webkit-backdrop-filter:var(--glass-strong);box-shadow:var(--shadow),var(--glass-hi);margin-bottom:16px}
 .hero-banner{height:132px;background:var(--cover-grad);display:flex;align-items:center;justify-content:center;font-size:3rem;overflow:hidden}
 .hero-banner img{width:100%;height:100%;object-fit:cover}
@@ -701,6 +716,11 @@ html[data-theme="dark"] .course-badge{background:rgba(217,119,6,.18);color:#fbbf
       <div class="tag-list" id="tagList"></div>
       <div style="margin-top:10px"><a href="javascript:;" onclick="openTag('')" style="font-size:.8rem;color:var(--primary-dark);text-decoration:none">查看全部标签 ›</a></div>
     </div>
+    <!-- 友情链接：放在文章左边（左栏「标签」下面） -->
+    <div class="side-card" id="friendSideCard" style="display:none">
+      <h3>🔗 友情链接</h3>
+      <div class="quick-links" id="friendSideList"></div>
+    </div>
   </div>
 
   <!-- Center Column -->
@@ -916,20 +936,15 @@ html[data-theme="dark"] .course-badge{background:rgba(217,119,6,.18);color:#fbbf
     </div>
   </div>
 
-  <!-- Right Column：正文之外的东西都放这里（文章信息 / 目录 / 资料附件 / 统计 / 链接） -->
+  <!-- Right Column：正文之外的东西都放这里（文章信息 / 统计 / 链接 / 目录） -->
   <div class="right-col">
     <!-- 文章信息：课程信息 / 基本信息 / 文章信息，按打开的页面自动切换 -->
     <div class="side-card" id="sideInfoCard" style="display:none">
       <h3 id="sideInfoTitle">文章信息</h3>
       <div class="kv-list" id="sideInfoBody"></div>
     </div>
-    <!-- 文章目录 -->
-    <div class="side-card toc-card" id="tocCard" style="display:none">
-      <h3>📑 文章目录</h3>
-      <div class="toc-card-list" id="tocCardList"></div>
-    </div>
     <!-- 资料 / 附件（现在跟在正文下面，这里不再放） -->
-    <div class="side-card">
+    <div class="side-card" id="statCard">
       <h3>站点统计</h3>
       <div class="stat-grid">
         <div class="stat-item"><div class="num" id="statArticles">0</div><div class="label">文章数</div></div>
@@ -938,14 +953,18 @@ html[data-theme="dark"] .course-badge{background:rgba(217,119,6,.18);color:#fbbf
         <div class="stat-item"><div class="num" id="statDays">7</div><div class="label">建站天数</div></div>
       </div>
     </div>
-    <div class="side-card">
-      <h3>快速链接</h3>
-      <div class="quick-links collapsed" id="quickLinks"></div>
-      <button class="links-toggle" id="quickLinksToggle" type="button" onclick="toggleQuickLinks()" hidden></button>
-    </div>
-    <div class="side-card" id="friendSideCard" style="display:none">
-      <h3>🔗 友情链接</h3>
-      <div class="quick-links" id="friendSideList"></div>
+    <!-- 打开文章时这一块整块粘住：目录在最上面，一直跟着文章走 -->
+    <div class="rail-sticky">
+      <!-- 文章目录 -->
+      <div class="side-card toc-card" id="tocCard" style="display:none">
+        <h3>📑 文章目录</h3>
+        <div class="toc-card-list" id="tocCardList"></div>
+      </div>
+      <div class="side-card">
+        <h3>快速链接</h3>
+        <div class="quick-links collapsed" id="quickLinks"></div>
+        <button class="links-toggle" id="quickLinksToggle" type="button" onclick="toggleQuickLinks()" hidden></button>
+      </div>
     </div>
   </div>
 </div>
@@ -1667,13 +1686,33 @@ function courseBadgeHTML(c){
 function applySiteConfig(){
   var sc = (blogData && blogData.siteConfig) || {};
   var title = sc.title || "思齐个人主页";
-  /* 浏览器标签标题：控制长度，避免被标签栏截断 */
+  /* 浏览器标签标题：只用「网站标题」，不再拼「XX的博客」后缀
+     （标题在管理后台「站点设置 → 网站标题」里改） */
   var tab = title.length > 16 ? title.slice(0, 16) + "…" : title;
-  document.title = tab + " - " + (sc.name || "思齐") + "的博客";
+  document.title = tab;
   var h1 = document.getElementById("titleH1"); if(h1) h1.textContent = title;
   var p = document.getElementById("titleP"); if(p) p.textContent = sc.subtitle || "";
+  /* 浏览器标签上的小图标 = 后台「头像」（填图片地址才替换，emoji 保留内置图标） */
+  applyFavicon(sc.avatar);
   var brand = document.querySelector(".nav-brand");
   if(brand) brand.innerHTML = '<span class="dot"></span>' + esc((sc.name || "思齐") + "的博客");
+}
+/* 把后台设置的头像图片同步成浏览器标签图标；不是图片地址就恢复内置 favicon */
+function applyFavicon(v){
+  var s = String(v == null ? "" : v).trim();
+  var link = document.getElementById("dynFavicon");
+  if(!isImgUrl(s)){
+    if(link && link.parentNode) link.parentNode.removeChild(link);
+    return;
+  }
+  if(!link){
+    link = document.createElement("link");
+    link.id = "dynFavicon";
+    link.rel = "icon";
+    document.head.appendChild(link);
+  }
+  link.type = /[.]svg($|[?#])/i.test(s) ? "image/svg+xml" : "image/png";
+  link.href = s;
 }
 
 function itemTime(x){
@@ -1791,7 +1830,6 @@ function openCourse(idx){
   var introBox = document.getElementById("cdIntro");
   introBox.innerHTML = mdRenderHTML(c.intro) || '<div class="empty">暂无课程介绍</div>';
   introBox.className = "md-body";
-  buildToc(introBox);
   document.getElementById("cdProgressBar").style.width = progress+"%";
   document.getElementById("cdProgressText").innerHTML = "学习进度：<b>"+progress+"%</b>";
   /* 资料/附件 → 正文下面（没有资料就不显示这张卡） */
@@ -1800,6 +1838,8 @@ function openCourse(idx){
   showSideFiles("courseDetail", hasFiles ? "📎 课程资料" : "", hasFiles ? filesHtml : "");
   setPageTitle("courseDetail", c.title, "");
   showSection("courseDetail");
+  /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */
+  buildToc(introBox);
 }
 function backToCourses(){ showSection("courses"); setPageTitle("courses"); currentCourseIdx=-1; }
 
@@ -1853,11 +1893,12 @@ function openPaper(idx){
   var desc = document.getElementById("pdDesc");
   desc.innerHTML = mdRenderHTML(p.desc) || "";
   desc.style.display = (p.desc && String(p.desc).trim()) ? "" : "none";
-  buildToc(ab);
   var hasFiles = files.length > 0;
   showSideFiles("paperDetail", hasFiles ? "📎 论文文件" : "", hasFiles ? (galleryHTML(p) + fileListGrouped(p)) : "");
   setPageTitle("paperDetail", p.title, "");
   showSection("paperDetail");
+  /* 摘要 + 备注一起出目录；同样要放在 showSection 之后 */
+  buildToc([ab, desc]);
 }
 function backToPapers(){ showSection("papers"); setPageTitle("papers"); currentPaperIdx=-1; }
 
@@ -1935,12 +1976,6 @@ function jumpTo(e, id){
   e.preventDefault();
   var el = document.getElementById(id);
   if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-function tocHTML(heads){
-  if(heads.length < 2) return "";
-  return '<div class="toc"><div class="toc-title">📑 目录</div>' + heads.map(function(h){
-    return '<a class="toc-lv' + h.lvl + '" href="#' + h.id + '" onclick="jumpTo(event,&quot;' + h.id + '&quot;)">' + h.txt + '</a>';
-  }).join("") + '</div>';
 }
 function applyTheme(t){
   var dark = (t === 'dark');
@@ -2038,10 +2073,8 @@ function mdRender(src){
   }
   flushPara();
   _mdDepth--;
-  var _html = out.join("");
-  /* 顶层加一个文内目录卡片；悬浮目录由 buildToc() 另外生成 */
-  if(_mdDepth === 0 && heads.length >= 2) _html = tocHTML(heads) + _html;
-  return _html;
+  /* 正文里不再插文内目录卡片：目录统一由 buildToc() 放到文章右边的侧栏里 */
+  return out.join("");
 }
 /* 去掉 Markdown 记号，用于列表摘要与搜索 */
 function stripMd(s){
@@ -2088,34 +2121,37 @@ function mdText(s){
 }
 
 /* ============================================================
-   悬浮目录：电脑端右侧常驻，手机端点右下角按钮弹出
+   文章目录：桌面端是右侧栏里跟着文章走的卡片；手机上点底部按钮弹出
    ============================================================ */
 function slugifyToc(text, i){
   var s = String(text || "").replace(/<[^>]+>/g, "").trim().toLowerCase()
     .replace(/[^\w\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
   return "sec-" + (s || "h") + "-" + (i + 1);
 }
-/* 把容器里的 h1~h4 收成目录（HTML 正文没有 id 时补一个，锚点才能跳） */
+/* 把容器里的 h1~h4 收成目录（HTML 正文没有 id 时补一个，锚点才能跳）
+   可以传一个容器，也可以传一组容器（比如论文的「摘要 + 备注」） */
 function buildToc(container){
+  var boxes = Array.isArray(container) ? container : [container];
   var heads = [];
-  if(container){
-    var hs = container.querySelectorAll("h1,h2,h3,h4");
+  boxes.forEach(function(box){
+    if(!box) return;
+    var hs = box.querySelectorAll("h1,h2,h3,h4");
     Array.prototype.forEach.call(hs, function(h, i){
       if(!h.id) h.id = slugifyToc(h.textContent, i);
       heads.push({ id: h.id, txt: h.textContent || "", lvl: Math.min(4, parseInt(h.tagName.slice(1), 10) || 2) });
     });
-  }
+  });
   renderToc(heads);
 }
-/* 目录链接 HTML：左栏卡片和窄屏抽屉共用同一份内容 */
+/* 目录链接 HTML：右侧栏卡片和窄屏抽屉共用同一份内容 */
 function tocLinksHTML(heads){
   return heads.map(function(h){
     return '<a href="#' + esc(h.id) + '" data-toc="' + esc(h.id) + '" class="toc-lv' + h.lvl + '" onclick="jumpTo(event,&quot;' + esc(h.id) + '&quot;)">' + esc(h.txt) + '</a>';
   }).join("");
 }
 /* 目录有两处出口：
-   ① 左栏「标签」下面的卡片（主要入口，桌面端）
-   ② 窄屏时左栏被挤到正文下面，用底部悬浮按钮弹出抽屉兜底 */
+   ① 桌面端右侧栏的「文章目录」卡片（跟着文章走，主要入口）
+   ② 窄屏时右栏被挤到正文下面，用底部悬浮按钮弹出抽屉兜底 */
 function renderToc(heads){
   var card = document.getElementById("tocCard");
   var cardList = document.getElementById("tocCardList");
@@ -2127,7 +2163,9 @@ function renderToc(heads){
   closeToc();
 
   var has = heads && heads.length >= 2;
-  /* 左栏卡片 */
+  /* 有目录时给 body 打个标记：右侧栏那一块才会粘住跟着文章走 */
+  document.body.classList.toggle("toc-on", !!has);
+  /* 右侧栏目录卡片 */
   if(card && cardList){
     if(has){
       cardList.innerHTML = tocLinksHTML(heads);
@@ -2341,12 +2379,13 @@ function openNotice(idx){
   var box = document.getElementById("ndContent");
   box.innerHTML = mdRenderHTML(n.content) || '<div class="empty">这条通知还没有正文</div>';
   box.className = "md-body";
-  buildToc(box);
   /* 附件 → 正文下面（没有附件就不显示这张卡） */
   var nHasFiles = collectFiles(n).length > 0;
   showSideFiles("noticeDetail", nHasFiles ? "📎 附件" : "", nHasFiles ? (galleryHTML(n) + fileListGrouped(n)) : "");
   setPageTitle("noticeDetail", n.title, "");
   showSection("noticeDetail");
+  /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */
+  buildToc(box);
 }
 function backToNotices(){ showSection("notices"); setPageTitle("notices"); currentNoticeIdx=-1; }
 
@@ -2367,10 +2406,11 @@ function openClass(idx){
   var box = document.getElementById("clDetailContent");
   box.innerHTML = mdRenderHTML(c.content);
   box.className = "intro md-body";
-  buildToc(box);
   document.getElementById("clDetailFiles").innerHTML = galleryHTML(c) + fileListGrouped(c);
   setPageTitle("classDetail", c.title, "");
   showSection("classDetail");
+  /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */
+  buildToc(box);
 }
 function backToClass(){ showSection("class"); setPageTitle("class"); currentClassIdx=-1; }
 
@@ -3173,13 +3213,24 @@ function clearSideArticle(){
   FILE_SECTIONS.forEach(function(sec){ showSideFiles(sec, "", ""); });
 }
 
+/* 哪些栏目算「一篇文章」：打开它们时右侧栏只留目录/信息，不显示站点统计 */
+var DETAIL_SECTIONS = ["courseDetail", "noticeDetail", "classDetail", "paperDetail"];
+function isDetailSection(name){
+  return DETAIL_SECTIONS.indexOf(name) >= 0;
+}
 function showSection(name){
   document.querySelectorAll(".section").forEach(function(s){s.classList.remove("active");});
   document.getElementById("sec-"+name).classList.add("active");
-  /* 详情页在 showSection 之后才填内容并 buildToc，这里先清空上一个页面的目录 */
+  /* 详情页：内容与目录由 openXxx() 在 showSection 之后填充，这里先清空上一个页面的目录 */
   renderToc([]);
-  /* 只有文章详情页才显示「文章信息 / 目录 / 资料」这三张卡 */
-  if(name !== "courseDetail" && name !== "noticeDetail" && name !== "classDetail" && name !== "paperDetail"){
+  var detail = isDetailSection(name);
+  /* 打开一篇文章时隐藏「站点统计」，右侧栏留给文章目录 */
+  var statCard = document.getElementById("statCard");
+  if(statCard) statCard.style.display = detail ? "none" : "";
+  /* 打上 article-open：右侧栏「目录 + 快速链接」整块粘住，跟着文章滚动 */
+  document.body.classList.toggle("article-open", detail);
+  /* 只有文章详情页才显示「文章信息 / 目录 / 资料」这几张卡 */
+  if(!detail){
     clearSideArticle();
   }
   window.scrollTo(0,0);

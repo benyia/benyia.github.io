@@ -372,6 +372,23 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       </div>
 
       <div class="card">
+        <h2>📢 公告 + 建站日期</h2>
+        <div class="note">
+          <b>公告</b>显示在首页左栏「个人信息」下面；留空就不显示这张卡。<br>
+          <b>建站日期</b>用来算首页右栏的「建站天数」（今天 − 建站日期 + 1），不再是写死的数字。
+        </div>
+        <div class="form-row">
+          <label style="font-size:.88rem;display:flex;align-items:center;gap:8px">建站日期：<input type="date" id="cfgStartDate" style="padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-family:inherit"></label>
+        </div>
+        <div class="form-row"><textarea id="cfgNotice" placeholder="公告内容（可换行，留空=不显示公告卡）" style="min-height:90px"></textarea></div>
+        <div class="form-row">
+          <input type="text" id="cfgNoticeBtn" placeholder="公告按钮文字（可留空）">
+          <input type="text" id="cfgNoticeUrl" placeholder="公告按钮链接（可留空）" style="flex:2">
+        </div>
+        <button class="btn btn-primary" onclick="saveHomeInfo()">保存公告与建站日期</button>
+      </div>
+
+      <div class="card">
         <h2>🏠 首页卡片面板</h2>
         <div class="note">
           首页现在是一面卡片墙。<b>「最新文章 / 个人名片 / 站点统计 …」这些是系统卡片</b>，会自动读取你现有的内容（<b>只读</b>，不会改你的数据），可以改标题、换图标、调宽度、排序、关掉。<br>
@@ -3626,8 +3643,12 @@ function saveSiteConfig(){
     coverPanSec: parseInt($("cfgCoverPanSec").value, 10) || 3,
     name: $("cfgName").value.trim() || "思齐",
     bio: $("cfgBio").value.trim(),
-    /* 欢迎页设置由「首页」面板单独保存，这里必须原样带过去，否则会被覆盖掉 */
-    welcome: (blogData.siteConfig && blogData.siteConfig.welcome) || undefined
+    /* 欢迎页 / 公告 / 建站日期由「首页」面板单独保存，这里必须原样带过去，否则会被覆盖掉 */
+    welcome: (blogData.siteConfig && blogData.siteConfig.welcome) || undefined,
+    startDate: (blogData.siteConfig && blogData.siteConfig.startDate) || undefined,
+    notice: (blogData.siteConfig && blogData.siteConfig.notice) || undefined,
+    noticeBtn: (blogData.siteConfig && blogData.siteConfig.noticeBtn) || undefined,
+    noticeUrl: (blogData.siteConfig && blogData.siteConfig.noticeUrl) || undefined
   };
   saveData("修改站点设置");
   renderAll();
@@ -3715,7 +3736,21 @@ function renderHomeManage(){
   $("wkSuffix").value = (w.suffix === undefined ? "小站" : w.suffix);
   $("wkTip").value = (w.tip || "很高兴与你相遇");
   $("wkBg").value = w.bg || "";
+  /* 公告 + 建站日期 */
+  if($("cfgStartDate")) $("cfgStartDate").value = (blogData.siteConfig.startDate || "2026-09-01");
+  if($("cfgNotice")) $("cfgNotice").value = (blogData.siteConfig.notice || "");
+  if($("cfgNoticeBtn")) $("cfgNoticeBtn").value = (blogData.siteConfig.noticeBtn || "");
+  if($("cfgNoticeUrl")) $("cfgNoticeUrl").value = (blogData.siteConfig.noticeUrl || "");
   renderHomePanelList();
+}
+function saveHomeInfo(){
+  blogData.siteConfig.startDate = $("cfgStartDate").value || "";
+  blogData.siteConfig.notice = $("cfgNotice").value;
+  blogData.siteConfig.noticeBtn = $("cfgNoticeBtn").value.trim();
+  blogData.siteConfig.noticeUrl = $("cfgNoticeUrl").value.trim();
+  saveData("修改首页公告 / 建站日期");
+  renderAll();
+  showToast("已保存");
 }
 function saveWelcomeCfg(){
   var w = wkCfg();

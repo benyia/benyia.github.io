@@ -1028,6 +1028,92 @@ a.hp-row{text-decoration:none;color:inherit}
   .hp-grid.anim .hp-card{opacity:1;transform:none}
   .hp-card:hover{transform:none}
 }
+
+/* ============================================================
+   🏠 首页三栏：中间内容卡片 / 左栏介绍公告 / 右栏动态统计
+   ============================================================ */
+/* 顶部分类筛选 */
+.home-filter{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.hf-pill{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:99px;
+  border:1px solid var(--border);background:var(--card);color:var(--text2);
+  font-size:.8rem;font-family:inherit;cursor:pointer;
+  backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
+  transition:background .2s,color .2s,border-color .2s,transform .2s,box-shadow .2s;
+}
+.hf-pill:hover{color:var(--primary-dark);border-color:var(--primary);transform:translateY(-1px)}
+.hf-pill.on{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600;box-shadow:0 6px 16px rgba(16,185,129,.28)}
+.hf-pill em{font-style:normal;font-size:.72rem;opacity:.85;font-variant-numeric:tabular-nums}
+
+/* 首页强制单列（宽卡片带封面，双列摆不下） */
+#homeList.list-cols{display:flex;flex-direction:column;gap:16px}
+#homeList .article-card.ac-card{
+  display:flex;flex-direction:row;align-items:stretch;gap:16px;
+  margin-bottom:0;padding:16px;height:auto;overflow:hidden;
+}
+.ac-body{flex:1;min-width:0;display:flex;flex-direction:column}
+.ac-top{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.ac-badge{
+  display:inline-block;padding:2px 9px;border-radius:99px;font-size:.7rem;
+  background:var(--primary-light);color:var(--primary-dark);
+}
+.ac-badge.top{background:#fef3c7;color:#b45309}
+html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd34d}
+.ac-title{font-size:1.02rem;font-weight:700;color:var(--text);line-height:1.5;margin-bottom:8px;transition:color .2s}
+.article-card:hover .ac-title{color:var(--primary-dark)}
+.ac-tags{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:8px}
+.ac-tags span{font-size:.72rem;color:var(--text3)}
+.ac-desc{
+  font-size:.84rem;color:var(--text2);line-height:1.75;margin-bottom:10px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.ac-meta{display:flex;flex-wrap:wrap;gap:14px;margin-top:auto;font-size:.73rem;color:var(--text3)}
+.ac-cover{
+  flex:0 0 200px;width:200px;min-height:118px;border-radius:12px;
+  background-size:cover;background-position:center;background-color:var(--cover-grad);
+  transition:transform .45s cubic-bezier(.22,1,.36,1);
+}
+.article-card:hover .ac-cover{transform:scale(1.04)}
+.ac-cover-none{display:flex;align-items:center;justify-content:center;font-size:1.9rem}
+.ac-cover-none img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+@media(max-width:760px){
+  #homeList .article-card.ac-card{flex-direction:column-reverse;padding:14px}
+  .ac-cover{flex:0 0 150px;width:100%;min-height:150px}
+  .ac-desc{-webkit-line-clamp:3}
+}
+
+/* 左栏：个人介绍 + 公告 */
+.lc-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px}
+.lc-link{
+  width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  background:var(--primary-light);color:var(--primary-dark);font-size:.95rem;overflow:hidden;text-decoration:none;
+  transition:transform .2s,background .2s,color .2s;
+}
+.lc-link:hover{transform:translateY(-2px);background:var(--primary);color:#fff}
+.lc-link img{width:100%;height:100%;object-fit:cover}
+.lc-stats{display:flex;justify-content:space-around;margin-top:14px;padding-top:12px;border-top:1px dashed var(--border)}
+.lc-stats span{display:flex;flex-direction:column;gap:2px;font-size:.72rem;color:var(--text3)}
+.lc-stats b{font-size:1rem;color:var(--primary-dark);font-variant-numeric:tabular-nums}
+.lc-notice-text{font-size:.84rem;color:var(--text2);line-height:1.85;white-space:pre-wrap}
+
+/* 右栏：动态时间线 */
+.feed-list{display:flex;flex-direction:column;gap:12px}
+.feed-item{position:relative;padding-left:16px}
+.feed-item::before{content:"";position:absolute;left:3px;top:7px;bottom:-13px;width:1px;background:var(--border)}
+.feed-item:last-child::before{display:none}
+.feed-dot{
+  position:absolute;left:0;top:5px;width:7px;height:7px;border-radius:50%;
+  background:var(--primary);box-shadow:0 0 0 3px var(--primary-light);
+}
+.feed-date{font-size:.7rem;color:var(--text3);font-variant-numeric:tabular-nums}
+.feed-text{font-size:.82rem;color:var(--text2);line-height:1.6;margin-top:2px}
+.feed-empty{font-size:.8rem;color:var(--text3)}
+
+/* 右栏：统计列表 */
+.stat-list{display:flex;flex-direction:column;gap:0}
+.stat-row{display:flex;align-items:center;justify-content:space-between;padding:8px 2px;font-size:.84rem;color:var(--text2)}
+.stat-row + .stat-row{border-top:1px dashed var(--border)}
+.sr-v{font-weight:700;color:var(--primary-dark);font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -1052,6 +1138,7 @@ a.hp-row{text-decoration:none;color:inherit}
     <a href="/" class="nav-brand"><span class="dot"></span>思齐的博客</a>
     <div class="nav-links" id="navLinks">
       <button class="active" data-t="home">首页</button>
+      <button data-t="panels">面板</button>
       <button data-t="courses">课程</button>
       <button data-t="papers">论文</button>
       <button data-t="notices">通知</button>
@@ -1091,10 +1178,18 @@ a.hp-row{text-decoration:none;color:inherit}
 <div class="main">
   <!-- Left Column -->
   <div class="left-col">
-    <div class="side-card profile">
+    <!-- 个人介绍：大头像 + 简介 + 小图标行 + 一行统计 -->
+    <div class="side-card profile lc-profile">
       <div class="avatar" id="profileAvatar">思</div>
       <div class="name" id="profileName">思齐</div>
       <div class="bio" id="profileBio">控制工程研究生</div>
+      <div class="lc-links" id="profileLinks"></div>
+      <div class="lc-stats" id="profileStats"></div>
+    </div>
+    <!-- 公告：后台「首页」里改 -->
+    <div class="side-card" id="noticeCard" style="display:none">
+      <h3>📢 公告</h3>
+      <div class="lc-notice" id="noticeBody"></div>
     </div>
     <div class="side-card">
       <h3>分类</h3>
@@ -1114,16 +1209,16 @@ a.hp-row{text-decoration:none;color:inherit}
 
   <!-- Center Column -->
   <div class="center-col">
-    <!-- 首页：卡片面板墙（面板内容在后台「首页」里增删改排序） -->
+    <!-- 首页：分类筛选 + 内容卡片（每页 6 条 + 分页码） -->
     <div class="section active" id="sec-home">
-      <div class="hp-grid" id="hpGrid"></div>
-    </div>
-
-    <!-- 文章列表：点首页「最新文章」面板的「查看全部」进来，内容和以前一模一样 -->
-    <div class="section" id="sec-articles">
-      <div class="section-header"><button class="back-btn" onclick="switchTab('home')">← 返回首页</button></div>
+      <div class="home-filter" id="homeFilter"></div>
       <div id="homeList"></div>
       <div class="pager" id="homePager"></div>
+    </div>
+
+    <!-- 面板：原来的卡片墙搬到这里，导航里有独立入口 -->
+    <div class="section" id="sec-panels">
+      <div class="hp-grid" id="hpGrid"></div>
     </div>
 
     <div class="section" id="sec-courses">
@@ -1372,15 +1467,16 @@ a.hp-row{text-decoration:none;color:inherit}
         <span>☰ 歌曲列表</span><span class="mp-openlist-n" id="mpOpenListCount">0 首</span>
       </button>
     </div>
+    <!-- 动态：按时间把最近新增/更新的内容列出来（只读，自动生成） -->
+    <div class="side-card" id="feedCard">
+      <h3>📌 动态</h3>
+      <div class="feed-list" id="feedList"></div>
+      <div style="margin-top:10px"><a href="javascript:;" onclick="switchTab('home')" style="font-size:.8rem;color:var(--primary-dark);text-decoration:none">查看更多动态 ›</a></div>
+    </div>
     <!-- 站点统计 -->
     <div class="side-card" id="statCard">
       <h3>站点统计</h3>
-      <div class="stat-grid">
-        <div class="stat-item"><div class="num" id="statArticles">0</div><div class="label">文章数</div></div>
-        <div class="stat-item"><div class="num" id="statCourses">0</div><div class="label">课程数</div></div>
-        <div class="stat-item"><div class="num" id="statPapers">0</div><div class="label">论文数</div></div>
-        <div class="stat-item"><div class="num" id="statDays">7</div><div class="label">建站天数</div></div>
-      </div>
+      <div class="stat-list" id="statList"></div>
     </div>
     <!-- 打开文章时这一块整块粘住：目录在最上面，一直跟着文章走 -->
     <div class="rail-sticky">
@@ -1461,7 +1557,7 @@ const PAGE_SIZE = 6;
 
 const PAGE_TITLES = {
   home: ["思齐个人主页", "钟爱奥迪A6"],
-  articles: ["全部文章", "课程 / 论文 / 通知 / 班级 的最新记录"],
+  panels: ["面板", "首页卡片一览"],
   courses: ["我的课程", "课程资料与学习资源"],
   papers: ["论文", "学术论文与研究进展"],
   notices: ["学校通知", "重要通知与公告"],
@@ -1482,6 +1578,9 @@ const PAGE_TITLES = {
 
 const DEFAULT_DATA = {
   siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", name:"思齐", bio:"控制工程研究生", defaultImage:"files/default-cover.jpg", defaultAvatar:"files/default-avatar.png", coverPan:true, coverPanSec:3,
+    startDate:"2026-09-01",
+    notice:"欢迎来到我的小站 🌿\n这里记录我的课程、论文、学习笔记和生活随笔。\n公告内容可以在后台「首页」里改。",
+    noticeBtn:"", noticeUrl:"",
     welcome:{on:true, top:"欢迎来到", name:"", mid:"の", suffix:"小站", tip:"很高兴与你相遇", bg:"", sec:3.5}},
   /* 首页卡片面板：默认把我现有的内容「只读」展示一份，随时可在后台改动 */
   homePanels: [
@@ -1788,7 +1887,7 @@ function showSkeletons(){
     var el = document.getElementById(id);
     if(el && !el.innerHTML.trim()) el.innerHTML = card(3);
   });
-  var stats = document.getElementById("statArticles");
+  var stats = document.getElementById("statList");
   if(stats && stats.parentNode && !stats.getAttribute("data-sk")){
     stats.setAttribute("data-sk", "1");
   }
@@ -1834,6 +1933,70 @@ function renderProfile(){
   document.getElementById("profileAvatar").innerHTML = iconHTML(sc.avatar || sc.defaultImage || "", "思");
   document.getElementById("profileName").textContent = sc.name || "思齐";
   document.getElementById("profileBio").textContent = sc.bio || "";
+  /* 小图标行：直接拿「快速链接」里的图标当社交入口 */
+  var links = document.getElementById("profileLinks");
+  if(links){
+    links.innerHTML = (blogData.quickLinks || []).slice(0, 8).map(function(l){
+      var ic = isImgUrl(l.icon) ? '<img src="' + esc(l.icon) + '" alt="">' : esc(l.icon || "🔗");
+      return '<a class="lc-link" href="' + esc(l.url) + '" target="_blank" rel="noopener" title="' + esc(l.title) + '">' + ic + '</a>';
+    }).join("");
+  }
+  var st = document.getElementById("profileStats");
+  if(st){
+    var arts = (blogData.courses||[]).length + (blogData.papers||[]).length + (blogData.notices||[]).length + (blogData.classItems||[]).length;
+    st.innerHTML = '<span><b>' + arts + '</b>文章</span><span><b>' + (blogData.categories||[]).length + '</b>分类</span><span><b>' + (blogData.tags||[]).length + '</b>标签</span>';
+  }
+}
+/* 建站天数：按 siteConfig.startDate 实时算，不再是写死的数字 */
+function siteDays(){
+  var sc = blogData.siteConfig || {};
+  var m = String(sc.startDate || "2026-09-01").trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(!m) return 0;
+  var now = new Date();
+  var a = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  var b = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var d = Math.floor((b - a) / 86400000) + 1;
+  return d > 0 ? d : 0;
+}
+/* 公告（后台「首页」里写） */
+function renderNotice(){
+  var card = document.getElementById("noticeCard"), body = document.getElementById("noticeBody");
+  if(!card || !body) return;
+  var sc = blogData.siteConfig || {};
+  var txt = String(sc.notice || "").trim();
+  if(!txt){ card.style.display = "none"; body.innerHTML = ""; return; }
+  card.style.display = "";
+  body.innerHTML = '<div class="lc-notice-text">' + esc(txt) + '</div>'
+    + (sc.noticeUrl ? '<a class="hp-btn" href="' + esc(sc.noticeUrl) + '" target="_blank" rel="noopener" style="margin-top:12px">' + esc(sc.noticeBtn || "了解更多") + ' →</a>' : "");
+}
+/* 动态时间线：直接读后台的修改日志，最近 6 条 */
+function renderFeed(){
+  var box = document.getElementById("feedList");
+  if(!box) return;
+  var logs = (blogData.logs || []).slice(0, 6);
+  box.innerHTML = logs.length ? logs.map(function(l){
+    var t = String(l.time || "");
+    return '<div class="feed-item"><span class="feed-dot"></span>'
+      + '<div class="feed-date">' + esc(t.slice(0, 10)) + (t.length > 10 ? " " + esc(t.slice(11, 16)) : "") + '</div>'
+      + '<div class="feed-text">' + esc(l.action || "") + '</div></div>';
+  }).join("") : '<div class="feed-empty">还没有动态</div>';
+}
+/* 统计：全是本地数量，不依赖任何外部服务 */
+function renderStats(){
+  var box = document.getElementById("statList");
+  if(!box) return;
+  var rows = [
+    ["📄", "文章", (blogData.courses||[]).length + (blogData.papers||[]).length + (blogData.notices||[]).length + (blogData.classItems||[]).length],
+    ["📌", "动态", (blogData.logs||[]).length],
+    ["🗂️", "分类", (blogData.categories||[]).length],
+    ["🏷️", "标签", (blogData.tags||[]).length],
+    ["📖", "日记", (blogData.diary||[]).length],
+    ["🎵", "影音", (blogData.media||[]).length],
+    ["📅", "建站天数", siteDays()]
+  ];
+  box.innerHTML = rows.map(function(r){
+    return '<div class="stat-row"><span class="sr-k">' + r[0] + " " + r[1] + '</span><span class="sr-v">' + r[2] + '</span></div>';
+  }).join("");
 }
 
 function renderCategories(){
@@ -2105,6 +2268,8 @@ function renderAll(){
   renderFilters();
   renderHomePanels();
   initWelcome();
+  renderNotice();
+  renderFeed();
   renderHome();
   renderCourses();
   renderPapers();
@@ -2131,10 +2296,7 @@ function renderAll(){
   applySiteConfig();
 
   document.getElementById("aboutContent").textContent = blogData.siteConfig.about || "暂无介绍";
-
-  document.getElementById("statArticles").textContent = (blogData.courses||[]).length + (blogData.papers||[]).length + (blogData.notices||[]).length + (blogData.classItems||[]).length;
-  document.getElementById("statCourses").textContent = (blogData.courses||[]).length;
-  document.getElementById("statPapers").textContent = (blogData.papers||[]).length;
+  renderStats();
 }
 
 /* ============================================================
@@ -2246,16 +2408,79 @@ function goPage(key, p){
   if(sec) sec.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+/* 首页：分类筛选 + 宽内容卡片（封面 / 标签 / 摘要 / 字数 / 阅读时长） */
+var homeFilterKey = "all";
+function hpTagsOf(v){
+  if(Array.isArray(v)) return v.filter(Boolean).map(String);
+  return String(v || "").split(/[,，]/).map(function(s){ return s.trim(); }).filter(Boolean);
+}
+/* 摘要用的纯文本：先把 HTML 标签和实体去掉，再过一遍 Markdown 清理 */
+function plainText(s){
+  return String(s == null ? "" : s)
+    .replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&lt;/gi, "<").replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"').replace(/&#39;/gi, "'").replace(/&amp;/gi, "&");
+}
+function homeItems(){
+  var out = [];
+  function add(type, obj, icon, title, text, click){
+    var full = stripMd(plainText(text)).replace(/\s+/g, " ").trim();
+    out.push({
+      type: type, item: obj, icon: icon, title: title, desc: full,
+      words: full.replace(/\s/g, "").length,
+      tags: hpTagsOf(obj && obj.tags).slice(0, 4),
+      top: !!(obj && (obj.top === true || obj.pinned === true)),
+      time: (obj && (obj.time || obj.date)) || "",
+      click: click
+    });
+  }
+  (blogData.courses||[]).forEach(function(c,i){ add("课程", c, c.icon||"📚", c.title, c.intro||c.desc, "openCourse("+i+")"); });
+  (blogData.papers||[]).forEach(function(p,i){ add("论文", p, "📝", p.title, p.abstract||p.desc, "openPaper("+i+")"); });
+  (blogData.notices||[]).forEach(function(n,i){ add("通知", n, "🔔", n.title, n.content, "openNotice("+i+")"); });
+  (blogData.classItems||[]).forEach(function(c,i){ add("班级", c, "👥", c.title, c.content, "openClass("+i+")"); });
+  out.sort(byTimeDesc);
+  return out;
+}
+function homeCardHTML(a){
+  var sc = blogData.siteConfig || {};
+  var imgs = collectImages(a.item || {});
+  var bg = (imgs[0] && imgs[0].url) || sc.defaultImage || "";
+  var cover = bg
+    ? '<div class="ac-cover" style="background-image:url(' + esc(bg) + ')"></div>'
+    : '<div class="ac-cover ac-cover-none">' + (isImgUrl(a.icon) ? '<img src="' + esc(a.icon) + '" alt="">' : esc(a.icon)) + '</div>';
+  var nf = collectFiles(a.item || {}).length;
+  return '<article class="article-card ac-card" onclick="' + a.click + '">'
+    + '<div class="ac-body">'
+    +   '<div class="ac-top">' + (a.top ? '<span class="ac-badge top">置顶</span>' : "") + '<span class="ac-badge">' + esc(a.type) + '</span></div>'
+    +   '<h3 class="ac-title">' + esc(a.title) + '</h3>'
+    +   (a.tags.length ? '<div class="ac-tags">' + a.tags.map(function(t){ return "<span># " + esc(t) + "</span>"; }).join("") + '</div>' : "")
+    +   (a.desc ? '<p class="ac-desc">' + esc(a.desc.slice(0, 150)) + '</p>' : "")
+    +   '<div class="ac-meta">'
+    +     (a.time ? '<span>📅 ' + esc(a.time.slice(0, 10)) + '</span>' : "")
+    +     '<span>✍ ' + a.words + ' 字</span>'
+    +     '<span>⏱ ' + Math.max(1, Math.round(a.words / 400)) + ' 分钟</span>'
+    +     (nf ? '<span>📎 ' + nf + ' 个文件</span>' : "")
+    +   '</div>'
+    + '</div>' + cover + '</article>';
+}
+function setHomeFilter(k){ homeFilterKey = k; pageState.home = 1; renderHome(); }
 function renderHome(){
-  var items = [];
-  (blogData.courses||[]).forEach(function(c,i){ items.push({type:"课程", item:c, icon:c.icon||"📚", title:c.title, desc:c.desc, time:c.time||"", click:"openCourse("+i+")"}); });
-  (blogData.papers||[]).forEach(function(p,i){ items.push({type:"论文", item:p, icon:"📝", title:p.title, desc:p.abstract||p.desc, time:p.time||"", click:"openPaper("+i+")"}); });
-  (blogData.notices||[]).forEach(function(n,i){ items.push({type:"通知", item:n, icon:"🔔", title:n.title, desc:stripMd(n.content), time:n.time||n.date||"", click:"openNotice("+i+")"}); });
-  (blogData.classItems||[]).forEach(function(c,i){ items.push({type:"班级", item:c, icon:"👥", title:c.title, desc:c.content, time:c.time||c.date||"", click:"openClass("+i+")"}); });
-  items.sort(byTimeDesc);
-  renderPaged("home", "homeList", "homePager", items, function(a){
-    return '<div class="article-card" onclick="'+a.click+'">'+coverHTML(a.item, a.icon)+'<div class="article-body"><div class="article-title">'+esc(a.title)+'</div><div class="article-meta"><span>'+a.type+'</span>'+(a.time?'<span class="time">🕐 '+esc(a.time)+'</span>':"")+'</div><div class="article-desc">'+esc(String(a.desc||"").slice(0,120))+'</div></div></div>';
-  }, "暂无内容");
+  var items = homeItems();
+  var counts = { all: items.length };
+  items.forEach(function(a){ counts[a.type] = (counts[a.type] || 0) + 1; });
+  var bar = document.getElementById("homeFilter");
+  if(bar){
+    bar.innerHTML = ["all", "课程", "论文", "通知", "班级"].filter(function(k){
+      return k === "all" || counts[k];
+    }).map(function(k){
+      return '<button class="hf-pill' + (homeFilterKey === k ? " on" : "") + '" type="button" onclick="setHomeFilter(\'' + k + '\')">'
+        + (k === "all" ? "全部" : k) + "<em>" + (counts[k] || 0) + "</em></button>";
+    }).join("");
+  }
+  var list = homeFilterKey === "all" ? items : items.filter(function(a){ return a.type === homeFilterKey; });
+  renderPaged("home", "homeList", "homePager", list, homeCardHTML, "暂无内容");
 }
 
 function renderCourses(){
@@ -3713,7 +3938,7 @@ function showSection(name){
   if(typeof mpRequestMini === "function") mpRequestMini();
 }
 /* 有些视图没有自己的导航按钮，高亮要落到它所属的栏目上 */
-var NAV_ALIAS = { articles: "home" };
+var NAV_ALIAS = {};
 function switchTab(t){
   setActiveNav(NAV_ALIAS[t] || t);
   /* 切栏目时清掉上一个页面的目录 */
@@ -3774,7 +3999,7 @@ function closeDrawer(){
 function currentTab(){
   var active = document.querySelector(".section.active");
   if(!active) return "home";
-  var map = { "sec-home": "home", "sec-articles": "home", "sec-courses": "courses", "sec-courseDetail": "courses",
+  var map = { "sec-home": "home", "sec-panels": "panels", "sec-courses": "courses", "sec-courseDetail": "courses",
     "sec-papers": "papers", "sec-paperDetail": "papers", "sec-notices": "notices",
     "sec-noticeDetail": "notices", "sec-class": "class", "sec-classDetail": "class",
     "sec-roster": "roster", "sec-life": "life", "sec-media": "life", "sec-ledger": "ledger",
@@ -4599,7 +4824,7 @@ function hpBodyHTML(p){
 function hpFootHTML(p){
   var t = p.type || "note";
   var go = function(tab, label){ return '<button class="hp-btn" type="button" onclick="switchTab(\'' + tab + '\')">' + esc(label || p.btn || "查看") + ' →</button>'; };
-  if(t === "articles") return go("articles", p.btn || "查看全部");
+  if(t === "articles") return go("home", p.btn || "查看全部");
   if(t === "courses")  return go("courses",  p.btn || "全部课程");
   if(t === "diary")    return go("diary",    p.btn || "全部日记");
   if(t === "media")    return go("life",     p.btn || "影音");

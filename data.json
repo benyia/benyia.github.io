@@ -63,6 +63,14 @@
           "size": 0,
           "folder": "",
           "external": true
+        },
+        {
+          "name": "计算机控制系统2023级",
+          "url": "https://pub-136c3c30d6304071bd43270de2d7dab6.r2.dev/sut-graduate-exam-control-system-2023.pdf.pdf",
+          "type": "链接",
+          "size": 0,
+          "folder": "",
+          "external": true
         }
       ],
       "images": [
@@ -73,7 +81,7 @@
           "size": 250572
         }
       ],
-      "time": "2026-09-27 01:00",
+      "time": "2026-09-27 13:11",
       "tags": [
         "控制工程",
         "计算机控制",
@@ -498,6 +506,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-27 13:11",
+      "action": "编辑课程：计算机控制系统"
+    },
+    {
       "time": "2026-09-27 01:00",
       "action": "编辑课程：计算机控制系统"
     },
@@ -892,10 +904,6 @@
     {
       "time": "2026-09-19 11:07",
       "action": "修改站点设置"
-    },
-    {
-      "time": "2026-09-19 10:58",
-      "action": "编辑课程：自动控制原理"
     }
   ],
   "categories": [

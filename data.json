@@ -447,21 +447,21 @@
       "title": "第一学期选课",
       "type": "通知",
       "date": "2026-09-24",
-      "content": "请学生关注公共选修课开课人数，如果开课人数一直到达不了，请学生做好改选准备。<img src=\"files/1790491040288_1_l3uvvaiv_选课.png\" alt=\"\"><br><img src=\"files/1790491040288_1_l3uvvaiv_选课.png\" alt=\"\"><div><img src=\"files/1790491040288_1_l3uvvaiv_选课.png\" alt=\"\"></div>",
+      "content": "请学生关注公共选修课开课人数，如果开课人数一直到达不了，请学生做好改选准备。<img src=\"files/1790491040288_1_l3uvvaiv_选课.png\" alt=\"\"><div><img src=\"files/1790491417950_5_s0rdmcbh_选课.png\" alt=\"\"></div>",
       "contentIsHTML": true,
       "tags": [],
       "files": [],
       "images": [
         {
           "name": "选课.png",
-          "url": "files/1790491040288_1_l3uvvaiv_选课.png",
+          "url": "files/1790491417950_5_s0rdmcbh_选课.png",
           "type": "PNG",
           "size": 908869
         }
       ],
       "file": "",
       "fileName": "",
-      "time": "2026-09-27 14:38"
+      "time": "2026-09-27 14:43"
     }
   ],
   "lifeServices": [
@@ -566,6 +566,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-27 14:43",
+      "action": "编辑班级事务：第一学期选课"
+    },
     {
       "time": "2026-09-27 14:42",
       "action": "编辑通知：关于2026级研究生学信网学籍信息确认的通知"
@@ -961,10 +965,6 @@
     {
       "time": "2026-09-23 15:44",
       "action": "添加快速链接：学校图书馆"
-    },
-    {
-      "time": "2026-09-23 15:33",
-      "action": "添加快速链接：知网"
     }
   ],
   "categories": [

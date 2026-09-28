@@ -3642,8 +3642,16 @@ function renderDiary(){
   }).join("");
   diaryAccBind();
 }
-/* 日记：手风琴——展开一条就把其它条收起来（老浏览器不支持 details[name] 时的兜底） */
+/* 日记：手风琴——展开一条就把其它条收起来（老浏览器不支持 details[name] 时的兜底）；
+   展开哪一条，右侧栏就显示那一条的「文章目录」，并像打开文章一样让右栏粘住 */
 var diaryAccBound = false;
+/* 展开日记时，右栏按「文章详情」的规矩来：有目录才隐藏站点统计并让整块粘住 */
+function diaryTocLayout(){
+  var on = document.body.classList.contains("toc-on");
+  document.body.classList.toggle("article-open", on);
+  var stat = document.getElementById("statCard");
+  if(stat) stat.style.display = on ? "none" : "";
+}
 function diaryAccBind(){
   if(diaryAccBound) return;
   var box = document.getElementById("diaryList");
@@ -3651,9 +3659,23 @@ function diaryAccBind(){
   diaryAccBound = true;
   box.addEventListener("toggle", function(e){
     var d = e.target;
-    if(!d || String(d.tagName || "").toUpperCase() !== "DETAILS" || !d.open) return;
-    var all = box.querySelectorAll("details");
-    for(var i = 0; i < all.length; i++){ if(all[i] !== d && all[i].open) all[i].open = false; }
+    if(!d || String(d.tagName || "").toUpperCase() !== "DETAILS") return;
+    if(d.open){
+      var all = box.querySelectorAll("details");
+      for(var i = 0; i < all.length; i++){ if(all[i] !== d && all[i].open) all[i].open = false; }
+      /* 给刚展开这条生成目录（标题少于 2 个时目录卡自动隐藏，右栏也保持原样） */
+      var body = d.querySelector(".diary-content") || d.querySelector(".diary-body");
+      if(body && typeof buildToc === "function") buildToc(body);
+      diaryTocLayout();
+    }else{
+      /* 全部收起了就把目录和右栏布局都还原 */
+      var ds = box.querySelectorAll("details"), anyOpen = false;
+      for(var j = 0; j < ds.length; j++){ if(ds[j].open){ anyOpen = true; break; } }
+      if(!anyOpen){
+        if(typeof renderToc === "function") renderToc([]);
+        diaryTocLayout();
+      }
+    }
   }, true);
 }
 function renderAdvisor(){

@@ -616,6 +616,10 @@
       "action": "名单：前台显示"
     },
     {
+      "time": "2026-09-28 14:41",
+      "action": "名单：前台显示"
+    },
+    {
       "time": "2026-09-28 14:39",
       "action": "修改入场欢迎页"
     },
@@ -1006,10 +1010,6 @@
     {
       "time": "2026-09-24 22:16",
       "action": "删除通知"
-    },
-    {
-      "time": "2026-09-24 22:16",
-      "action": "删除通知"
     }
   ],
   "categories": [
@@ -1355,7 +1355,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": false,
+      "show": true,
       "hide": [
         "ethnicity",
         "political",
@@ -1387,7 +1387,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": false,
+      "show": true,
       "hide": []
     }
   ],

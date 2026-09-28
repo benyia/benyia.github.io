@@ -964,6 +964,8 @@ const GH_API_BASE = "https://github-api-proxy.s3069988193.workers.dev";
 const ADMIN_PWD = "syj3008338";
 const PWD_KEY = "benyia_admin_pwd";
 const TOKEN_KEY = "benyia_gh_token";
+/* 刚保存过的时间戳：前台看到这个标记就绕过 Pages 的 CDN 缓存直接读 API */
+const FRESH_KEY = "benyia_data_fresh";
 
 /* 上传单个文件的建议上限（GitHub contents API 限制，超过请用 Git LFS 或网盘） */
 const MAX_FILE_MB = 100;
@@ -2509,18 +2511,43 @@ async function initPanel(){
   await syncNow(true);
 }
 
+/* ============================================================
+   读线上 data.json
+   ⚠️ 权威来源必须是 GitHub API，不能是 Pages 上的 data.json：
+      GitHub Pages 的 CDN 缓存 data.json 时【忽略查询字符串】，同一份副本最多发 10 分钟。
+      用 Pages 当来源会导致「刚保存成功、刷新一下又变回旧内容」。
+      API 不做这种缓存，而且顺手能把 sha 一起拿到。
+   ============================================================ */
+async function readRemoteData(){
+  if(getStoredToken()){
+    try{
+      const r = await ghApi(DATA_PATH, {query:"?ref="+GH_BRANCH+"&t="+Date.now()});
+      if(r.ok && r.json && r.json.content){
+        const bin = atob(String(r.json.content).replace(/\s/g, ""));
+        const bytes = new Uint8Array(bin.length);
+        for(let i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
+        return { data: JSON.parse(new TextDecoder().decode(bytes)), sha: r.json.sha || "", via: "api" };
+      }
+    }catch(e){}
+  }
+  /* 没设 Token（或 API 失败）才退回 Pages；这时可能拿到最多 10 分钟前的副本 */
+  const res = await fetch(DATA_PATH+"?v="+Date.now(), {cache:"no-store"});
+  if(!res.ok) throw new Error("HTTP "+res.status);
+  return { data: await res.json(), sha: "", via: "pages" };
+}
+
 /* 从 GitHub 重新拉取 data.json（真源是仓库里的 data.json） */
 async function syncNow(silent){
   setSyncState("加载中…");
+  let via = "pages";
   try{
-    const res = await fetch(DATA_PATH+"?v="+Date.now(), {cache:"no-store"});
-    if(res.ok){
-      blogData = await res.json();
-    } else {
-      throw new Error("HTTP "+res.status);
-    }
+    const got = await readRemoteData();
+    blogData = got.data;
+    dataSha = got.sha;
+    via = got.via;
   }catch(e){
     blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    dataSha = "";
     showToast("读取 data.json 失败："+e.message, "error");
   }
   /* 补齐缺失字段 */
@@ -2529,12 +2556,11 @@ async function syncNow(silent){
     blogData.siteConfig = Object.assign({}, DEFAULT_DATA.siteConfig);
   }
 
-  dataSha = "";
-  if(getStoredToken()){ try{ await fetchDataSha(); }catch(e){} }
+  if(!dataSha && getStoredToken()){ try{ await fetchDataSha(); }catch(e){} }
 
   renderAll();
-  setSyncState(getStoredToken() ? "已就绪" : "未设置 Token");
-  if(!silent) showToast("已从 GitHub 重新拉取数据");
+  setSyncState(via === "api" ? "已就绪（API 直读）" : (getStoredToken() ? "已就绪" : "未设置 Token"));
+  if(!silent) showToast(via === "api" ? "已从 GitHub 直接读取最新数据（绕过 CDN 缓存）" : "已从 GitHub 重新拉取数据");
 }
 
 function setSyncState(text){
@@ -2564,13 +2590,11 @@ async function saveData(action){
     renderLogs();
   }
 
-  /* 保存前拉取最新数据：保留本页面不认识的顶层字段，避免旧页面把新加的字段覆盖掉 */
+  /* 保存前拉取最新数据：保留本页面不认识的顶层字段，避免旧页面把新加的字段覆盖掉。
+     这里也必须走 API —— Pages 上的副本可能是 10 分钟前的 */
   try{
-    const latestRes = await fetch(DATA_PATH+"?v="+Date.now(), {cache:"no-store"});
-    if(latestRes.ok){
-      const latest = await latestRes.json();
-      for(const k in latest){ if(blogData[k]===undefined) blogData[k] = latest[k]; }
-    }
+    const latest = (await readRemoteData()).data;
+    for(const k in latest){ if(blogData[k]===undefined) blogData[k] = latest[k]; }
   }catch(e){}
 
   const body = JSON.stringify(blogData, null, 2);
@@ -2606,6 +2630,9 @@ async function saveData(action){
       if(r.ok){
         dataSha = (r.json && r.json.content && r.json.content.sha) ? r.json.content.sha : "";
         saving = false;
+        /* 告诉前台「刚保存过」：Pages 上的 data.json 还要最多 10 分钟才刷新，
+           带上这个标记前台就会直接读 API，不用等 CDN */
+        try{ localStorage.setItem(FRESH_KEY, String(Date.now() + 900000)); }catch(e){}
         setSyncState("已保存 "+nowStr());
         showToast("✅ 保存成功，稍等 1 分钟前台就会更新");
         return true;

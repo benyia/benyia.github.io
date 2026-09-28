@@ -612,6 +612,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-28 15:03",
+      "action": "名单：前台隐藏"
+    },
+    {
       "time": "2026-09-28 14:41",
       "action": "名单：前台显示"
     },
@@ -1006,10 +1010,6 @@
     {
       "time": "2026-09-24 22:16",
       "action": "编辑通知：2026年秋季学期选课通知"
-    },
-    {
-      "time": "2026-09-24 22:16",
-      "action": "删除通知"
     }
   ],
   "categories": [
@@ -1329,7 +1329,7 @@
       "note": "",
       "photo": "files/1789783018217_1_pohb49f2_人物.png",
       "images": [],
-      "show": true,
+      "show": false,
       "hide": [
         "note",
         "idCard",
@@ -1355,7 +1355,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": true,
+      "show": false,
       "hide": [
         "ethnicity",
         "political",
@@ -1387,7 +1387,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": true,
+      "show": false,
       "hide": []
     }
   ],

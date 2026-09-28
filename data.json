@@ -409,18 +409,6 @@
       ],
       "files": [],
       "time": "2026-09-27 14:33"
-    },
-    {
-      "title": "DeepSeek V4.1 Flash 官方 API 越狱成功，保姆级教程！",
-      "source": "YouTube",
-      "date": "2026-09-28",
-      "level": "normal",
-      "content": "# 一招解锁无审查！DeepSeek V4.1 Flash 官方 API 越狱成功，保姆级教程！\n\n发布时间：2026-09-28 作者：X超哥 阅读：4\n\n大家好，我是超哥。今天给大家分享 **DeepSeek V4.1 Flash** **越狱教程**，通过一个**简单的方法**，就可以让 DeepSeek V4.1 Flash **解锁回答限制**，体验**无审查模式**。整个过程**非常简单**，我们直接开始教程。\n\n![](https://www.xgdn.com/d/file/efpub/2026/09-28/662c2a7bc9ef9081f4323bb4a035b150.png)\n\n### 一、配置安装 OpenCode\n\n#### 1\\. 安装 node.js 环境\n\n**node.js 下载地址：**[https://nodejs.org/zh-cn/download](https://nodejs.org/zh-cn/download)\n\n打开电脑的**cmd**，执行安装成功检测命令：\n\nnode -v\n\nnpm -v\n\n1.\n\nnode -v\n\n2.\n\nnpm -v\n\nCopy\n\n#### 2\\. 安装 OpenCode\n\nOpenCode **官网：[https://opencode.ai/](https://opencode.ai/)**\n\n打开电脑的**cmd**，执行下面命令进行安装：\n\nnpm install -g @opencode/cli\n\n1.\n\nnpm install -g @opencode/cli\n\nCopy\n\n#### 3\\. 启动 OpenCode\n\n在cmd里执行下面命令启动：\n\nopencode\n\n1.\n\nopencode\n\nCopy\n\n#### 4\\. 卸载 OpenCode\n\n在cmd里执行下面命令卸载：\n\nopencode uninstall\n\n1.\n\nopencode uninstall\n\nCopy\n\n然后选择：yes，就可以成功卸载了。\n\n### 二、接入 DeepSeek v4 Flash 模型 API\n\nDeepseek 官网：[https://www.deepseek.com](https://www.deepseek.com)\n\n![](https://www.xgdn.com/d/file/efpub/2026/07-23/dea98ee476af5192e978e97bd306c557.png)\n\n### 三、越狱文件下载\n\n下载地址：[https://github.com/togg53192-cmd/jailbreaks/blob/main/deepseek-4-1.md](https://github.com/togg53192-cmd/jailbreaks/blob/main/deepseek-4-1.md)\n\n下载下来的文件命名成：**AGENTS.md**\n\n[DeepSeek](/tag/210/)\n\n分享到\n\n[上一篇0成本免费用！MiniMax M3.1-Flash-Preview 本地部署实测｜鹈鹕骑车、bug 修复](/84.html) [下一篇没有了](javascript:void\\(0\\);)",
-      "contentIsHTML": false,
-      "tags": [],
-      "images": [],
-      "files": [],
-      "time": "2026-09-28 09:25"
     }
   ],
   "classItems": [
@@ -587,7 +575,7 @@
     {
       "date": "2026-09-27",
       "title": "博客内容修改",
-      "content": "1、前面板的生活服务不显示音乐<div>2、</div>",
+      "content": "1、前面板的生活服务不显示音乐，不能写日记，<div>2、后台课程、论文、通知、班级事务、名单、记账、日记和导师指导等新添加的内容在最上面。并且有搜索功能</div><div>3、markdown源码不能生成代码专用复制格式</div>",
       "contentIsHTML": true,
       "tags": [],
       "images": [],
@@ -630,6 +618,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-28 09:45",
+      "action": "编辑日记：博客内容修改"
+    },
     {
       "time": "2026-09-28 09:41",
       "action": "删除通知"
@@ -1025,10 +1017,6 @@
     {
       "time": "2026-09-24 21:45",
       "action": "编辑友链：番茄助理人fqzlr"
-    },
-    {
-      "time": "2026-09-24 21:44",
-      "action": "添加友链：https://blog.fqzlr.top/"
     }
   ],
   "categories": [

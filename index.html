@@ -543,16 +543,35 @@ body.article-open.toc-on .rail-sticky{position:sticky;top:76px;max-height:calc(1
 .diary-media{margin-top:10px}
 .diary-media audio{width:100%;max-width:440px;margin-top:8px}
 .diary-media video{width:100%;max-width:560px;border-radius:10px;margin-top:8px}
-details.diary-item{padding:0;overflow:hidden}
-.diary-summary{cursor:pointer;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;list-style:none;outline:none}
+details.diary-item{padding:0;overflow:hidden;transition:box-shadow .25s,border-color .25s}
+details.diary-item:hover{box-shadow:0 8px 24px rgba(15,23,42,.10);border-color:var(--primary-light)}
+details.diary-item[open]{border-color:var(--primary-light);box-shadow:0 10px 30px rgba(15,23,42,.12)}
+/* 时间线：按日期分组，组头是「日期 + N 条 + 向右渐隐的分隔线」（参考说说的排法） */
+.diary-group{margin-bottom:26px}
+.diary-day{display:flex;align-items:center;gap:10px;margin:0 0 12px;padding-left:2px}
+.diary-day-text{font-size:.95rem;font-weight:700;color:var(--text);white-space:nowrap}
+.diary-day-n{font-size:.74rem;color:var(--text3);background:var(--soft);border:1px solid var(--border);border-radius:99px;padding:1px 9px;white-space:nowrap}
+.diary-day::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+.diary-summary{cursor:pointer;padding:14px 18px 14px 16px;display:flex;align-items:flex-start;gap:11px;list-style:none;outline:none;transition:background .18s}
 .diary-summary::-webkit-details-marker{display:none}
+.diary-summary:hover{background:var(--soft)}
+/* 左侧时间线圆点 */
+.diary-dot{flex:0 0 auto;width:9px;height:9px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 3px var(--primary-light);margin-top:5px}
+details[open] .diary-dot{background:var(--primary-dark)}
 .diary-summary-main{min-width:0;flex:1}
-.diary-summary-title{display:block;font-size:1.02rem;font-weight:700;color:var(--text)}
-.diary-summary-preview{display:block;font-size:.8rem;color:var(--text3);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.diary-summary-date{font-size:.76rem;color:var(--text3);white-space:nowrap}
-.diary-summary-arrow{color:var(--text3);font-size:.8rem;transition:transform .2s}
+.diary-summary-time{display:block;font-size:.72rem;color:var(--text3);font-variant-numeric:tabular-nums;margin-bottom:3px}
+.diary-summary-title{display:block;font-size:1rem;font-weight:700;color:var(--text);line-height:1.45}
+.diary-summary-preview{
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  font-size:.82rem;color:var(--text3);margin-top:5px;line-height:1.6;
+}
+.diary-summary-arrow{color:var(--text3);font-size:.78rem;transition:transform .2s;margin-top:4px;flex:0 0 auto}
 details[open] .diary-summary-arrow{transform:rotate(180deg)}
-.diary-body{padding:0 18px 18px}
+.diary-body{padding:2px 18px 18px 36px}
+@media(max-width:640px){
+  .diary-summary{padding:12px 14px 12px 12px;gap:9px}
+  .diary-body{padding:2px 14px 16px 29px}
+}
 .icon-img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .footer{text-align:center;padding:32px;color:var(--text3);font-size:.82rem;border-top:1px solid var(--border);margin-top:20px;background:var(--title-bg)}
 
@@ -3560,34 +3579,67 @@ function autoTitle(text, date){
   if(first.length > 24) return first.slice(0, 24) + "…";
   return first;
 }
+/* 日期标题：2026-09-28 → 9月28日 */
+function diaryDayLabel(date){
+  var m = String(date||"").match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(!m) return "未标日期";
+  var y = String(new Date().getFullYear());
+  return (m[1] === y ? "" : m[1] + "年") + parseInt(m[2],10) + "月" + parseInt(m[3],10) + "日";
+}
+/* 卡片上的完整时间戳：2026-09-28 10:08（参考说说那种写法） */
+function diaryStamp(d){
+  var t = String((d && d.time) || "");
+  var m = t.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{1,2}):(\d{2})/);
+  if(m) return m[1] + " " + m[2].padStart(2,"0") + ":" + m[3];
+  return String((d && d.date) || "");
+}
+function diaryItemHTML(d){
+  var title = d.title || autoTitle(d.content, d.date);
+  var preview = mdText(d.content).split(String.fromCharCode(10)).join(" ").trim();
+  var media = (d.media||[]).map(function(m){
+    var url = esc(m.url);
+    var nm = String(m.name||"");
+    var dot = nm.lastIndexOf(".");
+    var ext = dot >= 0 ? nm.slice(dot+1).toLowerCase() : "";
+    var player = "";
+    if(["mp4","webm","mov","mkv","avi"].indexOf(ext) >= 0) player = '<video controls preload="metadata" src="'+url+'"></video>';
+    else if(["mp3","wav","m4a","ogg","flac","aac"].indexOf(ext) >= 0) player = '<audio controls preload="metadata" src="'+url+'"></audio>';
+    return '<div class="diary-media">'+player+'<div style="margin-top:6px">'+fileActionHTML(url, nm)+'</div></div>';
+  }).join("");
+  /* 默认全部收起：点哪一条才展开哪一条（details 同 name 保证同时只有一条打开） */
+  return '<details class="diary-item" name="diaryAcc">'
+    + '<summary class="diary-summary">'
+    +   '<span class="diary-dot"></span>'
+    +   '<span class="diary-summary-main">'
+    +     '<span class="diary-summary-time">'+esc(diaryStamp(d))+'</span>'
+    +     '<span class="diary-summary-title">'+esc(title)+'</span>'
+    +     (preview?'<span class="diary-summary-preview">'+esc(preview)+'</span>':"")
+    +   '</span>'
+    +   '<span class="diary-summary-arrow">▼</span>'
+    + '</summary>'
+    + '<div class="diary-body"><div class="diary-content md-body">'+mdRenderHTML(d.content)+'</div>'
+    + ((d.tags||[]).length ? '<div class="chip-row" style="margin-top:10px">'+d.tags.map(function(t){ return '<span class="info-chip" style="cursor:pointer" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')">🏷 '+esc(t)+'</span>'; }).join("")+'</div>' : "")
+    + galleryHTML(d)+media+'</div>'
+    + '</details>';
+}
 function renderDiary(){
   var list = (blogData.diary||[]).slice().reverse();
-  document.getElementById("diaryList").innerHTML = list.map(function(d, idx){
-    var title = d.title || autoTitle(d.content, d.date);
-    var preview = mdText(d.content).split(String.fromCharCode(10)).join(" ").trim();
-    if(preview.length > 46) preview = preview.slice(0,46) + "…";
-    var media = (d.media||[]).map(function(m){
-      var url = esc(m.url);
-      var nm = String(m.name||"");
-      var dot = nm.lastIndexOf(".");
-      var ext = dot >= 0 ? nm.slice(dot+1).toLowerCase() : "";
-      var player = "";
-      if(["mp4","webm","mov","mkv","avi"].indexOf(ext) >= 0) player = '<video controls preload="metadata" src="'+url+'"></video>';
-      else if(["mp3","wav","m4a","ogg","flac","aac"].indexOf(ext) >= 0) player = '<audio controls preload="metadata" src="'+url+'"></audio>';
-      return '<div class="diary-media">'+player+'<div style="margin-top:6px">'+fileActionHTML(url, nm)+'</div></div>';
-    }).join("");
-    return '<details class="diary-item" name="diaryAcc"'+(idx===0?" open":"")+'>'
-      + '<summary class="diary-summary">'
-      +   '<span class="diary-summary-main"><span class="diary-summary-title">'+esc(title)+'</span>'
-      +   (preview?'<span class="diary-summary-preview">'+esc(preview)+'</span>':"")+'</span>'
-      +   '<span class="diary-summary-date">'+esc(d.date)+'</span>'
-      +   '<span class="diary-summary-arrow">▼</span>'
-      + '</summary>'
-      + '<div class="diary-body"><div class="diary-content md-body">'+mdRenderHTML(d.content)+'</div>'
-      + ((d.tags||[]).length ? '<div class="chip-row" style="margin-top:10px">'+d.tags.map(function(t){ return '<span class="info-chip" style="cursor:pointer" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')">🏷 '+esc(t)+'</span>'; }).join("")+'</div>' : "")
-      + galleryHTML(d)+media+'</div>'
-      + '</details>';
-  }).join("") || '<div class="empty">暂无日记</div>';
+  var box = document.getElementById("diaryList");
+  if(!list.length){ box.innerHTML = '<div class="empty">暂无日记</div>'; return; }
+  /* 按日期分组，做成时间线：日期标题 + 当天条数 */
+  var groups = [], cur = null;
+  list.forEach(function(d){
+    var day = String((d && d.date) || "").slice(0, 10);
+    if(!cur || cur.day !== day){ cur = { day: day, html: [] }; groups.push(cur); }
+    cur.html.push(diaryItemHTML(d));
+  });
+  box.innerHTML = groups.map(function(g){
+    return '<div class="diary-group">'
+      + '<div class="diary-day"><span class="diary-day-text">'+esc(diaryDayLabel(g.day))+'</span>'
+      + '<span class="diary-day-n">'+g.html.length+' 条</span></div>'
+      + g.html.join("")
+      + '</div>';
+  }).join("");
   diaryAccBind();
 }
 /* 日记：手风琴——展开一条就把其它条收起来（老浏览器不支持 details[name] 时的兜底） */

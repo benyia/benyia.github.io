@@ -619,6 +619,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-28 10:41",
+      "action": "添加图片：头像"
+    },
+    {
       "time": "2026-09-28 10:19",
       "action": "修改入场欢迎页"
     },
@@ -1013,10 +1017,6 @@
     {
       "time": "2026-09-24 22:05",
       "action": "删除课程"
-    },
-    {
-      "time": "2026-09-24 22:05",
-      "action": "编辑论文：基于FPGA 的多路信号收发器设计"
     }
   ],
   "categories": [
@@ -1295,6 +1295,39 @@
       "file": "files/1790520789117_7_k2qxigni_周杰伦_-_晴天_Live_.mp3",
       "fileName": "周杰伦 - 晴天(Live).mp3",
       "time": "2026-09-27 22:53"
+    },
+    {
+      "type": "image",
+      "title": "头像",
+      "desc": "",
+      "url": "",
+      "files": [
+        {
+          "name": "images.jpg",
+          "url": "files/1790563248603_1_zx3jdd86_images.jpg",
+          "type": "JPG",
+          "size": 23438,
+          "folder": ""
+        },
+        {
+          "name": "头像1.jpg",
+          "url": "files/1790563250312_2_n935df2h_头像1.jpg",
+          "type": "JPG",
+          "size": 98497,
+          "folder": ""
+        },
+        {
+          "name": "头像2.jpg",
+          "url": "files/1790563252575_3_tzilczv2_头像2.jpg",
+          "type": "JPG",
+          "size": 364653,
+          "folder": ""
+        }
+      ],
+      "images": [],
+      "file": "files/1790563248603_1_zx3jdd86_images.jpg",
+      "fileName": "images.jpg",
+      "time": "2026-09-28 10:41"
     }
   ],
   "roster": [

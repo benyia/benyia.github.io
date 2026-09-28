@@ -2130,6 +2130,178 @@ function stripMd(s){
 function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function nowStr(){ const d=new Date(); return todayStr()+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
 
+/* ============================================================
+   列表工具：最新排最前 + 关键词过滤
+   ------------------------------------------------------------
+   只影响「显示顺序」，绝不改动 blogData 里数组本身的顺序：
+   adminSortNewest 返回的是 [{i, item}]，i 始终是原始下标，
+   渲染时按钮上写的还是这个 i，删除 / 编辑才不会点错人。
+   ============================================================ */
+var ADMIN_SORT_KEYS = ["time", "date", "updatedAt", "createdAt", "publishDate"];
+
+/* 取条目的时间字符串；都没有就返回 null（会排到最后） */
+function adminTimeOf(it){
+  if(!it || typeof it !== "object") return null;
+  for(var i = 0; i < ADMIN_SORT_KEYS.length; i++){
+    var v = it[ADMIN_SORT_KEYS[i]];
+    if(v === undefined || v === null) continue;
+    var s = String(v).trim();
+    if(s) return s;
+  }
+  return null;
+}
+
+/* 时间倒序（"2026-09-27 13:50" / "2026-09-27" 这种字符串直接倒序比较即可）；
+   没有时间字段的排最后，并保持它们彼此之间的原有顺序；有时间且相同的也保持原有顺序。
+   返回 [{i, item}]，i = 原始下标。 */
+function adminSortNewest(arr){
+  var list = arr || [];
+  var rows = [];
+  for(var i = 0; i < list.length; i++){
+    var item = list[i];
+    rows.push({ i: i, item: item, k: adminTimeOf(item) });
+  }
+  rows.sort(function(a, b){
+    if(a.k === null && b.k === null) return a.i - b.i;
+    if(a.k === null) return 1;
+    if(b.k === null) return -1;
+    if(a.k !== b.k) return a.k < b.k ? 1 : -1;
+    return a.i - b.i;
+  });
+  return rows;
+}
+
+/* 把任意字段值摊平成一段可搜索的纯文本 */
+function adminText(v){
+  if(v === null || v === undefined) return "";
+  if(typeof v === "string") return v;
+  if(typeof v === "number" || typeof v === "boolean") return String(v);
+  if(Object.prototype.toString.call(v) === "[object Array]"){
+    return v.map(adminText).join(" ");
+  }
+  if(typeof v === "object"){
+    var out = [];
+    for(var k in v){ if(Object.prototype.hasOwnProperty.call(v, k)) out.push(adminText(v[k])); }
+    return out.join(" ");
+  }
+  return String(v);
+}
+
+/* 把条目里那些字段拼成一段纯文本 */
+function adminHaystack(item, fields){
+  var parts = [];
+  (fields || []).forEach(function(f){
+    parts.push(adminText(item ? item[f] : ""));
+  });
+  return parts.join(" \n ");
+}
+
+/* 关键词匹配：大小写不敏感；多个空格分隔的关键词要求全部命中（AND）；
+   搜索词为空时一律返回 true。 */
+function adminMatch(item, fields, q){
+  var terms = String(q == null ? "" : q).trim().toLowerCase().split(/\s+/).filter(Boolean);
+  if(!terms.length) return true;
+  var hay = adminHaystack(item, fields).toLowerCase();
+  for(var i = 0; i < terms.length; i++){
+    if(hay.indexOf(terms[i]) < 0) return false;
+  }
+  return true;
+}
+
+/* 每个面板自己的搜索词（模块级保存，重渲染时输入框的值不会丢） */
+var courseQuery = "", paperQuery = "", noticeQuery = "", classQuery = "";
+var rosterQuery = "", ledgerQuery = "", diaryQuery = "", advisorQuery = "";
+
+/* 各面板共用的重渲染入口：搜索框 oninput 直接调它 */
+var ADMIN_QUERY_RERENDER = {
+  courses: function(){ renderCourses(); },
+  papers:  function(){ renderPapers(); },
+  notices: function(){ renderNotices(); },
+  "class": function(){ renderClass(); },
+  roster:  function(){ renderRoster(); },
+  ledger:  function(){ renderLedger(); },
+  diary:   function(){ renderDiary(); },
+  advisor: function(){ renderAdvisor(); }
+};
+
+/* 搜索框的 oninput：存住搜索词 + 立刻重渲染 */
+function adminQueryInput(key, value){
+  if(key === "courses") courseQuery = value;
+  else if(key === "papers") paperQuery = value;
+  else if(key === "notices") noticeQuery = value;
+  else if(key === "class") classQuery = value;
+  else if(key === "roster") rosterQuery = value;
+  else if(key === "ledger") ledgerQuery = value;
+  else if(key === "diary") diaryQuery = value;
+  else if(key === "advisor") advisorQuery = value;
+  var fn = ADMIN_QUERY_RERENDER[key];
+  if(fn) fn();
+}
+
+/* 取当前搜索词（渲染函数里用） */
+function adminQueryOf(key){
+  if(key === "courses") return courseQuery;
+  if(key === "papers") return paperQuery;
+  if(key === "notices") return noticeQuery;
+  if(key === "class") return classQuery;
+  if(key === "roster") return rosterQuery;
+  if(key === "ledger") return ledgerQuery;
+  if(key === "diary") return diaryQuery;
+  if(key === "advisor") return advisorQuery;
+  return "";
+}
+
+/* 搜索用的字段清单 */
+var ADMIN_SEARCH_FIELDS = {
+  courses: ["title", "desc", "intro", "tags", "time", "date"],
+  papers:  ["title", "desc", "abstract", "tags", "status", "year", "time", "date"],
+  notices: ["title", "source", "content", "tags", "date", "time"],
+  "class": ["title", "type", "content", "tags", "date", "time"],
+  roster:  ["studentId", "name", "gender", "className", "college", "major", "dorm", "advisor",
+            "ethnicity", "political", "birthday", "phone", "email", "idCard", "homeAddress", "note", "time", "date"],
+  ledger:  ["type", "amount", "category", "desc", "date", "time"],
+  diary:   ["title", "content", "tags", "date", "time"],
+  advisor: ["content", "tags", "count", "date", "time"]
+};
+
+/* 取某面板搜索用的字段；搜索正文（HTML / Markdown）时先转成纯文本 */
+function adminSearchFields(key, item){
+  var base = ADMIN_SEARCH_FIELDS[key] || [];
+  return base.map(function(f){
+    var v = item ? item[f] : "";
+    if(f === "content" || f === "intro" || f === "abstract") return stripMd(v);
+    return v;
+  });
+}
+
+/* 列表的搜索框：统一生成，样式和后台其它输入框保持一致 */
+function adminSearchInput(key, placeholder, id){
+  var ph = esc(placeholder);
+  return '<div style="margin:0 0 10px">'
+    + '<input type="text" id="' + esc(id) + '" value="' + esc(adminQueryOf(key)) + '" placeholder="' + ph + '" '
+    + 'style="width:100%;max-width:420px;box-sizing:border-box;padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:.88rem" '
+    + 'oninput="adminQueryInput(\'' + key + '\', this.value)">'
+    + '</div>';
+}
+
+/* 排序 + 过滤，返回 [{i, item}] —— 渲染函数统一用它 */
+function adminVisible(key, arr){
+  var rows = adminSortNewest(arr);
+  var q = adminQueryOf(key);
+  if(!String(q || "").trim()) return rows;
+  return rows.filter(function(r){
+    return adminMatch({ v: adminSearchFields(key, r.item) }, ["v"], q);
+  });
+}
+
+/* 空状态：搜索没命中时给一句人话 */
+function adminEmptyBox(key, emptyText){
+  if(String(adminQueryOf(key) || "").trim()){
+    return '<div style="color:#94a3b8;font-size:.85rem">没有找到匹配的内容</div>';
+  }
+  return '<div style="color:#94a3b8;font-size:.85rem">' + (emptyText || "暂无") + '</div>';
+}
+
 function showToast(msg, type){
   const t=document.createElement("div");
   t.className="toast "+(type||"success");
@@ -2778,24 +2950,27 @@ function delRoster(i){
   renderAll();
 }
 function renderRoster(){
-  $("rosterList").innerHTML = (blogData.roster||[]).map(function(r,i){
+  var rows = adminVisible("roster", blogData.roster);
+  $("rosterList").innerHTML = adminSearchInput("roster", "搜索名单：学号 / 姓名 / 班级 / 专业 / 学院 / 宿舍 / 导师 / 电话 / 邮箱", "rosterSearch")
+    + (rows.map(function(r){
+    var r0 = r.item, i = r.i;
     var parts = [];
-    if(r.studentId) parts.push("学号 "+esc(r.studentId));
-    if(r.gender) parts.push(esc(r.gender));
-    if(r.className) parts.push(esc(r.className));
-    if(r.college) parts.push(esc(r.college));
-    if(r.dorm) parts.push("宿舍 "+esc(r.dorm));
-    if(r.advisor) parts.push("导师 "+esc(r.advisor));
-    var on = (r.show !== false);
-    var hid = r.hide || [];
+    if(r0.studentId) parts.push("学号 "+esc(r0.studentId));
+    if(r0.gender) parts.push(esc(r0.gender));
+    if(r0.className) parts.push(esc(r0.className));
+    if(r0.college) parts.push(esc(r0.college));
+    if(r0.dorm) parts.push("宿舍 "+esc(r0.dorm));
+    if(r0.advisor) parts.push("导师 "+esc(r0.advisor));
+    var on = (r0.show !== false);
+    var hid = r0.hide || [];
     var fieldBoxes = ROSTER_FIELDS.map(function(f){
       var vis = (hid.indexOf(f[0]) < 0);
       return '<label style="display:inline-flex;align-items:center;gap:3px;white-space:nowrap;color:'+(vis?"#475569":"#cbd5e1")+'"><input type="checkbox" '+(vis?"checked":"")+' data-ri="'+i+'" data-field="'+f[0]+'" onclick="toggleRosterField(this)"> '+f[1]+'</label>';
     }).join("");
-    return '<div class="item-row"><div class="info"><div class="title">'+esc(r.name)+(on?"":' <span style="font-size:.72rem;color:#ef4444">（前台隐藏）</span>')+'</div><div class="desc">'+parts.join(" · ")+'</div>'
+    return '<div class="item-row"><div class="info"><div class="title">'+esc(r0.name)+(on?"":' <span style="font-size:.72rem;color:#ef4444">（前台隐藏）</span>')+'</div><div class="desc">'+parts.join(" · ")+'</div>'
       + '<div style="margin-top:8px;font-size:.76rem;display:flex;flex-wrap:wrap;gap:6px 12px;padding-top:8px;border-top:1px dashed #e2e8f0">'+fieldBoxes+'</div>'
       + '</div><div class="actions"><label style="font-size:.8rem;display:flex;align-items:center;gap:4px"><input type="checkbox" '+(on?"checked":"")+' data-ri="'+i+'" onclick="toggleRosterShow(this)"> 整条显示</label><button class="btn btn-ghost btn-sm" onclick="editRoster('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delRoster('+i+')">删除</button></div></div>';
-  }).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无名单</div>';
+  }).join("") || adminEmptyBox("roster", "暂无名单"));
 }
 function toggleRosterField(cb){
   var i = parseInt(cb.getAttribute("data-ri"),10);
@@ -3065,13 +3240,16 @@ function editCourse(i){
   $("panel-courses").scrollIntoView({behavior:"smooth"});
 }
 function renderCourses(){
-  $("courseList").innerHTML=(blogData.courses||[]).map(function(c,i){
+  var rows = adminVisible("courses", blogData.courses);
+  $("courseList").innerHTML = adminSearchInput("courses", "搜索课程：标题 / 简介 / 标签 / 正文", "courseSearch")
+    + (rows.map(function(r){
+    var c = r.item, i = r.i;
     var nfiles = (c.files||[]).length;
     var folders = {};
     (c.files||[]).forEach(function(f){ if(f.folder) folders[f.folder] = 1; });
     var nf = Object.keys(folders).length;
     return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(c.icon,26)+' '+esc(c.title)+'</div><div class="desc">'+esc(c.desc)+' · 进度 '+(c.progress||0)+'% · '+nfiles+' 个文件'+(nf?(' · '+nf+' 个文件夹'):'')+'</div>'+fileRows(c.files,"courses",i)+imgRows(c.images,"courses",i)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editCourse('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delCourse('+i+')">删除</button></div></div>';
-  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+  }).join("") || adminEmptyBox("courses", "暂无"));
 }
 function delCourse(i){
   if(!confirm("确定删除「"+blogData.courses[i].title+"」？")) return;
@@ -3131,7 +3309,11 @@ function editPaper(i){
   $("panel-papers").scrollIntoView({behavior:"smooth"});
 }
 function renderPapers(){
-  $("paperList").innerHTML=(blogData.papers||[]).map((p,i)=>`
+  var rows = adminVisible("papers", blogData.papers);
+  $("paperList").innerHTML = adminSearchInput("papers", "搜索论文：标题 / 备注 / 摘要 / 标签 / 状态", "paperSearch")
+    + (rows.map(function(r){
+    var p = r.item, i = r.i;
+    return `
     <div class="item-row">
       <div class="info">
         <div class="title">${esc(p.title)}</div>
@@ -3142,7 +3324,8 @@ function renderPapers(){
         <button class="btn btn-ghost btn-sm" onclick="editPaper(${i})">编辑</button>
         <button class="btn btn-danger btn-sm" onclick="delPaper(${i})">删除</button>
       </div>
-    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+    </div>`;
+  }).join("") || adminEmptyBox("papers", "暂无"));
 }
 function delPaper(i){
   if(!confirm("确定删除「"+blogData.papers[i].title+"」？")) return;
@@ -3213,11 +3396,14 @@ function cancelNoticeEdit(){
   $("nCancel").style.display = "none";
 }
 function renderNotices(){
-  $("noticeList").innerHTML=(blogData.notices||[]).map(function(n,i){
+  var rows = adminVisible("notices", blogData.notices);
+  $("noticeList").innerHTML = adminSearchInput("notices", "搜索通知：标题 / 来源 / 正文 / 标签 / 日期", "noticeSearch")
+    + (rows.map(function(r){
+    var n = r.item, i = r.i;
     var full = stripMd(n.content).replace(/\n/g," ");
     var brief = full.slice(0,60);
     return '<div class="item-row"><div class="info"><div class="title">'+esc(n.title)+'</div><div class="desc">'+esc(n.source||"")+' · '+esc(n.date||"")+'</div>'+(brief?'<div class="desc">'+esc(brief)+(full.length>60?"…":"")+'</div>':"")+fileRows(n.files,"notices",i)+imgRows(n.images,"notices",i)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editNotice('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delNotice('+i+')">删除</button></div></div>';
-  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+  }).join("") || adminEmptyBox("notices", "暂无"));
 }
 function delNotice(i){
   if(!confirm("确定删除？")) return;
@@ -3272,7 +3458,11 @@ function editClass(i){
   $("panel-class").scrollIntoView({behavior:"smooth"});
 }
 function renderClass(){
-  $("classList").innerHTML=(blogData.classItems||[]).map((c,i)=>`
+  var rows = adminVisible("class", blogData.classItems);
+  $("classList").innerHTML = adminSearchInput("class", "搜索班级事务：标题 / 类型 / 正文 / 标签 / 日期", "classSearch")
+    + (rows.map(function(r){
+    var c = r.item, i = r.i;
+    return `
     <div class="item-row">
       <div class="info">
         <div class="title">${esc(c.title)}</div>
@@ -3283,7 +3473,8 @@ function renderClass(){
         <button class="btn btn-ghost btn-sm" onclick="editClass(${i})">编辑</button>
         <button class="btn btn-danger btn-sm" onclick="delClass(${i})">删除</button>
       </div>
-    </div>`).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+    </div>`;
+  }).join("") || adminEmptyBox("class", "暂无"));
 }
 function delClass(i){
   if(!confirm("确定删除？")) return;
@@ -3342,7 +3533,7 @@ function addLedger(){
   setImgDrafts("ledger", []);
 }
 function renderLedger(){
-  var list=(blogData.ledger||[]).slice().reverse();
+  var rows = adminVisible("ledger", blogData.ledger);
   var income=0, expense=0;
   (blogData.ledger||[]).forEach(function(r){
     var a=parseFloat(r.amount)||0;
@@ -3351,10 +3542,11 @@ function renderLedger(){
   $("lgIn").textContent=income.toFixed(2);
   $("lgOut").textContent=expense.toFixed(2);
   $("lgNet").textContent=(income-expense).toFixed(2);
-  $("ledgerList").innerHTML=list.map(function(r){
-    var realIdx=blogData.ledger.indexOf(r);
+  $("ledgerList").innerHTML = adminSearchInput("ledger", "搜索记账：分类 / 备注 / 金额 / 日期 / 时间", "ledgerSearch")
+    + (rows.map(function(row){
+    var r = row.item, realIdx = row.i;
     return '<div class="item-row"><div class="info"><div class="title">'+(r.type==="income"?"收入":"支出")+' ¥'+(parseFloat(r.amount)||0).toFixed(2)+'</div><div class="desc">'+esc(r.date)+(r.time?(' '+esc(r.time)):"")+' · '+esc(r.category||"其他")+' · '+esc(r.desc||"")+'</div>'+imgRows(r.images,"ledger",realIdx)+'</div><button class="btn btn-danger btn-sm" onclick="delLedger('+realIdx+')">删除</button></div>';
-  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+  }).join("") || adminEmptyBox("ledger", "暂无"));
 }
 function delLedger(realIdx){
   if(!confirm("确定删除？")) return;
@@ -3436,12 +3628,13 @@ function cancelDiaryEdit(){
   $("diaryCancel").style.display = "none";
 }
 function renderDiary(){
-  var list=(blogData.diary||[]).slice().reverse();
-  $("diaryList").innerHTML=list.map(function(d){
-    var realIdx=blogData.diary.indexOf(d);
+  var rows = adminVisible("diary", blogData.diary);
+  $("diaryList").innerHTML = adminSearchInput("diary", "搜索日记：标题 / 正文 / 标签 / 日期", "diarySearch")
+    + (rows.map(function(row){
+    var d = row.item, realIdx = row.i;
     var tg = (d.tags||[]).map(function(t){ return '<span class="tag-chip">'+esc(t)+'</span>'; }).join("");
     return '<div class="item-row"><div class="info"><div class="title">'+esc(d.title||d.date)+'</div><div class="desc">'+esc(stripMd(d.content).slice(0,120))+'</div><div class="desc">'+esc(d.date)+' · '+((d.media||[]).length)+' 个影音'+(tg?(' · '+tg):"")+'</div>'+imgRows(d.images,"diary",realIdx)+fileRows(d.media,"diary",realIdx)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editDiary('+realIdx+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delDiary('+realIdx+')">删除</button></div></div>';
-  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+  }).join("") || adminEmptyBox("diary", "暂无"));
 }
 function delDiary(realIdx){
   if(!confirm("确定删除？")) return;
@@ -3507,12 +3700,13 @@ function cancelAdvisorEdit(){
   $("advCancel").style.display = "none";
 }
 function renderAdvisor(){
-  var list=(blogData.advisor||[]).slice().reverse();
-  $("advisorList").innerHTML=list.map(function(d){
-    var realIdx=blogData.advisor.indexOf(d);
+  var rows = adminVisible("advisor", blogData.advisor);
+  $("advisorList").innerHTML = adminSearchInput("advisor", "搜索指导记录：正文 / 标签 / 第几次 / 日期", "advisorSearch")
+    + (rows.map(function(row){
+    var d = row.item, realIdx = row.i;
     var tg = (d.tags||[]).map(function(t){ return '<span class="tag-chip">'+esc(t)+'</span>'; }).join("");
     return '<div class="item-row"><div class="info"><div class="title">'+(d.count?('第 '+d.count+' 次指导 · '):"")+esc(d.date)+(d.time?(' '+esc(d.time)):"")+'</div><div class="desc">'+esc(stripMd(d.content).slice(0,120))+'</div>'+(tg?'<div class="desc">'+tg+'</div>':"")+imgRows(d.images,"advisor",realIdx)+fileRows(d.files,"advisor",realIdx)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editAdvisor('+realIdx+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delAdvisor('+realIdx+')">删除</button></div></div>';
-  }).join("")||'<div style="color:#94a3b8;font-size:.85rem">暂无</div>';
+  }).join("") || adminEmptyBox("advisor", "暂无"));
 }
 function delAdvisor(realIdx){
   if(!confirm("确定删除？")) return;

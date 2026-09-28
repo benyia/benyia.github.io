@@ -585,7 +585,7 @@
     {
       "date": "2026-09-28",
       "title": "DeepSeek V4.1 Flash越狱教程",
-      "content": "大家好，我是超哥。今天给大家分享**DeepSeek V4.1 Flash** **越狱教程**，通过一个**简单的方法**，就可以让 DeepSeek V4.1 Flash **解锁回答限制**，体验**无审查模式**。整个过程**非常简单**，我们直接开始教程。\n![图片](files/1790557454789_4_7gaufwid_662c2a7bc9ef9081f4323bb4a035b150.png)\n### 一、配置安装 OpenCode\n\n#### 1. 安装 node.js 环境\n\n**node.js 下载地址：**[https://nodejs.org/zh-cn/download](https://nodejs.org/zh-cn/download)\n\n打开电脑的**cmd**，执行安装成功检测命令：\n\n```\nnode -v\nnpm -v\n```\n\n\n#### 2. 安装 OpenCode\n\nOpenCode**官网：[https://opencode.ai/](https://opencode.ai/)**\n\n打开电脑的**cmd**，执行下面命令进行安装：\n\n```\nnpm install -g @opencode/cli\n```\n\n\n#### 3. 启动 OpenCode\n\n在cmd里执行下面命令启动：\n\n```\nopencode\n```\n\n\n#### 4. 卸载 OpenCode\n\n在cmd里执行下面命令卸载：\n\n```\nopencode uninstall\n```\n\n\n\n然后选择：yes，就可以成功卸载了。\n\n### 二、接入 DeepSeek v4 Flash 模型 API\n\nDeepseek 官网：[https://www.deepseek.com](https://www.deepseek.com/)\n\n![图片](files/1790557477463_5_zzc58ilu_dea98ee476af5192e978e97bd306c557.png)\n\n### 三、越狱文件下载\n\n下载地址：[https://github.com/togg53192-cmd/jailbreaks/blob/main/deepseek-4-1.md](https://github.com/togg53192-cmd/jailbreaks/blob/main/deepseek-4-1.md)\n\n下载下来的文件命名成：**AGENTS.md**",
+      "content": "# 一招解锁无审查！DeepSeek V4.1 Flash 官方 API 越狱成功，保姆级教程！\n\n大家好，今天给大家分享**DeepSeek V4.1 Flash** **越狱教程**，通过一个**简单的方法**，就可以让 DeepSeek V4.1 Flash **解锁回答限制**，体验**无审查模式**。整个过程**非常简单**，我们直接开始教程。\n![图片](files/1790557454789_4_7gaufwid_662c2a7bc9ef9081f4323bb4a035b150.png)\n### 一、配置安装 OpenCode\n\n#### 1. 安装 node.js 环境\n\n**node.js 下载地址：**[https://nodejs.org/zh-cn/download](https://nodejs.org/zh-cn/download)\n\n打开电脑的**cmd**，执行安装成功检测命令：\n\n```\nnode -v\nnpm -v\n```\n\n\n#### 2. 安装 OpenCode\n\nOpenCode**官网：[https://opencode.ai/](https://opencode.ai/)**\n\n打开电脑的**cmd**，执行下面命令进行安装：\n\n```\nnpm install -g @opencode/cli\n```\n\n\n#### 3. 启动 OpenCode\n\n在cmd里执行下面命令启动：\n\n```\nopencode\n```\n\n\n#### 4. 卸载 OpenCode\n\n在cmd里执行下面命令卸载：\n\n```\nopencode uninstall\n```\n\n\n\n然后选择：yes，就可以成功卸载了。\n\n### 二、接入 DeepSeek v4 Flash 模型 API\n\nDeepseek 官网：[https://www.deepseek.com](https://www.deepseek.com/)\n\n![图片](files/1790557477463_5_zzc58ilu_dea98ee476af5192e978e97bd306c557.png)\n\n### 三、越狱文件下载\n\n下载地址：[https://github.com/togg53192-cmd/jailbreaks/blob/main/deepseek-4-1.md](https://github.com/togg53192-cmd/jailbreaks/blob/main/deepseek-4-1.md)\n\n下载下来的文件命名成：**AGENTS.md**",
       "contentIsHTML": false,
       "tags": [
         "越狱教程"
@@ -618,6 +618,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-28 09:12",
+      "action": "编辑日记：DeepSeek V4.1 Flash越狱教程"
+    },
     {
       "time": "2026-09-28 09:07",
       "action": "编辑日记：DeepSeek V4.1 Flash越狱教程"
@@ -1013,10 +1017,6 @@
     {
       "time": "2026-09-24 21:25",
       "action": "修改站点设置"
-    },
-    {
-      "time": "2026-09-24 20:17",
-      "action": "删除课程"
     }
   ],
   "categories": [

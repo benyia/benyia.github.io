@@ -1303,23 +1303,16 @@
       "url": "",
       "files": [
         {
-          "name": "头像1.jpg",
-          "url": "files/1790563338482_1_ted8p1n4_头像1.jpg",
-          "type": "JPG",
-          "size": 98497,
-          "folder": ""
-        },
-        {
           "name": "头像2.jpg",
-          "url": "files/1790563340569_2_ke7pvlp2_头像2.jpg",
+          "url": "files/1790563368447_1_mzs1rwyq_头像2.jpg",
           "type": "JPG",
           "size": 364653,
           "folder": ""
         }
       ],
       "images": [],
-      "file": "files/1790563338482_1_ted8p1n4_头像1.jpg",
-      "fileName": "头像1.jpg",
+      "file": "files/1790563368447_1_mzs1rwyq_头像2.jpg",
+      "fileName": "头像2.jpg",
       "time": "2026-09-28 10:42"
     }
   ],

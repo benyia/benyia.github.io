@@ -1754,12 +1754,41 @@ function clearSkeletons(){
   });
 }
 
+/* ============================================================
+   读 data.json
+   ⚠️ GitHub Pages 的 CDN 缓存 data.json 时【忽略查询字符串】，
+      同一份副本最多发 10 分钟，所以 ?v=时间戳 是绕不过去的。
+      站长刚在后台保存过（同一浏览器会留下标记）时，直接读 GitHub API，
+      这样保存完刷前台马上就能看到，不用等 CDN 过期。普通访客不受影响。
+   ============================================================ */
+function dataJustSaved(){
+  try{
+    var t = parseInt(localStorage.getItem("benyia_data_fresh") || "0", 10);
+    return t > Date.now();
+  }catch(e){ return false; }
+}
+async function readFreshData(){
+  if(!dataJustSaved()) return null;
+  try{
+    var r = await fetch("https://api.github.com/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/data.json?ref=main&t=" + Date.now(), { cache: "no-store" });
+    if(!r.ok) return null;
+    var meta = await r.json();
+    var bin = atob(String(meta.content || "").replace(/\s/g, ""));
+    var bytes = new Uint8Array(bin.length);
+    for(var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }catch(e){ return null; }   /* 拿不到就安静地退回 Pages */
+}
 async function loadData(){
   showSkeletons();          /* 先上骨架屏，别让首屏空着转圈 */
   try {
-    var res = await fetch("data.json?v=" + Date.now());
-    if(res.ok){ blogData = await res.json(); }
-    else { blogData = JSON.parse(JSON.stringify(DEFAULT_DATA)); }
+    var fresh = await readFreshData();
+    if(fresh){ blogData = fresh; }
+    else {
+      var res = await fetch("data.json?v=" + Date.now());
+      if(res.ok){ blogData = await res.json(); }
+      else { blogData = JSON.parse(JSON.stringify(DEFAULT_DATA)); }
+    }
   } catch(e) {
     blogData = JSON.parse(JSON.stringify(DEFAULT_DATA));
   }

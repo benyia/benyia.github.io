@@ -619,7 +619,7 @@
   ],
   "logs": [
     {
-      "time": "2026-09-28 10:42",
+      "time": "2026-09-28 10:43",
       "action": "添加音乐：头像"
     },
     {
@@ -1303,17 +1303,17 @@
       "url": "",
       "files": [
         {
-          "name": "头像2.jpg",
-          "url": "files/1790563368447_1_mzs1rwyq_头像2.jpg",
+          "name": "头像1.jpg",
+          "url": "files/1790563426094_1_a9u1q6sh_头像1.jpg",
           "type": "JPG",
-          "size": 364653,
+          "size": 98497,
           "folder": ""
         }
       ],
       "images": [],
-      "file": "files/1790563368447_1_mzs1rwyq_头像2.jpg",
-      "fileName": "头像2.jpg",
-      "time": "2026-09-28 10:42"
+      "file": "files/1790563426094_1_a9u1q6sh_头像1.jpg",
+      "fileName": "头像1.jpg",
+      "time": "2026-09-28 10:43"
     }
   ],
   "roster": [

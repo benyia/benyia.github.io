@@ -1181,9 +1181,12 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
 
     <div class="section" id="sec-life">
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px" id="lifeList"></div>
-      <h3 style="margin:26px 0 12px;font-size:1rem;padding-left:10px;border-left:3px solid var(--primary)">🎵 音乐 · 🎬 视频 · 🖼️ 图片</h3>
-      <div class="filter-bar" id="mediaFilters"></div>
-      <div id="mediaList"></div>
+      <!-- 影音区：音乐只在右侧歌曲播放器里；这里只放视频/图片，没有就整块隐藏 -->
+      <div id="lifeMediaBox">
+        <h3 style="margin:26px 0 12px;font-size:1rem;padding-left:10px;border-left:3px solid var(--primary)">🎬 视频 · 🖼️ 图片</h3>
+        <div class="filter-bar" id="mediaFilters"></div>
+        <div id="mediaList"></div>
+      </div>
     </div>
 
     <div class="section" id="sec-ledger">
@@ -1205,29 +1208,7 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
     </div>
 
     <div class="section" id="sec-diary">
-      <!-- 前台直接写日记（和「记一笔」一样，需要浏览器里存过 GitHub Token） -->
-      <div class="front-form" id="diaryFormBox">
-        <h4>✍️ 写一篇日记</h4>
-        <div class="ff-hint">支持 Markdown：<code>## 小标题</code>、<code>**加粗**</code>、<code>- 列表</code>、<code>![图](图片地址)</code>；图片地址可以先在后台「添加图片」上传后复制过来。</div>
-        <div class="ff-row">
-          <input type="text" id="fdTitle" placeholder="标题（留空就取正文第一行）">
-          <input type="date" id="fdDate" style="flex:0 0 160px">
-        </div>
-        <div class="ff-row">
-          <input type="text" id="fdTags" placeholder="标签，逗号分隔（如：深度学习,随笔）">
-        </div>
-        <div class="rt-toolbar" id="fdToolbar"></div>
-        <div class="rt-content" id="fdContent" contenteditable="true" data-placeholder="今天学到/收获了什么……可以直接排版、插图片"></div>
-        <div class="rt-foot">
-          <span>支持小标题、加粗、列表、插图；写完点右边「保存日记」</span>
-          <span><a onclick="toggleFrontRich('fd')" id="fdMode">切换到源码 / Markdown</a></span>
-        </div>
-        <input type="file" id="fdImgInput" accept="image/*" multiple style="display:none" onchange="onFrontImagePick(event,'fd')">
-        <div class="ff-actions" style="margin-top:12px">
-          <button class="btn-primary" type="button" onclick="addDiaryFromFront()">保存日记</button>
-          <span class="ff-status" id="fdStatus"></span>
-        </div>
-      </div>
+      <!-- 日记只在后台写，前台只看（原来那个「写一篇日记」表单已按需求移除） -->
       <div id="diaryList"></div>
     </div>
 
@@ -2065,7 +2046,8 @@ function renderFilters(){
   document.getElementById("classFilters").innerHTML = types.map(function(t){
     return '<button class="'+(classFilter===t?"active":"")+'" onclick="setClassFilter(\''+t+'\')">'+(t==="all"?"全部":t)+'</button>';
   }).join("");
-  var mf = [["all","全部"],["music","音乐"],["video","视频"],["image","图片"]];
+  /* 音乐只在右侧的歌曲播放器里出现，生活服务页不再重复列一遍 */
+  var mf = [["all","全部"],["video","视频"],["image","图片"]];
   document.getElementById("mediaFilters").innerHTML = mf.map(function(x){
     return '<button class="'+(mediaFilter===x[0]?"active":"")+'" onclick="setMediaFilter(\''+x[0]+'\')">'+x[1]+'</button>';
   }).join("");
@@ -3013,25 +2995,30 @@ function backToClass(){ showSection("class"); setPageTitle("class"); currentClas
 
 function setMediaFilter(k){ mediaFilter = k; renderFilters(); renderMedia(); }
 function renderMedia(){
-  var all = blogData.media||[];
-  var list = mediaFilter==="all" ? all : all.filter(function(m){return m.type===mediaFilter;});
+  /* 「音乐」这一类的条目只在右侧歌曲播放器里展示；生活服务页只列视频和图片 */
+  var all = (blogData.media||[]).filter(function(m){ return m && m.type !== "music"; });
+  var wrap = document.getElementById("lifeMediaBox");
+  if(wrap) wrap.style.display = all.length ? "" : "none";   /* 没有视频/图片就整块不显示 */
+  if(!all.length){ document.getElementById("mediaList").innerHTML = ""; return; }
+  var f = mediaFilter === "music" ? "all" : mediaFilter;
+  var list = f === "all" ? all : all.filter(function(m){ return m.type === f; });
   document.getElementById("mediaList").innerHTML = list.map(function(m){
-    var f = collectFiles(m)[0];
-    var icon = m.type==="music" ? "🎵" : (m.type==="video" ? "🎬" : "🖼️");
+    var f0 = collectFiles(m)[0];
+    var icon = m.type === "video" ? "🎬" : "🖼️";
     var player = "";
-    if(f && f.url){
-      var nm = String(f.name||"");
+    if(f0 && f0.url){
+      var nm = String(f0.name||"");
       var dot = nm.lastIndexOf(".");
       var ext = dot >= 0 ? nm.slice(dot+1).toLowerCase() : "";
-      if(["mp3","wav","m4a","ogg","flac","aac","wma"].indexOf(ext) >= 0){
-        player = '<audio controls preload="metadata" src="'+esc(f.url)+'" style="width:100%;max-width:420px;margin-bottom:10px"></audio>';
-      }else if(["mp4","webm","mov","mkv","avi","m4v"].indexOf(ext) >= 0){
-        player = '<video controls preload="metadata" src="'+esc(f.url)+'" style="width:100%;border-radius:10px;margin-bottom:10px"></video>';
-      }else if(m.type==="image"){
-        player = '<img src="'+esc(f.url)+'" style="width:100%;border-radius:8px;margin-bottom:10px" alt="">';
+      if(["mp4","webm","mov","mkv","avi","m4v"].indexOf(ext) >= 0){
+        player = '<video controls preload="metadata" src="'+esc(f0.url)+'" style="width:100%;border-radius:10px;margin-bottom:10px"></video>';
+      }else if(["mp3","wav","m4a","ogg","flac","aac","wma"].indexOf(ext) >= 0){
+        player = '<audio controls preload="metadata" src="'+esc(f0.url)+'" style="width:100%;max-width:420px;margin-bottom:10px"></audio>';
+      }else if(m.type === "image"){
+        player = '<img src="'+esc(f0.url)+'" style="width:100%;border-radius:8px;margin-bottom:10px" alt="">';
       }
     }
-    var dl = (f && f.url) ? '<div style="margin-top:8px">'+fileActionHTML(f.url, f.name)+'</div>' : '';
+    var dl = (f0 && f0.url) ? '<div style="margin-top:8px">'+fileActionHTML(f0.url, f0.name)+'</div>' : '';
     if(m.url) dl += '<div style="margin-top:8px"><a class="btn" href="'+esc(m.url)+'" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.78rem">打开链接</a></div>';
     return '<div class="article-card"><div class="article-body">'+player+'<div class="article-title">'+icon+' '+esc(m.title)+'</div>'+(m.desc?'<div class="article-desc">'+esc(m.desc)+'</div>':"")+dl+'</div></div>';
   }).join("") || '<div class="empty">暂无内容</div>';
@@ -3489,35 +3476,6 @@ async function onFrontImagePick(e){
     sayStatus("fdStatus", "图片上传失败：" + err.message, "#ef4444");
   }
 }
-async function addDiaryFromFront(){
-  var content = getFrontRich("fd");
-  var title = (document.getElementById("fdTitle").value || "").trim();
-  var tags = parseTagsText(document.getElementById("fdTags").value);
-  var date = document.getElementById("fdDate").value || todayStr();
-  if(!content && !title){ sayStatus("fdStatus", "请先写点内容", "#ef4444"); return; }
-  if(!title) title = autoTitle(looksHTML(content) ? mdText(content) : content, date);
-  sayStatus("fdStatus", "保存中…（正在写入 GitHub）");
-  try{
-    await pushDataChange(function(d){
-      d.diary = d.diary || [];
-      d.diary.push({
-        date: date, title: title, content: content,
-        contentIsHTML: isFrontRich("fd"),
-        tags: tags, images: [], media: [], time: nowStr()
-      });
-    }, "前台写日记：" + title);
-    var ed = document.getElementById("fdContent");
-    if(ed) ed.innerHTML = "";
-    var st = document.getElementById("fdSource");
-    if(st) st.value = "";
-    document.getElementById("fdTitle").value = "";
-    document.getElementById("fdTags").value = "";
-    renderDiary();
-    sayStatus("fdStatus", "✅ 已保存并生效（线上约 1 分钟后同步）", "var(--primary-dark)");
-  }catch(e){
-    sayStatus("fdStatus", "保存失败：" + e.message, "#ef4444");
-  }
-}
 async function addAdvisorFromFront(){
   var content = (document.getElementById("faContent").value || "").trim();
   var date = document.getElementById("faDate").value || todayStr();
@@ -3545,15 +3503,11 @@ async function addAdvisorFromFront(){
    注意：站点标题/头像等「站点设置」只在管理后台改，前台不提供编辑入口。 */
 function initFrontForms(){
   var today = todayStr();
-  var d = document.getElementById("fdDate");
   var a = document.getElementById("faDate");
-  if(d && !d.value) d.value = today;
   if(a && !a.value) a.value = today;
-  /* 前台日记的轻量富文本工具栏 */
-  initFrontRich("fd");
 
   var hasToken = !!frontToken();
-  var ownerOnly = ["diaryFormBox", "advisorFormBox", "ledgerFormBox", "ledgerStatsBox", "ledgerHint"];
+  var ownerOnly = ["advisorFormBox", "ledgerFormBox", "ledgerStatsBox", "ledgerHint"];
   ownerOnly.forEach(function(id){
     var el = document.getElementById(id);
     if(!el) return;

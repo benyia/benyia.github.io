@@ -619,8 +619,8 @@
   ],
   "logs": [
     {
-      "time": "2026-09-28 10:41",
-      "action": "添加图片：头像"
+      "time": "2026-09-28 10:42",
+      "action": "添加音乐：头像"
     },
     {
       "time": "2026-09-28 10:19",
@@ -1297,37 +1297,30 @@
       "time": "2026-09-27 22:53"
     },
     {
-      "type": "image",
+      "type": "music",
       "title": "头像",
       "desc": "",
       "url": "",
       "files": [
         {
-          "name": "images.jpg",
-          "url": "files/1790563248603_1_zx3jdd86_images.jpg",
-          "type": "JPG",
-          "size": 23438,
-          "folder": ""
-        },
-        {
           "name": "头像1.jpg",
-          "url": "files/1790563250312_2_n935df2h_头像1.jpg",
+          "url": "files/1790563338482_1_ted8p1n4_头像1.jpg",
           "type": "JPG",
           "size": 98497,
           "folder": ""
         },
         {
           "name": "头像2.jpg",
-          "url": "files/1790563252575_3_tzilczv2_头像2.jpg",
+          "url": "files/1790563340569_2_ke7pvlp2_头像2.jpg",
           "type": "JPG",
           "size": 364653,
           "folder": ""
         }
       ],
       "images": [],
-      "file": "files/1790563248603_1_zx3jdd86_images.jpg",
-      "fileName": "images.jpg",
-      "time": "2026-09-28 10:41"
+      "file": "files/1790563338482_1_ted8p1n4_头像1.jpg",
+      "fileName": "头像1.jpg",
+      "time": "2026-09-28 10:42"
     }
   ],
   "roster": [

@@ -147,6 +147,43 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .rte-content audio,.rte-content video{max-width:100%;margin:6px 0;display:block}
 .rte-plain{width:100%;min-height:260px;padding:14px 16px;border:none;outline:none;font-family:ui-monospace,Consolas,monospace;font-size:.85rem;line-height:1.7;resize:vertical;color:var(--text)}
 .rte-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:.76rem;color:#94a3b8;padding:6px 10px;background:#f8fafc;border-top:1px solid var(--border)}
+/* 三种编辑模式的切换条 */
+.rte-modes{display:inline-flex;gap:2px;background:#eef2f6;border:1px solid var(--border);border-radius:8px;padding:2px}
+.rte-modes button{
+  border:none;background:transparent;font-family:inherit;font-size:.74rem;line-height:1;
+  padding:5px 9px;border-radius:6px;color:#64748b;cursor:pointer;transition:.15s;
+}
+.rte-modes button:hover{color:var(--primary-dark);background:#fff}
+.rte-modes button.on{background:var(--primary);color:#fff;font-weight:600}
+.rte-modes button:disabled{opacity:.4;cursor:not-allowed}
+.rte-modes button.rte-eye{margin-left:2px}
+.rte-modes button.rte-eye.on{background:#0f172a}
+/* 源码模式的实时预览 */
+.rte-preview{
+  border-top:1px dashed var(--border);padding:16px 18px;background:#fbfdfe;
+  font-size:.9rem;line-height:1.85;color:var(--text);min-height:80px;overflow-wrap:anywhere;
+}
+.rte-preview>*:first-child{margin-top:0}
+.rte-preview h1,.rte-preview h2,.rte-preview h3,.rte-preview h4{margin:18px 0 8px;line-height:1.45;font-weight:700}
+.rte-preview h1{font-size:1.4rem}
+.rte-preview h2{font-size:1.2rem;border-left:4px solid var(--primary);padding-left:10px}
+.rte-preview h3{font-size:1.06rem}
+.rte-preview h4{font-size:.96rem}
+.rte-preview p{margin:10px 0}
+.rte-preview ul,.rte-preview ol{margin:10px 0 10px 22px}
+.rte-preview li{margin:4px 0}
+.rte-preview blockquote{margin:12px 0;padding:8px 14px;border-left:4px solid var(--primary-light);background:#f1f5f9;color:var(--text2);border-radius:0 8px 8px 0}
+.rte-preview img{max-width:100%;border-radius:8px;margin:8px 0;display:block}
+.rte-preview a{color:var(--primary-dark)}
+.rte-preview table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.86rem}
+.rte-preview th,.rte-preview td{border:1px solid var(--border);padding:7px 10px}
+.rte-preview th{background:#f1f5f9;font-weight:600}
+.rte-preview hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+.rte-preview code{background:#f1f5f9;border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-family:ui-monospace,Consolas,monospace;font-size:.85em}
+.rte-preview .rte-prev-code{margin:12px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#f8fafc}
+.rte-preview .rte-prev-code pre{margin:0;padding:12px 14px;overflow-x:auto;font-size:.82rem;line-height:1.65}
+.rte-preview .rte-prev-code code{background:none;border:none;padding:0}
+.rte-preview audio,.rte-preview video{max-width:100%;display:block;margin:10px 0}
 
 /* ===== 统一输入弹窗（替代浏览器自带的 prompt，和站点风格一致） ===== */
 .dlg-mask{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:1500;display:none;align-items:center;justify-content:center;padding:20px}
@@ -1530,6 +1567,15 @@ function inlineMdToHtml(s){
   out = out.replace(/~~([^~]+)~~/g, "<s>$1</s>");
   return out;
 }
+/* Markdown 表格的行拆分 */
+function mdSplitRow(s){
+  return String(s == null ? "" : s).trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map(function(c){ return c.trim(); });
+}
+/* 表格的分隔行：| --- | :--: | 这种 */
+function isMdTableSep(s){
+  s = String(s == null ? "" : s);
+  return s.indexOf("|") >= 0 && /^[\s|:-]*-[\s|:-]*$/.test(s);
+}
 function mdToHtmlLite(src){
   var lines = String(src == null ? "" : src).replace(/\r\n?/g, "\n").split("\n");
   var out = [], i = 0;
@@ -1542,6 +1588,19 @@ function mdToHtmlLite(src){
       while(i < lines.length && !/^\s*```/.test(lines[i])){ code.push(lines[i]); i++; }
       i++;
       out.push("<pre><code>" + mdEscape(code.join("\n")) + "</code></pre>");
+      continue;
+    }
+    /* Markdown 表格（前台 mdRender 也支持，这里对齐） */
+    if(/^\s*\|/.test(line) && i + 1 < lines.length && isMdTableSep(lines[i + 1])){
+      var head = mdSplitRow(line);
+      i += 2;
+      var body = [];
+      while(i < lines.length && /^\s*\|/.test(lines[i])){ body.push(mdSplitRow(lines[i])); i++; }
+      out.push("<table><thead><tr>"
+        + head.map(function(c){ return "<th>" + inlineMdToHtml(c) + "</th>"; }).join("")
+        + "</tr></thead><tbody>"
+        + body.map(function(r){ return "<tr>" + r.map(function(c){ return "<td>" + inlineMdToHtml(c) + "</td>"; }).join("") + "</tr>"; }).join("")
+        + "</tbody></table>");
       continue;
     }
     var h = line.match(/^\s{0,3}(#{1,6})\s+(.*)$/);
@@ -1567,8 +1626,9 @@ function mdToHtmlLite(src){
       continue;
     }
     var para = [];
-    while(i < lines.length && lines[i].trim() && !/^\s*(#{1,6}\s|>|[-*+]\s|\d+[.)]\s|```)/.test(lines[i])){ para.push(lines[i]); i++; }
-    out.push("<p>" + inlineMdToHtml(para.join("<br>")) + "</p>");
+    while(i < lines.length && lines[i].trim() && !/^\s*(#{1,6}\s|>|[-*+]\s|\d+[.)]\s|```|\|)/.test(lines[i])){ para.push(lines[i]); i++; }
+    /* 每行单独转义再拼真 <br>：以前是先 join("<br>") 再转义，<br> 会变成字面量 &lt;br&gt; */
+    out.push("<p>" + para.map(inlineMdToHtml).join("<br>") + "</p>");
   }
   return out.join("") || "<p></p>";
 }
@@ -1650,6 +1710,7 @@ function initRte(key){
     });
   }
   editor.addEventListener("input", function(){ updateRteCount(key); });
+  buildRteModeBar(key);
   updateRteCount(key);
 }
 function saveRteSel(key){
@@ -1673,6 +1734,144 @@ function restoreRteSel(key){
   } catch(e){}
 }
 /* 载入内容：HTML 直接放进去，Markdown 先转成 HTML */
+/* ============================================================
+   正文编辑器：三种模式都保留
+     rich —— 可视化（所见即所得，存 HTML）
+     md   —— Markdown 源码（存 Markdown，前台用 mdRender 渲染）
+     html —— HTML 源码（原样存 HTML，表达力最强，带实时预览）
+   ============================================================ */
+var rtePreviewOn = {};          /* 每个编辑器各自的预览开关 */
+
+/* 模式切换条：注在原来那个「切换到源码/Markdown」链接的位置上 */
+function buildRteModeBar(key){
+  var a = $(RICH_KEYS[key].mode);
+  if(!a || !a.parentNode) return;
+  var host = a.parentNode;
+  if(host.getAttribute("data-modebar")) return;
+  host.setAttribute("data-modebar", "1");
+  host.innerHTML =
+    '<span class="rte-modes" id="rteModes_' + key + '">'
+    + '<button type="button" data-m="rich" onclick="setRichMode(\'' + key + '\',\'rich\')" title="所见即所得">可视化</button>'
+    + '<button type="button" data-m="md" onclick="setRichMode(\'' + key + '\',\'md\')" title="Markdown 源码">Markdown</button>'
+    + '<button type="button" data-m="html" onclick="setRichMode(\'' + key + '\',\'html\')" title="HTML 源码，表达能力最强">HTML</button>'
+    + '<button type="button" class="rte-eye" data-m="preview" onclick="toggleRtePreview(\'' + key + '\')" title="看渲染后的样子">👁 预览</button>'
+    + '</span>';
+  paintRteModeBar(key);
+}
+function paintRteModeBar(key){
+  var box = $("rteModes_" + key);
+  if(!box) return;
+  var m = getRichMode(key);
+  /* 源码模式下工具栏是失效的，藏起来免得白点 */
+  var bar = $(RICH_KEYS[key].bar);
+  if(bar) bar.style.display = (m === "rich") ? "" : "none";
+  var btns = box.querySelectorAll("button[data-m]");
+  for(var i = 0; i < btns.length; i++){
+    var bm = btns[i].getAttribute("data-m");
+    if(bm === "preview"){
+      var usable = (m !== "rich");
+      btns[i].disabled = !usable;
+      btns[i].classList.toggle("on", usable && !!rtePreviewOn[key]);
+      btns[i].title = usable ? "看渲染后的样子" : "可视化模式本身就是所见即所得";
+    }else{
+      btns[i].classList.toggle("on", bm === m);
+    }
+  }
+}
+/* 切模式：内容在几种表示之间自动转换 */
+function setRichMode(key, next){
+  var cfg = RICH_KEYS[key];
+  if(!cfg) return;
+  var editor = $(cfg.editor);
+  if(!editor) return;
+  var cur = getRichMode(key);
+  if(cur === next){ return; }
+
+  if(cur === "rich"){
+    /* 可视化 → 源码：Markdown 走 htmlToMd，HTML 原样带过去 */
+    var html = getRich(key);
+    editor.removeAttribute("contenteditable");
+    editor.style.display = "none";
+    var old = $("rtePlain_" + key);
+    if(old) old.parentNode.removeChild(old);
+    var oldPv = $("rtePreview_" + key);
+    if(oldPv) oldPv.parentNode.removeChild(oldPv);
+    var ta = document.createElement("textarea");
+    ta.className = "rte-plain";
+    ta.id = "rtePlain_" + key;
+    ta.spellcheck = false;
+    ta.value = (next === "md") ? (looksRichHTML(html) ? htmlToMd(html) : html) : html;
+    editor.parentNode.insertBefore(ta, editor.nextSibling);
+    var pv = document.createElement("div");
+    pv.className = "rte-preview";
+    pv.id = "rtePreview_" + key;
+    pv.style.display = "none";
+    ta.parentNode.insertBefore(pv, ta.nextSibling);
+    ta.addEventListener("input", function(){ refreshRtePreview(key); });
+    editorState[key].mode = next;
+    ta.focus();
+    showToast(next === "md"
+      ? "已切到 Markdown 源码：只支持 Markdown 语法，复杂排版建议用 HTML 模式"
+      : "已切到 HTML 源码：可以直接写任意 HTML，点「👁 预览」看效果");
+  }else if(next === "rich"){
+    /* 源码 → 可视化 */
+    var ta2 = $("rtePlain_" + key);
+    var src = ta2 ? ta2.value : "";
+    var asHtml = (cur === "md") ? mdToHtmlLite(src) : src;
+    if(ta2) ta2.parentNode.removeChild(ta2);
+    var pv2 = $("rtePreview_" + key);
+    if(pv2) pv2.parentNode.removeChild(pv2);
+    editor.style.display = "";
+    editor.setAttribute("contenteditable", "true");
+    editor.innerHTML = asHtml;
+    editorState[key].mode = "rich";
+    editorState[key].savedSel = null;
+    updateRteCount(key);
+    showToast("已切回可视化编辑");
+  }else{
+    /* 源码内部 Markdown ↔ HTML 互转 */
+    var ta3 = $("rtePlain_" + key);
+    if(ta3) ta3.value = (next === "html") ? mdToHtmlLite(ta3.value) : htmlToMd(ta3.value);
+    editorState[key].mode = next;
+  }
+  paintRteModeBar(key);
+  refreshRtePreview(key);
+}
+/* 兼容老的调用（万一还有地方引用）：按 可视化 → Markdown → HTML → 可视化 轮换 */
+function toggleRichMode(key){
+  var m = getRichMode(key);
+  setRichMode(key, m === "rich" ? "md" : (m === "md" ? "html" : "rich"));
+}
+/* 预览开关 */
+function toggleRtePreview(key){
+  if(getRichMode(key) === "rich"){ showToast("可视化模式本身就是所见即所得，不用预览", "info"); return; }
+  rtePreviewOn[key] = !rtePreviewOn[key];
+  refreshRtePreview(key);
+}
+function refreshRtePreview(key){
+  var pv = $("rtePreview_" + key);
+  var ta = $("rtePlain_" + key);
+  if(!pv || !ta) return;
+  var on = !!rtePreviewOn[key];
+  pv.style.display = on ? "" : "none";
+  paintRteModeBar(key);
+  if(!on) return;
+  var mode = getRichMode(key);
+  pv.innerHTML = (mode === "md") ? mdToHtmlLite(ta.value) : ta.value;
+  /* 预览里的代码块也套上「语言 + 复制」的样式，和前台一致 */
+  var pres = pv.querySelectorAll("pre");
+  for(var i = 0; i < pres.length; i++){
+    var pre = pres[i], wrap = document.createElement("div");
+    wrap.className = "rte-prev-code";
+    pre.parentNode.insertBefore(wrap, pre);
+    wrap.appendChild(pre);
+  }
+}
+function setModeLink(key, text){
+  var a = $(RICH_KEYS[key].mode);
+  if(a) a.textContent = text;
+}
+
 function loadRich(key, raw){
   var cfg = RICH_KEYS[key];
   if(!cfg) return;
@@ -1682,10 +1881,11 @@ function loadRich(key, raw){
   var s = String(raw == null ? "" : raw);
   var mode = getRichMode(key);
   var ta = $("rtePlain_" + key);
-  if(mode === "plain"){
+  if(mode !== "rich"){
     /* 源码模式下：同步 textarea，别碰正在编辑的内容 */
-    if(ta) ta.value = s;
+    if(ta) ta.value = (mode === "md" && looksRichHTML(s)) ? htmlToMd(s) : s;
     editor.style.display = "none";
+    refreshRtePreview(key);
     return;
   }
   editor.style.display = "";
@@ -1694,12 +1894,12 @@ function loadRich(key, raw){
   editorState[key].savedSel = null;
   updateRteCount(key);
 }
-/* 读内容：rich 模式返回 HTML，plain 模式返回源码 */
+/* 读内容：rich / html 返回 HTML，md 返回 Markdown 源码 */
 function getRich(key){
   var cfg = RICH_KEYS[key];
   if(!cfg) return "";
   var mode = getRichMode(key);
-  if(mode === "plain"){
+  if(mode !== "rich"){
     var ta = $("rtePlain_" + key);
     return ta ? ta.value.trim() : "";
   }
@@ -1709,54 +1909,26 @@ function getRich(key){
   if(html === "<br>" || html === "<p></p>" || html === "<div><br></div>") html = "";
   return html.trim();
 }
-function isRichMode(key){ return getRichMode(key) === "rich"; }
+/* 存下去的是不是 HTML（只有 Markdown 模式存的是 Markdown） */
+function isRichMode(key){ return getRichMode(key) !== "md"; }
 function getRichMode(key){ return (editorState[key] && editorState[key].mode) || "rich"; }
-/* 源码 / 所见即所得 来回切换 */
-function toggleRichMode(key){
-  var cfg = RICH_KEYS[key];
-  if(!cfg) return;
-  var editor = $(cfg.editor);
-  var mode = getRichMode(key);
-  if(mode === "rich"){
-    var html = getRich(key);
-    editorState[key].mode = "plain";
-    editor.removeAttribute("contenteditable");
-    editor.style.display = "none";
-    var old = $("rtePlain_" + key);
-    if(old) old.parentNode.removeChild(old);
-    var ta = document.createElement("textarea");
-    ta.className = "rte-plain";
-    ta.id = "rtePlain_" + key;
-    ta.value = looksRichHTML(html) ? htmlToMd(html) : html;
-    editor.parentNode.insertBefore(ta, editor.nextSibling);
-    ta.focus();
-    setModeLink(key, "切换回可视化编辑");
-    showToast("已切到源码模式：这里内容是 Markdown，切回去会自动转换");
-  }else{
-    var ta2 = $("rtePlain_" + key);
-    var src = ta2 ? ta2.value : "";
-    if(ta2) ta2.parentNode.removeChild(ta2);
-    editor.style.display = "";
-    editor.setAttribute("contenteditable", "true");
-    editorState[key].mode = "rich";
-    editor.innerHTML = !src.trim() ? "" : (looksRichHTML(src) ? src : mdToHtmlLite(src));
-    editorState[key].savedSel = null;
-    updateRteCount(key);
-    setModeLink(key, "切换到源码/Markdown");
-    showToast("已切回可视化编辑");
-  }
-}
-function setModeLink(key, text){
-  var a = $(RICH_KEYS[key].mode);
-  if(a) a.textContent = text;
-}
 function updateRteCount(key){
   var cfg = RICH_KEYS[key];
   if(!cfg) return;
+  var mode = getRichMode(key);
   var editor = $(cfg.editor);
-  var n = editor ? (editor.textContent || "").replace(/\s+/g, "").length : 0;
+  var n = 0;
+  if(mode !== "rich"){
+    var ta = $("rtePlain_" + key);
+    n = ta ? String(ta.value || "").replace(/\s+/g, "").length : 0;
+  }else{
+    n = editor ? (editor.textContent || "").replace(/\s+/g, "").length : 0;
+  }
   var box = $("rteCount_" + key);
-  if(box) box.textContent = n ? ("约 " + n + " 字") : "";
+  if(box){
+    var label = mode === "md" ? " Markdown" : (mode === "html" ? " HTML" : "");
+    box.textContent = n ? ("约 " + n + " 字" + label) : "";
+  }
 }
 
 /* HTML → Markdown：只为「切到源码模式」时能继续用 Markdown 编辑 */

@@ -670,12 +670,8 @@
   ],
   "logs": [
     {
-      "time": "2026-09-30 11:15",
+      "time": "2026-09-30 11:17",
       "action": "编辑应用：Google Chrome"
-    },
-    {
-      "time": "2026-09-30 11:14",
-      "action": "编辑应用：DeepSeek"
     },
     {
       "time": "2026-09-30 11:10",
@@ -1067,6 +1063,10 @@
     },
     {
       "time": "2026-09-25 15:56",
+      "action": "修改站点设置"
+    },
+    {
+      "time": "2026-09-25 15:55",
       "action": "修改站点设置"
     }
   ],
@@ -1643,7 +1643,7 @@
     },
     {
       "name": "DeepSeek",
-      "icon": "files/1790738076494_1_2ocwh274_DeeepSeek.png",
+      "icon": "🐋",
       "summary": "中文人工智能大模型平台",
       "cover": "",
       "tags": [
@@ -1687,7 +1687,7 @@
     },
     {
       "name": "Google Chrome",
-      "icon": "files/1790738113095_2_piz6n75o_chrome.png",
+      "icon": "files/1790738243529_1_ns0oxf6n_chrome.png",
       "summary": "全球最受欢迎的浏览器",
       "cover": "",
       "tags": [

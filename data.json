@@ -670,6 +670,10 @@
   ],
   "logs": [
     {
+      "time": "2026-09-30 11:13",
+      "action": "编辑应用：Google Chrome"
+    },
+    {
       "time": "2026-09-30 11:12",
       "action": "编辑应用：CC Switch"
     },
@@ -1063,10 +1067,6 @@
     },
     {
       "time": "2026-09-25 15:55",
-      "action": "修改站点设置"
-    },
-    {
-      "time": "2026-09-25 15:53",
       "action": "修改站点设置"
     }
   ],
@@ -1687,7 +1687,7 @@
     },
     {
       "name": "Google Chrome",
-      "icon": "🌐",
+      "icon": "files/1790738012238_4_ts7y4i39_chrome.png",
       "summary": "全球最受欢迎的浏览器",
       "cover": "",
       "tags": [

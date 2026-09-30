@@ -2977,6 +2977,38 @@ function previewSrc(path){
   return p;
 }
 
+/* ============================================================
+   上传前去重：同一份内容只存一份
+   · 用 git 的 blob 指纹 sha1("blob <长度>\0" + 内容) 判断内容是否已在仓库里
+   · 命中就直接复用已有路径，不再新建副本
+   （以前「保存没显示 → 又传一遍」会堆出几十份重复文件，这里从根上堵住）
+   ============================================================ */
+var _blobIndex = null;      /* { blobSha1 -> 仓库路径 }，整个会话缓存一次 */
+async function repoBlobIndex(force){
+  if(_blobIndex && !force) return _blobIndex;
+  try{
+    var res = await fetch(GH_API_BASE + "/repos/"+GH_OWNER+"/"+GH_REPO+"/git/trees/"+GH_BRANCH+"?recursive=1",
+                          { headers: ghHeaders(), cache: "no-store" });
+    var j = await res.json();
+    var map = {};
+    if(res.ok && j && j.tree) j.tree.forEach(function(t){ if(t.type === "blob") map[t.sha] = t.path; });
+    _blobIndex = map;
+  }catch(e){ if(!_blobIndex) _blobIndex = {}; }
+  return _blobIndex;
+}
+/* 本地算出与 git 一致的内容指纹 */
+async function gitBlobSha1(file){
+  try{
+    if(!(window.crypto && crypto.subtle && crypto.subtle.digest)) return "";
+    var buf = new Uint8Array(await file.arrayBuffer());
+    var head = new TextEncoder().encode("blob " + buf.length + "\u0000");
+    var all = new Uint8Array(head.length + buf.length);
+    all.set(head, 0); all.set(buf, head.length);
+    var d = await crypto.subtle.digest("SHA-1", all);
+    return Array.prototype.map.call(new Uint8Array(d), function(b){ return ("0"+b.toString(16)).slice(-2); }).join("");
+  }catch(e){ return ""; }
+}
+
 async function uploadFile(file, kind){
   if(file.size > MAX_FILE_MB*1024*1024){
     throw new Error("「"+file.name+"」有 "+fmtSize(file.size)+"，超过 GitHub 单文件上限 "+MAX_FILE_MB+"MB。大文件请先传到网盘，再用「外链地址」粘链接。");
@@ -2984,6 +3016,23 @@ async function uploadFile(file, kind){
   if(!getStoredToken()) throw new Error("请先在「站点设置」里填写 GitHub Token");
 
   var status = kindEl(kind, "UpStatus");
+
+  /* —— 去重：内容指纹一致就直接复用仓库里已有的文件 —— */
+  var blobSha1 = "";
+  try{
+    blobSha1 = await gitBlobSha1(file);
+    if(blobSha1){
+      var idx = await repoBlobIndex();
+      var exist = idx[blobSha1];
+      if(exist && exist.indexOf("files/") === 0){
+        if(status) status.textContent = "内容已存在，直接复用：" + exist;
+        finishUploadProgress(true, "已复用仓库里已有的文件（没有重复上传）");
+        showToast("这个文件内容和已上传的一模一样，已直接复用，没有重复占空间");
+        return { name: exist.split("/").pop(), url: exist, type: (exist.split(".").pop()||"file").toUpperCase(), size: file.size };
+      }
+    }
+  }catch(e){}
+
   showUploadProgress(file.name);
   if(status){ status.textContent = "正在编码 " + file.name + " …"; }
   setUploadProgress(0);
@@ -3034,6 +3083,7 @@ async function uploadFile(file, kind){
       });
 
       freshFiles[safe] = Date.now();
+      if(blobSha1 && _blobIndex) _blobIndex[blobSha1] = safe;   /* 同一份内容再传就直接命中 */
       setUploadProgress(100, totalSize, totalSize);
       finishUploadProgress(true, "上传完成 ✅ " + fmtSize(totalSize));
       if(status) status.textContent = "✅ 已上传：" + file.name + "（记得点保存）";

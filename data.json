@@ -442,26 +442,6 @@
         }
       ],
       "time": "2026-09-29 18:19"
-    },
-    {
-      "title": "chrome",
-      "source": "",
-      "date": "2026-09-30",
-      "level": "normal",
-      "content": "",
-      "contentIsHTML": true,
-      "tags": [],
-      "images": [],
-      "files": [
-        {
-          "name": "chrome.png",
-          "url": "files/1790738593144_1_xbvgzcx0_chrome.png",
-          "type": "PNG",
-          "size": 6879,
-          "folder": ""
-        }
-      ],
-      "time": "2026-09-30 11:23"
     }
   ],
   "classItems": [
@@ -689,6 +669,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-30 14:52",
+      "action": "删除通知"
+    },
     {
       "time": "2026-09-30 11:54",
       "action": "编辑应用：Reddit（红迪）"
@@ -1084,10 +1068,6 @@
     {
       "time": "2026-09-25 19:32",
       "action": "名单字段可见性：email 显示"
-    },
-    {
-      "time": "2026-09-25 19:32",
-      "action": "名单字段可见性：birthday 显示"
     }
   ],
   "categories": [

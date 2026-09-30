@@ -554,6 +554,21 @@
       "url": "https://www.taobao.com/",
       "files": [],
       "images": []
+    },
+    {
+      "icon": "files/1790734538708_2_kq79d48g_DeeepSeek.png",
+      "title": "deepseek Harness",
+      "desc": "",
+      "url": "https://www.deepseek.com/harness/",
+      "files": [],
+      "images": [
+        {
+          "name": "PixPin_2026-09-30_10-14-48.png",
+          "url": "files/1790734512656_1_k4hb2fdh_PixPin_2026-09-30_10-14-48.png",
+          "type": "PNG",
+          "size": 112139
+        }
+      ]
     }
   ],
   "ledger": [
@@ -661,6 +676,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-30 10:16",
+      "action": "添加生活服务：deepseek Harness"
+    },
     {
       "time": "2026-09-29 21:33",
       "action": "编辑通知：Edgetunnel2.0 全新版本"
@@ -1055,10 +1074,6 @@
     },
     {
       "time": "2026-09-24 23:36",
-      "action": "名单：前台隐藏"
-    },
-    {
-      "time": "2026-09-24 23:32",
       "action": "名单：前台隐藏"
     }
   ],

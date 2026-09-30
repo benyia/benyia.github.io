@@ -442,6 +442,26 @@
         }
       ],
       "time": "2026-09-29 18:19"
+    },
+    {
+      "title": "chrome",
+      "source": "",
+      "date": "2026-09-30",
+      "level": "normal",
+      "content": "",
+      "contentIsHTML": true,
+      "tags": [],
+      "images": [],
+      "files": [
+        {
+          "name": "chrome.png",
+          "url": "files/1790738593144_1_xbvgzcx0_chrome.png",
+          "type": "PNG",
+          "size": 6879,
+          "folder": ""
+        }
+      ],
+      "time": "2026-09-30 11:23"
     }
   ],
   "classItems": [
@@ -670,8 +690,8 @@
   ],
   "logs": [
     {
-      "time": "2026-09-30 11:22",
-      "action": "编辑应用：Google Chrome"
+      "time": "2026-09-30 11:23",
+      "action": "发布通知：chrome"
     },
     {
       "time": "2026-09-30 11:19",
@@ -1687,7 +1707,7 @@
     },
     {
       "name": "Google Chrome",
-      "icon": "files/1790738515210_1_f0hy5laz_chrome.png",
+      "icon": "🌐",
       "summary": "全球最受欢迎的浏览器",
       "cover": "",
       "tags": [

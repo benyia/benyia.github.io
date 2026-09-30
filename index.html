@@ -1006,6 +1006,41 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
 .stat-row{display:flex;align-items:center;justify-content:space-between;padding:8px 2px;font-size:.84rem;color:var(--text2)}
 .stat-row + .stat-row{border-top:1px dashed var(--border)}
 .sr-v{font-weight:700;color:var(--primary-dark);font-variant-numeric:tabular-nums}
+/* ============================================================
+   🧩 精选应用（生活服务）：卡片网格 + 应用详情页
+   ============================================================ */
+.app-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px}
+.app-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;display:flex;flex-direction:column;gap:10px;height:100%}
+.app-card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(15,23,42,.10);border-color:var(--primary)}
+.app-head{display:flex;align-items:center;gap:12px}
+.app-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;background:var(--primary-light);overflow:hidden;flex:0 0 auto}
+.app-icon img{width:100%;height:100%;object-fit:cover}
+.app-name{font-weight:700;font-size:.98rem;color:var(--text);word-break:break-word}
+.app-sum{font-size:.8rem;color:var(--text2);line-height:1.55;min-height:2.4em}
+.app-chips{display:flex;flex-wrap:wrap;gap:6px}
+.app-chip{font-size:.72rem;padding:3px 9px;border-radius:99px;background:var(--soft);border:1px solid var(--border);color:var(--text2);white-space:nowrap}
+.app-dl{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;border-radius:10px;background:var(--primary-light);color:var(--primary-dark);font-size:.82rem;font-weight:600;transition:background .18s,color .18s}
+.app-card:hover .app-dl{background:var(--primary);color:#fff}
+.app-sec-title{font-size:1rem;margin:26px 0 12px;padding-left:10px;border-left:3px solid var(--primary)}
+.app-hero{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.app-icon-lg{width:76px;height:76px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;background:var(--primary-light);overflow:hidden;flex:0 0 auto}
+.app-icon-lg img{width:100%;height:100%;object-fit:cover}
+.app-cover{margin-top:16px;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.app-cover img{width:100%;display:block}
+.app-feature{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--soft);margin-bottom:10px}
+.app-feature h4{margin:0 0 5px;font-size:.9rem;color:var(--text)}
+.app-feature p{margin:0;font-size:.84rem;color:var(--text2);line-height:1.65}
+.app-dl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(224px,1fr));gap:12px}
+.app-dl-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+.app-dl-card .plat{font-weight:600;font-size:.9rem;color:var(--text)}
+.app-dl-card .pdesc{font-size:.75rem;color:var(--text3);margin-top:2px}
+.app-dl-btn{margin-left:auto;padding:7px 14px;border-radius:9px;background:var(--primary);color:#fff;font-size:.8rem;text-decoration:none;white-space:nowrap;transition:opacity .18s}
+.app-dl-btn:hover{opacity:.88}
+.app-pn{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.app-pn a{flex:1 1 240px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--card);text-decoration:none;color:var(--text);font-size:.84rem;transition:border-color .18s}
+.app-pn a:hover{border-color:var(--primary)}
+.app-pn .lbl{display:block;font-size:.72rem;color:var(--text3);margin-bottom:3px}
+@media (max-width:600px){.app-grid{grid-template-columns:1fr}.app-dl-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1199,12 +1234,47 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
     </div>
 
     <div class="section" id="sec-life">
+      <!-- 🧩 精选应用：点卡片进详情页（版式参考 X超哥博客「精选应用」） -->
+      <div id="appsBox">
+        <h3 class="app-sec-title" style="margin-top:0">🧩 精选应用</h3>
+        <div style="font-size:.8rem;color:var(--text3);margin-bottom:14px">收录值得安装的实用应用、效率工具与优质软件资源。</div>
+        <div class="app-grid" id="appList"></div>
+      </div>
+      <h3 class="app-sec-title" id="lifeLinksTitle">🔖 常用网站</h3>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px" id="lifeList"></div>
       <!-- 影音区：音乐只在右侧歌曲播放器里；这里只放视频/图片，没有就整块隐藏 -->
       <div id="lifeMediaBox">
         <h3 style="margin:26px 0 12px;font-size:1rem;padding-left:10px;border-left:3px solid var(--primary)">🎬 视频 · 🖼️ 图片</h3>
         <div class="filter-bar" id="mediaFilters"></div>
         <div id="mediaList"></div>
+      </div>
+    </div>
+
+    <!-- 🧩 应用详情页：和 X超哥博客的应用页一样，有介绍、应用特色、应用信息、下载地址 -->
+    <div class="section" id="sec-appDetail">
+      <div class="section-header"><button class="back-btn" onclick="backToApps()">← 返回</button></div>
+      <div class="article-card" style="padding:20px">
+        <div class="app-hero">
+          <div class="app-icon-lg" id="adIcon">🧩</div>
+          <div style="flex:1;min-width:220px">
+            <h2 id="adTitle" style="margin:0 0 8px;font-size:1.3rem"></h2>
+            <div class="article-meta" id="adMeta"></div>
+            <p class="intro" id="adSummary" style="margin:10px 0 0"></p>
+            <div class="chip-row" id="adTags" style="margin-top:10px"></div>
+          </div>
+        </div>
+        <div class="app-cover" id="adCover" style="display:none"></div>
+        <div id="adIntro" style="display:none"></div>
+        <h3 class="app-sec-title" id="adFeatTitle">应用特色</h3>
+        <div id="adFeatures"></div>
+        <h3 class="app-sec-title" id="adInfoTitle">应用信息</h3>
+        <div class="kv-list" id="adInfo"></div>
+        <h3 class="app-sec-title" id="adDlTitle">下载地址</h3>
+        <div class="app-dl-grid" id="adDownloads"></div>
+        <div id="adFiles"></div>
+        <h3 class="app-sec-title" id="adMoreTitle">猜你喜欢</h3>
+        <div class="app-grid" id="adMore"></div>
+        <div class="app-pn" id="adPn"></div>
       </div>
     </div>
 
@@ -1441,7 +1511,8 @@ const PAGE_TITLES = {
   courseDetail: ["课程详情", ""],
   paperDetail: ["论文详情", ""],
   noticeDetail: ["通知详情", ""],
-  classDetail: ["班级事务详情", ""]
+  classDetail: ["班级事务详情", ""],
+  appDetail: ["应用详情", ""]
 };
 
 const DEFAULT_DATA = {
@@ -2152,6 +2223,7 @@ function renderAll(){
   renderNotices();
   renderClass();
   renderLife();
+  renderApps();
   renderMedia();
   renderRoster();
   renderLedger();
@@ -2166,7 +2238,7 @@ function renderAll(){
 
   /* 交互增强：懒加载图片、给各列表挂入场动画、应用站点配置 */
   lazyImages(document);
-  ["homeList", "coursesList", "papersList", "noticesList", "classList", "lifeList", "mediaList", "diaryList", "advisorList", "ledgerList", "rosterList"]
+  ["homeList", "coursesList", "papersList", "noticesList", "classList", "lifeList", "appList", "mediaList", "diaryList", "advisorList", "ledgerList", "rosterList"]
     .forEach(function(id){ markReveal(document.getElementById(id), ":scope > *"); });
   markReveal(document.querySelector(".left-col"), ":scope > *");
   applySiteConfig();
@@ -3085,6 +3157,111 @@ function renderLife(){
   }).join("") || '<div class="empty">暂无</div>';
 }
 
+/* ============================================================
+   🧩 精选应用：生活服务里的应用卡片 + 点开的详情页
+   · 数据来自 data.json 的 apps 数组（后台「精选应用」里维护）
+   · 字段：name / icon / summary / cover / tags[] / intro(Markdown)
+          features[{title,desc}] / developer / website / github
+          social[{name,url}] / downloads[{platform,desc,url,label}]
+          images[] / files[] / time / author / views
+   ============================================================ */
+var currentAppIdx = -1;
+function appIconHTML(a, big){
+  var ic = (a && a.icon) ? a.icon : "🧩";
+  return isImgUrl(ic) ? '<img src="'+esc(ic)+'" alt="">' : esc(ic);
+}
+function appCardHTML(a, idx){
+  var tags = (a.tags||[]).slice(0,4).map(function(t){ return '<span class="app-chip">'+esc(t)+'</span>'; }).join("");
+  return '<div class="app-card" onclick="openApp('+idx+')">'
+    + '<div class="app-head"><div class="app-icon">'+appIconHTML(a)+'</div>'
+    + '<div style="min-width:0"><div class="app-name">'+esc(a.name||"未命名应用")+'</div></div></div>'
+    + '<div class="app-sum">'+esc(a.summary||"")+'</div>'
+    + (tags ? '<div class="app-chips">'+tags+'</div>' : "")
+    + '<div class="app-dl">⬇ 下载地址</div>'
+    + '</div>';
+}
+function renderApps(){
+  var list = blogData.apps || [];
+  var box = document.getElementById("appsBox");
+  if(box) box.style.display = list.length ? "" : "none";
+  var el = document.getElementById("appList");
+  if(el) el.innerHTML = list.map(function(a, i){ return appCardHTML(a, i); }).join("");
+  /* 没有常用网站就把标题也收起来 */
+  var t = document.getElementById("lifeLinksTitle");
+  if(t) t.style.display = (blogData.lifeServices||[]).length ? "" : "none";
+}
+function openApp(idx){
+  var a = (blogData.apps||[])[idx];
+  if(!a) return;
+  currentAppIdx = idx;
+  document.getElementById("adIcon").innerHTML = appIconHTML(a);
+  document.getElementById("adTitle").textContent = a.name || "未命名应用";
+  var meta = [];
+  if(a.time) meta.push("发布时间：" + a.time);
+  if(a.author) meta.push("作者：" + a.author);
+  if(a.views) meta.push("阅读：" + a.views);
+  document.getElementById("adMeta").textContent = meta.join(" · ");
+  document.getElementById("adSummary").textContent = a.summary || "";
+  document.getElementById("adTags").innerHTML = (a.tags||[]).map(function(t){
+    return '<span class="app-chip">'+esc(t)+'</span>';
+  }).join("");
+  /* 封面大图 */
+  var cov = document.getElementById("adCover");
+  if(a.cover){ cov.style.display = ""; cov.innerHTML = '<img src="'+esc(a.cover)+'" alt="" loading="lazy">'; }
+  else { cov.style.display = "none"; cov.innerHTML = ""; }
+  /* 正文介绍：支持 Markdown，也兼容直接写 HTML */
+  var intro = document.getElementById("adIntro");
+  if(a.intro){ intro.style.display = ""; intro.className = "md-body"; intro.innerHTML = mdRenderHTML(a.intro); }
+  else { intro.style.display = "none"; intro.innerHTML = ""; }
+  /* 应用特色 */
+  var feats = a.features || [];
+  document.getElementById("adFeatures").innerHTML = feats.map(function(f){
+    return '<div class="app-feature"><h4>'+esc(f.title||"")+'</h4>'+(f.desc ? '<p>'+esc(f.desc)+'</p>' : "")+'</div>';
+  }).join("");
+  document.getElementById("adFeatTitle").style.display = feats.length ? "" : "none";
+  /* 应用信息（和右侧栏共用一份 kv 结构） */
+  var rows = [];
+  if(a.developer) rows.push('<div class="kv"><span class="k">开发厂商</span><span class="v">'+esc(a.developer)+'</span></div>');
+  if(a.website) rows.push('<div class="kv"><span class="k">官方网站</span><span class="v"><a href="'+esc(a.website)+'" target="_blank" rel="noopener" style="color:var(--primary-dark);text-decoration:none">'+esc(a.website)+'</a></span></div>');
+  if(a.github) rows.push('<div class="kv"><span class="k">GitHub</span><span class="v"><a href="'+esc(a.github)+'" target="_blank" rel="noopener" style="color:var(--primary-dark);text-decoration:none">'+esc(a.github)+'</a></span></div>');
+  if((a.social||[]).length) rows.push('<div class="kv"><span class="k">社交平台</span><span class="v">'
+    + a.social.map(function(s){ return '<a href="'+esc(s.url)+'" target="_blank" rel="noopener" style="color:var(--primary-dark);text-decoration:none">'+esc(s.name||"链接")+'</a>'; }).join("、")
+    + '</span></div>');
+  var infoHTML = rows.join("") || '<div style="font-size:.84rem;color:var(--text3)">暂无信息</div>';
+  document.getElementById("adInfo").innerHTML = infoHTML;
+  /* 下载地址 */
+  var dls = a.downloads || [];
+  document.getElementById("adDownloads").innerHTML = dls.map(function(d){
+    return '<div class="app-dl-card"><div><div class="plat">'+esc(d.platform||"下载")+'</div>'
+      + (d.desc ? '<div class="pdesc">'+esc(d.desc)+'</div>' : "")+'</div>'
+      + '<a class="app-dl-btn" href="'+esc(d.url||"#")+'" target="_blank" rel="noopener">'+esc(d.label||"下载")+'</a></div>';
+  }).join("") || '<div style="font-size:.84rem;color:var(--text3)">暂无下载地址</div>';
+  document.getElementById("adDlTitle").style.display = dls.length ? "" : "none";
+  /* 附件 / 截图 */
+  var extra = "";
+  if(collectFiles(a).length) extra += '<h3 class="app-sec-title">📎 相关下载</h3>' + fileListGrouped(a);
+  extra += galleryHTML(a);
+  document.getElementById("adFiles").innerHTML = extra;
+  /* 右侧栏「应用信息」跟着切换 */
+  showSideInfo("🧩 应用信息", infoHTML);
+  /* 猜你喜欢 */
+  var others = (blogData.apps||[]).map(function(x, i){ return {a:x, i:i}; }).filter(function(o){ return o.i !== idx; }).slice(0, 4);
+  document.getElementById("adMore").innerHTML = others.map(function(o){ return appCardHTML(o.a, o.i); }).join("");
+  document.getElementById("adMoreTitle").style.display = others.length ? "" : "none";
+  /* 上一篇 / 下一篇 */
+  var prev = (blogData.apps||[])[idx-1], next = (blogData.apps||[])[idx+1];
+  document.getElementById("adPn").innerHTML =
+      (prev ? '<a href="javascript:;" onclick="openApp('+(idx-1)+')"><span class="lbl">上一篇</span>'+esc(prev.name)+'</a>'
+            : '<a href="javascript:;" style="opacity:.55;cursor:default"><span class="lbl">上一篇</span>没有了</a>')
+    + (next ? '<a href="javascript:;" onclick="openApp('+(idx+1)+')"><span class="lbl">下一篇</span>'+esc(next.name)+'</a>'
+            : '<a href="javascript:;" style="opacity:.55;cursor:default"><span class="lbl">下一篇</span>没有了</a>');
+  setPageTitle("appDetail", a.name, a.summary || "");
+  showSection("appDetail");
+  /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */
+  buildToc(document.getElementById("adIntro"));
+}
+function backToApps(){ currentAppIdx = -1; switchTab("life"); }
+
 function updateLgCategories(){
   var type = document.getElementById("lgType").value;
   var cats = (blogData.ledgerCategories||{})[type] || ["其他"];
@@ -3776,6 +3953,13 @@ function buildSearchIndex(){
   (blogData.lifeServices||[]).forEach(function(x){
     push("生活服务", x.title, [x.title, x.desc, x.url, fileNames(x)], "switchTab('life')");
   });
+  /* 精选应用：点搜索结果直接打开那款应用的详情页 */
+  (blogData.apps||[]).forEach(function(a, i){
+    var txt = [a.name, a.summary, a.developer, (a.tags||[]).join(" "), a.intro];
+    (a.features||[]).forEach(function(f){ txt.push(f.title, f.desc); });
+    (a.downloads||[]).forEach(function(d){ txt.push(d.platform, d.desc); });
+    push("精选应用", a.name, txt, "openApp(" + i + ")");
+  });
   (blogData.media||[]).forEach(function(m){
     push("影音", m.title, [m.title, m.desc, m.type, fileNames(m)], "switchTab('life')");
   });
@@ -3883,7 +4067,7 @@ function clearSideArticle(){
 }
 
 /* 哪些栏目算「一篇文章」：打开它们时右侧栏只留目录/信息，不显示站点统计 */
-var DETAIL_SECTIONS = ["courseDetail", "noticeDetail", "classDetail", "paperDetail"];
+var DETAIL_SECTIONS = ["courseDetail", "noticeDetail", "classDetail", "paperDetail", "appDetail"];
 function isDetailSection(name){
   return DETAIL_SECTIONS.indexOf(name) >= 0;
 }
@@ -3975,6 +4159,7 @@ function currentTab(){
     "sec-papers": "papers", "sec-paperDetail": "papers", "sec-notices": "notices",
     "sec-noticeDetail": "notices", "sec-class": "class", "sec-classDetail": "class",
     "sec-roster": "roster", "sec-life": "life", "sec-media": "life", "sec-ledger": "ledger",
+    "sec-appDetail": "life",
     "sec-diary": "diary", "sec-tags": "tags", "sec-advisor": "advisor", "sec-about": "about" };
   return map[active.id] || "home";
 }

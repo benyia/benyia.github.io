@@ -2745,11 +2745,23 @@ async function readRemoteData(){
   if(getStoredToken()){
     try{
       const r = await ghApi(DATA_PATH, {query:"?ref="+GH_BRANCH+"&t="+Date.now()});
-      if(r.ok && r.json && r.json.content){
-        const bin = atob(String(r.json.content).replace(/\s/g, ""));
-        const bytes = new Uint8Array(bin.length);
-        for(let i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
-        return { data: JSON.parse(new TextDecoder().decode(bytes)), sha: r.json.sha || "", via: "api" };
+      if(r.ok && r.json && r.json.sha){
+        /* ⚠️ 坑：contents API 对 >1MB 的文件不回正文（content 为空、encoding:"none"）。
+           本站 data.json 已经 4MB，所以必须改走 git/blobs 按 sha 取，
+           否则这里会静默失败、退回下面那条 Pages 缓存分支 —— 表现就是「保存成功但刷新后还是不显示」。 */
+        let b64 = (r.json.content && r.json.encoding === "base64") ? r.json.content : "";
+        if(!b64){
+          const bres = await fetch(GH_API_BASE + "/repos/" + GH_OWNER + "/" + GH_REPO + "/git/blobs/" + r.json.sha,
+                                   { headers: ghHeaders(), cache: "no-store" });
+          const bjson = await bres.json();
+          if(bres.ok && bjson && bjson.content) b64 = bjson.content;
+        }
+        if(b64){
+          const bin = atob(String(b64).replace(/\s/g, ""));
+          const bytes = new Uint8Array(bin.length);
+          for(let i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
+          return { data: JSON.parse(new TextDecoder().decode(bytes)), sha: r.json.sha || "", via: "api" };
+        }
       }
     }catch(e){}
   }

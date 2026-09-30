@@ -261,6 +261,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
       <button data-p="class">班级事务</button>
       <button data-p="roster">名单</button>
       <button data-p="life">生活服务</button>
+      <button data-p="apps">精选应用</button>
       <button data-p="ledger">记账</button>
       <button data-p="diary">日记</button>
       <button data-p="friends">友链</button>
@@ -733,6 +734,56 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
     </div>
 
     <!-- ===== 记账 ===== -->
+    <!-- ===== 精选应用 ===== -->
+    <div class="panel" id="panel-apps">
+      <div class="card">
+        <h2 id="appFormTitle">添加应用</h2>
+        <div class="form-row">
+          <input type="text" id="apIcon" placeholder="图标（emoji 或图片URL）" style="flex:0.9">
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('apIcon')">图片</button><span id="prev_apIcon"></span>
+          <input type="text" id="apName" placeholder="应用名称 *" style="flex:1">
+          <input type="text" id="apSummary" placeholder="一句话简介" style="flex:1.8">
+        </div>
+        <div class="form-row">
+          <input type="text" id="apTags" placeholder="标签，逗号分隔（如：AI,开发效率,API管理）" style="flex:2.4">
+          <input type="text" id="apDeveloper" placeholder="开发厂商" style="flex:1">
+          <input type="date" id="apTime" style="flex:1">
+        </div>
+        <div class="form-row">
+          <input type="text" id="apWebsite" placeholder="官方网站 https://..." style="flex:1.5">
+          <input type="text" id="apGithub" placeholder="GitHub https://..." style="flex:1.5">
+        </div>
+        <div class="form-row">
+          <input type="text" id="apCover" placeholder="封面图 URL" style="flex:2">
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('apCover')">图片</button><span id="prev_apCover"></span>
+          <input type="text" id="apAuthor" placeholder="作者" style="flex:0.8">
+          <input type="number" id="apViews" placeholder="阅读数" style="flex:0.6">
+        </div>
+
+        <div class="form-row" style="margin:10px 0 6px"><b style="font-size:.88rem">📝 正文介绍</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">支持 Markdown</span></div>
+        <textarea id="apIntro" placeholder="这款应用是做什么的……"></textarea>
+
+        <div class="form-row" style="margin:16px 0 6px"><b style="font-size:.88rem">✨ 应用特色</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">标题 + 说明</span><button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="apFeatAdd()">+ 添加特色</button></div>
+        <div id="apFeatBox"></div>
+
+        <div class="form-row" style="margin:16px 0 6px"><b style="font-size:.88rem">⬇️ 下载地址</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">按平台一行</span><button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="apDlAdd()">+ 添加平台</button></div>
+        <div id="apDlBox"></div>
+
+        <div class="form-row" style="margin:16px 0 6px"><b style="font-size:.88rem">🔗 社交平台</b><button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="apSocialAdd()">+ 添加</button></div>
+        <div id="apSocialBox"></div>
+
+        <div class="form-row" style="margin:16px 0 6px"><b style="font-size:.88rem">🖼️ 截图</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
+        <div id="imgList_apps" style="margin-bottom:6px"></div>
+        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="pickImgs('apps')">添加截图</button></div>
+
+        <div style="margin-top:12px">
+          <button class="btn btn-primary" onclick="addApp()">保存应用</button>
+          <button class="btn btn-ghost" onclick="cancelAppEdit()">取消编辑</button>
+        </div>
+      </div>
+      <div class="card"><h2>应用列表</h2><div id="appManageList"></div></div>
+    </div>
+
     <div class="panel" id="panel-ledger">
       <div class="card">
         <h2>记一笔</h2>
@@ -1024,7 +1075,7 @@ const DEFAULT_DATA = {
   ],
   friendLinks:[],
   friendApplies:[],
-  courses:[],papers:[],notices:[],classItems:[],lifeServices:[],
+  courses:[],papers:[],notices:[],classItems:[],lifeServices:[],apps:[],
   ledger:[],ledgerCategories:{expense:["吃饭","买东西","生活用品","交通","娱乐","学习","医疗","其他"],income:["工资","奖学金","补贴","红包","其他"]},media:[],roster:[],rosterConfig:{showSensitive:false},diary:[],advisor:[],logs:[]
 };
 
@@ -1274,7 +1325,7 @@ function deleteModalImage(){
   showToast("已移除（记得保存）");
 }
 
-var ICON_FIELDS = ["cfgAvatar","cIcon","lsIcon","catIcon","qlIcon","rPhoto","cfgDefaultImage","cfgDefaultAvatar","frAvatar","wkBg"];
+var ICON_FIELDS = ["cfgAvatar","cIcon","lsIcon","catIcon","qlIcon","rPhoto","cfgDefaultImage","cfgDefaultAvatar","frAvatar","wkBg","apIcon","apCover"];
 function refreshIconPrev(id){
   var inp = $(id), box = $("prev_" + id);
   if(!inp || !box) return;
@@ -3344,7 +3395,7 @@ function renderAll(){
   $("statF").textContent=fileCount;
   refreshMdInsertBtn();
 
-  renderCourses();renderPapers();renderNotices();renderClass();renderLife();renderMedia();
+  renderCourses();renderPapers();renderNotices();renderClass();renderLife();renderAppsManage();renderMedia();
   renderRoster();
   $("rShowSensitive").checked = !!(blogData.rosterConfig && blogData.rosterConfig.showSensitive);
   renderLedger();renderDiary();renderAdvisor();renderLogs();
@@ -3711,6 +3762,124 @@ function delLife(i){
   blogData.lifeServices.splice(i,1);
   saveData("删除生活服务");
   renderAll();
+}
+
+/* ---------- 精选应用（前台「精选应用」+ 应用详情页的数据来源） ---------- */
+let editingApp = null;
+let appFeatRows = [], appDlRows = [], appSocialRows = [];
+
+function apFeatAdd(){ appFeatRows.push({title:"", desc:""}); apFeatRender(); }
+function apFeatDel(i){ appFeatRows.splice(i,1); apFeatRender(); }
+function apFeatRender(){
+  $("apFeatBox").innerHTML = appFeatRows.map(function(f,i){
+    return '<div class="form-row" style="align-items:flex-start;margin-bottom:6px">'
+      + '<input type="text" placeholder="特色标题（如：自动故障转移）" value="'+esc(f.title)+'" oninput="appFeatRows['+i+'].title=this.value" style="flex:1">'
+      + '<input type="text" placeholder="特色说明" value="'+esc(f.desc)+'" oninput="appFeatRows['+i+'].desc=this.value" style="flex:2.4">'
+      + '<button class="btn btn-danger btn-sm" onclick="apFeatDel('+i+')">删除</button></div>';
+  }).join("") || '<div style="font-size:.8rem;color:#94a3b8">还没有特色条目，点右上角「+ 添加特色」</div>';
+}
+function apDlAdd(){ appDlRows.push({platform:"", desc:"", url:"", label:"下载"}); apDlRender(); }
+function apDlDel(i){ appDlRows.splice(i,1); apDlRender(); }
+function apDlRender(){
+  $("apDlBox").innerHTML = appDlRows.map(function(d,i){
+    return '<div class="form-row" style="margin-bottom:6px">'
+      + '<input type="text" placeholder="平台（Windows）" value="'+esc(d.platform)+'" oninput="appDlRows['+i+'].platform=this.value" style="flex:1">'
+      + '<input type="text" placeholder="说明（PC 桌面客户端）" value="'+esc(d.desc)+'" oninput="appDlRows['+i+'].desc=this.value" style="flex:1.4">'
+      + '<input type="text" placeholder="下载链接 https://..." value="'+esc(d.url)+'" oninput="appDlRows['+i+'].url=this.value" style="flex:2">'
+      + '<input type="text" placeholder="按钮文字" value="'+esc(d.label)+'" oninput="appDlRows['+i+'].label=this.value" style="flex:0.6">'
+      + '<button class="btn btn-danger btn-sm" onclick="apDlDel('+i+')">删除</button></div>';
+  }).join("") || '<div style="font-size:.8rem;color:#94a3b8">还没有下载地址</div>';
+}
+function apSocialAdd(){ appSocialRows.push({name:"", url:""}); apSocialRender(); }
+function apSocialDel(i){ appSocialRows.splice(i,1); apSocialRender(); }
+function apSocialRender(){
+  $("apSocialBox").innerHTML = appSocialRows.map(function(s,i){
+    return '<div class="form-row" style="margin-bottom:6px">'
+      + '<input type="text" placeholder="名称（X / Telegram）" value="'+esc(s.name)+'" oninput="appSocialRows['+i+'].name=this.value" style="flex:1">'
+      + '<input type="text" placeholder="链接 https://..." value="'+esc(s.url)+'" oninput="appSocialRows['+i+'].url=this.value" style="flex:2.4">'
+      + '<button class="btn btn-danger btn-sm" onclick="apSocialDel('+i+')">删除</button></div>';
+  }).join("") || '<div style="font-size:.8rem;color:#94a3b8">还没有社交平台</div>';
+}
+
+function addApp(){
+  var name = $("apName").value.trim();
+  if(!name){ showToast("请填写应用名称","error"); return; }
+  var item = {
+    name: name,
+    icon: $("apIcon").value.trim() || "🧩",
+    summary: $("apSummary").value.trim(),
+    cover: $("apCover").value.trim(),
+    tags: $("apTags").value.split(/[,，]/).map(function(t){ return t.trim(); }).filter(Boolean),
+    intro: $("apIntro").value,
+    features: appFeatRows.filter(function(f){ return f.title.trim() || f.desc.trim(); })
+                        .map(function(f){ return {title:f.title.trim(), desc:f.desc.trim()}; }),
+    developer: $("apDeveloper").value.trim(),
+    website: $("apWebsite").value.trim(),
+    github: $("apGithub").value.trim(),
+    social: appSocialRows.filter(function(s){ return s.name.trim() || s.url.trim(); })
+                         .map(function(s){ return {name:s.name.trim(), url:s.url.trim()}; }),
+    downloads: appDlRows.filter(function(d){ return d.platform.trim() || d.url.trim(); })
+                        .map(function(d){ return {platform:d.platform.trim(), desc:d.desc.trim(), url:d.url.trim(), label:(d.label||"").trim()||"下载"}; }),
+    images: (imgDrafts.apps||[]).slice(),
+    files: [],
+    time: $("apTime").value || todayStr(),
+    author: $("apAuthor").value.trim(),
+    views: parseInt($("apViews").value,10) || 0
+  };
+  blogData.apps = blogData.apps || [];
+  if(editingApp === null){
+    blogData.apps.push(item);
+    saveData("添加应用："+name);
+  }else{
+    blogData.apps[editingApp] = item;
+    saveData("编辑应用："+name);
+  }
+  cancelAppEdit();
+  renderAll();
+}
+function renderAppsManage(){
+  $("appManageList").innerHTML = (blogData.apps||[]).map(function(a,i){
+    return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(a.icon,24)+' '+esc(a.name)+'</div>'
+      + '<div class="desc">'+esc(a.summary||"")+' · 特色 '+(a.features||[]).length+' 条 · 下载 '+(a.downloads||[]).length+' 个'+(a.time?(' · '+esc(a.time)):"")+'</div>'
+      + imgRows(a.images,"apps",i)+'</div>'
+      + '<div class="actions"><button class="btn btn-ghost btn-sm" onclick="editApp('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delApp('+i+')">删除</button></div></div>';
+  }).join("") || '<div style="color:#94a3b8;font-size:.85rem">暂无应用</div>';
+}
+function delApp(i){
+  if(!confirm("确定删除这个应用？")) return;
+  blogData.apps.splice(i,1);
+  saveData("删除应用");
+  renderAll();
+}
+function editApp(i){
+  var a = blogData.apps[i];
+  if(!a) return;
+  editingApp = i;
+  $("apIcon").value = a.icon||"";       $("apName").value = a.name||"";
+  $("apSummary").value = a.summary||""; $("apTags").value = (a.tags||[]).join(",");
+  $("apIntro").value = a.intro||"";
+  $("apDeveloper").value = a.developer||""; $("apWebsite").value = a.website||""; $("apGithub").value = a.github||"";
+  $("apCover").value = a.cover||"";     $("apTime").value = a.time||"";
+  $("apAuthor").value = a.author||"";   $("apViews").value = a.views||"";
+  appFeatRows = (a.features||[]).map(function(f){ return {title:f.title||"", desc:f.desc||""}; });
+  appDlRows = (a.downloads||[]).map(function(d){ return {platform:d.platform||"", desc:d.desc||"", url:d.url||"", label:d.label||"下载"}; });
+  appSocialRows = (a.social||[]).map(function(s){ return {name:s.name||"", url:s.url||""}; });
+  apFeatRender(); apDlRender(); apSocialRender();
+  setImgDrafts("apps", a.images);
+  $("appFormTitle").textContent = "✏️ 编辑应用：" + (a.name||"");
+  refreshAllIconPrevs();
+  var box = document.getElementById("panel-apps");
+  if(box && box.scrollIntoView) box.scrollIntoView({behavior:"smooth"});
+}
+function cancelAppEdit(){
+  editingApp = null;
+  ["apIcon","apName","apSummary","apTags","apIntro","apDeveloper","apWebsite","apGithub","apCover","apTime","apAuthor","apViews"]
+    .forEach(function(id){ if($(id)) $(id).value = ""; });
+  appFeatRows = []; appDlRows = []; appSocialRows = [];
+  apFeatRender(); apDlRender(); apSocialRender();
+  setImgDrafts("apps", []);
+  $("appFormTitle").textContent = "添加应用";
+  refreshAllIconPrevs();
 }
 
 /* ---------- 记账 ---------- */

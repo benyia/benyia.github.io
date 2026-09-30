@@ -670,11 +670,11 @@
   ],
   "logs": [
     {
-      "time": "2026-09-30 11:13",
-      "action": "编辑应用：Google Chrome"
+      "time": "2026-09-30 11:14",
+      "action": "编辑应用：DeepSeek"
     },
     {
-      "time": "2026-09-30 11:12",
+      "time": "2026-09-30 11:10",
       "action": "编辑应用：CC Switch"
     },
     {
@@ -1568,7 +1568,7 @@
   "apps": [
     {
       "name": "CC Switch",
-      "icon": "files/1790737936546_1_13zlb0up_cc-switch-logo-BPrI77SG.png",
+      "icon": "files/1790737840053_1_bu7jzbyc_下载.svg",
       "summary": "统一管理你的 AI 编程工具工作流",
       "cover": "",
       "tags": [
@@ -1643,7 +1643,7 @@
     },
     {
       "name": "DeepSeek",
-      "icon": "🐋",
+      "icon": "files/1790738076494_1_2ocwh274_DeeepSeek.png",
       "summary": "中文人工智能大模型平台",
       "cover": "",
       "tags": [
@@ -1687,7 +1687,7 @@
     },
     {
       "name": "Google Chrome",
-      "icon": "files/1790738012238_4_ts7y4i39_chrome.png",
+      "icon": "🌐",
       "summary": "全球最受欢迎的浏览器",
       "cover": "",
       "tags": [

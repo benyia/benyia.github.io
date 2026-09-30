@@ -561,14 +561,7 @@
       "desc": "",
       "url": "https://www.deepseek.com/harness/",
       "files": [],
-      "images": [
-        {
-          "name": "PixPin_2026-09-30_10-14-48.png",
-          "url": "files/1790734512656_1_k4hb2fdh_PixPin_2026-09-30_10-14-48.png",
-          "type": "PNG",
-          "size": 112139
-        }
-      ]
+      "images": []
     }
   ],
   "ledger": [
@@ -676,6 +669,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-09-30 10:41",
+      "action": "移除图片"
+    },
     {
       "time": "2026-09-30 10:16",
       "action": "添加生活服务：deepseek Harness"
@@ -1071,10 +1068,6 @@
     {
       "time": "2026-09-25 10:46",
       "action": "修改站点设置"
-    },
-    {
-      "time": "2026-09-24 23:36",
-      "action": "名单：前台隐藏"
     }
   ],
   "categories": [

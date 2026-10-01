@@ -657,6 +657,16 @@
       "images": [],
       "media": [],
       "time": "2026-09-29 14:57"
+    },
+    {
+      "date": "2026-10-01",
+      "title": "我的邮箱",
+      "content": "<a target=\"_blank\" href=\"http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=xba8r-T39-aFtqikrKnrtrCx66ChsOumqw\" style=\"text-decoration:none;\"><img src=\"http://rescdn.qqmail.com/zh_CN/htmledition/images/function/qm_open/ico_mailme_01.png\"/></a>",
+      "contentIsHTML": true,
+      "tags": [],
+      "images": [],
+      "media": [],
+      "time": "2026-10-01 10:43"
     }
   ],
   "advisor": [
@@ -669,6 +679,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-10-01 10:43",
+      "action": "写日记：我的邮箱"
+    },
     {
       "time": "2026-09-30 14:52",
       "action": "删除通知"
@@ -1064,10 +1078,6 @@
     {
       "time": "2026-09-26 21:43",
       "action": "名单：前台隐藏"
-    },
-    {
-      "time": "2026-09-25 19:32",
-      "action": "名单字段可见性：email 显示"
     }
   ],
   "categories": [

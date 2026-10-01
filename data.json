@@ -680,6 +680,10 @@
   ],
   "logs": [
     {
+      "time": "2026-10-01 23:59",
+      "action": "添加应用：FlClash"
+    },
+    {
       "time": "2026-10-01 10:43",
       "action": "写日记：我的邮箱"
     },
@@ -1066,10 +1070,6 @@
     {
       "time": "2026-09-26 21:43",
       "action": "从 GitHub 导入 1 条友链申请"
-    },
-    {
-      "time": "2026-09-26 21:43",
-      "action": "名单：前台隐藏"
     },
     {
       "time": "2026-09-26 21:43",
@@ -1799,6 +1799,74 @@
       "images": [],
       "files": [],
       "time": "2026-09-30",
+      "author": "",
+      "views": 0
+    },
+    {
+      "name": "FlClash",
+      "icon": "files/1790869777898_1_32hz3vbf_logo.png",
+      "summary": "FlClash 是一款基于 Clash 核心的多功能图形用户界面 (GUI) 工具，专为那些需要简单、直观地管理网络代理的用户设计",
+      "cover": "https://flclash.cc/logo.png",
+      "tags": [
+        "代理"
+      ],
+      "intro": "FlClash 是一款基于 Clash 核心的多功能图形用户界面 (GUI) 工具，专为那些需要简单、直观地管理网络代理的用户设计。它通过丰富的功能和友好的界面，简化了代理配置和管理过程，为用户提供了一个高效且稳定的解决方案。\n\nFlClash 是一个基于 Clash 核心的多功能 GUI 工具，通过直观的界面和强大的功能，简化了网络代理的管理过程。无论是个人用户还是专业人士，FlClash 都为其提供了一个高效且可靠的解决方案。凭借其简洁的设计、广泛的协议支持和跨平台兼容性，FlClash 成为优化互联网体验的必备工具。",
+      "features": [
+        {
+          "title": "简洁的用户界面",
+          "desc": "FlClash 提供了一个干净且易于导航的界面，用户可以轻松找到所需的功能。无论是配置代理、管理规则，还是实时监控流量，FlClash 都使这些任务变得简单明了。"
+        },
+        {
+          "title": "广泛的协议支持",
+          "desc": "FlClash 支持多种流行的代理协议，包括 Shadowsocks、VMess 和 Trojan 等。用户可以根据自己的需求选择和配置适合的代理类型，并通过 FlClash 轻松管理这些配置。"
+        },
+        {
+          "title": "动态规则管理",
+          "desc": "FlClash 允许用户基于 IP 地址、域名等创建并管理自定义的路由规则。通过这些规则，用户可以灵活地控制流量，绕过地理限制，优化网络性能。"
+        },
+        {
+          "title": "实时流量监控",
+          "desc": "FlClash 提供了实时的流量监控功能，用户可以随时查看代理的使用情况，了解网络流量的走向，从而更好地管理和优化他们的网络体验。"
+        },
+        {
+          "title": "多平台兼容性",
+          "desc": "FlClash 支持多种操作系统，包括 Windows、macOS 和 Linux。这种跨平台的兼容性确保了无论用户使用什么设备，都能享受到 FlClash 的便捷和高效。"
+        }
+      ],
+      "developer": "",
+      "website": "https://flclash.cc/",
+      "github": "https://github.com/chen08209/FlClash",
+      "social": [],
+      "downloads": [
+        {
+          "platform": "安卓",
+          "desc": "Android",
+          "url": "https://release-assets.githubusercontent.com/github-production-release-asset/678716433/44ed66f7-19f6-4b56-84dc-36119609ef18?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-01T16%3A48%3A05Z&rscd=attachment%3B+filename%3DFlClash-0.8.98-android-x86_64.apk&rsct=application%2Fvnd.android.package-archive&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-01T15%3A47%3A57Z&ske=2026-10-01T16%3A48%3A05Z&sks=b&skv=2018-11-09&sig=04Yir8UdAZdkIumpRkg47qC%2FB7MwB8Zw5mwFQhyXaCk%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MDg3MTc5NiwibmJmIjoxNzkwODY5OTk2LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.rCd1YAi-zlXMtonkpgRwrpmAj_Q_EpKCu8vuEyKOKX0&response-content-disposition=attachment%3B%20filename%3DFlClash-0.8.98-android-x86_64.apk&response-content-type=application%2Fvnd.android.package-archive",
+          "label": "下载"
+        },
+        {
+          "platform": "Windows",
+          "desc": "PC桌面",
+          "url": "https://dl.p6p.net/FlClash/v0.8.94/FlClash-0.8.94-windows-amd64-setup.exe",
+          "label": "下载"
+        },
+        {
+          "platform": "Linux",
+          "desc": "ubuntu",
+          "url": "https://dl.p6p.net/FlClash/v0.8.94/FlClash-0.8.94-linux-amd64.deb",
+          "label": "下载"
+        }
+      ],
+      "images": [
+        {
+          "name": "PixPin_2026-10-01_23-58-48.png",
+          "url": "files/1790870358644_2_yl2dhrp6_PixPin_2026-10-01_23-58-48.png",
+          "type": "PNG",
+          "size": 76012
+        }
+      ],
+      "files": [],
+      "time": "2026-10-01",
       "author": "",
       "views": 0
     }

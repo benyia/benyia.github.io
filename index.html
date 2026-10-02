@@ -2696,6 +2696,21 @@ function toggleTheme(){
 })();
 
 var _mdDepth = 0;
+/* 混排渲染开关：为 true 时 mdRender 会保留 HTML 标签
+   （用于「HTML + Markdown 混排」的正文，比如直接粘 GitHub README） */
+var _mdPreserveHTML = false;
+function mdRenderPreserve(src){
+  var prev = _mdPreserveHTML;
+  _mdPreserveHTML = true;
+  try{ return mdRender(src); } finally { _mdPreserveHTML = prev; }
+}
+/* 正文里是否夹着块级 Markdown（标题 / 代码块 / 表格分隔行）——决定要不要走混排渲染 */
+function looksMdBlock(s){
+  s = String(s || "");
+  return /^\s{0,3}#{1,6}\s+\S/m.test(s)
+      || /```/.test(s)
+      || /^\s*\|?[\s:|-]*-{2,}[\s:|-]*\|?\s*$/m.test(s);
+}
 function mdRender(src){
   _mdDepth++;
   var heads = [];
@@ -2705,6 +2720,13 @@ function mdRender(src){
   text = text.replace(/```([^\n]*)\n([\s\S]*?)```/g, function(m, lang, c){ codes.push({ lang: String(lang||"").trim(), code: c }); return "\u0000C" + (codes.length - 1) + "\u0000"; });
   text = text.replace(/```([\s\S]*?)```/g, function(m, c){ codes.push({ lang: "", code: c }); return "\u0000C" + (codes.length - 1) + "\u0000"; });
   var inlineCodes = [];
+  /* 混排模式（粘 GitHub README 这种 HTML + Markdown 的内容）：
+     先把 HTML 标签占位，免得被下面的 esc() 转义成看得见的 <div> 文字；
+     正文输出前再还原回去。代码块里的 HTML 不受影响（上面已先抽走）。 */
+  var keepHTML = _mdPreserveHTML ? [] : null;
+  if(keepHTML){
+    text = text.replace(/<\/?[a-zA-Z][^>]*>/g, function(m){ keepHTML.push(m); return "\u0000H" + (keepHTML.length - 1) + "\u0000"; });
+  }
   text = esc(text);
   text = text.replace(/`([^`\n]+)`/g, function(m, c){ inlineCodes.push(c); return "\u0000I" + (inlineCodes.length - 1) + "\u0000"; });
   var lines = text.split("\n");
@@ -2726,6 +2748,15 @@ function mdRender(src){
     if(/^\s*$/.test(line)){ flushPara(); continue; }
     var ph = line.match(/^\u0000C(\d+)\u0000\s*$/);
     if(ph){ flushPara(); out.push(codeBlockHTML(codes[parseInt(ph[1], 10)])); continue; }
+    /* 混排模式：整行就是一个块级 HTML 标签时，原样放出来（div/details/table…），
+       这样夹在中间的文字仍然是正常段落，标签也不会被 <p> 包住 */
+    var hph = line.match(/^\s*\u0000H(\d+)\u0000\s*$/);
+    if(hph){
+      var rawTag = keepHTML ? keepHTML[parseInt(hph[1], 10)] : "";
+      if(rawTag && /^<\/?(div|p|table|thead|tbody|tr|td|th|ul|ol|li|blockquote|pre|figure|figcaption|details|summary|section|h[1-6]|hr)\b/i.test(rawTag)){
+        flushPara(); out.push(rawTag); continue;
+      }
+    }
     var h = line.match(/^\s{0,3}(#{1,6})\s+(.*)$/);
     if(h){ flushPara(); var _lv = h[1].length; var _ht = mdInline(h[2].replace(/\s+#+\s*$/, "")); var _id = "sec" + (heads.length + 1); heads.push({ lvl: _lv, txt: _ht, id: _id }); out.push("<h" + _lv + " id=\"" + _id + "\">" + _ht + "</h" + _lv + ">"); continue; }
     if(/^\s{0,3}([-*_])\s*(\1\s*){2,}$/.test(line)){ flushPara(); out.push("<hr>"); continue; }
@@ -2772,8 +2803,11 @@ function mdRender(src){
   }
   flushPara();
   _mdDepth--;
+  var htmlOut = out.join("");
+  /* 混排模式：把占位的 HTML 标签原样还原 */
+  if(keepHTML){ htmlOut = htmlOut.replace(/\u0000H(\d+)\u0000/g, function(m, i){ return keepHTML[parseInt(i, 10)] || ""; }); }
   /* 正文里不再插文内目录卡片：目录统一由 buildToc() 放到文章右边的侧栏里 */
-  return out.join("");
+  return htmlOut;
 }
 /* 去掉 Markdown 记号，用于列表摘要与搜索 */
 function stripMd(s){
@@ -2802,7 +2836,12 @@ function looksHTML(s){
 function mdRenderHTML(src){
   var s = String(src == null ? "" : src);
   if(!s.trim()) return "";
-  return looksHTML(s) ? s : mdRender(s);
+  if(looksHTML(s)){
+    /* 粘 GitHub README 这类「HTML + Markdown 混排」的正文：
+       HTML 标签保留原样，同时把里面的 Markdown 也渲染出来（以前会原样输出，于是 #、** 变成字面字符） */
+    return looksMdBlock(s) ? mdRenderPreserve(s) : s;
+  }
+  return mdRender(s);
 }
 /* 列表摘要 / 搜索用：去掉所有记号 */
 function mdText(s){

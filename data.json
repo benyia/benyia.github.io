@@ -691,6 +691,10 @@
   ],
   "logs": [
     {
+      "time": "2026-10-02 22:54",
+      "action": "名单：前台显示"
+    },
+    {
       "time": "2026-10-02 15:54",
       "action": "修改首页显示内容"
     },
@@ -1085,10 +1089,6 @@
     {
       "time": "2026-09-27 13:11",
       "action": "编辑课程：计算机控制系统"
-    },
-    {
-      "time": "2026-09-27 01:00",
-      "action": "编辑课程：计算机控制系统"
     }
   ],
   "categories": [
@@ -1408,7 +1408,7 @@
       "note": "",
       "photo": "files/1789783018217_1_pohb49f2_人物.png",
       "images": [],
-      "show": false,
+      "show": true,
       "hide": [
         "note",
         "idCard",
@@ -1434,7 +1434,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": false,
+      "show": true,
       "hide": [
         "ethnicity",
         "political",
@@ -1466,7 +1466,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": false,
+      "show": true,
       "hide": []
     }
   ],

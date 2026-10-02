@@ -2875,6 +2875,11 @@ function stripMd(s){
     .replace(/^\s*>\s?/gm, "")
     .replace(/^\s*([-*+]|\d+[.)])\s+/gm, "")
     .replace(/\*\*|__|~~/g, "")
+    .replace(/\*([^*\n]+)\*/g, "$1")
+    .replace(/^\s*([-*_])(\s*\1){2,}\s*$/gm, " ")
+    /* 表格：去掉分隔行，单元格竖线换成空格（摘要 / 搜索词里不再是一堆 |） */
+    .replace(/^\s*\|?[\s:|-]*-{2,}[\s:|-]*\|?\s*$/gm, " ")
+    .replace(/\s*\|\s*/g, " ")
     .replace(/[ \t]+/g, " ")
     .replace(/\n{2,}/g, "\n")
     .trim();
@@ -2902,13 +2907,15 @@ function mdRenderHTML(src){
 function mdText(s){
   var t = String(s == null ? "" : s);
   if(looksHTML(t)){
-    return t.replace(/<(script|style)[\s\S]*?<\/\1>/gi, " ")
+    var stripped = t.replace(/<(script|style)[\s\S]*?<\/\1>/gi, " ")
       .replace(/<br\s*\/?>/gi, " ")
       .replace(/<\/(p|div|h[1-6]|li|tr|blockquote)>/gi, " ")
       .replace(/<[^>]+>/g, "")
       .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'")
-      .replace(/[ \t]+/g, " ").replace(/\n{2,}/g, "\n").trim();
+      .replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+    /* HTML 正文里常常还夹着 Markdown（比如粘贴 GitHub README）：
+       剥完标签还要再清一遍记号，否则列表摘要里会露出 #、** 和图片地址 */
+    return stripMd(stripped);
   }
   return stripMd(t);
 }

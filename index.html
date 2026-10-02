@@ -2051,12 +2051,12 @@ function tagIndex(){
   (blogData.diary||[]).forEach(function(d,i){
     add(d.tags, { kind:"日记", icon:"📖", title:d.title||autoTitle(d.content, d.date),
       desc:mdText(d.content), body:d.content || "",
-      time:d.time||d.date||"", click:"switchTab('diary')" });
+      time:d.time||d.date||"", click:"openDiary("+i+")" });
   });
   (blogData.advisor||[]).forEach(function(a,i){
     add(a.tags, { kind:"导师指导", icon:"🎓", title:(a.count?("第 "+a.count+" 次指导"):"指导记录"),
       desc:mdText(a.content), body:a.content || "",
-      time:a.time||a.date||"", click:"switchTab('advisor')" });
+      time:a.time||a.date||"", click:"openAdvisor("+i+")" });
   });
   Object.keys(map).forEach(function(k){ map[k].items.sort(byTimeDesc); });
   /* 标签排序：内容多的排前面，其次按原配置顺序 */
@@ -2448,7 +2448,7 @@ function homeItems(){
   if(on.papers)     (blogData.papers||[]).forEach(function(p,i){ add("论文", p, "📝", p.title, p.abstract||p.desc, "openPaper("+i+")"); });
   if(on.notices)    (blogData.notices||[]).forEach(function(n,i){ add("通知", n, "🔔", n.title, n.content, "openNotice("+i+")"); });
   if(on.classItems) (blogData.classItems||[]).forEach(function(c,i){ add("班级", c, "👥", c.title, c.content, "openClass("+i+")"); });
-  if(on.diary)      (blogData.diary||[]).forEach(function(d,i){ add("日记", d, "📖", d.title || "无标题", d.content, "switchTab('diary')"); });
+  if(on.diary)      (blogData.diary||[]).forEach(function(d,i){ add("日记", d, "📖", d.title || "无标题", d.content, "openDiary("+i+")"); });
   out.sort(byTimeDesc);          /* 最新的排最前面 */
   return out;
 }

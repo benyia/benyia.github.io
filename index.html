@@ -567,6 +567,10 @@ details[open] .diary-dot{background:var(--primary-dark)}
 }
 .diary-summary-arrow{color:var(--text3);font-size:.78rem;transition:transform .2s;margin-top:4px;flex:0 0 auto}
 details[open] .diary-summary-arrow{transform:rotate(180deg)}
+/* 日记列表卡片：整块可点，点进去是独立详情页 */
+.diary-card{padding:0;cursor:pointer;transition:box-shadow .25s,border-color .25s}
+.diary-card:hover{box-shadow:0 8px 24px rgba(15,23,42,.10);border-color:var(--primary-light)}
+.diary-card .diary-summary-arrow{font-size:1.05rem;line-height:1;margin-top:6px}
 .diary-body{padding:2px 18px 18px 36px}
 @media(max-width:640px){
   .diary-summary{padding:12px 14px 12px 12px;gap:9px}
@@ -1305,8 +1309,23 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
     </div>
 
     <div class="section" id="sec-diary">
-      <!-- 日记只在后台写，前台只看（原来那个「写一篇日记」表单已按需求移除） -->
+      <!-- 日记列表：点一篇 → 进入独立的日记详情页（不在列表里原地展开） -->
       <div id="diaryList"></div>
+    </div>
+
+    <!-- 日记详情：独立页面，只显示这一篇 -->
+    <div class="section" id="sec-diaryDetail">
+      <div class="section-header"><button class="back-btn" onclick="backToDiary()">← 返回</button></div>
+      <div class="hero-card">
+        <div class="hero-body">
+          <h2 id="ddTitle"></h2>
+          <div class="chip-row" id="ddChips"></div>
+        </div>
+      </div>
+      <div class="reader-card"><div class="md-body" id="ddContent"></div></div>
+      <div id="ddFiles"></div>
+      <!-- 上一篇 / 下一篇 -->
+      <div class="app-pn" id="ddPn" style="display:none"></div>
     </div>
 
     <!-- 标签聚合：点任意标签，看全部相关内容 -->
@@ -1513,6 +1532,7 @@ const PAGE_TITLES = {
   media: ["影音", "音乐 / 视频 / 图片"],
   ledger: ["生活记账", "记录每一笔开销"],
   diary: ["日记", "记录生活点滴"],
+  diaryDetail: ["日记", "记录生活点滴"],
   tags: ["标签", "按标签聚合全部内容"],
   advisor: ["导师指导", "与导师交流记录"],
   about: ["关于我", "了解更多关于思齐"],
@@ -1575,6 +1595,7 @@ const CLASS_TYPES = ["通知","名单","作业","考试","活动"];
 
 let blogData = null;
 let currentCourseIdx = -1;
+let currentDiaryIdx = -1;
 let currentNoticeIdx = -1;
 let currentPaperIdx = -1;
 let currentClassIdx = -1;
@@ -3350,16 +3371,30 @@ function renderPnNav(boxId, arr, idx, fn, opts){
   box.innerHTML = h;
   box.style.display = h ? "" : "none";
 }
-/* 日记：点上一篇 / 下一篇直接跳到那一条并展开它 */
+/* 日记：打开独立的详情页（只显示这一篇，列表不再原地展开） */
 function openDiary(idx){
-  var el = document.getElementById("diaryItem-" + idx);
-  if(!el) return;
-  if(typeof currentTab === "function" && currentTab() !== "diary" && typeof switchTab === "function") switchTab("diary");
-  var all = document.querySelectorAll("#diaryList details.diary-item");
-  for(var i = 0; i < all.length; i++){ if(all[i] !== el) all[i].open = false; }
-  el.open = true;
-  if(el.scrollIntoView) el.scrollIntoView({behavior:"smooth", block:"start"});
+  var src = blogData.diary || [];
+  var d = src[idx];
+  if(!d) return;
+  currentDiaryIdx = idx;
+  var title = d.title || autoTitle(d.content, d.date);
+  document.getElementById("ddTitle").textContent = title;
+  document.getElementById("ddChips").innerHTML =
+      '<span class="info-chip">🕐 '+esc(diaryStamp(d))+'</span>'
+    + ((d.tags||[]).length ? d.tags.map(function(t){ return '<span class="info-chip" style="cursor:pointer" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')">🏷 '+esc(t)+'</span>'; }).join("") : "");
+  var box = document.getElementById("ddContent");
+  box.innerHTML = mdRenderHTML(d.content) || '<div class="empty">这篇日记没有正文</div>';
+  box.className = "md-body";
+  document.getElementById("ddFiles").innerHTML = galleryHTML(d) + diaryMediaHTML(d);
+  setPageTitle("diaryDetail", title, diaryStamp(d));
+  showSection("diaryDetail");
+  /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */
+  buildToc(box);
+  /* 上一篇 / 下一篇：按日记列表的显示顺序（最新在前），raw 保证下标是原始数组下标 */
+  var ordered = src.map(function(x){ return x; }).reverse();
+  renderPnNav("ddPn", ordered, ordered.indexOf(d), "openDiary", { raw: true, full: src });
 }
+function backToDiary(){ currentDiaryIdx = -1; switchTab("diary"); }
 
 function updateLgCategories(){
   var type = document.getElementById("lgType").value;
@@ -3869,36 +3904,33 @@ function diaryStamp(d){
   if(m) return m[1] + " " + m[2].padStart(2,"0") + ":" + m[3];
   return String((d && d.date) || "");
 }
-function diaryItemHTML(d, rawIdx, pnHTML){
+/* 日记列表卡片：整块可点，点进独立的日记详情页 */
+function diaryItemHTML(d, rawIdx){
   var title = d.title || autoTitle(d.content, d.date);
   var preview = mdText(d.content).split(String.fromCharCode(10)).join(" ").trim();
-  var media = (d.media||[]).map(function(m){
-    var url = esc(m.url);
-    var nm = String(m.name||"");
-    var dot = nm.lastIndexOf(".");
-    var ext = dot >= 0 ? nm.slice(dot+1).toLowerCase() : "";
-    var player = "";
-    if(["mp4","webm","mov","mkv","avi"].indexOf(ext) >= 0) player = '<video controls preload="metadata" src="'+url+'"></video>';
-    else if(["mp3","wav","m4a","ogg","flac","aac"].indexOf(ext) >= 0) player = '<audio controls preload="metadata" src="'+url+'"></audio>';
-    return '<div class="diary-media">'+player+'<div style="margin-top:6px">'+fileActionHTML(url, nm)+'</div></div>';
-  }).join("");
-  /* 默认全部收起：点哪一条才展开哪一条（details 同 name 保证同时只有一条打开） */
-  return '<details class="diary-item" name="diaryAcc" id="diaryItem-'+rawIdx+'">'
-    + '<summary class="diary-summary">'
+  return '<div class="diary-item diary-card" onclick="openDiary('+rawIdx+')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \')openDiary('+rawIdx+')">'
+    + '<div class="diary-summary">'
     +   '<span class="diary-dot"></span>'
     +   '<span class="diary-summary-main">'
     +     '<span class="diary-summary-time">'+esc(diaryStamp(d))+'</span>'
     +     '<span class="diary-summary-title">'+esc(title)+'</span>'
     +     (preview?'<span class="diary-summary-preview">'+esc(preview)+'</span>':"")
     +   '</span>'
-    +   '<span class="diary-summary-arrow">▼</span>'
-    + '</summary>'
-    + '<div class="diary-body"><div class="diary-content md-body">'+mdRenderHTML(d.content)+'</div>'
-    + ((d.tags||[]).length ? '<div class="chip-row" style="margin-top:10px">'+d.tags.map(function(t){ return '<span class="info-chip" style="cursor:pointer" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')">🏷 '+esc(t)+'</span>'; }).join("")+'</div>' : "")
-    + galleryHTML(d)+media
-    + (pnHTML ? '<div class="app-pn diary-pn">'+pnHTML+'</div>' : "")
-    + '</div>'
-    + '</details>';
+    +   '<span class="diary-summary-arrow">›</span>'
+    + '</div></div>';
+}
+/* 日记详情里的影音（音频 / 视频播放器） */
+function diaryMediaHTML(d){
+  return (d.media||[]).map(function(m){
+    var url = esc(m.url);
+    var nm = String(m.name||"");
+    var dot = nm.lastIndexOf(".");
+    var ext = dot >= 0 ? nm.slice(dot+1).toLowerCase() : "";
+    var player = "";
+    if(["mp4","webm","mov","mkv","avi","m4v"].indexOf(ext) >= 0) player = '<video controls preload="metadata" src="'+url+'" style="width:100%;border-radius:10px;margin-bottom:8px"></video>';
+    else if(["mp3","wav","m4a","ogg","flac","aac","wma"].indexOf(ext) >= 0) player = '<audio controls preload="metadata" src="'+url+'" style="width:100%;max-width:420px;margin-bottom:8px"></audio>';
+    return '<div class="diary-media">'+player+'<div>'+fileActionHTML(url, nm)+'</div></div>';
+  }).join("");
 }
 function renderDiary(){
   var src = blogData.diary || [];
@@ -3908,17 +3940,11 @@ function renderDiary(){
   if(!list.length){ box.innerHTML = '<div class="empty">暂无日记</div>'; return; }
   /* 按日期分组，做成时间线：日期标题 + 当天条数 */
   var groups = [], cur = null;
-  list.forEach(function(it, pos){
+  list.forEach(function(it){
     var d = it.d;
     var day = String((d && d.date) || "").slice(0, 10);
     if(!cur || cur.day !== day){ cur = { day: day, html: [] }; groups.push(cur); }
-    /* 上一篇 = 列表里更靠上的一条（更新的一条），下一篇 = 更靠下的一条（更旧） */
-    var prevIt = pos > 0 ? list[pos-1] : null;
-    var nextIt = pos < list.length-1 ? list[pos+1] : null;
-    var pn = "";
-    if(prevIt) pn += '<a href="javascript:;" onclick="openDiary('+prevIt.i+')"><span class="lbl">上一篇</span>'+esc(prevIt.d.title || autoTitle(prevIt.d.content, prevIt.d.date))+'</a>';
-    if(nextIt) pn += '<a href="javascript:;" onclick="openDiary('+nextIt.i+')"><span class="lbl">下一篇</span>'+esc(nextIt.d.title || autoTitle(nextIt.d.content, nextIt.d.date))+'</a>';
-    cur.html.push(diaryItemHTML(d, it.i, pn));
+    cur.html.push(diaryItemHTML(d, it.i));
   });
   box.innerHTML = groups.map(function(g){
     return '<div class="diary-group">'
@@ -3927,7 +3953,6 @@ function renderDiary(){
       + g.html.join("")
       + '</div>';
   }).join("");
-  diaryAccBind();
 }
 /* 日记：手风琴——展开一条就把其它条收起来（老浏览器不支持 details[name] 时的兜底）；
    展开哪一条，右侧栏就显示那一条的「文章目录」，并像打开文章一样让右栏粘住 */
@@ -4040,9 +4065,9 @@ function buildSearchIndex(){
   (blogData.classItems||[]).forEach(function(c,i){
     push("班级", c.title, [c.title, c.type, c.content, c.date, fileNames(c)], "openClass(" + i + ")");
   });
-  (blogData.diary||[]).forEach(function(d){
+  (blogData.diary||[]).forEach(function(d, i){
     var t = d.title || autoTitle(d.content, d.date);
-    push("日记", t, [t, d.content, d.date, (d.media||[]).map(function(m){ return m.name; }).join(" ")], "switchTab('diary')");
+    push("日记", t, [t, d.content, d.date, (d.media||[]).map(function(m){ return m.name; }).join(" ")], "openDiary(" + i + ")");
   });
   (blogData.advisor||[]).forEach(function(a){
     push("导师指导", (a.count ? ("第" + a.count + "次指导 · ") : "") + (a.date || ""), [a.content, a.date, String(a.count || "")], "switchTab('advisor')");
@@ -4182,7 +4207,7 @@ function clearSideArticle(){
 }
 
 /* 哪些栏目算「一篇文章」：打开它们时右侧栏只留目录/信息，不显示站点统计 */
-var DETAIL_SECTIONS = ["courseDetail", "noticeDetail", "classDetail", "paperDetail", "appDetail"];
+var DETAIL_SECTIONS = ["courseDetail", "noticeDetail", "classDetail", "paperDetail", "appDetail", "diaryDetail"];
 function isDetailSection(name){
   return DETAIL_SECTIONS.indexOf(name) >= 0;
 }
@@ -4275,7 +4300,7 @@ function currentTab(){
     "sec-noticeDetail": "notices", "sec-class": "class", "sec-classDetail": "class",
     "sec-roster": "roster", "sec-life": "life", "sec-media": "life", "sec-ledger": "ledger",
     "sec-appDetail": "life",
-    "sec-diary": "diary", "sec-tags": "tags", "sec-advisor": "advisor", "sec-about": "about" };
+    "sec-diary": "diary", "sec-diaryDetail": "diary", "sec-tags": "tags", "sec-advisor": "advisor", "sec-about": "about" };
   return map[active.id] || "home";
 }
 document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeDrawer(); });

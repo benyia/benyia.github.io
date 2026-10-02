@@ -1353,7 +1353,23 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
           <span class="ff-status" id="faStatus"></span>
         </div>
       </div>
+      <!-- 指导记录列表：点一条 → 进入独立的详情页（不再原地展开） -->
       <div id="advisorList"></div>
+    </div>
+
+    <!-- 导师指导详情：独立页面，只显示这一次 -->
+    <div class="section" id="sec-advisorDetail">
+      <div class="section-header"><button class="back-btn" onclick="backToAdvisor()">← 返回</button></div>
+      <div class="hero-card">
+        <div class="hero-body">
+          <h2 id="avTitle"></h2>
+          <div class="chip-row" id="avChips"></div>
+        </div>
+      </div>
+      <div class="reader-card"><div class="md-body" id="avContent"></div></div>
+      <div id="avFiles"></div>
+      <!-- 上一篇 / 下一篇 -->
+      <div class="app-pn" id="avPn" style="display:none"></div>
     </div>
 
     <div class="section" id="sec-about">
@@ -1535,6 +1551,7 @@ const PAGE_TITLES = {
   diaryDetail: ["日记", "记录生活点滴"],
   tags: ["标签", "按标签聚合全部内容"],
   advisor: ["导师指导", "与导师交流记录"],
+  advisorDetail: ["导师指导", "与导师交流记录"],
   about: ["关于我", "了解更多关于思齐"],
   courseDetail: ["课程详情", ""],
   paperDetail: ["论文详情", ""],
@@ -1596,6 +1613,7 @@ const CLASS_TYPES = ["通知","名单","作业","考试","活动"];
 let blogData = null;
 let currentCourseIdx = -1;
 let currentDiaryIdx = -1;
+let currentAdvisorIdx = -1;
 let currentNoticeIdx = -1;
 let currentPaperIdx = -1;
 let currentClassIdx = -1;
@@ -3995,28 +4013,60 @@ function diaryAccBind(){
     }
   }, true);
 }
-function renderAdvisor(){
-  var list = (blogData.advisor||[]).slice().reverse();
-  document.getElementById("advisorList").innerHTML = list.map(function(d, idx){
-    var title = (d.count ? ("第 " + d.count + " 次指导") : "指导记录");
-    if(d.date) title += " · " + d.date;
-    if(d.time) title += " " + d.time;
-    var preview = mdText(d.content).split(String.fromCharCode(10)).join(" ").trim();
-    if(preview.length > 46) preview = preview.slice(0,46) + "…";
-    var tags = (d.tags||[]).length
-      ? '<div class="chip-row" style="margin-top:10px">' + d.tags.map(function(t){ return '<span class="info-chip" style="cursor:pointer" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')">🏷 '+esc(t)+'</span>'; }).join("") + '</div>'
-      : "";
-    var files = collectFiles(d).length ? fileListGrouped(d) : "";
-    return '<details class="diary-item"'+(idx===0?" open":"")+'>'
-      + '<summary class="diary-summary">'
-      +   '<span class="diary-summary-main"><span class="diary-summary-title">'+esc(title)+'</span>'
-      +   (preview?'<span class="diary-summary-preview">'+esc(preview)+'</span>':"")+'</span>'
-      +   '<span class="diary-summary-arrow">▼</span>'
-      + '</summary>'
-      + '<div class="diary-body"><div class="diary-content md-body">'+mdRenderHTML(d.content)+'</div>'+tags+galleryHTML(d)+files+'</div>'
-      + '</details>';
-  }).join("") || '<div class="empty">暂无记录</div>';
+/* ---------- 导师指导：列表卡片 + 独立详情页 ---------- */
+function advisorTitleOf(a){
+  var t = (a.count ? ("第 " + a.count + " 次指导") : "指导记录");
+  if(a.date) t += " · " + a.date;
+  if(a.time) t += " " + a.time;
+  return t;
 }
+function advisorItemHTML(a, rawIdx){
+  var preview = mdText(a.content).split(String.fromCharCode(10)).join(" ").trim();
+  if(preview.length > 60) preview = preview.slice(0,60) + "…";
+  return '<div class="diary-item diary-card" onclick="openAdvisor('+rawIdx+')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \')openAdvisor('+rawIdx+')">'
+    + '<div class="diary-summary">'
+    +   '<span class="diary-dot"></span>'
+    +   '<span class="diary-summary-main">'
+    +     '<span class="diary-summary-title">'+esc(advisorTitleOf(a))+'</span>'
+    +     (preview?'<span class="diary-summary-preview">'+esc(preview)+'</span>':"")
+    +   '</span>'
+    +   '<span class="diary-summary-arrow">›</span>'
+    + '</div></div>';
+}
+function renderAdvisor(){
+  var src = blogData.advisor || [];
+  /* 显示顺序：最新在前；带原始下标，供详情页跳转 */
+  var list = src.map(function(a, i){ return { a: a, i: i }; }).reverse();
+  document.getElementById("advisorList").innerHTML =
+    list.map(function(it){ return advisorItemHTML(it.a, it.i); }).join("") || '<div class="empty">暂无记录</div>';
+}
+/* 打开独立的指导记录详情页（只显示这一次） */
+function openAdvisor(idx){
+  var src = blogData.advisor || [];
+  var a = src[idx];
+  if(!a) return;
+  currentAdvisorIdx = idx;
+  var title = advisorTitleOf(a);
+  document.getElementById("avTitle").textContent = title;
+  document.getElementById("avChips").innerHTML =
+      (a.count ? '<span class="info-chip green">第 '+esc(String(a.count))+' 次</span>' : '')
+    + (a.date ? '<span class="info-chip">📅 '+esc(a.date)+'</span>' : '')
+    + (a.time ? '<span class="info-chip">🕐 '+esc(a.time)+'</span>' : '')
+    + ((a.tags||[]).length ? a.tags.map(function(t){ return '<span class="info-chip" style="cursor:pointer" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')">🏷 '+esc(t)+'</span>'; }).join("") : "");
+  var box = document.getElementById("avContent");
+  box.innerHTML = mdRenderHTML(a.content) || '<div class="empty">这次没有记录内容</div>';
+  box.className = "md-body";
+  var files = collectFiles(a).length ? ('<div class="info-card"><h3>📎 资料附件</h3>' + fileListGrouped(a) + '</div>') : "";
+  document.getElementById("avFiles").innerHTML = galleryHTML(a) + files;
+  setPageTitle("advisorDetail", title, a.date || "");
+  showSection("advisorDetail");
+  /* 目录要在 showSection 之后生成 */
+  buildToc(box);
+  /* 上一篇 / 下一篇：按列表显示顺序（最新在前） */
+  var ordered = src.map(function(x){ return x; }).reverse();
+  renderPnNav("avPn", ordered, ordered.indexOf(a), "openAdvisor", { raw: true, full: src });
+}
+function backToAdvisor(){ currentAdvisorIdx = -1; switchTab("advisor"); }
 
 function renderRoster(){
   var FIELDS = [
@@ -4069,8 +4119,8 @@ function buildSearchIndex(){
     var t = d.title || autoTitle(d.content, d.date);
     push("日记", t, [t, d.content, d.date, (d.media||[]).map(function(m){ return m.name; }).join(" ")], "openDiary(" + i + ")");
   });
-  (blogData.advisor||[]).forEach(function(a){
-    push("导师指导", (a.count ? ("第" + a.count + "次指导 · ") : "") + (a.date || ""), [a.content, a.date, String(a.count || "")], "switchTab('advisor')");
+  (blogData.advisor||[]).forEach(function(a, i){
+    push("导师指导", (a.count ? ("第" + a.count + "次指导 · ") : "") + (a.date || ""), [a.content, a.date, String(a.count || "")], "openAdvisor(" + i + ")");
   });
 
   /* 名单：只索引前台真正可见的字段，隐藏的不进索引 */
@@ -4207,7 +4257,7 @@ function clearSideArticle(){
 }
 
 /* 哪些栏目算「一篇文章」：打开它们时右侧栏只留目录/信息，不显示站点统计 */
-var DETAIL_SECTIONS = ["courseDetail", "noticeDetail", "classDetail", "paperDetail", "appDetail", "diaryDetail"];
+var DETAIL_SECTIONS = ["courseDetail", "noticeDetail", "classDetail", "paperDetail", "appDetail", "diaryDetail", "advisorDetail"];
 function isDetailSection(name){
   return DETAIL_SECTIONS.indexOf(name) >= 0;
 }
@@ -4300,7 +4350,8 @@ function currentTab(){
     "sec-noticeDetail": "notices", "sec-class": "class", "sec-classDetail": "class",
     "sec-roster": "roster", "sec-life": "life", "sec-media": "life", "sec-ledger": "ledger",
     "sec-appDetail": "life",
-    "sec-diary": "diary", "sec-diaryDetail": "diary", "sec-tags": "tags", "sec-advisor": "advisor", "sec-about": "about" };
+    "sec-diary": "diary", "sec-diaryDetail": "diary", "sec-tags": "tags",
+    "sec-advisor": "advisor", "sec-advisorDetail": "advisor", "sec-about": "about" };
   return map[active.id] || "home";
 }
 document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeDrawer(); });

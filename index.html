@@ -1164,6 +1164,8 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
         <h3 id="articleFilesTitle_courseDetail">📎 课程资料</h3>
         <div id="articleFilesBody_courseDetail"></div>
       </div>
+      <!-- 上一篇 / 下一篇（只有一侧存在时只显示那一侧） -->
+      <div class="app-pn" id="cdPn" style="display:none"></div>
     </div>
 
     <div class="section" id="sec-papers">
@@ -1189,6 +1191,8 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
         <h3 id="articleFilesTitle_paperDetail">📎 论文文件</h3>
         <div id="articleFilesBody_paperDetail"></div>
       </div>
+      <!-- 上一篇 / 下一篇 -->
+      <div class="app-pn" id="pdPn" style="display:none"></div>
     </div>
 
     <div class="section" id="sec-notices">
@@ -1211,6 +1215,8 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
         <h3 id="articleFilesTitle_noticeDetail">📎 附件</h3>
         <div id="articleFilesBody_noticeDetail"></div>
       </div>
+      <!-- 上一篇 / 下一篇 -->
+      <div class="app-pn" id="ndPn" style="display:none"></div>
     </div>
 
     <div class="section" id="sec-class">
@@ -2503,6 +2509,8 @@ function openCourse(idx){
   showSection("courseDetail");
   /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */
   buildToc(introBox);
+  /* 上一篇 / 下一篇：按列表（时间倒序）取相邻的课程 */
+  renderPnNav("cdPn", blogData.courses||[], idx, "openCourse");
 }
 function backToCourses(){ showSection("courses"); setPageTitle("courses"); currentCourseIdx=-1; }
 
@@ -2562,6 +2570,12 @@ function openPaper(idx){
   showSection("paperDetail");
   /* 摘要 + 备注一起出目录；同样要放在 showSection 之后 */
   buildToc([ab, desc]);
+  /* 上一篇 / 下一篇：在当前筛选结果里走（这样不会跳到被筛掉的文章上） */
+  var pf = PAPER_FILTERS.filter(function(x){ return x.key === paperFilter; })[0];
+  var pAll = blogData.papers || [];
+  var pList = (pf && pf.match) ? pAll.filter(function(p){ return pf.match(p.status); }) : pAll;
+  if(pList.indexOf(p) < 0) pList = pAll;
+  renderPnNav("pdPn", pList, pList.indexOf(p), "openPaper", { full: pAll });
 }
 function backToPapers(){ showSection("papers"); setPageTitle("papers"); currentPaperIdx=-1; }
 
@@ -3124,6 +3138,8 @@ function openNotice(idx){
   showSection("noticeDetail");
   /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */
   buildToc(box);
+  /* 上一篇 / 下一篇 */
+  renderPnNav("ndPn", blogData.notices||[], idx, "openNotice");
 }
 function backToNotices(){ showSection("notices"); setPageTitle("notices"); currentNoticeIdx=-1; }
 
@@ -3287,21 +3303,56 @@ function openApp(idx){
   var others = (blogData.apps||[]).map(function(x, i){ return {a:x, i:i}; }).filter(function(o){ return o.i !== idx; }).slice(0, 4);
   document.getElementById("adMore").innerHTML = others.map(function(o){ return appCardHTML(o.a, o.i); }).join("");
   document.getElementById("adMoreTitle").style.display = others.length ? "" : "none";
-  /* 上一篇 / 下一篇：只显示存在的那一侧，没有就不占位（不再显示「没有了」） */
-  var apps = blogData.apps || [];
-  var prev = apps[idx-1], next = apps[idx+1];
-  var pnHTML = "";
-  if(prev) pnHTML += '<a href="javascript:;" onclick="openApp('+(idx-1)+')"><span class="lbl">上一篇</span>'+esc(prev.name)+'</a>';
-  if(next) pnHTML += '<a href="javascript:;" onclick="openApp('+(idx+1)+')"><span class="lbl">下一篇</span>'+esc(next.name)+'</a>';
-  var pnBox = document.getElementById("adPn");
-  pnBox.innerHTML = pnHTML;
-  pnBox.style.display = pnHTML ? "" : "none";
+  /* 上一篇 / 下一篇：只显示存在的那一侧（应用按自己的排列顺序） */
+  renderPnNav("adPn", blogData.apps || [], idx, "openApp", { raw: true });
   setPageTitle("appDetail", a.name, a.summary || "");
   showSection("appDetail");
   /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */
   buildToc(document.getElementById("adIntro"));
 }
 function backToApps(){ currentAppIdx = -1; switchTab("life"); }
+
+/* ============================================================
+   上一篇 / 下一篇（精选应用、课程、论文、通知 共用）
+   · 只画存在的那一侧，两侧都没有就整块隐藏（不再出现「没有了」占位）
+   · 默认按列表顺序（时间倒序）：上一篇 = 列表里更靠上的一条
+   · opts.raw = true 表示按原始数组顺序（精选应用用这个）
+   · opts.full = 打开函数真正接收下标的完整数组（当 arr 是筛选后的子集时用）
+   · opts.title 可自定义取标题的方式
+   ============================================================ */
+function renderPnNav(boxId, arr, idx, fn, opts){
+  var box = document.getElementById(boxId);
+  if(!box) return;
+  opts = opts || {};
+  var list = arr || [];
+  var full = opts.full || list;
+  var titleOf = opts.title || function(x){ return (x && x.title) || ""; };
+  var prev = null, next = null;
+  if(opts.raw){
+    prev = list[idx-1] || null;
+    next = list[idx+1] || null;
+  }else{
+    var sorted = list.slice().sort(byTimeDesc);
+    var pos = sorted.indexOf(list[idx]);
+    if(pos > 0) prev = sorted[pos-1];
+    if(pos >= 0 && pos < sorted.length-1) next = sorted[pos+1];
+  }
+  var h = "";
+  if(prev) h += '<a href="javascript:;" onclick="'+fn+'('+full.indexOf(prev)+')"><span class="lbl">上一篇</span>'+esc(titleOf(prev))+'</a>';
+  if(next) h += '<a href="javascript:;" onclick="'+fn+'('+full.indexOf(next)+')"><span class="lbl">下一篇</span>'+esc(titleOf(next))+'</a>';
+  box.innerHTML = h;
+  box.style.display = h ? "" : "none";
+}
+/* 日记：点上一篇 / 下一篇直接跳到那一条并展开它 */
+function openDiary(idx){
+  var el = document.getElementById("diaryItem-" + idx);
+  if(!el) return;
+  if(typeof currentTab === "function" && currentTab() !== "diary" && typeof switchTab === "function") switchTab("diary");
+  var all = document.querySelectorAll("#diaryList details.diary-item");
+  for(var i = 0; i < all.length; i++){ if(all[i] !== el) all[i].open = false; }
+  el.open = true;
+  if(el.scrollIntoView) el.scrollIntoView({behavior:"smooth", block:"start"});
+}
 
 function updateLgCategories(){
   var type = document.getElementById("lgType").value;
@@ -3811,7 +3862,7 @@ function diaryStamp(d){
   if(m) return m[1] + " " + m[2].padStart(2,"0") + ":" + m[3];
   return String((d && d.date) || "");
 }
-function diaryItemHTML(d){
+function diaryItemHTML(d, rawIdx, pnHTML){
   var title = d.title || autoTitle(d.content, d.date);
   var preview = mdText(d.content).split(String.fromCharCode(10)).join(" ").trim();
   var media = (d.media||[]).map(function(m){
@@ -3825,7 +3876,7 @@ function diaryItemHTML(d){
     return '<div class="diary-media">'+player+'<div style="margin-top:6px">'+fileActionHTML(url, nm)+'</div></div>';
   }).join("");
   /* 默认全部收起：点哪一条才展开哪一条（details 同 name 保证同时只有一条打开） */
-  return '<details class="diary-item" name="diaryAcc">'
+  return '<details class="diary-item" name="diaryAcc" id="diaryItem-'+rawIdx+'">'
     + '<summary class="diary-summary">'
     +   '<span class="diary-dot"></span>'
     +   '<span class="diary-summary-main">'
@@ -3837,19 +3888,30 @@ function diaryItemHTML(d){
     + '</summary>'
     + '<div class="diary-body"><div class="diary-content md-body">'+mdRenderHTML(d.content)+'</div>'
     + ((d.tags||[]).length ? '<div class="chip-row" style="margin-top:10px">'+d.tags.map(function(t){ return '<span class="info-chip" style="cursor:pointer" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')">🏷 '+esc(t)+'</span>'; }).join("")+'</div>' : "")
-    + galleryHTML(d)+media+'</div>'
+    + galleryHTML(d)+media
+    + (pnHTML ? '<div class="app-pn diary-pn">'+pnHTML+'</div>' : "")
+    + '</div>'
     + '</details>';
 }
 function renderDiary(){
-  var list = (blogData.diary||[]).slice().reverse();
+  var src = blogData.diary || [];
+  /* 显示顺序：最新在前；同时记住它在原始数组里的下标，供「上一篇/下一篇」跳转使用 */
+  var list = src.map(function(d, i){ return { d: d, i: i }; }).reverse();
   var box = document.getElementById("diaryList");
   if(!list.length){ box.innerHTML = '<div class="empty">暂无日记</div>'; return; }
   /* 按日期分组，做成时间线：日期标题 + 当天条数 */
   var groups = [], cur = null;
-  list.forEach(function(d){
+  list.forEach(function(it, pos){
+    var d = it.d;
     var day = String((d && d.date) || "").slice(0, 10);
     if(!cur || cur.day !== day){ cur = { day: day, html: [] }; groups.push(cur); }
-    cur.html.push(diaryItemHTML(d));
+    /* 上一篇 = 列表里更靠上的一条（更新的一条），下一篇 = 更靠下的一条（更旧） */
+    var prevIt = pos > 0 ? list[pos-1] : null;
+    var nextIt = pos < list.length-1 ? list[pos+1] : null;
+    var pn = "";
+    if(prevIt) pn += '<a href="javascript:;" onclick="openDiary('+prevIt.i+')"><span class="lbl">上一篇</span>'+esc(prevIt.d.title || autoTitle(prevIt.d.content, prevIt.d.date))+'</a>';
+    if(nextIt) pn += '<a href="javascript:;" onclick="openDiary('+nextIt.i+')"><span class="lbl">下一篇</span>'+esc(nextIt.d.title || autoTitle(nextIt.d.content, nextIt.d.date))+'</a>';
+    cur.html.push(diaryItemHTML(d, it.i, pn));
   });
   box.innerHTML = groups.map(function(g){
     return '<div class="diary-group">'

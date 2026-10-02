@@ -26,8 +26,7 @@
       "courses",
       "papers",
       "notices",
-      "classItems",
-      "diary"
+      "classItems"
     ]
   },
   "courses": [
@@ -692,6 +691,10 @@
   ],
   "logs": [
     {
+      "time": "2026-10-02 15:54",
+      "action": "修改首页显示内容"
+    },
+    {
       "time": "2026-10-02 15:13",
       "action": "编辑日记：米游社 & 库街区 · 每日自动打卡签到小工具"
     },
@@ -1086,10 +1089,6 @@
     {
       "time": "2026-09-27 01:00",
       "action": "编辑课程：计算机控制系统"
-    },
-    {
-      "time": "2026-09-26 21:43",
-      "action": "通过友链申请：Starhiro"
     }
   ],
   "categories": [

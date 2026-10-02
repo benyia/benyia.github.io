@@ -3287,13 +3287,15 @@ function openApp(idx){
   var others = (blogData.apps||[]).map(function(x, i){ return {a:x, i:i}; }).filter(function(o){ return o.i !== idx; }).slice(0, 4);
   document.getElementById("adMore").innerHTML = others.map(function(o){ return appCardHTML(o.a, o.i); }).join("");
   document.getElementById("adMoreTitle").style.display = others.length ? "" : "none";
-  /* 上一篇 / 下一篇 */
-  var prev = (blogData.apps||[])[idx-1], next = (blogData.apps||[])[idx+1];
-  document.getElementById("adPn").innerHTML =
-      (prev ? '<a href="javascript:;" onclick="openApp('+(idx-1)+')"><span class="lbl">上一篇</span>'+esc(prev.name)+'</a>'
-            : '<a href="javascript:;" style="opacity:.55;cursor:default"><span class="lbl">上一篇</span>没有了</a>')
-    + (next ? '<a href="javascript:;" onclick="openApp('+(idx+1)+')"><span class="lbl">下一篇</span>'+esc(next.name)+'</a>'
-            : '<a href="javascript:;" style="opacity:.55;cursor:default"><span class="lbl">下一篇</span>没有了</a>');
+  /* 上一篇 / 下一篇：只显示存在的那一侧，没有就不占位（不再显示「没有了」） */
+  var apps = blogData.apps || [];
+  var prev = apps[idx-1], next = apps[idx+1];
+  var pnHTML = "";
+  if(prev) pnHTML += '<a href="javascript:;" onclick="openApp('+(idx-1)+')"><span class="lbl">上一篇</span>'+esc(prev.name)+'</a>';
+  if(next) pnHTML += '<a href="javascript:;" onclick="openApp('+(idx+1)+')"><span class="lbl">下一篇</span>'+esc(next.name)+'</a>';
+  var pnBox = document.getElementById("adPn");
+  pnBox.innerHTML = pnHTML;
+  pnBox.style.display = pnHTML ? "" : "none";
   setPageTitle("appDetail", a.name, a.summary || "");
   showSection("appDetail");
   /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */

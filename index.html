@@ -571,6 +571,9 @@ details[open] .diary-summary-arrow{transform:rotate(180deg)}
 .diary-card{padding:0;cursor:pointer;transition:box-shadow .25s,border-color .25s}
 .diary-card:hover{box-shadow:0 8px 24px rgba(15,23,42,.10);border-color:var(--primary-light)}
 .diary-card .diary-summary-arrow{font-size:1.05rem;line-height:1;margin-top:6px}
+/* 搜索结果定位到的那一条：闪一下高亮，一眼能看到 */
+@keyframes flashItem{0%,55%{box-shadow:0 0 0 3px var(--primary);border-color:var(--primary)}100%{box-shadow:none}}
+.flash-item{animation:flashItem 1.7s ease}
 .diary-body{padding:2px 18px 18px 36px}
 @media(max-width:640px){
   .diary-summary{padding:12px 14px 12px 12px;gap:9px}
@@ -2512,7 +2515,33 @@ function renderCourses(){
       + '</div></div>';
   }, "暂无课程");
 }
+/* ============================================================
+   「从哪儿来，就回哪儿去」
+   打开详情页之前，记住来路（哪个栏目 + 当时滚到哪一行），
+   点「← 返回」时原样回去 —— 而不是每次都回到栏目顶部。
+   在详情页之间用「上一篇/下一篇」跳转时，不会覆盖最初的来路。
+   ============================================================ */
+var navOrigin = null;
+function activeSectionId(){
+  var a = document.querySelector(".section.active");
+  return a ? a.id : "";
+}
+function rememberOrigin(){
+  if(/Detail$/.test(activeSectionId())) return;   /* 已经在详情页里跳转，保持最初的来路 */
+  navOrigin = { tab: currentTab(), y: (window.pageYOffset || document.documentElement.scrollTop || 0) };
+}
+function backToOrigin(fallbackTab){
+  var o = navOrigin;
+  navOrigin = null;
+  switchTab((o && o.tab) ? o.tab : fallbackTab);
+  if(o && typeof o.y === "number"){
+    /* showSection 里会 scrollTo(0,0)，等它跑完再把位置还原 */
+    setTimeout(function(){ window.scrollTo(0, o.y); }, 0);
+  }
+}
+
 function openCourse(idx){
+  rememberOrigin();
   currentCourseIdx = idx;
   var c = blogData.courses[idx];
   var banner = document.getElementById("cdIcon");
@@ -2553,7 +2582,7 @@ function openCourse(idx){
   /* 上一篇 / 下一篇：按列表（时间倒序）取相邻的课程 */
   renderPnNav("cdPn", blogData.courses||[], idx, "openCourse");
 }
-function backToCourses(){ showSection("courses"); setPageTitle("courses"); currentCourseIdx=-1; }
+function backToCourses(){ currentCourseIdx = -1; backToOrigin("courses"); }
 
 function renderPapers(){
   var all = blogData.papers||[];
@@ -2578,6 +2607,7 @@ function renderPapers(){
   }).join("") || '<div class="empty">暂无匹配的论文</div>';
 }
 function openPaper(idx){
+  rememberOrigin();
   currentPaperIdx = idx;
   var p = blogData.papers[idx];
   var files = collectFiles(p);
@@ -2618,7 +2648,7 @@ function openPaper(idx){
   if(pList.indexOf(p) < 0) pList = pAll;
   renderPnNav("pdPn", pList, pList.indexOf(p), "openPaper", { full: pAll });
 }
-function backToPapers(){ showSection("papers"); setPageTitle("papers"); currentPaperIdx=-1; }
+function backToPapers(){ currentPaperIdx = -1; backToOrigin("papers"); }
 
 /* ---------- Markdown（通知正文：文字 + 图片混排） ---------- */
 function mdInline(s){
@@ -3159,6 +3189,7 @@ function renderNotices(){
   }, "暂无通知");
 }
 function openNotice(idx){
+  rememberOrigin();
   currentNoticeIdx = idx;
   var n = blogData.notices[idx];
   document.getElementById("ndTitle").textContent = n.title;
@@ -3189,7 +3220,7 @@ function openNotice(idx){
   /* 上一篇 / 下一篇 */
   renderPnNav("ndPn", blogData.notices||[], idx, "openNotice");
 }
-function backToNotices(){ showSection("notices"); setPageTitle("notices"); currentNoticeIdx=-1; }
+function backToNotices(){ currentNoticeIdx = -1; backToOrigin("notices"); }
 
 function renderClass(){
   var all = blogData.classItems||[];
@@ -3201,6 +3232,7 @@ function renderClass(){
   }, "暂无内容");
 }
 function openClass(idx){
+  rememberOrigin();
   currentClassIdx = idx;
   var c = blogData.classItems[idx];
   document.getElementById("clDetailTitle").textContent = c.title;
@@ -3219,7 +3251,7 @@ function openClass(idx){
   if(cList.indexOf(c) < 0) cList = cAll;
   renderPnNav("clPn", cList, cList.indexOf(c), "openClass", { full: cAll });
 }
-function backToClass(){ showSection("class"); setPageTitle("class"); currentClassIdx=-1; }
+function backToClass(){ currentClassIdx = -1; backToOrigin("class"); }
 
 function setMediaFilter(k){ mediaFilter = k; renderFilters(); renderMedia(); }
 function renderMedia(){
@@ -3248,12 +3280,12 @@ function renderMedia(){
     }
     var dl = (f0 && f0.url) ? '<div style="margin-top:8px">'+fileActionHTML(f0.url, f0.name)+'</div>' : '';
     if(m.url) dl += '<div style="margin-top:8px"><a class="btn" href="'+esc(m.url)+'" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;font-size:.78rem">打开链接</a></div>';
-    return '<div class="article-card"><div class="article-body">'+player+'<div class="article-title">'+icon+' '+esc(m.title)+'</div>'+(m.desc?'<div class="article-desc">'+esc(m.desc)+'</div>':"")+dl+'</div></div>';
+    return '<div class="article-card" id="mediaCard-'+(blogData.media||[]).indexOf(m)+'"><div class="article-body">'+player+'<div class="article-title">'+icon+' '+esc(m.title)+'</div>'+(m.desc?'<div class="article-desc">'+esc(m.desc)+'</div>':"")+dl+'</div></div>';
   }).join("") || '<div class="empty">暂无内容</div>';
 }
 
 function renderLife(){
-  document.getElementById("lifeList").innerHTML = (blogData.lifeServices||[]).map(function(s){
+  document.getElementById("lifeList").innerHTML = (blogData.lifeServices||[]).map(function(s, si){
     var files = collectFiles(s);
     var fileLinks = files.map(function(f){
       return '<div style="margin-top:6px">'+fileActionHTML(f.url, f.name)+'</div>';
@@ -3261,7 +3293,7 @@ function renderLife(){
     var ic = isImgUrl(s.icon) ? '<img src="'+esc(s.icon)+'" style="width:48px;height:48px;object-fit:cover;border-radius:10px">' : '<span style="font-size:2rem">'+esc(s.icon||"🔗")+'</span>';
     var open = s.url ? '<a href="'+esc(s.url)+'" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">' : '<div>';
     var close = s.url ? '</a>' : '</div>';
-    return open+'<div class="article-card" style="margin-bottom:0"><div class="article-body" style="text-align:center"><div style="margin-bottom:8px">'+ic+'</div><div class="article-title">'+esc(s.title)+'</div><div class="article-desc">'+esc(s.desc)+'</div>'+fileLinks+imgStrip(s)+'</div></div>'+close;
+    return open+'<div class="article-card" id="lifeCard-'+si+'" style="margin-bottom:0"><div class="article-body" style="text-align:center"><div style="margin-bottom:8px">'+ic+'</div><div class="article-title">'+esc(s.title)+'</div><div class="article-desc">'+esc(s.desc)+'</div>'+fileLinks+imgStrip(s)+'</div></div>'+close;
   }).join("") || '<div class="empty">暂无</div>';
 }
 
@@ -3301,6 +3333,7 @@ function renderApps(){
 function openApp(idx){
   var a = (blogData.apps||[])[idx];
   if(!a) return;
+  rememberOrigin();
   currentAppIdx = idx;
   document.getElementById("adIcon").innerHTML = appIconHTML(a);
   document.getElementById("adTitle").textContent = a.name || "未命名应用";
@@ -3363,7 +3396,7 @@ function openApp(idx){
   /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */
   buildToc(document.getElementById("adIntro"));
 }
-function backToApps(){ currentAppIdx = -1; switchTab("life"); }
+function backToApps(){ currentAppIdx = -1; backToOrigin("life"); }
 
 /* ============================================================
    上一篇 / 下一篇（精选应用、课程、论文、通知 共用）
@@ -3401,6 +3434,7 @@ function openDiary(idx){
   var src = blogData.diary || [];
   var d = src[idx];
   if(!d) return;
+  rememberOrigin();
   currentDiaryIdx = idx;
   var title = d.title || autoTitle(d.content, d.date);
   document.getElementById("ddTitle").textContent = title;
@@ -3419,7 +3453,7 @@ function openDiary(idx){
   var ordered = src.map(function(x){ return x; }).reverse();
   renderPnNav("ddPn", ordered, ordered.indexOf(d), "openDiary", { raw: true, full: src });
 }
-function backToDiary(){ currentDiaryIdx = -1; switchTab("diary"); }
+function backToDiary(){ currentDiaryIdx = -1; backToOrigin("diary"); }
 
 function updateLgCategories(){
   var type = document.getElementById("lgType").value;
@@ -3437,7 +3471,7 @@ function renderLedger(){
   document.getElementById("ledgerList").innerHTML = records.slice().reverse().map(function(r){
     var imgs = collectImages(r);
     var bills = imgs.length ? '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">'+imgs.map(function(f){ return '<a href="'+esc(f.url)+'" target="_blank" rel="noopener"><img src="'+esc(f.url)+'" style="width:64px;height:64px;object-fit:cover;border-radius:8px" alt=""></a>'; }).join("")+'</div>' : "";
-    return '<div class="ledger-item" style="border-left-color:'+(r.type==="income"?"#10b981":"#ef4444")+'"><div style="flex:1;min-width:180px"><div class="date">'+esc(r.date)+(r.time?(' '+esc(r.time)):"")+' · '+esc(r.category||"其他")+'</div><div>'+esc(r.desc||"无备注")+'</div>'+bills+'</div><div class="amount" style="color:'+(r.type==="income"?"#10b981":"#ef4444")+'">'+(r.type==="income"?"+":"-")+'¥'+(parseFloat(r.amount)||0).toFixed(2)+'</div></div>';
+    return '<div class="ledger-item" id="ledgerItem-'+records.indexOf(r)+'" style="border-left-color:'+(r.type==="income"?"#10b981":"#ef4444")+'"><div style="flex:1;min-width:180px"><div class="date">'+esc(r.date)+(r.time?(' '+esc(r.time)):"")+' · '+esc(r.category||"其他")+'</div><div>'+esc(r.desc||"无备注")+'</div>'+bills+'</div><div class="amount" style="color:'+(r.type==="income"?"#10b981":"#ef4444")+'">'+(r.type==="income"?"+":"-")+'¥'+(parseFloat(r.amount)||0).toFixed(2)+'</div></div>';
   }).join("") || '<div class="empty">暂无记录</div>';
   updateLgCategories();
 }
@@ -4052,6 +4086,7 @@ function openAdvisor(idx){
   var src = blogData.advisor || [];
   var a = src[idx];
   if(!a) return;
+  rememberOrigin();
   currentAdvisorIdx = idx;
   var title = advisorTitleOf(a);
   document.getElementById("avTitle").textContent = title;
@@ -4073,7 +4108,43 @@ function openAdvisor(idx){
   var ordered = src.map(function(x){ return x; }).reverse();
   renderPnNav("avPn", ordered, ordered.indexOf(a), "openAdvisor", { raw: true, full: src });
 }
-function backToAdvisor(){ currentAdvisorIdx = -1; switchTab("advisor"); }
+function backToAdvisor(){ currentAdvisorIdx = -1; backToOrigin("advisor"); }
+
+/* ============================================================
+   没有独立详情页的内容（名单 / 生活服务 / 影音 / 记账）：
+   点搜索结果要「落到那一条」——切到它所在的栏目、滚到它、闪一下高亮，
+   而不是只跳到栏目顶部让人自己找。
+   ============================================================ */
+function flashAndScroll(el){
+  if(!el) return;
+  if(el.scrollIntoView) el.scrollIntoView({behavior:"smooth", block:"center"});
+  el.classList.add("flash-item");
+  setTimeout(function(){ el.classList.remove("flash-item"); }, 1700);
+}
+function focusItem(tab, elemId){
+  switchTab(tab);
+  flashAndScroll(document.getElementById(elemId));
+}
+/* 生活服务：有网址就直接打开；没有网址就定位到那张卡片 */
+function openService(i){
+  var x = (blogData.lifeServices||[])[i];
+  if(!x) return;
+  if(x.url){ window.open(x.url, "_blank", "noopener"); return; }
+  focusItem("life", "lifeCard-" + i);
+}
+/* 影音：定位到那一张卡片（音乐条目列表里没有卡片，就定位到影音区 / 播放器） */
+function openMedia(i){
+  var m = (blogData.media||[])[i];
+  if(!m) return;
+  switchTab("life");
+  var el = document.getElementById("mediaCard-" + i) || document.getElementById("lifeMediaBox") || document.getElementById("mpCard");
+  flashAndScroll(el);
+}
+/* 快速链接：直接打开 */
+function openQuickLink(i){
+  var l = (blogData.quickLinks||[])[i];
+  if(l && l.url) window.open(l.url, "_blank", "noopener");
+}
 
 function renderRoster(){
   var FIELDS = [
@@ -4085,7 +4156,7 @@ function renderRoster(){
   var SENSITIVE = ["idCard", "homeAddress", "phone", "email", "birthday"];
   var list = (blogData.roster||[]).filter(function(r){ return r.show !== false; });
   var globalShow = !!(blogData.rosterConfig && blogData.rosterConfig.showSensitive);
-  document.getElementById("rosterList").innerHTML = list.map(function(r){
+  document.getElementById("rosterList").innerHTML = list.map(function(r, ri){
     var hide = r.hide || [];
     var photoSrc = r.photo || (blogData.siteConfig && blogData.siteConfig.defaultAvatar) || "files/default-avatar.png";
     var photo = '<div class="roster-photo"><img src="'+esc(photoSrc)+'" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=&#39;none&#39;;var n=this.nextElementSibling;if(n){n.style.display=&#39;flex&#39;;}"><span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.4rem">'+esc((r.name||"?").slice(0,1))+'</span></div>';
@@ -4098,7 +4169,7 @@ function renderRoster(){
     }).map(function(f){
       return '<div class="roster-row"><span class="k">'+f[1]+'</span><span class="v">'+esc(r[f[0]])+'</span></div>';
     }).join("");
-    return '<div class="roster-card">'+photo+'<div class="roster-info">'+rows+'</div>'+galleryHTML(r)+'</div>';
+    return '<div class="roster-card" id="rosterCard-'+ri+'">'+photo+'<div class="roster-info">'+rows+'</div>'+galleryHTML(r)+'</div>';
   }).join("") || '<div class="empty">暂无名单</div>';
 }
 
@@ -4134,7 +4205,7 @@ function buildSearchIndex(){
   var SENS = ["idCard", "homeAddress", "phone", "email", "birthday"];
   var gShow = !!(blogData.rosterConfig && blogData.rosterConfig.showSensitive);
   var RF = [["studentId","学号"],["name","姓名"],["gender","性别"],["className","班级"],["college","学院"],["major","专业"],["dorm","宿舍号"],["advisor","导师"],["ethnicity","民族"],["political","政治面貌"],["birthday","出生日期"],["phone","电话"],["email","邮箱"],["idCard","身份证号"],["homeAddress","家庭住址"],["note","备注"]];
-  (blogData.roster||[]).filter(function(r){ return r.show !== false; }).forEach(function(r){
+  (blogData.roster||[]).filter(function(r){ return r.show !== false; }).forEach(function(r, ri){
     var hid = r.hide || [];
     var parts = [];
     RF.forEach(function(f){
@@ -4144,11 +4215,11 @@ function buildSearchIndex(){
       if(SENS.indexOf(k) >= 0 && !gShow) return;
       parts.push(r[k]);
     });
-    push("名单", r.name, parts, "switchTab('roster')");
+    push("名单", r.name, parts, "focusItem('roster','rosterCard-" + ri + "')");
   });
 
-  (blogData.lifeServices||[]).forEach(function(x){
-    push("生活服务", x.title, [x.title, x.desc, x.url, fileNames(x)], "switchTab('life')");
+  (blogData.lifeServices||[]).forEach(function(x, i){
+    push("生活服务", x.title, [x.title, x.desc, x.url, fileNames(x)], "openService(" + i + ")");
   });
   /* 精选应用：点搜索结果直接打开那款应用的详情页 */
   (blogData.apps||[]).forEach(function(a, i){
@@ -4157,20 +4228,20 @@ function buildSearchIndex(){
     (a.downloads||[]).forEach(function(d){ txt.push(d.platform, d.desc); });
     push("精选应用", a.name, txt, "openApp(" + i + ")");
   });
-  (blogData.media||[]).forEach(function(m){
-    push("影音", m.title, [m.title, m.desc, m.type, fileNames(m)], "switchTab('life')");
+  (blogData.media||[]).forEach(function(m, i){
+    push("影音", m.title, [m.title, m.desc, m.type, fileNames(m)], "openMedia(" + i + ")");
   });
-  (blogData.quickLinks||[]).forEach(function(l){
-    push("快速链接", l.title, [l.title, l.url], "");
+  (blogData.quickLinks||[]).forEach(function(l, i){
+    push("快速链接", l.title, [l.title, l.url], "openQuickLink(" + i + ")");
   });
   (blogData.categories||[]).forEach(function(c){
     push("分类", c.name, [c.name], "switchTab('" + (c.section || "home") + "')");
   });
   (blogData.tags||[]).forEach(function(t){
-    push("标签", t, [t], "switchTab('home')");
+    push("标签", t, [t], "openTag('" + String(t).replace(/\\/g, "\\\\").replace(/'/g, "\\'") + "')");
   });
-  (blogData.ledger||[]).forEach(function(r){
-    push("记账", (r.category || "其他") + " ¥" + (parseFloat(r.amount) || 0).toFixed(2), [r.desc, r.category, r.date, String(r.amount || "")], "switchTab('ledger')");
+  (blogData.ledger||[]).forEach(function(r, i){
+    push("记账", (r.category || "其他") + " ¥" + (parseFloat(r.amount) || 0).toFixed(2), [r.desc, r.category, r.date, String(r.amount || "")], "focusItem('ledger','ledgerItem-" + i + "')");
   });
 
   idx.forEach(function(x){ x.tl = x.title.toLowerCase(); x.xl = x.text.toLowerCase(); });

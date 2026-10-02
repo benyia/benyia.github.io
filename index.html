@@ -1233,6 +1233,8 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
         <p class="intro" id="clDetailContent"></p>
       </div>
       <div id="clDetailFiles"></div>
+      <!-- 上一篇 / 下一篇 -->
+      <div class="app-pn" id="clPn" style="display:none"></div>
     </div>
 
     <div class="section" id="sec-roster">
@@ -3165,6 +3167,11 @@ function openClass(idx){
   showSection("classDetail");
   /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */
   buildToc(box);
+  /* 上一篇 / 下一篇：在当前类型筛选结果里走 */
+  var cAll = blogData.classItems || [];
+  var cList = (classFilter === "all") ? cAll : cAll.filter(function(x){ return x.type === classFilter; });
+  if(cList.indexOf(c) < 0) cList = cAll;
+  renderPnNav("clPn", cList, cList.indexOf(c), "openClass", { full: cAll });
 }
 function backToClass(){ showSection("class"); setPageTitle("class"); currentClassIdx=-1; }
 

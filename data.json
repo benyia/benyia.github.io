@@ -511,6 +511,21 @@
       "file": "",
       "fileName": "",
       "time": "2026-09-27 14:46"
+    },
+    {
+      "title": "运筹学完整知识体系框架",
+      "type": "作业",
+      "date": "2026-10-06",
+      "content": "<html style=\"margin:0;padding:0;\">\n<title>运筹学知识体系框架</title>\n<div style=\"width:100%;box-sizing:border-box;padding:20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;\">\n  <h2 style=\"text-align:center;color:#1e293b;margin:0 0 24px 0;font-size:22px;\">运筹学知识体系全景图</h2>\n  \n  <!-- 顶层：运筹学总览 -->\n  <div style=\"display:flex;justify-content:center;margin-bottom:20px;\">\n    <div style=\"background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:white;padding:14px 32px;border-radius:10px;font-size:18px;font-weight:600;box-shadow:0 4px 12px rgba(59,130,246,0.3);\">\n      运筹学 Operations Research\n    </div>\n  </div>\n\n  <!-- 连接箭头 -->\n  <div style=\"text-align:center;color:#94a3b8;font-size:20px;margin-bottom:16px;\">▼</div>\n\n  <!-- 四大核心分支 -->\n  <div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px;\">\n    \n    <!-- 线性规划分支 -->\n    <div style=\"background:white;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-top:4px solid #3b82f6;\">\n      <div style=\"font-size:16px;font-weight:600;color:#1e40af;margin-bottom:10px;\">📐 线性规划 (LP)</div>\n      <div style=\"font-size:13px;color:#475569;line-height:1.8;\">\n        • 线性规划模型与标准型<br>\n        • 单纯形法（大M法/两阶段法）<br>\n        • 对偶理论与对偶单纯形法<br>\n        • 灵敏度分析<br>\n        • 运输问题与指派问题\n      </div>\n    </div>\n\n    <!-- 整数规划分支 -->\n    <div style=\"background:white;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-top:4px solid #8b5cf6;\">\n      <div style=\"font-size:16px;font-weight:600;color:#6d28d9;margin-bottom:10px;\">🔢 整数规划 (IP)</div>\n      <div style=\"font-size:13px;color:#475569;line-height:1.8;\">\n        • 纯整数/混合整数/0-1规划<br>\n        • 分支定界法<br>\n        • 割平面法<br>\n        • 指派问题（匈牙利法）<br>\n        • 背包问题与选址问题\n      </div>\n    </div>\n\n    <!-- 图与网络分支 -->\n    <div style=\"background:white;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-top:4px solid #10b981;\">\n      <div style=\"font-size:16px;font-weight:600;color:#047857;margin-bottom:10px;\">🕸️ 图与网络</div>\n      <div style=\"font-size:13px;color:#475569;line-height:1.8;\">\n        • 图的基本概念与模型<br>\n        • 最短路问题（Dijkstra/Floyd）<br>\n        • 最大流问题（Ford-Fulkerson）<br>\n        • 最小费用最大流<br>\n        • 网络计划技术（PERT/CPM）\n      </div>\n    </div>\n\n    <!-- 动态规划分支 -->\n    <div style=\"background:white;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-top:4px solid #f59e0b;\">\n      <div style=\"font-size:16px;font-weight:600;color:#b45309;margin-bottom:10px;\">🔄 动态规划 (DP)</div>\n      <div style=\"font-size:13px;color:#475569;line-height:1.8;\">\n        • 阶段、状态、决策、策略<br>\n        • 最优性原理（Bellman）<br>\n        • 逆序解法与顺序解法<br>\n        • 资源分配/生产库存问题<br>\n        • 设备更新/背包问题\n      </div>\n    </div>\n  </div>\n\n  <!-- 应用分支 -->\n  <div style=\"text-align:center;color:#94a3b8;font-size:14px;margin-bottom:12px;font-weight:500;\">—— 拓展应用领域 ——</div>\n  \n  <div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;\">\n    <div style=\"background:white;border-radius:8px;padding:12px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.06);border-left:3px solid #ec4899;\">\n      <div style=\"font-size:14px;font-weight:600;color:#be185d;\">⏱️ 排队论</div>\n      <div style=\"font-size:12px;color:#64748b;margin-top:6px;\">M/M/1、M/M/c<br>排队系统优化</div>\n    </div>\n    <div style=\"background:white;border-radius:8px;padding:12px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.06);border-left:3px solid #06b6d4;\">\n      <div style=\"font-size:14px;font-weight:600;color:#0e7490;\">📦 存储论</div>\n      <div style=\"font-size:12px;color:#64748b;margin-top:6px;\">EOQ模型<br>随机库存模型</div>\n    </div>\n    <div style=\"background:white;border-radius:8px;padding:12px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.06);border-left:3px solid #ef4444;\">\n      <div style=\"font-size:14px;font-weight:600;color:#b91c1c;\">⚔️ 对策论</div>\n      <div style=\"font-size:12px;color:#64748b;margin-top:6px;\">矩阵对策<br>Nash均衡</div>\n    </div>\n    <div style=\"background:white;border-radius:8px;padding:12px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.06);border-left:3px solid #6366f1;\">\n      <div style=\"font-size:14px;font-weight:600;color:#4338ca;\">🎯 决策论</div>\n      <div style=\"font-size:12px;color:#64748b;margin-top:6px;\">风险型决策<br>不确定型决策</div>\n    </div>\n  </div>\n\n  <!-- 学习路径提示 -->\n  <div style=\"margin-top:24px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:10px;padding:16px;\">\n    <div style=\"font-size:14px;font-weight:600;color:#1e40af;margin-bottom:8px;\">💡 推荐学习顺序</div>\n    <div style=\"font-size:13px;color:#334155;line-height:1.8;\">\n      <strong>线性规划</strong>（基础核心，约占考试40%）→ <strong>整数规划</strong>（LP的延伸）→ <strong>图与网络</strong>（独立体系）→ <strong>动态规划</strong>（思维方式转变）→ 其他专题按需选学\n    </div>\n  </div>\n</div>",
+      "contentIsHTML": true,
+      "tags": [
+        "运筹学"
+      ],
+      "files": [],
+      "images": [],
+      "file": "",
+      "fileName": "",
+      "time": "2026-10-06 11:19"
     }
   ],
   "lifeServices": [
@@ -703,6 +718,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-10-06 11:19",
+      "action": "添加班级事务：运筹学完整知识体系框架"
+    },
     {
       "time": "2026-10-04 18:46",
       "action": "编辑导师指导记录"
@@ -1098,10 +1117,6 @@
     {
       "time": "2026-09-27 13:32",
       "action": "编辑日记：沈阳一日漫游"
-    },
-    {
-      "time": "2026-09-27 13:31",
-      "action": "修改站点设置"
     }
   ],
   "categories": [

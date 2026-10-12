@@ -791,6 +791,10 @@
   ],
   "logs": [
     {
+      "time": "2026-10-12 22:11",
+      "action": "名单：前台隐藏"
+    },
+    {
       "time": "2026-10-12 22:09",
       "action": "发布通知：关于开展学校2026年度实验室安全教育学习与准入考核工作的通知"
     },
@@ -1185,10 +1189,6 @@
     {
       "time": "2026-09-27 14:05",
       "action": "发布通知：党委常委、副校长杨占旭到人工智能学院调研指导工作"
-    },
-    {
-      "time": "2026-09-27 14:03",
-      "action": "编辑通知：关于中央校区 9 月 6 日电力改造停电通知"
     }
   ],
   "categories": [
@@ -1508,7 +1508,7 @@
       "note": "",
       "photo": "files/1789783018217_1_pohb49f2_人物.png",
       "images": [],
-      "show": true,
+      "show": false,
       "hide": [
         "idCard",
         "homeAddress",
@@ -1534,7 +1534,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": true,
+      "show": false,
       "hide": [
         "ethnicity",
         "political",
@@ -1566,7 +1566,7 @@
       "note": "",
       "photo": "",
       "images": [],
-      "show": true,
+      "show": false,
       "hide": []
     }
   ],

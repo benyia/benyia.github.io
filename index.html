@@ -933,7 +933,6 @@ html[data-theme="dark"] .course-badge{background:rgba(217,119,6,.18);color:#fbbf
 .wk-name .wk-mid{color:#38bdf8;font-family:Georgia,serif}
 .wk-tip{margin-top:14px;font-size:.95rem;color:#64748b;letter-spacing:.06em;opacity:0;transform:translateY(10px);animation:wkUp .6s ease-out 1.5s forwards}
 .wk-line{height:1px;width:0;margin:28px auto 0;background:linear-gradient(90deg,transparent,rgba(56,189,248,.5),transparent);opacity:0;animation:wkLine .6s ease-out 2.2s forwards}
-.wk-skip{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);font-size:.72rem;color:#475569;letter-spacing:.18em;opacity:0;animation:wkUp .6s ease-out 3s forwards}
 @keyframes wkUp{to{opacity:1;transform:none}}
 @keyframes wkName{to{opacity:1;transform:none}}
 @keyframes wkLine{to{width:160px;opacity:1}}
@@ -945,7 +944,7 @@ body.wk-lock{overflow:hidden}
 }
 @media (prefers-reduced-motion:reduce){
   .wk-bg{animation:none;opacity:.2;transform:none}
-  .wk-top,.wk-name,.wk-tip,.wk-line,.wk-skip{animation:none;opacity:1;transform:none}
+  .wk-top,.wk-name,.wk-tip,.wk-line{animation:none;opacity:1;transform:none}
   .wk-line{width:160px}
 }
 
@@ -1060,7 +1059,6 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
     <div class="wk-name" id="wkName"><span id="wkNameA">思齐</span><span class="wk-mid" id="wkMid">の</span><span id="wkSuffix">小站</span></div>
     <p class="wk-tip" id="wkTip"></p>
     <div class="wk-line"></div>
-    <div class="wk-skip">点击任意处跳过</div>
   </div>
 </div>
 

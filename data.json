@@ -659,7 +659,7 @@
     {
       "icon": "files/1790734538708_2_kq79d48g_DeeepSeek.png",
       "title": "deepseek Harness",
-      "desc": "",
+      "desc": "AI智能体",
       "url": "https://www.deepseek.com/harness/",
       "files": [],
       "images": []
@@ -805,6 +805,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-10-17 11:45",
+      "action": "编辑生活服务：deepseek Harness"
+    },
     {
       "time": "2026-10-17 11:44",
       "action": "移除图片"
@@ -1199,10 +1203,6 @@
     },
     {
       "time": "2026-09-27 14:29",
-      "action": "编辑通知：党委常委、副校长杨占旭到人工智能学院调研指导工作"
-    },
-    {
-      "time": "2026-09-27 14:19",
       "action": "编辑通知：党委常委、副校长杨占旭到人工智能学院调研指导工作"
     }
   ],

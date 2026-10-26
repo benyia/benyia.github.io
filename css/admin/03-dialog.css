@@ -1,0 +1,26 @@
+/* ===== 统一输入弹窗（替代浏览器自带的 prompt，和站点风格一致） ===== */
+.dlg-mask{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:1500;display:none;align-items:center;justify-content:center;padding:20px}
+.dlg-mask.show{display:flex}
+.dlg{background:#fff;border-radius:14px;box-shadow:0 25px 60px rgba(15,23,42,.3);width:100%;max-width:560px;padding:22px 24px 18px;animation:dlgIn .18s ease}
+@keyframes dlgIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.dlg h3{font-size:1.06rem;margin-bottom:10px;font-weight:700}
+.dlg .dlg-hint{font-size:.86rem;color:var(--text2);line-height:1.75;margin-bottom:14px;white-space:pre-wrap}
+.dlg .dlg-input{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:.9rem;font-family:inherit;color:var(--text);background:#fff;outline:none;transition:.2s}
+.dlg .dlg-input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(16,185,129,.14)}
+.dlg .dlg-row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.dlg .dlg-row .dlg-input{flex:1;min-width:150px}
+.dlg .dlg-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.dlg .dlg-actions.left{justify-content:space-between}
+.dlg-btn{padding:9px 24px;border:none;border-radius:10px;font-size:.9rem;font-family:inherit;cursor:pointer;transition:.18s}
+.dlg-btn.primary{background:#2563eb;color:#fff}
+.dlg-btn.primary:hover{background:#1d4ed8}
+.dlg-btn.ghost{background:#f1f5f9;color:#475569}
+.dlg-btn.ghost:hover{background:#e2e8f0}
+.dlg-btn.upload{background:var(--primary-light);color:var(--primary-dark);font-weight:600}
+.dlg-btn.upload:hover{background:var(--primary);color:#fff}
+.dlg .dlg-thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.dlg-thumb{display:flex;flex-direction:column;align-items:center;gap:4px;width:76px;padding:6px;border:1px solid var(--border);border-radius:9px;background:#fff;cursor:pointer;font-size:.68rem;color:var(--text2);font-family:inherit}
+.dlg-thumb:hover{border-color:var(--primary);color:var(--primary-dark)}
+.dlg-thumb img{width:64px;height:52px;object-fit:cover;border-radius:6px;display:block}
+.dlg .dlg-err{color:var(--danger);font-size:.8rem;margin-top:8px;min-height:1.1em}
+@media(max-width:520px){ .dlg{padding:18px 16px 14px} .dlg .dlg-actions{flex-direction:column-reverse} .dlg-btn{width:100%} }

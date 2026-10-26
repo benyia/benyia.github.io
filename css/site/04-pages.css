@@ -1,0 +1,41 @@
+/* ============================================================
+   ✨ 入场欢迎页
+   还原参考站那套：深色底 + 背景图 blur(20px) 从 1.2 缩到 1 + 三行字按
+   0.3s / 0.8s / 1.5s 依次淡入上浮 + 渐变线展开到 160px + 到点整体淡出
+   ============================================================ */
+.wk{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#020617;cursor:pointer}
+.wk.hide{animation:wkOut .8s ease-in-out forwards;pointer-events:none}
+.wk.gone{display:none}
+@keyframes wkOut{to{opacity:0}}
+.wk-bg{
+  position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;
+  filter:blur(20px);opacity:0;transform:scale(1.2);animation:wkBg 1.2s ease-out forwards;
+}
+@keyframes wkBg{to{opacity:.2;transform:scale(1)}}
+.wk.hide .wk-bg{animation:none;opacity:.2;transform:scale(1.1);transition:transform .8s ease-in-out}
+.wk-inner{position:relative;z-index:1;text-align:center;padding:0 24px}
+.wk-top{font-size:1.05rem;color:#94a3b8;letter-spacing:.3em;opacity:0;transform:translateY(10px);animation:wkUp .6s ease-out .3s forwards}
+.wk-name{
+  margin-top:14px;display:flex;align-items:center;justify-content:center;gap:2px;
+  font-size:2.7rem;font-weight:700;color:#fff;letter-spacing:-.01em;
+  font-family:"Noto Serif SC","Songti SC",Georgia,serif;
+  opacity:0;transform:translateY(20px) scale(.9);animation:wkName .7s ease-out .8s forwards;
+}
+.wk-name .wk-mid{color:#38bdf8;font-family:Georgia,serif}
+.wk-tip{margin-top:14px;font-size:.95rem;color:#64748b;letter-spacing:.06em;opacity:0;transform:translateY(10px);animation:wkUp .6s ease-out 1.5s forwards}
+.wk-line{height:1px;width:0;margin:28px auto 0;background:linear-gradient(90deg,transparent,rgba(56,189,248,.5),transparent);opacity:0;animation:wkLine .6s ease-out 2.2s forwards}
+@keyframes wkUp{to{opacity:1;transform:none}}
+@keyframes wkName{to{opacity:1;transform:none}}
+@keyframes wkLine{to{width:160px;opacity:1}}
+body.wk-lock{overflow:hidden}
+@media(max-width:600px){
+  .wk-name{font-size:1.9rem}
+  .wk-top{font-size:.92rem;letter-spacing:.22em}
+  .wk-tip{font-size:.8rem;padding:0 6px}
+}
+@media (prefers-reduced-motion:reduce){
+  .wk-bg{animation:none;opacity:.2;transform:none}
+  .wk-top,.wk-name,.wk-tip,.wk-line{animation:none;opacity:1;transform:none}
+  .wk-line{width:160px}
+}
+

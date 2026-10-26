@@ -137,7 +137,7 @@ function showSkeletons(){
   };
   ["homeList", "coursesList", "papersList", "noticesList", "classList", "diaryList", "advisorList"].forEach(function(id){
     var el = document.getElementById(id);
-    if(el && !el.innerHTML.trim()) el.innerHTML = card(4);
+    if(el && !el.innerHTML.trim()) el.innerHTML = card(3);
   });
   var stats = document.getElementById("statList");
   if(stats && stats.parentNode && !stats.getAttribute("data-sk")){
@@ -190,8 +190,8 @@ async function loadData(){
     else {
       /* 不带随机戳：10 分钟内重复进站直接用浏览器 / CDN 缓存，不用每次重下 596 KB；
          拿不到再绕过缓存重试一次 */
-      var res = await fetch("data.json");
-      if(!res.ok) res = await fetch("data.json?v=" + Date.now());
+      var res = (window.__dataPromise ? await window.__dataPromise : null) || await fetch("data.json");
+      if(!res || !res.ok) res = await fetch("data.json?v=" + Date.now());
       if(res.ok){ blogData = await res.json(); }
       else { blogData = JSON.parse(JSON.stringify(DEFAULT_DATA)); }
     }

@@ -6,6 +6,7 @@
 .wk{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#020617;cursor:pointer}
 .wk.hide{animation:wkOut .8s ease-in-out forwards;pointer-events:none}
 .wk.gone{display:none}
+.wk.wk-pre{display:none}   /* 还没准备好就别闪一下黑屏 */
 @keyframes wkOut{to{opacity:0}}
 .wk-bg{
   position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;

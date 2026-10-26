@@ -36,6 +36,30 @@ function wkClose(){
 function wkCachedOff(){
   try{ return localStorage.getItem("wk_off") === "1"; }catch(e){ return false; }
 }
+/* 数据和背景图准备就绪才显示；准备慢就直接看内容，不让人干等一块黑屏 */
+function wkShow(wk, cfg){
+  var url = String(cfg.bg || "").trim();
+  var sec = Number(cfg.sec); if(!(sec > 0)) sec = 3.5;
+  var shown = false;
+  var start = function(){
+    if(shown) return;
+    shown = true;
+    wk.classList.remove("wk-pre", "gone", "hide");
+    document.body.classList.add("wk-lock");
+    wk.addEventListener("click", wkClose);
+    wkStartAt = Date.now();
+    wkDone = false;
+    wkDeadline = wkStartAt + sec * 1000;
+    wkTick();
+    setTimeout(wkClose, (sec + 5) * 1000);       /* 保险：到点没关就强制关 */
+  };
+  if(!url){ start(); return; }
+  var img = new Image(), t = setTimeout(start, 800);   /* 图片慢就不等了 */
+  img.onload = function(){ clearTimeout(t); start(); };
+  img.onerror = function(){ clearTimeout(t); start(); };
+  try{ img.src = url; }catch(e){ clearTimeout(t); start(); }
+}
+
 function initWelcome(){
   if(wkInited) return;
   wkInited = true;
@@ -45,20 +69,17 @@ function initWelcome(){
   var cfg = sc.welcome || {};
   if(cfg.on === false){
     try{ localStorage.setItem("wk_off", "1"); }catch(e){ /* 忽略 */ }
-    wk.classList.add("gone");
+    wk.classList.add("gone", "wk-pre");
     document.body.classList.remove("wk-lock");
     wkDone = true;
     return;
   }
   try{ localStorage.removeItem("wk_off"); }catch(e){ /* 忽略 */ }
-  /* 只有「因为本地缓存判定为关闭而藏起来」时才重新放出来；
-     定时器自己关掉的那种不要再放第二次（慢网下会连续出现两次，像卡住了） */
-  if(wkHiddenByCache && wk.classList.contains("gone")){
-    wk.classList.remove("gone", "hide");
-    wkStartAt = Date.now();
-    wkDone = false;
-    document.body.classList.add("wk-lock");
-    wk.addEventListener("click", wkClose);
+  /* 数据来晚了（>2.5 秒）：这次直接看内容，不为一个欢迎页让人多等 */
+  if(Date.now() - wkStartAt > 2500){
+    wk.classList.add("wk-pre");
+    wkDone = true;
+    return;
   }
   var txt = function(id, v){ var e = document.getElementById(id); if(e && v != null && v !== "") e.textContent = v; };
   txt("wkTop", cfg.top);
@@ -73,29 +94,20 @@ function initWelcome(){
     var url = String(cfg.bg || "").trim() || "assets/image1.png";
     try{ bg.style.backgroundImage = 'url("' + encodeURI(url) + '")'; }catch(e){ /* 忽略 */ }
   }
-  /* 结束时间按「页面打开那一刻」算，数据加载慢也不会多显示一会儿 */
-  var sec = Number(cfg.sec); if(!(sec > 0)) sec = 3.5;
-  wkDeadline = wkStartAt + sec * 1000;
-  wkTick();
+  wkShow(wk, cfg);
 }
 
-/* 欢迎页：页面一进来就先显示并开始计时，数据到了再按后台设置刷新文案 */
+/* 欢迎页：先藏着（HTML 上是 .wk-pre），数据 + 背景图都就绪再放出来 */
 (function(){
   var wk = document.getElementById("wk");
   if(wkCachedOff()){
     wkHiddenByCache = true;
-    if(wk) wk.classList.add("gone");     /* 后台关过，先不闪；等数据确认后再决定 */
-    return;
-  }
-  if(wk){
-    document.body.classList.add("wk-lock");
-    wk.addEventListener("click", wkClose);
+    if(wk) wk.classList.add("gone", "wk-pre");
   }
   document.addEventListener("keydown", function(e){
     if(wkDone) return;
     if(e.key === "Escape" || e.key === " " || e.key === "Enter") wkClose();
   });
-  wkSchedule(3.5);
 })();
 
 initSiteChrome();

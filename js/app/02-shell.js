@@ -173,7 +173,10 @@ async function loadData(){
     var fresh = await readFreshData();
     if(fresh){ blogData = fresh; }
     else {
-      var res = await fetch("data.json?v=" + Date.now());
+      /* 不带随机戳：10 分钟内重复进站直接用浏览器 / CDN 缓存，不用每次重下 596 KB；
+         拿不到再绕过缓存重试一次 */
+      var res = await fetch("data.json");
+      if(!res.ok) res = await fetch("data.json?v=" + Date.now());
       if(res.ok){ blogData = await res.json(); }
       else { blogData = JSON.parse(JSON.stringify(DEFAULT_DATA)); }
     }

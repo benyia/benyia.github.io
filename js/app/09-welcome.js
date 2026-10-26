@@ -2,6 +2,7 @@
    ✨ 入场欢迎页（内容在后台「首页」里改）
    ============================================================ */
 var wkStartAt = Date.now(), wkTimer = null, wkDeadline = 0, wkDone = false, wkInited = false;
+var wkHiddenByCache = false;   /* 是否是被 localStorage 判定「后台已关」才藏起来的 */
 
 function wkGreeting(tail){
   var now = new Date(), h = now.getHours();
@@ -50,8 +51,9 @@ function initWelcome(){
     return;
   }
   try{ localStorage.removeItem("wk_off"); }catch(e){ /* 忽略 */ }
-  /* 之前因为本地缓存判定为「已关闭」而藏起来了，现在后台又打开了，就重新放出来 */
-  if(wk.classList.contains("gone")){
+  /* 只有「因为本地缓存判定为关闭而藏起来」时才重新放出来；
+     定时器自己关掉的那种不要再放第二次（慢网下会连续出现两次，像卡住了） */
+  if(wkHiddenByCache && wk.classList.contains("gone")){
     wk.classList.remove("gone", "hide");
     wkStartAt = Date.now();
     wkDone = false;
@@ -81,6 +83,7 @@ function initWelcome(){
 (function(){
   var wk = document.getElementById("wk");
   if(wkCachedOff()){
+    wkHiddenByCache = true;
     if(wk) wk.classList.add("gone");     /* 后台关过，先不闪；等数据确认后再决定 */
     return;
   }

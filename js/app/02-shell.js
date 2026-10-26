@@ -13,7 +13,7 @@ function loadBgLazy(){
   var img = new Image();
   img.onload = mark;
   img.onerror = mark;   /* 加载失败就保持渐变底，不影响阅读 */
-  var go = function(){ img.src = "assets/image1.png"; };
+  var go = function(){ img.src = "assets/image1.jpg"; };
   var idle = window.requestIdleCallback || function(cb){ return setTimeout(cb, 800); };
   if(document.readyState === "complete") idle(go);
   else window.addEventListener("load", function(){ idle(go); });

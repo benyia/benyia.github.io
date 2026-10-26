@@ -44,7 +44,7 @@ body::after{
   background-image:none;background-size:cover;background-position:center;background-repeat:no-repeat;
   opacity:0;transition:opacity .5s ease;pointer-events:none;
 }
-body.bg-ready::after{background-image:url("../../assets/image1.png");opacity:1}
+body.bg-ready::after{background-image:url("../../assets/image1.jpg");opacity:1}
 
 /* Top Nav */
 .topnav{background:var(--nav-bg);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;backdrop-filter:var(--glass-strong);-webkit-backdrop-filter:var(--glass-strong)}

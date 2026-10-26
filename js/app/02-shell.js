@@ -80,11 +80,26 @@ function observeReveal(){
       el.classList.add("in");
       revealObserver.unobserve(el);
     });
-  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.04 });
+  /* 底部往外扩 220px：卡片一露头就显示，别让首屏底部留一条空白带 */
+  }, { rootMargin: "0px 0px 220px 0px", threshold: 0 });
   Array.prototype.forEach.call(els, function(el){
     el.setAttribute("data-reveal-watch", "1");
     revealObserver.observe(el);
   });
+  /* 兜底：首屏（含底部外扩 220px）里的元素立刻显示，不等滚动 */
+  var revealNow = function(){
+    var limit = (window.innerHeight || 800) + 220;
+    Array.prototype.forEach.call(document.querySelectorAll(".reveal:not(.in)"), function(el){
+      if(!el.getClientRects().length) return;   /* display:none 的（隐藏标签页）不动 */
+      if(el.getBoundingClientRect().top < limit){
+        el.style.transitionDelay = "0ms";
+        el.classList.add("in");
+        if(revealObserver) revealObserver.unobserve(el);
+      }
+    });
+  };
+  revealNow();
+  setTimeout(revealNow, 600);
 }
 /* 给容器里的直接子卡片挂上入场动画（列表重渲染后调用） */
 function markReveal(container, selector){
@@ -122,7 +137,7 @@ function showSkeletons(){
   };
   ["homeList", "coursesList", "papersList", "noticesList", "classList", "diaryList", "advisorList"].forEach(function(id){
     var el = document.getElementById(id);
-    if(el && !el.innerHTML.trim()) el.innerHTML = card(3);
+    if(el && !el.innerHTML.trim()) el.innerHTML = card(4);
   });
   var stats = document.getElementById("statList");
   if(stats && stats.parentNode && !stats.getAttribute("data-sk")){

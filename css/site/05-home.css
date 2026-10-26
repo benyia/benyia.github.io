@@ -51,6 +51,18 @@ html[data-theme="dark"] .ac-badge.top{background:rgba(251,191,36,.18);color:#fcd
   .ac-desc{-webkit-line-clamp:3}
 }
 
+/* 首页更紧凑：一屏能看到 4 条（卡片下方的空白带也一并消掉） */
+#homeList.list-cols{gap:10px}
+#homeList .article-card.ac-card{padding:10px 12px;gap:12px}
+#homeList .ac-cover{flex:0 0 148px;width:148px;min-height:86px}
+#homeList .ac-title{font-size:.98rem;line-height:1.35;margin-bottom:4px}
+#homeList .ac-top{margin-bottom:4px}
+#homeList .ac-badge{font-size:.66rem;padding:1px 8px}
+#homeList .ac-tags{display:none}   /* 首页不放标签行，卡片高度才统一 */
+#homeList .ac-desc{font-size:.8rem;line-height:1.45;margin-bottom:5px}
+#homeList .ac-meta{font-size:.68rem;gap:10px}
+.home-filter{margin-bottom:10px}
+
 /* 左栏：个人介绍 + 公告 */
 .lc-stats{display:flex;justify-content:space-around;margin-top:14px;padding-top:12px;border-top:1px dashed var(--border)}
 .lc-stats span{display:flex;flex-direction:column;gap:2px;font-size:.72rem;color:var(--text3)}

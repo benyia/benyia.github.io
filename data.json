@@ -21,7 +21,7 @@
       "mid": "の",
       "suffix": "小站",
       "tip": "很高兴与你相遇",
-      "bg": "files/1790517975604_1_8f1oj17i_images.jpg"
+      "bg": "files/images.jpg"
     },
     "homeSections": [
       "courses",
@@ -867,6 +867,10 @@
       "action": "修改入场欢迎页"
     },
     {
+      "time": "2026-11-17 20:32",
+      "action": "修改入场欢迎页"
+    },
+    {
       "time": "2026-11-17 20:31",
       "action": "修改入场欢迎页"
     },
@@ -1257,10 +1261,6 @@
     {
       "time": "2026-09-27 22:51",
       "action": "添加音乐：萨顶顶 - 莫疑奥妙"
-    },
-    {
-      "time": "2026-09-27 22:51",
-      "action": "添加音乐：马也_Crabbit&Fanko - 海屿你2.0"
     }
   ],
   "categories": [

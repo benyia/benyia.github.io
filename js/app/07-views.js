@@ -186,9 +186,118 @@ function doSearch(q){
   box.classList.add("show");
 }
 
+var routerApplying = false;
+var ROUTE_SECTION_KEYS = ["home", "courses", "papers", "notices", "class", "roster", "life", "media", "ledger", "diary", "tags", "advisor", "about"];
+function routeSlug(text){
+  var s = String(text || "").trim()
+    .replace(/[\\/#?%]+/g, " ")
+    .replace(/\s+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  if(!s) s = "untitled";
+  return s.slice(0, 96);
+}
+function routePathForSection(t){
+  return t === "home" ? "/" : "/" + t;
+}
+function syncRoute(path){
+  if(routerApplying) return;
+  if(location.pathname === path) return;
+  try{ history.pushState({path:path}, "", path); }catch(e){}
+}
+function syncEntryRoute(prefix, title){
+  syncRoute("/" + prefix + "/" + encodeURIComponent(routeSlug(title)));
+}
+function routeDecodePart(s){
+  try{ return decodeURIComponent(s); }catch(e){ return s; }
+}
+function routeIndexBySlug(list, slug, titleOf){
+  list = list || [];
+  for(var i = 0; i < list.length; i++){
+    if(routeSlug(titleOf(list[i])) === slug) return i;
+  }
+  return -1;
+}
+function routeDiaryTitle(d){
+  return d.title || (typeof autoTitle === "function" ? autoTitle(d.content, d.date) : "日记");
+}
+function siteTitleText(){
+  return (blogData && blogData.siteConfig && blogData.siteConfig.title) || "思齐";
+}
 function setPageTitle(key, h1, p){
-  document.getElementById("titleH1").textContent = h1 || (PAGE_TITLES[key]?PAGE_TITLES[key][0]:"思齐个人主页");
+  var finalH1 = h1 || (PAGE_TITLES[key]?PAGE_TITLES[key][0]:"思齐个人主页");
+  var site = siteTitleText();
+  document.getElementById("titleH1").textContent = finalH1;
   document.getElementById("titleP").textContent = p !== undefined ? p : (PAGE_TITLES[key]?PAGE_TITLES[key][1]:"");
+  document.title = key === "home" ? site : (finalH1 + " · " + site);
+}
+function applyRouteFromLocation(){
+  var raw = location.pathname || "/";
+  var parts = raw.split("/").filter(Boolean).map(routeDecodePart);
+  routerApplying = true;
+  try{
+    if(!parts.length){ switchTab("home"); return; }
+    var section = parts[0], slug = parts[1] || "";
+    if(section === "courses" && slug){
+      var ci = routeIndexBySlug(blogData.courses, slug, function(x){ return x.title; });
+      if(ci >= 0) openCourse(ci); else switchTab("courses");
+      return;
+    }
+    if(section === "papers" && slug){
+      var pi = routeIndexBySlug(blogData.papers, slug, function(x){ return x.title; });
+      if(pi >= 0) openPaper(pi); else switchTab("papers");
+      return;
+    }
+    if(section === "notices" && slug){
+      var ni = routeIndexBySlug(blogData.notices, slug, function(x){ return x.title; });
+      if(ni >= 0) openNotice(ni); else switchTab("notices");
+      return;
+    }
+    if(section === "class" && slug){
+      var li = routeIndexBySlug(blogData.classItems, slug, function(x){ return x.title; });
+      if(li >= 0) openClass(li); else switchTab("class");
+      return;
+    }
+    if(section === "apps" && slug){
+      var ai = routeIndexBySlug(blogData.apps, slug, function(x){ return x.name; });
+      if(ai >= 0) openApp(ai); else switchTab("life");
+      return;
+    }
+    if(section === "diary" && slug){
+      var di = routeIndexBySlug(blogData.diary, slug, routeDiaryTitle);
+      if(di >= 0) openDiary(di); else switchTab("diary");
+      return;
+    }
+    if(section === "advisor" && slug){
+      var vi = routeIndexBySlug(blogData.advisor, slug, function(x){ return advisorTitleOf(x); });
+      if(vi >= 0) openAdvisor(vi); else switchTab("advisor");
+      return;
+    }
+    if(section === "tags" && slug){
+      openTag(slug);
+      return;
+    }
+    if(section === "apps"){ switchTab("life"); return; }
+    if(ROUTE_SECTION_KEYS.indexOf(section) >= 0){ switchTab(section); return; }
+    switchTab("home");
+  }catch(e){
+    switchTab("home");
+  }finally{
+    routerApplying = false;
+  }
+}
+function initRouter(){
+  var spaPath = "";
+  try{ spaPath = new URLSearchParams(location.search).get("spa") || ""; }catch(e){}
+  if(spaPath && spaPath.charAt(0) === "/"){
+    try{ history.replaceState(null, "", spaPath); }catch(e){}
+  }else{
+    var hash = routeDecodePart(String(location.hash || "").replace(/^#\/?/, ""));
+    if(hash && ROUTE_SECTION_KEYS.indexOf(hash) >= 0){
+      try{ history.replaceState(null, "", routePathForSection(hash)); }catch(e){}
+    }
+  }
+  applyRouteFromLocation();
+  window.addEventListener("popstate", applyRouteFromLocation);
 }
 /* ============================================================
    右侧栏：正文之外的一切（文章信息 / 目录 / 资料附件）
@@ -260,6 +369,7 @@ function switchTab(t){
   /* 标签聚合页需要按当前选中标签重画 */
   if(t === "tags") renderTagView(currentTag);
   closeDrawer();
+  syncRoute(routePathForSection(t));
 }
 /* 电脑导航和手机抽屉的高亮保持一致 */
 function setActiveNav(t){

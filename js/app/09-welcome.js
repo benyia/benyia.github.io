@@ -79,4 +79,6 @@ function initWelcome(){
 }
 
 initSiteChrome();
-loadData();
+loadData().then(function(){
+  if(typeof initRouter === "function") initRouter();
+});

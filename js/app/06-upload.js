@@ -262,6 +262,7 @@ function openAdvisor(idx){
   /* 上一篇 / 下一篇：按列表显示顺序（最新在前） */
   var ordered = src.map(function(x){ return x; }).reverse();
   renderPnNav("avPn", ordered, ordered.indexOf(a), "openAdvisor", { raw: true, full: src });
+  syncEntryRoute("advisor", title);
 }
 function backToAdvisor(){ currentAdvisorIdx = -1; backToOrigin("advisor"); }
 

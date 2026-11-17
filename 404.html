@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+  var path = location.pathname + location.search + location.hash;
+  var known = /^\/(class|courses|papers|notices|diary|advisor|apps|tags|roster|life|media|ledger|about)(\/|$)/;
+  if(known.test(location.pathname)) location.replace("/?spa=" + encodeURIComponent(path));
+})();
+</script>
 <meta name="theme-color" content="#10b981">
 <title>页面走丢了 · 思齐个人主页</title>
 <meta name="robots" content="noindex">

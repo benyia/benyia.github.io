@@ -164,6 +164,7 @@ function openTag(t){
   renderTagView(currentTag);
   setActiveNav("tags");
   window.scrollTo(0, 0);
+  syncEntryRoute("tags", currentTag);
 }
 
 /* 快速链接：默认只显示前 N 个，其余收起来，避免右侧栏太长 */
@@ -637,6 +638,7 @@ function openCourse(idx){
   buildToc(introBox);
   /* 上一篇 / 下一篇：按列表（时间倒序）取相邻的课程 */
   renderPnNav("cdPn", blogData.courses||[], idx, "openCourse");
+  syncEntryRoute("courses", c.title);
 }
 function backToCourses(){ currentCourseIdx = -1; backToOrigin("courses"); }
 
@@ -703,6 +705,7 @@ function openPaper(idx){
   var pList = (pf && pf.match) ? pAll.filter(function(p){ return pf.match(p.status); }) : pAll;
   if(pList.indexOf(p) < 0) pList = pAll;
   renderPnNav("pdPn", pList, pList.indexOf(p), "openPaper", { full: pAll });
+  syncEntryRoute("papers", p.title);
 }
 function backToPapers(){ currentPaperIdx = -1; backToOrigin("papers"); }
 

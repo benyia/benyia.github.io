@@ -150,6 +150,7 @@ function openNotice(idx){
   buildToc(box);
   /* 上一篇 / 下一篇 */
   renderPnNav("ndPn", blogData.notices||[], idx, "openNotice");
+  syncEntryRoute("notices", n.title);
 }
 function backToNotices(){ currentNoticeIdx = -1; backToOrigin("notices"); }
 
@@ -181,6 +182,7 @@ function openClass(idx){
   var cList = (classFilter === "all") ? cAll : cAll.filter(function(x){ return x.type === classFilter; });
   if(cList.indexOf(c) < 0) cList = cAll;
   renderPnNav("clPn", cList, cList.indexOf(c), "openClass", { full: cAll });
+  syncEntryRoute("class", c.title);
 }
 function backToClass(){ currentClassIdx = -1; backToOrigin("class"); }
 
@@ -326,6 +328,7 @@ function openApp(idx){
   showSection("appDetail");
   /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */
   buildToc(document.getElementById("adIntro"));
+  syncEntryRoute("apps", a.name);
 }
 function backToApps(){ currentAppIdx = -1; backToOrigin("life"); }
 
@@ -383,6 +386,7 @@ function openDiary(idx){
   /* 上一篇 / 下一篇：按日记列表的显示顺序（最新在前），raw 保证下标是原始数组下标 */
   var ordered = src.map(function(x){ return x; }).reverse();
   renderPnNav("ddPn", ordered, ordered.indexOf(d), "openDiary", { raw: true, full: src });
+  syncEntryRoute("diary", title);
 }
 function backToDiary(){ currentDiaryIdx = -1; backToOrigin("diary"); }
 

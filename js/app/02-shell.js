@@ -214,7 +214,10 @@ async function reloadFreshData(){
   if(_freshReloading) return;
   _freshReloading = true;
   var oldScroll = window.scrollY || window.pageYOffset || 0;
-  try{ await loadData(); }finally{
+  try{
+    await loadData();
+    if(typeof applyRouteFromLocation === "function") applyRouteFromLocation();
+  }finally{
     _freshReloading = false;
     window.scrollTo(0, oldScroll);
   }

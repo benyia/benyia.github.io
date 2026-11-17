@@ -174,13 +174,50 @@ async function readFreshData(){
   if(!dataJustSaved()) return null;
   try{
     var r = await fetch("https://api.github.com/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/data.json?ref=main&t=" + Date.now(), { cache: "no-store" });
-    if(!r.ok) return null;
-    var meta = await r.json();
-    var bin = atob(String(meta.content || "").replace(/\s/g, ""));
-    var bytes = new Uint8Array(bin.length);
-    for(var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    return JSON.parse(new TextDecoder().decode(bytes));
-  }catch(e){ return null; }   /* 拿不到就安静地退回 Pages */
+    if(r.ok){
+      var meta = await r.json();
+      if(meta.content){
+        var bin = atob(String(meta.content).replace(/\s/g, ""));
+        var bytes = new Uint8Array(bin.length);
+        for(var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return JSON.parse(new TextDecoder().decode(bytes));
+      }
+    }
+  }catch(e){}
+  /* 未登录 GitHub API 可能限流；raw 地址没有这个问题，也能绕开 Pages 的旧缓存 */
+  try{
+    var raw = await fetch("https://raw.githubusercontent.com/" + GH_OWNER + "/" + GH_REPO + "/main/data.json?t=" + Date.now(), { cache: "no-store" });
+    if(raw.ok) return await raw.json();
+  }catch(e){}
+  return null;   /* 都拿不到才安静地退回 Pages */
+}
+var _freshMark = null;
+var _freshReloading = false;
+function initFreshDataWatch(){
+  try{ _freshMark = localStorage.getItem("benyia_data_fresh"); }catch(e){}
+  window.addEventListener("storage", function(e){
+    if(e.key !== "benyia_data_fresh" || !e.newValue) return;
+    _freshMark = e.newValue;
+    reloadFreshData();
+  });
+  document.addEventListener("visibilitychange", function(){
+    if(document.hidden) return;
+    var value = null;
+    try{ value = localStorage.getItem("benyia_data_fresh"); }catch(e){}
+    if(value && value !== _freshMark){
+      _freshMark = value;
+      reloadFreshData();
+    }
+  });
+}
+async function reloadFreshData(){
+  if(_freshReloading) return;
+  _freshReloading = true;
+  var oldScroll = window.scrollY || window.pageYOffset || 0;
+  try{ await loadData(); }finally{
+    _freshReloading = false;
+    window.scrollTo(0, oldScroll);
+  }
 }
 async function loadData(){
   showSkeletons();          /* 先上骨架屏，别让首屏空着转圈 */
@@ -190,7 +227,9 @@ async function loadData(){
     else {
       /* 不带随机戳：10 分钟内重复进站直接用浏览器 / CDN 缓存，不用每次重下 596 KB；
          拿不到再绕过缓存重试一次 */
-      var res = (window.__dataPromise ? await window.__dataPromise : null) || await fetch("data.json");
+      var preload = window.__dataPromise;
+      window.__dataPromise = null;
+      var res = (preload ? await preload : null) || await fetch("data.json");
       if(!res || !res.ok) res = await fetch("data.json?v=" + Date.now());
       if(res.ok){ blogData = await res.json(); }
       else { blogData = JSON.parse(JSON.stringify(DEFAULT_DATA)); }
@@ -277,4 +316,6 @@ function renderTags(){
     return '<span class="tag-chip" onclick="openTag(\''+esc(t).replace(/'/g,"\\'")+'\')" title="查看该标签下的全部内容">'+esc(t)+'</span>';
   }).join("") || '';
 }
+
+initFreshDataWatch();
 

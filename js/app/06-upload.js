@@ -1,23 +1,55 @@
 /* ---------- 前台图片上传（直接传到仓库的 files/ 目录） ---------- */
+function cleanFrontUploadName(name){
+  var raw = String(name || "file").trim();
+  var dot = raw.lastIndexOf(".");
+  var ext = "";
+  if(dot > 0 && raw.length - dot <= 12){
+    ext = raw.slice(dot).replace(/[^.A-Za-z0-9]/g, "");
+    raw = raw.slice(0, dot);
+  }
+  raw = raw.replace(/[\\/:*?"<>|\u0000-\u001f]/g, "_")
+           .replace(/\s+/g, " ")
+           .replace(/^[ ._-]+|[ ._-]+$/g, "");
+  if(!raw || raw === "." || raw === "..") raw = "file";
+  if(/^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/i.test(raw)) raw = "_" + raw;
+  if(raw.length > 80) raw = raw.slice(0, 80);
+  return raw + ext;
+}
+function frontUploadPath(folder, name, attempt){
+  var safe = cleanFrontUploadName(name);
+  if(attempt > 1){
+    var dot = safe.lastIndexOf(".");
+    safe = dot > 0
+      ? safe.slice(0, dot) + "-" + attempt + safe.slice(dot)
+      : safe + "-" + attempt;
+  }
+  return (folder || "files") + "/" + safe;
+}
 async function uploadFrontFile(file, folder){
   var token = frontToken();
   if(!token) throw new Error("需要先在后台「站点设置」保存 GitHub Token");
-  var safeName = String(file.name || "file").replace(/[^\w.\-\u4e00-\u9fa5]+/g, "_").slice(-60);
-  var repoPath = (folder || "files") + "/" + Date.now() + "_" + safeName;
   var buf = new Uint8Array(await file.arrayBuffer());
   var bin = "", CHUNK = 0x8000;
   for(var i = 0; i < buf.length; i += CHUNK) bin += String.fromCharCode.apply(null, buf.subarray(i, i + CHUNK));
-  var res = await fetch("https://api.github.com/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/" + repoPath, {
-    method: "PUT",
-    headers: { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
-    body: JSON.stringify({ message: "上传文件：" + safeName, content: btoa(bin), branch: "main" })
-  });
-  if(!res.ok){
-    var m = "HTTP " + res.status;
-    try { var j = await res.json(); if(j.message) m += "：" + j.message; } catch(e){}
-    throw new Error(m);
+  var payload = JSON.stringify({ message: "上传文件：" + cleanFrontUploadName(file.name), content: btoa(bin), branch: "main" });
+  var lastError = "";
+  var nameAttempt = 1;
+  for(var attempt = 1; attempt <= 4; attempt++){
+    var repoPath = frontUploadPath(folder, file.name, nameAttempt);
+    var apiPath = repoPath.split("/").map(encodeURIComponent).join("/");
+    var res = await fetch("https://api.github.com/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/" + apiPath, {
+      method: "PUT",
+      headers: { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
+      body: payload
+    });
+    if(res.ok) return repoPath;
+    lastError = "HTTP " + res.status;
+    try { var j = await res.json(); if(j.message) lastError += "：" + j.message; } catch(e){}
+    if(res.status !== 422 || attempt === 4) break;
+    nameAttempt++;
+    await new Promise(function(resolve){ setTimeout(resolve, 250 * attempt); });
   }
-  return repoPath;
+  throw new Error(lastError);
 }
 async function onFrontImagePick(e){
   var files = Array.prototype.slice.call((e.target && e.target.files) || []);

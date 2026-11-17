@@ -329,4 +329,87 @@ buildDrawer();
 document.addEventListener("click", function(e){
   if(!e.target.closest(".nav-search")) document.getElementById("searchResults").classList.remove("show");
 });
+
+/* ---------- 正文图片：悬停反馈 + 点击放大 / 再点还原 ---------- */
+var _zoomTrigger = null;
+function enhanceZoomableImages(root){
+  var imgs = (root || document).querySelectorAll(".md-body img");
+  Array.prototype.forEach.call(imgs, function(img){
+    if(img.closest("a")) return;
+    img.classList.add("zoomable");
+    if(!img.hasAttribute("tabindex")) img.setAttribute("tabindex", "0");
+    if(!img.hasAttribute("role")) img.setAttribute("role", "button");
+    if(!img.hasAttribute("aria-label")){
+      var alt = String(img.getAttribute("alt") || "").trim();
+      img.setAttribute("aria-label", alt ? "查看大图：" + alt : "查看大图");
+    }
+  });
+}
+function openImageZoom(img){
+  var box = document.getElementById("imgLightbox");
+  var big = document.getElementById("imgLightboxImg");
+  var close = document.getElementById("imgLightboxClose");
+  if(!box || !big) return;
+  var src = img.currentSrc || img.getAttribute("src") || img.getAttribute("data-src");
+  if(!src) return;
+  _zoomTrigger = img;
+  big.src = src;
+  big.alt = img.getAttribute("alt") || "";
+  box.classList.add("on");
+  box.setAttribute("aria-hidden", "false");
+  document.body.classList.add("zoom-lock");
+  if(close) close.focus();
+}
+function closeImageZoom(){
+  var box = document.getElementById("imgLightbox");
+  var big = document.getElementById("imgLightboxImg");
+  if(!box || !box.classList.contains("on")) return;
+  box.classList.remove("on");
+  box.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("zoom-lock");
+  setTimeout(function(){
+    if(big && !box.classList.contains("on")) big.removeAttribute("src");
+  }, 220);
+  if(_zoomTrigger){
+    try{ _zoomTrigger.focus({preventScroll:true}); }catch(e){}
+    _zoomTrigger = null;
+  }
+}
+function initImageZoom(){
+  var box = document.getElementById("imgLightbox");
+  if(!box) return;
+  enhanceZoomableImages(document);
+  if(window.MutationObserver){
+    var timer = null;
+    new MutationObserver(function(){
+      if(timer) return;
+      timer = setTimeout(function(){
+        timer = null;
+        enhanceZoomableImages(document);
+      }, 80);
+    }).observe(document.body, {childList:true, subtree:true});
+  }
+  document.addEventListener("click", function(e){
+    var img = e.target.closest && e.target.closest(".md-body img.zoomable");
+    if(!img || img.closest("a")) return;
+    e.preventDefault();
+    e.stopPropagation();
+    openImageZoom(img);
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && box.classList.contains("on")){
+      closeImageZoom();
+      return;
+    }
+    if((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches(".md-body img.zoomable")){
+      e.preventDefault();
+      openImageZoom(e.target);
+    }
+  });
+  box.addEventListener("click", closeImageZoom);
+  var close = document.getElementById("imgLightboxClose");
+  if(close) close.addEventListener("click", function(e){ e.stopPropagation(); closeImageZoom(); });
+}
+
+initImageZoom();
 

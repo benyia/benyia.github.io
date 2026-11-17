@@ -152,13 +152,32 @@ async function prepareImageForUpload(file, options){
   }
 }
 
-/* 清理文件名并生成存放路径 */
-let _upSeq = 0;
-function buildFilePath(name){
-  _upSeq++;
-  const safe = String(name).replace(/[^\w.\-\u4e00-\u9fa5]/g, "_").slice(-60);
-  const rnd = Math.random().toString(36).slice(2, 10);
-  return FILES_DIR + "/" + Date.now() + "_" + _upSeq + "_" + rnd + "_" + safe;
+/* 保留原文件名；只有重名时才追加 -2、-3 这样的短后缀 */
+function cleanUploadName(name){
+  var raw = String(name || "file").trim();
+  var dot = raw.lastIndexOf(".");
+  var ext = "";
+  if(dot > 0 && raw.length - dot <= 12){
+    ext = raw.slice(dot).replace(/[^.A-Za-z0-9]/g, "");
+    raw = raw.slice(0, dot);
+  }
+  raw = raw.replace(/[\\/:*?"<>|\u0000-\u001f]/g, "_")
+           .replace(/\s+/g, " ")
+           .replace(/^[ ._-]+|[ ._-]+$/g, "");
+  if(!raw || raw === "." || raw === "..") raw = "file";
+  if(/^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/i.test(raw)) raw = "_" + raw;
+  if(raw.length > 80) raw = raw.slice(0, 80);
+  return raw + ext;
+}
+function buildFilePath(name, attempt){
+  var safe = cleanUploadName(name);
+  if(attempt > 1){
+    var dot = safe.lastIndexOf(".");
+    safe = dot > 0
+      ? safe.slice(0, dot) + "-" + attempt + safe.slice(dot)
+      : safe + "-" + attempt;
+  }
+  return FILES_DIR + "/" + safe;
 }
 
 /* 后台元素命名兼容：课程用 c 前缀、论文 p、班级 cl */
@@ -230,6 +249,9 @@ function previewSrc(path){
    （以前「保存没显示 → 又传一遍」会堆出几十份重复文件，这里从根上堵住）
    ============================================================ */
 var _blobIndex = null;      /* { blobSha1 -> 仓库路径 }，整个会话缓存一次 */
+function isLegacyUploadPath(path){
+  return /^files\/\d{10,}_\d+_[a-z0-9]+_/i.test(String(path || ""));
+}
 async function repoBlobIndex(force){
   if(_blobIndex && !force) return _blobIndex;
   try{
@@ -281,7 +303,7 @@ async function uploadFile(file, kind, imageOptions){
     if(blobSha1){
       var idx = await repoBlobIndex();
       var exist = idx[blobSha1];
-      if(exist && exist.indexOf("files/") === 0){
+      if(exist && exist.indexOf("files/") === 0 && !isLegacyUploadPath(exist)){
         if(status) status.textContent = "内容已存在，直接复用：" + exist;
         finishUploadProgress(true, "已复用仓库里已有的文件（没有重复上传）");
         showToast("这个文件内容和已上传的一模一样，已直接复用，没有重复占空间");
@@ -301,8 +323,9 @@ async function uploadFile(file, kind, imageOptions){
 
   var lastErr = "";
   var lastStatus = 0;
+  var nameAttempt = 1;
   for(var attempt=1; attempt<=4; attempt++){
-    var safe = buildFilePath(file.name);
+    var safe = buildFilePath(file.name, nameAttempt);
     var apiPath = safe.split("/").map(encodeURIComponent).join("/");
     var body = JSON.stringify({message:"Upload: "+file.name, content:content, branch:GH_BRANCH});
     if(attempt > 1){
@@ -358,6 +381,7 @@ async function uploadFile(file, kind, imageOptions){
     }catch(e){
       lastErr = e.message;
       lastStatus = e.status || 0;
+      if(lastStatus === 422) nameAttempt++;
       if(attempt < 4 && (lastStatus === 409 || lastStatus === 422 || lastStatus >= 500 || !lastStatus)){
         continue;
       }

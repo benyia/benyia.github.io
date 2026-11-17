@@ -483,21 +483,14 @@
       "source": "",
       "date": "2026-11-17",
       "level": "normal",
-      "content": "测试<div><img src=\"files/PixPin_2026-10-01_23-58-48.png\" alt=\"\"></div><hr id=\"null\"><img src=\"files/PixPin_2026-10-01_23-58-48.png\" alt=\"\"><div><img src=\"files/PixPin_2026-10-01_23-58-48.png\" alt=\"\" style=\"font-family: inherit; font-size: 0.92rem;\"></div>",
+      "content": "测试<div><img src=\"files/PixPin_2026-10-01_23-58-48.png\" alt=\"\"></div><div><br></div>",
       "contentIsHTML": true,
       "tags": [
         "测试"
       ],
-      "images": [
-        {
-          "name": "PixPin_2026-10-01_23-58-48.png",
-          "url": "files/PixPin_2026-10-01_23-58-48.png",
-          "type": "PNG",
-          "size": 76012
-        }
-      ],
+      "images": [],
       "files": [],
-      "time": "2026-11-17 20:29"
+      "time": "2026-11-17 21:43"
     }
   ],
   "classItems": [
@@ -888,6 +881,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-11-17 21:43",
+      "action": "编辑通知：测试"
+    },
     {
       "time": "2026-11-17 21:41",
       "action": "添加班级事务：从一行 print() 走到反向传播"
@@ -1283,10 +1280,6 @@
     {
       "time": "2026-09-28 09:30",
       "action": "发布通知：DeepSeek V4.1 Flash 官方 API 越狱"
-    },
-    {
-      "time": "2026-09-28 09:25",
-      "action": "编辑通知：DeepSeek V4.1 Flash 官方 API 越狱成功，保姆级教程！"
     }
   ],
   "categories": [

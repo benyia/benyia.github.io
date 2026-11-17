@@ -23,7 +23,7 @@
 .rte-plain{width:100%;min-height:260px;padding:14px 16px;border:none;outline:none;font-family:ui-monospace,Consolas,monospace;font-size:.85rem;line-height:1.7;resize:vertical;color:var(--text)}
 .rte-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:.76rem;color:#94a3b8;padding:6px 10px;background:#f8fafc;border-top:1px solid var(--border)}
 /* 三种编辑模式的切换条 */
-.rte-modes{display:inline-flex;gap:2px;background:#eef2f6;border:1px solid var(--border);border-radius:8px;padding:2px}
+.rte-modes{display:inline-flex;flex-wrap:wrap;gap:2px;background:#eef2f6;border:1px solid var(--border);border-radius:8px;padding:2px}
 .rte-modes button{
   border:none;background:transparent;font-family:inherit;font-size:.74rem;line-height:1;
   padding:5px 9px;border-radius:6px;color:#64748b;cursor:pointer;transition:.15s;
@@ -33,6 +33,9 @@
 .rte-modes button:disabled{opacity:.4;cursor:not-allowed}
 .rte-modes button.rte-eye{margin-left:2px}
 .rte-modes button.rte-eye.on{background:#0f172a}
+.rte-modes button.rte-import{color:#047857;font-weight:600}
+.rte-modes button.rte-import:hover{background:#ecfdf5}
+.rte-content.rte-drop,.rte-plain.rte-drop{outline:2px dashed var(--primary);outline-offset:-6px;background:#f0fdf4}
 /* 源码模式的实时预览 */
 .rte-preview{
   border-top:1px dashed var(--border);padding:16px 18px;background:#fbfdfe;
@@ -44,19 +47,22 @@
 .rte-preview h2{font-size:1.2rem;border-left:4px solid var(--primary);padding-left:10px}
 .rte-preview h3{font-size:1.06rem}
 .rte-preview h4{font-size:.96rem}
-.rte-preview p{margin:10px 0}
+.rte-preview p{margin:10px 0;line-height:1.9;text-wrap:pretty}
 .rte-preview ul,.rte-preview ol{margin:10px 0 10px 22px}
 .rte-preview li{margin:4px 0}
 .rte-preview blockquote{margin:12px 0;padding:8px 14px;border-left:4px solid var(--primary-light);background:#f1f5f9;color:var(--text2);border-radius:0 8px 8px 0}
 .rte-preview img{max-width:100%;border-radius:8px;margin:8px 0;display:block}
 .rte-preview a{color:var(--primary-dark)}
-.rte-preview table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.86rem}
-.rte-preview th,.rte-preview td{border:1px solid var(--border);padding:7px 10px}
+.rte-preview table{border-collapse:separate;border-spacing:0;width:100%;margin:14px 0;font-size:.86rem;display:block;overflow-x:auto;border:1px solid var(--border);border-radius:10px}
+.rte-preview th,.rte-preview td{border:0;border-bottom:1px solid var(--border);padding:8px 11px;text-align:left}
 .rte-preview th{background:#f1f5f9;font-weight:600}
 .rte-preview hr{border:none;border-top:1px solid var(--border);margin:16px 0}
 .rte-preview code{background:#f1f5f9;border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-family:ui-monospace,Consolas,monospace;font-size:.85em}
-.rte-preview .rte-prev-code{margin:12px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#f8fafc}
-.rte-preview .rte-prev-code pre{margin:0;padding:12px 14px;overflow-x:auto;font-size:.82rem;line-height:1.65}
-.rte-preview .rte-prev-code code{background:none;border:none;padding:0}
+.rte-preview .rte-prev-code{margin:14px 0;border:1px solid rgba(148,163,184,.18);border-radius:12px;overflow:hidden;background:#0b1220;box-shadow:0 8px 20px rgba(2,6,23,.12)}
+.rte-prev-head{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(148,163,184,.08);border-bottom:1px solid rgba(148,163,184,.14);color:#94a3b8;font-size:.72rem;font-family:ui-monospace,Consolas,monospace}
+.rte-prev-head button{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.08);color:#e2e8f0;border-radius:6px;padding:3px 9px;font-size:.7rem;cursor:pointer}
+.rte-prev-head button:hover{background:rgba(255,255,255,.14)}
+.rte-preview .rte-prev-code pre{margin:0;padding:14px 16px;overflow-x:auto;font-size:.82rem;line-height:1.7;tab-size:2}
+.rte-preview .rte-prev-code code{background:none;border:none;padding:0;color:#e2e8f0}
 .rte-preview audio,.rte-preview video{max-width:100%;display:block;margin:10px 0}
 

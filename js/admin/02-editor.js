@@ -273,11 +273,13 @@ function mdToHtmlLite(src){
     var line = lines[i];
     if(!line.trim()){ i++; continue; }
     if(/^\s*```/.test(line)){
+      var lang = line.trim().replace(/^```+/, "").trim().split(/\s+/)[0] || "";
+      if(!/^[\w+#.-]+$/.test(lang)) lang = "";
       i++;
       var code = [];
       while(i < lines.length && !/^\s*```/.test(lines[i])){ code.push(lines[i]); i++; }
       i++;
-      out.push("<pre><code>" + mdEscape(code.join("\n")) + "</code></pre>");
+      out.push("<pre><code" + (lang ? ' class="language-' + mdEscape(lang) + '"' : "") + ">" + mdEscape(code.join("\n")) + "</code></pre>");
       continue;
     }
     /* Markdown 表格（前台 mdRender 也支持，这里对齐） */
@@ -398,6 +400,7 @@ function initRte(key){
       e.preventDefault();
       document.execCommand("insertText", false, t);
     });
+    bindRichFileDrop(key, editor);
   }
   editor.addEventListener("input", function(){ updateRteCount(key); });
   buildRteModeBar(key);
@@ -444,6 +447,7 @@ function buildRteModeBar(key){
     + '<button type="button" data-m="rich" onclick="setRichMode(\'' + key + '\',\'rich\')" title="所见即所得">可视化</button>'
     + '<button type="button" data-m="md" onclick="setRichMode(\'' + key + '\',\'md\')" title="Markdown 源码">Markdown</button>'
     + '<button type="button" data-m="html" onclick="setRichMode(\'' + key + '\',\'html\')" title="HTML 源码，表达能力最强">HTML</button>'
+    + '<button type="button" class="rte-import" onclick="importRichFile(\'' + key + '\')" title="导入 .md / .html 文件并自动预览">⇪ 导入</button>'
     + '<button type="button" class="rte-eye" data-m="preview" onclick="toggleRtePreview(\'' + key + '\')" title="看渲染后的样子">👁 预览</button>'
     + '</span>';
   paintRteModeBar(key);
@@ -498,6 +502,7 @@ function setRichMode(key, next){
     pv.style.display = "none";
     ta.parentNode.insertBefore(pv, ta.nextSibling);
     ta.addEventListener("input", function(){ refreshRtePreview(key); });
+    bindRichFileDrop(key, ta);
     editorState[key].mode = next;
     ta.focus();
     showToast(next === "md"
@@ -538,6 +543,107 @@ function toggleRtePreview(key){
   rtePreviewOn[key] = !rtePreviewOn[key];
   refreshRtePreview(key);
 }
+function readRichTextFile(file){
+  if(file && typeof file.text === "function") return file.text();
+  return new Promise(function(resolve, reject){
+    var reader = new FileReader();
+    reader.onload = function(){ resolve(String(reader.result || "")); };
+    reader.onerror = function(){ reject(new Error("文件读取失败")); };
+    reader.readAsText(file, "utf-8");
+  });
+}
+function stripMarkdownFrontMatter(text){
+  return String(text || "").replace(/^\uFEFF/, "").replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "");
+}
+function sanitizeImportedHTML(html){
+  var doc = new DOMParser().parseFromString(String(html || ""), "text/html");
+  var source = doc.body ? doc.body.innerHTML : String(html || "");
+  var box = document.createElement("div");
+  box.innerHTML = source;
+  box.querySelectorAll("script,style,link,meta,base,iframe,object,embed,form,input,button,textarea,select").forEach(function(el){
+    el.parentNode.removeChild(el);
+  });
+  box.querySelectorAll("*").forEach(function(el){
+    Array.prototype.slice.call(el.attributes).forEach(function(attr){
+      var name = attr.name.toLowerCase();
+      var value = String(attr.value || "").trim();
+      if(/^on/.test(name) || (/(href|src|xlink:href|action|formaction)$/i.test(name) && /^javascript:/i.test(value))){
+        el.removeAttribute(attr.name);
+      }
+    });
+  });
+  return box.innerHTML.trim();
+}
+function applyImportedRichSource(key, mode, text, filename){
+  if(getRich(key).trim() && !confirm("导入会替换当前正文，确定继续吗？")) return false;
+  if(getRichMode(key) !== mode) setRichMode(key, mode);
+  var ta = $("rtePlain_" + key);
+  if(!ta){ showToast("编辑器还没有进入源码模式，请重试", "error"); return false; }
+  ta.value = text;
+  editorState[key].mode = mode;
+  rtePreviewOn[key] = true;
+  paintRteModeBar(key);
+  refreshRtePreview(key);
+  updateRteCount(key);
+  ta.focus();
+  try{ ta.scrollTop = 0; }catch(e){}
+  showToast("已导入 " + filename + "，预览已打开；保存后前台生效");
+  return true;
+}
+async function importRichFileData(key, file){
+  if(!file) return;
+  if(file.size > 3 * 1024 * 1024){
+    showToast("文件超过 3MB，建议拆分或精简后再导入", "error");
+    return;
+  }
+  var ext = String(file.name || "").split(".").pop().toLowerCase();
+  var modes = { md: "md", markdown: "md", mdown: "md", mdx: "md", txt: "md", html: "html", htm: "html" };
+  var mode = modes[ext];
+  if(!mode){
+    showToast("只支持 .md / .markdown / .txt / .html / .htm 文件", "error");
+    return;
+  }
+  try{
+    var text = await readRichTextFile(file);
+    if(mode === "md"){
+      text = stripMarkdownFrontMatter(text).replace(/\r\n?/g, "\n");
+    }else{
+      text = sanitizeImportedHTML(text);
+      if(!text){ showToast("这个 HTML 文件里没有可导入的正文内容", "error"); return; }
+    }
+    applyImportedRichSource(key, mode, text, file.name || "导入文件");
+  }catch(e){
+    showToast("导入失败：" + e.message, "error");
+  }
+}
+function importRichFile(key){
+  var input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".md,.markdown,.mdown,.mdx,.txt,.html,.htm,text/markdown,text/html,text/plain";
+  input.style.display = "none";
+  input.onchange = function(){
+    var file = input.files && input.files[0];
+    importRichFileData(key, file).finally(function(){ if(input.parentNode) input.parentNode.removeChild(input); });
+  };
+  document.body.appendChild(input);
+  input.click();
+}
+function bindRichFileDrop(key, el){
+  if(!el || el._richDropBound) return;
+  el._richDropBound = true;
+  el.addEventListener("dragover", function(e){
+    if(!e.dataTransfer || !e.dataTransfer.types || Array.prototype.indexOf.call(e.dataTransfer.types, "Files") < 0) return;
+    e.preventDefault();
+    el.classList.add("rte-drop");
+  });
+  el.addEventListener("dragleave", function(){ el.classList.remove("rte-drop"); });
+  el.addEventListener("drop", function(e){
+    if(!e.dataTransfer || !e.dataTransfer.files || !e.dataTransfer.files.length) return;
+    e.preventDefault();
+    el.classList.remove("rte-drop");
+    importRichFileData(key, e.dataTransfer.files[0]);
+  });
+}
 function refreshRtePreview(key){
   var pv = $("rtePreview_" + key);
   var ta = $("rtePlain_" + key);
@@ -554,7 +660,40 @@ function refreshRtePreview(key){
     var pre = pres[i], wrap = document.createElement("div");
     wrap.className = "rte-prev-code";
     pre.parentNode.insertBefore(wrap, pre);
+    var code = pre.querySelector("code");
+    var cls = String((code && code.className) || pre.className || "");
+    var lm = cls.match(/language-([\w+#.-]+)/i) || cls.match(/lang-([\w+#.-]+)/i);
+    var head = document.createElement("div");
+    head.className = "rte-prev-head";
+    head.innerHTML = "<span>" + esc(lm ? lm[1] : "code") + "</span>";
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = "复制";
+    btn.onclick = function(){ copyPreviewCode(this); };
+    head.appendChild(btn);
+    wrap.appendChild(head);
     wrap.appendChild(pre);
+  }
+}
+function copyPreviewCode(btn){
+  var wrap = btn.closest ? btn.closest(".rte-prev-code") : null;
+  var pre = wrap ? wrap.querySelector("pre") : null;
+  var text = pre ? (pre.innerText || pre.textContent || "") : "";
+  var done = function(){ btn.textContent = "已复制 ✓"; setTimeout(function(){ btn.textContent = "复制"; }, 1500); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(function(){
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.left = "-9999px";
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand("copy"); done(); }catch(e){}
+      ta.remove();
+    });
+  }else{
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.left = "-9999px";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); done(); }catch(e){}
+    ta.remove();
   }
 }
 function setModeLink(key, text){

@@ -70,7 +70,7 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 
 <!-- 样式按模块拆分（顺序即层叠顺序，不要调换）：基础 → 组件 → 影音 → 独立页 → 首页
      改完任一文件请同步改这里的 ?v= 版本号，避免访客用到旧缓存 -->
-<link rel="stylesheet" href="css/site/01-base.css?v=20261117b">
+<link rel="stylesheet" href="css/site/01-base.css?v=20261117e">
 <link rel="stylesheet" href="css/site/02-components.css?v=20261117a">
 <link rel="stylesheet" href="css/site/03-media.css?v=20261117a">
 <link rel="stylesheet" href="css/site/04-pages.css?v=20261117a">
@@ -284,8 +284,8 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
       <div class="detail-header">
         <h2 id="clDetailTitle"></h2>
         <div class="article-meta" id="clDetailMeta"></div>
-        <p class="intro" id="clDetailContent"></p>
       </div>
+      <div class="reader-card"><div class="intro md-body" id="clDetailContent"></div></div>
       <div id="clDetailFiles"></div>
       <!-- 上一篇 / 下一篇 -->
       <div class="app-pn" id="clPn" style="display:none"></div>

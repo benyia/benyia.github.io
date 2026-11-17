@@ -10,7 +10,7 @@
     "defaultAvatar": "",
     "loginHint": "提示：我喜欢的人的生日",
     "coverPan": true,
-    "coverPanSec": 1,
+    "coverPanSec": 3,
     "name": "思齐",
     "bio": "控制工程研究生 · 记录学习与生活",
     "welcome": {
@@ -863,6 +863,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-17 20:31",
+      "action": "修改站点设置"
+    },
+    {
       "time": "2026-11-17 20:30",
       "action": "修改站点设置"
     },
@@ -1257,10 +1261,6 @@
     {
       "time": "2026-09-27 22:00",
       "action": "修改入场欢迎页"
-    },
-    {
-      "time": "2026-09-27 21:59",
-      "action": "开关首页卡片"
     }
   ],
   "categories": [

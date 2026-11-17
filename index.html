@@ -30,9 +30,24 @@
 
 <!-- 图标 -->
 <!-- 图片统一放在 assets/ 下（根目录只留代码与数据） -->
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="assets/favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link id="siteFaviconSvg" rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link id="siteFaviconIco" rel="icon" href="assets/favicon.ico" sizes="any">
+<link id="siteAppleTouchIcon" rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<script>
+(function(){
+  try{
+    var s = localStorage.getItem("benyia_site_favicon") || "";
+    if(!/^(https?:\/\/|files\/|\/)/.test(s)) return;
+    var type = /\.svg($|[?#])/i.test(s) ? "image/svg+xml" : "image/png";
+    var svg = document.getElementById("siteFaviconSvg");
+    var ico = document.getElementById("siteFaviconIco");
+    var apple = document.getElementById("siteAppleTouchIcon");
+    if(svg){ svg.href = s; svg.type = type; svg.sizes = "any"; }
+    if(ico && ico.parentNode) ico.parentNode.removeChild(ico);
+    if(apple) apple.href = s;
+  }catch(e){}
+})();
+</script>
 
 <!-- 结构化数据：让搜索结果更完整 -->
 <script type="application/ld+json">
@@ -546,7 +561,7 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 <!-- 脚本按模块拆分：普通 script 共享全局作用域，顺序即依赖顺序，不要调换 -->
 <script src="js/app/01-core.js?v=20261117a"></script>
 <script src="js/app/02-shell.js?v=20261117b"></script>
-<script src="js/app/03-content.js?v=20261117a"></script>
+<script src="js/app/03-content.js?v=20261117c"></script>
 <script src="js/app/04-markdown.js?v=20261117a"></script>
 <script src="js/app/05-pages.js?v=20261117a"></script>
 <script src="js/app/06-upload.js?v=20261117b"></script>

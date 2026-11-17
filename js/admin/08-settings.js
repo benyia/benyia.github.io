@@ -2,12 +2,13 @@
    站点设置 / 导出
    ============================================================ */
 function saveSiteConfig(){
+  var favicon = $("cfgFavicon").value.trim();
   blogData.siteConfig = {
     title: $("cfgTitle").value.trim() || "思齐个人主页",
     subtitle: $("cfgSub").value.trim(),
     about: $("cfgAbout").value,
     avatar: $("cfgAvatar").value.trim() || "思",
-    favicon: $("cfgFavicon").value.trim(),
+    favicon: favicon,
     defaultImage: $("cfgDefaultImage").value.trim(),
     columns: $("cfgColumns").value || "1",
     defaultAvatar: $("cfgDefaultAvatar").value.trim(),
@@ -24,11 +25,16 @@ function saveSiteConfig(){
     noticeUrl: (blogData.siteConfig && blogData.siteConfig.noticeUrl) || undefined,
     homeSections: (blogData.siteConfig && Array.isArray(blogData.siteConfig.homeSections)) ? blogData.siteConfig.homeSections : undefined
   };
+  try{
+    if(favicon) localStorage.setItem("benyia_site_favicon", favicon);
+    else localStorage.removeItem("benyia_site_favicon");
+  }catch(e){}
   saveData("修改站点设置");
   renderAll();
 }
 function clearSiteFavicon(){
   $("cfgFavicon").value = "";
+  try{ localStorage.removeItem("benyia_site_favicon"); }catch(e){}
   refreshIconPrev("cfgFavicon");
   showToast("已恢复默认标签图标，记得点保存");
 }

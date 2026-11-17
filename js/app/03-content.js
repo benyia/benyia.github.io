@@ -319,32 +319,87 @@ function applySiteConfig(){
   if(brand) brand.innerHTML = '<span class="dot"></span>' + esc((sc.name || "思齐") + "的博客");
 }
 /* 把后台设置的图标同步成浏览器标签 / iOS 桌面图标；不是图片地址就恢复内置 favicon */
-function applyFavicon(v){
-  var s = String(v == null ? "" : v).trim();
-  var link = document.getElementById("dynFavicon");
-  var apple = document.getElementById("dynAppleTouchIcon");
-  if(!isImgUrl(s)){
-    if(link && link.parentNode) link.parentNode.removeChild(link);
-    if(apple && apple.parentNode) apple.parentNode.removeChild(apple);
-    return;
+var FAVICON_DEFAULT = {
+  svg: "assets/favicon.svg",
+  ico: "assets/favicon.ico",
+  apple: "assets/apple-touch-icon.png"
+};
+function faviconMime(s){
+  if(/\.svg($|[?#])/i.test(s)) return "image/svg+xml";
+  if(/\.jpe?g($|[?#])/i.test(s)) return "image/jpeg";
+  if(/\.webp($|[?#])/i.test(s)) return "image/webp";
+  if(/\.ico($|[?#])/i.test(s)) return "image/x-icon";
+  return "image/png";
+}
+function restoreDefaultFavicon(){
+  var svg = document.getElementById("siteFaviconSvg");
+  var ico = document.getElementById("siteFaviconIco");
+  var apple = document.getElementById("siteAppleTouchIcon");
+  if(!svg){
+    svg = document.createElement("link");
+    svg.id = "siteFaviconSvg";
+    svg.rel = "icon";
+    document.head.appendChild(svg);
   }
-  var type = "image/png";
-  if(/\.svg($|[?#])/i.test(s)) type = "image/svg+xml";
-  else if(/\.jpe?g($|[?#])/i.test(s)) type = "image/jpeg";
-  else if(/\.webp($|[?#])/i.test(s)) type = "image/webp";
-  else if(/\.ico($|[?#])/i.test(s)) type = "image/x-icon";
-  if(!link){
-    link = document.createElement("link");
-    link.id = "dynFavicon";
-    link.rel = "icon";
-    document.head.appendChild(link);
+  svg.href = FAVICON_DEFAULT.svg;
+  svg.type = "image/svg+xml";
+  svg.removeAttribute("sizes");
+  if(!ico){
+    ico = document.createElement("link");
+    ico.id = "siteFaviconIco";
+    ico.rel = "icon";
+    if(svg.parentNode) svg.parentNode.insertBefore(ico, svg.nextSibling);
+    else document.head.appendChild(ico);
   }
-  link.type = type;
-  link.sizes = "any";
-  link.href = s;
+  ico.href = FAVICON_DEFAULT.ico;
+  ico.removeAttribute("type");
+  ico.sizes = "any";
   if(!apple){
     apple = document.createElement("link");
-    apple.id = "dynAppleTouchIcon";
+    apple.id = "siteAppleTouchIcon";
+    apple.rel = "apple-touch-icon";
+    document.head.appendChild(apple);
+  }
+  apple.href = FAVICON_DEFAULT.apple;
+  try{ localStorage.removeItem("benyia_site_favicon"); }catch(e){}
+}
+function applyFavicon(v){
+  var s = String(v == null ? "" : v).trim();
+  var oldDyn = document.getElementById("dynFavicon");
+  var oldDynApple = document.getElementById("dynAppleTouchIcon");
+  if(oldDyn && oldDyn.parentNode) oldDyn.parentNode.removeChild(oldDyn);
+  if(oldDynApple && oldDynApple.parentNode) oldDynApple.parentNode.removeChild(oldDynApple);
+  if(!isImgUrl(s)){
+    restoreDefaultFavicon();
+    return;
+  }
+
+  try{ localStorage.setItem("benyia_site_favicon", s); }catch(e){}
+  var type = faviconMime(s);
+  var svg = document.getElementById("siteFaviconSvg");
+  var ico = document.getElementById("siteFaviconIco");
+  var apple = document.getElementById("siteAppleTouchIcon");
+  if(ico && ico.parentNode) ico.parentNode.removeChild(ico);
+  if(!svg){
+    svg = document.createElement("link");
+    svg.id = "siteFaviconSvg";
+    svg.rel = "icon";
+    document.head.appendChild(svg);
+  }
+  /* 替换节点而不只是改 href：Chrome / Edge 对标签图标的缓存很顽固 */
+  if(svg.getAttribute("href") !== s || svg.type !== type){
+    var parent = svg.parentNode;
+    var fresh = svg.cloneNode(false);
+    fresh.href = s;
+    fresh.type = type;
+    fresh.sizes = "any";
+    if(parent) parent.replaceChild(fresh, svg);
+    else document.head.appendChild(fresh);
+    svg = fresh;
+  }
+  if(!apple){
+    apple = document.createElement("link");
+    apple.id = "siteAppleTouchIcon";
     apple.rel = "apple-touch-icon";
     document.head.appendChild(apple);
   }

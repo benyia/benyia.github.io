@@ -609,9 +609,12 @@ function embedFullHtmlPage(key, file, title){
     var label = esc(String(file.name || "HTML 页面").replace(/\.[^.]+$/, ""));
     var snippet = '<div class="html-doc-embed">'
       + '<div class="html-doc-bar"><span>完整 HTML 页面</span>'
-      + '<a href="' + path + '" target="_blank" rel="noopener">新窗口打开</a></div>'
+      + '<span class="html-doc-actions">'
+      + '<button type="button" data-html-expand>全屏阅读</button>'
+      + '<button type="button" data-html-collapse hidden>退出全屏</button>'
+      + '<a href="' + path + '" target="_blank" rel="noopener">新窗口打开</a></span></div>'
       + '<iframe class="html-doc-frame" src="' + path + '" title="' + label + '" loading="lazy" '
-      + 'sandbox="allow-scripts allow-popups allow-forms allow-modals allow-downloads"></iframe>'
+      + 'sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-downloads"></iframe>'
       + '</div>';
     applyImportedRichSource(key, "html", snippet, file.name || "完整 HTML 页面", true);
     showToast("完整 HTML 页面已内嵌，预览里可以直接查看；记得点保存");

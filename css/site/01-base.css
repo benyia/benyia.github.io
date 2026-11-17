@@ -191,6 +191,14 @@ body.bg-ready::after{background-image:url("../../assets/image1.jpg");opacity:1}
 .html-doc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 14px;background:var(--soft);border-bottom:1px solid var(--border);font-size:.78rem;color:var(--text2)}
 .html-doc-bar a{color:var(--primary-dark);font-weight:600;text-decoration:none}
 .html-doc-frame{display:block;width:100%;height:min(82vh,900px);border:0;background:#fff}
+.html-doc-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.html-doc-actions button{border:1px solid var(--border);background:var(--card);color:var(--text2);border-radius:7px;padding:4px 10px;font-size:.74rem;font-family:inherit;cursor:pointer}
+.html-doc-actions button:hover{color:var(--primary-dark);border-color:var(--primary)}
+.html-doc-embed.expanded{position:fixed;inset:0;width:100vw;height:100vh;max-width:none;z-index:2600;margin:0;border:0;border-radius:0;background:#0b1220}
+.html-doc-embed.expanded .html-doc-bar{background:#0f1a26;border-bottom-color:#22303d;color:#cbd5e1}
+.html-doc-embed.expanded .html-doc-bar a{color:#6ee7b7}
+.html-doc-embed.expanded .html-doc-frame{height:calc(100vh - 38px)}
+body.html-doc-open{overflow:hidden}
 @media(max-width:760px){.html-doc-frame{height:72vh}}
 
 /* 正文图片放大预览 */

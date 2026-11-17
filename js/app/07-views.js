@@ -522,4 +522,75 @@ function initImageZoom(){
 }
 
 initImageZoom();
+
+/* ---------- 完整 HTML 页面：全屏阅读 ---------- */
+var _htmlDocPlaceholder = null;
+var _htmlDocPortal = null;
+function initHtmlDocEmbed(){
+  if(document.body.getAttribute("data-html-doc-bound") === "1") return;
+  document.body.setAttribute("data-html-doc-bound", "1");
+  document.addEventListener("click", function(e){
+    var btn = e.target.closest && e.target.closest("[data-html-expand]");
+    if(!btn) return;
+    var wrap = btn.closest(".html-doc-embed");
+    if(!wrap) return;
+    e.preventDefault();
+    var frame = wrap.querySelector("iframe.html-doc-frame");
+    if(_htmlDocPortal){
+      _htmlDocPortal.classList.remove("expanded");
+      document.body.classList.remove("html-doc-open");
+    }
+    _htmlDocPlaceholder = document.createComment("html-doc-placeholder");
+    wrap.parentNode.insertBefore(_htmlDocPlaceholder, wrap);
+    document.body.appendChild(wrap);
+    _htmlDocPortal = wrap;
+    wrap.classList.add("expanded");
+    document.body.classList.add("html-doc-open");
+    var expand = wrap.querySelector("[data-html-expand]");
+    if(expand) expand.hidden = true;
+    var exit = wrap.querySelector("[data-html-collapse]");
+    if(exit) exit.hidden = false;
+    if(frame){
+      try{ frame.focus(); }catch(err){}
+    }
+  });
+  document.addEventListener("click", function(e){
+    var btn = e.target.closest && e.target.closest("[data-html-collapse]");
+    if(!btn) return;
+    var wrap = btn.closest(".html-doc-embed");
+    if(!wrap) return;
+    e.preventDefault();
+    wrap.classList.remove("expanded");
+    document.body.classList.remove("html-doc-open");
+    restoreHtmlDoc(wrap);
+    var exit = wrap.querySelector("[data-html-collapse]");
+    if(exit) exit.hidden = true;
+    var expand = wrap.querySelector("[data-html-expand]");
+    if(expand) expand.hidden = false;
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key !== "Escape") return;
+    var wrap = document.querySelector(".html-doc-embed.expanded");
+    if(!wrap) return;
+    wrap.classList.remove("expanded");
+    document.body.classList.remove("html-doc-open");
+    restoreHtmlDoc(wrap);
+    var exit = wrap.querySelector("[data-html-collapse]");
+    if(exit) exit.hidden = true;
+    var expand = wrap.querySelector("[data-html-expand]");
+    if(expand) expand.hidden = false;
+  });
+}
+function restoreHtmlDoc(wrap){
+  if(!wrap || !_htmlDocPlaceholder) return;
+  if(_htmlDocPlaceholder.parentNode) _htmlDocPlaceholder.parentNode.replaceChild(wrap, _htmlDocPlaceholder);
+  _htmlDocPlaceholder = null;
+  if(_htmlDocPortal === wrap) _htmlDocPortal = null;
+  var exit = wrap.querySelector("[data-html-collapse]");
+  if(exit) exit.hidden = true;
+  var expand = wrap.querySelector("[data-html-expand]");
+  if(expand) expand.hidden = false;
+}
+
+initHtmlDocEmbed();
 

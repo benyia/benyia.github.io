@@ -152,6 +152,11 @@ function mdRender(src){
   var codes = [];
   text = text.replace(/```([^\n]*)\n([\s\S]*?)```/g, function(m, lang, c){ codes.push({ lang: String(lang||"").trim(), code: c }); return "\u0000C" + (codes.length - 1) + "\u0000"; });
   text = text.replace(/```([\s\S]*?)```/g, function(m, c){ codes.push({ lang: "", code: c }); return "\u0000C" + (codes.length - 1) + "\u0000"; });
+  var displayMath = [];
+  text = text.replace(/\$\$([\s\S]*?)\$\$/g, function(m, tex){
+    displayMath.push(tex);
+    return "\u0000D" + (displayMath.length - 1) + "\u0000";
+  });
   var inlineCodes = [];
   /* 混排模式（粘 GitHub README 这种 HTML + Markdown 的内容）：
      先把 HTML 标签占位，免得被下面的 esc() 转义成看得见的 <div> 文字；
@@ -181,6 +186,13 @@ function mdRender(src){
     if(/^\s*$/.test(line)){ flushPara(); continue; }
     var ph = line.match(/^\u0000C(\d+)\u0000\s*$/);
     if(ph){ flushPara(); out.push(codeBlockHTML(codes[parseInt(ph[1], 10)])); continue; }
+    var dm = line.match(/^\s*\u0000D(\d+)\u0000\s*$/);
+    if(dm){
+      flushPara();
+      var tex = displayMath[parseInt(dm[1], 10)] || "";
+      out.push('<div class="math-block" data-tex="' + esc(tex) + '">' + esc(tex) + '</div>');
+      continue;
+    }
     /* 混排模式：整行就是一个块级 HTML 标签时，原样放出来（div/details/table…），
        这样夹在中间的文字仍然是正常段落，标签也不会被 <p> 包住 */
     var hph = line.match(/^\s*\u0000H(\d+)\u0000\s*$/);
@@ -414,4 +426,78 @@ window.addEventListener("resize", function(){
   if(fab) fab.classList.toggle("show", !!(has && window.innerWidth <= 760));
   if(tocDocked()) closeToc();
 });
+
+/* ============================================================
+   LaTeX 公式：KaTeX + auto-render
+   正文可能是 Markdown、富文本 HTML，或导入的完整页面片段；
+   统一观察 .md-body，不干扰代码块中的 $ 和反斜杠。
+   ============================================================ */
+var _katexAttempts = 0;
+var _mathTypesetTimer = null;
+var _mathObserver = null;
+var _mathStarted = false;
+function katexReady(){
+  return !!(window.katex && typeof window.renderMathInElement === "function");
+}
+function typesetMathIn(root){
+  if(!katexReady()) return false;
+  var boxes = [];
+  if(root && root.classList && root.classList.contains("md-body")) boxes.push(root);
+  if(root && root.querySelectorAll) boxes = boxes.concat(Array.prototype.slice.call(root.querySelectorAll(".md-body")));
+  boxes.forEach(function(box){
+    box.querySelectorAll(".math-block[data-tex]").forEach(function(el){
+      if(el.getAttribute("data-katex-done") === "1") return;
+      try{
+        window.katex.render(el.getAttribute("data-tex") || "", el, {
+          displayMode: true,
+          throwOnError: false,
+          errorColor: "#b45309",
+          strict: false
+        });
+        el.setAttribute("data-katex-done", "1");
+      }catch(e){}
+    });
+    try{
+      window.renderMathInElement(box, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false },
+          { left: "$", right: "$", display: false }
+        ],
+        throwOnError: false,
+        errorColor: "#b45309",
+        strict: false,
+        ignoredTags: ["script","noscript","style","textarea","pre","code","option"],
+        ignoredClasses: ["katex","katex-display","math-block"]
+      });
+      box.querySelectorAll(".katex-display").forEach(function(el){ el.setAttribute("tabindex", "0"); });
+    }catch(e){}
+  });
+  return true;
+}
+function scheduleMathTypeset(root){
+  if(_mathTypesetTimer) clearTimeout(_mathTypesetTimer);
+  _mathTypesetTimer = setTimeout(function(){
+    _mathTypesetTimer = null;
+    typesetMathIn(root || document);
+  }, 90);
+}
+function startMathObserver(){
+  if(_mathStarted || !katexReady()) return;
+  _mathStarted = true;
+  typesetMathIn(document);
+  if(window.MutationObserver){
+    _mathObserver = new MutationObserver(function(){ scheduleMathTypeset(document); });
+    _mathObserver.observe(document.body, { childList: true, subtree: true });
+  }
+}
+function initMathTypesetting(){
+  if(_mathStarted) return;
+  if(katexReady()){ startMathObserver(); return; }
+  if(_katexAttempts++ < 60) setTimeout(initMathTypesetting, 250);
+}
+document.addEventListener("DOMContentLoaded", initMathTypesetting);
+window.addEventListener("load", initMathTypesetting);
+setTimeout(initMathTypesetting, 0);
 

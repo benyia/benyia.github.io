@@ -181,6 +181,17 @@ body.bg-ready::after{background-image:url("../../assets/image1.jpg");opacity:1}
 .md-body tr:nth-child(even) td{background:rgba(148,163,184,.055)}
 .md-body code{background:rgba(148,163,184,.14);border:1px solid var(--border);border-radius:6px;padding:.12em .42em;font-size:.88em;font-family:ui-monospace,Consolas,Monaco,"Courier New",monospace;color:var(--text)}
 .md-body pre{background:#0b1220;color:#e2e8f0;padding:16px 18px;border-radius:12px;overflow-x:auto;margin:16px 0}
+.md-body .katex{font-size:1.04em}
+.md-body .katex-display{overflow-x:auto;overflow-y:hidden;margin:1.35em 0;padding:8px 2px;scrollbar-width:thin}
+.md-body .katex-display>.katex{font-size:1.12em}
+.md-body .katex-error{color:#b45309!important;background:#fffbeb;border-radius:5px;padding:1px 4px}
+
+/* 完整的自包含 HTML 页面：保留原页面样式与公式，用沙箱隔离 */
+.html-doc-embed{margin:22px 0;border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
+.html-doc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 14px;background:var(--soft);border-bottom:1px solid var(--border);font-size:.78rem;color:var(--text2)}
+.html-doc-bar a{color:var(--primary-dark);font-weight:600;text-decoration:none}
+.html-doc-frame{display:block;width:100%;height:min(82vh,900px);border:0;background:#fff}
+@media(max-width:760px){.html-doc-frame{height:72vh}}
 
 /* 正文图片放大预览 */
 body.zoom-lock{overflow:hidden}

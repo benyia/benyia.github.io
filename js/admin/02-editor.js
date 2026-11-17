@@ -267,11 +267,23 @@ function isMdTableSep(s){
   return s.indexOf("|") >= 0 && /^[\s|:-]*-[\s|:-]*$/.test(s);
 }
 function mdToHtmlLite(src){
-  var lines = String(src == null ? "" : src).replace(/\r\n?/g, "\n").split("\n");
+  var mathBlocks = [];
+  var normalized = String(src == null ? "" : src).replace(/\r\n?/g, "\n").replace(/\$\$([\s\S]*?)\$\$/g, function(m, tex){
+    mathBlocks.push(tex);
+    return "\u0000D" + (mathBlocks.length - 1) + "\u0000";
+  });
+  var lines = normalized.split("\n");
   var out = [], i = 0;
   while(i < lines.length){
     var line = lines[i];
     if(!line.trim()){ i++; continue; }
+    var dm = line.match(/^\s*\u0000D(\d+)\u0000\s*$/);
+    if(dm){
+      var tex = mathBlocks[parseInt(dm[1], 10)] || "";
+      out.push('<div class="math-block" data-tex="' + esc(tex) + '">' + esc(tex) + '</div>');
+      i++;
+      continue;
+    }
     if(/^\s*```/.test(line)){
       var lang = line.trim().replace(/^```+/, "").trim().split(/\s+/)[0] || "";
       if(!/^[\w+#.-]+$/.test(lang)) lang = "";
@@ -574,8 +586,8 @@ function sanitizeImportedHTML(html){
   });
   return box.innerHTML.trim();
 }
-function applyImportedRichSource(key, mode, text, filename){
-  if(getRich(key).trim() && !confirm("导入会替换当前正文，确定继续吗？")) return false;
+function applyImportedRichSource(key, mode, text, filename, skipConfirm){
+  if(!skipConfirm && getRich(key).trim() && !confirm("导入会替换当前正文，确定继续吗？")) return false;
   if(getRichMode(key) !== mode) setRichMode(key, mode);
   var ta = $("rtePlain_" + key);
   if(!ta){ showToast("编辑器还没有进入源码模式，请重试", "error"); return false; }
@@ -590,10 +602,25 @@ function applyImportedRichSource(key, mode, text, filename){
   showToast("已导入 " + filename + "，预览已打开；保存后前台生效");
   return true;
 }
+function embedFullHtmlPage(key, file, title){
+  showToast("正在上传完整 HTML 页面…");
+  return uploadFile(file, "img").then(function(meta){
+    var path = esc(meta.url);
+    var label = esc(String(file.name || "HTML 页面").replace(/\.[^.]+$/, ""));
+    var snippet = '<div class="html-doc-embed">'
+      + '<div class="html-doc-bar"><span>完整 HTML 页面</span>'
+      + '<a href="' + path + '" target="_blank" rel="noopener">新窗口打开</a></div>'
+      + '<iframe class="html-doc-frame" src="' + path + '" title="' + label + '" loading="lazy" '
+      + 'sandbox="allow-scripts allow-popups allow-forms allow-modals allow-downloads"></iframe>'
+      + '</div>';
+    applyImportedRichSource(key, "html", snippet, file.name || "完整 HTML 页面", true);
+    showToast("完整 HTML 页面已内嵌，预览里可以直接查看；记得点保存");
+  });
+}
 async function importRichFileData(key, file){
   if(!file) return;
-  if(file.size > 3 * 1024 * 1024){
-    showToast("文件超过 3MB，建议拆分或精简后再导入", "error");
+  if(file.size > 8 * 1024 * 1024){
+    showToast("文件超过 8MB，建议拆分或精简后再导入", "error");
     return;
   }
   var ext = String(file.name || "").split(".").pop().toLowerCase();
@@ -608,6 +635,14 @@ async function importRichFileData(key, file){
     if(mode === "md"){
       text = stripMarkdownFrontMatter(text).replace(/\r\n?/g, "\n");
     }else{
+      var fullDocument = /<!doctype\s+html|<html[\s>]/i.test(text);
+      if(fullDocument){
+        var embed = confirm("检测到完整 HTML 页面（可能含有独立样式、脚本或公式）。\n\n确定：原样上传并以沙箱页面内嵌，保留原设计。\n取消：只提取正文，套用博客样式。");
+        if(embed){
+          await embedFullHtmlPage(key, file, file.name || "完整 HTML 页面");
+          return;
+        }
+      }
       text = sanitizeImportedHTML(text);
       if(!text){ showToast("这个 HTML 文件里没有可导入的正文内容", "error"); return; }
     }
@@ -674,6 +709,42 @@ function refreshRtePreview(key){
     wrap.appendChild(head);
     wrap.appendChild(pre);
   }
+  typesetAdminMath(pv);
+}
+function typesetAdminMath(el, tries){
+  if(!el || !el.isConnected) return;
+  tries = tries || 0;
+  if(!(window.katex && typeof window.renderMathInElement === "function")){
+    if(tries < 30) setTimeout(function(){ typesetAdminMath(el, tries + 1); }, 250);
+    return;
+  }
+  try{
+    el.querySelectorAll(".math-block[data-tex]").forEach(function(block){
+      if(block.getAttribute("data-katex-done") === "1") return;
+      try{
+        window.katex.render(block.getAttribute("data-tex") || "", block, {
+          displayMode: true,
+          throwOnError: false,
+          errorColor: "#b45309",
+          strict: false
+        });
+        block.setAttribute("data-katex-done", "1");
+      }catch(e){}
+    });
+    window.renderMathInElement(el, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "\\[", right: "\\]", display: true },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "$", right: "$", display: false }
+      ],
+      throwOnError: false,
+      errorColor: "#b45309",
+      strict: false,
+      ignoredTags: ["script","noscript","style","textarea","pre","code","option","iframe"],
+      ignoredClasses: ["katex","katex-display","math-block"]
+    });
+  }catch(e){}
 }
 function copyPreviewCode(btn){
   var wrap = btn.closest ? btn.closest(".rte-prev-code") : null;

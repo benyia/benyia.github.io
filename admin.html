@@ -91,14 +91,23 @@
       <div class="card">
         <h2>🎨 个人信息与站点设置</h2>
         <div class="note">
-          <b>头像</b>：填图片地址就同时用在前台左栏和<b>浏览器标签的小图标</b>上；填 emoji / 文字则标签图标保持内置图标。<br>
+          <b>头像</b>：显示在前台左栏。下面的<b>浏览器标签图标</b>可以单独上传，留空时会沿用头像图片。<br>
           <b>网站标题</b>：浏览器标签上显示的就是它（前台顶部大标题也用它），<b>不会再自动加「XX的博客」后缀</b>。
         </div>
         <div class="form-row">
-          <input type="text" id="cfgAvatar" placeholder="头像：emoji 或图片地址（同时用作浏览器标签图标）" style="flex:1">
+          <input type="text" id="cfgAvatar" placeholder="头像：emoji 或图片地址" style="flex:1">
           <button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgAvatar')">图片</button><span id="prev_cfgAvatar"></span>
           <input type="text" id="cfgName" placeholder="姓名" style="flex:1">
           <input type="text" id="cfgBio" placeholder="一句话简介" style="flex:2">
+        </div>
+        <div class="form-row">
+          <input type="text" id="cfgFavicon" aria-label="浏览器标签图标" placeholder="浏览器标签图标：留空则沿用头像图片" style="flex:2">
+          <button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgFavicon')">上传图标</button>
+          <button class="btn btn-ghost btn-sm" onclick="clearSiteFavicon()">恢复默认</button>
+          <span id="prev_cfgFavicon"></span>
+        </div>
+        <div class="note" style="margin-top:-4px">
+          上传任意照片或 Logo，会自动居中裁成正方形并压缩为 <b>256×256 PNG</b>；普通正文图片会自动缩放并转为 JPEG / WebP。
         </div>
         <div class="form-row"><input type="text" id="cfgTitle" placeholder="网站标题（浏览器标签上显示的就是它）"><input type="text" id="cfgSub" placeholder="副标题"></div>
         <div class="form-row"><input type="text" id="cfgDefaultImage" placeholder="默认图片(没上传图片时显示，可留空)" style="flex:2"><button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultImage')">上传</button><span id="prev_cfgDefaultImage"></span></div>
@@ -427,6 +436,9 @@
     <div class="panel" id="panel-roster">
       <div class="card">
         <h2 id="rosterFormTitle">添加名单成员</h2>
+        <div class="note" style="border-left:4px solid #ef4444;color:#7f1d1d;background:#fef2f2">
+          <b>隐私提醒：</b>这个后台直接读写公开仓库里的 <code>data.json</code>。手机号、身份证号等字段即使在前台隐藏，别人仍可从数据文件直接读取。请勿长期保存敏感个人信息；确需管理时，应改用私有后端或加密存储。
+        </div>
         <div class="editing-bar" id="rosterEditBar">正在编辑 —— <a onclick="cancelRosterEdit()">取消编辑</a></div>
         <div class="form-row">
           <input type="text" id="rStudentId" placeholder="学号" style="flex:1">
@@ -838,13 +850,13 @@
 </div>
 
 <!-- 脚本按模块拆分：普通 script 共享全局作用域，顺序即依赖顺序，不要调换 -->
-<script src="js/admin/01-core.js?v=20261026"></script>
-<script src="js/admin/02-editor.js?v=20261026"></script>
-<script src="js/admin/03-list.js?v=20261026"></script>
-<script src="js/admin/04-api.js?v=20261026"></script>
-<script src="js/admin/05-upload.js?v=20261026"></script>
-<script src="js/admin/06-forms.js?v=20261026"></script>
-<script src="js/admin/07-render.js?v=20261026"></script>
-<script src="js/admin/08-settings.js?v=20261026"></script>
+<script src="js/admin/01-core.js?v=20261117a"></script>
+<script src="js/admin/02-editor.js?v=20261117a"></script>
+<script src="js/admin/03-list.js?v=20261117a"></script>
+<script src="js/admin/04-api.js?v=20261117a"></script>
+<script src="js/admin/05-upload.js?v=20261117a"></script>
+<script src="js/admin/06-forms.js?v=20261117a"></script>
+<script src="js/admin/07-render.js?v=20261117a"></script>
+<script src="js/admin/08-settings.js?v=20261117a"></script>
 </body>
 </html>

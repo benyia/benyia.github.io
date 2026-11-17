@@ -22,7 +22,7 @@ function renderFriends(){
   if(side && sideWrap){
     var top = list.slice(0, 6);
     side.innerHTML = top.map(function(f){
-      var ic = f.avatar ? '<img src="' + esc(f.avatar) + '" style="width:16px;height:16px;object-fit:cover;border-radius:50%;vertical-align:-3px">' : "🔗";
+      var ic = f.avatar ? '<img src="' + esc(f.avatar) + '" alt="" width="16" height="16" style="width:16px;height:16px;object-fit:cover;border-radius:50%;vertical-align:-3px">' : "🔗";
       return '<div class="quick-link"><a href="' + esc(f.url) + '" target="_blank" rel="noopener"><span>' + ic + ' ' + esc(f.name || "") + '</span><span>→</span></a></div>';
     }).join("");
     sideWrap.style.display = top.length ? "block" : "none";

@@ -7,6 +7,7 @@ function renderAll(){
   $("cfgSub").value   = sc.subtitle || "";
   $("cfgAbout").value = sc.about || "";
   $("cfgAvatar").value = sc.avatar || "";
+  $("cfgFavicon").value = sc.favicon || "";
   $("cfgDefaultImage").value = sc.defaultImage || "";
   $("cfgColumns").value = sc.columns || "1";
   $("cfgDefaultAvatar").value = sc.defaultAvatar || "";

@@ -13,21 +13,30 @@ function pickImgs(key){
   });
 }
 /* 图标 / 头像 / 照片：弹窗（网址 / 上传），选好后自动填回输入框 */
+function iconUploadOptions(inputId){
+  if(inputId === "cfgFavicon"){
+    return {square:true, maxEdge:256, format:"image/png", quality:0.92, force:true, minBytes:0};
+  }
+  if(["cfgAvatar","cfgDefaultAvatar","catIcon","qlIcon","cIcon","lsIcon","apIcon","frAvatar","rPhoto"].indexOf(inputId) >= 0){
+    return {square:true, maxEdge:256, format:"image/webp", quality:0.88, force:true, minBytes:0};
+  }
+  return {};
+}
 function pickIcon(inputId){
   var current = ($(inputId) && $(inputId).value ? $(inputId).value.trim() : "");
+  var isFavicon = inputId === "cfgFavicon";
   openInputDialog({
-    title: "设置图片",
-    hint: "图片地址（也可以直接粘贴图床链接）\n先点「选择文件上传」也行，上传完地址会自动填进来",
+    title: isFavicon ? "设置浏览器标签图标" : "设置图片",
+    hint: isFavicon
+      ? "上传照片或 Logo，会自动居中裁成正方形、压缩为 256×256 PNG。\n也可以直接粘贴图片地址。"
+      : "图片地址（也可以直接粘贴图床链接）\n先点「选择文件上传」也行，上传完地址会自动填进来",
     placeholder: "https://",
     value: current,
     okText: "使用这张",
     onFile: async function(files){
-      var out = [];
-      for(var i = 0; i < files.length; i++){
-        var meta = await uploadFile(files[i], "img");
-        out.push(meta.url);
-      }
-      return out;
+      if(!files.length) return [];
+      var meta = await uploadFile(files[0], "img", iconUploadOptions(inputId));
+      return [meta.url];
     },
     onOk: function(url){
       url = String(url || "").split("\n").map(function(s){ return s.trim(); }).filter(Boolean)[0] || "";

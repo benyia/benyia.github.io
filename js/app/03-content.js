@@ -172,7 +172,7 @@ var quickLinksExpanded = false;
 function renderQuickLinks(){
   var list = blogData.quickLinks || [];
   document.getElementById("quickLinks").innerHTML = list.map(function(l, i){
-    var ic = isImgUrl(l.icon) ? '<img src="'+esc(l.icon)+'" style="width:16px;height:16px;object-fit:cover;border-radius:4px;vertical-align:-3px">' : esc(l.icon||"");
+    var ic = isImgUrl(l.icon) ? '<img src="'+esc(l.icon)+'" alt="" width="16" height="16" style="width:16px;height:16px;object-fit:cover;border-radius:4px;vertical-align:-3px">' : esc(l.icon||"");
     var extra = i >= QUICK_LINKS_VISIBLE ? " extra" : "";
     return '<div class="quick-link'+extra+'"><a href="'+esc(l.url)+'" target="_blank" rel="noopener"><span>'+ic+' '+esc(l.title)+'</span><span>→</span></a></div>';
   }).join("") || '';
@@ -313,27 +313,42 @@ function applySiteConfig(){
   document.title = tab;
   var h1 = document.getElementById("titleH1"); if(h1) h1.textContent = title;
   var p = document.getElementById("titleP"); if(p) p.textContent = sc.subtitle || "";
-  /* 浏览器标签上的小图标 = 后台「头像」（填图片地址才替换，emoji 保留内置图标） */
-  applyFavicon(sc.avatar);
+  /* 浏览器标签图标优先用单独设置；没设置时兼容旧配置，沿用头像图片 */
+  applyFavicon(sc.favicon || sc.avatar);
   var brand = document.querySelector(".nav-brand");
   if(brand) brand.innerHTML = '<span class="dot"></span>' + esc((sc.name || "思齐") + "的博客");
 }
-/* 把后台设置的头像图片同步成浏览器标签图标；不是图片地址就恢复内置 favicon */
+/* 把后台设置的图标同步成浏览器标签 / iOS 桌面图标；不是图片地址就恢复内置 favicon */
 function applyFavicon(v){
   var s = String(v == null ? "" : v).trim();
   var link = document.getElementById("dynFavicon");
+  var apple = document.getElementById("dynAppleTouchIcon");
   if(!isImgUrl(s)){
     if(link && link.parentNode) link.parentNode.removeChild(link);
+    if(apple && apple.parentNode) apple.parentNode.removeChild(apple);
     return;
   }
+  var type = "image/png";
+  if(/\.svg($|[?#])/i.test(s)) type = "image/svg+xml";
+  else if(/\.jpe?g($|[?#])/i.test(s)) type = "image/jpeg";
+  else if(/\.webp($|[?#])/i.test(s)) type = "image/webp";
+  else if(/\.ico($|[?#])/i.test(s)) type = "image/x-icon";
   if(!link){
     link = document.createElement("link");
     link.id = "dynFavicon";
     link.rel = "icon";
     document.head.appendChild(link);
   }
-  link.type = /[.]svg($|[?#])/i.test(s) ? "image/svg+xml" : "image/png";
+  link.type = type;
+  link.sizes = "any";
   link.href = s;
+  if(!apple){
+    apple = document.createElement("link");
+    apple.id = "dynAppleTouchIcon";
+    apple.rel = "apple-touch-icon";
+    document.head.appendChild(apple);
+  }
+  apple.href = s;
 }
 
 function itemTime(x){

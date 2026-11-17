@@ -2,7 +2,7 @@
 .pager{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin:22px 0 8px}
 .pager button{min-width:38px;height:38px;padding:0 12px;border:1px solid var(--border);background:var(--card);color:var(--text2);border-radius:9px;font-size:.86rem;font-family:inherit;cursor:pointer;transition:all .2s}
 .pager button:hover:not(:disabled):not(.active){border-color:var(--primary);color:var(--primary)}
-.pager button.active{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600}
+.pager button.active{background:var(--primary-strong);border-color:var(--primary-strong);color:var(--on-primary);font-weight:600}
 .pager button:disabled{opacity:.4;cursor:not-allowed}
 .pager .pager-dots{color:var(--text3);padding:0 2px}
 .pager-info{text-align:center;font-size:.76rem;color:var(--text3);margin-bottom:10px}
@@ -28,8 +28,8 @@
 .friend-form input:focus,.friend-form textarea:focus{border-color:var(--primary)}
 .friend-form textarea{min-height:70px;width:100%;resize:vertical}
 .friend-form .ff-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.btn-primary{border:none;background:var(--primary);color:#fff;border-radius:9px;padding:9px 20px;font-size:.86rem;font-family:inherit;cursor:pointer}
-.btn-primary:hover{background:var(--primary-dark)}
+.btn-primary{border:none;background:var(--primary-strong);color:var(--on-primary);border-radius:9px;padding:9px 20px;font-size:.86rem;font-family:inherit;cursor:pointer}
+.btn-primary:hover{background:var(--primary-strong-hover)}
 /* 前台填写表单（写日记 / 指导记录 / 友链申请共用一套外观） */
 .front-form{background:var(--card);border:var(--glass-border);border-radius:12px;padding:18px;margin-bottom:18px;backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);box-shadow:var(--shadow),var(--glass-hi)}
 .front-form h4{font-size:.98rem;margin-bottom:4px}
@@ -147,7 +147,7 @@ body.article-open.toc-on .rail-sticky{position:sticky;top:76px;max-height:calc(1
 .meta-card .mv{font-size:.9rem;font-weight:600;word-break:break-all}
 /* 文件条目按钮 */
 .file-open{display:inline-block;padding:6px 14px;border-radius:8px;background:var(--primary-light);color:var(--primary-dark);font-size:.78rem;text-decoration:none;font-weight:600;white-space:nowrap;transition:all .2s}
-.file-open:hover{background:var(--primary);color:#fff}
+.file-open:hover{background:var(--primary-strong);color:var(--on-primary)}
 
 /* ===== 标签聚合 ===== */
 .tag-cloud{display:flex;flex-wrap:wrap;gap:8px}

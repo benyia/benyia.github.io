@@ -266,7 +266,7 @@ function renderStats(){
 function renderCategories(){
   var map = {courses:(blogData.courses||[]).length, papers:(blogData.papers||[]).length, notices:(blogData.notices||[]).length, class:(blogData.classItems||[]).length};
   document.getElementById("catList").innerHTML = (blogData.categories||[]).map(function(c){
-    var ic = isImgUrl(c.icon) ? '<img src="'+esc(c.icon)+'" style="width:16px;height:16px;object-fit:cover;border-radius:4px;vertical-align:-3px">' : esc(c.icon||"");
+    var ic = isImgUrl(c.icon) ? '<img src="'+esc(c.icon)+'" alt="" width="16" height="16" style="width:16px;height:16px;object-fit:cover;border-radius:4px;vertical-align:-3px">' : esc(c.icon||"");
     return '<div class="cat-item" onclick="switchTab(\''+esc(c.section||"home")+'\')"><span>'+ic+' '+esc(c.name)+'</span><span class="count">'+(map[c.section]||0)+'</span></div>';
   }).join("") || '';
 }

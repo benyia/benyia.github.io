@@ -7,6 +7,7 @@ function saveSiteConfig(){
     subtitle: $("cfgSub").value.trim(),
     about: $("cfgAbout").value,
     avatar: $("cfgAvatar").value.trim() || "思",
+    favicon: $("cfgFavicon").value.trim(),
     defaultImage: $("cfgDefaultImage").value.trim(),
     columns: $("cfgColumns").value || "1",
     defaultAvatar: $("cfgDefaultAvatar").value.trim(),
@@ -25,6 +26,11 @@ function saveSiteConfig(){
   };
   saveData("修改站点设置");
   renderAll();
+}
+function clearSiteFavicon(){
+  $("cfgFavicon").value = "";
+  refreshIconPrev("cfgFavicon");
+  showToast("已恢复默认标签图标，记得点保存");
 }
 /* ---------- 生活服务：编辑 ---------- */
 let editingLife = null;

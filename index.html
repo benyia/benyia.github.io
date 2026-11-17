@@ -54,13 +54,14 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 
 <!-- 样式按模块拆分（顺序即层叠顺序，不要调换）：基础 → 组件 → 影音 → 独立页 → 首页
      改完任一文件请同步改这里的 ?v= 版本号，避免访客用到旧缓存 -->
-<link rel="stylesheet" href="css/site/01-base.css?v=20261026f">
-<link rel="stylesheet" href="css/site/02-components.css?v=20261026f">
-<link rel="stylesheet" href="css/site/03-media.css?v=20261026f">
-<link rel="stylesheet" href="css/site/04-pages.css?v=20261026f">
-<link rel="stylesheet" href="css/site/05-home.css?v=20261026f">
+<link rel="stylesheet" href="css/site/01-base.css?v=20261117a">
+<link rel="stylesheet" href="css/site/02-components.css?v=20261117a">
+<link rel="stylesheet" href="css/site/03-media.css?v=20261117a">
+<link rel="stylesheet" href="css/site/04-pages.css?v=20261117a">
+<link rel="stylesheet" href="css/site/05-home.css?v=20261117a">
 </head>
 <body>
+<a class="skip-link" href="#mainContent">跳到主要内容</a>
 
 <!-- ✨ 入场欢迎页：背景图模糊缩放 + 三行字依次淡入 + 渐变线展开，到时间自动淡出（点任意处可跳过） -->
 <div class="wk" id="wk" role="dialog" aria-label="欢迎" onclick="this.classList.add('hide');document.body.classList.remove('wk-lock')">
@@ -137,9 +138,10 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
   <p id="titleP">钟爱奥迪A6</p>
 </div>
 
-<div class="main">
+<main class="main" id="mainContent">
   <!-- Left Column -->
   <div class="left-col">
+    <h2 class="sr-only">站点信息</h2>
     <!-- 个人介绍：大头像 + 简介 + 小图标行 + 一行统计 -->
     <div class="side-card profile lc-profile">
       <div class="avatar" id="profileAvatar">思</div>
@@ -422,6 +424,7 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 
   <!-- Right Column：正文之外的东西都放这里（文章信息 / 统计 / 链接 / 目录） -->
   <div class="right-col">
+    <h2 class="sr-only">站点工具</h2>
     <!-- 文章信息：课程信息 / 基本信息 / 文章信息，按打开的页面自动切换 -->
     <div class="side-card" id="sideInfoCard" style="display:none">
       <h3 id="sideInfoTitle">文章信息</h3>
@@ -477,7 +480,7 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
       </div>
     </div>
   </div>
-</div>
+</main>
 
 <!-- 悬浮目录：电脑端右侧常驻，手机端点右下角按钮弹出 -->
 <div class="rtoc-mask" id="rtocMask" onclick="closeToc()"></div>
@@ -534,14 +537,14 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 <div class="footer">© <span id="copyYear">2026</span> 思齐个人主页 · Powered by GitHub Pages</div>
 
 <!-- 脚本按模块拆分：普通 script 共享全局作用域，顺序即依赖顺序，不要调换 -->
-<script src="js/app/01-core.js?v=20261026f"></script>
-<script src="js/app/02-shell.js?v=20261026f"></script>
-<script src="js/app/03-content.js?v=20261026f"></script>
-<script src="js/app/04-markdown.js?v=20261026f"></script>
-<script src="js/app/05-pages.js?v=20261026f"></script>
-<script src="js/app/06-upload.js?v=20261026f"></script>
-<script src="js/app/07-views.js?v=20261026f"></script>
-<script src="js/app/08-music.js?v=20261026f"></script>
-<script src="js/app/09-welcome.js?v=20261026f"></script>
+<script src="js/app/01-core.js?v=20261117a"></script>
+<script src="js/app/02-shell.js?v=20261117a"></script>
+<script src="js/app/03-content.js?v=20261117a"></script>
+<script src="js/app/04-markdown.js?v=20261117a"></script>
+<script src="js/app/05-pages.js?v=20261117a"></script>
+<script src="js/app/06-upload.js?v=20261117a"></script>
+<script src="js/app/07-views.js?v=20261117a"></script>
+<script src="js/app/08-music.js?v=20261117a"></script>
+<script src="js/app/09-welcome.js?v=20261117a"></script>
 </body>
 </html>

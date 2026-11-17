@@ -10,6 +10,148 @@ function fileToBase64(file){
   });
 }
 
+/* ============================================================
+   图片上传前优化：缩放、居中裁切、转成更适合网页的格式
+   · 普通照片：最长边最多 2400px，JPEG / WebP
+   · 头像、图标：居中裁成正方形，默认最长边 256px
+   · SVG 与 GIF 保持原样，避免破坏矢量图和动图
+   ============================================================ */
+const IMAGE_MAX_EDGE = 2400;
+const IMAGE_ICON_MAX_EDGE = 256;
+const IMAGE_QUALITY = 0.86;
+
+function isRasterUpload(file){
+  var type = String((file && file.type) || "").toLowerCase();
+  return type.indexOf("image/") === 0 && type !== "image/svg+xml" && type !== "image/gif";
+}
+
+async function loadUploadImage(file){
+  if(window.createImageBitmap){
+    try{
+      var bitmap = await createImageBitmap(file, {imageOrientation:"from-image"});
+      return {
+        source: bitmap,
+        width: bitmap.width,
+        height: bitmap.height,
+        close: function(){ if(bitmap.close) bitmap.close(); }
+      };
+    }catch(e){}
+  }
+  var url = URL.createObjectURL(file);
+  try{
+    var img = await new Promise(function(resolve, reject){
+      var el = new Image();
+      el.onload = function(){ resolve(el); };
+      el.onerror = function(){ reject(new Error("图片解码失败")); };
+      el.src = url;
+    });
+    return {
+      source: img,
+      width: img.naturalWidth || img.width,
+      height: img.naturalHeight || img.height,
+      close: function(){
+        try{ URL.revokeObjectURL(url); }catch(e){}
+      }
+    };
+  }catch(e){
+    try{ URL.revokeObjectURL(url); }catch(e2){}
+    throw e;
+  }
+}
+
+function canvasToBlob(canvas, type, quality){
+  return new Promise(function(resolve){
+    canvas.toBlob(resolve, type, quality);
+  });
+}
+
+async function prepareImageForUpload(file, options){
+  options = options || {};
+  if(!isRasterUpload(file)) return {file:file, optimized:false};
+
+  var square = !!options.square;
+  var maxEdge = options.maxEdge || (square ? IMAGE_ICON_MAX_EDGE : IMAGE_MAX_EDGE);
+  var minBytes = options.minBytes === undefined ? 160 * 1024 : options.minBytes;
+  if(!square && !options.force && file.size <= minBytes && /image\/(jpeg|webp)/i.test(file.type)){
+    return {file:file, optimized:false};
+  }
+
+  var loaded;
+  try{
+    loaded = await loadUploadImage(file);
+  }catch(e){
+    return {file:file, optimized:false, error:e.message};
+  }
+
+  try{
+    var srcW = loaded.width;
+    var srcH = loaded.height;
+    if(!srcW || !srcH) return {file:file, optimized:false};
+
+    var sx = 0, sy = 0, sw = srcW, sh = srcH;
+    var targetW, targetH;
+    if(square){
+      var side = Math.min(srcW, srcH);
+      sx = Math.round((srcW - side) / 2);
+      sy = Math.round((srcH - side) / 2);
+      sw = side;
+      sh = side;
+      targetW = targetH = Math.max(1, Math.min(maxEdge, side));
+    }else{
+      var scale = Math.min(1, maxEdge / Math.max(srcW, srcH));
+      targetW = Math.max(1, Math.round(srcW * scale));
+      targetH = Math.max(1, Math.round(srcH * scale));
+    }
+
+    var resized = targetW !== srcW || targetH !== srcH || square;
+    if(!resized && file.size <= minBytes && !options.force){
+      return {file:file, optimized:false};
+    }
+
+    var outputType = options.format || (
+      square ? "image/webp" :
+      (/^image\/png$/i.test(file.type) ? "image/webp" : "image/jpeg")
+    );
+    var quality = options.quality === undefined ? IMAGE_QUALITY : options.quality;
+    var canvas = document.createElement("canvas");
+    canvas.width = targetW;
+    canvas.height = targetH;
+    var ctx = canvas.getContext("2d");
+    if(!ctx) return {file:file, optimized:false};
+    if(outputType === "image/jpeg"){
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, targetW, targetH);
+    }
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(loaded.source, sx, sy, sw, sh, 0, 0, targetW, targetH);
+
+    var blob = await canvasToBlob(canvas, outputType, quality);
+    if(!blob) return {file:file, optimized:false};
+    if(!resized && !options.force && blob.size >= file.size){
+      return {file:file, optimized:false};
+    }
+
+    var ext = outputType === "image/png" ? "png" : (outputType === "image/webp" ? "webp" : "jpg");
+    var base = String(file.name || "image").replace(/\.[^.]+$/, "") || "image";
+    var outFile = new File([blob], base + "." + ext, {
+      type: outputType,
+      lastModified: Date.now()
+    });
+    return {
+      file: outFile,
+      optimized: true,
+      originalSize: file.size,
+      size: blob.size,
+      width: targetW,
+      height: targetH,
+      type: outputType
+    };
+  }finally{
+    loaded.close();
+  }
+}
+
 /* 清理文件名并生成存放路径 */
 let _upSeq = 0;
 function buildFilePath(name){
@@ -113,11 +255,22 @@ async function gitBlobSha1(file){
   }catch(e){ return ""; }
 }
 
-async function uploadFile(file, kind){
+async function uploadFile(file, kind, imageOptions){
+  var originalSize = file.size;
+  var wasOptimized = false;
+  if(!getStoredToken()) throw new Error("请先在「站点设置」里填写 GitHub Token");
+
+  try{
+    var prepared = await prepareImageForUpload(file, imageOptions);
+    if(prepared && prepared.file){
+      file = prepared.file;
+      wasOptimized = !!prepared.optimized;
+    }
+  }catch(e){}
+
   if(file.size > MAX_FILE_MB*1024*1024){
     throw new Error("「"+file.name+"」有 "+fmtSize(file.size)+"，超过 GitHub 单文件上限 "+MAX_FILE_MB+"MB。大文件请先传到网盘，再用「外链地址」粘链接。");
   }
-  if(!getStoredToken()) throw new Error("请先在「站点设置」里填写 GitHub Token");
 
   var status = kindEl(kind, "UpStatus");
 
@@ -189,9 +342,19 @@ async function uploadFile(file, kind){
       freshFiles[safe] = Date.now();
       if(blobSha1 && _blobIndex) _blobIndex[blobSha1] = safe;   /* 同一份内容再传就直接命中 */
       setUploadProgress(100, totalSize, totalSize);
-      finishUploadProgress(true, "上传完成 ✅ " + fmtSize(totalSize));
+      var savedText = wasOptimized
+        ? " · 已优化 " + fmtSize(originalSize) + " → " + fmtSize(totalSize)
+        : "";
+      finishUploadProgress(true, "上传完成 ✅ " + fmtSize(totalSize) + savedText);
       if(status) status.textContent = "✅ 已上传：" + file.name + "（记得点保存）";
-      return {name:file.name, url:safe, type:(file.name.split(".").pop()||"file").toUpperCase(), size:file.size};
+      return {
+        name:file.name,
+        url:safe,
+        type:(file.name.split(".").pop()||"file").toUpperCase(),
+        size:file.size,
+        originalSize:originalSize,
+        optimized:wasOptimized
+      };
     }catch(e){
       lastErr = e.message;
       lastStatus = e.status || 0;

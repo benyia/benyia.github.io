@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自动控制原理期末复习重点</title>
+<style>
+  :root{
+    --bg:#f4f6fa;
+    --card:#ffffff;
+    --ink:#1c2333;
+    --ink-soft:#4a5568;
+    --line:#e2e8f0;
+    --accent:#1e4e8c;
+    --accent-soft:#e8f0fb;
+    --warn-bg:#fff8e6;
+    --warn-line:#d4a017;
+    --formula-bg:#f7f9fc;
+    --formula-line:#d8e0ec;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.9;
+    font-size:16px;
+    padding-bottom:80px;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px;}
+
+  /* 顶部 */
+  header{
+    background:linear-gradient(135deg,#1e4e8c 0%,#2c6bb5 100%);
+    color:#fff;
+    padding:48px 24px 40px;
+    text-align:center;
+  }
+  header h1{font-size:28px;font-weight:600;letter-spacing:1px;}
+  header .sub{margin-top:10px;font-size:14px;opacity:.85;}
+
+  /* 侧边目录 */
+  .toc{
+    position:fixed;top:100px;right:20px;width:200px;
+    background:var(--card);border:1px solid var(--line);border-radius:8px;
+    padding:16px 18px;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.05);
+    z-index:10;
+  }
+  .toc h4{font-size:13px;color:var(--accent);margin-bottom:10px;font-weight:600;}
+  .toc a{display:block;color:var(--ink-soft);text-decoration:none;padding:4px 0;border-bottom:1px dashed var(--line);}
+  .toc a:last-child{border-bottom:none;}
+  .toc a:hover{color:var(--accent);}
+  @media(max-width:1200px){.toc{display:none;}}
+
+  /* 章节卡片 */
+  .chapter{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:36px 40px;
+    margin-top:28px;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .chapter h2{
+    font-size:21px;color:var(--accent);font-weight:600;
+    padding-bottom:10px;margin-bottom:20px;
+    border-bottom:2px solid var(--accent);
+  }
+  .chapter h3{
+    font-size:17px;color:#2a3f5f;font-weight:600;
+    margin:28px 0 12px;
+  }
+  .chapter p{margin:10px 0;color:var(--ink);}
+  .chapter ul,.chapter ol{padding-left:26px;margin:12px 0;}
+  .chapter li{margin-bottom:8px;}
+
+  /* 提示框 */
+  .note{
+    background:var(--accent-soft);
+    border-left:4px solid var(--accent);
+    padding:14px 18px;border-radius:0 6px 6px 0;
+    margin:18px 0;font-size:15px;
+  }
+  .warn{
+    background:var(--warn-bg);
+    border-left:4px solid var(--warn-line);
+    padding:14px 18px;border-radius:0 6px 6px 0;
+    margin:18px 0;font-size:15px;
+  }
+
+  /* 公式块 */
+  .formula{
+    background:var(--formula-bg);
+    border:1px solid var(--formula-line);
+    border-radius:6px;
+    padding:16px 20px;
+    margin:16px 0;
+    text-align:center;
+    font-size:17px;
+    font-family:"Cambria Math","Times New Roman",serif;
+    font-style:italic;
+  }
+  .formula .eq{display:block;margin:8px 0;}
+
+  /* 分式 */
+  .frac{
+    display:inline-flex;flex-direction:column;vertical-align:middle;
+    text-align:center;margin:0 4px;
+  }
+  .frac .num{padding:0 6px 2px;border-bottom:1.5px solid currentColor;line-height:1.3;}
+  .frac .den{padding:2px 6px 0;line-height:1.3;}
+
+  /* 极限 */
+  .lim{display:inline-block;text-align:center;vertical-align:middle;margin:0 2px;}
+  .lim .lim-op{font-style:normal;font-size:14px;}
+  .lim .lim-sub{display:block;font-size:11px;font-style:normal;line-height:1;}
+
+  /* 表格 */
+  table{
+    width:100%;border-collapse:collapse;margin:20px 0;font-size:15px;
+  }
+  th,td{border:1px solid var(--line);padding:12px 14px;text-align:left;}
+  th{background:var(--accent-soft);color:var(--accent);font-weight:600;}
+  tr:nth-child(even){background:#fafbfd;}
+
+  strong{color:#1a2b4a;}
+
+  @media(max-width:640px){
+    .chapter{padding:24px 20px;}
+    header{padding:36px 16px 30px;}
+    header h1{font-size:22px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>自动控制原理 · 期末复习重点</h1>
+  <div class="sub">依据老师腾讯会议重点整理 · 第一章 / 第二章 / 第四章 / 智能控制</div>
+</header>
+
+<nav class="toc">
+  <h4>目录跳转</h4>
+  <a href="#c0">复习优先级</a>
+  <a href="#c1">第一章 基础概念</a>
+  <a href="#c2">第二章 数学模型</a>
+  <a href="#c4">第四章 反馈特性</a>
+  <a href="#c5">智能控制</a>
+  <a href="#c6">答题技巧</a>
+</nav>
+
+<div class="wrap">
+
+<!-- 复习优先级 -->
+<div class="chapter" id="c0">
+  <h2>整体复习优先级</h2>
+  <ol>
+    <li><strong>最高优先级（简答、填空、计算必考）</strong>：第1章概念；第2章系统数学模型；第4章灵敏度、稳态误差 K<sub>p</sub>、K<sub>v</sub>、K<sub>a</sub>。</li>
+    <li><strong>次优先级（填空、简答）</strong>：BP神经网络、模糊控制基础概念（不考复杂计算）。</li>
+    <li><strong>最低优先级</strong>：专家系统，时间紧张简单浏览即可。</li>
+  </ol>
+  <div class="warn">
+    <strong>老师原话：</strong>不划定考试题，只强调课程必须掌握的基础。计算题以课上练习、课后习题为主；开放简答题多写知识点就给分；填空选择都是基础，不绕弯。
+  </div>
+</div>
+
+<!-- 第一章 -->
+<div class="chapter" id="c1">
+  <h2>第一章 自动控制基础</h2>
+
+  <h3>1. 什么是自动控制、基本概念</h3>
+  <p><strong>自动控制</strong>：在没有人直接参与的情况下，利用控制装置，使被控对象的被控量自动按照预定规律运行，并抵消外部扰动的影响。</p>
+  <ul>
+    <li><strong>被控对象</strong>：被控制的设备、装置或过程。</li>
+    <li><strong>被控量（输出）</strong>：需要被控制、维持的物理量。</li>
+    <li><strong>参考输入（给定输入）</strong>：期望被控量达到的目标值。</li>
+    <li><strong>扰动</strong>：引起输出偏离期望值的内外干扰。</li>
+    <li><strong>控制器</strong>：接收偏差信号，产生控制信号驱动执行机构。</li>
+    <li><strong>执行机构</strong>：直接对被控对象施加控制作用。</li>
+    <li><strong>反馈</strong>：把输出测量出来送回输入端，与参考输入比较得到偏差。</li>
+  </ul>
+  <div class="note">
+    闭环（反馈）控制的核心：<strong>利用偏差消除偏差</strong>。开环控制没有反馈，输出不影响控制输入。
+  </div>
+
+  <h3>2. 稳定性的重要性（简答题高频）</h3>
+  <ul>
+    <li><strong>首要前提</strong>：不稳定系统输出发散、振荡越来越大，根本无法完成控制任务。</li>
+    <li><strong>抗扰动能力</strong>：稳定系统受干扰后能回到平衡点；不稳定系统扰动会被不断放大。</li>
+    <li><strong>性能基础</strong>：只有系统稳定，讨论超调量、调节时间、稳态误差才有意义；不稳定系统没有性能指标可言。</li>
+    <li><strong>设备安全</strong>：不稳定会造成机械超限、器件损坏，引发安全事故。</li>
+  </ul>
+
+  <h3>3. 瞬态响应（瞬态效应）与稳态响应</h3>
+  <ul>
+    <li><strong>瞬态响应（瞬态效应）</strong>：输入变化后，系统从旧平衡状态向新平衡状态过渡的暂时分量；包含超调、振荡、调节时间，随时间衰减。</li>
+    <li><strong>稳态响应</strong>：t → ∞ 时，瞬态分量完全消失后系统长期保持的输出；用来评价稳态误差。</li>
+  </ul>
+  <div class="note">完整输出 = 瞬态响应分量 + 稳态响应分量</div>
+</div>
+
+<!-- 第二章 -->
+<div class="chapter" id="c2">
+  <h2>第二章 系统数学模型（分值最高）</h2>
+
+  <h3>1. 传递函数反映了系统的什么特性</h3>
+  <p><strong>定义</strong>：零初始条件下，输出的拉普拉斯变换与输入的拉普拉斯变换之比。仅适用于线性定常系统。</p>
+  <div class="formula">
+    <span class="eq">G(s) = <span class="frac"><span class="num">Y(s)</span><span class="den">R(s)</span></span></span>
+  </div>
+  <ul>
+    <li>反映系统<strong>固有的动态特性</strong>，只取决于系统结构、元件参数，与输入信号、初始条件无关。</li>
+    <li>通过零点、极点分布，可以反映系统的稳定性、瞬态响应、稳态响应。</li>
+    <li>仅描述输入输出的外部关系，<strong>不能反映系统内部状态</strong>。</li>
+    <li>只代表零状态响应；完整输出还要叠加初始条件带来的零输入响应。</li>
+  </ul>
+
+  <h3>2. 线性系统与非线性系统；线性系统满足的条件</h3>
+  <p>线性系统必须同时满足<strong>叠加性</strong>和<strong>齐次性（比例性）</strong>。</p>
+  <ul>
+    <li><strong>叠加性</strong>：若输入 x<sub>1</sub> → y<sub>1</sub>，x<sub>2</sub> → y<sub>2</sub>，则输入 x<sub>1</sub> + x<sub>2</sub>，输出为 y<sub>1</sub> + y<sub>2</sub>。</li>
+    <li><strong>齐次性</strong>：若输入 x → y，则输入 βx，输出为 βy。</li>
+  </ul>
+  <p><strong>非线性系统</strong>：微分方程含有平方、乘积、饱和、死区、摩擦等非线性项，不满足叠加原理。现实绝大多数物理系统本质是非线性的，可以在工作点附近做小信号泰勒一阶线性近似。</p>
+
+  <h3>3. 框图化简求传递函数（计算题重点）</h3>
+  <ul>
+    <li>基础连接：串联、并联、负反馈、正反馈。</li>
+    <li>掌握：相加点前移 / 后移；分支点前移 / 后移。</li>
+    <li>复杂框图可以转成信号流图，用<strong>梅森增益公式</strong>直接求解，不必一步步化简。</li>
+  </ul>
+  <p><strong>负反馈闭环：</strong></p>
+  <div class="formula">
+    T(s) = <span class="frac"><span class="num">G(s)</span><span class="den">1 + G(s)H(s)</span></span>
+  </div>
+  <p><strong>正反馈闭环：</strong></p>
+  <div class="formula">
+    T(s) = <span class="frac"><span class="num">G(s)</span><span class="den">1 − G(s)H(s)</span></span>
+  </div>
+  <p><strong>梅森增益公式：</strong></p>
+  <div class="formula">
+    <span class="eq">T = <span class="frac"><span class="num">Σ P<sub>k</sub> · Δ<sub>k</sub></span><span class="den">Δ</span></span></span>
+    <span class="eq">Δ = 1 − Σ L<sub>i</sub> + Σ L<sub>i</sub>L<sub>j</sub>（两两互不接触回路）− …</span>
+  </div>
+  <ul>
+    <li>P<sub>k</sub>：第 k 条前向通路的增益。</li>
+    <li>Δ：流图的特征式。</li>
+    <li>Δ<sub>k</sub>：第 k 条通路的余因式，即删除所有与该通路接触的回路后，特征式剩余的部分。</li>
+  </ul>
+
+  <h3>4. 二阶系统：阻尼比 ζ 不同取值对应的响应（填空、简答高频）</h3>
+  <p>二阶系统标准特征方程：</p>
+  <div class="formula">
+    <span class="eq">s² + 2ζω<sub>n</sub>s + ω<sub>n</sub>² = 0</span>
+    <span class="eq">s<sub>1,2</sub> = −ζω<sub>n</sub> ± ω<sub>n</sub>√(ζ² − 1)</span>
+  </div>
+  <table>
+    <tr>
+      <th>阻尼比 ζ</th>
+      <th>系统状态</th>
+      <th>极点位置</th>
+      <th>阶跃响应特点</th>
+    </tr>
+    <tr>
+      <td>ζ = 0</td>
+      <td>无阻尼</td>
+      <td>一对纯虚极点</td>
+      <td>等幅持续振荡，临界稳定，不会衰减</td>
+    </tr>
+    <tr>
+      <td>0 &lt; ζ &lt; 1</td>
+      <td>欠阻尼</td>
+      <td>s 左半平面共轭复极点</td>
+      <td>衰减振荡，存在超调；工程中最常用</td>
+    </tr>
+    <tr>
+      <td>ζ = 1</td>
+      <td>临界阻尼</td>
+      <td>二重相等负实极点</td>
+      <td>无振荡无超调；刚好不发生振荡的边界；非振荡响应中最快</td>
+    </tr>
+    <tr>
+      <td>ζ &gt; 1</td>
+      <td>过阻尼</td>
+      <td>两个不等负实极点</td>
+      <td>无振荡无超调；响应缓慢</td>
+    </tr>
+  </table>
+  <div class="note">复习做题建议：动手完成课本课后的框图化简、梅森公式、二阶系统分析习题。</div>
+</div>
+
+<!-- 第四章 -->
+<div class="chapter" id="c4">
+  <h2>第四章 反馈控制系统特性（计算题重点）</h2>
+
+  <div class="warn">
+    <strong>分清两个"灵敏度"，考试极易混淆：</strong>
+    <ol>
+      <li><strong>Bode 参数灵敏度</strong>：课后计算题，求偏导计算。</li>
+      <li><strong>灵敏度函数 S(s)、补灵敏度函数 T(s)</strong>：填空简答，满足 S(s) + T(s) = 1。</li>
+    </ol>
+  </div>
+
+  <h3>1. Bode 参数灵敏度（课后习题计算题）</h3>
+  <p>描述闭环传递函数 T 对某一参数 α 的敏感程度，等于相对变化率之比。</p>
+  <div class="formula">
+    S<sub>α</sub><sup>T</sup> =
+    <span class="frac"><span class="num">∂T / T</span><span class="den">∂α / α</span></span>
+    =
+    <span class="frac"><span class="num">α</span><span class="den">T</span></span>
+    ·
+    <span class="frac"><span class="num">∂T</span><span class="den">∂α</span></span>
+  </div>
+  <ul>
+    <li>物理含义：参数 α 变化 1%，闭环传递函数 T 大约变化 S<sub>α</sub><sup>T</sup> %。</li>
+    <li>引入闭环反馈可以降低系统对对象参数变化的灵敏度。</li>
+    <li>做题步骤：写出闭环传递函数 → 对参数 α 求偏导 → 代入公式化简。</li>
+  </ul>
+
+  <h3>2. 灵敏度函数与补灵敏度函数</h3>
+  <p>单位负反馈，开环传递函数 L(s) = G(s)H(s)。</p>
+  <div class="formula">
+    <span class="eq">S(s) = <span class="frac"><span class="num">1</span><span class="den">1 + L(s)</span></span></span>
+    <span class="eq">T(s) = <span class="frac"><span class="num">L(s)</span><span class="den">1 + L(s)</span></span></span>
+    <span class="eq"><strong>S(s) + T(s) = 1</strong></span>
+  </div>
+  <ul>
+    <li><strong>灵敏度函数 S(s)</strong>：描述输出扰动对输出的传递，代表系统抑制扰动的能力。</li>
+    <li><strong>补灵敏度函数 T(s)</strong>：等于闭环传递函数，描述系统跟踪参考输入的能力。</li>
+  </ul>
+
+  <h3>3. 静态误差系数 K<sub>p</sub>、K<sub>v</sub>、K<sub>a</sub>（老师上课画方框重点）</h3>
+  <div class="formula">
+    <span class="eq">
+      K<sub>p</sub> =
+      <span class="lim"><span class="lim-op">lim</span><span class="lim-sub">s→0</span></span>
+      L(s)，&nbsp;&nbsp;
+      e<sub>ss</sub> = <span class="frac"><span class="num">1</span><span class="den">1 + K<sub>p</sub></span></span>
+      &nbsp;（阶跃输入）
+    </span>
+    <span class="eq">
+      K<sub>v</sub> =
+      <span class="lim"><span class="lim-op">lim</span><span class="lim-sub">s→0</span></span>
+      sL(s)，&nbsp;&nbsp;
+      e<sub>ss</sub> = <span class="frac"><span class="num">1</span><span class="den">K<sub>v</sub></span></span>
+      &nbsp;（斜坡输入）
+    </span>
+    <span class="eq">
+      K<sub>a</sub> =
+      <span class="lim"><span class="lim-op">lim</span><span class="lim-sub">s→0</span></span>
+      s²L(s)，&nbsp;&nbsp;
+      e<sub>ss</sub> = <span class="frac"><span class="num">1</span><span class="den">K<sub>a</sub></span></span>
+      &nbsp;（抛物线输入）
+    </span>
+  </div>
+  <ul>
+    <li>0 型系统：只有有限的 K<sub>p</sub>；I 型系统：有限的 K<sub>v</sub>；II 型系统：有限的 K<sub>a</sub>。</li>
+    <li>题型：给定开环传递函数，求不同输入下的稳态误差。</li>
+  </ul>
+</div>
+
+<!-- 智能控制 -->
+<div class="chapter" id="c5">
+  <h2>智能控制：BP神经网络与模糊控制（只考概念，无复杂计算）</h2>
+
+  <h3>1. BP神经网络</h3>
+  <ul>
+    <li>BP 是反向传播误差的多层前馈神经网络。</li>
+    <li>想要网络控制效果足够好，<strong>必须有足够多、具有代表性的训练样本</strong>；样本不足会发生欠拟合或过拟合。</li>
+  </ul>
+
+  <h3>2. 模糊控制基础概念</h3>
+  <ul>
+    <li><strong>模糊概念</strong>：现实中很多事物没有明确的"是 / 非"二值边界（大、小、高、低）。</li>
+    <li><strong>模糊集合</strong>：边界不清晰的集合；元素属于集合的程度取值在 0 ~ 1 之间。</li>
+    <li><strong>隶属度函数 μ(x)</strong>：μ(x) ∈ [0, 1]，描述元素 x 属于该模糊集合的程度；0 表示完全不属于，1 表示完全属于。常见类型：三角形、梯形、高斯型。</li>
+  </ul>
+  <p><strong>模糊集合三大组成要素：论域、模糊语言子集、隶属度函数。</strong></p>
+  <ul>
+    <li><strong>论域</strong>：全部讨论元素的全集。</li>
+    <li><strong>模糊语言子集（语言值）</strong>：如 {负大、负小、零、正小、正大}。</li>
+    <li><strong>隶属度函数</strong>：每一个语言值对应一条隶属度曲线。</li>
+  </ul>
+  <div class="note">专家系统：时间紧张可以简单浏览，不作为复习重点。</div>
+</div>
+
+<!-- 答题技巧 -->
+<div class="chapter" id="c6">
+  <h2>考试答题技巧</h2>
+  <ol>
+    <li><strong>开放性简答题</strong>：没有固定标准答案，尽量多写相关知识点，写对就给分，不要空题。</li>
+    <li><strong>填空、选择题</strong>：全部为基础概念，不要过度解读题目。</li>
+    <li><strong>计算题</strong>：重视步骤分，即使最终结果算错，写出公式也能拿到部分分数。</li>
+    <li><strong>复习范围</strong>：计算题只做课上练习、课后习题，不要钻研偏题怪题。</li>
+  </ol>
+</div>
+
+</div>
+</body>
+</html>

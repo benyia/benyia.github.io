@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>有约束求极值：3大核心方法原理与精解（教材标准 gi(x) ≥ 0 版）</title>
+    <!-- 引入 MathJax 渲染数学公式 -->
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=Lj9kjkJpXmqE6Dtr-mAF-t05Vgi79Gw9vFogveNLxabpVipekHOqOMJJS1SzfrWm0XxOs2QM-EJY61ix_TD8bWJTvYiMAbVBWx2n2WitUrd6BUtmeXnY4Kqw6HSNq1u7GY7HUF56nV1Z1EYkzk3jcxmAX2f2K9agSxIXHedmc-tohv22cOVi7KmHb0xV2WbA96trFI8D883G4387yfXAJ_giwkN83nMzd4Q7ehoVJUwt599YASV8yEntR347blLNjSOQV1Jj5HMWUsejHrhHHqfGhWQpjaj1ZGyr7P0dBLlrZrn2KuQI_HIFAOwOTzEQNR2RUzWtwh5_lbBEmK7BjTqaC0GDX3V5T-e8eXrnNb6uN4W8xWrocKJXuqLj6bn6YJEotSm85fGmmyuDJXsD9YREs5hLfBFHrVckItSgngjhWroIQyQxsePRCDUwsYfHxh4JH4l3NwXytbPujZmjAr_-MeOTl48XuqyIQlnKWKD1vB1fff7oSmpkVH6oD3Y4KMiwryL3HDY4E5s2jJ_Qw7jAn-l6WhZILOA4bltXj1o" charset="UTF-8"></script><script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #eff6ff;
+            --accent: #0284c7;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --method-bg: #f0fdf4;
+            --method-border: #16a34a;
+            --step-bg: #fffbeb;
+            --step-border: #d97706;
+            --step-card: #ffffff;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 2.0;
+            color: var(--text);
+            background-color: var(--bg);
+            padding: 40px 24px;
+            font-size: 16.5px;
+        }
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 56px 64px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        }
+        header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 32px;
+            margin-bottom: 44px;
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 2.25rem;
+            margin-bottom: 14px;
+            letter-spacing: 0.5px;
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.08rem;
+        }
+        .badge-standard {
+            display: inline-block;
+            margin-top: 12px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid #bfdbfe;
+            padding: 4px 16px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .toc {
+            background: var(--primary-light);
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 28px 36px;
+            margin-bottom: 52px;
+        }
+        .toc h3 {
+            color: var(--primary);
+            margin-bottom: 16px;
+            font-size: 1.2rem;
+        }
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 14px 28px;
+            list-style: none;
+        }
+        .toc-grid a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+        .toc-grid a:hover {
+            text-decoration: underline;
+        }
+        .section-card {
+            margin-bottom: 64px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+        }
+        .section-header {
+            background: var(--primary);
+            color: #ffffff;
+            padding: 22px 32px;
+            font-size: 1.45rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .section-body {
+            padding: 36px 40px;
+        }
+        .method-box {
+            background: var(--method-bg);
+            border-left: 6px solid var(--method-border);
+            padding: 28px 32px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+        .method-box h4 {
+            color: #15803d;
+            margin-bottom: 16px;
+            font-size: 1.2rem;
+        }
+        .method-box p {
+            margin-bottom: 14px;
+        }
+        .method-box ol, .method-box ul {
+            padding-left: 28px;
+        }
+        .method-box li {
+            margin-bottom: 14px;
+        }
+        .method-box ul li {
+            margin-bottom: 10px;
+        }
+        .problem-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px 36px;
+            margin-bottom: 40px;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .problem-card:last-child {
+            margin-bottom: 0;
+        }
+        .problem-title {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 18px;
+        }
+        .problem-statement {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+            padding: 16px 24px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px dashed #cbd5e1;
+        }
+        .solution-steps {
+            background: var(--step-bg);
+            border-left: 5px solid var(--step-border);
+            padding: 28px 32px;
+            border-radius: 10px;
+        }
+        .solution-steps h5 {
+            color: #b45309;
+            font-size: 1.12rem;
+            margin-bottom: 20px;
+        }
+        .step-item {
+            background: var(--step-card);
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+        }
+        .step-item ul {
+            padding-left: 24px;
+            margin-top: 10px;
+        }
+        .step-item li {
+            margin-bottom: 12px;
+        }
+        .step-label {
+            display: inline-block;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+        .conclusion {
+            margin-top: 24px;
+            padding: 18px 24px;
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+            border-radius: 6px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        mjx-container[jax="CHTML"][display="true"] {
+            margin: 1.2em 0 !important;
+        }
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 40px;
+            padding-top: 28px;
+            border-top: 1px solid var(--border);
+        }
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .container { padding: 28px 20px; }
+            .section-body { padding: 24px 18px; }
+            .problem-card { padding: 22px 18px; }
+            .solution-steps { padding: 20px 16px; }
+        }
+        @media print {
+            body { background: #fff; padding: 0; }
+            .container { box-shadow: none; padding: 10px; max-width: 100%; }
+            .section-card { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>有约束最优化求极值：方法原理与例题精解</h1>
+        <p class="subtitle">涵盖：K-T 条件（库恩-塔克条件） · SUMT 外点罚函数法 · SUMT 内点障碍函数法</p>
+        <div class="badge-standard">教材标准约定：不等式约束统一采用 $g_i(x) \ge 0$ 形式</div>
+    </header>
+
+    <div class="toc">
+        <h3>目录导航（点击直接跳转）</h3>
+        <ul class="toc-grid">
+            <li><a href="#sec1">一、K-T 条件（库恩-塔克条件，2道例题）</a></li>
+            <li><a href="#sec2">二、SUMT 外点法（外点罚函数法，2道例题）</a></li>
+            <li><a href="#sec3">三、SUMT 内点法（内点障碍函数法，2道例题）</a></li>
+        </ul>
+    </div>
+
+    <!-- ==================== 1. K-T条件 ==================== -->
+    <div class="section-card" id="sec1">
+        <div class="section-header">一、K-T 条件（库恩-塔克条件 / Kuhn-Tucker Conditions）</div>
+        <div class="section-body">
+            <div class="method-box">
+                <h4>【核心原理与标准做题步骤（教材 $g_i(x) \ge 0$ 形式）】</h4>
+                <p>考虑教材标准形式的有约束最优化问题：
+                $$\min f(x) \quad \text{s.t.} \quad g_i(x) \ge 0 \; (i=1,\dots,m), \quad h_j(x) = 0 \; (j=1,\dots,l)$$
+                求解 K-T 点（极小值的一阶必要条件，当问题为凸规划时也是充要条件）的标准步骤如下：</p>
+                <ol>
+                    <li><strong>化为标准形式：</strong>将所有不等式约束统一移项整理为 $g_i(x) \ge 0$，等式约束整理为 $h_j(x) = 0$。</li>
+                    <li><strong>构造拉格朗日函数：</strong>引入拉格朗日乘子 $\lambda_i \ge 0$ 和 $\mu_j \in \mathbb{R}$，构造拉格朗日函数：
+                        $$L(x, \lambda, \mu) = f(x) - \sum_{i=1}^m \lambda_i g_i(x) - \sum_{j=1}^l \mu_j h_j(x)$$
+                    </li>
+                    <li><strong>列出 K-T 条件方程组：</strong>
+                        <ul>
+                            <li><strong>一阶驻点条件：</strong>$\nabla_x L(x, \lambda, \mu) = \nabla f(x) - \sum_{i=1}^m \lambda_i \nabla g_i(x) - \sum_{j=1}^l \mu_j \nabla h_j(x) = 0$</li>
+                            <li><strong>互补松弛条件：</strong>$\lambda_i g_i(x) = 0 \quad (i=1,2,\dots,m)$</li>
+                            <li><strong>原始可行性条件：</strong>$g_i(x) \ge 0, \quad h_j(x) = 0$</li>
+                            <li><strong>乘子非负条件：</strong>$\lambda_i \ge 0 \quad (i=1,2,\dots,m)$</li>
+                        </ul>
+                    </li>
+                    <li><strong>分情况讨论求解：</strong>根据互补松弛条件 $\lambda_i g_i(x) = 0$，按乘子 $\lambda_i = 0$（非起作用约束，内部点）或 $g_i(x) = 0$（起作用约束，边界点）分类讨论，并逐一检验求得的解是否同时满足原始可行性 $g_i(x) \ge 0$ 和乘子非负性 $\lambda_i \ge 0$。</li>
+                </ol>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 1.1（单个不等式约束的 K-T 点求解）</div>
+                <div class="problem-statement">
+                    利用 K-T 条件求解非线性规划问题：
+                    $$\min f(x_1, x_2) = (x_1 - 2)^2 + (x_2 - 1)^2$$
+                    $$\text{s.t.} \quad x_1 + x_2 \le 1$$
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第 1 步：化为标准形式 $g(x) \ge 0$ 并构造拉格朗日函数</span><br>
+                        将不等式约束写为教材标准形式：
+                        $$g(x_1, x_2) = 1 - x_1 - x_2 \ge 0$$
+                        引入拉格朗日乘子 $\lambda \ge 0$，构造拉格朗日函数：
+                        $$L(x_1, x_2, \lambda) = (x_1 - 2)^2 + (x_2 - 1)^2 - \lambda(1 - x_1 - x_2)$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第 2 步：写出 K-T 条件方程组</span><br>
+                        对 $x_1, x_2$ 分别求偏导并结合约束条件，列出 K-T 方程组：
+                        $$\begin{cases}
+                        \dfrac{\partial L}{\partial x_1} = 2(x_1 - 2) + \lambda = 0 & (1) \\[10pt]
+                        \dfrac{\partial L}{\partial x_2} = 2(x_2 - 1) + \lambda = 0 & (2) \\[10pt]
+                        \lambda(1 - x_1 - x_2) = 0 & (3) \\[8pt]
+                        1 - x_1 - x_2 \ge 0 & (4) \\[8pt]
+                        \lambda \ge 0 & (5)
+                        \end{cases}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第 3 步：按互补松弛条件 (3) 分情况讨论</span>
+                        <ul>
+                            <li>
+                                <strong>情况一：令 $\lambda = 0$（约束不起作用，内部点）</strong><br>
+                                代入 (1)、(2) 两式得：$2(x_1 - 2) = 0 \implies x_1 = 2$；$2(x_2 - 1) = 0 \implies x_2 = 1$。<br>
+                                检验可行性条件 (4)：$g(2, 1) = 1 - 2 - 1 = -2 < 0$，<strong>不满足 $1 - x_1 - x_2 \ge 0$，故舍去！</strong>
+                            </li>
+                            <li>
+                                <strong>情况二：令 $1 - x_1 - x_2 = 0$（约束起作用，边界点）</strong><br>
+                                由 (1) 和 (2) 解出用 $\lambda$ 表示的坐标：$x_1 = 2 - \dfrac{\lambda}{2}$，$x_2 = 1 - \dfrac{\lambda}{2}$。<br>
+                                将其代入边界方程 $1 - x_1 - x_2 = 0$ 得：
+                                $$1 - \left(2 - \frac{\lambda}{2}\right) - \left(1 - \frac{\lambda}{2}\right) = 0 \implies \lambda - 2 = 0 \implies \lambda = 2$$
+                                检验乘子非负条件 (5)：$\lambda = 2 \ge 0$，满足要求。<br>
+                                回代求得极值点坐标：$x_1 = 2 - \dfrac{2}{2} = 1$，$x_2 = 1 - \dfrac{2}{2} = 0$。
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="conclusion">
+                        结论：该问题的唯一 K-T 点为 $x^* = (1, 0)^T$，对应乘子 $\lambda^* = 2$。因目标函数为严格凸函数且可行域为凸集，故 $x^* = (1, 0)^T$ 即为全局极小点，极小值 $f(x^*) = (1-2)^2 + (0-1)^2 = 2$。
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 1.2（含两个不等式约束的 K-T 条件求解）</div>
+                <div class="problem-statement">
+                    利用 K-T 条件求解有约束极值问题：
+                    $$\min f(x_1, x_2) = x_1^2 + x_2^2 - 4x_1 - 4x_2$$
+                    $$\text{s.t.} \quad \begin{cases} x_1 + x_2 \le 2 \\ x_1 \ge 0 \end{cases}$$
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第 1 步：化为标准形式 $g_i(x) \ge 0$ 并写出 K-T 条件</span><br>
+                        将两个不等式约束统一化为 $g_i(x) \ge 0$ 标准形式：
+                        $$g_1(x) = 2 - x_1 - x_2 \ge 0, \qquad g_2(x) = x_1 \ge 0$$
+                        构造拉格朗日函数：
+                        $$L(x_1, x_2, \lambda_1, \lambda_2) = x_1^2 + x_2^2 - 4x_1 - 4x_2 - \lambda_1(2 - x_1 - x_2) - \lambda_2 x_1$$
+                        列出 K-T 条件方程组：
+                        $$\begin{cases}
+                        \dfrac{\partial L}{\partial x_1} = 2x_1 - 4 + \lambda_1 - \lambda_2 = 0 & (1) \\[10pt]
+                        \dfrac{\partial L}{\partial x_2} = 2x_2 - 4 + \lambda_1 = 0 & (2) \\[10pt]
+                        \lambda_1(2 - x_1 - x_2) = 0, \quad \lambda_2 x_1 = 0 & (3) \\[8pt]
+                        2 - x_1 - x_2 \ge 0, \quad x_1 \ge 0 & (4) \\[8pt]
+                        \lambda_1 \ge 0, \quad \lambda_2 \ge 0 & (5)
+                        \end{cases}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第 2 步：对互补松弛条件进行 4 种组合讨论</span>
+                        <ul>
+                            <li>
+                                <strong>情形 1（$\lambda_1 = 0, \; \lambda_2 = 0$，两约束均不起作用）：</strong><br>
+                                由 (1)、(2) 得 $x_1 = 2, \; x_2 = 2$。代入 $g_1(x)$ 得 $2 - 2 - 2 = -2 < 0$，违背可行性条件 (4)，舍去。
+                            </li>
+                            <li>
+                                <strong>情形 2（$\lambda_1 > 0, \; \lambda_2 = 0$，仅第 1 个约束起作用 $2 - x_1 - x_2 = 0$）：</strong><br>
+                                由 (1)、(2) 知 $2x_1 - 4 + \lambda_1 = 0$ 且 $2x_2 - 4 + \lambda_1 = 0$，故 $x_1 = x_2$。<br>
+                                代入 $2 - x_1 - x_2 = 0$ 解得：$x_1 = 1, \; x_2 = 1$。<br>
+                                回代 (2) 式求乘子：$\lambda_1 = 4 - 2(1) = 2 > 0$（满足 $\lambda_1 \ge 0$）。<br>
+                                检验第 2 个约束：$g_2(x) = x_1 = 1 \ge 0$ 成立。<strong>所有 K-T 条件全部满足！</strong>
+                            </li>
+                            <li>
+                                <strong>情形 3（$\lambda_1 = 0, \; \lambda_2 > 0$，仅第 2 个约束起作用 $x_1 = 0$）：</strong><br>
+                                将 $\lambda_1 = 0, \; x_1 = 0$ 代入 (1) 式得：$-4 - \lambda_2 = 0 \implies \lambda_2 = -4 < 0$，违背乘子非负条件 $\lambda_2 \ge 0$，舍去。
+                            </li>
+                            <li>
+                                <strong>情形 4（$\lambda_1 > 0, \; \lambda_2 > 0$，两个约束同时起作用 $x_1 = 0$ 且 $2 - x_1 - x_2 = 0$）：</strong><br>
+                                解得 $x_1 = 0, \; x_2 = 2$。代入 (2) 式得 $\lambda_1 = 4 - 2(2) = 0$，再代入 (1) 式得 $\lambda_2 = -4 < 0$，违背乘子非负条件，舍去。
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="conclusion">
+                        结论：唯一 K-T 点为 $x^* = (1, 1)^T$，对应拉格朗日乘子 $\lambda^* = (2, 0)^T$，全局极小值为 $f(x^*) = 1^2 + 1^2 - 4(1) - 4(1) = -6$。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 2. SUMT 外点法 ==================== -->
+    <div class="section-card" id="sec2">
+        <div class="section-header">二、SUMT 外点法（序列无约束极小化 —— 外点罚函数法）</div>
+        <div class="section-body">
+            <div class="method-box">
+                <h4>【核心原理与标准做题步骤（教材 $g_i(x) \ge 0$ 形式）】</h4>
+                <p><strong>外点罚函数法（Exterior Penalty Method）</strong>将违反约束的程度转化为惩罚项加到目标函数上，从而把有约束优化转化为一系列无约束优化问题。迭代点序列通常从<strong>可行域外部</strong>逐渐逼近最优解（可同时处理等式约束与不等式约束）：</p>
+                <ol>
+                    <li><strong>构造外点罚函数（增广目标函数）：</strong>对于标准问题 $\min f(x) \quad \text{s.t.} \; g_i(x) \ge 0, \; h_j(x) = 0$，取递增的正罚因子序列 $M_k > 0$（$M_1 < M_2 < \dots \to +\infty$），构造外点罚函数：
+                        $$P(x, M_k) = f(x) + M_k \sum_{i=1}^m \left[\min\{0, g_i(x)\}\right]^2 + M_k \sum_{j=1}^l \left[h_j(x)\right]^2$$
+                        <em>（注：当迭代点位于不可行域外部时，违反约束意味着 $g_i(x) < 0$，此时 $\min\{0, g_i(x)\} = g_i(x)$，惩罚项直接写为 $M_k \left[g_i(x)\right]^2$。）</em>
+                    </li>
+                    <li><strong>求解无约束极小点 $x^*(M_k)$：</strong>对 $P(x, M_k)$ 求关于 $x$ 的一阶梯度并令其为 $0$：
+                        $$\nabla_x P(x, M_k) = 0$$
+                        解出含罚因子 $M_k$ 的解析驻点 $x^*(M_k)$。
+                    </li>
+                    <li><strong>求极限得原问题最优解：</strong>令罚因子 $M_k \to +\infty$，计算极限：
+                        $$x^* = \lim_{M_k \to +\infty} x^*(M_k)$$
+                    </li>
+                </ol>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 2.1（等式约束问题的 SUMT 外点法求解）</div>
+                <div class="problem-statement">
+                    用 SUMT 外点罚函数法求解等式约束优化问题：
+                    $$\min f(x_1, x_2) = x_1^2 + 2x_2^2$$
+                    $$\text{s.t.} \quad x_1 + x_2 = 1$$
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第 1 步：构造外点罚函数 $P(x_1, x_2, M)$</span><br>
+                        将等式约束写为标准形式 $h(x_1, x_2) = x_1 + x_2 - 1 = 0$。引入罚因子 $M > 0$，构造增广目标函数：
+                        $$P(x_1, x_2, M) = x_1^2 + 2x_2^2 + M(x_1 + x_2 - 1)^2$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第 2 步：求解无约束极值必要条件 $\nabla_x P = 0$</span><br>
+                        分别对 $x_1, x_2$ 求一阶偏导并令其等于 $0$：
+                        $$\begin{cases}
+                        \dfrac{\partial P}{\partial x_1} = 2x_1 + 2M(x_1 + x_2 - 1) = 0 & (1) \\[10pt]
+                        \dfrac{\partial P}{\partial x_2} = 4x_2 + 2M(x_1 + x_2 - 1) = 0 & (2)
+                        \end{cases}$$
+                        用 (1) 式减去 (2) 式消去含罚因子 $M$ 的项：
+                        $$2x_1 - 4x_2 = 0 \implies x_1 = 2x_2$$
+                        将 $x_1 = 2x_2$ 代回 (2) 式：
+                        $$4x_2 + 2M(2x_2 + x_2 - 1) = 0 \implies (2 + 3M)x_2 = M$$
+                        解得关于罚因子 $M$ 的无约束极小点 $x^*(M)$：
+                        $$x_1^*(M) = \frac{2M}{3M + 2}, \qquad x_2^*(M) = \frac{M}{3M + 2}$$
+                        <em>（验证：对任意有限 $M > 0$，$x_1^*(M) + x_2^*(M) = \dfrac{3M}{3M+2} < 1$，说明迭代点严格位于可行集外部。）</em>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第 3 步：令 $M \to +\infty$ 取极限求最优解</span><br>
+                        $$x_1^* = \lim_{M \to +\infty} \frac{2M}{3M + 2} = \lim_{M \to +\infty} \frac{2}{3 + \frac{2}{M}} = \frac{2}{3}$$
+                        $$x_2^* = \lim_{M \to +\infty} \frac{M}{3M + 2} = \lim_{M \to +\infty} \frac{1}{3 + \frac{2}{M}} = \frac{1}{3}$$
+                    </div>
+                    <div class="conclusion">
+                        结论：原问题的最优解（极小点）为 $x^* = \left(\dfrac{2}{3}, \dfrac{1}{3}\right)^T$，极小值为 $f(x^*) = \left(\dfrac{2}{3}\right)^2 + 2\left(\dfrac{1}{3}\right)^2 = \dfrac{2}{3}$。
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 2.2（不等式约束问题的 SUMT 外点法求解）</div>
+                <div class="problem-statement">
+                    用 SUMT 外点罚函数法求解不等式约束优化问题：
+                    $$\min f(x_1, x_2) = x_1^2 + x_2^2$$
+                    $$\text{s.t.} \quad x_1 + x_2 \ge 2$$
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第 1 步：化为标准形式 $g(x) \ge 0$ 并判断迭代点区域</span><br>
+                        将不等式约束写为教材标准形式：
+                        $$g(x_1, x_2) = x_1 + x_2 - 2 \ge 0$$
+                        原目标函数 $f(x_1, x_2) = x_1^2 + x_2^2$ 的无约束极小点为 $(0, 0)^T$，代入约束得 $g(0, 0) = -2 < 0$，位于可行域外部。因此外点法的迭代点必落在不可行域 $g(x_1, x_2) < 0$（即 $x_1 + x_2 - 2 < 0$）内，此时 $\min\{0, g(x)\} = x_1 + x_2 - 2$。
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第 2 步：构造外点罚函数并求无约束极小点</span><br>
+                        在不可行域 $x_1 + x_2 - 2 < 0$ 内，构造外点罚函数：
+                        $$P(x_1, x_2, M) = x_1^2 + x_2^2 + M(x_1 + x_2 - 2)^2$$
+                        令一阶偏导数为 $0$：
+                        $$\begin{cases}
+                        \dfrac{\partial P}{\partial x_1} = 2x_1 + 2M(x_1 + x_2 - 2) = 0 & (1) \\[10pt]
+                        \dfrac{\partial P}{\partial x_2} = 2x_2 + 2M(x_1 + x_2 - 2) = 0 & (2)
+                        \end{cases}$$
+                        两式相减得 $x_1 = x_2$。代入 (1) 式整理得：
+                        $$x_1 + M(2x_1 - 2) = 0 \implies (1 + 2M)x_1 = 2M$$
+                        解得外点序列极小点：
+                        $$x_1^*(M) = \frac{2M}{2M + 1}, \qquad x_2^*(M) = \frac{2M}{2M + 1}$$
+                        <em>（验证：对任意 $M > 0$，有 $g(x^*(M)) = \dfrac{4M}{2M+1} - 2 = \dfrac{-2}{2M+1} < 0$，确实严格位于可行域外部，并随 $M \to +\infty$ 从外部逼近边界 $x_1 + x_2 - 2 = 0$。）</em>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第 3 步：令 $M \to +\infty$ 求极限</span><br>
+                        $$x_1^* = \lim_{M \to +\infty} \frac{2M}{2M + 1} = 1, \qquad x_2^* = \lim_{M \to +\infty} \frac{2M}{2M + 1} = 1$$
+                    </div>
+                    <div class="conclusion">
+                        结论：通过 SUMT 外点法从可行域外部（$g(x) < 0$ 区域）逼近，求得原问题最优解为 $x^* = (1, 1)^T$，极小值 $f(x^*) = 2$。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 3. SUMT 内点法 ==================== -->
+    <div class="section-card" id="sec3">
+        <div class="section-header">三、SUMT 内点法（序列无约束极小化 —— 内点障碍函数法）</div>
+        <div class="section-body">
+            <div class="method-box">
+                <h4>【核心原理与标准做题步骤（教材 $g_i(x) \ge 0$ 形式）】</h4>
+                <p><strong>内点法 / 障碍函数法（Interior Point / Barrier Method）</strong>仅适用于含<strong>不等式约束</strong>的优化问题：
+                $$\min f(x) \quad \text{s.t.} \quad g_i(x) \ge 0 \; (i=1,\dots,m)$$
+                要求可行域的严格内部非空，即<strong>严格内点集</strong> $S^0 = \{x \mid g_i(x) > 0, \; i=1,\dots,m\} \neq \varnothing$。它在可行域边界 $g_i(x) = 0$ 上筑起一道无限高的“势垒墙”，迫使迭代点序列始终保持在<strong>可行域严格内部（$g_i(x) > 0$）</strong>逼近最优解：</p>
+                <ol>
+                    <li><strong>构造内点障碍函数（增广目标函数）：</strong>取递减的正障碍因子序列 $r_k > 0$（$r_1 > r_2 > \dots \to 0^+$），教材常用的两种标准障碍函数形式为：
+                        <ul>
+                            <li><strong>倒数障碍函数（最常考）：</strong>
+                                $$B(x, r_k) = f(x) + r_k \sum_{i=1}^m \frac{1}{g_i(x)}$$
+                            </li>
+                            <li><strong>对数障碍函数：</strong>
+                                $$B(x, r_k) = f(x) - r_k \sum_{i=1}^m \ln\left[g_i(x)\right]$$
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>在严格可行域内部求无约束极小点 $x^*(r_k)$：</strong>令梯度 $\nabla_x B(x, r_k) = 0$，求解并筛选出满足严格内点条件 $g_i(x) > 0$ 的驻点 $x^*(r_k)$。</li>
+                    <li><strong>求极限得原问题最优解：</strong>令障碍因子缩减至零（$r_k \to 0^+$），计算极限：
+                        $$x^* = \lim_{r_k \to 0^+} x^*(r_k)$$
+                    </li>
+                </ol>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 3.1（倒数障碍函数的 SUMT 内点法求解）</div>
+                <div class="problem-statement">
+                    用 SUMT 内点法（采用<strong>倒数障碍函数</strong>）求解如下不等式约束极值问题：
+                    $$\min f(x) = x^2 - 2x$$
+                    $$\text{s.t.} \quad x \ge 2$$
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第 1 步：写出标准形式 $g(x) \ge 0$ 并构造倒数障碍函数</span><br>
+                        将不等式约束化为教材标准形式：
+                        $$g(x) = x - 2 \ge 0$$
+                        因此严格内点域为 $S^0 = \{x \mid x - 2 > 0\} = \{x \mid x > 2\}$。<br>
+                        取障碍因子 $r > 0$，在严格内点域 $x > 2$ 内构造倒数障碍函数：
+                        $$B(x, r) = f(x) + \frac{r}{g(x)} = x^2 - 2x + \frac{r}{x - 2}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第 2 步：在严格内点域 $x > 2$ 内求解驻点条件 $\nabla_x B(x, r) = 0$</span><br>
+                        对 $B(x, r)$ 关于 $x$ 求一阶导数并令其等于 $0$：
+                        $$\frac{\mathrm{d}B(x, r)}{\mathrm{d}x} = 2x - 2 - \frac{r}{(x - 2)^2} = 0$$
+                        移项整理得：
+                        $$2(x - 1)(x - 2)^2 = r \implies (x - 2)^2 = \frac{r}{2(x - 1)}$$
+                        因为内点法的迭代点必须位于严格可行域内部 $x > 2$（故 $x - 2 > 0$ 且 $x - 1 > 1 > 0$），两边开平方取正根得：
+                        $$x^*(r) = 2 + \sqrt{\frac{r}{2\left(x^*(r) - 1\right)}} > 2$$
+                        <em>（可见对任意 $r > 0$，极小点 $x^*(r)$ 恒满足 $g(x^*(r)) = x^*(r) - 2 > 0$，始终处于可行域的严格内部！）</em>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第 3 步：令障碍因子 $r \to 0^+$ 求极限</span><br>
+                        当 $r \to 0^+$ 时，右侧根号项 $\sqrt{\dfrac{r}{2(x^*(r) - 1)}} \to 0$，两边取极限得：
+                        $$x^* = \lim_{r \to 0^+} x^*(r) = 2 + 0 = 2$$
+                    </div>
+                    <div class="conclusion">
+                        结论：内点序列 $x^*(r)$ 从严格可行域内部（$x - 2 > 0$ 一侧）随 $r \to 0^+$ 收敛到边界最优解 $x^* = 2$，极小值 $f(2) = 2^2 - 2(2) = 0$。
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 3.2（二元函数的对数与倒数障碍函数内点法完整求解）</div>
+                <div class="problem-statement">
+                    用 SUMT 内点法求解二元有约束优化问题（分别用<strong>对数障碍函数</strong>和<strong>倒数障碍函数</strong>推导）：
+                    $$\min f(x_1, x_2) = x_1 + \frac{1}{2}x_2^2$$
+                    $$\text{s.t.} \quad x_1 \ge 1$$
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">方法 A：采用对数障碍函数 $B_1(x, r) = f(x) - r \ln[g(x)]$</span><br>
+                        将不等式约束写为标准形式 $g(x_1, x_2) = x_1 - 1 \ge 0$，严格内点域为 $x_1 - 1 > 0$。<br>
+                        取障碍因子 $r > 0$，构造对数障碍函数：
+                        $$B_1(x_1, x_2, r) = x_1 + \frac{1}{2}x_2^2 - r \ln(x_1 - 1)$$
+                        令一阶偏导数为 $0$：
+                        $$\begin{cases}
+                        \dfrac{\partial B_1}{\partial x_1} = 1 - \dfrac{r}{x_1 - 1} = 0 \\[10pt]
+                        \dfrac{\partial B_1}{\partial x_2} = x_2 = 0
+                        \end{cases}$$
+                        因 $x_1 - 1 > 0$，直接解出含 $r$ 的显式内点解析解：
+                        $$x_1^*(r) = 1 + r, \qquad x_2^*(r) = 0$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">方法 B：采用倒数障碍函数 $B_2(x, r) = f(x) + \dfrac{r}{g(x)}$</span><br>
+                        在严格内点域 $g(x_1, x_2) = x_1 - 1 > 0$ 内，构造倒数障碍函数：
+                        $$B_2(x_1, x_2, r) = x_1 + \frac{1}{2}x_2^2 + \frac{r}{x_1 - 1}$$
+                        令一阶偏导数为 $0$：
+                        $$\begin{cases}
+                        \dfrac{\partial B_2}{\partial x_1} = 1 - \dfrac{r}{(x_1 - 1)^2} = 0 \\[10pt]
+                        \dfrac{\partial B_2}{\partial x_2} = x_2 = 0
+                        \end{cases}$$
+                        因要求点位于严格可行域内部（$x_1 - 1 > 0$），舍去不合题意的负根 $1 - \sqrt{r}$，保留正根得显式内点解：
+                        $$x_1^*(r) = 1 + \sqrt{r}, \qquad x_2^*(r) = 0$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第 3 步：令 $r \to 0^+$ 取极限求原问题极小点</span><br>
+                        无论采用对数障碍函数还是倒数障碍函数，令 $r \to 0^+$ 均有：
+                        $$x_1^* = \lim_{r \to 0^+} (1 + r) = \lim_{r \to 0^+} (1 + \sqrt{r}) = 1, \qquad x_2^* = \lim_{r \to 0^+} 0 = 0$$
+                    </div>
+                    <div class="conclusion">
+                        结论：内点解为 $x^*(r) = (1+r, 0)^T$（对数型）或 $(1+\sqrt{r}, 0)^T$（倒数型），当 $r \to 0^+$ 时从严格可行域内部（$g(x) > 0$）收敛到精确极小点 $x^* = (1, 0)^T$，极小值 $f(x^*) = 1$。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>有约束最优化核心算法讲义（教材 $g_i(x) \ge 0$ 标准版） · 支持浏览器直接查看或 Ctrl+P 导出高清 PDF</p>
+    </footer>
+</div>
+</body>
+</html>

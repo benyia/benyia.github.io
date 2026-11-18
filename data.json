@@ -1068,6 +1068,66 @@
       ],
       "images": [],
       "time": "2026-11-18 16:35"
+    },
+    {
+      "icon": "控",
+      "title": "控制系统分析与设计",
+      "desc": "教材、PPT、课后习题答案",
+      "intro": "如何对控制系统进行分析与设计——先建立系统数学模型（微分方程、传递函数、状态空间），再用时域分析（暂态响应、稳态误差、稳定性判据）、根轨迹法和频域分析（Bode图、Nyquist判据、稳定裕度）去分析系统的稳定性、快速性和稳态精度，最后讲系统设计/校正，即通过超前校正、滞后校正、滞后-超前校正、PID控制器以及反馈校正等手段，使系统满足给定的性能指标，并配套前五章题目与答案用于复习巩固。",
+      "introIsHTML": true,
+      "tags": [
+        "课程"
+      ],
+      "progress": 100,
+      "folders": [],
+      "files": [
+        {
+          "name": "所有内容",
+          "url": "https://pan.baidu.com/s/1yCbsUvI9NPrJYOB0qCCK-Q?pwd=pgy7",
+          "type": "链接",
+          "size": 0,
+          "folder": "",
+          "external": true
+        },
+        {
+          "name": "BP神经网络与模糊数学知识点总结.html",
+          "url": "files/BP神经网络与模糊数学知识点总结.html",
+          "type": "HTML",
+          "size": 12865,
+          "originalSize": 12865,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "控制系统分析设计复习重点.html",
+          "url": "files/控制系统分析设计复习重点.html",
+          "type": "HTML",
+          "size": 17457,
+          "originalSize": 17457,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "控制系统与分析设计复习+五章题目答案.html",
+          "url": "files/控制系统与分析设计复习+五章题目答案.html",
+          "type": "HTML",
+          "size": 20266077,
+          "originalSize": 20266077,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "自动控制原理_复习卡片.html",
+          "url": "files/自动控制原理_复习卡片.html",
+          "type": "HTML",
+          "size": 800747,
+          "originalSize": 800747,
+          "optimized": false,
+          "folder": ""
+        }
+      ],
+      "images": [],
+      "time": "2026-11-18 16:38"
     }
   ],
   "papers": [
@@ -1739,6 +1799,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-18 16:38",
+      "action": "添加课程：控制系统分析与设计"
+    },
+    {
       "time": "2026-11-18 16:35",
       "action": "添加课程：神经网络与强化学习"
     },
@@ -2133,10 +2197,6 @@
     {
       "time": "2026-09-30 11:39",
       "action": "编辑应用：Google Chrome"
-    },
-    {
-      "time": "2026-09-30 11:23",
-      "action": "发布通知：chrome"
     }
   ],
   "categories": [

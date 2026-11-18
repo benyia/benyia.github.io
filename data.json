@@ -7,7 +7,7 @@
     "about": "你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",
     "avatar": "files/头像3.webp",
     "favicon": "files/头像2.png",
-    "defaultImage": "files/头像2.jpg",
+    "defaultImage": "",
     "columns": "2",
     "defaultAvatar": "",
     "loginHint": "提示：我喜欢的人的生日",
@@ -871,6 +871,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-18 13:10",
+      "action": "修改站点设置"
+    },
+    {
       "time": "2026-11-18 13:09",
       "action": "修改首页显示内容"
     },
@@ -1265,10 +1269,6 @@
     {
       "time": "2026-09-28 11:02",
       "action": "删除影音"
-    },
-    {
-      "time": "2026-09-28 10:50",
-      "action": "添加音乐：头像1"
     }
   ],
   "categories": [

@@ -477,20 +477,6 @@
       "images": [],
       "files": [],
       "time": "2026-11-02 09:41"
-    },
-    {
-      "title": "测试",
-      "source": "",
-      "date": "2026-11-17",
-      "level": "normal",
-      "content": "测试<div><img src=\"files/PixPin_2026-10-01_23-58-48.png\" alt=\"\"></div><div><br></div>",
-      "contentIsHTML": true,
-      "tags": [
-        "测试"
-      ],
-      "images": [],
-      "files": [],
-      "time": "2026-11-17 21:43"
     }
   ],
   "classItems": [
@@ -881,6 +867,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-11-18 08:10",
+      "action": "删除通知"
+    },
     {
       "time": "2026-11-17 22:30",
       "action": "添加班级事务：2026年卷一·六级四篇真题 · 生词背诵清单"
@@ -1276,10 +1266,6 @@
     {
       "time": "2026-09-28 09:41",
       "action": "删除通知"
-    },
-    {
-      "time": "2026-09-28 09:39",
-      "action": "编辑通知：DeepSeek V4.1 Flash 官方 API 越狱"
     }
   ],
   "categories": [

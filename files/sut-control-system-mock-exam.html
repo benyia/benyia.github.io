@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沈阳工业大学 - 计算机控制系统 研究生考试模拟试题及答案</title>
+    <!-- 引入 MathJax 渲染数学公式 -->
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=WM9l9mxmCl9XSo6GMXn9mkbJBGNv1TA8jbtEc7GNjVtpupeTtggP8BfPWqqhQoBHzHFt9mNpiBEHYGwAlZenYQ-x4jdvxAPiRL8HiFPDyPo7dn4OLE-ES-1x5mThzpib3HOKGTFxwn5KjKeOmgPSGV85hv1g4JhltdI00W7u2vst3nNJPl7xpRTJz0GCkNEwcmQ7BHvtCifPGLn-ZZQdlOKmm0wrnlyqNpvkMltF0SuCV7Wbs4xx8rqytoRHRsIig33Nz46rDMJcP-vhnTTNOEad1ZL5BY3xda0ouvnPAp086u0nK4HcZEWW7Pcv53fk3JOM3Qjys2NZU5Rl9Y8a9UObsU-iighiltvA1YwccDA" charset="UTF-8"></script><script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #1e293b;
+            --accent-color: #2563eb;
+            --border-color: #cbd5e1;
+            --bg-solution: #f8fafc;
+            --score-color: #dc2626;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "SimSun", "Songti SC", "Noto Serif SC", "Microsoft YaHei", serif;
+            line-height: 1.75;
+            color: #111827;
+            background-color: #e2e8f0;
+            margin: 0;
+            padding: 24px 12px;
+        }
+        .toolbar {
+            max-width: 900px;
+            margin: 0 auto 16px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        .toolbar-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #334155;
+        }
+        .toolbar-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: "Microsoft YaHei", sans-serif;
+            transition: background-color 0.15s;
+        }
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+        .btn-outline {
+            background-color: #ffffff;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-outline:hover {
+            background-color: #f1f5f9;
+        }
+        .paper-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 48px 56px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+        /* 试卷头部样式（还原沈工大卷头） */
+        .exam-header {
+            border-bottom: 2px solid #000000;
+            padding-bottom: 12px;
+            margin-bottom: 28px;
+        }
+        .exam-top-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .exam-school-line {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin: 8px 0 14px 0;
+        }
+        .exam-info-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1.2fr 0.8fr;
+            font-size: 15px;
+            font-weight: bold;
+            gap: 8px;
+        }
+        /* 题目与解答块样式 */
+        .question-block {
+            margin-bottom: 36px;
+            page-break-inside: avoid;
+        }
+        .question-title {
+            font-size: 16.5px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .sub-questions {
+            margin: 10px 0 14px 0;
+            padding-left: 20px;
+        }
+        .sub-questions p {
+            margin: 6px 0;
+            font-size: 16px;
+        }
+        /* 控制系统框图容器 */
+        .diagram-box {
+            text-align: center;
+            margin: 16px auto;
+            padding: 12px;
+            background: #ffffff;
+        }
+        .diagram-box svg {
+            max-width: 100%;
+            height: auto;
+        }
+        /* 答案及评分标准框 */
+        .solution-box {
+            background-color: var(--bg-solution);
+            border-left: 4px solid var(--accent-color);
+            padding: 16px 22px;
+            margin-top: 14px;
+            border-radius: 0 6px 6px 0;
+            font-size: 15.5px;
+        }
+        .solution-header {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 16px;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 4px;
+        }
+        .step-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 6px 0;
+            border-bottom: 1px dotted #e2e8f0;
+            padding-bottom: 4px;
+        }
+        .step-content {
+            flex: 1;
+            overflow-x: auto;
+        }
+        .score-badge {
+            color: var(--score-color);
+            font-weight: bold;
+            font-family: "Microsoft YaHei", sans-serif;
+            font-size: 14px;
+            margin-left: 16px;
+            white-space: nowrap;
+            border: 1px solid #fca5a5;
+            background: #fef2f2;
+            padding: 1px 8px;
+            border-radius: 4px;
+        }
+        .jury-table {
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 15px;
+        }
+        .jury-table th, .jury-table td {
+            border: 1px solid #475569;
+            padding: 6px 18px;
+            text-align: center;
+        }
+        .jury-table th {
+            background-color: #f1f5f9;
+        }
+        .hidden-answer {
+            display: none !important;
+        }
+        @media print {
+            body {
+                background: #ffffff;
+                padding: 0;
+            }
+            .toolbar {
+                display: none;
+            }
+            .paper-container {
+                box-shadow: none;
+                padding: 20px;
+                max-width: 100%;
+            }
+            .solution-box {
+                background-color: #ffffff;
+                border-left: 3px solid #000000;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="toolbar">
+    <div class="toolbar-title">📄 沈阳工业大学《计算机控制系统》历年真题同款全真模拟卷</div>
+    <div class="toolbar-actions">
+        <button class="btn btn-outline" onclick="toggleAnswers()" id="toggleBtn">隐藏答案及评分标准（自测模式）</button>
+        <button class="btn" onclick="window.print()">打印 / 导出 PDF</button>
+    </div>
+</div>
+
+<div class="paper-container">
+    <!-- 试卷抬头 -->
+    <div class="exam-header">
+        <div class="exam-top-meta">
+            <span>研究生考试模拟试题答案及评分标准</span>
+            <span>共 4 道大题（满分 70 分）</span>
+        </div>
+        <div class="exam-school-line">
+            沈阳工业大学 2026/2027 学年第 1 学期第 1 周至第 8 周
+        </div>
+        <div class="exam-info-grid">
+            <span>课程名称：计算机控制系统</span>
+            <span>任课教师：张俊</span>
+            <span>课程编号：24302241202</span>
+            <span>考试形式：闭卷</span>
+        </div>
+    </div>
+
+    <!-- ==================== 第一题 ==================== -->
+    <div class="question-block">
+        <div class="question-title">
+            一、（15分）离散控制系统如下图所示，其中采样周期 $T=0.5\text{s}$，零阶保持器 $W_{h0}(s)=\dfrac{1-e^{-sT}}{s}$，被控对象 $W(s)=\dfrac{2}{s+2}$。（计算结果保留 4 位小数）
+        </div>
+
+        <!-- 离散控制系统标准 SVG 框图 -->
+        <div class="diagram-box">
+            <svg viewBox="0 0 760 190" width="680" height="170" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 10 5 L 0 9 z" fill="#000"/>
+                    </marker>
+                </defs>
+                <!-- W_d(z) 顶部标注范围 -->
+                <line x1="340" y1="15" x2="340" y2="65" stroke="#000" stroke-width="1"/>
+                <line x1="630" y1="15" x2="630" y2="65" stroke="#000" stroke-width="1"/>
+                <line x1="340" y1="28" x2="455" y2="28" stroke="#000" stroke-width="1" marker-start="url(#arrow)"/>
+                <line x1="515" y1="28" x2="630" y2="28" stroke="#000" stroke-width="1" marker-end="url(#arrow)"/>
+                <text x="485" y="34" font-family="Times New Roman, serif" font-style="italic" font-size="18" text-anchor="middle">W<tspan baseline-shift="sub" font-size="13">d</tspan><tspan font-style="normal">(z)</tspan></text>
+
+                <!-- 输入 r(k) 到比较点 -->
+                <line x1="20" y1="85" x2="78" y2="85" stroke="#000" stroke-width="1.3" marker-end="url(#arrow)"/>
+                <text x="48" y="75" font-family="Times New Roman, serif" font-style="italic" font-size="18" text-anchor="middle">r(k)</text>
+
+                <!-- 比较点 -->
+                <circle cx="92" cy="85" r="13" fill="none" stroke="#000" stroke-width="1.3"/>
+                <line x1="83" y1="76" x2="101" y2="94" stroke="#000" stroke-width="1"/>
+                <line x1="83" y1="94" x2="101" y2="76" stroke="#000" stroke-width="1"/>
+                <text x="108" y="112" font-family="Times New Roman, serif" font-size="16">−</text>
+
+                <!-- e(k) 到 D(z) -->
+                <line x1="105" y1="85" x2="165" y2="85" stroke="#000" stroke-width="1.3" marker-end="url(#arrow)"/>
+                <text x="135" y="75" font-family="Times New Roman, serif" font-style="italic" font-size="18" text-anchor="middle">e(k)</text>
+
+                <!-- D(z) 方框 -->
+                <rect x="166" y="60" width="76" height="50" fill="none" stroke="#000" stroke-width="1.3"/>
+                <text x="204" y="91" font-family="Times New Roman, serif" font-style="italic" font-size="18" text-anchor="middle">D(z)</text>
+
+                <!-- u(k) 及采样开关 T -->
+                <line x1="242" y1="85" x2="292" y2="85" stroke="#000" stroke-width="1.3"/>
+                <text x="268" y="75" font-family="Times New Roman, serif" font-style="italic" font-size="18" text-anchor="middle">u(k)</text>
+                <line x1="292" y1="85" x2="314" y2="63" stroke="#000" stroke-width="1.5"/>
+                <text x="304" y="112" font-family="Times New Roman, serif" font-style="italic" font-size="16" text-anchor="middle">T</text>
+                <line x1="316" y1="85" x2="365" y2="85" stroke="#000" stroke-width="1.3" marker-end="url(#arrow)"/>
+
+                <!-- W_h0(s) 方框 -->
+                <rect x="366" y="60" width="84" height="50" fill="none" stroke="#000" stroke-width="1.3"/>
+                <text x="408" y="91" font-family="Times New Roman, serif" font-style="italic" font-size="18" text-anchor="middle">W<tspan baseline-shift="sub" font-size="12">h0</tspan><tspan font-style="normal">(s)</tspan></text>
+
+                <!-- u(t) 到 W(s) -->
+                <line x1="450" y1="85" x2="515" y2="85" stroke="#000" stroke-width="1.3" marker-end="url(#arrow)"/>
+                <text x="482" y="75" font-family="Times New Roman, serif" font-style="italic" font-size="18" text-anchor="middle">u(t)</text>
+
+                <!-- W(s) 方框 -->
+                <rect x="516" y="60" width="80" height="50" fill="none" stroke="#000" stroke-width="1.3"/>
+                <text x="556" y="91" font-family="Times New Roman, serif" font-style="italic" font-size="18" text-anchor="middle">W(s)</text>
+
+                <!-- 输出 y(t) -->
+                <line x1="596" y1="85" x2="700" y2="85" stroke="#000" stroke-width="1.3" marker-end="url(#arrow)"/>
+                <text x="665" y="75" font-family="Times New Roman, serif" font-style="italic" font-size="18" text-anchor="middle">y(t)</text>
+
+                <!-- 反馈回路及采样开关 T -->
+                <line x1="650" y1="85" x2="650" y2="115" stroke="#000" stroke-width="1.3"/>
+                <line x1="650" y1="138" x2="668" y2="116" stroke="#000" stroke-width="1.5"/>
+                <text x="680" y="132" font-family="Times New Roman, serif" font-style="italic" font-size="16">T</text>
+                <line x1="650" y1="138" x2="650" y2="165" stroke="#000" stroke-width="1.3"/>
+                <line x1="650" y1="165" x2="92" y2="165" stroke="#000" stroke-width="1.3"/>
+                <line x1="92" y1="165" x2="92" y2="99" stroke="#000" stroke-width="1.3" marker-end="url(#arrow)"/>
+                <text x="115" y="135" font-family="Times New Roman, serif" font-style="italic" font-size="16">y(k)</text>
+            </svg>
+        </div>
+
+        <div class="sub-questions">
+            <p>试：</p>
+            <p>（1）当 $D(z)=1$ 时，求系统的开环脉冲传递函数 $W_d(z)$ 及闭环脉冲传递函数 $W_B(z)$；（5分）</p>
+            <p>（2）当 $D(z)=1$ 且输入为单位阶跃信号时，求系统输出 $Y(z)$、前三个采样周期时刻的值 $y(0)$、$y(1)$、$y(2)$、$y(3)$ 及通项表达式 $y(k)$；（6分）</p>
+            <p>（3）若数字控制器取比例控制 $D(z)=K_p$，试确定使闭环系统稳定的 $K_p$ 取值范围，并求出单位阶跃输入下的稳态误差 $e(\infty)$（用 $K_p$ 表示，并计算 $K_p=1$ 时的稳态误差值）。（4分）</p>
+        </div>
+
+        <div class="solution-box">
+            <div class="solution-header">解：</div>
+            <p><strong>（1）求开环与闭环脉冲传递函数：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    系统广义被控对象开环脉冲传递函数为（已知 $T=0.5\text{s}$，$e^{-2T}=e^{-1}\approx 0.3679$）：
+                    $$W_d(z) = \mathcal{Z}[W_{h0}(s)W(s)] = \mathcal{Z}\left(\frac{1-e^{-sT}}{s}\cdot\frac{2}{s+2}\right) = (1-z^{-1})\mathcal{Z}\left(\frac{2}{s(s+2)}\right)$$
+                    $$= (1-z^{-1})\left[\frac{1}{1-z^{-1}} - \frac{1}{1-e^{-2T}z^{-1}}\right] = \frac{1-e^{-1}}{z-e^{-1}} = \frac{1-0.3679}{z-0.3679} = \frac{0.6321}{z-0.3679}$$
+                </div>
+                <span class="score-badge">3分</span>
+            </div>
+            <div class="step-row">
+                <div class="step-content">
+                    当 $D(z)=1$ 时，系统闭环脉冲传递函数为：
+                    $$W_B(z) = \frac{D(z)W_d(z)}{1+D(z)W_d(z)} = \frac{\dfrac{0.6321}{z-0.3679}}{1+\dfrac{0.6321}{z-0.3679}} = \frac{0.6321}{z+0.2642}$$
+                </div>
+                <span class="score-badge">2分</span>
+            </div>
+
+            <p><strong>（2）求单位阶跃响应 $Y(z)$、采样时刻值及通项 $y(k)$：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    当输入为单位阶跃信号 $R(z)=\dfrac{z}{z-1}$ 时，运用长除法求前几拍输出：
+                    $$Y(z) = W_B(z)R(z) = \frac{0.6321}{z+0.2642}\cdot\frac{z}{z-1} = \frac{0.6321z}{z^2 - 0.7358z - 0.2642}$$
+                    $$= 0z^0 + 0.6321z^{-1} + 0.4651z^{-2} + 0.5092z^{-3} + \cdots$$
+                    故：$y(0)=0$，$y(1)=0.6321$，$y(2)=0.4651$，$y(3)=0.5092$。
+                </div>
+                <span class="score-badge">3分</span>
+            </div>
+            <div class="step-row">
+                <div class="step-content">
+                    利用部分分式展开法求通项 $y(k)$：
+                    $$\frac{Y(z)}{z} = \frac{0.6321}{(z-1)(z+0.2642)} = \frac{0.6321}{1.2642}\left[\frac{1}{z-1} - \frac{1}{z+0.2642}\right] = 0.5000\left[\frac{1}{z-1} - \frac{1}{z+0.2642}\right]$$
+                    $$Y(z) = 0.5000\left[\frac{z}{z-1} - \frac{z}{z+0.2642}\right] \implies y(k) = 0.5000\left[1 - (-0.2642)^k\right]\quad (k=0,1,2,\cdots)$$
+                </div>
+                <span class="score-badge">3分</span>
+            </div>
+
+            <p><strong>（3）分析 $D(z)=K_p$ 时的稳定性与稳态误差：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    当 $D(z)=K_p$ 时，闭环特征方程为 $z - 0.3679 + 0.6321K_p = 0$，特征根为 $z = 0.3679 - 0.6321K_p$。<br>
+                    由闭环系统稳定条件 $|z| = |0.3679 - 0.6321K_p| < 1$，解得：$-1 < K_p < 2.1641$。
+                </div>
+                <span class="score-badge">2分</span>
+            </div>
+            <div class="step-row">
+                <div class="step-content">
+                    当系统稳定时，由终值定理得单位阶跃输入下的稳态误差：
+                    $$e(\infty) = \lim_{z\to 1}(z-1)E(z) = \lim_{z\to 1}(z-1)\cdot\frac{z}{z-1}\cdot\frac{z-0.3679}{z-0.3679+0.6321K_p} = \frac{0.6321}{0.6321+0.6321K_p} = \frac{1}{1+K_p}$$
+                    可见当 $K_p$ 增大时稳态误差减小；当 $K_p=1$ 时，$e(\infty) = \dfrac{1}{1+1} = 0.5000$（或由 $1-y(\infty)=1-0.5000=0.5000$ 得出）。
+                </div>
+                <span class="score-badge">2分</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 第二题 ==================== -->
+    <div class="question-block">
+        <div class="question-title">
+            二、（15分）数字 PID 控制算法推导与计算。
+        </div>
+        <div class="sub-questions">
+            <p>已知连续系统的校正装置为模拟 PID 控制器：$D(s) = \dfrac{U(s)}{E(s)} = K_p\left(1 + \dfrac{1}{T_i s} + T_d s\right)$，采样周期为 $T$。</p>
+            <p>（1）写出模拟 PID 控制器的时域表达式 $u(t)$，并据此推导出<strong>位置式</strong>数字 PID 控制算法 $u(k)$ 及其脉冲传递函数 $D(z)=\dfrac{U(z)}{E(z)}$；（5分）</p>
+            <p>（2）基于位置式算法推导出<strong>增量式</strong>数字 PID 控制算法 $\Delta u(k)$；（3分）</p>
+            <p>（3）当给定参数为 $D(s) = 2\left(1 + \dfrac{1}{0.5s} + 0.25s\right)$，采样周期 $T=0.5\text{s}$，若系统初始时刻 $k=0$，控制器初始输出 $u(0)=0$，采样偏差依次为 $e(0)=1$、$e(1)=0.5$、$e(2)=0.2$（当 $k<0$ 时 $e(k)=0$），试分别计算控制器输出 $u(1)$ 和 $u(2)$；（4分）</p>
+            <p>（4）与位置式数字 PID 控制器相比，简要说明增量式数字 PID 控制算法的优势。（3分）</p>
+        </div>
+
+        <div class="solution-box">
+            <div class="solution-header">解：</div>
+            <p><strong>（1）模拟 PID 时域形式与位置式数字 PID 算法：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    模拟 PID 控制算法的时域表达式为：
+                    $$u(t) = K_p\left[e(t) + \frac{1}{T_i}\int_0^t e(t)\,\mathrm{d}t + T_d\frac{\mathrm{d}e(t)}{\mathrm{d}t}\right]$$
+                </div>
+                <span class="score-badge">1分</span>
+            </div>
+            <div class="step-row">
+                <div class="step-content">
+                    以矩形向后差分近似积分、一阶向后差分近似微分，得到位置式数字 PID 控制算法：
+                    $$u(k) = K_p\left\{e(k) + \frac{T}{T_i}\sum_{j=1}^{k}e(j) + \frac{T_d}{T}[e(k)-e(k-1)]\right\} = K_p e(k) + K_i\sum_{j=1}^{k}e(j) + K_d[e(k)-e(k-1)]$$
+                    其中 $K_i = K_p\dfrac{T}{T_i}$，$K_d = K_p\dfrac{T_d}{T}$。
+                </div>
+                <span class="score-badge">2分</span>
+            </div>
+            <div class="step-row">
+                <div class="step-content">
+                    对上式两边取 $Z$ 变换，可得位置式数字 PID 的脉冲传递函数：
+                    $$D(z) = \frac{U(z)}{E(z)} = K_p\left[1 + \frac{T}{T_i(1-z^{-1})} + \frac{T_d}{T}(1-z^{-1})\right] = K_p + K_i\frac{1}{1-z^{-1}} + K_d(1-z^{-1})$$
+                </div>
+                <span class="score-badge">2分</span>
+            </div>
+
+            <p><strong>（2）推导增量式数字 PID 控制算法：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    由 $k-1$ 时刻的输出表达式 $u(k-1) = K_p e(k-1) + K_i\sum_{j=1}^{k-1}e(j) + K_d[e(k-1)-e(k-2)]$，两式相减得控制增量：
+                    $$\Delta u(k) = u(k) - u(k-1) = K_p[e(k)-e(k-1)] + K_i e(k) + K_d[e(k)-2e(k-1)+e(k-2)]$$
+                    $$= (K_p + K_i + K_d)e(k) - (K_p + 2K_d)e(k-1) + K_d e(k-2)$$
+                </div>
+                <span class="score-badge">3分</span>
+            </div>
+
+            <p><strong>（3）代入具体参数计算 $u(1)$ 与 $u(2)$：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    由 $D(s) = 2\left(1 + \dfrac{1}{0.5s} + 0.25s\right)$ 及 $T=0.5\text{s}$，可知：$K_p = 2$，$T_i = 0.5\text{s}$，$T_d = 0.25\text{s}$。<br>
+                    从而：$K_i = K_p\dfrac{T}{T_i} = 2\times\dfrac{0.5}{0.5} = 2$，$K_d = K_p\dfrac{T_d}{T} = 2\times\dfrac{0.25}{0.5} = 1$。<br>
+                    代入增量式递推公式：
+                    $$u(k) = u(k-1) + (2+2+1)e(k) - (2+2\times 1)e(k-1) + 1\cdot e(k-2) = u(k-1) + 5e(k) - 4e(k-1) + e(k-2)$$
+                </div>
+                <span class="score-badge">2分</span>
+            </div>
+            <div class="step-row">
+                <div class="step-content">
+                    代入 $u(0)=0$，$e(-1)=0$，$e(0)=1$，$e(1)=0.5$，$e(2)=0.2$：
+                    $$u(1) = u(0) + 5e(1) - 4e(0) + e(-1) = 0 + 5\times 0.5 - 4\times 1 + 0 = -1.5$$
+                    $$u(2) = u(1) + 5e(2) - 4e(1) + e(0) = -1.5 + 5\times 0.2 - 4\times 0.5 + 1 = -1.5$$
+                </div>
+                <span class="score-badge">2分</span>
+            </div>
+
+            <p><strong>（4）增量式数字 PID 控制算法的优势：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    1）计算机只输出控制增量 $\Delta u(k)$（即执行机构位置的变化部分），因此计算机发生故障或误动作时影响较小，不会严重冲击生产过程；<br>
+                    2）在 $k$ 时刻计算输出只需用到当前偏差 $e(k)$ 及前两拍偏差 $e(k-1)$、$e(k-2)$，无需累加历史全部偏差，既避免了积分饱和，又节约了内存与计算时间；<br>
+                    3）在进行手动—自动无扰切换时，控制量冲击小，能够实现平滑过渡。
+                </div>
+                <span class="score-badge">3分</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 第三题 ==================== -->
+    <div class="question-block">
+        <div class="question-title">
+            三、（20分）离散控制系统结构如图一所示，其中广义被控对象的脉冲传递函数为
+            $$W_d(z) = \frac{0.250z^{-1}(1+0.600z^{-1})}{(1-z^{-1})(1-0.500z^{-1})}$$
+            采样周期 $T=1\text{s}$。（计算结果保留 3 位小数）
+        </div>
+        <div class="sub-questions">
+            <p>（1）试确定该系统在单位阶跃输入时的<strong>最小拍有纹波</strong>数字控制器 $D(z)$；（5分）</p>
+            <p>（2）试确定该系统在单位阶跃输入时的<strong>最小拍无纹波</strong>数字控制器 $D(z)$；（8分）</p>
+            <p>（3）针对（2）所设计的最小拍无纹波控制器，计算控制量序列 $u(k)$ 以检验其是否仍有纹波存在，并分别给出有纹波和无纹波两种情况下的调节时间 $t_s$。（7分）</p>
+        </div>
+
+        <div class="solution-box">
+            <div class="solution-header">解：</div>
+            <p><strong>（1）设计最小拍有纹波数字控制器 $D(z)$：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    广义对象纯滞后拍数 $d=1$，无单位圆上及圆外零极点（除 $z=1$ 极点外），对单位阶跃输入 $R(z)=\dfrac{1}{1-z^{-1}}$（$m=1$），最小拍有纹波闭环脉冲传递函数为：
+                    $$W_B(z) = z^{-1}, \qquad 1 - W_B(z) = 1 - z^{-1}$$
+                </div>
+                <span class="score-badge">2分</span>
+            </div>
+            <div class="step-row">
+                <div class="step-content">
+                    由此求得最小拍有纹波数字控制器为：
+                    $$D(z) = \frac{1}{W_d(z)}\cdot\frac{W_B(z)}{1-W_B(z)} = \frac{(1-z^{-1})(1-0.500z^{-1})}{0.250z^{-1}(1+0.600z^{-1})}\cdot\frac{z^{-1}}{1-z^{-1}} = \frac{4.000(1-0.500z^{-1})}{1+0.600z^{-1}}$$
+                    该 $D(z)$ 在物理上可以实现。
+                </div>
+                <span class="score-badge">3分</span>
+            </div>
+
+            <p><strong>（2）设计最小拍无纹波数字控制器 $D(z)$：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    为消除采样点间的纹波，$W_B(z)$ 必须包含 $W_d(z)$ 的全部零点因子 $(1+0.600z^{-1})$，故设闭环脉冲传递函数为：
+                    $$W_B(z) = f_1 z^{-1}(1 + 0.600z^{-1})$$
+                    由无稳态误差条件 $W_B(z)\big|_{z=1} = 1$，得：
+                    $$f_1(1 + 0.600) = 1 \implies f_1 = 0.625$$
+                    故：
+                    $$W_B(z) = 0.625z^{-1}(1 + 0.600z^{-1}) = 0.625z^{-1} + 0.375z^{-2}$$
+                </div>
+                <span class="score-badge">4分</span>
+            </div>
+            <div class="step-row">
+                <div class="step-content">
+                    进而求得误差传递函数因子：
+                    $$1 - W_B(z) = 1 - 0.625z^{-1} - 0.375z^{-2} = (1 - z^{-1})(1 + 0.375z^{-1})$$
+                    最小拍无纹波数字控制器 $D(z)$ 为：
+                    $$D(z) = \frac{1}{W_d(z)}\cdot\frac{W_B(z)}{1-W_B(z)} = \frac{(1-z^{-1})(1-0.500z^{-1})}{0.250z^{-1}(1+0.600z^{-1})}\cdot\frac{0.625z^{-1}(1+0.600z^{-1})}{(1-z^{-1})(1+0.375z^{-1})} = \frac{2.500(1-0.500z^{-1})}{1+0.375z^{-1}}$$
+                    该 $D(z)$ 在物理上可以实现。
+                </div>
+                <span class="score-badge">4分</span>
+            </div>
+
+            <p><strong>（3）检验控制量 $u(k)$ 波动及计算两种情况下的调节时间 $t_s$：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    无纹波设计下，控制器输出 $U(z)$ 为：
+                    $$U(z) = \frac{W_B(z)}{W_d(z)}R(z) = \frac{0.625z^{-1}(1+0.600z^{-1})(1-z^{-1})(1-0.500z^{-1})}{0.250z^{-1}(1+0.600z^{-1})}\cdot\frac{1}{1-z^{-1}}$$
+                    $$= 2.500(1 - 0.500z^{-1}) = 2.500 - 1.250z^{-1} + 0z^{-2} + 0z^{-3} + \cdots$$
+                    由于 $k\ge 2$ 后控制序列恒为常数（$u(2)=u(3)=\cdots=0$），控制器输出收敛无衰减振荡，故系统输出响应不会有纹波。
+                </div>
+                <span class="score-badge">4分</span>
+            </div>
+            <div class="step-row">
+                <div class="step-content">
+                    <strong>有纹波时：</strong> $Y(z) = W_B(z)R(z) = z^{-1}\cdot\dfrac{1}{1-z^{-1}} = z^{-1} + z^{-2} + z^{-3} + \cdots$，$y(1)=y(2)=\cdots=1$，调节时间为 $t_s = 1T = 1\text{s}$。<br>
+                    <strong>无纹波时：</strong> $Y(z) = 0.625z^{-1}(1+0.600z^{-1})\cdot\dfrac{1}{1-z^{-1}} = 0.625z^{-1} + 1.000z^{-2} + 1.000z^{-3} + \cdots$，$y(1)=0.625$，$y(2)=y(3)=\cdots=1.000$，调节时间为 $t_s = 2T = 2\text{s}$。
+                </div>
+                <span class="score-badge">3分</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 第四题 ==================== -->
+    <div class="question-block">
+        <div class="question-title">
+            四、（20分）某离散控制系统状态空间模型为：
+            $$x(k+1) = \begin{bmatrix} 0.800 & 0.200 \\ -0.100 & 0.600 \end{bmatrix}x(k) + \begin{bmatrix} 0 \\ 1 \end{bmatrix}u(k)$$
+            $$y(k) = \begin{bmatrix} 1 & 0 \end{bmatrix}x(k)$$
+            （计算结果保留 3 位小数）
+        </div>
+        <div class="sub-questions">
+            <p>（1）用 Jury（朱利）稳定性判据判断开环系统的稳定性；（4分）</p>
+            <p>（2）若要求将状态反馈控制器的极点配置在 $z_{1,2} = 0.4 \pm j0.3$ 处，试按全部状态可测时，计算状态反馈增益矩阵 $L = \begin{bmatrix} L_1 & L_2 \end{bmatrix}$（分别利用<strong>对应项系数相等法</strong>和<strong>通用求解算法</strong>求解）；（8分）</p>
+            <p>（3）按极点配置设计预报观测器，将观测器的极点配置在 $z_{1,2} = 0.3$ 处，计算观测器增益矩阵 $K = \begin{bmatrix} K_1 & K_2 \end{bmatrix}^T$（分别利用<strong>对应项系数相等法</strong>和<strong>通用求解算法</strong>求解）；若系统初始状态 $x(0)=\begin{bmatrix} 1 & 0 \end{bmatrix}^T$，观测器初始状态 $\hat{x}(0)=\begin{bmatrix} 0 & 0 \end{bmatrix}^T$，求状态重构误差 $\tilde{x}(1)$。（8分）</p>
+        </div>
+
+        <div class="solution-box">
+            <div class="solution-header">解：</div>
+            <p><strong>（1）用 Jury 稳定性判据判断开环系统稳定性：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    系统矩阵 $F = \begin{bmatrix} 0.800 & 0.200 \\ -0.100 & 0.600 \end{bmatrix}$，$G = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$，$C = \begin{bmatrix} 1 & 0 \end{bmatrix}$。开环特征方程为：
+                    $$F(z) = |zI - F| = \begin{vmatrix} z-0.800 & -0.200 \\ 0.100 & z-0.600 \end{vmatrix} = z^2 - 1.400z + 0.500 = 0$$
+                    这里阶数 $n=2$，$a_2 = 1$，$a_1 = -1.400$，$a_0 = 0.500$。朱利阵列为：
+                    <table class="jury-table">
+                        <tr><th>$z^0$</th><th>$z^1$</th><th>$z^2$</th></tr>
+                        <tr><td>$0.500$</td><td>$-1.400$</td><td>$1$</td></tr>
+                    </table>
+                    检验朱利判据条件：<br>
+                    ① $F(1) = 1 - 1.400 + 0.500 = 0.100 > 0$；<br>
+                    ② $(-1)^n F(-1) = (-1)^2(1 + 1.400 + 0.500) = 2.900 > 0$；<br>
+                    ③ $|a_0| = 0.500 < 1 = a_2$。<br>
+                    故开环系统<strong>稳定</strong>。
+                </div>
+                <span class="score-badge">4分</span>
+            </div>
+
+            <p><strong>（2）状态反馈极点配置求解反馈增益矩阵 $L$：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    期望闭环极点为 $z_{1,2} = 0.4 \pm j0.3$，故期望特征多项式为：
+                    $$\alpha_c(z) = (z - 0.4 - j0.3)(z - 0.4 + j0.3) = (z-0.4)^2 + 0.3^2 = z^2 - 0.800z + 0.250$$
+                    <strong>方法一（对应项系数相等法）：</strong> 设 $L = \begin{bmatrix} L_1 & L_2 \end{bmatrix}$，则闭环特征多项式为：
+                    $$\alpha_c(z) = |zI - F + GL| = \begin{vmatrix} z-0.800 & -0.200 \\ 0.100+L_1 & z-0.600+L_2 \end{vmatrix}$$
+                    $$= (z-0.800)(z-0.600+L_2) + 0.200(0.100+L_1) = z^2 + (L_2 - 1.400)z + (0.500 + 0.200L_1 - 0.800L_2)$$
+                    令其与 $z^2 - 0.800z + 0.250$ 对应项系数相等：
+                    $$\begin{cases} L_2 - 1.400 = -0.800 \\ 0.500 + 0.200L_1 - 0.800L_2 = 0.250 \end{cases} \implies L = \begin{bmatrix} L_1 & L_2 \end{bmatrix} = \begin{bmatrix} 1.150 & 0.600 \end{bmatrix}$$
+                </div>
+                <span class="score-badge">4分</span>
+            </div>
+            <div class="step-row">
+                <div class="step-content">
+                    <strong>方法二（通用求解算法 / Ackermann 公式）：</strong>
+                    $$\begin{bmatrix} G & FG \end{bmatrix} = \begin{bmatrix} 0 & 0.200 \\ 1 & 0.600 \end{bmatrix}, \qquad \begin{bmatrix} G & FG \end{bmatrix}^{-1} = \begin{bmatrix} -3.000 & 1.000 \\ 5.000 & 0 \end{bmatrix}$$
+                    $$\alpha_c(F) = F^2 - 0.800F + 0.250I = \begin{bmatrix} 0.620 & 0.280 \\ -0.140 & 0.340 \end{bmatrix} - \begin{bmatrix} 0.640 & 0.160 \\ -0.080 & 0.480 \end{bmatrix} + \begin{bmatrix} 0.250 & 0 \\ 0 & 0.250 \end{bmatrix} = \begin{bmatrix} 0.230 & 0.120 \\ -0.060 & 0.110 \end{bmatrix}$$
+                    $$L = \begin{bmatrix} 0 & 1 \end{bmatrix}\begin{bmatrix} G & FG \end{bmatrix}^{-1}\alpha_c(F) = \begin{bmatrix} 5.000 & 0 \end{bmatrix}\begin{bmatrix} 0.230 & 0.120 \\ -0.060 & 0.110 \end{bmatrix} = \begin{bmatrix} 1.150 & 0.600 \end{bmatrix}$$
+                </div>
+                <span class="score-badge">4分</span>
+            </div>
+
+            <p><strong>（3）预报观测器极点配置求解 $K$ 及状态重构误差 $\tilde{x}(1)$：</strong></p>
+            <div class="step-row">
+                <div class="step-content">
+                    观测器期望极点配置在 $z_{1,2}=0.3$ 处，故观测器期望特征多项式为：
+                    $$\alpha_e(z) = (z - 0.3)^2 = z^2 - 0.600z + 0.090$$
+                    <strong>方法一（对应项系数相等法）：</strong> 设 $K = \begin{bmatrix} K_1 & K_2 \end{bmatrix}^T$，预报观测器状态重构误差特征多项式为：
+                    $$\alpha_e(z) = |zI - F + KC| = \begin{vmatrix} z-0.800+K_1 & -0.200 \\ 0.100+K_2 & z-0.600 \end{vmatrix}$$
+                    $$= (z-0.800+K_1)(z-0.600) + 0.200(0.100+K_2) = z^2 + (K_1 - 1.400)z + (0.500 - 0.600K_1 + 0.200K_2)$$
+                    与 $z^2 - 0.600z + 0.090$ 对应系数比较得：
+                    $$\begin{cases} K_1 - 1.400 = -0.600 \\ 0.500 - 0.600K_1 + 0.200K_2 = 0.090 \end{cases} \implies K = \begin{bmatrix} K_1 \\ K_2 \end{bmatrix} = \begin{bmatrix} 0.800 \\ 0.350 \end{bmatrix}$$
+                </div>
+                <span class="score-badge">3分</span>
+            </div>
+            <div class="step-row">
+                <div class="step-content">
+                    <strong>方法二（通用求解算法）：</strong>
+                    $$\begin{bmatrix} C \\ CF \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 0.800 & 0.200 \end{bmatrix}, \qquad \begin{bmatrix} C \\ CF \end{bmatrix}^{-1} = \begin{bmatrix} 1.000 & 0 \\ -4.000 & 5.000 \end{bmatrix}$$
+                    $$\alpha_e(F) = F^2 - 0.600F + 0.090I = \begin{bmatrix} 0.620 & 0.280 \\ -0.140 & 0.340 \end{bmatrix} - \begin{bmatrix} 0.480 & 0.120 \\ -0.060 & 0.360 \end{bmatrix} + \begin{bmatrix} 0.090 & 0 \\ 0 & 0.090 \end{bmatrix} = \begin{bmatrix} 0.230 & 0.160 \\ -0.080 & 0.070 \end{bmatrix}$$
+                    $$K = \alpha_e(F)\begin{bmatrix} C \\ CF \end{bmatrix}^{-1}\begin{bmatrix} 0 \\ 1 \end{bmatrix} = \begin{bmatrix} 0.230 & 0.160 \\ -0.080 & 0.070 \end{bmatrix}\begin{bmatrix} 0 \\ 5.000 \end{bmatrix} = \begin{bmatrix} 0.800 \\ 0.350 \end{bmatrix}$$
+                </div>
+                <span class="score-badge">3分</span>
+            </div>
+            <div class="step-row">
+                <div class="step-content">
+                    <strong>求状态重构误差 $\tilde{x}(1)$：</strong> 状态重构误差方程为 $\tilde{x}(k+1) = (F - KC)\tilde{x}(k)$，因此：
+                    $$\tilde{x}(1) = (F - KC)[x(0) - \hat{x}(0)] = \left(\begin{bmatrix} 0.800 & 0.200 \\ -0.100 & 0.600 \end{bmatrix} - \begin{bmatrix} 0.800 & 0 \\ 0.350 & 0 \end{bmatrix}\right)\begin{bmatrix} 1 \\ 0 \end{bmatrix} = \begin{bmatrix} 0 & 0.200 \\ -0.450 & 0.600 \end{bmatrix}\begin{bmatrix} 1 \\ 0 \end{bmatrix} = \begin{bmatrix} 0 \\ -0.450 \end{bmatrix}$$
+                </div>
+                <span class="score-badge">2分</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let answersVisible = true;
+    function toggleAnswers() {
+        answersVisible = !answersVisible;
+        const boxes = document.querySelectorAll('.solution-box');
+        const btn = document.getElementById('toggleBtn');
+        boxes.forEach(box => {
+            if (answersVisible) {
+                box.classList.remove('hidden-answer');
+            } else {
+                box.classList.add('hidden-answer');
+            }
+        });
+        btn.textContent = answersVisible ? '隐藏答案及评分标准（自测模式）' : '显示答案及评分标准';
+    }
+</script>
+
+</body>
+</html>

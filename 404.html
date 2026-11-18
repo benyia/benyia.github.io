@@ -6,7 +6,7 @@
 <script>
 (function(){
   var path = location.pathname + location.search + location.hash;
-  var known = /^\/(class|courses|papers|notices|diary|advisor|apps|tags|roster|life|media|ledger|about)(\/|$)/;
+  var known = /^\/(class|courses|collections|papers|notices|diary|advisor|apps|tags|roster|life|media|ledger|about)(\/|$)/;
   if(known.test(location.pathname)) location.replace("/?spa=" + encodeURIComponent(path));
 })();
 </script>

@@ -73,11 +73,11 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 
 <!-- 样式按模块拆分（顺序即层叠顺序，不要调换）：基础 → 组件 → 影音 → 独立页 → 首页
      改完任一文件请同步改这里的 ?v= 版本号，避免访客用到旧缓存 -->
-<link rel="stylesheet" href="css/site/01-base.css?v=20261117i">
-<link rel="stylesheet" href="css/site/02-components.css?v=20261117a">
-<link rel="stylesheet" href="css/site/03-media.css?v=20261117a">
-<link rel="stylesheet" href="css/site/04-pages.css?v=20261117a">
-<link rel="stylesheet" href="css/site/05-home.css?v=20261117a">
+<link rel="stylesheet" href="css/site/01-base.css?v=20261118g">
+<link rel="stylesheet" href="css/site/02-components.css?v=20261118g">
+<link rel="stylesheet" href="css/site/03-media.css?v=20261118g">
+<link rel="stylesheet" href="css/site/04-pages.css?v=20261118g">
+<link rel="stylesheet" href="css/site/05-home.css?v=20261118g">
 </head>
 <body>
 <a class="skip-link" href="#mainContent">跳到主要内容</a>
@@ -122,16 +122,14 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
     <div class="nav-links" id="navLinks">
       <button class="active" data-t="home">首页</button>
       <button data-t="courses">课程</button>
+      <button data-t="collections">合辑</button>
       <button data-t="papers">论文</button>
       <button data-t="notices">通知</button>
       <button data-t="class">班级</button>
       <button data-t="advisor">导师指导</button>
-      <button data-t="roster">名单</button>
       <button data-t="life">生活服务</button>
-      <button data-t="ledger">记账</button>
-      <button data-t="diary">日记</button>
-      <button data-t="tags">标签</button>
-      <button data-t="about">关于</button>
+      <button data-t="records">记录</button>
+      <button data-t="tags">标签与关于</button>
     </div>
     <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="切换暗色/亮色">🌙</button>
     <div class="nav-search">
@@ -225,6 +223,26 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
       <div class="app-pn" id="cdPn" style="display:none"></div>
     </div>
 
+    <div class="section" id="sec-collections">
+      <div class="collection-grid" id="collectionList"></div>
+      <div class="pager" id="collectionPager"></div>
+    </div>
+
+    <div class="section" id="sec-collectionDetail">
+      <div class="section-header"><button class="back-btn" onclick="backToCollections()">← 返回</button></div>
+      <div class="hero-card">
+        <div class="hero-banner" id="colDetailIcon">📦</div>
+        <div class="hero-body">
+          <h2 id="colDetailTitle">合辑名称</h2>
+          <div class="chip-row" id="colDetailChips"></div>
+          <div class="article-desc" id="colDetailDesc" style="margin-top:10px"></div>
+        </div>
+      </div>
+      <div class="reader-card"><div class="md-body" id="colDetailIntro"></div></div>
+      <div class="collection-files" id="colDetailFiles"></div>
+      <div class="app-pn" id="colPn" style="display:none"></div>
+    </div>
+
     <div class="section" id="sec-papers">
       <div class="filter-bar" id="paperFilters"></div>
       <div id="papersList"></div>
@@ -277,9 +295,18 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
     </div>
 
     <div class="section" id="sec-class">
-      <div class="filter-bar" id="classFilters"></div>
-      <div id="classList"></div>
-      <div class="pager" id="classPager"></div>
+      <div class="class-switch" role="tablist" aria-label="班级内容">
+        <button type="button" class="active" data-class-tab="items" onclick="switchClassTab('items')">班级事务</button>
+        <button type="button" data-class-tab="roster" onclick="switchClassTab('roster')">班级名单</button>
+      </div>
+      <div id="classItemsPane">
+        <div class="filter-bar" id="classFilters"></div>
+        <div id="classList"></div>
+        <div class="pager" id="classPager"></div>
+      </div>
+      <div id="classRosterPane" style="display:none">
+        <div id="rosterList"></div>
+      </div>
     </div>
 
     <div class="section" id="sec-classDetail">
@@ -292,10 +319,6 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
       <div id="clDetailFiles"></div>
       <!-- 上一篇 / 下一篇 -->
       <div class="app-pn" id="clPn" style="display:none"></div>
-    </div>
-
-    <div class="section" id="sec-roster">
-      <div id="rosterList"></div>
     </div>
 
     <div class="section" id="sec-life">
@@ -344,6 +367,10 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
     </div>
 
     <div class="section" id="sec-ledger">
+      <div class="class-switch group-switch">
+        <button type="button" class="active" data-record-tab="ledger" onclick="switchRecordTab('ledger')">记账</button>
+        <button type="button" data-record-tab="diary" onclick="switchRecordTab('diary')">日记</button>
+      </div>
       <!-- 记一笔：只有站长（本机存过 Token）能看到 -->
       <div class="ledger-stats" id="ledgerStatsBox" hidden>
         <div class="stat-card income"><div class="num" id="statInc">¥0</div><div class="label">本月收入</div></div>
@@ -362,6 +389,10 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
     </div>
 
     <div class="section" id="sec-diary">
+      <div class="class-switch group-switch">
+        <button type="button" data-record-tab="ledger" onclick="switchRecordTab('ledger')">记账</button>
+        <button type="button" class="active" data-record-tab="diary" onclick="switchRecordTab('diary')">日记</button>
+      </div>
       <!-- 日记列表：点一篇 → 进入独立的日记详情页（不在列表里原地展开） -->
       <div id="diaryList"></div>
     </div>
@@ -383,6 +414,10 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 
     <!-- 标签聚合：点任意标签，看全部相关内容 -->
     <div class="section" id="sec-tags">
+      <div class="class-switch group-switch">
+        <button type="button" class="active" data-info-tab="tags" onclick="switchInfoTab('tags')">标签</button>
+        <button type="button" data-info-tab="about" onclick="switchInfoTab('about')">关于</button>
+      </div>
       <div id="tagCloudBox"></div>
       <div id="tagPostsBox"></div>
     </div>
@@ -408,6 +443,10 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
     </div>
 
     <div class="section" id="sec-about">
+      <div class="class-switch group-switch">
+        <button type="button" data-info-tab="tags" onclick="switchInfoTab('tags')">标签</button>
+        <button type="button" class="active" data-info-tab="about" onclick="switchInfoTab('about')">关于</button>
+      </div>
       <div class="about-content" id="aboutContent">加载中...</div>
 
       <!-- 友链：后台添加的博客网站 -->
@@ -560,17 +599,34 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
   <div class="img-lightbox-hint">点击图片或空白处关闭</div>
 </div>
 
+<!-- 首页互动：本机评论 / 点赞 / 收藏 -->
+<div class="eng-dialog" id="engDialog" role="dialog" aria-modal="true" aria-labelledby="engDialogTitle" onclick="if(event.target===this)closeEngagementDialog()">
+  <div class="eng-dialog-box">
+    <div class="eng-dialog-head">
+      <h3 id="engDialogTitle">评论</h3>
+      <button type="button" class="eng-dialog-close" onclick="closeEngagementDialog()" aria-label="关闭">✕</button>
+    </div>
+    <div class="eng-dialog-note">评论保存在当前浏览器；要支持多人公开评论，需要接入 GitHub Discussions / Giscus 等后端。</div>
+    <div id="engCommentsList" class="eng-comments"></div>
+    <textarea id="engCommentInput" placeholder="写点评论……" maxlength="1000"></textarea>
+    <div class="eng-dialog-actions">
+      <button type="button" class="btn btn-ghost" onclick="closeEngagementDialog()">取消</button>
+      <button type="button" class="btn btn-primary" onclick="submitEngagementComment()">发布评论</button>
+    </div>
+  </div>
+</div>
+
 <div class="footer">© <span id="copyYear">2026</span> 思齐个人主页 · Powered by GitHub Pages</div>
 
 <!-- 脚本按模块拆分：普通 script 共享全局作用域，顺序即依赖顺序，不要调换 -->
-<script src="js/app/01-core.js?v=20261117d"></script>
-<script src="js/app/02-shell.js?v=20261117d"></script>
-<script src="js/app/03-content.js?v=20261117d"></script>
-<script src="js/app/04-markdown.js?v=20261117g"></script>
-<script src="js/app/05-pages.js?v=20261117d"></script>
-<script src="js/app/06-upload.js?v=20261117d"></script>
-<script src="js/app/07-views.js?v=20261117i"></script>
-<script src="js/app/08-music.js?v=20261117d"></script>
-<script src="js/app/09-welcome.js?v=20261117d"></script>
+<script src="js/app/01-core.js?v=20261118g"></script>
+<script src="js/app/02-shell.js?v=20261118g"></script>
+<script src="js/app/03-content.js?v=20261118g"></script>
+<script src="js/app/04-markdown.js?v=20261118g"></script>
+<script src="js/app/05-pages.js?v=20261118g"></script>
+<script src="js/app/06-upload.js?v=20261118g"></script>
+<script src="js/app/07-views.js?v=20261118g"></script>
+<script src="js/app/08-music.js?v=20261118g"></script>
+<script src="js/app/09-welcome.js?v=20261118g"></script>
 </body>
 </html>

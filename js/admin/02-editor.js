@@ -28,6 +28,7 @@ function parseTagsInput(v){
    ============================================================ */
 var UPLOAD_BOXES = [
   { box: "cUploadBox",   input: "cFileInput",   handler: "onCourseFiles",  label: "课程文件" },
+  { box: "collectionUploadBox", input: "collectionFileInput", handler: "onCollectionFiles", label: "合辑文件" },
   { box: "pUploadBox",   input: "pFileInput",   handler: "onPaperFiles",   label: "论文文件" },
   { box: "nfUploadBox",  input: "nfFileInput",  handler: "onNoticeFiles",  label: "通知附件" },
   { box: "clUploadBox",  input: "clFileInput",  handler: "onClassFiles",   label: "班级附件" },
@@ -205,9 +206,11 @@ function insertImageViaDialog(key, after){
 
 /* 百度网盘等外链：和截图一致的「粘贴网盘分享链接」弹窗 */
 function addExternalFileViaDialog(kind){
+  var targetFolder = kind === "course" ? courseCurrentFolder : "";
   openInputDialog({
     title: "添加网盘外链",
-    hint: "粘贴网盘分享链接（百度网盘/阿里云盘等）\n有提取码建议直接写在链接里，方便自己识别",
+    hint: "粘贴网盘分享链接（百度网盘/阿里云盘等）\n有提取码建议直接写在链接里，方便自己识别"
+      + (kind === "course" ? "\n会放进当前文件夹：" + (targetFolder || "课程根目录") : ""),
     placeholder: "https://pan.baidu.com/s/...",
     secondInput: true,
     placeholder2: "显示名称（留空就用链接末段）",
@@ -227,8 +230,9 @@ function addExternalFileViaDialog(kind){
           nm = String(nm).slice(0, 40) || u;
         }
         var extMatch = String(nm).match(/\.([a-zA-Z0-9]{1,5})$/);
-        drafts[kind].push({ name: nm, url: u, type: extMatch ? extMatch[1].toUpperCase() : "链接", size: 0, folder: "", external: true });
+        drafts[kind].push({ name: nm, url: u, type: extMatch ? extMatch[1].toUpperCase() : "链接", size: 0, folder: targetFolder || "", external: true });
       });
+      if(kind === "course" && targetFolder) courseFolderAdd(targetFolder);
       renderDraftFiles(kind);
       showToast("已添加 " + lines.length + " 个外链，别忘了点保存");
       return true;

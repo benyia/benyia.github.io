@@ -20,7 +20,7 @@ const FRESH_KEY = "benyia_data_fresh";
 const MAX_FILE_MB = 100;
 
 const DEFAULT_DATA = {
-  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",avatar:"思",favicon:"",name:"思齐",bio:"控制工程研究生",coverPan:true,coverPanSec:3},
+  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",avatar:"思",favicon:"",name:"思齐",bio:"控制工程研究生",coverPan:true,coverPanSec:3,adminTitle:"",adminTitleSync:true},
   categories:[
     {icon:"📚",name:"课程学习",section:"courses"},
     {icon:"📝",name:"论文",section:"papers"},
@@ -36,7 +36,7 @@ const DEFAULT_DATA = {
   ],
   friendLinks:[],
   friendApplies:[],
-  courses:[],papers:[],notices:[],classItems:[],lifeServices:[],apps:[],
+  courses:[],papers:[],notices:[],classItems:[],collections:[],lifeServices:[],apps:[],
   ledger:[],ledgerCategories:{expense:["吃饭","买东西","生活用品","交通","娱乐","学习","医疗","其他"],income:["工资","奖学金","补贴","红包","其他"]},media:[],roster:[],rosterConfig:{showSensitive:false},diary:[],advisor:[],logs:[]
 };
 
@@ -48,9 +48,12 @@ let dataSha = "";
 let saving = false;
 
 /* 编辑态：null 表示新增，数字表示正在编辑的下标 */
-const editing = {course:null, paper:null, class:null};
+const editing = {course:null, paper:null, class:null, collection:null};
 /* 表单里已上传的文件列表 */
-const drafts  = {course:[], paper:[], class:[], life:[], media:[], dmedia:[], nf:[], adv:[]};
+const drafts  = {course:[], paper:[], class:[], collection:[], life:[], media:[], dmedia:[], nf:[], adv:[]};
+/* 课程的文件夹草稿：存相对路径，例如「课件」「课件/第1章」 */
+let courseDraftFolders = [];
+let courseCurrentFolder = "";
 
 /* ============================================================
    小工具
@@ -286,7 +289,7 @@ function deleteModalImage(){
   showToast("已移除（记得保存）");
 }
 
-var ICON_FIELDS = ["cfgAvatar","cfgFavicon","cIcon","lsIcon","catIcon","qlIcon","rPhoto","cfgDefaultImage","cfgDefaultAvatar","frAvatar","wkBg","apIcon","apCover"];
+var ICON_FIELDS = ["cfgAvatar","cfgFavicon","cIcon","collIcon","lsIcon","catIcon","qlIcon","rPhoto","cfgDefaultImage","cfgDefaultAvatar","frAvatar","wkBg","apIcon","apCover"];
 function refreshIconPrev(id){
   var inp = $(id), box = $("prev_" + id);
   if(!inp || !box) return;

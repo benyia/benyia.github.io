@@ -98,9 +98,11 @@ body.bg-ready::after{background-image:url("../../assets/image1.jpg");opacity:1}
 .page-title p{color:var(--text2);font-size:.95rem}
 
 /* Main Layout：左=导航侧栏，中=正文，右=文章信息/目录/资料等一切非正文内容 */
-.main{max-width:1480px;margin:0 auto;padding:28px;display:grid;grid-template-columns:220px minmax(0,1fr) 280px;gap:22px}
+.main{max-width:1340px;margin:0 auto;padding:28px;display:grid;grid-template-columns:220px minmax(0,760px) 260px;gap:20px;justify-content:center}
 .left-col,.right-col{display:flex;flex-direction:column;gap:20px}
-.center-col{min-width:0}
+body.article-open .main{max-width:1600px;grid-template-columns:220px minmax(0,1020px) 280px}
+.center-col{min-width:0;width:100%;max-width:760px;justify-self:center}
+body.article-open .center-col{max-width:1020px}
 
 /* Card */
 .side-card{background:var(--card);border:var(--glass-border);border-radius:var(--radius);padding:20px;backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);box-shadow:var(--shadow),var(--glass-hi)}

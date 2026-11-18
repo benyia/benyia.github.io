@@ -77,12 +77,13 @@ function adminMatch(item, fields, q){
 }
 
 /* 每个面板自己的搜索词（模块级保存，重渲染时输入框的值不会丢） */
-var courseQuery = "", paperQuery = "", noticeQuery = "", classQuery = "";
+var courseQuery = "", collectionQuery = "", paperQuery = "", noticeQuery = "", classQuery = "";
 var rosterQuery = "", ledgerQuery = "", diaryQuery = "", advisorQuery = "";
 
 /* 各面板共用的重渲染入口：搜索框 oninput 直接调它 */
 var ADMIN_QUERY_RERENDER = {
   courses: function(){ renderCourses(); },
+  collections: function(){ renderCollections(); },
   papers:  function(){ renderPapers(); },
   notices: function(){ renderNotices(); },
   "class": function(){ renderClass(); },
@@ -95,6 +96,7 @@ var ADMIN_QUERY_RERENDER = {
 /* 搜索框的 oninput：存住搜索词 + 立刻重渲染 */
 function adminQueryInput(key, value){
   if(key === "courses") courseQuery = value;
+  else if(key === "collections") collectionQuery = value;
   else if(key === "papers") paperQuery = value;
   else if(key === "notices") noticeQuery = value;
   else if(key === "class") classQuery = value;
@@ -109,6 +111,7 @@ function adminQueryInput(key, value){
 /* 取当前搜索词（渲染函数里用） */
 function adminQueryOf(key){
   if(key === "courses") return courseQuery;
+  if(key === "collections") return collectionQuery;
   if(key === "papers") return paperQuery;
   if(key === "notices") return noticeQuery;
   if(key === "class") return classQuery;
@@ -122,6 +125,7 @@ function adminQueryOf(key){
 /* 搜索用的字段清单 */
 var ADMIN_SEARCH_FIELDS = {
   courses: ["title", "desc", "intro", "tags", "time", "date"],
+  collections: ["title", "desc", "intro", "tags", "author", "time", "date"],
   papers:  ["title", "desc", "abstract", "tags", "status", "year", "time", "date"],
   notices: ["title", "source", "content", "tags", "date", "time"],
   "class": ["title", "type", "content", "tags", "date", "time"],

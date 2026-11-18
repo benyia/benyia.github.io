@@ -52,6 +52,7 @@ function togglePwdView(){
     var r = await fetch("data.json?t=" + Date.now(), { cache: "no-store" });
     if(!r.ok) return;
     var d = await r.json();
+    document.title = adminTitleFromConfig(d && d.siteConfig);
     var h = d && d.siteConfig ? d.siteConfig.loginHint : null;
     var box = document.getElementById("loginHint");
     if(box && h !== null && h !== undefined) box.textContent = h;
@@ -60,6 +61,26 @@ function togglePwdView(){
 })();
 
 function isLogged(){ try{ return localStorage.getItem("benyia_logged")==="1" || sessionStorage.getItem("benyia_logged")==="1"; }catch(e){ return false; } }
+function adminTitleFromConfig(sc){
+  sc = sc || {};
+  var site = String(sc.title || "思齐个人主页").trim() || "思齐个人主页";
+  if(sc.adminTitleSync !== false) return "管理后台 - " + site;
+  return String(sc.adminTitle || "").trim() || ("管理后台 - " + site);
+}
+function applyAdminTabTitle(){
+  document.title = adminTitleFromConfig(blogData && blogData.siteConfig);
+}
+function refreshAdminTitlePreview(){
+  var site = ($("cfgTitle") && $("cfgTitle").value.trim()) || "思齐个人主页";
+  var sync = !$("cfgAdminTitleSync") || $("cfgAdminTitleSync").checked;
+  var custom = $("cfgAdminTitle") ? $("cfgAdminTitle").value.trim() : "";
+  document.title = sync ? ("管理后台 - " + site) : (custom || ("管理后台 - " + site));
+}
+function syncAdminTitleField(){
+  var sync = !$("cfgAdminTitleSync") || $("cfgAdminTitleSync").checked;
+  if($("cfgAdminTitle")) $("cfgAdminTitle").disabled = sync;
+  refreshAdminTitlePreview();
+}
 function login(){
   var p = $("pwdInput").value;
   if(p === getPwd()){
@@ -186,6 +207,8 @@ async function initPanel(){
   Object.keys(RICH_KEYS).forEach(function(k){ initRte(k); });
   /* 上传框支持拖拽 */
   initDropZones();
+  /* 课程资料库的空白状态 / 当前草稿 */
+  renderCourseFileManager();
   await syncNow(true);
 }
 
@@ -249,6 +272,7 @@ async function syncNow(silent){
   if(!dataSha && getStoredToken()){ try{ await fetchDataSha(); }catch(e){} }
 
   renderAll();
+  applyAdminTabTitle();
   setSyncState(via === "api" ? "已就绪（API 直读）" : (getStoredToken() ? "已就绪" : "未设置 Token"));
   if(!silent) showToast(via === "api" ? "已从 GitHub 直接读取最新数据（绕过 CDN 缓存）" : "已从 GitHub 重新拉取数据");
 }

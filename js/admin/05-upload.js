@@ -12,7 +12,7 @@ function fileToBase64(file){
 
 /* ============================================================
    图片上传前优化：缩放、居中裁切、转成更适合网页的格式
-   · 普通照片：最长边最多 2400px，JPEG / WebP
+   · 普通照片：最长边最多 2400px，统一转为 JPEG；头像/图标转为 WebP
    · 头像、图标：居中裁成正方形，默认最长边 256px
    · SVG 与 GIF 保持原样，避免破坏矢量图和动图
    ============================================================ */
@@ -108,10 +108,7 @@ async function prepareImageForUpload(file, options){
       return {file:file, optimized:false};
     }
 
-    var outputType = options.format || (
-      square ? "image/webp" :
-      (/^image\/png$/i.test(file.type) ? "image/webp" : "image/jpeg")
-    );
+    var outputType = options.format || (square ? "image/webp" : "image/jpeg");
     var quality = options.quality === undefined ? IMAGE_QUALITY : options.quality;
     var canvas = document.createElement("canvas");
     canvas.width = targetW;
@@ -235,9 +232,56 @@ function finishUploadProgress(ok, msg){
 
 /* 刚上传的文件：GitHub Pages 还没发布，预览时加时间戳绕过缓存 */
 var freshFiles = {};
+var LOCAL_PREVIEW_KEY = "benyia_local_previews";
+var localPreviewMap = (function(){
+  try{ return JSON.parse(sessionStorage.getItem(LOCAL_PREVIEW_KEY) || "{}") || {}; }catch(e){ return {}; }
+})();
+function saveLocalPreviewStore(){
+  try{
+    var keys = Object.keys(localPreviewMap);
+    if(keys.length > 24){
+      for(var i = 0; i < keys.length - 24; i++) delete localPreviewMap[keys[i]];
+    }
+    sessionStorage.setItem(LOCAL_PREVIEW_KEY, JSON.stringify(localPreviewMap));
+  }catch(e){}
+}
+function rememberLocalPreview(path, file){
+  try{
+    if(!path || !file || String(file.type||"").indexOf("image/") !== 0) return;
+    var objectUrl = URL.createObjectURL(file);
+    localPreviewMap[path] = objectUrl;
+    /* 再生成一张小尺寸 JPEG 存到 sessionStorage：刷新页面后、Pages 尚未发布时也看得到 */
+    var img = new Image();
+    img.onload = function(){
+      try{
+        var edge = 360;
+        var scale = Math.min(1, edge / Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height));
+        var c = document.createElement("canvas");
+        c.width = Math.max(1, Math.round((img.naturalWidth || img.width) * scale));
+        c.height = Math.max(1, Math.round((img.naturalHeight || img.height) * scale));
+        var ctx = c.getContext("2d");
+        if(ctx){
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(0, 0, c.width, c.height);
+          ctx.drawImage(img, 0, 0, c.width, c.height);
+          var data = c.toDataURL("image/jpeg", 0.82);
+          localPreviewMap[path] = data;
+          saveLocalPreviewStore();
+        }
+      }catch(e){}
+    };
+    img.src = objectUrl;
+  }catch(e){}
+}
 function previewSrc(path){
   var p = String(path || "");
   if(!p) return p;
+  if(localPreviewMap[p]) return localPreviewMap[p];
+  try{
+    var u = new URL(p, location.href);
+    var rel = u.pathname.replace(/^\//, "");
+    if(localPreviewMap[rel]) return localPreviewMap[rel];
+  }catch(e){}
   if(freshFiles[p]) return p + (p.indexOf("?") >= 0 ? "&" : "?") + "t=" + freshFiles[p];
   return p;
 }
@@ -307,6 +351,7 @@ async function uploadFile(file, kind, imageOptions){
         if(status) status.textContent = "内容已存在，直接复用：" + exist;
         finishUploadProgress(true, "已复用仓库里已有的文件（没有重复上传）");
         showToast("这个文件内容和已上传的一模一样，已直接复用，没有重复占空间");
+        rememberLocalPreview(exist, file);
         return { name: exist.split("/").pop(), url: exist, type: (exist.split(".").pop()||"file").toUpperCase(), size: file.size };
       }
     }
@@ -363,6 +408,7 @@ async function uploadFile(file, kind, imageOptions){
       });
 
       freshFiles[safe] = Date.now();
+      rememberLocalPreview(safe, file);
       if(blobSha1 && _blobIndex) _blobIndex[blobSha1] = safe;   /* 同一份内容再传就直接命中 */
       setUploadProgress(100, totalSize, totalSize);
       var savedText = wasOptimized

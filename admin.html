@@ -10,9 +10,9 @@
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <!-- 样式按模块拆分（顺序即层叠顺序）：骨架/登录 → 富文本编辑器 → 弹窗
      改完任一文件请同步改这里的 ?v= 版本号 -->
-<link rel="stylesheet" href="css/admin/01-base.css?v=20261026">
-<link rel="stylesheet" href="css/admin/02-editor.css?v=20261117g">
-<link rel="stylesheet" href="css/admin/03-dialog.css?v=20261026">
+<link rel="stylesheet" href="css/admin/01-base.css?v=20261118g">
+<link rel="stylesheet" href="css/admin/02-editor.css?v=20261118g">
+<link rel="stylesheet" href="css/admin/03-dialog.css?v=20261118g">
 <link rel="stylesheet" href="assets/katex/katex.min.css">
 <script defer src="assets/katex/katex.min.js"></script>
 <script defer src="assets/katex/contrib/auto-render.min.js"></script>
@@ -60,12 +60,12 @@
       <button class="active" data-p="site">站点设置</button>
       <button data-p="home">首页</button>
       <button data-p="courses">课程</button>
+      <button data-p="collections">合辑</button>
       <button data-p="papers">论文</button>
       <button data-p="notices">通知</button>
       <button data-p="class">班级事务</button>
       <button data-p="roster">名单</button>
-      <button data-p="life">生活服务</button>
-      <button data-p="apps">精选应用</button>
+      <button data-p="lifeapps">生活与精选</button>
       <button data-p="ledger">记账</button>
       <button data-p="diary">日记</button>
       <button data-p="friends">友链</button>
@@ -110,9 +110,14 @@
           <span id="prev_cfgFavicon"></span>
         </div>
         <div class="note" style="margin-top:-4px">
-          上传任意照片或 Logo，会自动居中裁成正方形并压缩为 <b>256×256 PNG</b>；普通正文图片会自动缩放并转为 JPEG / WebP。
+          上传任意照片或 Logo，会自动居中裁成正方形并压缩为 <b>256×256 PNG</b>；普通照片会自动缩放并转为 <b>JPEG</b>，上传完成后立即显示本地缩略图，不用等 GitHub Pages 发布。
         </div>
-        <div class="form-row"><input type="text" id="cfgTitle" placeholder="网站标题（浏览器标签上显示的就是它）"><input type="text" id="cfgSub" placeholder="副标题"></div>
+        <div class="form-row"><input type="text" id="cfgTitle" placeholder="前台网站标题（浏览器标签上显示的就是它）" oninput="refreshAdminTitlePreview()"><input type="text" id="cfgSub" placeholder="副标题"></div>
+        <div class="form-row">
+          <input type="text" id="cfgAdminTitle" placeholder="后台浏览器标签标题（留空会自动生成）" oninput="refreshAdminTitlePreview()">
+          <label style="font-size:.84rem;display:flex;align-items:center;gap:6px;white-space:nowrap"><input type="checkbox" id="cfgAdminTitleSync" onchange="syncAdminTitleField()"> 跟随前台标题</label>
+        </div>
+        <div class="note" style="margin-top:-4px">后台标签默认显示「管理后台 - 前台网站标题」。取消勾选后，可以单独设置后台标签标题；前台和后台可以分别修改。</div>
         <div class="form-row"><input type="text" id="cfgDefaultImage" placeholder="默认图片(没上传图片时显示，可留空)" style="flex:2"><button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultImage')">上传</button><span id="prev_cfgDefaultImage"></span></div>
         <div class="form-row">
           <label style="font-size:.88rem;display:flex;align-items:center;gap:8px">前台帖子显示：
@@ -278,22 +283,69 @@
           <button class="btn btn-ghost btn-sm" onclick="openImgPicker('course')">🖼️ 插入图片到正文</button>
         </div>
 
-        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 课程文件</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">可传多个；填文件夹名即归入该文件夹</span></div>
-        <div class="form-row"><input type="text" id="cFolder" placeholder="文件夹名（留空=根目录；填了就传到这个文件夹）"></div>
-        <div class="file-list" id="cFiles"></div>
+        <div class="course-fm-head">
+          <div>
+            <b>📎 课程资料库</b>
+            <span>先建文件夹，再进入文件夹上传；文件类型不限</span>
+          </div>
+          <div class="course-fm-actions">
+            <button class="btn btn-ghost btn-sm" type="button" onclick="courseFolderCreate()">📁 新建文件夹</button>
+            <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('cFileInput').click()">⬆️ 上传文件</button>
+            <button class="btn btn-ghost btn-sm" type="button" onclick="addExternalFileBtn('course')">🔗 添加外链</button>
+          </div>
+        </div>
+        <div class="course-fm" id="courseFileManager"></div>
         <div class="upload-box" id="cUploadBox" onclick="document.getElementById('cFileInput').click()">
-          <div class="up-hint">点击选择文件，或把文件直接拖到这里上传（PDF / PPT / 图片 / 压缩包等）</div>
+          <div class="up-hint" id="cUploadHint">点击选择文件，或把文件拖到这里上传到当前文件夹</div>
           <div class="up-status" id="cUpStatus">支持多选；单个文件不超过 100MB</div>
           <div class="progress-track" id="cProgressTrack"><div class="progress-bar" id="cProgressBar"></div></div>
         </div>
         <input type="file" id="cFileInput" multiple style="display:none" onchange="onCourseFiles(event)">
-        <div style="margin-top:6px"><button class="btn btn-ghost btn-sm" onclick="addExternalFileBtn('course')">🔗 添加网盘外链（大文件推荐）</button></div>
         <div style="margin-top:12px">
           <button class="btn btn-primary" id="cSubmit" onclick="saveCourse()">添加课程</button>
           <button class="btn btn-ghost" id="cCancel" onclick="cancelEdit('course')" style="display:none">取消</button>
         </div>
       </div>
       <div class="card"><h2>课程列表</h2><div id="courseList"></div></div>
+    </div>
+
+    <!-- ===== 合辑 ===== -->
+    <div class="panel" id="panel-collections">
+      <div class="card">
+        <h2 id="collectionFormTitle">添加合辑系列</h2>
+        <div class="editing-bar" id="collectionEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelCollectionEdit()">取消编辑</a></div>
+        <div class="note">一个合辑就是一组系列资料，例如「AI教程」「Win11优化」「系统安装」「魔法网站」。系列内可以上传 Markdown、HTML、PDF、图片、音乐、视频、压缩包等任意文件。</div>
+        <div class="form-row">
+          <input type="text" id="collIcon" placeholder="图标（如 📦、🤖、💻）" style="flex:0.7">
+          <button class="btn btn-ghost btn-sm" type="button" onclick="pickIcon('collIcon')">图片</button><span id="prev_collIcon"></span>
+          <input type="text" id="collTitle" placeholder="系列名称，例如：AI教程" style="flex:1.4">
+          <input type="text" id="collDesc" placeholder="一句话简介" style="flex:1.8">
+        </div>
+        <div class="form-row">
+          <input type="text" id="collTags" placeholder="标签，逗号分隔（如：AI,教程,大模型）">
+          <input type="text" id="collAuthor" placeholder="整理人 / 作者" style="flex:0.7">
+        </div>
+        <div class="form-row"><textarea id="collIntro" placeholder="系列详细介绍，支持 Markdown……"></textarea></div>
+
+        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 封面 / 展示图</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
+        <div id="imgList_collection" style="margin-bottom:6px"></div>
+        <div style="margin-bottom:10px"><button class="btn btn-ghost btn-sm" type="button" onclick="pickImgs('collection')">添加图片</button></div>
+
+        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">📎 系列文件</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">任意类型；图片会显示缩略图，音视频/HTML/Markdown 在前台可直接预览</span></div>
+        <div class="file-list" id="collectionFiles"></div>
+        <div class="upload-box" id="collectionUploadBox" onclick="document.getElementById('collectionFileInput').click()">
+          <div class="up-hint">点击选择文件，或把文件直接拖到这里上传</div>
+          <div class="up-status" id="collectionUpStatus">支持多选；单个文件不超过 100MB</div>
+          <div class="progress-track" id="collectionProgressTrack"><div class="progress-bar" id="collectionProgressBar"></div></div>
+        </div>
+        <input type="file" id="collectionFileInput" multiple style="display:none" onchange="onCollectionFiles(event)">
+        <div style="margin-top:6px"><button class="btn btn-ghost btn-sm" type="button" onclick="addExternalFileBtn('collection')">🔗 添加网盘外链</button></div>
+        <div style="margin-top:12px">
+          <button class="btn btn-primary" id="collSubmit" onclick="saveCollection()">保存合辑</button>
+          <button class="btn btn-ghost" id="collCancel" onclick="cancelCollectionEdit()" style="display:none">取消</button>
+        </div>
+      </div>
+      <div class="card"><h2>合辑系列列表</h2><div id="collectionManageList"></div></div>
     </div>
 
     <!-- ===== 论文 ===== -->
@@ -499,8 +551,12 @@
       </div>
     </div>
 
-    <!-- ===== 生活服务 ===== -->
-    <div class="panel" id="panel-life">
+    <!-- ===== 生活服务 / 影音 / 精选应用 ===== -->
+    <div class="panel" id="panel-lifeapps">
+      <div class="admin-group-head">
+        <div><b>🧰 生活与精选</b><span>生活服务、影音和精选应用放在同一个编辑区，减少来回切页面。</span></div>
+      </div>
+      <div class="admin-subpanel" id="panel-life">
       <div class="card">
         <h2 id="lifeFormTitle">添加生活服务链接</h2>
         <div class="form-row">
@@ -549,9 +605,8 @@
       <div class="card"><h2>影音列表</h2><div id="mediaList"></div></div>
     </div>
 
-    <!-- ===== 记账 ===== -->
     <!-- ===== 精选应用 ===== -->
-    <div class="panel" id="panel-apps">
+      <div class="admin-subpanel" id="panel-apps">
       <div class="card">
         <h2 id="appFormTitle">添加应用</h2>
         <div class="form-row">
@@ -597,7 +652,8 @@
           <button class="btn btn-ghost" onclick="cancelAppEdit()">取消编辑</button>
         </div>
       </div>
-      <div class="card"><h2>应用列表</h2><div id="appManageList"></div></div>
+        <div class="card"><h2>应用列表</h2><div id="appManageList"></div></div>
+      </div>
     </div>
 
     <div class="panel" id="panel-ledger">
@@ -853,13 +909,13 @@
 </div>
 
 <!-- 脚本按模块拆分：普通 script 共享全局作用域，顺序即依赖顺序，不要调换 -->
-<script src="js/admin/01-core.js?v=20261117a"></script>
-<script src="js/admin/02-editor.js?v=20261117h"></script>
-<script src="js/admin/03-list.js?v=20261117a"></script>
-<script src="js/admin/04-api.js?v=20261117a"></script>
-<script src="js/admin/05-upload.js?v=20261117b"></script>
-<script src="js/admin/06-forms.js?v=20261117a"></script>
-<script src="js/admin/07-render.js?v=20261117a"></script>
-<script src="js/admin/08-settings.js?v=20261117c"></script>
+<script src="js/admin/01-core.js?v=20261118g"></script>
+<script src="js/admin/02-editor.js?v=20261118g"></script>
+<script src="js/admin/03-list.js?v=20261118g"></script>
+<script src="js/admin/04-api.js?v=20261118g"></script>
+<script src="js/admin/05-upload.js?v=20261118g"></script>
+<script src="js/admin/06-forms.js?v=20261118g"></script>
+<script src="js/admin/07-render.js?v=20261118g"></script>
+<script src="js/admin/08-settings.js?v=20261118g"></script>
 </body>
 </html>

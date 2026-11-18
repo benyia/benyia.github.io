@@ -17,7 +17,7 @@ function iconUploadOptions(inputId){
   if(inputId === "cfgFavicon"){
     return {square:true, maxEdge:256, format:"image/png", quality:0.92, force:true, minBytes:0};
   }
-  if(["cfgAvatar","cfgDefaultAvatar","catIcon","qlIcon","cIcon","lsIcon","apIcon","frAvatar","rPhoto"].indexOf(inputId) >= 0){
+  if(["cfgAvatar","cfgDefaultAvatar","catIcon","qlIcon","cIcon","collIcon","lsIcon","apIcon","frAvatar","rPhoto"].indexOf(inputId) >= 0){
     return {square:true, maxEdge:256, format:"image/webp", quality:0.88, force:true, minBytes:0};
   }
   return {};
@@ -210,6 +210,366 @@ function toggleRosterSensitive(){
 }
 function exportRoster(){ downloadJSON("roster-"+todayStr()+".json", blogData.roster||[]); showToast("已导出名单 JSON"); }
 
+/* ============================================================
+   课程资料库：文件夹路径工具
+   数据约定：
+   · course.folders = ["课件", "通知", "考试", "资料", "课件/第1章"]
+   · file.folder    = "" 或 "课件/第1章"
+   旧课程只有 files 也能自动推导出目录，不需要迁移数据。
+   ============================================================ */
+function coursePathNorm(path){
+  return String(path == null ? "" : path)
+    .replace(/\\/g, "/")
+    .split("/")
+    .map(function(s){ return s.trim(); })
+    .filter(function(s){ return s && s !== "." && s !== ".."; })
+    .join("/");
+}
+function coursePathParent(path){
+  var p = coursePathNorm(path);
+  var i = p.lastIndexOf("/");
+  return i < 0 ? "" : p.slice(0, i);
+}
+function coursePathLeaf(path){
+  var p = coursePathNorm(path);
+  var i = p.lastIndexOf("/");
+  return i < 0 ? p : p.slice(i + 1);
+}
+function coursePathJoin(parent, child){
+  var a = coursePathNorm(parent), b = coursePathNorm(child);
+  return a && b ? (a + "/" + b) : (a || b);
+}
+function coursePathUnder(path, parent){
+  var p = coursePathNorm(path), root = coursePathNorm(parent);
+  if(!root) return true;
+  return p === root || p.indexOf(root + "/") === 0;
+}
+function courseFolderUnique(list){
+  var seen = {}, out = [];
+  (list || []).forEach(function(path){
+    var p = coursePathNorm(path);
+    if(p && !seen[p]){ seen[p] = 1; out.push(p); }
+  });
+  return out;
+}
+function courseFolderListFrom(files, folders){
+  var seen = {}, out = [];
+  function add(path){
+    var p = coursePathNorm(path);
+    if(!p) return;
+    var parts = p.split("/");
+    for(var i = 1; i <= parts.length; i++){
+      var one = parts.slice(0, i).join("/");
+      if(!seen[one]){ seen[one] = 1; out.push(one); }
+    }
+  }
+  (folders || []).forEach(add);
+  (files || []).forEach(function(f){ if(f) add(f.folder); });
+  return out;
+}
+function courseFolderList(){
+  return courseFolderListFrom(drafts.course, courseDraftFolders);
+}
+function courseFolderAdd(path){
+  var p = coursePathNorm(path);
+  if(!p) return "";
+  var parts = p.split("/");
+  for(var i = 1; i <= parts.length; i++){
+    var one = parts.slice(0, i).join("/");
+    if(courseDraftFolders.indexOf(one) < 0) courseDraftFolders.push(one);
+  }
+  courseDraftFolders = courseFolderUnique(courseDraftFolders);
+  return p;
+}
+function courseFolderChildren(path, all){
+  var parent = coursePathNorm(path);
+  return (all || courseFolderList()).filter(function(p){
+    return coursePathParent(p) === parent;
+  });
+}
+function courseFolderStats(path){
+  var p = coursePathNorm(path);
+  var all = courseFolderList();
+  var dirCount = all.filter(function(x){
+    return x !== p && coursePathUnder(x, p);
+  }).length;
+  var files = (drafts.course || []).filter(function(f){
+    return coursePathUnder(coursePathNorm(f.folder), p);
+  });
+  return {dirs:dirCount, files:files.length};
+}
+function courseFileIcon(f){
+  var name = String((f && f.name) || "").toLowerCase();
+  var type = String((f && f.type) || "").toLowerCase();
+  var ext = (name.match(/\.([a-z0-9]{1,8})$/) || [])[1] || type;
+  if(/^(pdf)$/.test(ext)) return "📕";
+  if(/^(ppt|pptx|key)$/.test(ext)) return "📊";
+  if(/^(doc|docx|wps|odt)$/.test(ext)) return "📝";
+  if(/^(xls|xlsx|csv|ods)$/.test(ext)) return "📈";
+  if(/^(zip|rar|7z|tar|gz)$/.test(ext)) return "🗜️";
+  if(/^(png|jpg|jpeg|gif|webp|svg|bmp|tif|tiff)$/.test(ext)) return "🖼️";
+  if(/^(mp3|wav|flac|aac|m4a|ogg)$/.test(ext)) return "🎵";
+  if(/^(mp4|mkv|mov|avi|webm)$/.test(ext)) return "🎬";
+  if(/^(js|ts|py|c|cpp|h|java|go|rs|json|xml|html|css)$/.test(ext)) return "⌨️";
+  if(f && f.external) return "🔗";
+  return "📄";
+}
+function isImageFileMeta(f){
+  var name = String((f && f.name) || "").toLowerCase();
+  var type = String((f && f.type) || "").toLowerCase();
+  return type.indexOf("image/") === 0 || /\.(png|jpe?g|gif|webp|svg|bmp|avif)$/i.test(name);
+}
+function adminFileThumb(f, cls){
+  if(isImageFileMeta(f) && f && f.url){
+    return '<span class="' + cls + ' has-img"><img src="' + esc(previewSrc(f.url)) + '" data-url="' + esc(f.url) + '" data-title="查看图片" onclick="openImgFrom(this)" alt=""></span>';
+  }
+  return '<span class="' + cls + '">' + courseFileIcon(f) + '</span>';
+}
+function courseFolderCrumbHTML(path){
+  var current = coursePathNorm(path);
+  var html = '<button type="button" class="course-crumb" data-folder="" onclick="courseFolderOpenBtn(this)">课程根目录</button>';
+  var acc = "";
+  if(current){
+    current.split("/").forEach(function(part){
+      acc = acc ? (acc + "/" + part) : part;
+      html += '<span class="course-crumb-sep">›</span>'
+        + '<button type="button" class="course-crumb" data-folder="' + esc(acc) + '" onclick="courseFolderOpenBtn(this)">' + esc(part) + '</button>';
+    });
+  }
+  return html;
+}
+function courseFolderOpenBtn(btn){
+  courseCurrentFolder = coursePathNorm(btn.getAttribute("data-folder"));
+  renderCourseFileManager();
+}
+function courseFolderOpenEl(el){
+  courseCurrentFolder = coursePathNorm(el.getAttribute("data-folder"));
+  renderCourseFileManager();
+}
+function courseFolderOpenKey(event, el){
+  if(event.target !== el) return;
+  if(event.key === "Enter" || event.key === " "){
+    event.preventDefault();
+    courseFolderOpenEl(el);
+  }
+}
+function courseFolderCreate(){
+  var parent = courseCurrentFolder;
+  openInputDialog({
+    title: "新建课程文件夹",
+    hint: parent
+      ? "会在「" + parent + "」里新建。也可以输入「第1章/课件」一次建两级。\n文件夹只用于整理课程资料，文件类型不限。"
+      : "会在课程根目录新建。也可以输入「课件/第1章」一次建两级。\n常用结构：课件、通知、考试、资料。",
+    placeholder: "例如：课件",
+    okText: "新建",
+    onOk: function(name){
+      var raw = String(name || "").trim();
+      if(!raw){ dlgErr("文件夹名称不能为空"); return false; }
+      if(/[\\:*?"<>|]/.test(raw)){ dlgErr("文件夹名称不能包含 \\ : * ? \" < > |"); return false; }
+      var parts = raw.replace(/\\/g, "/").split("/");
+      if(parts.some(function(p){ return p.trim() === "." || p.trim() === ".."; })){
+        dlgErr("文件夹名称不能是 . 或 ..");
+        return false;
+      }
+      var rel = coursePathNorm(raw);
+      if(!rel){ dlgErr("文件夹名称不能为空"); return false; }
+      var full = coursePathJoin(parent, rel);
+      if(courseFolderList().indexOf(full) >= 0){
+        dlgErr("这个文件夹已经存在");
+        return false;
+      }
+      courseFolderAdd(full);
+      courseCurrentFolder = full;
+      renderCourseFileManager();
+      showToast("已新建文件夹「" + full + "」");
+      return true;
+    }
+  });
+}
+function courseQuickFolder(name){
+  var full = coursePathJoin(courseCurrentFolder, name);
+  if(!full || courseFolderList().indexOf(full) >= 0) return;
+  courseFolderAdd(full);
+  renderCourseFileManager();
+  showToast("已添加文件夹「" + full + "」");
+}
+function courseFolderRenameBtn(btn){
+  if(window.event) window.event.stopPropagation();
+  courseFolderRename(btn.getAttribute("data-folder"));
+}
+function courseFolderRename(path){
+  var oldPath = coursePathNorm(path);
+  var leaf = coursePathLeaf(oldPath);
+  var parent = coursePathParent(oldPath);
+  openInputDialog({
+    title: "重命名文件夹",
+    hint: "只修改当前文件夹名称；里面的子文件夹和文件会一起移动。",
+    placeholder: "文件夹名称",
+    value: leaf,
+    okText: "重命名",
+    onOk: function(name){
+      var next = coursePathNorm(name);
+      if(!next){ dlgErr("文件夹名称不能为空"); return false; }
+      if(next.indexOf("/") >= 0){ dlgErr("这里只需填写当前文件夹的名称"); return false; }
+      if(/[\\:*?"<>|]/.test(next)){ dlgErr("文件夹名称不能包含 \\ : * ? \" < > |"); return false; }
+      var full = coursePathJoin(parent, next);
+      if(courseFolderList().indexOf(full) >= 0){
+        dlgErr("同一位置已经有同名文件夹");
+        return false;
+      }
+      function relocate(p){
+        p = coursePathNorm(p);
+        if(!coursePathUnder(p, oldPath)) return p;
+        return p === oldPath ? full : (full + p.slice(oldPath.length));
+      }
+      courseDraftFolders = courseFolderUnique(courseDraftFolders.map(relocate));
+      (drafts.course || []).forEach(function(f){
+        if(f.folder) f.folder = relocate(f.folder);
+      });
+      if(courseCurrentFolder && coursePathUnder(courseCurrentFolder, oldPath)){
+        courseCurrentFolder = relocate(courseCurrentFolder);
+      }
+      renderCourseFileManager();
+      showToast("文件夹已重命名（记得点保存）");
+      return true;
+    }
+  });
+}
+function courseFolderDeleteBtn(btn){
+  if(window.event) window.event.stopPropagation();
+  courseFolderDelete(btn.getAttribute("data-folder"));
+}
+function courseFolderDelete(path){
+  var target = coursePathNorm(path);
+  if(!target) return;
+  var stats = courseFolderStats(target);
+  if(!confirm("删除文件夹「" + target + "」及其中的 " + stats.dirs + " 个子文件夹、" + stats.files + " 个文件？\n只从课程目录移除，不会删除 GitHub 上已经上传的文件。记得点保存。")) return;
+  drafts.course = (drafts.course || []).filter(function(f){
+    return !coursePathUnder(coursePathNorm(f.folder), target);
+  });
+  courseDraftFolders = courseDraftFolders.filter(function(p){ return !coursePathUnder(p, target); });
+  if(courseCurrentFolder && coursePathUnder(courseCurrentFolder, target)){
+    courseCurrentFolder = coursePathParent(target);
+  }
+  renderCourseFileManager();
+  showToast("文件夹已从草稿中删除（记得点保存）");
+}
+function courseFolderDragOver(event, el){
+  event.preventDefault();
+  event.stopPropagation();
+  el.classList.add("is-drop");
+}
+function courseFolderDragLeave(event, el){
+  event.preventDefault();
+  el.classList.remove("is-drop");
+}
+function courseFolderDrop(event, el){
+  event.preventDefault();
+  event.stopPropagation();
+  el.classList.remove("is-drop");
+  var files = event.dataTransfer && event.dataTransfer.files;
+  if(files && files.length) handleFiles(files, "course", el.getAttribute("data-folder") || "");
+}
+function courseMoveFileFromSelect(sel){
+  var i = parseInt(sel.getAttribute("data-fi"), 10);
+  if(!drafts.course || !drafts.course[i]) return;
+  var dest = sel.value;
+  if(!dest) return;
+  dest = dest === "__root__" ? "" : coursePathNorm(dest);
+  drafts.course[i].folder = dest;
+  if(dest) courseFolderAdd(dest);
+  renderCourseFileManager();
+  showToast("文件已移动到「" + (dest || "根目录") + "」（记得点保存）");
+}
+function courseFolderEmptyHTML(){
+  var common = ["课件", "通知", "考试", "资料"];
+  return '<div class="course-fm-empty">'
+    + '<div class="course-fm-empty-ico">📚</div>'
+    + '<div><b>课程资料库还是空的</b><span>先建几个文件夹，再进入文件夹上传课件、通知、试卷或其他任何文件。</span></div>'
+    + '<div class="course-fm-quick">'
+    + common.map(function(n){
+        return '<button type="button" class="btn btn-ghost btn-sm" onclick="courseQuickFolder(\'' + n + '\')">+ ' + n + '</button>';
+      }).join("")
+    + '<button type="button" class="btn btn-ghost btn-sm" onclick="courseFolderCreate()">+ 自定义</button>'
+    + '</div></div>';
+}
+function renderCourseFileManager(){
+  var box = $("courseFileManager");
+  if(!box) return;
+  var all = courseFolderList();
+  if(courseCurrentFolder && all.indexOf(courseCurrentFolder) < 0) courseCurrentFolder = "";
+  var current = courseCurrentFolder;
+  var children = courseFolderChildren(current, all);
+  var allFiles = drafts.course || [];
+  var direct = allFiles.map(function(f, i){ return {f:f, i:i}; }).filter(function(it){
+    return coursePathNorm(it.f.folder) === current;
+  }).sort(function(a, b){
+    return String(a.f.name || "").localeCompare(String(b.f.name || ""), "zh-CN", {numeric:true});
+  });
+  var stats = courseFolderStats(current);
+
+  var html = '<div class="course-fm-bar">'
+    + '<div class="course-fm-crumbs">' + courseFolderCrumbHTML(current) + '</div>'
+    + '<div class="course-fm-count">' + stats.dirs + ' 个文件夹 · ' + stats.files + ' 个文件</div>'
+    + '</div>';
+
+  if(!all.length && !allFiles.length){
+    html += courseFolderEmptyHTML();
+  }else{
+    if(current){
+      html += '<button type="button" class="course-fm-up" data-folder="' + esc(coursePathParent(current)) + '" onclick="courseFolderOpenBtn(this)">↩ 上一级</button>';
+    }
+    if(children.length){
+      html += '<div class="course-fm-grid">';
+      children.forEach(function(path){
+        var st = courseFolderStats(path);
+        html += '<div class="course-fm-card" role="button" tabindex="0" data-folder="' + esc(path) + '"'
+          + ' onclick="courseFolderOpenEl(this)" onkeydown="courseFolderOpenKey(event,this)"'
+          + ' ondragover="courseFolderDragOver(event,this)" ondragleave="courseFolderDragLeave(event,this)" ondrop="courseFolderDrop(event,this)">'
+          +   '<div class="course-fm-card-main"><span class="course-fm-folder">📁</span><div><b>' + esc(coursePathLeaf(path)) + '</b>'
+          +   '<span>' + (st.files ? (st.files + ' 个文件') : '空文件夹') + (st.dirs ? (' · ' + st.dirs + ' 个子文件夹') : '') + '</span></div></div>'
+          +   '<div class="course-fm-card-actions">'
+          +     '<button type="button" class="btn btn-ghost btn-sm" data-folder="' + esc(path) + '" onclick="courseFolderRenameBtn(this)" title="重命名文件夹">改名</button>'
+          +     '<button type="button" class="btn btn-danger btn-sm" data-folder="' + esc(path) + '" onclick="courseFolderDeleteBtn(this)" title="删除文件夹">删除</button>'
+          +   '</div>'
+          + '</div>';
+      });
+      html += '</div>';
+    }
+    if(direct.length){
+      var moveOptions = ['<option value="">移动到…</option>', '<option value="__root__">课程根目录</option>'].concat(
+        all.filter(function(p){ return p !== current; }).map(function(p){
+          return '<option value="' + esc(p) + '">' + esc(p) + '</option>';
+        })
+      ).join("");
+      html += '<div class="course-fm-files">';
+      direct.forEach(function(it){
+        var f = it.f;
+        html += '<div class="course-fm-file">'
+          +   adminFileThumb(f, "course-fm-file-ico")
+          +   '<div class="course-fm-file-main"><b>' + esc(f.name || "未命名文件") + '</b>'
+          +     '<span>' + esc(f.type || "文件") + (f.size ? (" · " + fmtSize(f.size)) : "") + (f.external ? " · 外部链接" : "") + '</span></div>'
+          +   '<select class="course-fm-move" data-fi="' + it.i + '" onchange="courseMoveFileFromSelect(this)" title="移动到其他文件夹">' + moveOptions + '</select>'
+          +   '<button type="button" class="btn btn-danger btn-sm" data-fkind="course" data-fidx="' + it.i + '" onclick="removeDraftFileBtn(this)">移除</button>'
+          + '</div>';
+      });
+      html += '</div>';
+    }
+    if(!children.length && !direct.length){
+      html += '<div class="course-fm-empty small"><div class="course-fm-empty-ico">📂</div>'
+        + '<div><b>这个文件夹是空的</b><span>点上面的「上传文件」，或把文件直接拖到这个页面；也可以先新建子文件夹。</span></div></div>';
+    }
+  }
+
+  box.innerHTML = html;
+  var hint = $("cUploadHint");
+  if(hint){
+    hint.textContent = "点击选择文件，或拖到文件夹 / 这里上传到"
+      + (current ? ("「" + coursePathLeaf(current) + "」") : "课程根目录")
+      + "（PDF / PPT / Word / 图片 / 音视频 / 压缩包等任意类型）";
+  }
+}
+
 async function handleFiles(fileList, kind, folder){
   var files = Array.prototype.slice.call(fileList||[]);
   if(!files.length) return;
@@ -220,7 +580,8 @@ async function handleFiles(fileList, kind, folder){
     try{
       if(status) status.textContent = "上传中（"+(done+1)+"/"+files.length+"）："+f.name;
       var meta = await uploadFile(f, kind);
-      meta.folder = folder || "";
+      meta.folder = coursePathNorm(folder || "");
+      if(kind === "course" && meta.folder) courseFolderAdd(meta.folder);
       drafts[kind].push(meta);
       done++;
       renderDraftFiles(kind);
@@ -244,6 +605,7 @@ function removeDraftFileBtn(btn){
   if(drafts[kind]){ drafts[kind].splice(i,1); renderDraftFiles(kind); }
 }
 function renderDraftFiles(kind){
+  if(kind === "course"){ renderCourseFileManager(); return; }
   var box = kindEl(kind,"Files");
   if(!box) return;
   var list = drafts[kind]||[];
@@ -254,16 +616,19 @@ function renderDraftFiles(kind){
     if(!groups[g]){ groups[g] = []; order.push(g); }
     groups[g].push({f:f, i:i});
   });
+  var hasFolders = order.some(function(g){ return !!g; });
   var html = "";
   order.forEach(function(g){
-    html += '<div style="margin:8px 0 4px;font-size:.85rem;font-weight:600">' + (g ? ('📁 '+esc(g)) : '📄 根目录（未归类）');
+    if(hasFolders || g){
+      html += '<div style="margin:8px 0 4px;font-size:.85rem;font-weight:600">' + (g ? ('📁 '+esc(g)) : '📄 根目录（未归类）');
+    }
     if(g){
       html += ' <button class="btn btn-ghost btn-sm" data-fk="'+esc(kind)+'" data-fn="'+esc(g)+'" onclick="renameFolderBtn(this)">重命名</button>';
       html += ' <button class="btn btn-danger btn-sm" data-fk="'+esc(kind)+'" data-fn="'+esc(g)+'" onclick="deleteFolderBtn(this)">删除文件夹</button>';
     }
-    html += '</div>';
+    if(hasFolders || g) html += '</div>';
     groups[g].forEach(function(it){
-      html += '<div class="file-item"><span class="fname">📄 '+esc(it.f.name)+'</span><span class="fsize">'+esc(it.f.type||"")+(it.f.size?(" · "+fmtSize(it.f.size)):"")+'</span><button class="btn btn-danger btn-sm" data-fkind="'+esc(kind)+'" data-fidx="'+it.i+'" onclick="removeDraftFileBtn(this)">移除</button></div>';
+      html += '<div class="file-item">'+adminFileThumb(it.f,"file-thumb")+'<span class="fname">'+esc(it.f.name)+'</span><span class="fsize">'+esc(it.f.type||"")+(it.f.size?(" · "+fmtSize(it.f.size)):"")+'</span><button class="btn btn-danger btn-sm" data-fkind="'+esc(kind)+'" data-fidx="'+it.i+'" onclick="removeDraftFileBtn(this)">移除</button></div>';
     });
   });
   box.innerHTML = html;
@@ -302,8 +667,11 @@ function removeDraftFileBtn(btn){
 
 function onCourseFiles(e){
   var v = e.target.files;
-  var folder = $("cFolder") ? $("cFolder").value.trim() : "";
-  handleFiles(v, "course", folder);
+  handleFiles(v, "course", courseCurrentFolder);
+  e.target.value = "";
+}
+function onCollectionFiles(e){
+  handleFiles(e.target.files, "collection");
   e.target.value = "";
 }
 function onDmediaFiles(e){ var v=e.target.files; handleFiles(v,"dmedia"); e.target.value=""; }

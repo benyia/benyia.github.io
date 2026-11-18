@@ -4,6 +4,9 @@
 function renderAll(){
   const sc = blogData.siteConfig || DEFAULT_DATA.siteConfig;
   $("cfgTitle").value = sc.title || "";
+  if($("cfgAdminTitle")) $("cfgAdminTitle").value = sc.adminTitle || "";
+  if($("cfgAdminTitleSync")) $("cfgAdminTitleSync").checked = sc.adminTitleSync !== false;
+  if(typeof syncAdminTitleField === "function") syncAdminTitleField();
   $("cfgSub").value   = sc.subtitle || "";
   $("cfgAbout").value = sc.about || "";
   $("cfgAvatar").value = sc.avatar || "";
@@ -25,7 +28,7 @@ function renderAll(){
   refreshAllIconPrevs();
 
   let fileCount = 0;
-  ["courses","papers","classItems"].forEach(k=>{
+  ["courses","papers","classItems","collections"].forEach(k=>{
     (blogData[k]||[]).forEach(it=>{ 
       if(Array.isArray(it.files)) fileCount += it.files.length;
       if(it.file) fileCount += 1;
@@ -37,7 +40,7 @@ function renderAll(){
   $("statF").textContent=fileCount;
   refreshMdInsertBtn();
 
-  renderCourses();renderPapers();renderNotices();renderClass();renderLife();renderAppsManage();renderMedia();
+  renderCourses();renderCollections();renderPapers();renderNotices();renderClass();renderLife();renderAppsManage();renderMedia();
   renderRoster();
   $("rShowSensitive").checked = !!(blogData.rosterConfig && blogData.rosterConfig.showSensitive);
   renderLedger();renderDiary();renderAdvisor();renderLogs();
@@ -68,7 +71,7 @@ function fileRows(files, kind, idx){
   const arr = files||[];
   if(!arr.length) return "";
   return `<div style="margin-top:6px">`+arr.map((f,i)=>`
-    <span class="tag-chip">📄 ${esc(f.name)}</span>
+    <span class="tag-chip">${f.folder ? ("📁 " + esc(f.folder) + " / ") : ""}📄 ${esc(f.name)}</span>
     <button class="btn btn-ghost btn-sm" style="margin:0 6px 2px 0" onclick="delFile('${kind}',${idx},${i})">×</button>
   `).join("")+`</div>`;
 }
@@ -92,6 +95,11 @@ async function delFile(kind, idx, fileIdx){
 function saveCourse(){
   var title=$("cTitle").value.trim();
   if(!title){ showToast("请输入课程名称","error"); return; }
+  var courseFiles = (drafts.course||[]).map(function(f){
+    var copy = Object.assign({}, f);
+    copy.folder = coursePathNorm(copy.folder);
+    return copy;
+  });
   var item = {
     icon: $("cIcon").value.trim() || "📚",
     title: title,
@@ -100,7 +108,8 @@ function saveCourse(){
     introIsHTML: isRichMode("course"),
     tags: parseTagsInput($("cTags").value),
     progress: parseInt($("cProgress").value)||0,
-    files: drafts.course.slice(),
+    folders: courseFolderListFrom(courseFiles, courseDraftFolders),
+    files: courseFiles,
     images: (imgDrafts.course||[]).slice(),
     time: nowStr()
   };
@@ -122,7 +131,9 @@ function editCourse(i){
   loadRich("course", c.intro||"");
   $("cTags").value = (c.tags||[]).join(",");
   $("cProgress").value=c.progress||0;
-  drafts.course = (c.files||[]).slice();
+  drafts.course = (c.files||[]).map(function(f){ return Object.assign({}, f); });
+  courseDraftFolders = courseFolderListFrom(drafts.course, c.folders || []);
+  courseCurrentFolder = "";
   setImgDrafts("course", c.images);
   renderDraftFiles("course");
   $("courseFormTitle").textContent="编辑课程："+c.title;
@@ -137,9 +148,7 @@ function renderCourses(){
     + (rows.map(function(r){
     var c = r.item, i = r.i;
     var nfiles = (c.files||[]).length;
-    var folders = {};
-    (c.files||[]).forEach(function(f){ if(f.folder) folders[f.folder] = 1; });
-    var nf = Object.keys(folders).length;
+    var nf = courseFolderListFrom(c.files, c.folders || []).length;
     return '<div class="item-row"><div class="info"><div class="title">'+iconThumb(c.icon,26)+' '+esc(c.title)+'</div><div class="desc">'+esc(c.desc)+' · 进度 '+(c.progress||0)+'% · '+nfiles+' 个文件'+(nf?(' · '+nf+' 个文件夹'):'')+'</div>'+fileRows(c.files,"courses",i)+imgRows(c.images,"courses",i)+'</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editCourse('+i+')">编辑</button><button class="btn btn-danger btn-sm" onclick="delCourse('+i+')">删除</button></div></div>';
   }).join("") || adminEmptyBox("courses", "暂无"));
 }
@@ -148,6 +157,98 @@ function delCourse(i){
   if(editing.course===i) cancelEdit("course");
   blogData.courses.splice(i,1);
   saveData("删除课程");
+  renderAll();
+}
+
+/* ---------- 合辑 ---------- */
+function saveCollection(){
+  var title = $("collTitle").value.trim();
+  if(!title){ showToast("请输入合辑名称", "error"); return; }
+  blogData.collections = blogData.collections || [];
+  var old = editing.collection === null ? null : blogData.collections[editing.collection];
+  var item = {
+    icon: $("collIcon").value.trim() || "📦",
+    title: title,
+    desc: $("collDesc").value.trim(),
+    intro: $("collIntro").value,
+    tags: parseTagsInput($("collTags").value),
+    author: $("collAuthor").value.trim() || (blogData.siteConfig && blogData.siteConfig.name) || "思齐",
+    files: (drafts.collection || []).map(function(f){ return Object.assign({}, f); }),
+    images: (imgDrafts.collection || []).slice(),
+    time: nowStr()
+  };
+  if(old){
+    item.created = old.created || old.time || item.time;
+    item.views = old.views || 0;
+    blogData.collections[editing.collection] = Object.assign({}, old, item);
+    saveData("编辑合辑：" + title);
+  }else{
+    item.created = item.time;
+    item.views = 0;
+    blogData.collections.push(item);
+    saveData("添加合辑：" + title);
+  }
+  cancelCollectionEdit();
+  renderAll();
+}
+function editCollection(i){
+  var c = blogData.collections[i];
+  if(!c) return;
+  editing.collection = i;
+  $("collIcon").value = c.icon || "📦";
+  $("collTitle").value = c.title || "";
+  $("collDesc").value = c.desc || "";
+  $("collIntro").value = c.intro || "";
+  $("collTags").value = (c.tags || []).join(",");
+  $("collAuthor").value = c.author || "";
+  drafts.collection = (c.files || []).map(function(f){ return Object.assign({}, f); });
+  setImgDrafts("collection", c.images || []);
+  renderDraftFiles("collection");
+  $("collectionFormTitle").textContent = "编辑合辑：" + (c.title || "");
+  $("collectionEditBar").classList.add("on");
+  $("collSubmit").textContent = "保存修改";
+  $("collCancel").style.display = "inline-block";
+  var panel = $("panel-collections");
+  if(panel) panel.scrollIntoView({behavior:"smooth"});
+}
+function cancelCollectionEdit(){
+  editing.collection = null;
+  ["collIcon","collTitle","collDesc","collIntro","collTags","collAuthor"].forEach(function(id){
+    if($(id)) $(id).value = "";
+  });
+  drafts.collection = [];
+  setImgDrafts("collection", []);
+  renderDraftFiles("collection");
+  $("collectionFormTitle").textContent = "添加合辑系列";
+  $("collectionEditBar").classList.remove("on");
+  $("collSubmit").textContent = "保存合辑";
+  $("collCancel").style.display = "none";
+  $("collectionUpStatus").textContent = "支持多选；单个文件不超过 " + MAX_FILE_MB + "MB";
+}
+function renderCollections(){
+  blogData.collections = blogData.collections || [];
+  var rows = adminVisible("collections", blogData.collections);
+  $("collectionManageList").innerHTML = adminSearchInput("collections", "搜索合辑：标题 / 简介 / 标签 / 文件", "collectionSearch")
+    + (rows.map(function(r){
+      var c = r.item, i = r.i;
+      var files = (c.files || []).length;
+      var imgs = (c.images || []).length;
+      return '<div class="item-row"><div class="info"><div class="title">'
+        + iconThumb(c.icon, 26) + ' ' + esc(c.title) + '</div><div class="desc">'
+        + esc(c.desc || "") + ' · ' + files + ' 个文件' + (imgs ? (' · ' + imgs + ' 张图片') : '')
+        + ' · ' + esc(c.time || '') + '</div>'
+        + fileRows(c.files, "collections", i) + imgRows(c.images, "collections", i)
+        + '</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editCollection(' + i + ')">编辑</button>'
+        + '<button class="btn btn-danger btn-sm" onclick="delCollection(' + i + ')">删除</button></div></div>';
+    }).join("") || adminEmptyBox("collections", "暂无"));
+}
+function delCollection(i){
+  var c = blogData.collections[i];
+  if(!c) return;
+  if(!confirm("确定删除合辑「" + c.title + "」？")) return;
+  if(editing.collection === i) cancelCollectionEdit();
+  blogData.collections.splice(i, 1);
+  saveData("删除合辑：" + c.title);
   renderAll();
 }
 

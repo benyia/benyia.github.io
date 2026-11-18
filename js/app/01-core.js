@@ -8,6 +8,7 @@ const HOME_PAGE_SIZE = 10;
 /* 首页默认显示哪几类内容（后台「首页」里可勾选） */
 const HOME_SECTIONS = [
   { key: "courses",    name: "课程",   icon: "📚" },
+  { key: "collections",name: "合辑",   icon: "📦" },
   { key: "papers",     name: "论文",   icon: "📝" },
   { key: "notices",    name: "通知",   icon: "🔔" },
   { key: "classItems", name: "班级",   icon: "👥" },
@@ -18,6 +19,7 @@ const HOME_SECTIONS_DEFAULT = ["courses", "papers", "notices", "classItems"];
 const PAGE_TITLES = {
   home: ["思齐个人主页", "钟爱奥迪A6"],
   courses: ["我的课程", "课程资料与学习资源"],
+  collections: ["合辑", "系列教程与资源收藏"],
   papers: ["论文", "学术论文与研究进展"],
   notices: ["学校通知", "重要通知与公告"],
   class: ["班级事务", "通知、名单与活动"],
@@ -32,6 +34,7 @@ const PAGE_TITLES = {
   advisorDetail: ["导师指导", "与导师交流记录"],
   about: ["关于我", "了解更多关于思齐"],
   courseDetail: ["课程详情", ""],
+  collectionDetail: ["合辑详情", ""],
   paperDetail: ["论文详情", ""],
   noticeDetail: ["通知详情", ""],
   classDetail: ["班级事务详情", ""],
@@ -39,7 +42,7 @@ const PAGE_TITLES = {
 };
 
 const DEFAULT_DATA = {
-  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", favicon:"", name:"思齐", bio:"控制工程研究生", defaultImage:"files/default-cover.jpg", defaultAvatar:"files/default-avatar.png", coverPan:true, coverPanSec:3,
+  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", favicon:"", name:"思齐", bio:"控制工程研究生", defaultImage:"files/default-cover.jpg", defaultAvatar:"files/default-avatar.png", coverPan:true, coverPanSec:3, adminTitle:"", adminTitleSync:true,
     startDate:"2026-09-01",
     notice:"欢迎来到我的小站 🌿\n这里记录我的课程、论文、学习笔记和生活随笔。\n公告内容可以在后台「首页」里改。",
     noticeBtn:"", noticeUrl:"",
@@ -70,7 +73,7 @@ const DEFAULT_DATA = {
     {icon:"🐙", title:"GitHub", url:"https://github.com"},
     {icon:"💡", title:"知乎", url:"https://www.zhihu.com"}
   ],
-  courses: [], papers: [], notices: [], classItems: [], lifeServices: [],
+  courses: [], papers: [], notices: [], classItems: [], collections: [], lifeServices: [],
   friendLinks: [],
   friendApplies: [],
   ledger: [],
@@ -90,6 +93,8 @@ const CLASS_TYPES = ["通知","名单","作业","考试","活动"];
 
 let blogData = null;
 let currentCourseIdx = -1;
+let currentCourseFolder = "";
+let currentCollectionIdx = -1;
 let currentDiaryIdx = -1;
 let currentAdvisorIdx = -1;
 let currentNoticeIdx = -1;
@@ -97,9 +102,12 @@ let currentPaperIdx = -1;
 let currentClassIdx = -1;
 let paperFilter = "all";
 let classFilter = "all";
+let classSubtab = "items";
+let recordSubtab = "ledger";
+let infoSubtab = "tags";
 let mediaFilter = "all";
 /* 分页当前页：首页 / 课程 / 通知 / 班级 各记各的 */
-const pageState = { home: 1, courses: 1, notices: 1, class: 1 };
+const pageState = { home: 1, courses: 1, collections: 1, notices: 1, class: 1 };
 /* 标签聚合当前选中的标签 */
 let currentTag = "";
 /* 悬浮目录当前高亮的标题 id */

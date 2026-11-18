@@ -163,6 +163,26 @@ function renderClass(){
     return '<div class="article-card" onclick="openClass('+idx+')">'+coverHTML(c, "👥")+'<div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+esc(c.type)+'</span><span>'+esc(c.date||"")+'</span>'+(c.time?'<span class="time">🕐 '+esc(c.time)+'</span>':"")+'</div><div class="article-desc">'+esc(mdText(c.content).slice(0,100))+'</div>'+imgStrip(c)+'</div></div>';
   }, "暂无内容");
 }
+function switchClassTab(mode, keepTitle){
+  classSubtab = mode === "roster" ? "roster" : "items";
+  var items = document.getElementById("classItemsPane");
+  var roster = document.getElementById("classRosterPane");
+  if(items) items.style.display = classSubtab === "items" ? "" : "none";
+  if(roster) roster.style.display = classSubtab === "roster" ? "" : "none";
+  document.querySelectorAll("[data-class-tab]").forEach(function(btn){
+    btn.classList.toggle("active", btn.getAttribute("data-class-tab") === classSubtab);
+  });
+  if(classSubtab === "roster") renderRoster();
+  if(!keepTitle) setPageTitle(classSubtab === "roster" ? "roster" : "class");
+}
+function switchRecordTab(tab){
+  recordSubtab = tab === "diary" ? "diary" : "ledger";
+  switchTab(recordSubtab);
+}
+function switchInfoTab(tab){
+  infoSubtab = tab === "about" ? "about" : "tags";
+  switchTab(infoSubtab);
+}
 function openClass(idx){
   rememberOrigin();
   currentClassIdx = idx;
@@ -369,6 +389,7 @@ function openDiary(idx){
   var d = src[idx];
   if(!d) return;
   rememberOrigin();
+  recordSubtab = "diary";
   currentDiaryIdx = idx;
   var title = d.title || autoTitle(d.content, d.date);
   document.getElementById("ddTitle").textContent = title;
@@ -380,6 +401,7 @@ function openDiary(idx){
   box.className = "md-body";
   document.getElementById("ddFiles").innerHTML = galleryHTML(d) + diaryMediaHTML(d);
   setPageTitle("diaryDetail", title, diaryStamp(d));
+  if(typeof setActiveNav === "function") setActiveNav("records");
   showSection("diaryDetail");
   /* 目录要在 showSection 之后生成，否则会被里面的 renderToc([]) 清掉 */
   buildToc(box);

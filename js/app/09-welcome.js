@@ -79,6 +79,7 @@ function initWelcome(){
 }
 
 initSiteChrome();
+if(typeof initHomeEngagement === "function") initHomeEngagement();
 loadData().then(function(){
   if(typeof initRouter === "function") initRouter();
 });

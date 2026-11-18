@@ -72,6 +72,9 @@ function buildSearchIndex(){
   (blogData.courses||[]).forEach(function(c,i){
     push("课程", c.title, [c.title, c.desc, c.intro, (c.tags||[]).join(" "), fileNames(c), (c.progress||0)+"%"], "openCourse(" + i + ")");
   });
+  (blogData.collections||[]).forEach(function(c,i){
+    push("合辑", c.title, [c.title, c.desc, c.intro, c.author, (c.tags||[]).join(" "), fileNames(c)], "openCollection(" + i + ")");
+  });
   (blogData.papers||[]).forEach(function(p,i){
     push("论文", p.title, [p.title, p.abstract, p.desc, (p.tags||[]).join(" "), p.year, p.status, fileNames(p)], "openPaper(" + i + ")");
   });
@@ -187,7 +190,7 @@ function doSearch(q){
 }
 
 var routerApplying = false;
-var ROUTE_SECTION_KEYS = ["home", "courses", "papers", "notices", "class", "roster", "life", "media", "ledger", "diary", "tags", "advisor", "about"];
+var ROUTE_SECTION_KEYS = ["home", "courses", "collections", "papers", "notices", "class", "roster", "life", "media", "ledger", "diary", "tags", "advisor", "about"];
 function routeSlug(text){
   var s = String(text || "").trim()
     .replace(/[\\/#?%]+/g, " ")
@@ -240,6 +243,11 @@ function applyRouteFromLocation(){
     if(section === "courses" && slug){
       var ci = routeIndexBySlug(blogData.courses, slug, function(x){ return x.title; });
       if(ci >= 0) openCourse(ci); else switchTab("courses");
+      return;
+    }
+    if(section === "collections" && slug){
+      var coli = routeIndexBySlug(blogData.collections, slug, function(x){ return x.title; });
+      if(coli >= 0) openCollection(coli); else switchTab("collections");
       return;
     }
     if(section === "papers" && slug){
@@ -332,7 +340,7 @@ function clearSideArticle(){
 }
 
 /* 哪些栏目算「一篇文章」：打开它们时右侧栏只留目录/信息，不显示站点统计 */
-var DETAIL_SECTIONS = ["courseDetail", "noticeDetail", "classDetail", "paperDetail", "appDetail", "diaryDetail", "advisorDetail"];
+var DETAIL_SECTIONS = ["courseDetail", "collectionDetail", "noticeDetail", "classDetail", "paperDetail", "appDetail", "diaryDetail", "advisorDetail"];
 function isDetailSection(name){
   return DETAIL_SECTIONS.indexOf(name) >= 0;
 }
@@ -361,11 +369,26 @@ function showSection(name){
 /* 有些视图没有自己的导航按钮，高亮要落到它所属的栏目上 */
 var NAV_ALIAS = {};
 function switchTab(t){
-  setActiveNav(NAV_ALIAS[t] || t);
+  if(typeof closeEngagementDialog === "function") closeEngagementDialog();
+  if(t === "records") t = recordSubtab || "ledger";
+  if(t === "roster"){ classSubtab = "roster"; t = "class"; }
+  if(t === "ledger" || t === "diary") recordSubtab = t;
+  if(t === "tags" || t === "about") infoSubtab = t;
+  var navKey = NAV_ALIAS[t] || t;
+  if(t === "ledger" || t === "diary") navKey = "records";
+  if(t === "about") navKey = "tags";
+  setActiveNav(navKey);
   /* 切栏目时清掉上一个页面的目录 */
   renderToc([]);
   setPageTitle(t);
   showSection(t);
+  if(t === "class" && typeof switchClassTab === "function") switchClassTab(classSubtab);
+  document.querySelectorAll("[data-record-tab]").forEach(function(btn){
+    btn.classList.toggle("active", btn.getAttribute("data-record-tab") === (t === "diary" ? "diary" : "ledger"));
+  });
+  document.querySelectorAll("[data-info-tab]").forEach(function(btn){
+    btn.classList.toggle("active", btn.getAttribute("data-info-tab") === (t === "about" ? "about" : "tags"));
+  });
   /* 标签聚合页需要按当前选中标签重画 */
   if(t === "tags") renderTagView(currentTag);
   closeDrawer();
@@ -422,15 +445,21 @@ function currentTab(){
   var active = document.querySelector(".section.active");
   if(!active) return "home";
   var map = { "sec-home": "home", "sec-courses": "courses", "sec-courseDetail": "courses",
+    "sec-collections": "collections", "sec-collectionDetail": "collections",
     "sec-papers": "papers", "sec-paperDetail": "papers", "sec-notices": "notices",
     "sec-noticeDetail": "notices", "sec-class": "class", "sec-classDetail": "class",
-    "sec-roster": "roster", "sec-life": "life", "sec-media": "life", "sec-ledger": "ledger",
+    "sec-roster": "class", "sec-life": "life", "sec-media": "life", "sec-ledger": "records",
     "sec-appDetail": "life",
-    "sec-diary": "diary", "sec-diaryDetail": "diary", "sec-tags": "tags",
-    "sec-advisor": "advisor", "sec-advisorDetail": "advisor", "sec-about": "about" };
+    "sec-diary": "records", "sec-diaryDetail": "records", "sec-tags": "tags",
+    "sec-advisor": "advisor", "sec-advisorDetail": "advisor", "sec-about": "tags" };
   return map[active.id] || "home";
 }
-document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeDrawer(); });
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape"){
+    closeDrawer();
+    if(typeof closeEngagementDialog === "function") closeEngagementDialog();
+  }
+});
 window.addEventListener("resize", function(){ if(window.innerWidth > 900) closeDrawer(); });
 
 document.querySelectorAll(".nav-links button").forEach(function(btn){ btn.onclick = function(){switchTab(btn.dataset.t);}; });

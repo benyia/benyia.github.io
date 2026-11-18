@@ -5,6 +5,8 @@ function saveSiteConfig(){
   var favicon = $("cfgFavicon").value.trim();
   blogData.siteConfig = {
     title: $("cfgTitle").value.trim() || "思齐个人主页",
+    adminTitle: $("cfgAdminTitle") ? $("cfgAdminTitle").value.trim() : "",
+    adminTitleSync: $("cfgAdminTitleSync") ? $("cfgAdminTitleSync").checked : true,
     subtitle: $("cfgSub").value.trim(),
     about: $("cfgAbout").value,
     avatar: $("cfgAvatar").value.trim() || "思",
@@ -30,6 +32,7 @@ function saveSiteConfig(){
     else localStorage.removeItem("benyia_site_favicon");
   }catch(e){}
   saveData("修改站点设置");
+  applyAdminTabTitle();
   renderAll();
 }
 function clearSiteFavicon(){
@@ -117,6 +120,7 @@ function saveHomeInfo(){
 /* 首页显示哪几类内容 */
 var HOME_SEC_OPTS = [
   { key: "courses",    name: "课程", icon: "📚" },
+  { key: "collections",name: "合辑", icon: "📦" },
   { key: "papers",     name: "论文", icon: "📝" },
   { key: "notices",    name: "通知", icon: "🔔" },
   { key: "classItems", name: "班级", icon: "👥" },
@@ -413,6 +417,8 @@ function cancelEdit(kind){
     ["cIcon","cTitle","cDesc","cTags"].forEach(id=>$(id).value="");
     loadRich("course", "");
     $("cProgress").value=0;
+    courseDraftFolders = [];
+    courseCurrentFolder = "";
     $("courseFormTitle").textContent="添加课程";
     $("courseEditBar").classList.remove("on");
     $("cSubmit").textContent="添加课程";

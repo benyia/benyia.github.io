@@ -983,6 +983,29 @@
       ],
       "images": [],
       "time": "2026-11-18 15:35"
+    },
+    {
+      "icon": "自",
+      "title": "自适应控制",
+      "desc": "教材、PPT、课后习题答案",
+      "intro": "",
+      "introIsHTML": true,
+      "tags": [],
+      "progress": 0,
+      "folders": [],
+      "files": [
+        {
+          "name": "《自适应控制》课程教学大纲.docx",
+          "url": "files/《自适应控制》课程教学大纲.docx",
+          "type": "DOCX",
+          "size": 84968,
+          "originalSize": 84968,
+          "optimized": false,
+          "folder": ""
+        }
+      ],
+      "images": [],
+      "time": "2026-11-18 16:23"
     }
   ],
   "papers": [
@@ -1654,6 +1677,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-18 16:23",
+      "action": "添加课程：自适应控制"
+    },
+    {
       "time": "2026-11-18 16:18",
       "action": "修改入场欢迎页"
     },
@@ -2048,10 +2075,6 @@
     {
       "time": "2026-09-30 11:19",
       "action": "编辑应用：DeepSeek"
-    },
-    {
-      "time": "2026-09-30 11:10",
-      "action": "编辑应用：CC Switch"
     }
   ],
   "categories": [

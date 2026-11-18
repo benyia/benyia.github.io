@@ -424,6 +424,7 @@ html[data-theme="dark"] .course-badge{background:rgba(217,119,6,.18);color:#fbbf
 @media(max-width:560px){
   .topnav-inner{gap:6px}
   .nav-brand{font-size:1rem}
+  .nav-admin{width:32px;height:32px;font-size:.98rem}
   .nav-search input{width:104px;padding:8px 12px 8px 32px}
   .nav-search input:focus{width:120px}
   .page-title{padding:20px 14px}

@@ -1,0 +1,2858 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Soul of Steve Jobs 中英对照精读版。">
+  <title>The Soul of Steve Jobs｜Gordon MacDonald · 戈登·麦克唐纳 著 中英对照</title>
+  <style>
+
+    :root {
+      --paper: #f4eee2;
+      --paper-2: #fbf8f1;
+      --paper-3: #efe6d6;
+      --ink: #24211d;
+      --ink-soft: #514a40;
+      --muted: #756d62;
+      --crimson: #9d2235;
+      --crimson-dark: #711626;
+      --gold: #b98b45;
+      --line: rgba(36, 33, 29, 0.14);
+      --ui: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --serif: Georgia, "Times New Roman", "Songti SC", "SimSun", serif;
+      --zh: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
+      --en-size: 19px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 6% 2%, rgba(185, 139, 69, 0.14), transparent 30rem),
+        radial-gradient(circle at 96% 8%, rgba(157, 34, 53, 0.08), transparent 34rem),
+        var(--paper);
+      font-family: var(--ui);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.55;
+      background-image: repeating-linear-gradient(
+        0deg,
+        rgba(79, 57, 34, 0.018) 0,
+        rgba(79, 57, 34, 0.018) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+    }
+
+    a { color: inherit; }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 70;
+      height: 3px;
+      width: 0;
+      background: linear-gradient(90deg, var(--crimson), var(--gold));
+      box-shadow: 0 0 14px rgba(157, 34, 53, 0.28);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 64px;
+      padding: 10px clamp(16px, 4vw, 52px);
+      background: rgba(247, 242, 233, 0.88);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--crimson);
+      font-family: var(--serif);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .brand::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--crimson);
+      box-shadow: 0 0 0 4px rgba(157, 34, 53, 0.1);
+    }
+
+    .tools {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .tool {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--ink-soft);
+      background: rgba(255, 255, 255, 0.38);
+      font: 500 12px/1 var(--ui);
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+
+    .tool:hover,
+    .tool:focus-visible {
+      color: var(--crimson);
+      background: #fff;
+      border-color: rgba(157, 34, 53, 0.35);
+      outline: none;
+    }
+
+    .tool.active {
+      color: #fff;
+      background: var(--crimson);
+      border-color: var(--crimson);
+    }
+
+    .sizer {
+      display: inline-flex;
+      gap: 4px;
+      margin: 0 2px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.26);
+    }
+
+    .sizer .tool {
+      width: 29px;
+      height: 29px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      font-family: var(--serif);
+      font-size: 13px;
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+      gap: clamp(34px, 5vw, 76px);
+      align-items: end;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: clamp(54px, 8vw, 108px) clamp(20px, 5vw, 64px) 54px;
+    }
+
+    .hero::after {
+      content: "HARVARD · 2008";
+      position: absolute;
+      right: 7px;
+      top: 58%;
+      color: rgba(36, 33, 29, 0.22);
+      font-family: var(--serif);
+      font-size: 9px;
+      letter-spacing: 0.26em;
+      transform: rotate(90deg) translateX(50%);
+      transform-origin: right center;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0;
+      color: var(--crimson);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 38px;
+      height: 1px;
+      background: var(--crimson);
+    }
+
+    .hero h1 {
+      margin: 18px 0 20px;
+      font-family: var(--zh);
+      font-size: clamp(38px, 6.2vw, 76px);
+      font-weight: 700;
+      line-height: 1.13;
+      letter-spacing: -0.045em;
+    }
+
+    .hero h1 span { color: var(--crimson); }
+
+    .en-title {
+      max-width: 760px;
+      margin: 0 0 18px;
+      color: #5d5448;
+      font-family: var(--serif);
+      font-size: clamp(17px, 2vw, 23px);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .byline {
+      margin: 0;
+      color: var(--ink-soft);
+      font-family: var(--serif);
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .byline strong {
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    .hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.28);
+      font-size: 11px;
+      letter-spacing: 0.03em;
+    }
+
+    .hero-card {
+      position: relative;
+      padding: 30px 28px 26px;
+      border: 1px solid rgba(157, 34, 53, 0.22);
+      background: rgba(255, 255, 255, 0.38);
+      box-shadow: 0 24px 60px rgba(72, 51, 29, 0.08);
+    }
+
+    .hero-card::before {
+      content: "“";
+      display: block;
+      height: 56px;
+      color: var(--gold);
+      font-family: var(--serif);
+      font-size: 96px;
+      line-height: 0.8;
+    }
+
+    .hero-card p {
+      margin: 0 0 18px;
+      font-family: var(--serif);
+      font-size: clamp(19px, 2vw, 24px);
+      font-style: italic;
+      line-height: 1.55;
+    }
+
+    .hero-card cite {
+      display: block;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-family: var(--zh);
+      font-size: 13px;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    .start {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 28px;
+      color: var(--crimson-dark);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .start span {
+      display: inline-grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      border: 1px solid rgba(157, 34, 53, 0.3);
+      border-radius: 50%;
+      font-size: 14px;
+    }
+
+    .guide {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 0 clamp(20px, 5vw, 64px) 46px;
+    }
+
+    .guide-inner {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-column: 1 / -1;
+      gap: 1px;
+      border: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .guide-item {
+      min-height: 132px;
+      padding: 22px 24px;
+      background: rgba(251, 248, 241, 0.76);
+    }
+
+    .guide-item b {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--crimson);
+      font-family: var(--serif);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .guide-item p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .toc {
+      max-width: 1220px;
+      margin: 0 auto 24px;
+      padding: 0 clamp(20px, 5vw, 64px);
+    }
+
+    .toc-inner {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 24px;
+      padding: 20px 0;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .toc-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .toc-links {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .toc-links a {
+      display: block;
+      padding: 4px 0 10px;
+      border-bottom: 2px solid transparent;
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.55;
+      text-decoration: none;
+      transition: 160ms ease;
+    }
+
+    .toc-links a:hover {
+      color: var(--crimson);
+      border-bottom-color: var(--crimson);
+    }
+
+    .toc-kicker {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--gold);
+      font-family: var(--serif);
+      font-size: 15px;
+      font-style: italic;
+    }
+
+    .reading {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px clamp(18px, 5vw, 40px) 76px;
+    }
+
+    .section {
+      margin-top: 76px;
+      scroll-margin-top: 90px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+      margin-bottom: 28px;
+      padding-top: 22px;
+      border-top: 1px solid var(--ink);
+    }
+
+    .kicker {
+      color: var(--crimson);
+      font-family: var(--serif);
+      font-size: 54px;
+      font-style: italic;
+      line-height: 0.82;
+    }
+
+    .section h2 {
+      margin: 0 0 8px;
+      font-family: var(--zh);
+      font-size: clamp(27px, 3.4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+    }
+
+    .section-sub {
+      margin: 0;
+      color: var(--muted);
+      font-family: var(--serif);
+      font-size: 14px;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .para {
+      display: grid;
+      grid-template-columns: 68px minmax(0, 1fr);
+      gap: 24px;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 96px;
+    }
+
+    .pno {
+      padding-top: 8px;
+      color: #b7a78e;
+      font-family: var(--serif);
+      font-size: 9px;
+      letter-spacing: 0.13em;
+    }
+
+    .pno b {
+      display: block;
+      margin-bottom: 8px;
+      color: #c7baa6;
+      font-size: 34px;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .en {
+      margin: 0;
+      color: #211e19;
+      font-family: var(--serif);
+      font-size: var(--en-size);
+      letter-spacing: 0.003em;
+      line-height: 1.95;
+    }
+
+    .zh {
+      margin: 15px 0 0;
+      padding: 3px 0 3px 18px;
+      border-left: 2px solid rgba(185, 139, 69, 0.55);
+      color: var(--ink-soft);
+      font-family: var(--zh);
+      font-size: calc(var(--en-size) * 0.93);
+      line-height: 1.95;
+    }
+
+    .hl {
+      padding-bottom: 1px;
+      border-bottom: 1.5px dotted rgba(157, 34, 53, 0.7);
+      color: inherit;
+      background: transparent;
+      cursor: help;
+      transition: background 160ms ease;
+    }
+
+    .hl:hover { background: rgba(185, 139, 69, 0.18); }
+
+    .keys {
+      margin-top: 19px;
+      padding: 15px 17px 16px;
+      border: 1px solid rgba(36, 33, 29, 0.1);
+      background: rgba(255, 255, 255, 0.34);
+    }
+
+    .keys-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--crimson);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .keys-count {
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: none;
+    }
+
+    .key-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 11px;
+    }
+
+    .key {
+      min-width: 0;
+      padding: 11px 13px 12px;
+      border-left: 2px solid rgba(157, 34, 53, 0.36);
+      background: rgba(247, 242, 233, 0.62);
+    }
+
+    .key-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 5px 7px;
+    }
+
+    .key-w {
+      color: var(--crimson-dark);
+      font-family: var(--serif);
+      font-size: 15.5px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .key-ipa {
+      color: var(--muted);
+      font-family: var(--serif);
+      font-size: 11.5px;
+      line-height: 1.35;
+    }
+
+    .key-pos {
+      padding: 2px 5px;
+      border: 1px solid rgba(36, 33, 29, 0.13);
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.2;
+    }
+
+    .key-zh {
+      margin-top: 5px;
+      color: var(--ink-soft);
+      font-family: var(--zh);
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.55;
+    }
+
+    .key-note {
+      margin-top: 3px;
+      color: #6c6459;
+      font-size: 11.5px;
+      line-height: 1.65;
+    }
+
+    body.hide-zh .zh { display: none; }
+    body.hide-keys .keys { display: none; }
+    body.hide-keys .para { padding-bottom: 30px; }
+
+    .glossary {
+      max-width: 1220px;
+      margin: 84px auto 0;
+      padding: 0 clamp(20px, 5vw, 64px);
+      scroll-margin-top: 90px;
+    }
+
+    .glossary-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 340px);
+      gap: 26px;
+      align-items: end;
+      padding-top: 24px;
+      border-top: 1px solid var(--ink);
+    }
+
+    .glossary h2 {
+      margin: 0 0 7px;
+      font-family: var(--zh);
+      font-size: clamp(28px, 3.5vw, 42px);
+      letter-spacing: -0.03em;
+    }
+
+    .glossary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.7;
+    }
+
+    .search-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-wrap::before {
+      content: "⌕";
+      position: absolute;
+      left: 13px;
+      color: var(--muted);
+      font-family: var(--serif);
+      font-size: 20px;
+      pointer-events: none;
+    }
+
+    .search {
+      width: 100%;
+      padding: 12px 14px 12px 39px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.42);
+      font: 13px/1.4 var(--ui);
+    }
+
+    .search:focus {
+      border-color: rgba(157, 34, 53, 0.5);
+      outline: none;
+      background: #fff;
+    }
+
+    .glossary-status {
+      margin: 18px 0 12px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+    }
+
+    .g-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .g-item {
+      min-height: 118px;
+      padding: 14px 15px;
+      border: 1px solid rgba(36, 33, 29, 0.1);
+      background: rgba(251, 248, 241, 0.66);
+      break-inside: avoid;
+    }
+
+    .g-item[hidden] { display: none; }
+
+    .g-word {
+      color: var(--crimson-dark);
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .g-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+      color: var(--muted);
+      font-family: var(--serif);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .g-meta i {
+      color: #9b8f80;
+      font-family: var(--ui);
+      font-size: 9.5px;
+      font-style: normal;
+    }
+
+    .g-zh {
+      margin-top: 7px;
+      color: var(--ink-soft);
+      font-family: var(--zh);
+      font-size: 12.5px;
+      font-weight: 600;
+      line-height: 1.55;
+    }
+
+    .g-note {
+      margin-top: 4px;
+      color: #746b60;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .site-footer {
+      max-width: 1220px;
+      margin: 78px auto 0;
+      padding: 24px clamp(20px, 5vw, 64px) 42px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .site-footer strong {
+      color: var(--ink-soft);
+      font-weight: 600;
+    }
+
+    .backtop {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 55;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(157, 34, 53, 0.28);
+      border-radius: 50%;
+      color: var(--crimson);
+      background: rgba(251, 248, 241, 0.92);
+      box-shadow: 0 8px 24px rgba(72, 51, 29, 0.1);
+      font-size: 16px;
+      text-decoration: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: 180ms ease;
+    }
+
+    .backtop.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        align-items: start;
+      }
+
+      .hero::after { display: none; }
+      .hero-card { max-width: 520px; }
+
+      .toc-inner {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .toc-links { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .g-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      .topbar {
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 16px 10px;
+      }
+
+      .brand {
+        flex: 1 0 100%;
+        padding-top: 0;
+      }
+
+      .tools {
+        width: 100%;
+        max-width: none;
+        gap: 5px;
+        justify-content: space-between;
+      }
+
+      .tool {
+        flex: 1 1 0;
+        padding: 7px 9px;
+        font-size: 11px;
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      .sizer { display: none; }
+
+      .hero {
+        padding-top: 46px;
+        padding-bottom: 40px;
+      }
+
+      .hero h1 {
+        font-size: clamp(34px, 9.4vw, 46px);
+        line-height: 1.16;
+        letter-spacing: -0.05em;
+      }
+
+      .guide-inner { grid-template-columns: 1fr; }
+      .guide-item { min-height: 0; }
+      .toc-links { grid-template-columns: 1fr 1fr; }
+
+      .section-head {
+        grid-template-columns: 64px minmax(0, 1fr);
+        gap: 14px;
+      }
+
+      .kicker { font-size: 42px; }
+
+      .para {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 28px 0;
+      }
+
+      .pno {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-top: 0;
+      }
+
+      .pno b {
+        margin: 0;
+        font-size: 24px;
+      }
+
+      .en { font-size: calc(var(--en-size) - 1px); }
+      .zh { font-size: calc(var(--en-size) * 0.9); }
+      .key-grid { grid-template-columns: 1fr; }
+
+      .glossary-head { grid-template-columns: 1fr; }
+      .g-grid { grid-template-columns: 1fr; }
+      .g-item { min-height: 0; }
+    }
+
+    @media (max-width: 430px) {
+      .hero-meta span { font-size: 10px; }
+      .hero-card { padding: 24px 21px; }
+    }
+
+    @media print {
+      @page { margin: 15mm 14mm; }
+
+      body {
+        background: #fff;
+        font-size: 10pt;
+      }
+
+      body::before,
+      .topbar,
+      .progress,
+      .guide,
+      .toc,
+      .start,
+      .backtop,
+      .search-wrap,
+      .glossary-status {
+        display: none !important;
+      }
+
+      .hero {
+        display: block;
+        max-width: none;
+        padding: 0 0 12mm;
+      }
+
+      .hero h1 { font-size: 28pt; }
+      .en-title { font-size: 13pt; }
+      .hero-card,
+      .hero::after { display: none; }
+
+      .reading,
+      .glossary {
+        max-width: none;
+        padding: 0;
+      }
+
+      .section {
+        margin-top: 0;
+        break-before: page;
+      }
+
+      .section:first-child { break-before: auto; }
+      .section-head { padding-top: 4mm; margin-bottom: 4mm; }
+      .kicker { font-size: 30pt; }
+      .section h2 { font-size: 20pt; }
+
+      .para {
+        grid-template-columns: 10mm minmax(0, 1fr);
+        gap: 5mm;
+        padding: 5mm 0;
+        break-inside: avoid;
+      }
+
+      .pno b { font-size: 19pt; }
+      .en { font-size: 10.2pt; line-height: 1.55; }
+      .zh { font-size: 9.5pt; line-height: 1.65; }
+      .hl { border-bottom: 0; font-weight: 700; }
+      .keys { margin-top: 3mm; padding: 0; border: 0; background: none; }
+      .keys-head { margin-bottom: 1.5mm; }
+      .key-grid { gap: 2mm; }
+      .key { padding: 2mm 3mm; background: #f6f3ed; break-inside: avoid; }
+      .key-w { font-size: 9.5pt; }
+      .key-zh, .key-note { font-size: 8pt; }
+
+      .glossary { break-before: page; margin-top: 0; }
+      .glossary-head { display: block; }
+      .g-grid { grid-template-columns: 1fr 1fr; gap: 2mm; }
+      .g-item { min-height: 0; padding: 2.5mm; }
+      .g-word { font-size: 9.5pt; }
+      .g-zh, .g-note { font-size: 8pt; }
+    }
+  
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#top">Gordon MacDonald · Soul of Jobs</a>
+    <div class="tools" aria-label="阅读工具">
+      <button class="tool" id="toggleZh" type="button" aria-pressed="false">隐藏中文</button>
+      <button class="tool" id="toggleKeys" type="button" aria-pressed="false">收起重点词</button>
+      <div class="sizer" aria-label="调整字号">
+        <button class="tool" id="fontMinus" type="button" title="缩小字号">A−</button>
+        <button class="tool" id="fontPlus" type="button" title="放大字号">A+</button>
+      </div>
+      <button class="tool" id="printBtn" type="button">打印</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Christian Reflection on Steve Jobs</p>
+        <h1>史蒂夫·乔布斯<br><span>的灵魂</span></h1>
+        <p class="en-title">The Soul of Steve Jobs</p>
+        <p class="byline"><strong>Gordon MacDonald</strong> · 戈登·麦克唐纳 著</p>
+        <div class="hero-meta">
+          <span>全文 60 段</span>
+          <span>约 2,767 词</span>
+          <span>中英逐段对照</span>
+          <span>重点词音标与注释</span>
+        </div>
+        <a class="start" href="intro">开始阅读 <span>↓</span></a>
+      </div>
+      <aside class="hero-card">
+        <p>He even cared about the look of the parts you couldn't see.</p>
+        <cite>他甚至在意那些你看不见的部件长什么样。<br>—— 乔布斯谈父亲</cite>
+      </aside>
+    </section>
+
+    <section class="guide" aria-label="阅读提示">
+      <div class="guide-inner">
+        <div class="guide-item">
+          <b>01 · 逐段精读</b>
+          <p>每段先读英文，再对照中文。译文以准确传达语气和逻辑为主，保留原文的口语节奏。</p>
+        </div>
+        <div class="guide-item">
+          <b>02 · 重点词标注</b>
+          <p>英文中的虚线下划线是重点词。每段下方列出音标、词性、释义与用法提示，页末附总表。</p>
+        </div>
+        <div class="guide-item">
+          <b>03 · 两种阅读模式</b>
+          <p>可用顶部按钮隐藏中文或收起重点词，先做纯英文阅读，再回看翻译与词汇，检测理解。</p>
+        </div>
+      </div>
+    </section>
+
+    <nav class="toc" aria-label="目录">
+      <div class="toc-inner">
+        <div class="toc-label">Contents / 目录</div>
+        <div class="toc-links">
+      <a href="#intro">
+        <span class="toc-kicker">I</span>
+        <span>为何写一篇基督徒视角的解读</span>
+      </a>
+      <a href="#early">
+        <span class="toc-kicker">II</span>
+        <span>早期影响</span>
+      </a>
+      <a href="#partner">
+        <span class="toc-kicker">III</span>
+        <span>伙伴关系</span>
+      </a>
+      <a href="#crash">
+        <span class="toc-kicker">IV</span>
+        <span>崩溃</span>
+      </a>
+      <a href="#truth">
+        <span class="toc-kicker">V</span>
+        <span>真理</span>
+      </a>
+      <a href="#beauty">
+        <span class="toc-kicker">VI</span>
+        <span>实用与美丽</span>
+      </a>
+      <a href="#dying">
+        <span class="toc-kicker">VII</span>
+        <span>死亡</span>
+      </a>
+      </div>
+      </div>
+    </nav>
+
+    <div class="reading">
+      <section class="section" id="intro">
+        <div class="section-head">
+          <div class="kicker" aria-hidden="true">I</div>
+          <div>
+            <h2>为何写一篇基督徒视角的解读</h2>
+            <p class="section-sub">争议人物留下的领导课</p>
+          </div>
+        </div>
+          <article class="para" id="p1">
+            <div class="pno" aria-hidden="true"><b>01</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Soon after the death of Apple's co-founder, Steve Jobs, I read Walter Isaacson's newly released <mark class="hl" title="传记 /baɪˈɒɡrəfi/">biography</mark>, Steve Jobs. Once started, I found it difficult to stop reading (on my iPad) about this complicated man, and I regretted reaching the last page.</p>
+              <p class="zh" lang="zh-CN">苹果公司联合创始人史蒂夫·乔布斯去世后不久，我读了沃尔特·艾萨克森新出版的传记《史蒂夫·乔布斯》。一开始读（在我的iPad上），我就发现很难停下来了解这个复杂的人，读到最后一页时我甚至感到遗憾。</p>
+              <div class="keys" aria-label="第 1 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">biography</span>
+                  <span class="key-ipa">/baɪˈɒɡrəfi/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">传记</div>
+                <div class="key-note">Walter Isaacson 所著 Steve Jobs 传记。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p2">
+            <div class="pno" aria-hidden="true"><b>02</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Whether one liked or disliked Steve Jobs, he is certainly one of the most talked-about leaders of our time. In his 56-year life, he founded and ultimately led a business organization to a <mark class="hl" title="压倒性的；领军的 /kəˈmɑːndɪŋ/">commanding</mark> position in the world of technology. He assembled and led teams that produced some of the most admired technological products of our time: Mac Books, iPods, iPhones, iPads. Whole industries came into being because of him.</p>
+              <p class="zh" lang="zh-CN">无论你喜欢还是不喜欢史蒂夫·乔布斯，他无疑是我们这个时代最受热议的领袖之一。在他56年的人生中，他创立并最终领导了一个商业组织，使其在科技世界中占据了主导地位。他组建并领导的团队创造了我们这个时代最受推崇的一些科技产品：MacBook、iPod、iPhone、iPad。整个行业因为他而诞生。</p>
+              <div class="keys" aria-label="第 2 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">commanding</span>
+                  <span class="key-ipa">/kəˈmɑːndɪŋ/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">压倒性的；领军的</div>
+                <div class="key-note">a commanding position = 领军地位。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">assemble</span>
+                  <span class="key-ipa">/əˈsembl/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">聚集；组建</div>
+                <div class="key-note">assemble and lead teams = 组建并领导团队。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p3">
+            <div class="pno" aria-hidden="true"><b>03</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">But Steve Jobs also had many critics. "He mistreated people." "He was <mark class="hl" title="无情的；残忍的 /ˈruːθləs/">ruthless</mark> in his business dealings." "He was <mark class="hl" title="报复心强的 /vɪnˈdɪktɪv/">vindictive</mark>." "He lacked <mark class="hl" title="同情；怜悯 /kəmˈpæʃn/">compassion</mark>." And that's just the light stuff.</p>
+              <p class="zh" lang="zh-CN">但史蒂夫·乔布斯也有许多批评者。"他虐待员工。""他在商业交易中冷酷无情。""他报复心强。""他缺乏同情心。"而这些还只是轻的。</p>
+              <div class="keys" aria-label="第 3 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">3 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">ruthless</span>
+                  <span class="key-ipa">/ˈruːθləs/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">无情的；残忍的</div>
+                <div class="key-note">ruth（怜悯）+ less。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">vindictive</span>
+                  <span class="key-ipa">/vɪnˈdɪktɪv/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">报复心强的</div>
+                <div class="key-note">vindicate v. 证明无辜，此处指反义。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">compassion</span>
+                  <span class="key-ipa">/kəmˈpæʃn/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">同情；怜悯</div>
+                <div class="key-note">lack compassion = 缺乏同情心。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p4">
+            <div class="pno" aria-hidden="true"><b>04</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">As I read about Steve Jobs, I dared to imagine a conversation with him in his office at Apple. A fantasy, of course, but a <mark class="hl" title="引发；触发 /ˈtrɪɡə/">trigger</mark> for some <mark class="hl" title="清醒的；严肃的 /ˈsəʊbə/">sober</mark> thought.</p>
+              <p class="zh" lang="zh-CN">当我阅读关于史蒂夫·乔布斯的内容时，我大胆地想象与他在苹果公司办公室里的一次对话。当然，这是一种幻想，但却引发了一些严肃的思考。</p>
+              <div class="keys" aria-label="第 4 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">trigger</span>
+                  <span class="key-ipa">/ˈtrɪɡə/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">引发；触发</div>
+                <div class="key-note">a trigger for sober thought = 引人深思的契机。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">sober</span>
+                  <span class="key-ipa">/ˈsəʊbə/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">清醒的；严肃的</div>
+                <div class="key-note">sober thought = 冷静的思考。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p5">
+            <div class="pno" aria-hidden="true"><b>05</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">We all know that Steve Jobs was not a <mark class="hl" title="公开声称信仰的 /prəˈfesɪŋ/">professing</mark> Christian. While he respected Jesus, he walked away from Christianity at an early age — at least in its organized and <mark class="hl" title="教义的 /dɒkˈtraɪnl/">doctrinal</mark> form.</p>
+              <p class="zh" lang="zh-CN">我们都知道史蒂夫·乔布斯不是一个公开宣称信仰的基督徒。虽然他尊重耶稣，但他在很小的时候就离开了基督教——至少是离开了其有组织的、教义化的形式。</p>
+              <div class="keys" aria-label="第 5 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">professing</span>
+                  <span class="key-ipa">/prəˈfesɪŋ/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">公开声称信仰的</div>
+                <div class="key-note">professing Christian = 挂牌基督徒。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">doctrinal</span>
+                  <span class="key-ipa">/dɒkˈtraɪnl/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">教义的</div>
+                <div class="key-note">doctrine n. 教义。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p6">
+            <div class="pno" aria-hidden="true"><b>06</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">So why write about him in a Christian journal? Answer: because his life yields valuable lessons, positive and negative, on the subject of leadership. It also highlights areas that Christian leaders can <mark class="hl" title="争取；利用 /ɪnˈlɪst/">enlist</mark> to touch the souls of people like him.</p>
+              <p class="zh" lang="zh-CN">那么为什么要在基督教刊物上写他呢？答案是：因为他的人生在领导力这个主题上提供了宝贵的经验教训，有正面的也有负面的。它也凸显了基督教领袖可以用来触动像他这样的人灵魂的领域。</p>
+              <div class="keys" aria-label="第 6 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">yield</span>
+                  <span class="key-ipa">/jiːld/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">产生；出产</div>
+                <div class="key-note">yield valuable lessons = 提供宝贵教训。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">enlist</span>
+                  <span class="key-ipa">/ɪnˈlɪst/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">争取；利用</div>
+                <div class="key-note">enlist to touch souls = 设法触动心灵。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+      </section>
+
+      <section class="section" id="early">
+        <div class="section-head">
+          <div class="kicker" aria-hidden="true">II</div>
+          <div>
+            <h2>早期影响</h2>
+            <p class="section-sub">生父、养父、老师与牧师</p>
+          </div>
+        </div>
+          <article class="para" id="p7">
+            <div class="pno" aria-hidden="true"><b>07</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">The Steve Jobs biography reminded me of how many leaders are shaped by events in their earliest years (even days) of life.</p>
+              <p class="zh" lang="zh-CN">《史蒂夫·乔布斯》传记让我想起，有多少领袖是由他们人生最初几年（甚至最初几天）的事件塑造的。</p>
+              <div class="keys" aria-label="第 7 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">shape</span>
+                  <span class="key-ipa">/ʃeɪp/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">塑造</div>
+                <div class="key-note">leaders are shaped by early events = 领袖由早年事件塑造。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p8">
+            <div class="pno" aria-hidden="true"><b>08</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Jobs, for example, was born to an unmarried couple who chose to give him up for adoption. The good news? The newborn child came to the home of a working class couple, Paul and Clara Jobs of San Francisco, who lavished great love and care on him.</p>
+              <p class="zh" lang="zh-CN">例如，乔布斯出生于一对未婚夫妇，他们选择把他送人收养。好消息是？这个新生儿来到了旧金山一对工人阶级夫妇——保罗和克拉拉·乔布斯——的家中，他们给予了他极大的爱和关怀。</p>
+              <div class="keys" aria-label="第 8 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">lavish</span>
+                  <span class="key-ipa">/ˈlævɪʃ/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">慷慨给予；挥霍</div>
+                <div class="key-note">lavish love on sb = 倾注大量爱。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p9">
+            <div class="pno" aria-hidden="true"><b>09</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Paul Jobs, Steve's adoptive father, was a Coast Guard <mark class="hl" title="老兵；退伍军人 /ˈvetərən/">veteran</mark>, a man of exceptional mechanical and <mark class="hl" title="木工 /ˈkɑːpəntri/">carpentry</mark> skill. When Steve was old enough, father and son began to <mark class="hl" title="摆弄；修补 /ˈtɪŋkə/">tinker</mark> with cars, build furniture, and repair things about the house. "I wasn't into fixing cars," Steve Jobs said years later, "but I was eager to hang out with my dad."</p>
+              <p class="zh" lang="zh-CN">保罗·乔布斯，史蒂夫的养父，是一名海岸警卫队退伍军人，一个拥有非凡机械和木工技能的人。当史蒂夫长到足够大时，父子俩开始摆弄汽车、制作家具、修理家里的东西。"我对修车不感兴趣，"史蒂夫·乔布斯多年后说，"但我很渴望和爸爸待在一起。"</p>
+              <div class="keys" aria-label="第 9 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">3 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">veteran</span>
+                  <span class="key-ipa">/ˈvetərən/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">老兵；退伍军人</div>
+                <div class="key-note">Coast Guard veteran = 海岸警卫队退伍兵。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">carpentry</span>
+                  <span class="key-ipa">/ˈkɑːpəntri/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">木工</div>
+                <div class="key-note">carpenter n. 木匠。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">tinker</span>
+                  <span class="key-ipa">/ˈtɪŋkə/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">摆弄；修补</div>
+                <div class="key-note">tinker with cars = 鼓捣汽车。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p10">
+            <div class="pno" aria-hidden="true"><b>10</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">In their time together, the father planted a powerful work <mark class="hl" title="道德准则；伦理 /ˈeθɪk/">ethic</mark> in his son. All work, Steve Jobs learned, was to be marked with excellence. When father and son painted a fence together, for example, the boy learned that the unexposed side was to be treated with the same <mark class="hl" title="彻底；一丝不苟 /ˈθʌrənəs/">thoroughness</mark> as the visible side.</p>
+              <p class="zh" lang="zh-CN">在他们相处的时光里，父亲在儿子心中种下了强烈的职业道德。史蒂夫·乔布斯学到，所有的工作都应以卓越为标志。例如，当父子俩一起粉刷栅栏时，男孩学到，看不见的那一面也要和看得见的那一面一样认真对待。</p>
+              <div class="keys" aria-label="第 10 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">ethic</span>
+                  <span class="key-ipa">/ˈeθɪk/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">道德准则；伦理</div>
+                <div class="key-note">work ethic = 职业道德。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">thoroughness</span>
+                  <span class="key-ipa">/ˈθʌrənəs/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">彻底；一丝不苟</div>
+                <div class="key-note">unexposed side 也要漆好。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p11">
+            <div class="pno" aria-hidden="true"><b>11</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">"(My father) loved doing things right," Jobs reflected. "He even cared about the look of the parts you couldn't see." Decades later this principle learned in boyhood would shape the development of Apple devices. Jobs always insisted that the inner parts of anything bearing the Apple name be as perfectly designed and built as the outer parts, even though a customer would never see them.</p>
+              <p class="zh" lang="zh-CN">"（我父亲）喜欢把事情做对，"乔布斯回忆道。"他甚至关心那些你看不见的零件的外观。"几十年后，这个在童年时代学到的原则塑造了苹果设备的发展。乔布斯始终坚持，任何带有苹果标志的产品，其内部零件的设计和制造都要和外部零件一样完美，尽管顾客永远看不到它们。</p>
+              <div class="keys" aria-label="第 11 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">reflect</span>
+                  <span class="key-ipa">/rɪˈflekt/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">反思；沉思</div>
+                <div class="key-note">Jobs reflected = 乔布斯回忆道。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p12">
+            <div class="pno" aria-hidden="true"><b>12</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">But then there's the perceived rejection of his biological parents. That's the bad-news side of the story. What's it like to know that your mother put you into the arms of someone else and walked away? This appears to have haunted Jobs all his life and may partially explain his shortfalls in many human relationships.</p>
+              <p class="zh" lang="zh-CN">但还有被亲生父母抛弃的感觉。这是故事中坏消息的一面。知道你的母亲把你交到别人手中然后转身离开，是什么感觉？这似乎困扰了乔布斯一生，也可能部分解释了他在许多人际关系中的不足。</p>
+              <div class="keys" aria-label="第 12 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">haunt</span>
+                  <span class="key-ipa">/hɔːnt/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">萦绕；困扰</div>
+                <div class="key-note">haunted Jobs all his life = 困扰乔布斯一生。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">shortfall</span>
+                  <span class="key-ipa">/ˈʃɔːtfɔːl/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">不足；缺陷</div>
+                <div class="key-note">partially explain his shortfalls = 部分解释他的缺陷。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p13">
+            <div class="pno" aria-hidden="true"><b>13</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">When Jobs began school, his parents and teachers soon discovered that he was a "problem child." It showed in his <mark class="hl" title="叛逆 /rɪˈbeljəsnəs/">rebelliousness</mark>, in his boredom with the <mark class="hl" title="课程 /kəˈrɪkjələm/">curriculum</mark>, in his unwillingness to fit into ordinary classroom regimens. He resisted learning in the traditional <mark class="hl" title="千篇一律的 /ˈkʊki kʌtə/">cookie-cutter</mark> ways.</p>
+              <p class="zh" lang="zh-CN">当乔布斯开始上学时，他的父母和老师很快发现他是一个"问题儿童"。这表现在他的叛逆、对课程的厌倦、不愿适应普通的课堂制度。他抗拒传统的千篇一律的学习方式。</p>
+              <div class="keys" aria-label="第 13 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">3 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">rebelliousness</span>
+                  <span class="key-ipa">/rɪˈbeljəsnəs/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">叛逆</div>
+                <div class="key-note">rebellious adj. 叛逆的。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">curriculum</span>
+                  <span class="key-ipa">/kəˈrɪkjələm/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">课程</div>
+                <div class="key-note">复数 curricula。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">cookie-cutter</span>
+                  <span class="key-ipa">/ˈkʊki kʌtə/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">千篇一律的</div>
+                <div class="key-note">cookie-cutter ways = 流水线式的方式。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p14">
+            <div class="pno" aria-hidden="true"><b>14</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">It's startling to realize that Steve Jobs might have ended up a social discard — a <mark class="hl" title="少年犯 /dɪˈlɪŋkwənt/">delinquent</mark> — had it not been for an <mark class="hl" title="敏锐的；善于观察的 /əbˈzɜːvənt/">observant</mark> teacher who suspected that she had an exceptional child in her classroom. Under her guidance Jobs quickly accelerated in his learning experiences. "I just wanted to learn and to please her," Jobs said, looking back on her efforts.</p>
+              <p class="zh" lang="zh-CN">令人震惊的是，如果不是因为一位善于观察的老师怀疑她的教室里有一个 exceptional 的孩子，史蒂夫·乔布斯可能最终会成为一个社会弃儿——一个不良少年。在她的指导下，乔布斯的学习经历迅速加速。"我只是想学习，想让她高兴，"乔布斯回顾她的努力时说。</p>
+              <div class="keys" aria-label="第 14 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">delinquent</span>
+                  <span class="key-ipa">/dɪˈlɪŋkwənt/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">少年犯</div>
+                <div class="key-note">social discard = 被社会抛弃的人。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">observant</span>
+                  <span class="key-ipa">/əbˈzɜːvənt/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">敏锐的；善于观察的</div>
+                <div class="key-note">observant teacher = 慧眼识珠的老师。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p15">
+            <div class="pno" aria-hidden="true"><b>15</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Unfortunately the same did not happen in his church experience. When Jobs was 13, he asked his pastor a simple (yet not so simple) question.</p>
+              <p class="zh" lang="zh-CN">不幸的是，同样的事情没有发生在他的教会经历中。乔布斯13岁时，他问了他的牧师一个简单（但又不那么简单）的问题。</p>
+            </div>
+          </article>
+          <article class="para" id="p16">
+            <div class="pno" aria-hidden="true"><b>16</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Isaacson writes: "In July 1968 Life magazine published a shocking cover showing a pair of starving children in Biafra. Jobs took it to Sunday school and confronted the church's pastor, 'If I raise my finger, will God know which one I'm going to raise even before I do it?'"</p>
+              <p class="zh" lang="zh-CN">艾萨克森写道："1968年7月，《生活》杂志刊登了一张令人震惊的封面，展示了比夫拉一对饥饿的儿童。乔布斯把它带到主日学校，质问教会的牧师：'如果我抬起手指，上帝会在我抬之前就知道我要抬哪一根吗？'"</p>
+              <div class="keys" aria-label="第 16 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">confront</span>
+                  <span class="key-ipa">/kənˈfrʌnt/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">当面质问；面对</div>
+                <div class="key-note">confronted the pastor = 当面质问牧师。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p17">
+            <div class="pno" aria-hidden="true"><b>17</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">"The pastor answers, 'Yes, God knows everything.'"</p>
+              <p class="zh" lang="zh-CN">"牧师回答说：'是的，上帝无所不知。'"</p>
+            </div>
+          </article>
+          <article class="para" id="p18">
+            <div class="pno" aria-hidden="true"><b>18</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">"Jobs then pulled out the Life cover and asked, 'Well, does God know about this and what's going to happen to those children?'"</p>
+              <p class="zh" lang="zh-CN">"乔布斯然后拿出《生活》杂志的封面问道：'那么，上帝知道这件事，知道那些孩子将会发生什么吗？'"</p>
+            </div>
+          </article>
+          <article class="para" id="p19">
+            <div class="pno" aria-hidden="true"><b>19</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">"'Steve, I know you Don't understand, but yes, God knows about that.'"</p>
+              <p class="zh" lang="zh-CN">"'史蒂夫，我知道你不明白，但是的，上帝知道那件事。'"</p>
+            </div>
+          </article>
+          <article class="para" id="p20">
+            <div class="pno" aria-hidden="true"><b>20</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">The pastor's answer badly underestimated the young teen's intellect and left him unsatisfied. According to Isaacson, Jobs walked away from the church that day and never returned.</p>
+              <p class="zh" lang="zh-CN">牧师的回答严重低估了这个少年的智力，让他感到不满意。据艾萨克森说，乔布斯那天离开了教会，再也没有回来。</p>
+              <div class="keys" aria-label="第 20 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">incidental</span>
+                  <span class="key-ipa">/ˌɪnsɪˈdentl/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">偶然的；无关紧要的</div>
+                <div class="key-note">与 forgettable 并列。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p21">
+            <div class="pno" aria-hidden="true"><b>21</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">For the pastor, that brief exchange was likely incidental and forgettable. Yet it was a <mark class="hl" title="转折点 /ˈtɜːnɪŋ pɔɪnt/">turning point</mark> that would point Steve Jobs toward eastern philosophy.</p>
+              <p class="zh" lang="zh-CN">对牧师来说，那次短暂的交流可能是偶然的、容易忘记的。然而，这是一个转折点，将史蒂夫·乔布斯引向了东方哲学。</p>
+              <div class="keys" aria-label="第 21 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">turning point</span>
+                  <span class="key-ipa">/ˈtɜːnɪŋ pɔɪnt/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">转折点</div>
+                <div class="key-note">point toward eastern philosophy = 转向东方哲学。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p22">
+            <div class="pno" aria-hidden="true"><b>22</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">The story generates a prayer in me: "Lord, make me aware of the implications of any (any!) word I say to people during the course of the day. Who can know when a spoken word directs someone toward the right path ... or the wrong one?"</p>
+              <p class="zh" lang="zh-CN">这个故事在我心中引发了一个祷告："主啊，让我意识到我在一天中对人们说的任何（任何！）一句话的影响。谁能知道一句说出的话何时会引导某人走向正确的道路……还是错误的道路呢？"</p>
+              <div class="keys" aria-label="第 22 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">implication</span>
+                  <span class="key-ipa">/ˌɪmplɪˈkeɪʃn/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">可能影响；隐含意义</div>
+                <div class="key-note">be aware of the implications = 意识到话语的分量。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p23">
+            <div class="pno" aria-hidden="true"><b>23</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">So you have these primary sources of formation in this boy's life: a birth mother, a loving father, a caring teacher, and an imperceptive pastor. Discuss!</p>
+              <p class="zh" lang="zh-CN">所以在这个男孩的生命中，你有这些塑造他的主要来源：一位生母、一位慈爱的父亲、一位关怀的老师，和一位迟钝的牧师。值得深思！</p>
+            </div>
+          </article>
+      </section>
+
+      <section class="section" id="partner">
+        <div class="section-head">
+          <div class="kicker" aria-hidden="true">III</div>
+          <div>
+            <h2>伙伴关系</h2>
+            <p class="section-sub">沃兹尼亚克与乔布斯的互补</p>
+          </div>
+        </div>
+          <article class="para" id="p24">
+            <div class="pno" aria-hidden="true"><b>24</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">If one is into technology (and I confess an attraction), Isaacson's record of Steve Jobs college and twenty-something years becomes <mark class="hl" title="引人入胜的 /ɪnˈtriːɡɪŋ/">intriguing</mark>. During that time Jobs came alive to the world of electronics, drugs, literature, and a host of other experiences. But among the most important events of that period was his introduction to Stephen Wozniak, who would become his partner in the founding of Apple.</p>
+              <p class="zh" lang="zh-CN">如果一个人对科技感兴趣（我承认我有这种兴趣），艾萨克森对史蒂夫·乔布斯大学和二十多岁时期的记录就变得引人入胜。在那段时间里，乔布斯开始接触电子、毒品、文学和许多其他体验。但那个时期最重要的事件之一，是他认识了斯蒂芬·沃兹尼亚克，后者后来成为他创立苹果公司的伙伴。</p>
+              <div class="keys" aria-label="第 24 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">intriguing</span>
+                  <span class="key-ipa">/ɪnˈtriːɡɪŋ/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">引人入胜的</div>
+                <div class="key-note">intrigue v. 激起兴趣。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p25">
+            <div class="pno" aria-hidden="true"><b>25</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">While other boys played ball, Jobs and Wozniak built their first computer in the garage of the Jobs's home. Theirs was a powerful <mark class="hl" title="协同效应 /ˈsɪnədʒi/">synergy</mark> of skills: Wozniak's grasp of the inner workings of a computer and Jobs's instinct for its design and utility.</p>
+              <p class="zh" lang="zh-CN">当其他男孩打球时，乔布斯和沃兹尼亚克在乔布斯家的车库里建造了他们的第一台电脑。他们的技能形成了强大的协同作用：沃兹尼亚克对计算机内部运作的掌握，以及乔布斯对其设计和实用性的直觉。</p>
+              <div class="keys" aria-label="第 25 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">synergy</span>
+                  <span class="key-ipa">/ˈsɪnədʒi/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">协同效应</div>
+                <div class="key-note">a powerful synergy of skills = 技能的强强联合。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p26">
+            <div class="pno" aria-hidden="true"><b>26</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">The birth of Apple Computer came in the years that followed, and the two men attracted a host of brilliant youngish people to join them in developing the company.</p>
+              <p class="zh" lang="zh-CN">苹果电脑公司在随后的几年里诞生，这两个人吸引了一大批才华横溢的年轻人加入他们，共同发展公司。</p>
+            </div>
+          </article>
+          <article class="para" id="p27">
+            <div class="pno" aria-hidden="true"><b>27</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">I'm most interested in the contrasts between the two men. Wozniak was shy, embarrassed by public recognition, <mark class="hl" title="痴迷的；执着的 /əbˈsesɪv/">obsessive</mark> about facts and truthfulness. Jobs, on the other hand, was <mark class="hl" title="傲慢的；冒失的 /bræʃ/">brash</mark>, ambitious, and controlling.</p>
+              <p class="zh" lang="zh-CN">我最感兴趣的是这两个人之间的对比。沃兹尼亚克害羞，在公众认可面前感到尴尬，对事实和真实性有着执着的追求。而乔布斯则鲁莽、雄心勃勃、控制欲强。</p>
+              <div class="keys" aria-label="第 27 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">brash</span>
+                  <span class="key-ipa">/bræʃ/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">傲慢的；冒失的</div>
+                <div class="key-note">与 Wozniak 的 shy 形成对比。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">obsessive</span>
+                  <span class="key-ipa">/əbˈsesɪv/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">痴迷的；执着的</div>
+                <div class="key-note">obsessive about facts = 对事实一丝不苟。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p28">
+            <div class="pno" aria-hidden="true"><b>28</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Isaacson writes: "Wozniak would be the gentle wizard coming up with a neat invention that he would have been happy to just give away, and Jobs would figure out how to make it user-friendly, put it together in a package, market it, and make a few bucks."</p>
+              <p class="zh" lang="zh-CN">艾萨克森写道："沃兹尼亚克是那个温和的巫师，想出一个巧妙的发明，他很乐意直接送人；而乔布斯则会想办法让它变得用户友好，把它打包，推向市场，赚点钱。"</p>
+            </div>
+          </article>
+          <article class="para" id="p29">
+            <div class="pno" aria-hidden="true"><b>29</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">The Wozniak-Jobs partnership will be the subject of more than one dissertation or book in years to come. It could make for a rich conversation today: how do partnerships begin, and how are they nurtured? And what's the nature of a relationship with God?</p>
+              <p class="zh" lang="zh-CN">沃兹尼亚克-乔布斯的伙伴关系在未来几年将成为不止一篇论文或书籍的主题。它在今天也可以引发一场丰富的对话：伙伴关系是如何开始的，又是如何培养的？与上帝的关系的本质是什么？</p>
+            </div>
+          </article>
+      </section>
+
+      <section class="section" id="crash">
+        <div class="section-head">
+          <div class="kicker" aria-hidden="true">IV</div>
+          <div>
+            <h2>崩溃</h2>
+            <p class="section-sub">30 岁被自己创办的公司解雇</p>
+          </div>
+        </div>
+          <article class="para" id="p30">
+            <div class="pno" aria-hidden="true"><b>30</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Years later Steve Jobs hit a kind of bottom. To simplify a very complex story: Jobs was a man with limited people skills. In his haste to fulfill his visions, he could be <mark class="hl" title="令人生畏的 /ɪnˈtɪmɪdeɪtɪŋ/">intimidating</mark>, <mark class="hl" title="令人讨厌的 /əbˈnɒkʃəs/">obnoxious</mark>, intolerant, impatient, <mark class="hl" title="亵渎的；粗俗的 /prəˈfeɪn/">profane</mark>, and offensive.</p>
+              <p class="zh" lang="zh-CN">多年后，史蒂夫·乔布斯跌入了某种低谷。简化一个非常复杂的故事：乔布斯是一个人际交往能力有限的人。在急于实现他的愿景时，他可能会令人畏惧、令人讨厌、不容忍、不耐烦、说脏话、冒犯他人。</p>
+              <div class="keys" aria-label="第 30 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">3 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">intimidating</span>
+                  <span class="key-ipa">/ɪnˈtɪmɪdeɪtɪŋ/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">令人生畏的</div>
+                <div class="key-note">intimidate v. 威吓。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">obnoxious</span>
+                  <span class="key-ipa">/əbˈnɒkʃəs/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">令人讨厌的</div>
+                <div class="key-note">一串形容词描述乔布斯的难相处。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">profane</span>
+                  <span class="key-ipa">/prəˈfeɪn/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">亵渎的；粗俗的</div>
+                <div class="key-note">此处指言语粗鲁。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p31">
+            <div class="pno" aria-hidden="true"><b>31</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">As often happens, the people at Apple mostly adjusted to Steve Jobs's way because, in spite of his <mark class="hl" title="喜怒无常的；易变的 /ˈvɒlətaɪl/">volatile</mark> personality, he caused highly talented and motivated people to achieve things beyond their own wildest expectations. If one was tough enough to accept the abuse involved in working for and with Steve Jobs, the success in terms of wealth, fame, and professional satisfaction was enormous.</p>
+              <p class="zh" lang="zh-CN">正如经常发生的那样，苹果公司的人大多适应了史蒂夫·乔布斯的方式，因为尽管他性格多变，他却让极具才华和积极性的人取得了超出他们自己最疯狂预期的成就。如果一个人足够坚强，能够接受为史蒂夫·乔布斯工作和与他一起工作所涉及的虐待，那么在财富、名望和职业满意度方面的成功是巨大的。</p>
+              <div class="keys" aria-label="第 31 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">volatile</span>
+                  <span class="key-ipa">/ˈvɒlətaɪl/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">喜怒无常的；易变的</div>
+                <div class="key-note">volatile personality = 暴躁多变的性格。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p32">
+            <div class="pno" aria-hidden="true"><b>32</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">But one day the board of Apple reached a point of intolerable frustration with Jobs. At the age of 30, Steve Jobs found himself out of a job. He once again experienced the echoes of rejection, <mark class="hl" title="抛弃；遗弃 /əˈbændənmənt/">abandonment</mark> — but this time at the age of 30. The man who'd often abandoned others was himself abandoned.</p>
+              <p class="zh" lang="zh-CN">但有一天，苹果董事会对乔布斯的沮丧达到了无法忍受的地步。30岁时，史蒂夫·乔布斯发现自己失业了。他再次体验到被拒绝、被抛弃的回响——但这一次是在30岁。那个经常抛弃别人的人自己也被抛弃了。</p>
+              <div class="keys" aria-label="第 32 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">abandonment</span>
+                  <span class="key-ipa">/əˈbændənmənt/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">抛弃；遗弃</div>
+                <div class="key-note">与 rejection 并列，呼应幼年被送养。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p33">
+            <div class="pno" aria-hidden="true"><b>33</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Those had to be moments of massive <mark class="hl" title="屈辱 /hjuːˌmɪliˈeɪʃn/">humiliation</mark> and self-searching. Was anything to be learned? While Jobs may have been able to identify his failures in executive leadership, I doubt if he ever looked inside himself to seek the root of the many faults and flaws that often made working with him an intolerable experience.</p>
+              <p class="zh" lang="zh-CN">那些时刻一定是巨大的屈辱和自我反省的时刻。有什么可以学到的吗？虽然乔布斯可能能够识别他在高管领导力方面的失败，但我怀疑他是否曾审视自己的内心，去寻找那些常常使与他共事成为一种无法忍受的体验的众多缺点和缺陷的根源。</p>
+              <div class="keys" aria-label="第 33 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">humiliation</span>
+                  <span class="key-ipa">/hjuːˌmɪliˈeɪʃn/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">屈辱</div>
+                <div class="key-note">massive humiliation = 奇耻大辱。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p34">
+            <div class="pno" aria-hidden="true"><b>34</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">"The one question I'd truly love Steve to answer is 'Why are you sometimes so mean?'" one colleague told Isaacson. When Isaacson posed the question to Jobs, he said, "This is who I am, and you can't expect me to be someone I'm not." That was it. Case closed.</p>
+              <p class="zh" lang="zh-CN">"我真正希望史蒂夫回答的一个问题是'你为什么有时候这么刻薄？'"一位同事告诉艾萨克森。当艾萨克森向乔布斯提出这个问题时，他说："这就是我，你不能指望我成为一个不是我的人。"就这样。结案。</p>
+            </div>
+          </article>
+          <article class="para" id="p35">
+            <div class="pno" aria-hidden="true"><b>35</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">When Steve founded a second company (NeXT), the products it introduced to the market, while innovative, were not entirely profitable. Jobs's place in business might have been scuttled. He was just inches from spending the rest of his life as a nobody. But this period of failure in Steve Jobs's life counted for something. "The best thing ever to happen to Steve is when we fired him, told him to get lost," an Apple board member said.</p>
+              <p class="zh" lang="zh-CN">当史蒂夫创立第二家公司（NeXT）时，它推向市场的产品虽然具有创新性，但并不完全盈利。乔布斯在商界的地位可能已经被毁。他差一点就作为一个无名小卒度过余生。但史蒂夫·乔布斯人生中的这段失败时期是有意义的。"发生在史蒂夫身上最好的事情就是我们解雇了他，让他滚蛋，"一位苹果董事会成员说。</p>
+              <div class="keys" aria-label="第 35 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">scuttle</span>
+                  <span class="key-ipa">/ˈskʌtl/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">破坏；使完蛋</div>
+                <div class="key-note">might have been scuttled = 可能就此断送。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p36">
+            <div class="pno" aria-hidden="true"><b>36</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Isaacson comments: "The theory, shared by many, is that the tough love made him wiser and more mature. But it's not that simple. At the company he founded after being ousted from Apple, Jobs was able to indulge all of his instincts, both good and bad. He was unbounded. The result was a series of <mark class="hl" title="壮观的；惊人的 /spekˈtækjələ/">spectacular</mark> products that were dazzling market flops. This was the true learning experience."</p>
+              <p class="zh" lang="zh-CN">艾萨克森评论道："许多人都认同的理论是，这种严厉的爱让他变得更明智、更成熟。但事情没那么简单。在被苹果驱逐后他创立的公司里，乔布斯能够放纵他所有的本能，无论是好的还是坏的。他毫无约束。结果是一系列壮观的产品，却在市场上惨败。这才是真正的学习经历。"</p>
+              <div class="keys" aria-label="第 36 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">3 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">oust</span>
+                  <span class="key-ipa">/aʊst/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">罢免；驱逐</div>
+                <div class="key-note">be ousted from Apple = 被苹果赶下台。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">spectacular</span>
+                  <span class="key-ipa">/spekˈtækjələ/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">壮观的；惊人的</div>
+                <div class="key-note">spectacular products that were market flops = 产品惊艳却市场惨败。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">flop</span>
+                  <span class="key-ipa">/flɒp/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">失败作品</div>
+                <div class="key-note">口语，指票房/销售惨败。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p37">
+            <div class="pno" aria-hidden="true"><b>37</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Sometime later the board of Apple, also facing great stress, invited Jobs back into the company. It's a convoluted, rather strange story, but the <mark class="hl" title="复职；恢复 /ˌriːɪnˈsteɪtmənt/">reinstatement</mark> turned out to be a new day for him and for Apple.</p>
+              <p class="zh" lang="zh-CN">不久之后，同样面临巨大压力的苹果董事会邀请乔布斯回到公司。这是一个复杂而相当奇怪的故事，但这次复职对他和苹果来说都成了新的一天。</p>
+              <div class="keys" aria-label="第 37 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">reinstatement</span>
+                  <span class="key-ipa">/ˌriːɪnˈsteɪtmənt/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">复职；恢复</div>
+                <div class="key-note">re- + in- + state + ment。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p38">
+            <div class="pno" aria-hidden="true"><b>38</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">When appropriate, I like to ask leaders if there was ever a time when they felt truly broken, stripped of self-confidence, and finally willing to seriously listen to someone other than themselves? Often, they nod their heads. Yes, there was such a time, most say. And yes, they finally learned to listen.</p>
+              <p class="zh" lang="zh-CN">在适当的时候，我喜欢问领袖们，是否有过这样一个时刻：他们感到真正崩溃、失去自信，最终愿意认真倾听除自己之外的人的声音？通常，他们会点头。大多数人说，是的，有过这样的时刻。是的，他们最终学会了倾听。</p>
+            </div>
+          </article>
+          <article class="para" id="p39">
+            <div class="pno" aria-hidden="true"><b>39</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">One thinks of Joseph's days as a slave, Moses's years in the desert, Peter's hours weeping in a dark valley. Defining moments, those.</p>
+              <p class="zh" lang="zh-CN">人们会想到约瑟为奴的日子、摩西在旷野的岁月、彼得在黑暗山谷中哭泣的时刻。那些都是决定性的时刻。</p>
+            </div>
+          </article>
+          <article class="para" id="p40">
+            <div class="pno" aria-hidden="true"><b>40</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Did Steve Jobs have such a defining moment? Was he ever truly humbled? The jury, Isaacson might say, is hung on that one.</p>
+              <p class="zh" lang="zh-CN">史蒂夫·乔布斯有过这样一个决定性的时刻吗？他曾真正谦卑过吗？艾萨克森可能会说，陪审团对此意见不一。</p>
+              <div class="keys" aria-label="第 40 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">humble</span>
+                  <span class="key-ipa">/ˈhʌmbl/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">使谦卑</div>
+                <div class="key-note">Was he ever truly humbled? = 他可曾真正谦卑过？</div>
+              </div>
+              </div>
+            </div>
+          </article>
+      </section>
+
+      <section class="section" id="truth">
+        <div class="section-head">
+          <div class="kicker" aria-hidden="true">V</div>
+          <div>
+            <h2>真理</h2>
+            <p class="section-sub">现实扭曲力场与领导的诱惑</p>
+          </div>
+        </div>
+          <article class="para" id="p41">
+            <div class="pno" aria-hidden="true"><b>41</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Those who worked around Steve Jobs spoke, and sometimes joked, about his reality distortion field, a term borrowed from the Star Trek TV series. Isaacson quotes long-term Jobs co-worker, Andy Hertzfeld, "(Jobs's) reality distortion field was a confounding <mark class="hl" title="混合物；大杂烩 /meɪˈlɒnʒ/">mélange</mark> of a <mark class="hl" title="有魅力的 /ˌkærɪzˈmætɪk/">charismatic</mark> rhetorical style, <mark class="hl" title="不屈不挠的 /ɪnˈdɒmɪtəbl/">indomitable</mark> will, and eagerness to bend any fact to fit the purpose at hand (italics mine)."</p>
+              <p class="zh" lang="zh-CN">那些在史蒂夫·乔布斯身边工作的人谈论，有时还开玩笑说他的"现实扭曲力场"——这个词借自《星际迷航》电视剧。艾萨克森引用了乔布斯长期同事安迪·赫茨菲尔德的话："（乔布斯的）现实扭曲力场是一种令人困惑的混合体，由富有魅力的修辞风格、不屈不挠的意志，以及急于扭曲任何事实以适应眼前目的的渴望组成（斜体为我所加）。"</p>
+              <div class="keys" aria-label="第 41 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">3 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">mélange</span>
+                  <span class="key-ipa">/meɪˈlɒnʒ/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">混合物；大杂烩</div>
+                <div class="key-note">法语借词。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">charismatic</span>
+                  <span class="key-ipa">/ˌkærɪzˈmætɪk/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">有魅力的</div>
+                <div class="key-note">charisma n. 魅力。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">indomitable</span>
+                  <span class="key-ipa">/ɪnˈdɒmɪtəbl/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">不屈不挠的</div>
+                <div class="key-note">in- + domitable（可征服的）。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p42">
+            <div class="pno" aria-hidden="true"><b>42</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">In a few words, Hertzfeld was saying that Steve Jobs often tried to talk things into existence. Plainly put: Jobs could lie, make unkeepable promises, and reframe facts. He knew few limits in trying to get people to see things his way. He not only convinced others but also himself. You could say that the man often drank his own Kool-Aid.</p>
+              <p class="zh" lang="zh-CN">简而言之，赫茨菲尔德是在说史蒂夫·乔布斯经常试图把事情说成存在的。说白了：乔布斯会撒谎、做出无法兑现的承诺、重构事实。在试图让人们以他的方式看待事物时，他几乎没有界限。他不仅说服了别人，也说服了自己。你可以说这个人经常喝自己的迷魂汤。</p>
+            </div>
+          </article>
+          <article class="para" id="p43">
+            <div class="pno" aria-hidden="true"><b>43</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">"At the root of the reality distortion was Jobs's belief that the rules didn't apply to him," Isaacson writes. "Rebelliousness and willfulness were <mark class="hl" title="根深蒂固的 /ɪnˈɡreɪnd/">ingrained</mark> in his character. He had the sense that he was special, a chosen one, an enlightened one."</p>
+              <p class="zh" lang="zh-CN">"现实扭曲的根源是乔布斯相信规则不适用于他，"艾萨克森写道。"叛逆和任性根深蒂固地存在于他的性格中。他有一种感觉，他是特别的，是被选中的人，是觉悟的人。"</p>
+              <div class="keys" aria-label="第 43 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">ingrained</span>
+                  <span class="key-ipa">/ɪnˈɡreɪnd/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">根深蒂固的</div>
+                <div class="key-note">in- + grain（纹理）。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p44">
+            <div class="pno" aria-hidden="true"><b>44</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">In the Steve Jobs world, the <mark class="hl" title="伤亡者；牺牲品 /ˈkæʒuəlti/">casualty</mark> rate in such a Darwinian atmosphere was great. But — and here is the <mark class="hl" title="难题；谜题 /kəˈnʌndrəm/">conundrum</mark> — the work usually got done, the objectives were achieved, the products shipped. More often than not, people delivered the impossible that Jobs demanded. Call it a task-driven leadership. But it wasn't a place where people with values ascended. Only the toughest survived.</p>
+              <p class="zh" lang="zh-CN">在史蒂夫·乔布斯的世界里，在这样一个达尔文式的氛围中，伤亡率很高。但——这就是难题所在——工作通常完成了，目标实现了，产品出货了。通常情况下，人们完成了乔布斯要求的不可能的事情。称之为任务驱动型领导力吧。但这不是一个有价值观的人能够晋升的地方。只有最坚强的人才能生存。</p>
+              <div class="keys" aria-label="第 44 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">casualty</span>
+                  <span class="key-ipa">/ˈkæʒuəlti/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">伤亡者；牺牲品</div>
+                <div class="key-note">casualty rate = 淘汰率。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">conundrum</span>
+                  <span class="key-ipa">/kəˈnʌndrəm/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">难题；谜题</div>
+                <div class="key-note">the work got done, but at what cost?</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p45">
+            <div class="pno" aria-hidden="true"><b>45</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">It's not difficult to see this pattern in a larger-than-life man like Steve Jobs and to harshly criticize it. What is more challenging is seeing that this same tendency lies <mark class="hl" title="潜在的 /ˈleɪtnt/">latent</mark> in the hearts of most leaders — Christians included. A great goal, a strong passion, a consuming need: they are the stuff of <mark class="hl" title="自我辩护 /ˌself ˌdʒʌstɪfɪˈkeɪʃn/">self-justification</mark> when a leader comes to believe that something must be achieved for the noblest of reasons. It is the temptation of the preacher who, in seeking to persuade, enhances or diminishes the truth to make his point. It is the temptation of any organizational leader when additional money must be raised to keep the cause afloat.</p>
+              <p class="zh" lang="zh-CN">在史蒂夫·乔布斯这样一个传奇人物身上看到这种模式并严厉批评它并不难。更具挑战性的是看到同样的倾向潜伏在大多数领袖的心中——包括基督徒。一个伟大的目标、一种强烈的激情、一种迫切的需求：当一个领袖开始相信必须以最崇高的理由实现某件事时，这些就是自我辩护的素材。这是传道者的诱惑——在寻求说服时，为了阐明观点而夸大或缩小真理。这是任何组织领袖在必须筹集额外资金以维持事业运转时的诱惑。</p>
+              <div class="keys" aria-label="第 45 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">latent</span>
+                  <span class="key-ipa">/ˈleɪtnt/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">潜在的</div>
+                <div class="key-note">lies latent in hearts = 潜藏在心中。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">self-justification</span>
+                  <span class="key-ipa">/ˌself ˌdʒʌstɪfɪˈkeɪʃn/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">自我辩护</div>
+                <div class="key-note">为达崇高目的而自我开脱。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p46">
+            <div class="pno" aria-hidden="true"><b>46</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">How do we accomplish the task but do so with <mark class="hl" title="正直；诚信 /ɪnˈteɡrəti/">integrity</mark>? File that away for a future staff retreat. Or thoughtful conversation.</p>
+              <p class="zh" lang="zh-CN">我们如何完成任务但又保持诚信？把这个问题留到以后的员工务虚会上讨论吧。或者进行一次深思熟虑的对话。</p>
+              <div class="keys" aria-label="第 46 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">integrity</span>
+                  <span class="key-ipa">/ɪnˈteɡrəti/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">正直；诚信</div>
+                <div class="key-note">do the task with integrity = 凭诚信把事做成。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+      </section>
+
+      <section class="section" id="beauty">
+        <div class="section-head">
+          <div class="kicker" aria-hidden="true">VI</div>
+          <div>
+            <h2>实用与美丽</h2>
+            <p class="section-sub">禅、极简与苹果产品的灵魂</p>
+          </div>
+        </div>
+          <article class="para" id="p47">
+            <div class="pno" aria-hidden="true"><b>47</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">When I obtained my first iPad, it came in a box that reminded me of rich European chocolates. The iPad inside was wrapped in a clear film. When I lifted the iPad from the box, my first instinct was to hold it <mark class="hl" title="虔诚地；恭敬地 /ˈrevərəntli/">reverently</mark> in my hands as I might a piece of art. Everything about it — its appearance, its feel, its solidity — evoked a kind of awe.</p>
+              <p class="zh" lang="zh-CN">当我拿到第一台iPad时，它的包装盒让我想起了昂贵的欧洲巧克力。里面的iPad包裹着一层透明薄膜。当我从盒子里拿起iPad时，我的第一本能是像捧着一件艺术品一样虔诚地把它捧在手中。它的一切——外观、触感、质感——都唤起了一种敬畏感。</p>
+              <div class="keys" aria-label="第 47 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">reverently</span>
+                  <span class="key-ipa">/ˈrevərəntli/</span>
+                  <span class="key-pos">adv.</span>
+                </div>
+                <div class="key-zh">虔诚地；恭敬地</div>
+                <div class="key-note">hold it reverently = 像捧艺术品一样捧着。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">evoke</span>
+                  <span class="key-ipa">/ɪˈvəʊk/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">唤起；引发</div>
+                <div class="key-note">evoke awe = 唤起敬畏。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p48">
+            <div class="pno" aria-hidden="true"><b>48</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">When its screen lit up and I acquainted myself with the many things the iPad could do, I was dazzled — just as Steve Jobs had willed it to be.</p>
+              <p class="zh" lang="zh-CN">当它的屏幕亮起，我熟悉了iPad能做的许多事情时，我被 dazzled 了——正如史蒂夫·乔布斯所期望的那样。</p>
+            </div>
+          </article>
+          <article class="para" id="p49">
+            <div class="pno" aria-hidden="true"><b>49</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">My reaction to my iPad was first imagined in the Apple labs where Jobs and his people spent thousands of hours building something that was not only easy to use but marvelous to look at. It was art and technology brought together in one elegant package.</p>
+              <p class="zh" lang="zh-CN">我对iPad的反应最早是在苹果实验室里被构想出来的，在那里乔布斯和他的团队花了数千小时打造了一个不仅易于使用而且看起来令人惊叹的东西。它是艺术与技术在一个优雅的包装中的结合。</p>
+            </div>
+          </article>
+          <article class="para" id="p50">
+            <div class="pno" aria-hidden="true"><b>50</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Apple products are known for their simplicity in both design and utility. Perhaps this was inspired by Jobs's attraction to Japanese <mark class="hl" title="禅宗 /zen/">Zen</mark> Buddhism. In this frame of reference, simplicity, wholeness, integrity, freedom from <mark class="hl" title="使人麻木的 /ˈnʌmɪŋ/">numbing</mark> complexity all reflect a sense of calmness.</p>
+              <p class="zh" lang="zh-CN">苹果产品以设计和实用性的简洁著称。也许这是受到乔布斯对日本禅宗佛教的喜爱的启发。在这个参照系中，简洁、完整、正直、摆脱令人麻木的复杂性，都反映了一种平静感。</p>
+              <div class="keys" aria-label="第 50 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">Zen</span>
+                  <span class="key-ipa">/zen/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">禅宗</div>
+                <div class="key-note">Japanese Zen Buddhism = 日本禅宗。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">numbing</span>
+                  <span class="key-ipa">/ˈnʌmɪŋ/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">使人麻木的</div>
+                <div class="key-note">freedom from numbing complexity = 摆脱令人麻木的复杂。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p51">
+            <div class="pno" aria-hidden="true"><b>51</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">For Steve Jobs great products were to be technologically exceptional, and they were to be equally beautiful. When I got my iPad, I found that I wanted to tell everyone about it. No one had to train me, motivate me, or threaten me with guilt. It was natural to rave about something that worked and was beautiful at the same time.</p>
+              <p class="zh" lang="zh-CN">对史蒂夫·乔布斯来说，伟大的产品在技术上要卓越，同时也要同样美丽。当我拿到iPad时，我发现我想告诉每个人关于它的事。没有人需要培训我、激励我，或者用内疚来威胁我。对一个既好用又美丽的东西赞不绝口是很自然的。</p>
+            </div>
+          </article>
+          <article class="para" id="p52">
+            <div class="pno" aria-hidden="true"><b>52</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Like the gospel of Jesus.</p>
+              <p class="zh" lang="zh-CN">就像耶稣的福音一样。</p>
+            </div>
+          </article>
+          <article class="para" id="p53">
+            <div class="pno" aria-hidden="true"><b>53</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">I've worried over these words because I fear that some will conclude that I am betraying my own loyalty to Jesus when I acknowledge that something good can arise from an alternative philosophical orientation. But to pretend not to notice that Jobs may have found some of his inspiration from another source is to be dishonest.</p>
+              <p class="zh" lang="zh-CN">我对这些话感到担忧，因为我担心有些人会得出结论，认为我在承认某种好的东西可以从另一种哲学取向中产生时，是在背叛我自己对耶稣的忠诚。但假装没有注意到乔布斯可能从另一个来源找到了一些灵感，是不诚实的。</p>
+              <div class="keys" aria-label="第 53 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">betray</span>
+                  <span class="key-ipa">/bɪˈtreɪ/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">背叛；辜负</div>
+                <div class="key-note">betray my loyalty = 背叛我的信仰。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p54">
+            <div class="pno" aria-hidden="true"><b>54</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">I would rather ask if a genuine Christianity should not have provided a similar inspiration. Was not Jesus the <mark class="hl" title="缩影；典范 /ɪˈpɪtəmi/">epitome</mark> of simplicity, of beauty, of wholeness? Was not the intended result of his gospel in the life of the believer meant to be (forgive this ludicrous comparison) as impressive as an iPad?</p>
+              <p class="zh" lang="zh-CN">我宁愿问，真正的基督教是否本应提供类似的灵感。耶稣不正是简洁、美丽、完整的缩影吗？他的福音在信徒生命中预期的结果，难道不应该（原谅这个可笑的比较）像iPad一样令人印象深刻吗？</p>
+              <div class="keys" aria-label="第 54 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">epitome</span>
+                  <span class="key-ipa">/ɪˈpɪtəmi/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">缩影；典范</div>
+                <div class="key-note">the epitome of simplicity = 极简的化身。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p55">
+            <div class="pno" aria-hidden="true"><b>55</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">(Note to those who choke on being compared to an iPad. Paul compared the flourishing Christian to a pot made of gold or silver. Alive today, he might have also resorted to using an iPad.)</p>
+              <p class="zh" lang="zh-CN">（致那些对被比作iPad感到窒息的人。保罗把兴旺的基督徒比作金或银制成的器皿。如果他今天还活着，他可能也会用iPad来打比方。）</p>
+            </div>
+          </article>
+      </section>
+
+      <section class="section" id="dying">
+        <div class="section-head">
+          <div class="kicker" aria-hidden="true">VII</div>
+          <div>
+            <h2>死亡</h2>
+            <p class="section-sub">癌症、信仰与最后的问题</p>
+          </div>
+        </div>
+          <article class="para" id="p56">
+            <div class="pno" aria-hidden="true"><b>56</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">When Steve Jobs discovered that he had cancer, typically he tried to manage his own healing process. There were some bad decisions that frustrated his doctors. But there were also good choices that apparently advanced the process of seeking a cure for cancer. But in the end, he lost this last battle and died.</p>
+              <p class="zh" lang="zh-CN">当史蒂夫·乔布斯发现自己患有癌症时，他照例试图管理自己的治疗过程。有一些糟糕的决定让他的医生感到沮丧。但也有一些好的选择，显然推进了寻求癌症治愈的过程。但最终，他输掉了最后这场战斗，去世了。</p>
+            </div>
+          </article>
+          <article class="para" id="p57">
+            <div class="pno" aria-hidden="true"><b>57</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">"I am about fifty-fifty on believing in God," he told Isaacson not long before he died. "For most of my life, I've felt that there must be more to our existence than meets the eye ... I'd like to think that something survives after you die. It's strange to think that you accumulate all this experience, and maybe a little wisdom, and it just goes away. So I really want to believe that something survives, that maybe your <mark class="hl" title="意识；知觉 /ˈkɒnʃəsnəs/">consciousness</mark> endures. But on the other hand, perhaps it's like an on-off switch. Click! And you're gone. Maybe that's why I never like to put on-off switches on Apple devices."</p>
+              <p class="zh" lang="zh-CN">"我对上帝的信仰大概是五五开，"他去世前不久告诉艾萨克森。"在我生命的大部分时间里，我都觉得我们的存在一定有比眼睛看到的更多的东西……我愿意相信人死后有什么东西留存下来。想到你积累了所有这些经验，也许还有一点智慧，然后就这么消失了，感觉很奇怪。所以我真的愿意相信有什么东西留存下来，也许你的意识会延续。但另一方面，也许它就像一个开关。咔嗒！你就消失了。也许这就是为什么我从来不喜欢在苹果设备上装开关。"</p>
+              <div class="keys" aria-label="第 57 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">consciousness</span>
+                  <span class="key-ipa">/ˈkɒnʃəsnəs/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">意识；知觉</div>
+                <div class="key-note">your consciousness endures = 你的意识会延续。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p58">
+            <div class="pno" aria-hidden="true"><b>58</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Once in a commencement address at Stanford, Jobs told graduates that death may be life's greatest gift in that a true respect for death might force one to give his/her best in every waking day.</p>
+              <p class="zh" lang="zh-CN">有一次在斯坦福大学的毕业典礼演讲中，乔布斯告诉毕业生，死亡可能是生命最伟大的礼物，因为对死亡的真正尊重可能会迫使一个人在清醒的每一天都付出最好的自己。</p>
+            </div>
+          </article>
+          <article class="para" id="p59">
+            <div class="pno" aria-hidden="true"><b>59</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">"Remembering that I'll be dead soon is the most important tool I've ever encountered to help me make the big choices in life," he said. "Because almost everything — all external expectations, all pride, all fear of embarrassment or failure — these things just fall away in the face of death, leaving only what is truly important."</p>
+              <p class="zh" lang="zh-CN">"记住我很快就会死，是我遇到过的帮助我做出人生重大抉择的最重要工具，"他说。"因为几乎所有的一切——所有外界的期望、所有的骄傲、所有对尴尬或失败的恐惧——这些东西在死亡面前都会烟消云散，只留下真正重要的东西。"</p>
+            </div>
+          </article>
+          <article class="para" id="p60">
+            <div class="pno" aria-hidden="true"><b>60</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">As I read this biography of Jobs, I wanted to see how a man dealt with his own brokenness and defects. I wanted to see what the good and the bad looked like in organizational leadership. I wanted to learn what's possible when someone — whatever the reason — reaches for their notion of the best. Isaacson helped me to do that.</p>
+              <p class="zh" lang="zh-CN">当我阅读这本乔布斯传记时，我想看看一个人是如何处理自己的破碎和缺陷的。我想看看组织领导力中的好与坏是什么样子。我想了解当一个人——无论出于什么原因——追求他所认为的最好时，什么是可能的。艾萨克森帮助我做到了这一点。</p>
+            </div>
+          </article>
+      </section>
+    </div>
+
+    <section class="glossary" id="glossary">
+      <div class="glossary-head">
+        <div>
+          <h2>重点词汇总表</h2>
+          <p>按字母排序，共 63 个词条。可输入英文、中文释义或词性筛选。</p>
+        </div>
+        <label class="search-wrap">
+          <span class="sr-only" hidden>搜索词汇</span>
+          <input class="search" id="glossarySearch" type="search" placeholder="搜索单词、音标或中文释义…" autocomplete="off">
+        </label>
+      </div>
+      <div class="glossary-status" id="glossaryStatus">显示全部 63 个词条</div>
+      <div class="g-grid" id="glossaryGrid">
+      <div class="g-item" data-search="abandonment /əˈbændənmənt/ n. 抛弃；遗弃 与 rejection 并列，呼应幼年被送养。">
+        <div class="g-word">abandonment</div>
+        <div class="g-meta"><span>/əˈbændənmənt/</span><i>n.</i></div>
+        <div class="g-zh">抛弃；遗弃</div>
+        <div class="g-note">与 rejection 并列，呼应幼年被送养。</div>
+      </div>
+      <div class="g-item" data-search="assemble /əˈsembl/ v. 聚集；组建 assemble and lead teams = 组建并领导团队。">
+        <div class="g-word">assemble</div>
+        <div class="g-meta"><span>/əˈsembl/</span><i>v.</i></div>
+        <div class="g-zh">聚集；组建</div>
+        <div class="g-note">assemble and lead teams = 组建并领导团队。</div>
+      </div>
+      <div class="g-item" data-search="betray /bɪˈtreɪ/ v. 背叛；辜负 betray my loyalty = 背叛我的信仰。">
+        <div class="g-word">betray</div>
+        <div class="g-meta"><span>/bɪˈtreɪ/</span><i>v.</i></div>
+        <div class="g-zh">背叛；辜负</div>
+        <div class="g-note">betray my loyalty = 背叛我的信仰。</div>
+      </div>
+      <div class="g-item" data-search="biography /baɪˈɒɡrəfi/ n. 传记 Walter Isaacson 所著 Steve Jobs 传记。">
+        <div class="g-word">biography</div>
+        <div class="g-meta"><span>/baɪˈɒɡrəfi/</span><i>n.</i></div>
+        <div class="g-zh">传记</div>
+        <div class="g-note">Walter Isaacson 所著 Steve Jobs 传记。</div>
+      </div>
+      <div class="g-item" data-search="brash /bræʃ/ adj. 傲慢的；冒失的 与 Wozniak 的 shy 形成对比。">
+        <div class="g-word">brash</div>
+        <div class="g-meta"><span>/bræʃ/</span><i>adj.</i></div>
+        <div class="g-zh">傲慢的；冒失的</div>
+        <div class="g-note">与 Wozniak 的 shy 形成对比。</div>
+      </div>
+      <div class="g-item" data-search="carpentry /ˈkɑːpəntri/ n. 木工 carpenter n. 木匠。">
+        <div class="g-word">carpentry</div>
+        <div class="g-meta"><span>/ˈkɑːpəntri/</span><i>n.</i></div>
+        <div class="g-zh">木工</div>
+        <div class="g-note">carpenter n. 木匠。</div>
+      </div>
+      <div class="g-item" data-search="casualty /ˈkæʒuəlti/ n. 伤亡者；牺牲品 casualty rate = 淘汰率。">
+        <div class="g-word">casualty</div>
+        <div class="g-meta"><span>/ˈkæʒuəlti/</span><i>n.</i></div>
+        <div class="g-zh">伤亡者；牺牲品</div>
+        <div class="g-note">casualty rate = 淘汰率。</div>
+      </div>
+      <div class="g-item" data-search="charismatic /ˌkærɪzˈmætɪk/ adj. 有魅力的 charisma n. 魅力。">
+        <div class="g-word">charismatic</div>
+        <div class="g-meta"><span>/ˌkærɪzˈmætɪk/</span><i>adj.</i></div>
+        <div class="g-zh">有魅力的</div>
+        <div class="g-note">charisma n. 魅力。</div>
+      </div>
+      <div class="g-item" data-search="commanding /kəˈmɑːndɪŋ/ adj. 压倒性的；领军的 a commanding position = 领军地位。">
+        <div class="g-word">commanding</div>
+        <div class="g-meta"><span>/kəˈmɑːndɪŋ/</span><i>adj.</i></div>
+        <div class="g-zh">压倒性的；领军的</div>
+        <div class="g-note">a commanding position = 领军地位。</div>
+      </div>
+      <div class="g-item" data-search="compassion /kəmˈpæʃn/ n. 同情；怜悯 lack compassion = 缺乏同情心。">
+        <div class="g-word">compassion</div>
+        <div class="g-meta"><span>/kəmˈpæʃn/</span><i>n.</i></div>
+        <div class="g-zh">同情；怜悯</div>
+        <div class="g-note">lack compassion = 缺乏同情心。</div>
+      </div>
+      <div class="g-item" data-search="confront /kənˈfrʌnt/ v. 当面质问；面对 confronted the pastor = 当面质问牧师。">
+        <div class="g-word">confront</div>
+        <div class="g-meta"><span>/kənˈfrʌnt/</span><i>v.</i></div>
+        <div class="g-zh">当面质问；面对</div>
+        <div class="g-note">confronted the pastor = 当面质问牧师。</div>
+      </div>
+      <div class="g-item" data-search="consciousness /ˈkɒnʃəsnəs/ n. 意识；知觉 your consciousness endures = 你的意识会延续。">
+        <div class="g-word">consciousness</div>
+        <div class="g-meta"><span>/ˈkɒnʃəsnəs/</span><i>n.</i></div>
+        <div class="g-zh">意识；知觉</div>
+        <div class="g-note">your consciousness endures = 你的意识会延续。</div>
+      </div>
+      <div class="g-item" data-search="conundrum /kəˈnʌndrəm/ n. 难题；谜题 the work got done, but at what cost?">
+        <div class="g-word">conundrum</div>
+        <div class="g-meta"><span>/kəˈnʌndrəm/</span><i>n.</i></div>
+        <div class="g-zh">难题；谜题</div>
+        <div class="g-note">the work got done, but at what cost?</div>
+      </div>
+      <div class="g-item" data-search="cookie-cutter /ˈkʊki kʌtə/ adj. 千篇一律的 cookie-cutter ways = 流水线式的方式。">
+        <div class="g-word">cookie-cutter</div>
+        <div class="g-meta"><span>/ˈkʊki kʌtə/</span><i>adj.</i></div>
+        <div class="g-zh">千篇一律的</div>
+        <div class="g-note">cookie-cutter ways = 流水线式的方式。</div>
+      </div>
+      <div class="g-item" data-search="curriculum /kəˈrɪkjələm/ n. 课程 复数 curricula。">
+        <div class="g-word">curriculum</div>
+        <div class="g-meta"><span>/kəˈrɪkjələm/</span><i>n.</i></div>
+        <div class="g-zh">课程</div>
+        <div class="g-note">复数 curricula。</div>
+      </div>
+      <div class="g-item" data-search="delinquent /dɪˈlɪŋkwənt/ n. 少年犯 social discard = 被社会抛弃的人。">
+        <div class="g-word">delinquent</div>
+        <div class="g-meta"><span>/dɪˈlɪŋkwənt/</span><i>n.</i></div>
+        <div class="g-zh">少年犯</div>
+        <div class="g-note">social discard = 被社会抛弃的人。</div>
+      </div>
+      <div class="g-item" data-search="doctrinal /dɒkˈtraɪnl/ adj. 教义的 doctrine n. 教义。">
+        <div class="g-word">doctrinal</div>
+        <div class="g-meta"><span>/dɒkˈtraɪnl/</span><i>adj.</i></div>
+        <div class="g-zh">教义的</div>
+        <div class="g-note">doctrine n. 教义。</div>
+      </div>
+      <div class="g-item" data-search="enlist /ɪnˈlɪst/ v. 争取；利用 enlist to touch souls = 设法触动心灵。">
+        <div class="g-word">enlist</div>
+        <div class="g-meta"><span>/ɪnˈlɪst/</span><i>v.</i></div>
+        <div class="g-zh">争取；利用</div>
+        <div class="g-note">enlist to touch souls = 设法触动心灵。</div>
+      </div>
+      <div class="g-item" data-search="epitome /ɪˈpɪtəmi/ n. 缩影；典范 the epitome of simplicity = 极简的化身。">
+        <div class="g-word">epitome</div>
+        <div class="g-meta"><span>/ɪˈpɪtəmi/</span><i>n.</i></div>
+        <div class="g-zh">缩影；典范</div>
+        <div class="g-note">the epitome of simplicity = 极简的化身。</div>
+      </div>
+      <div class="g-item" data-search="ethic /ˈeθɪk/ n. 道德准则；伦理 work ethic = 职业道德。">
+        <div class="g-word">ethic</div>
+        <div class="g-meta"><span>/ˈeθɪk/</span><i>n.</i></div>
+        <div class="g-zh">道德准则；伦理</div>
+        <div class="g-note">work ethic = 职业道德。</div>
+      </div>
+      <div class="g-item" data-search="evoke /ɪˈvəʊk/ v. 唤起；引发 evoke awe = 唤起敬畏。">
+        <div class="g-word">evoke</div>
+        <div class="g-meta"><span>/ɪˈvəʊk/</span><i>v.</i></div>
+        <div class="g-zh">唤起；引发</div>
+        <div class="g-note">evoke awe = 唤起敬畏。</div>
+      </div>
+      <div class="g-item" data-search="flop /flɒp/ n. 失败作品 口语，指票房/销售惨败。">
+        <div class="g-word">flop</div>
+        <div class="g-meta"><span>/flɒp/</span><i>n.</i></div>
+        <div class="g-zh">失败作品</div>
+        <div class="g-note">口语，指票房/销售惨败。</div>
+      </div>
+      <div class="g-item" data-search="haunt /hɔːnt/ v. 萦绕；困扰 haunted Jobs all his life = 困扰乔布斯一生。">
+        <div class="g-word">haunt</div>
+        <div class="g-meta"><span>/hɔːnt/</span><i>v.</i></div>
+        <div class="g-zh">萦绕；困扰</div>
+        <div class="g-note">haunted Jobs all his life = 困扰乔布斯一生。</div>
+      </div>
+      <div class="g-item" data-search="humble /ˈhʌmbl/ v. 使谦卑 Was he ever truly humbled? = 他可曾真正谦卑过？">
+        <div class="g-word">humble</div>
+        <div class="g-meta"><span>/ˈhʌmbl/</span><i>v.</i></div>
+        <div class="g-zh">使谦卑</div>
+        <div class="g-note">Was he ever truly humbled? = 他可曾真正谦卑过？</div>
+      </div>
+      <div class="g-item" data-search="humiliation /hjuːˌmɪliˈeɪʃn/ n. 屈辱 massive humiliation = 奇耻大辱。">
+        <div class="g-word">humiliation</div>
+        <div class="g-meta"><span>/hjuːˌmɪliˈeɪʃn/</span><i>n.</i></div>
+        <div class="g-zh">屈辱</div>
+        <div class="g-note">massive humiliation = 奇耻大辱。</div>
+      </div>
+      <div class="g-item" data-search="implication /ˌɪmplɪˈkeɪʃn/ n. 可能影响；隐含意义 be aware of the implications = 意识到话语的分量。">
+        <div class="g-word">implication</div>
+        <div class="g-meta"><span>/ˌɪmplɪˈkeɪʃn/</span><i>n.</i></div>
+        <div class="g-zh">可能影响；隐含意义</div>
+        <div class="g-note">be aware of the implications = 意识到话语的分量。</div>
+      </div>
+      <div class="g-item" data-search="incidental /ˌɪnsɪˈdentl/ adj. 偶然的；无关紧要的 与 forgettable 并列。">
+        <div class="g-word">incidental</div>
+        <div class="g-meta"><span>/ˌɪnsɪˈdentl/</span><i>adj.</i></div>
+        <div class="g-zh">偶然的；无关紧要的</div>
+        <div class="g-note">与 forgettable 并列。</div>
+      </div>
+      <div class="g-item" data-search="indomitable /ɪnˈdɒmɪtəbl/ adj. 不屈不挠的 in- + domitable（可征服的）。">
+        <div class="g-word">indomitable</div>
+        <div class="g-meta"><span>/ɪnˈdɒmɪtəbl/</span><i>adj.</i></div>
+        <div class="g-zh">不屈不挠的</div>
+        <div class="g-note">in- + domitable（可征服的）。</div>
+      </div>
+      <div class="g-item" data-search="ingrained /ɪnˈɡreɪnd/ adj. 根深蒂固的 in- + grain（纹理）。">
+        <div class="g-word">ingrained</div>
+        <div class="g-meta"><span>/ɪnˈɡreɪnd/</span><i>adj.</i></div>
+        <div class="g-zh">根深蒂固的</div>
+        <div class="g-note">in- + grain（纹理）。</div>
+      </div>
+      <div class="g-item" data-search="integrity /ɪnˈteɡrəti/ n. 正直；诚信 do the task with integrity = 凭诚信把事做成。">
+        <div class="g-word">integrity</div>
+        <div class="g-meta"><span>/ɪnˈteɡrəti/</span><i>n.</i></div>
+        <div class="g-zh">正直；诚信</div>
+        <div class="g-note">do the task with integrity = 凭诚信把事做成。</div>
+      </div>
+      <div class="g-item" data-search="intimidating /ɪnˈtɪmɪdeɪtɪŋ/ adj. 令人生畏的 intimidate v. 威吓。">
+        <div class="g-word">intimidating</div>
+        <div class="g-meta"><span>/ɪnˈtɪmɪdeɪtɪŋ/</span><i>adj.</i></div>
+        <div class="g-zh">令人生畏的</div>
+        <div class="g-note">intimidate v. 威吓。</div>
+      </div>
+      <div class="g-item" data-search="intriguing /ɪnˈtriːɡɪŋ/ adj. 引人入胜的 intrigue v. 激起兴趣。">
+        <div class="g-word">intriguing</div>
+        <div class="g-meta"><span>/ɪnˈtriːɡɪŋ/</span><i>adj.</i></div>
+        <div class="g-zh">引人入胜的</div>
+        <div class="g-note">intrigue v. 激起兴趣。</div>
+      </div>
+      <div class="g-item" data-search="latent /ˈleɪtnt/ adj. 潜在的 lies latent in hearts = 潜藏在心中。">
+        <div class="g-word">latent</div>
+        <div class="g-meta"><span>/ˈleɪtnt/</span><i>adj.</i></div>
+        <div class="g-zh">潜在的</div>
+        <div class="g-note">lies latent in hearts = 潜藏在心中。</div>
+      </div>
+      <div class="g-item" data-search="lavish /ˈlævɪʃ/ v. 慷慨给予；挥霍 lavish love on sb = 倾注大量爱。">
+        <div class="g-word">lavish</div>
+        <div class="g-meta"><span>/ˈlævɪʃ/</span><i>v.</i></div>
+        <div class="g-zh">慷慨给予；挥霍</div>
+        <div class="g-note">lavish love on sb = 倾注大量爱。</div>
+      </div>
+      <div class="g-item" data-search="mélange /meɪˈlɒnʒ/ n. 混合物；大杂烩 法语借词。">
+        <div class="g-word">mélange</div>
+        <div class="g-meta"><span>/meɪˈlɒnʒ/</span><i>n.</i></div>
+        <div class="g-zh">混合物；大杂烩</div>
+        <div class="g-note">法语借词。</div>
+      </div>
+      <div class="g-item" data-search="numbing /ˈnʌmɪŋ/ adj. 使人麻木的 freedom from numbing complexity = 摆脱令人麻木的复杂。">
+        <div class="g-word">numbing</div>
+        <div class="g-meta"><span>/ˈnʌmɪŋ/</span><i>adj.</i></div>
+        <div class="g-zh">使人麻木的</div>
+        <div class="g-note">freedom from numbing complexity = 摆脱令人麻木的复杂。</div>
+      </div>
+      <div class="g-item" data-search="obnoxious /əbˈnɒkʃəs/ adj. 令人讨厌的 一串形容词描述乔布斯的难相处。">
+        <div class="g-word">obnoxious</div>
+        <div class="g-meta"><span>/əbˈnɒkʃəs/</span><i>adj.</i></div>
+        <div class="g-zh">令人讨厌的</div>
+        <div class="g-note">一串形容词描述乔布斯的难相处。</div>
+      </div>
+      <div class="g-item" data-search="observant /əbˈzɜːvənt/ adj. 敏锐的；善于观察的 observant teacher = 慧眼识珠的老师。">
+        <div class="g-word">observant</div>
+        <div class="g-meta"><span>/əbˈzɜːvənt/</span><i>adj.</i></div>
+        <div class="g-zh">敏锐的；善于观察的</div>
+        <div class="g-note">observant teacher = 慧眼识珠的老师。</div>
+      </div>
+      <div class="g-item" data-search="obsessive /əbˈsesɪv/ adj. 痴迷的；执着的 obsessive about facts = 对事实一丝不苟。">
+        <div class="g-word">obsessive</div>
+        <div class="g-meta"><span>/əbˈsesɪv/</span><i>adj.</i></div>
+        <div class="g-zh">痴迷的；执着的</div>
+        <div class="g-note">obsessive about facts = 对事实一丝不苟。</div>
+      </div>
+      <div class="g-item" data-search="oust /aʊst/ v. 罢免；驱逐 be ousted from Apple = 被苹果赶下台。">
+        <div class="g-word">oust</div>
+        <div class="g-meta"><span>/aʊst/</span><i>v.</i></div>
+        <div class="g-zh">罢免；驱逐</div>
+        <div class="g-note">be ousted from Apple = 被苹果赶下台。</div>
+      </div>
+      <div class="g-item" data-search="profane /prəˈfeɪn/ adj. 亵渎的；粗俗的 此处指言语粗鲁。">
+        <div class="g-word">profane</div>
+        <div class="g-meta"><span>/prəˈfeɪn/</span><i>adj.</i></div>
+        <div class="g-zh">亵渎的；粗俗的</div>
+        <div class="g-note">此处指言语粗鲁。</div>
+      </div>
+      <div class="g-item" data-search="professing /prəˈfesɪŋ/ adj. 公开声称信仰的 professing Christian = 挂牌基督徒。">
+        <div class="g-word">professing</div>
+        <div class="g-meta"><span>/prəˈfesɪŋ/</span><i>adj.</i></div>
+        <div class="g-zh">公开声称信仰的</div>
+        <div class="g-note">professing Christian = 挂牌基督徒。</div>
+      </div>
+      <div class="g-item" data-search="rebelliousness /rɪˈbeljəsnəs/ n. 叛逆 rebellious adj. 叛逆的。">
+        <div class="g-word">rebelliousness</div>
+        <div class="g-meta"><span>/rɪˈbeljəsnəs/</span><i>n.</i></div>
+        <div class="g-zh">叛逆</div>
+        <div class="g-note">rebellious adj. 叛逆的。</div>
+      </div>
+      <div class="g-item" data-search="reflect /rɪˈflekt/ v. 反思；沉思 Jobs reflected = 乔布斯回忆道。">
+        <div class="g-word">reflect</div>
+        <div class="g-meta"><span>/rɪˈflekt/</span><i>v.</i></div>
+        <div class="g-zh">反思；沉思</div>
+        <div class="g-note">Jobs reflected = 乔布斯回忆道。</div>
+      </div>
+      <div class="g-item" data-search="reinstatement /ˌriːɪnˈsteɪtmənt/ n. 复职；恢复 re- + in- + state + ment。">
+        <div class="g-word">reinstatement</div>
+        <div class="g-meta"><span>/ˌriːɪnˈsteɪtmənt/</span><i>n.</i></div>
+        <div class="g-zh">复职；恢复</div>
+        <div class="g-note">re- + in- + state + ment。</div>
+      </div>
+      <div class="g-item" data-search="reverently /ˈrevərəntli/ adv. 虔诚地；恭敬地 hold it reverently = 像捧艺术品一样捧着。">
+        <div class="g-word">reverently</div>
+        <div class="g-meta"><span>/ˈrevərəntli/</span><i>adv.</i></div>
+        <div class="g-zh">虔诚地；恭敬地</div>
+        <div class="g-note">hold it reverently = 像捧艺术品一样捧着。</div>
+      </div>
+      <div class="g-item" data-search="ruthless /ˈruːθləs/ adj. 无情的；残忍的 ruth（怜悯）+ less。">
+        <div class="g-word">ruthless</div>
+        <div class="g-meta"><span>/ˈruːθləs/</span><i>adj.</i></div>
+        <div class="g-zh">无情的；残忍的</div>
+        <div class="g-note">ruth（怜悯）+ less。</div>
+      </div>
+      <div class="g-item" data-search="scuttle /ˈskʌtl/ v. 破坏；使完蛋 might have been scuttled = 可能就此断送。">
+        <div class="g-word">scuttle</div>
+        <div class="g-meta"><span>/ˈskʌtl/</span><i>v.</i></div>
+        <div class="g-zh">破坏；使完蛋</div>
+        <div class="g-note">might have been scuttled = 可能就此断送。</div>
+      </div>
+      <div class="g-item" data-search="self-justification /ˌself ˌdʒʌstɪfɪˈkeɪʃn/ n. 自我辩护 为达崇高目的而自我开脱。">
+        <div class="g-word">self-justification</div>
+        <div class="g-meta"><span>/ˌself ˌdʒʌstɪfɪˈkeɪʃn/</span><i>n.</i></div>
+        <div class="g-zh">自我辩护</div>
+        <div class="g-note">为达崇高目的而自我开脱。</div>
+      </div>
+      <div class="g-item" data-search="shape /ʃeɪp/ v. 塑造 leaders are shaped by early events = 领袖由早年事件塑造。">
+        <div class="g-word">shape</div>
+        <div class="g-meta"><span>/ʃeɪp/</span><i>v.</i></div>
+        <div class="g-zh">塑造</div>
+        <div class="g-note">leaders are shaped by early events = 领袖由早年事件塑造。</div>
+      </div>
+      <div class="g-item" data-search="shortfall /ˈʃɔːtfɔːl/ n. 不足；缺陷 partially explain his shortfalls = 部分解释他的缺陷。">
+        <div class="g-word">shortfall</div>
+        <div class="g-meta"><span>/ˈʃɔːtfɔːl/</span><i>n.</i></div>
+        <div class="g-zh">不足；缺陷</div>
+        <div class="g-note">partially explain his shortfalls = 部分解释他的缺陷。</div>
+      </div>
+      <div class="g-item" data-search="sober /ˈsəʊbə/ adj. 清醒的；严肃的 sober thought = 冷静的思考。">
+        <div class="g-word">sober</div>
+        <div class="g-meta"><span>/ˈsəʊbə/</span><i>adj.</i></div>
+        <div class="g-zh">清醒的；严肃的</div>
+        <div class="g-note">sober thought = 冷静的思考。</div>
+      </div>
+      <div class="g-item" data-search="spectacular /spekˈtækjələ/ adj. 壮观的；惊人的 spectacular products that were market flops = 产品惊艳却市场惨败。">
+        <div class="g-word">spectacular</div>
+        <div class="g-meta"><span>/spekˈtækjələ/</span><i>adj.</i></div>
+        <div class="g-zh">壮观的；惊人的</div>
+        <div class="g-note">spectacular products that were market flops = 产品惊艳却市场惨败。</div>
+      </div>
+      <div class="g-item" data-search="synergy /ˈsɪnədʒi/ n. 协同效应 a powerful synergy of skills = 技能的强强联合。">
+        <div class="g-word">synergy</div>
+        <div class="g-meta"><span>/ˈsɪnədʒi/</span><i>n.</i></div>
+        <div class="g-zh">协同效应</div>
+        <div class="g-note">a powerful synergy of skills = 技能的强强联合。</div>
+      </div>
+      <div class="g-item" data-search="thoroughness /ˈθʌrənəs/ n. 彻底；一丝不苟 unexposed side 也要漆好。">
+        <div class="g-word">thoroughness</div>
+        <div class="g-meta"><span>/ˈθʌrənəs/</span><i>n.</i></div>
+        <div class="g-zh">彻底；一丝不苟</div>
+        <div class="g-note">unexposed side 也要漆好。</div>
+      </div>
+      <div class="g-item" data-search="tinker /ˈtɪŋkə/ v. 摆弄；修补 tinker with cars = 鼓捣汽车。">
+        <div class="g-word">tinker</div>
+        <div class="g-meta"><span>/ˈtɪŋkə/</span><i>v.</i></div>
+        <div class="g-zh">摆弄；修补</div>
+        <div class="g-note">tinker with cars = 鼓捣汽车。</div>
+      </div>
+      <div class="g-item" data-search="trigger /ˈtrɪɡə/ v. 引发；触发 a trigger for sober thought = 引人深思的契机。">
+        <div class="g-word">trigger</div>
+        <div class="g-meta"><span>/ˈtrɪɡə/</span><i>v.</i></div>
+        <div class="g-zh">引发；触发</div>
+        <div class="g-note">a trigger for sober thought = 引人深思的契机。</div>
+      </div>
+      <div class="g-item" data-search="turning point /ˈtɜːnɪŋ pɔɪnt/ n. 转折点 point toward eastern philosophy = 转向东方哲学。">
+        <div class="g-word">turning point</div>
+        <div class="g-meta"><span>/ˈtɜːnɪŋ pɔɪnt/</span><i>n.</i></div>
+        <div class="g-zh">转折点</div>
+        <div class="g-note">point toward eastern philosophy = 转向东方哲学。</div>
+      </div>
+      <div class="g-item" data-search="veteran /ˈvetərən/ n. 老兵；退伍军人 Coast Guard veteran = 海岸警卫队退伍兵。">
+        <div class="g-word">veteran</div>
+        <div class="g-meta"><span>/ˈvetərən/</span><i>n.</i></div>
+        <div class="g-zh">老兵；退伍军人</div>
+        <div class="g-note">Coast Guard veteran = 海岸警卫队退伍兵。</div>
+      </div>
+      <div class="g-item" data-search="vindictive /vɪnˈdɪktɪv/ adj. 报复心强的 vindicate v. 证明无辜，此处指反义。">
+        <div class="g-word">vindictive</div>
+        <div class="g-meta"><span>/vɪnˈdɪktɪv/</span><i>adj.</i></div>
+        <div class="g-zh">报复心强的</div>
+        <div class="g-note">vindicate v. 证明无辜，此处指反义。</div>
+      </div>
+      <div class="g-item" data-search="volatile /ˈvɒlətaɪl/ adj. 喜怒无常的；易变的 volatile personality = 暴躁多变的性格。">
+        <div class="g-word">volatile</div>
+        <div class="g-meta"><span>/ˈvɒlətaɪl/</span><i>adj.</i></div>
+        <div class="g-zh">喜怒无常的；易变的</div>
+        <div class="g-note">volatile personality = 暴躁多变的性格。</div>
+      </div>
+      <div class="g-item" data-search="yield /jiːld/ v. 产生；出产 yield valuable lessons = 提供宝贵教训。">
+        <div class="g-word">yield</div>
+        <div class="g-meta"><span>/jiːld/</span><i>v.</i></div>
+        <div class="g-zh">产生；出产</div>
+        <div class="g-note">yield valuable lessons = 提供宝贵教训。</div>
+      </div>
+      <div class="g-item" data-search="Zen /zen/ n. 禅宗 Japanese Zen Buddhism = 日本禅宗。">
+        <div class="g-word">Zen</div>
+        <div class="g-meta"><span>/zen/</span><i>n.</i></div>
+        <div class="g-zh">禅宗</div>
+        <div class="g-note">Japanese Zen Buddhism = 日本禅宗。</div>
+      </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p><strong>研究生英语综合教程 · 中英对照精读</strong>　按 J. K. Rowling 哈佛演讲同款排版生成。顶部按钮可切换中文显隐、重点词折叠与字号。</p>
+    </footer>
+  </main>
+
+  <a class="backtop" id="backtop" href="#top" aria-label="回到顶部">↑</a>
+
+  <script>
+
+    (() => {
+      const body = document.body;
+      const root = document.documentElement;
+      const toggleZh = document.getElementById("toggleZh");
+      const toggleKeys = document.getElementById("toggleKeys");
+      const fontMinus = document.getElementById("fontMinus");
+      const fontPlus = document.getElementById("fontPlus");
+      const printBtn = document.getElementById("printBtn");
+      const progress = document.getElementById("progress");
+      const backtop = document.getElementById("backtop");
+      const search = document.getElementById("glossarySearch");
+      const status = document.getElementById("glossaryStatus");
+      const items = [...document.querySelectorAll(".g-item")];
+      let fontSize = 19;
+
+      const setPressed = (button, pressed) => {
+        button.classList.toggle("active", pressed);
+        button.setAttribute("aria-pressed", String(pressed));
+      };
+
+      toggleZh.addEventListener("click", () => {
+        const hidden = body.classList.toggle("hide-zh");
+        toggleZh.textContent = hidden ? "显示中文" : "隐藏中文";
+        setPressed(toggleZh, hidden);
+      });
+
+      toggleKeys.addEventListener("click", () => {
+        const hidden = body.classList.toggle("hide-keys");
+        toggleKeys.textContent = hidden ? "展开重点词" : "收起重点词";
+        setPressed(toggleKeys, hidden);
+      });
+
+      const applyFontSize = () => {
+        root.style.setProperty("--en-size", fontSize + "px");
+      };
+
+      fontMinus.addEventListener("click", () => {
+        fontSize = Math.max(16, fontSize - 1);
+        applyFontSize();
+      });
+
+      fontPlus.addEventListener("click", () => {
+        fontSize = Math.min(24, fontSize + 1);
+        applyFontSize();
+      });
+
+      printBtn.addEventListener("click", () => window.print());
+
+      const updateScroll = () => {
+        const top = window.scrollY || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - window.innerHeight;
+        const ratio = height > 0 ? Math.min(1, Math.max(0, top / height)) : 0;
+        progress.style.width = (ratio * 100).toFixed(2) + "%";
+        backtop.classList.toggle("show", top > 650);
+      };
+
+      window.addEventListener("scroll", updateScroll, { passive: true });
+      window.addEventListener("resize", updateScroll);
+      updateScroll();
+
+      search.addEventListener("input", () => {
+        const query = search.value.trim().toLocaleLowerCase("zh-CN");
+        let visible = 0;
+        for (const item of items) {
+          const haystack = (item.dataset.search || "").toLocaleLowerCase("zh-CN");
+          const match = !query || haystack.includes(query);
+          item.hidden = !match;
+          if (match) visible += 1;
+        }
+        status.textContent = query
+          ? "找到 " + visible + " 个词条"
+          : "显示全部 " + items.length + " 个词条";
+      });
+    })();
+  
+  </script>
+</body>
+</html>

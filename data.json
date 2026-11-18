@@ -388,10 +388,64 @@
           "originalSize": 20057,
           "optimized": false,
           "folder": "新时代实践作业"
+        },
+        {
+          "name": "答案-新时代中国特色社会主义理论与实践复习题0923.docx",
+          "url": "files/答案-新时代中国特色社会主义理论与实践复习题0923.docx",
+          "type": "DOCX",
+          "size": 15675,
+          "originalSize": 15675,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "微信图片_20261013133223_264_566.jpg",
+          "url": "files/微信图片_20261013133223_264_566.jpg",
+          "type": "JPG",
+          "size": 339991,
+          "originalSize": 4153698,
+          "optimized": true,
+          "folder": ""
+        },
+        {
+          "name": "小抄版本.docx",
+          "url": "files/小抄版本.docx",
+          "type": "DOCX",
+          "size": 1918628,
+          "originalSize": 1918628,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "新时代考试简答题.pdf",
+          "url": "files/新时代考试简答题.pdf",
+          "type": "PDF",
+          "size": 452953,
+          "originalSize": 452953,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "新时代中国特色社会主义理论与实践_夜读版.html",
+          "url": "files/新时代中国特色社会主义理论与实践_夜读版.html",
+          "type": "HTML",
+          "size": 61057,
+          "originalSize": 61057,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "学生版-新时代中国特色社会主义理论与实践复习题0923.docx",
+          "url": "files/学生版-新时代中国特色社会主义理论与实践复习题0923.docx",
+          "type": "DOCX",
+          "size": 18677,
+          "originalSize": 18677,
+          "optimized": false,
+          "folder": ""
         }
       ],
       "images": [],
-      "time": "2026-11-18 15:52",
+      "time": "2026-11-18 15:53",
       "tags": [
         "公共课",
         "政治"
@@ -1335,6 +1389,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-18 15:53",
+      "action": "编辑课程：新时代中国特色社会主义理论与实践"
+    },
+    {
       "time": "2026-11-18 15:52",
       "action": "编辑课程：新时代中国特色社会主义理论与实践"
     },
@@ -1729,10 +1787,6 @@
     {
       "time": "2026-09-29 18:50",
       "action": "编辑通知：Edgetunnel2.0 全新版本"
-    },
-    {
-      "time": "2026-09-29 18:19",
-      "action": "编辑通知：沈工大申请教育邮箱方法"
     }
   ],
   "categories": [

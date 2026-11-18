@@ -212,7 +212,8 @@
       ],
       "progress": 100,
       "folders": [
-        "运筹学试卷"
+        "运筹学试卷",
+        "复习题"
       ],
       "files": [
         {
@@ -249,10 +250,134 @@
           "size": 0,
           "folder": "",
           "external": true
+        },
+        {
+          "name": "第6章_整数规划三类方法_例题精讲.html",
+          "url": "files/第6章_整数规划三类方法_例题精讲.html",
+          "type": "HTML",
+          "size": 2386959,
+          "originalSize": 2386959,
+          "optimized": false,
+          "folder": "复习题"
+        },
+        {
+          "name": "第7章_无约束极值六种方法_例题精讲.html",
+          "url": "files/第7章_无约束极值六种方法_例题精讲.html",
+          "type": "HTML",
+          "size": 2347658,
+          "folder": "复习题"
+        },
+        {
+          "name": "高等运筹学期末模拟考试.html",
+          "url": "files/高等运筹学期末模拟考试.html",
+          "type": "HTML",
+          "size": 11948,
+          "originalSize": 11948,
+          "optimized": false,
+          "folder": "复习题"
+        },
+        {
+          "name": "高等运筹学期末模拟考试答案.html",
+          "url": "files/高等运筹学期末模拟考试答案.html",
+          "type": "HTML",
+          "size": 6357,
+          "originalSize": 6357,
+          "optimized": false,
+          "folder": "复习题"
+        },
+        {
+          "name": "求对偶问题例题10道.html",
+          "url": "files/求对偶问题例题10道.html",
+          "type": "HTML",
+          "size": 31074,
+          "originalSize": 31074,
+          "optimized": false,
+          "folder": "复习题"
+        },
+        {
+          "name": "凸规划判定练习题.html",
+          "url": "files/凸规划判定练习题.html",
+          "type": "HTML",
+          "size": 21115,
+          "originalSize": 21115,
+          "optimized": false,
+          "folder": "复习题"
+        },
+        {
+          "name": "无约束求极值_6大方法与12道例题详解.html",
+          "url": "files/无约束求极值_6大方法与12道例题详解.html",
+          "type": "HTML",
+          "size": 56853,
+          "originalSize": 56853,
+          "optimized": false,
+          "folder": "复习题"
+        },
+        {
+          "name": "无约束求极值-进阶拔高题（30题）.html",
+          "url": "files/无约束求极值-进阶拔高题（30题）.html",
+          "type": "HTML",
+          "size": 124313,
+          "originalSize": 124313,
+          "optimized": false,
+          "folder": "复习题"
+        },
+        {
+          "name": "有约束求极值_3大方法与6道例题详解.html",
+          "url": "files/有约束求极值_3大方法与6道例题详解.html",
+          "type": "HTML",
+          "size": 32493,
+          "originalSize": 32493,
+          "optimized": false,
+          "folder": "复习题"
+        },
+        {
+          "name": "有约束求极值_3大方法与6道例题详解_教材标准版.html",
+          "url": "files/有约束求极值_3大方法与6道例题详解_教材标准版.html",
+          "type": "HTML",
+          "size": 35626,
+          "originalSize": 35626,
+          "optimized": false,
+          "folder": "复习题"
+        },
+        {
+          "name": "运筹学_两套试卷_含答案解析.html",
+          "url": "files/运筹学_两套试卷_含答案解析.html",
+          "type": "HTML",
+          "size": 141189,
+          "originalSize": 141189,
+          "optimized": false,
+          "folder": "复习题"
+        },
+        {
+          "name": "运筹学核心算法标准题解题库.html",
+          "url": "files/运筹学核心算法标准题解题库.html",
+          "type": "HTML",
+          "size": 110798,
+          "originalSize": 110798,
+          "optimized": false,
+          "folder": "复习题"
+        },
+        {
+          "name": "运筹学算法典型题精解.html",
+          "url": "files/运筹学算法典型题精解.html",
+          "type": "HTML",
+          "size": 55616,
+          "originalSize": 55616,
+          "optimized": false,
+          "folder": "复习题"
+        },
+        {
+          "name": "运筹学一天速成.html",
+          "url": "files/运筹学一天速成.html",
+          "type": "HTML",
+          "size": 47808,
+          "originalSize": 47808,
+          "optimized": false,
+          "folder": "复习题"
         }
       ],
       "images": [],
-      "time": "2026-11-18 13:25"
+      "time": "2026-11-18 13:27"
     }
   ],
   "papers": [
@@ -924,6 +1049,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-18 13:27",
+      "action": "编辑课程：运筹学"
+    },
+    {
       "time": "2026-11-18 13:25",
       "action": "添加课程：运筹学"
     },
@@ -1318,10 +1447,6 @@
     {
       "time": "2026-09-28 14:41",
       "action": "名单：前台显示"
-    },
-    {
-      "time": "2026-09-28 14:39",
-      "action": "修改入场欢迎页"
     }
   ],
   "categories": [

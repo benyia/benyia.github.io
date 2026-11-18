@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>无约束求极值：6大核心方法原理与精解（共12道例题）</title>
+    <!-- 引入 MathJax 渲染数学公式 -->
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=67hDkxSKvVmgz2aIBslMh8lPkcAsR1Nhhws_WuFdZv1wYelpbbImVLFWWQS_efsedFSa47YqW-Ys-wfPqQp8HUtFAtdlKpbBCB2wODacqmxHXuXabghqDKOXTUTOmQYh0vM3vQBQ_y3x8YTjJYjvqLDa7SIMraWyfVrEXAkvnAGcu9pXaeGqWNvEuelbX2dYo401uUvWGaiVLR27gAZUhnfHjsg-CjLKINADrBqPYSBy2gWCvh3sxBZ4w6geXMw3uGCYZT_rqPBiG1F0ZOvL-ZXxN3Gd_ZuWK0ePLSxr0oHiU4W59_xb8JJpU9PlAk5CFauB80JG4HV_Qm3JCNsd_FGAwFHqsjWeQLHAaXY9SaPIByt9odnt5u3Gd5EGUw_h4edKEdsJ7koFUHOPaqZgSN1Qtcyp2pHgqqalq8tfQQjrpuXjc3sNaHuwhEDbfYrZua6C0LHVspzqG5JdpWn5q0qHKhZnAJMkyRWAN0GSdKkyKQqb5p-V-UZ8xM11IYIZk4ixO51mtrjli-8bpD6-kA" charset="UTF-8"></script><script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #eff6ff;
+            --accent: #0284c7;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --method-bg: #f0fdf4;
+            --method-border: #16a34a;
+            --step-bg: #fffbeb;
+            --step-border: #d97706;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.75;
+            color: var(--text);
+            background-color: var(--bg);
+            padding: 20px;
+        }
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+        header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 2.1rem;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+        .toc {
+            background: var(--primary-light);
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 20px 28px;
+            margin-bottom: 36px;
+        }
+        .toc h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.15rem;
+        }
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 8px 20px;
+            list-style: none;
+        }
+        .toc-grid a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .toc-grid a:hover {
+            text-decoration: underline;
+        }
+        .section-card {
+            margin-bottom: 48px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .section-header {
+            background: var(--primary);
+            color: #ffffff;
+            padding: 16px 24px;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        .section-body {
+            padding: 24px 30px;
+        }
+        .method-box {
+            background: var(--method-bg);
+            border-left: 5px solid var(--method-border);
+            padding: 18px 22px;
+            border-radius: 6px;
+            margin-bottom: 26px;
+        }
+        .method-box h4 {
+            color: #15803d;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        .method-box ol, .method-box ul {
+            padding-left: 22px;
+        }
+        .problem-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 22px 26px;
+            margin-bottom: 24px;
+            background: #ffffff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+        .problem-title {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+        .problem-statement {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--border);
+        }
+        .solution-steps {
+            background: var(--step-bg);
+            border-left: 4px solid var(--step-border);
+            padding: 16px 20px;
+            border-radius: 6px;
+        }
+        .solution-steps h5 {
+            color: #b45309;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        .step-item {
+            margin-bottom: 12px;
+        }
+        .step-label {
+            font-weight: 700;
+            color: #92400e;
+        }
+        .conclusion {
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px solid #fde68a;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        @media print {
+            body { background: #fff; padding: 0; }
+            .container { box-shadow: none; padding: 10px; max-width: 100%; }
+            .section-card { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>无约束最优化求极值：方法原理与例题精解</h1>
+        <p class="subtitle">涵盖：黄金分割法 · 最速下降法 · 牛顿法 · 共轭梯度法 · 变尺度法 (DFP) · 可行下降方向判定</p>
+    </header>
+
+    <div class="toc">
+        <h3>目录导航（点击直接跳转）</h3>
+        <ul class="toc-grid">
+            <li><a href="#sec1">一、黄金分割法（0.618法，2道例题）</a></li>
+            <li><a href="#sec2">二、最速下降法（梯度法，2道例题）</a></li>
+            <li><a href="#sec3">三、牛顿法（Newton法，2道例题）</a></li>
+            <li><a href="#sec4">四、共轭梯度法（FR法，2道例题）</a></li>
+            <li><a href="#sec5">五、变尺度法（DFP拟牛顿法，2道例题）</a></li>
+            <li><a href="#sec6">六、可行下降方向（判定与构造，2道例题）</a></li>
+        </ul>
+    </div>
+
+    <!-- ==================== 1. 黄金分割法 ==================== -->
+    <div class="section-card" id="sec1">
+        <div class="section-header">一、黄金分割法（0.618法 —— 一维搜索）</div>
+        <div class="section-body">
+            <div class="method-box">
+                <h4>【核心原理与标准做题步骤】</h4>
+                <p>用于求解单峰函数 $\varphi(\alpha)$ 在区间 $[a_k, b_k]$ 上的极小值点，通过对称取点不断缩短搜索区间（每次缩短比例为 $\tau = 0.618$）：</p>
+                <ol>
+                    <li><strong>计算试探点：</strong>给定初始区间 $[a_1, b_1]$，取黄金分割常数 $\tau \approx 0.618$：
+                        $$\lambda_1 = a_1 + (1 - 0.618)(b_1 - a_1) = a_1 + 0.382(b_1 - a_1)$$
+                        $$\mu_1 = a_1 + 0.618(b_1 - a_1)$$
+                    </li>
+                    <li><strong>计算函数值并比较消去区间：</strong>
+                        <ul>
+                            <li>若 $\varphi(\lambda_k) \le \varphi(\mu_k)$：极小点在 $[a_k, \mu_k]$ 内，令 $a_{k+1} = a_k, b_{k+1} = \mu_k$，且新试探点 $\mu_{k+1} = \lambda_k$，只需新算 $\lambda_{k+1} = a_{k+1} + 0.382(b_{k+1} - a_{k+1})$。</li>
+                            <li>若 $\varphi(\lambda_k) > \varphi(\mu_k)$：极小点在 $[\lambda_k, b_k]$ 内，令 $a_{k+1} = \lambda_k, b_{k+1} = b_k$，且新试探点 $\lambda_{k+1} = \mu_k$，只需新算 $\mu_{k+1} = a_{k+1} + 0.618(b_{k+1} - a_{k+1})$。</li>
+                        </ul>
+                    </li>
+                    <li><strong>终止准则：</strong>当区间长度 $|b_k - a_k| \le \varepsilon$（或达到指定迭代次数）时停止，取区间中点 $\alpha^* = \frac{a_k + b_k}{2}$ 作为极小点近似值。</li>
+                </ol>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 1.1（基础二次函数一维搜索）</div>
+                <div class="problem-statement">
+                    用黄金分割法（0.618法）求一元函数 $\varphi(\alpha) = \alpha^2 - 4\alpha + 5$ 在初始区间 $[0, 3]$ 上的极小点近似值，要求进行 <strong>2次区间缩减</strong>。
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第1步（初始化与第1次取点）：</span><br>
+                        已知初始区间 $[a_1, b_1] = [0, 3]$，区间长度 $L_1 = 3 - 0 = 3$。<br>
+                        计算两个初始试探点：<br>
+                        $$\lambda_1 = 0 + 0.382 \times (3 - 0) = 1.146$$
+                        $$\mu_1 = 0 + 0.618 \times (3 - 0) = 1.854$$
+                        计算对应的函数值：<br>
+                        $$\varphi(\lambda_1) = (1.146)^2 - 4(1.146) + 5 = 1.3133 - 4.584 + 5 = 1.7293$$
+                        $$\varphi(\mu_1) = (1.854)^2 - 4(1.854) + 5 = 3.4373 - 7.416 + 5 = 1.0213$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第2步（第1次区间缩减）：</span><br>
+                        因为 $\varphi(\lambda_1) > \varphi(\mu_1)$（即 $1.7293 > 1.0213$），故舍去左段 $[0, \lambda_1)$，得到新区间：<br>
+                        $$[a_2, b_2] = [\lambda_1, b_1] = [1.146, 3]$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第3步（第2次取点与比较）：</span><br>
+                        利用黄金分割性质，直接令 $\lambda_2 = \mu_1 = 1.854$，且已知 $\varphi(\lambda_2) = \varphi(\mu_1) = 1.0213$。<br>
+                        只需计算新的右试探点 $\mu_2$：<br>
+                        $$\mu_2 = a_2 + 0.618(b_2 - a_2) = 1.146 + 0.618 \times (3 - 1.146) = 1.146 + 1.1458 = 2.2918$$
+                        计算函数值 $\varphi(\mu_2)$：<br>
+                        $$\varphi(\mu_2) = (2.2918)^2 - 4(2.2918) + 5 = 5.2523 - 9.1672 + 5 = 1.0851$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第4步（第2次区间缩减）：</span><br>
+                        比较得 $\varphi(\lambda_2) < \varphi(\mu_2)$（即 $1.0213 < 1.0851$），故舍去右段 $(\mu_2, 3]$，得到缩减后的新区间：<br>
+                        $$[a_3, b_3] = [a_2, \mu_2] = [1.146, 2.2918]$$
+                    </div>
+                    <div class="conclusion">
+                        结论：经过2次区间缩减后，极小点所在区间为 $[1.146, 2.2918]$，取中点得近似极小点 $\alpha^* \approx \frac{1.146 + 2.2918}{2} = 1.7189$（理论精确解为 $\alpha^* = 2$）。
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 1.2（对称区间上的二次函数缩减）</div>
+                <div class="problem-statement">
+                    用黄金分割法求函数 $\varphi(\alpha) = \alpha^2 - 2\alpha$ 在区间 $[-1, 3]$ 上的极小点，进行 <strong>2次区间缩减</strong>，写出每一步试探点及区间变化。
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第1步（初始试探点计算）：</span><br>
+                        初始区间 $[a_1, b_1] = [-1, 3]$，区间长度 $L_1 = 3 - (-1) = 4$。<br>
+                        $$\lambda_1 = -1 + 0.382 \times 4 = -1 + 1.528 = 0.528$$
+                        $$\mu_1 = -1 + 0.618 \times 4 = -1 + 2.472 = 1.472$$
+                        计算函数值：<br>
+                        $$\varphi(\lambda_1) = (0.528)^2 - 2(0.528) = 0.2788 - 1.056 = -0.7772$$
+                        $$\varphi(\mu_1) = (1.472)^2 - 2(1.472) = 2.1668 - 2.944 = -0.7772$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第2步（第1次区间缩减）：</span><br>
+                        由于 $\varphi(\lambda_1) = \varphi(\mu_1) = -0.7772$（满足 $\varphi(\lambda_1) \le \varphi(\mu_1)$），按照标准准则保留左区间 $[a_1, \mu_1]$：<br>
+                        $$[a_2, b_2] = [-1, 1.472]$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第3步（第2次试探点计算与缩减）：</span><br>
+                        在新区间 $[-1, 1.472]$ 中，直接复用 $\mu_2 = \lambda_1 = 0.528$，$\varphi(\mu_2) = -0.7772$。<br>
+                        计算新左试探点 $\lambda_2$：<br>
+                        $$\lambda_2 = a_2 + 0.382(b_2 - a_2) = -1 + 0.382 \times (1.472 - (-1)) = -1 + 0.382 \times 2.472 = -0.0557$$
+                        计算函数值 $\varphi(\lambda_2)$：<br>
+                        $$\varphi(\lambda_2) = (-0.0557)^2 - 2(-0.0557) = 0.0031 + 0.1114 = 0.1145$$
+                        比较得 $\varphi(\lambda_2) > \varphi(\mu_2)$（即 $0.1145 > -0.7772$），故舍去左段 $[-1, \lambda_2)$，得第2次缩减区间：<br>
+                        $$[a_3, b_3] = [\lambda_2, b_2] = [-0.0557, 1.472]$$
+                    </div>
+                    <div class="conclusion">
+                        结论：经过2次缩减后区间为 $[-0.0557, 1.472]$，取区间中点得极小点近似值 $\alpha^* \approx \frac{-0.0557 + 1.472}{2} = 0.7082$（理论精确解为 $\alpha^* = 1$）。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 2. 最速下降法 ==================== -->
+    <div class="section-card" id="sec2">
+        <div class="section-header">二、最速下降法（Steepest Descent Method / 梯度法）</div>
+        <div class="section-body">
+            <div class="method-box">
+                <h4>【核心原理与标准做题步骤】</h4>
+                <p>以负梯度方向作为搜索方向（函数值局部下降最快的方向），结合一维精确线搜索求极小值：</p>
+                <ol>
+                    <li><strong>初始化：</strong>给定初始点 $x^{(0)}$ 和精度 $\varepsilon > 0$，令 $k = 0$。</li>
+                    <li><strong>计算梯度并检验终止条件：</strong>计算 $\nabla f(x^{(k)})$。若 $\|\nabla f(x^{(k)})\| \le \varepsilon$，停止迭代，输出 $x^{(k)}$。</li>
+                    <li><strong>构造最速下降方向：</strong>令 $d^{(k)} = -\nabla f(x^{(k)})$。</li>
+                    <li><strong>一维精确线搜索求步长 $\alpha_k$：</strong>求解 $\min_{\alpha > 0} \varphi(\alpha) = f(x^{(k)} + \alpha d^{(k)})$，令 $\varphi'(\alpha) = 0$ 解出 $\alpha_k$。<br>
+                        <em>（注：对于正定二次函数 $f(x) = \frac{1}{2}x^T Q x + b^T x + c$，可直接用步长公式 $\alpha_k = \frac{(d^{(k)})^T d^{(k)}}{(d^{(k)})^T Q d^{(k)}}$）</em>。</li>
+                    <li><strong>更新迭代点：</strong>$x^{(k+1)} = x^{(k)} + \alpha_k d^{(k)}$，令 $k = k+1$，转第2步。</li>
+                </ol>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 2.1（正定二次函数完成1次完整迭代）</div>
+                <div class="problem-statement">
+                    用最速下降法求解无约束优化问题 $\min f(x_1, x_2) = x_1^2 + 2x_2^2$，初始点取 $x^{(0)} = (2, 1)^T$，求第1次迭代点 $x^{(1)}$ 及对应的函数值。
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第1步（求梯度表达式与初始点梯度）：</span><br>
+                        目标函数的梯度为：
+                        $$\nabla f(x) = \begin{pmatrix} \frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2} \end{pmatrix} = \begin{pmatrix} 2x_1 \\ 4x_2 \end{pmatrix}$$
+                        代入初始点 $x^{(0)} = (2, 1)^T$：
+                        $$\nabla f(x^{(0)}) = \begin{pmatrix} 2 \times 2 \\ 4 \times 1 \end{pmatrix} = \begin{pmatrix} 4 \\ 4 \end{pmatrix} \neq \begin{pmatrix} 0 \\ 0 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第2步（确定搜索方向 $d^{(0)}$）：</span><br>
+                        取负梯度方向：
+                        $$d^{(0)} = -\nabla f(x^{(0)}) = \begin{pmatrix} -4 \\ -4 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第3步（一维精确线搜索求最佳步长 $\alpha_0$）：</span><br>
+                        构造沿方向 $d^{(0)}$ 的新点：
+                        $$x^{(0)} + \alpha d^{(0)} = \begin{pmatrix} 2 - 4\alpha \\ 1 - 4\alpha \end{pmatrix}$$
+                        代入目标函数得关于 $\alpha$ 的一元函数：
+                        $$\varphi(\alpha) = f(2 - 4\alpha, 1 - 4\alpha) = (2 - 4\alpha)^2 + 2(1 - 4\alpha)^2 = (4 - 16\alpha + 16\alpha^2) + (2 - 16\alpha + 32\alpha^2) = 48\alpha^2 - 32\alpha + 6$$
+                        令导数 $\varphi'(\alpha) = 96\alpha - 32 = 0$，解得最优步长：
+                        $$\alpha_0 = \frac{32}{96} = \frac{1}{3}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第4步（计算新迭代点 $x^{(1)}$）：</span><br>
+                        $$x^{(1)} = x^{(0)} + \alpha_0 d^{(0)} = \begin{pmatrix} 2 \\ 1 \end{pmatrix} + \frac{1}{3}\begin{pmatrix} -4 \\ -4 \end{pmatrix} = \begin{pmatrix} \frac{2}{3} \\ -\frac{1}{3} \end{pmatrix}$$
+                        此时函数值为 $f(x^{(1)}) = \left(\frac{2}{3}\right)^2 + 2\left(-\frac{1}{3}\right)^2 = \frac{4}{9} + \frac{2}{9} = \frac{2}{3}$（比初始值 $f(x^{(0)}) = 6$ 大幅下降）。
+                    </div>
+                    <div class="conclusion">
+                        结论：第1次迭代后的点为 $x^{(1)} = \left(\frac{2}{3}, -\frac{1}{3}\right)^T$，函数值降至 $\frac{2}{3}$。
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 2.2（含交叉项二次函数的最速下降迭代）</div>
+                <div class="problem-statement">
+                    用最速下降法求函数 $\min f(x_1, x_2) = \frac{1}{2}x_1^2 + x_2^2 - x_1 x_2 - x_1$，从初始点 $x^{(0)} = (0, 0)^T$ 出发，计算 $x^{(1)}$ 和 $x^{(2)}$。
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第1步（写出梯度与海森矩阵 $Q$）：</span><br>
+                        $$\nabla f(x) = \begin{pmatrix} x_1 - x_2 - 1 \\ 2x_2 - x_1 \end{pmatrix}, \quad Q = \nabla^2 f(x) = \begin{pmatrix} 1 & -1 \\ -1 & 2 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第2步（第1次迭代 $x^{(0)} \to x^{(1)}$）：</span><br>
+                        在 $x^{(0)} = (0, 0)^T$ 处：
+                        $$\nabla f(x^{(0)}) = \begin{pmatrix} -1 \\ 0 \end{pmatrix} \implies d^{(0)} = -\nabla f(x^{(0)}) = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$$
+                        利用二次函数精确步长公式：
+                        $$\alpha_0 = \frac{(d^{(0)})^T d^{(0)}}{(d^{(0)})^T Q d^{(0)}} = \frac{\begin{pmatrix} 1 & 0 \end{pmatrix}\begin{pmatrix} 1 \\ 0 \end{pmatrix}}{\begin{pmatrix} 1 & 0 \end{pmatrix}\begin{pmatrix} 1 & -1 \\ -1 & 2 \end{pmatrix}\begin{pmatrix} 1 \\ 0 \end{pmatrix}} = \frac{1}{1} = 1$$
+                        更新得第1次迭代点：
+                        $$x^{(1)} = x^{(0)} + \alpha_0 d^{(0)} = \begin{pmatrix} 0 \\ 0 \end{pmatrix} + 1 \times \begin{pmatrix} 1 \\ 0 \end{pmatrix} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第3步（第2次迭代 $x^{(1)} \to x^{(2)}$）：</span><br>
+                        在 $x^{(1)} = (1, 0)^T$ 处计算梯度与负梯度方向：
+                        $$\nabla f(x^{(1)}) = \begin{pmatrix} 1 - 0 - 1 \\ 0 - 1 \end{pmatrix} = \begin{pmatrix} 0 \\ -1 \end{pmatrix} \implies d^{(1)} = -\nabla f(x^{(1)}) = \begin{pmatrix} 0 \\ 1 \end{pmatrix}$$
+                        计算步长 $\alpha_1$：
+                        $$\alpha_1 = \frac{(d^{(1)})^T d^{(1)}}{(d^{(1)})^T Q d^{(1)}} = \frac{\begin{pmatrix} 0 & 1 \end{pmatrix}\begin{pmatrix} 0 \\ 1 \end{pmatrix}}{\begin{pmatrix} 0 & 1 \end{pmatrix}\begin{pmatrix} 1 & -1 \\ -1 & 2 \end{pmatrix}\begin{pmatrix} 0 \\ 1 \end{pmatrix}} = \frac{1}{2}$$
+                        更新得第2次迭代点：
+                        $$x^{(2)} = x^{(1)} + \alpha_1 d^{(1)} = \begin{pmatrix} 1 \\ 0 \end{pmatrix} + \frac{1}{2}\begin{pmatrix} 0 \\ 1 \end{pmatrix} = \begin{pmatrix} 1 \\ \frac{1}{2} \end{pmatrix}$$
+                    </div>
+                    <div class="conclusion">
+                        结论：经过两次最速下降迭代，依次得到 $x^{(1)} = (1, 0)^T$ 和 $x^{(2)} = (1, \frac{1}{2})^T$。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 3. 牛顿法 ==================== -->
+    <div class="section-card" id="sec3">
+        <div class="section-header">三、牛顿法（Newton's Method）</div>
+        <div class="section-body">
+            <div class="method-box">
+                <h4>【核心原理与标准做题步骤】</h4>
+                <p>利用函数二阶泰勒展开近似原函数，同时使用一阶梯度信息和二阶海森矩阵（Hessian Matrix）信息，具有二阶收敛速度（正定二次函数<strong>一步即可收敛到精确极小点</strong>）：</p>
+                <ol>
+                    <li><strong>计算一阶梯度与二阶海森矩阵：</strong>求 $\nabla f(x^{(k)})$ 和 $H(x^{(k)}) = \nabla^2 f(x^{(k)})$。</li>
+                    <li><strong>检验终止条件：</strong>若 $\|\nabla f(x^{(k)})\| \le \varepsilon$，停止计算，得极小点 $x^{(k)}$。</li>
+                    <li><strong>计算牛顿方向 $d^{(k)}$：</strong>求解线性方程组 $H(x^{(k)}) d^{(k)} = -\nabla f(x^{(k)})$，即：
+                        $$d^{(k)} = -\left[\nabla^2 f(x^{(k)})\right]^{-1} \nabla f(x^{(k)})$$
+                    </li>
+                    <li><strong>更新迭代点：</strong>标准牛顿法步长固定为 $\alpha_k = 1$，令 $x^{(k+1)} = x^{(k)} + d^{(k)}$，继续下一步检验。</li>
+                </ol>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 3.1（二元正定二次函数一步收敛）</div>
+                <div class="problem-statement">
+                    用牛顿法求函数 $\min f(x_1, x_2) = x_1^2 + 2x_2^2 - 2x_1 x_2 - 4x_1$ 的极小点，取初始点 $x^{(0)} = (0, 0)^T$。
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第1步（计算梯度 $\nabla f(x)$ 与海森矩阵 $\nabla^2 f(x)$）：</span><br>
+                        $$\nabla f(x) = \begin{pmatrix} 2x_1 - 2x_2 - 4 \\ 4x_2 - 2x_1 \end{pmatrix}, \quad H(x) = \nabla^2 f(x) = \begin{pmatrix} 2 & -2 \\ -2 & 4 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第2步（计算初始点处的梯度与海森逆矩阵）：</span><br>
+                        代入 $x^{(0)} = (0, 0)^T$：
+                        $$\nabla f(x^{(0)}) = \begin{pmatrix} -4 \\ 0 \end{pmatrix}$$
+                        对于二阶矩阵 $H = \begin{pmatrix} 2 & -2 \\ -2 & 4 \end{pmatrix}$，行列式 $\det(H) = 2 \times 4 - (-2)\times(-2) = 4 > 0$，其逆矩阵为：
+                        $$H^{-1} = \frac{1}{4}\begin{pmatrix} 4 & 2 \\ 2 & 2 \end{pmatrix} = \begin{pmatrix} 1 & \frac{1}{2} \\ \frac{1}{2} & \frac{1}{2} \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第3步（计算牛顿方向 $d^{(0)}$ 并更新 $x^{(1)}$）：</span><br>
+                        $$d^{(0)} = -H^{-1}\nabla f(x^{(0)}) = -\begin{pmatrix} 1 & \frac{1}{2} \\ \frac{1}{2} & \frac{1}{2} \end{pmatrix}\begin{pmatrix} -4 \\ 0 \end{pmatrix} = \begin{pmatrix} 4 \\ 2 \end{pmatrix}$$
+                        更新迭代点：
+                        $$x^{(1)} = x^{(0)} + d^{(0)} = \begin{pmatrix} 0 \\ 0 \end{pmatrix} + \begin{pmatrix} 4 \\ 2 \end{pmatrix} = \begin{pmatrix} 4 \\ 2 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第4步（检验终止条件）：</span><br>
+                        将 $x^{(1)} = (4, 2)^T$ 代入梯度公式：
+                        $$\nabla f(x^{(1)}) = \begin{pmatrix} 2(4) - 2(2) - 4 \\ 4(2) - 2(4) \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}$$
+                        梯度为零向量，满足终止条件。
+                    </div>
+                    <div class="conclusion">
+                        结论：牛顿法仅用 1 步迭代即求得精确极小点 $x^* = (4, 2)^T$，极小值为 $f(x^*) = -8$。
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 3.2（高次非二次函数的牛顿法迭代）</div>
+                <div class="problem-statement">
+                    用牛顿法求四次非二次函数 $\min f(x_1, x_2) = x_1^4 + 2x_2^2 - 4x_1 - 4x_2$，从初始点 $x^{(0)} = (1, 0)^T$ 出发，计算第1次迭代点 $x^{(1)}$。
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第1步（求一阶梯度与二阶海森矩阵表达式）：</span><br>
+                        $$\nabla f(x) = \begin{pmatrix} 4x_1^3 - 4 \\ 4x_2 - 4 \end{pmatrix}, \quad \nabla^2 f(x) = \begin{pmatrix} 12x_1^2 & 0 \\ 0 & 4 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第2步（在初始点 $x^{(0)} = (1, 0)^T$ 处求值）：</span><br>
+                        $$\nabla f(x^{(0)}) = \begin{pmatrix} 4(1)^3 - 4 \\ 4(0) - 4 \end{pmatrix} = \begin{pmatrix} 0 \\ -4 \end{pmatrix}$$
+                        $$H(x^{(0)}) = \nabla^2 f(x^{(0)}) = \begin{pmatrix} 12 & 0 \\ 0 & 4 \end{pmatrix} \implies \left[H(x^{(0)})\right]^{-1} = \begin{pmatrix} \frac{1}{12} & 0 \\ 0 & \frac{1}{4} \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第3步（计算牛顿方向 $d^{(0)}$ 与迭代点 $x^{(1)}$）：</span><br>
+                        $$d^{(0)} = -\left[H(x^{(0)})\right]^{-1} \nabla f(x^{(0)}) = -\begin{pmatrix} \frac{1}{12} & 0 \\ 0 & \frac{1}{4} \end{pmatrix}\begin{pmatrix} 0 \\ -4 \end{pmatrix} = \begin{pmatrix} 0 \\ 1 \end{pmatrix}$$
+                        $$x^{(1)} = x^{(0)} + d^{(0)} = \begin{pmatrix} 1 \\ 0 \end{pmatrix} + \begin{pmatrix} 0 \\ 1 \end{pmatrix} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第4步（验证 $x^{(1)}$ 处的梯度）：</span><br>
+                        $$\nabla f(x^{(1)}) = \begin{pmatrix} 4(1)^3 - 4 \\ 4(1) - 4 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}$$
+                        梯度已为 $0$，且海森矩阵正定，达到极小点。
+                    </div>
+                    <div class="conclusion">
+                        结论：第1次迭代点 $x^{(1)} = (1, 1)^T$ 即为该函数的精确极小点，极小值 $f(1, 1) = -5$。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 4. 共轭梯度法 ==================== -->
+    <div class="section-card" id="sec4">
+        <div class="section-header">四、共轭梯度法（Conjugate Gradient Method — FR法）</div>
+        <div class="section-body">
+            <div class="method-box">
+                <h4>【核心原理与标准做题步骤】</h4>
+                <p>克服最速下降法的“锯齿现象”，且无需计算和存储二阶海森矩阵。通过将当前负梯度与上一步搜索方向线性组合，构造关于 $Q$ 共轭的搜索方向（对 $n$ 元正定二次函数至多 $n$ 步必收敛到精确解）：</p>
+                <ol>
+                    <li><strong>第1步搜索：</strong>给定 $x^{(0)}$，计算 $g_0 = \nabla f(x^{(0)})$，取初始方向为最速下降方向 $d^{(0)} = -g_0$。</li>
+                    <li><strong>一维精确搜索：</strong>求步长 $\alpha_k = \frac{-g_k^T d^{(k)}}{(d^{(k)})^T Q d^{(k)}}$，更新点 $x^{(k+1)} = x^{(k)} + \alpha_k d^{(k)}$。</li>
+                    <li><strong>计算新梯度与共轭系数 $\beta_k$（Fletcher-Reeves 公式）：</strong><br>
+                        计算 $g_{k+1} = \nabla f(x^{(k+1)})$，若 $\|g_{k+1}\| \le \varepsilon$ 则终止；否则计算组合系数：
+                        $$\beta_k = \frac{\|g_{k+1}\|^2}{\|g_k\|^2} = \frac{g_{k+1}^T g_{k+1}}{g_k^T g_k}$$
+                    </li>
+                    <li><strong>构造新共轭方向：</strong>$d^{(k+1)} = -g_{k+1} + \beta_k d^{(k)}$，令 $k = k+1$ 继续一维搜索。</li>
+                </ol>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 4.1（标准二次函数的两步精确收敛）</div>
+                <div class="problem-statement">
+                    用 Fletcher-Reeves (FR) 共轭梯度法求 $\min f(x_1, x_2) = x_1^2 + 2x_2^2$，取初始点 $x^{(0)} = (2, 1)^T$，完整写出两步迭代求得精确极小点的过程。
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第1步（初始化与第1次搜索 $x^{(0)} \to x^{(1)}$）：</span><br>
+                        梯度 $\nabla f(x) = (2x_1, 4x_2)^T$，海森矩阵 $Q = \begin{pmatrix} 2 & 0 \\ 0 & 4 \end{pmatrix}$。<br>
+                        在 $x^{(0)} = (2, 1)^T$ 处：
+                        $$g_0 = \nabla f(x^{(0)}) = \begin{pmatrix} 4 \\ 4 \end{pmatrix}, \quad d^{(0)} = -g_0 = \begin{pmatrix} -4 \\ -4 \end{pmatrix}$$
+                        计算步长 $\alpha_0$：
+                        $$\alpha_0 = \frac{-g_0^T d^{(0)}}{(d^{(0)})^T Q d^{(0)}} = \frac{16 + 16}{2(-4)^2 + 4(-4)^2} = \frac{32}{32 + 64} = \frac{1}{3}$$
+                        更新得 $x^{(1)}$：
+                        $$x^{(1)} = x^{(0)} + \alpha_0 d^{(0)} = \begin{pmatrix} 2 \\ 1 \end{pmatrix} + \frac{1}{3}\begin{pmatrix} -4 \\ -4 \end{pmatrix} = \begin{pmatrix} \frac{2}{3} \\ -\frac{1}{3} \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第2步（计算 $g_1$、系数 $\beta_0$ 与共轭方向 $d^{(1)}$）：</span><br>
+                        在 $x^{(1)}$ 处计算梯度：
+                        $$g_1 = \nabla f(x^{(1)}) = \begin{pmatrix} 2 \times \frac{2}{3} \\ 4 \times (-\frac{1}{3}) \end{pmatrix} = \begin{pmatrix} \frac{4}{3} \\ -\frac{4}{3} \end{pmatrix} \neq \begin{pmatrix} 0 \\ 0 \end{pmatrix}$$
+                        由 FR 公式计算共轭系数 $\beta_0$：
+                        $$\beta_0 = \frac{\|g_1\|^2}{\|g_0\|^2} = \frac{\left(\frac{4}{3}\right)^2 + \left(-\frac{4}{3}\right)^2}{4^2 + 4^2} = \frac{\frac{32}{9}}{32} = \frac{1}{9}$$
+                        构造第2个搜索方向 $d^{(1)}$：
+                        $$d^{(1)} = -g_1 + \beta_0 d^{(0)} = \begin{pmatrix} -\frac{4}{3} \\ \frac{4}{3} \end{pmatrix} + \frac{1}{9}\begin{pmatrix} -4 \\ -4 \end{pmatrix} = \begin{pmatrix} -\frac{16}{9} \\ \frac{8}{9} \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第3步（第2次搜索 $x^{(1)} \to x^{(2)}$）：</span><br>
+                        计算步长 $\alpha_1$：
+                        $$\alpha_1 = \frac{-g_1^T d^{(1)}}{(d^{(1)})^T Q d^{(1)}} = \frac{-\left[\frac{4}{3}(-\frac{16}{9}) + (-\frac{4}{3})(\frac{8}{9})\right]}{2\left(-\frac{16}{9}\right)^2 + 4\left(\frac{8}{9}\right)^2} = \frac{\frac{96}{27}}{\frac{512 + 256}{81}} = \frac{\frac{32}{9}}{\frac{768}{81}} = \frac{3}{8}$$
+                        更新得 $x^{(2)}$：
+                        $$x^{(2)} = x^{(1)} + \alpha_1 d^{(1)} = \begin{pmatrix} \frac{2}{3} \\ -\frac{1}{3} \end{pmatrix} + \frac{3}{8}\begin{pmatrix} -\frac{16}{9} \\ \frac{8}{9} \end{pmatrix} = \begin{pmatrix} \frac{2}{3} - \frac{2}{3} \\ -\frac{1}{3} + \frac{1}{3} \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}$$
+                        此时 $g_2 = \nabla f(x^{(2)}) = (0, 0)^T$，迭代终止。
+                    </div>
+                    <div class="conclusion">
+                        结论：二元正定二次函数经过 2 步共轭梯度迭代，精确收敛到极小点 $x^* = (0, 0)^T$。
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 4.2（含交叉项二次函数的共轭梯度法求解）</div>
+                <div class="problem-statement">
+                    用共轭梯度法求解 $\min f(x_1, x_2) = \frac{1}{2}x_1^2 + x_2^2 - x_1 x_2 - x_1$，初始点 $x^{(0)} = (0, 0)^T$。
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第1步（第1次迭代 $x^{(0)} \to x^{(1)}$）：</span><br>
+                        已知 $\nabla f(x) = \begin{pmatrix} x_1 - x_2 - 1 \\ 2x_2 - x_1 \end{pmatrix}$，$Q = \begin{pmatrix} 1 & -1 \\ -1 & 2 \end{pmatrix}$。<br>
+                        在 $x^{(0)} = (0, 0)^T$ 处：
+                        $$g_0 = \begin{pmatrix} -1 \\ 0 \end{pmatrix}, \quad d^{(0)} = -g_0 = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$$
+                        $$\alpha_0 = \frac{-g_0^T d^{(0)}}{(d^{(0)})^T Q d^{(0)}} = \frac{1}{1} = 1 \implies x^{(1)} = x^{(0)} + \alpha_0 d^{(0)} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第2步（构造共轭方向 $d^{(1)}$）：</span><br>
+                        计算 $x^{(1)} = (1, 0)^T$ 处的梯度：
+                        $$g_1 = \nabla f(x^{(1)}) = \begin{pmatrix} 0 \\ -1 \end{pmatrix}$$
+                        计算共轭系数 $\beta_0$：
+                        $$\beta_0 = \frac{\|g_1\|^2}{\|g_0\|^2} = \frac{0^2 + (-1)^2}{(-1)^2 + 0^2} = \frac{1}{1} = 1$$
+                        计算新搜索方向 $d^{(1)}$：
+                        $$d^{(1)} = -g_1 + \beta_0 d^{(0)} = \begin{pmatrix} 0 \\ 1 \end{pmatrix} + 1 \times \begin{pmatrix} 1 \\ 0 \end{pmatrix} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第3步（第2次迭代 $x^{(1)} \to x^{(2)}$）：</span><br>
+                        计算 $(d^{(1)})^T Q d^{(1)}$：
+                        $$(d^{(1)})^T Q d^{(1)} = \begin{pmatrix} 1 & 1 \end{pmatrix}\begin{pmatrix} 1 & -1 \\ -1 & 2 \end{pmatrix}\begin{pmatrix} 1 \\ 1 \end{pmatrix} = \begin{pmatrix} 1 & 1 \end{pmatrix}\begin{pmatrix} 0 \\ 1 \end{pmatrix} = 1$$
+                        计算步长 $\alpha_1$：
+                        $$\alpha_1 = \frac{-g_1^T d^{(1)}}{(d^{(1)})^T Q d^{(1)}} = \frac{-\begin{pmatrix} 0 & -1 \end{pmatrix}\begin{pmatrix} 1 \\ 1 \end{pmatrix}}{1} = 1$$
+                        更新得 $x^{(2)}$：
+                        $$x^{(2)} = x^{(1)} + \alpha_1 d^{(1)} = \begin{pmatrix} 1 \\ 0 \end{pmatrix} + 1 \times \begin{pmatrix} 1 \\ 1 \end{pmatrix} = \begin{pmatrix} 2 \\ 1 \end{pmatrix}$$
+                        验证梯度：$g_2 = \nabla f(2, 1) = \begin{pmatrix} 2 - 1 - 1 \\ 2(1) - 2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}$，迭代终止。
+                    </div>
+                    <div class="conclusion">
+                        结论：经过 2 步迭代精确得到极小点 $x^* = (2, 1)^T$（对比最速下降法在例2.2中第2步仅走到 $(1, \frac{1}{2})^T$，可见共轭梯度法的优越性）。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 5. 变尺度法 ==================== -->
+    <div class="section-card" id="sec5">
+        <div class="section-header">五、变尺度法（Quasi-Newton / DFP 拟牛顿法）</div>
+        <div class="section-body">
+            <div class="method-box">
+                <h4>【核心原理与标准做题步骤】</h4>
+                <p>通过构造对称正定矩阵 $H_k$（尺度矩阵）来逼近海森矩阵的逆矩阵 $[\nabla^2 f(x^{(k)})]^{-1}$，从而避免直接求二阶导数和矩阵求逆。最经典的是 <strong>DFP 算法</strong>：</p>
+                <ol>
+                    <li><strong>初始化：</strong>给定初始点 $x^{(0)}$，取初始尺度矩阵为单位阵 $H_0 = I$，计算 $g_0 = \nabla f(x^{(0)})$。</li>
+                    <li><strong>计算拟牛顿方向：</strong>$d^{(k)} = -H_k g_k$。</li>
+                    <li><strong>一维精确线搜索：</strong>求步长 $\alpha_k$ 使得 $f(x^{(k)} + \alpha_k d^{(k)})$ 极小，更新点 $x^{(k+1)} = x^{(k)} + \alpha_k d^{(k)}$。</li>
+                    <li><strong>计算位移差与梯度差：</strong>计算新梯度 $g_{k+1} = \nabla f(x^{(k+1)})$（若为0则停止），记：
+                        $$s_k = x^{(k+1)} - x^{(k)}, \quad y_k = g_{k+1} - g_k$$
+                    </li>
+                    <li><strong>DFP 变尺度矩阵校正公式：</strong>
+                        $$H_{k+1} = H_k + \frac{s_k s_k^T}{s_k^T y_k} - \frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k}$$
+                    </li>
+                </ol>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 5.1（DFP变尺度法构造 $H_1$ 并求极小点）</div>
+                <div class="problem-statement">
+                    用 DFP 变尺度法求解 $\min f(x_1, x_2) = x_1^2 + 2x_2^2$，取初始点 $x^{(0)} = (2, 1)^T$，初始尺度矩阵 $H_0 = I$。求校正后的矩阵 $H_1$ 及极小点 $x^{(2)}$。
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第1步（第1次搜索 $x^{(0)} \to x^{(1)}$）：</span><br>
+                        已知 $\nabla f(x) = (2x_1, 4x_2)^T$。在 $x^{(0)} = (2, 1)^T$ 处，$g_0 = (4, 4)^T$。<br>
+                        因为 $H_0 = I$，所以 $d^{(0)} = -H_0 g_0 = (-4, -4)^T$。<br>
+                        由例 2.1 一维搜索结果知 $\alpha_0 = \frac{1}{3}$，故：
+                        $$x^{(1)} = x^{(0)} + \alpha_0 d^{(0)} = \begin{pmatrix} \frac{2}{3} \\ -\frac{1}{3} \end{pmatrix}, \quad g_1 = \nabla f(x^{(1)}) = \begin{pmatrix} \frac{4}{3} \\ -\frac{4}{3} \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第2步（计算 $s_0, y_0$ 及 DFP 校正矩阵 $H_1$）：</span><br>
+                        $$s_0 = x^{(1)} - x^{(0)} = \begin{pmatrix} -\frac{4}{3} \\ -\frac{4}{3} \end{pmatrix} = -\frac{4}{3}\begin{pmatrix} 1 \\ 1 \end{pmatrix}$$
+                        $$y_0 = g_1 - g_0 = \begin{pmatrix} \frac{4}{3} - 4 \\ -\frac{4}{3} - 4 \end{pmatrix} = \begin{pmatrix} -\frac{8}{3} \\ -\frac{16}{3} \end{pmatrix} = -\frac{8}{3}\begin{pmatrix} 1 \\ 2 \end{pmatrix}$$
+                        分别计算 DFP 公式的两项修正项（注意常数因子在分子分母中可直接约分简化计算）：<br>
+                        <ul>
+                            <li>第一项 $\frac{s_0 s_0^T}{s_0^T y_0}$：令 $\tilde{s} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}, \tilde{y} = \begin{pmatrix} 1 \\ 2 \end{pmatrix}$，注意 $s_0 = -\frac{4}{3}\tilde{s}, y_0 = -\frac{8}{3}\tilde{y}$，则：
+                                $$s_0 s_0^T = \frac{16}{9}\begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix}, \quad s_0^T y_0 = \frac{32}{9}(1\times 1 + 1\times 2) = \frac{32}{3}$$
+                                $$\frac{s_0 s_0^T}{s_0^T y_0} = \frac{\frac{16}{9}}{\frac{32}{3}}\begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix} = \frac{1}{6}\begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix}$$
+                            </li>
+                            <li>第二项 $\frac{H_0 y_0 y_0^T H_0}{y_0^T H_0 y_0}$：因 $H_0 = I$，常数系数 $-\frac{8}{3}$ 平方后上下直接约去：
+                                $$\frac{y_0 y_0^T}{y_0^T y_0} = \frac{\tilde{y}\tilde{y}^T}{\tilde{y}^T\tilde{y}} = \frac{1}{1^2 + 2^2}\begin{pmatrix} 1 \\ 2 \end{pmatrix}\begin{pmatrix} 1 & 2 \end{pmatrix} = \frac{1}{5}\begin{pmatrix} 1 & 2 \\ 2 & 4 \end{pmatrix}$$
+                            </li>
+                        </ul>
+                        合并得到 $H_1$：
+                        $$H_1 = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix} + \begin{pmatrix} \frac{1}{6} & \frac{1}{6} \\ \frac{1}{6} & \frac{1}{6} \end{pmatrix} - \begin{pmatrix} \frac{1}{5} & \frac{2}{5} \\ \frac{2}{5} & \frac{4}{5} \end{pmatrix} = \begin{pmatrix} \frac{29}{30} & -\frac{7}{30} \\ -\frac{7}{30} & \frac{11}{30} \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第3步（第2次搜索 $x^{(1)} \to x^{(2)}$）：</span><br>
+                        计算搜索方向 $d^{(1)} = -H_1 g_1$：
+                        $$d^{(1)} = -\frac{1}{30}\begin{pmatrix} 29 & -7 \\ -7 & 11 \end{pmatrix}\begin{pmatrix} \frac{4}{3} \\ -\frac{4}{3} \end{pmatrix} = -\frac{4}{90}\begin{pmatrix} 36 \\ -18 \end{pmatrix} = \begin{pmatrix} -\frac{8}{5} \\ \frac{4}{5} \end{pmatrix}$$
+                        一维精确搜索求步长 $\alpha_1$（其中 $Q = \text{diag}(2, 4)$）：
+                        $$\alpha_1 = \frac{-g_1^T d^{(1)}}{(d^{(1)})^T Q d^{(1)}} = \frac{-\left[\frac{4}{3}(-\frac{8}{5}) + (-\frac{4}{3})(\frac{4}{5})\right]}{2\left(-\frac{8}{5}\right)^2 + 4\left(\frac{4}{5}\right)^2} = \frac{\frac{16}{5}}{\frac{128 + 64}{25}} = \frac{\frac{16}{5}}{\frac{192}{25}} = \frac{5}{12}$$
+                        更新迭代点 $x^{(2)}$：
+                        $$x^{(2)} = x^{(1)} + \alpha_1 d^{(1)} = \begin{pmatrix} \frac{2}{3} \\ -\frac{1}{3} \end{pmatrix} + \frac{5}{12}\begin{pmatrix} -\frac{8}{5} \\ \frac{4}{5} \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}$$
+                    </div>
+                    <div class="conclusion">
+                        结论：校正后的变尺度矩阵为 $H_1 = \frac{1}{30}\begin{pmatrix} 29 & -7 \\ -7 & 11 \end{pmatrix}$，第2步迭代精确收敛至极小点 $x^* = (0, 0)^T$。
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 5.2（含交叉项函数的 DFP 变尺度法完整求解）</div>
+                <div class="problem-statement">
+                    用 DFP 变尺度法求 $\min f(x_1, x_2) = \frac{1}{2}x_1^2 + x_2^2 - x_1 x_2 - x_1$，初始点 $x^{(0)} = (0, 0)^T$，初始矩阵 $H_0 = I$。
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第1步（第1次迭代）：</span><br>
+                        梯度 $\nabla f(x) = \begin{pmatrix} x_1 - x_2 - 1 \\ 2x_2 - x_1 \end{pmatrix}$。在 $x^{(0)} = (0, 0)^T$ 处，$g_0 = \begin{pmatrix} -1 \\ 0 \end{pmatrix}$。<br>
+                        搜索方向 $d^{(0)} = -H_0 g_0 = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$，精确步长 $\alpha_0 = 1$（见例4.2），得：
+                        $$x^{(1)} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}, \quad g_1 = \nabla f(x^{(1)}) = \begin{pmatrix} 0 \\ -1 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第2步（用 DFP 公式更新尺度矩阵 $H_1$）：</span><br>
+                        $$s_0 = x^{(1)} - x^{(0)} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}, \quad y_0 = g_1 - g_0 = \begin{pmatrix} 1 \\ -1 \end{pmatrix}$$
+                        计算内积与外积：
+                        $$s_0^T y_0 = 1 \times 1 + 0 \times (-1) = 1, \quad s_0 s_0^T = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$$
+                        $$y_0^T H_0 y_0 = 1^2 + (-1)^2 = 2, \quad H_0 y_0 y_0^T H_0 = \begin{pmatrix} 1 \\ -1 \end{pmatrix}\begin{pmatrix} 1 & -1 \end{pmatrix} = \begin{pmatrix} 1 & -1 \\ -1 & 1 \end{pmatrix}$$
+                        代入 DFP 公式得 $H_1$：
+                        $$H_1 = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix} + \frac{1}{1}\begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} - \frac{1}{2}\begin{pmatrix} 1 & -1 \\ -1 & 1 \end{pmatrix} = \begin{pmatrix} \frac{3}{2} & \frac{1}{2} \\ \frac{1}{2} & \frac{1}{2} \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第3步（第2次迭代求极小点 $x^{(2)}$）：</span><br>
+                        计算拟牛顿方向 $d^{(1)}$：
+                        $$d^{(1)} = -H_1 g_1 = -\begin{pmatrix} \frac{3}{2} & \frac{1}{2} \\ \frac{1}{2} & \frac{1}{2} \end{pmatrix}\begin{pmatrix} 0 \\ -1 \end{pmatrix} = \begin{pmatrix} \frac{1}{2} \\ \frac{1}{2} \end{pmatrix}$$
+                        求步长 $\alpha_1$（已知 $Q = \begin{pmatrix} 1 & -1 \\ -1 & 2 \end{pmatrix}$）：
+                        $$\alpha_1 = \frac{-g_1^T d^{(1)}}{(d^{(1)})^T Q d^{(1)}} = \frac{\frac{1}{2}}{\frac{1}{4}} = 2$$
+                        更新得 $x^{(2)}$：
+                        $$x^{(2)} = x^{(1)} + \alpha_1 d^{(1)} = \begin{pmatrix} 1 \\ 0 \end{pmatrix} + 2\begin{pmatrix} \frac{1}{2} \\ \frac{1}{2} \end{pmatrix} = \begin{pmatrix} 2 \\ 1 \end{pmatrix}$$
+                        验证梯度 $g_2 = \nabla f(2, 1) = (0, 0)^T$，算法终止。
+                    </div>
+                    <div class="conclusion">
+                        结论：DFP变尺度法经过 2 步迭代精确得到极小点 $x^* = (2, 1)^T$。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 6. 可行下降方向 ==================== -->
+    <div class="section-card" id="sec6">
+        <div class="section-header">六、可行下降方向（判定准则与方向构造）</div>
+        <div class="section-body">
+            <div class="method-box">
+                <h4>【核心原理与标准做题步骤】</h4>
+                <p>在无约束优化（或内点处）中，任何点沿任意非零方向移动均是可行的，关键在于判定该方向是否为<strong>下降方向（Descent Direction）</strong>：</p>
+                <ol>
+                    <li><strong>定义：</strong>设函数 $f(x)$ 在点 $x^{(k)}$ 可微，对于非零向量 $d$，若存在 $\bar{\alpha} > 0$，使得对任意 $\alpha \in (0, \bar{\alpha})$ 都有 $f(x^{(k)} + \alpha d) < f(x^{(k)})$，则称 $d$ 为 $f(x)$ 在 $x^{(k)}$ 处的下降方向。</li>
+                    <li><strong>代数判定充要条件（一阶充分条件）：</strong>利用方向导数 $\frac{\partial f(x^{(k)})}{\partial d} = \nabla f(x^{(k)})^T d$：
+                        <ul>
+                            <li>若 <strong>$\nabla f(x^{(k)})^T d < 0$</strong>（即方向 $d$ 与梯度 $\nabla f(x^{(k)})$ 的夹角为钝角），则 $d$ 必是<strong>下降方向</strong>；</li>
+                            <li>若 <strong>$\nabla f(x^{(k)})^T d > 0$</strong>（夹角为锐角），则 $d$ 是<strong>上升方向</strong>；</li>
+                            <li>若 $\nabla f(x^{(k)})^T d = 0$（正交），需进一步借助二阶导数 $d^T \nabla^2 f(x^{(k)}) d$ 判定。</li>
+                        </ul>
+                    </li>
+                    <li><strong>构造通法：</strong>取任意对称正定矩阵 $M$，令 $d = -M \nabla f(x^{(k)})$，因 $\nabla f^T d = -\nabla f^T M \nabla f < 0$（当 $\nabla f \neq 0$），故必为下降方向（取 $M=I$ 即最速下降法，取 $M=H^{-1}$ 即牛顿法）。</li>
+                </ol>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 6.1（多个候选方向的下降性判定）</div>
+                <div class="problem-statement">
+                    已知目标函数 $f(x_1, x_2) = 2x_1^2 + x_2^2 - 2x_1 x_2 + 4x_1$，当前点为 $x^{(0)} = (1, 2)^T$。试判断向量 $d^{(1)} = (-1, -1)^T$、$d^{(2)} = (1, -2)^T$、$d^{(3)} = (-1, 2)^T$ 在 $x^{(0)}$ 处是否为可行下降方向？
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第1步（计算当前点 $x^{(0)}$ 处的梯度 $\nabla f(x^{(0)})$）：</span><br>
+                        求偏导数得梯度表达式：
+                        $$\nabla f(x) = \begin{pmatrix} 4x_1 - 2x_2 + 4 \\ 2x_2 - 2x_1 \end{pmatrix}$$
+                        将 $x^{(0)} = (1, 2)^T$ 代入：
+                        $$\nabla f(x^{(0)}) = \begin{pmatrix} 4(1) - 2(2) + 4 \\ 2(2) - 2(1) \end{pmatrix} = \begin{pmatrix} 4 \\ 2 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第2步（分别计算内积 $\nabla f(x^{(0)})^T d^{(i)}$ 并判断符号）：</span><br>
+                        <ul>
+                            <li>对方向 $d^{(1)} = (-1, -1)^T$：
+                                $$\nabla f(x^{(0)})^T d^{(1)} = 4 \times (-1) + 2 \times (-1) = -6 < 0$$
+                                满足下降条件，故 <strong>$d^{(1)}$ 是可行下降方向</strong>。
+                            </li>
+                            <li>对方向 $d^{(2)} = (1, -2)^T$：
+                                $$\nabla f(x^{(0)})^T d^{(2)} = 4 \times 1 + 2 \times (-2) = 0$$
+                                一阶方向导数为 $0$（正交），不满足严格一阶下降条件 $\nabla f^T d < 0$（进一步看二阶：$d^{(2)T}\nabla^2 f d^{(2)} = 18 > 0$，函数值在附近增大），故 <strong>$d^{(2)}$ 不是下降方向</strong>。
+                            </li>
+                            <li>对方向 $d^{(3)} = (-1, 2)^T$：
+                                $$\nabla f(x^{(0)})^T d^{(3)} = 4 \times (-1) + 2 \times 2 = 0$$
+                                同理一阶内积为 $0$，<strong>$d^{(3)}$ 不是严格一阶下降方向</strong>。
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="conclusion">
+                        结论：只有 $d^{(1)} = (-1, -1)^T$ 满足 $\nabla f(x^{(0)})^T d < 0$，是 $x^{(0)}$ 处的可行下降方向。
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-title">例题 6.2（含参数的下降方向范围求解与正定矩阵构造）</div>
+                <div class="problem-statement">
+                    设目标函数 $f(x_1, x_2) = x_1^2 + 3x_2^2 - 4x_1 + 6x_2$，在点 $x^{(0)} = (0, 0)^T$ 处：<br>
+                    (1) 若方向 $d = (1, k)^T$ 是 $x^{(0)}$ 处的下降方向，求实数 $k$ 的取值范围；<br>
+                    (2) 给定矩阵 $M = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$，验证 $d = -M\nabla f(x^{(0)})$ 是否为下降方向，并求出该方向向量。
+                </div>
+                <div class="solution-steps">
+                    <h5>【详细解题步骤】</h5>
+                    <div class="step-item">
+                        <span class="step-label">第1步（计算 $x^{(0)}$ 处的梯度）：</span><br>
+                        $$\nabla f(x) = \begin{pmatrix} 2x_1 - 4 \\ 6x_2 + 6 \end{pmatrix} \implies \nabla f(x^{(0)}) = \nabla f(0, 0) = \begin{pmatrix} -4 \\ 6 \end{pmatrix}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第2步（求解第 (1) 问参数 $k$ 的范围）：</span><br>
+                        要使 $d = (1, k)^T$ 为下降方向，必须满足 $\nabla f(x^{(0)})^T d < 0$：
+                        $$\begin{pmatrix} -4 & 6 \end{pmatrix}\begin{pmatrix} 1 \\ k \end{pmatrix} = -4 + 6k < 0 \implies 6k < 4 \implies k < \frac{2}{3}$$
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">第3步（求解第 (2) 问方向向量并验证下降性）：</span><br>
+                        首先检验矩阵 $M = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$ 的正定性：一阶顺序主子式 $\Delta_1 = 2 > 0$，二阶顺序主子式 $\Delta_2 = 2\times 2 - 1\times 1 = 3 > 0$，故 $M$ 对称正定。<br>
+                        计算方向 $d$：
+                        $$d = -M\nabla f(x^{(0)}) = -\begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}\begin{pmatrix} -4 \\ 6 \end{pmatrix} = -\begin{pmatrix} -8 + 6 \\ -4 + 12 \end{pmatrix} = \begin{pmatrix} 2 \\ -8 \end{pmatrix}$$
+                        验证内积：
+                        $$\nabla f(x^{(0)})^T d = \begin{pmatrix} -4 & 6 \end{pmatrix}\begin{pmatrix} 2 \\ -8 \end{pmatrix} = -8 - 48 = -56 < 0$$
+                        显然满足下降方向条件。
+                    </div>
+                    <div class="conclusion">
+                        结论：(1) 参数 $k$ 的取值范围为 $k < \frac{2}{3}$；(2) 所构造的方向向量为 $d = (2, -8)^T$，内积为 $-56 < 0$，确为下降方向。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>无约束最优化核心算法讲义 · 支持浏览器直接查看或 Ctrl+P 导出高清 PDF</p>
+    </footer>
+</div>
+</body>
+</html>

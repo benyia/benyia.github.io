@@ -491,7 +491,7 @@
       "folders": []
     },
     {
-      "icon": "files/1790147910091_4_ni7ke2pi_数学.png",
+      "icon": "数",
       "title": "数值分析",
       "desc": "教材、PPT、课后习题答案",
       "intro": "<h1>《数值分析》课程简介</h1><p>数值分析是研究生重要数学基础课，研究各类数学问题的数值求解算法。课程主要讲授插值与函数逼近、数值微分与积分、线性与非线性方程组数值解法、矩阵特征值计算、常微分方程数值解等内容。重点讨论算法的收敛性、稳定性与误差分析，结合编程实现开展计算实践。本课程旨在培养学生科学计算思维，掌握算法选用与评估能力，为工程仿真、建模分析及相关专业科研工作提供数值计算理论与方法支撑。</p>",
@@ -504,15 +504,91 @@
           "size": 0,
           "folder": "",
           "external": true
+        },
+        {
+          "name": "基于有限差分法的二维稳态温度场数值计算与分析.docx",
+          "url": "files/基于有限差分法的二维稳态温度场数值计算与分析.docx",
+          "type": "DOCX",
+          "size": 639706,
+          "originalSize": 639706,
+          "optimized": false,
+          "folder": "2026工程案例大作业"
+        },
+        {
+          "name": "基于有限差分法的二维稳态温度场数值计算与分析.md",
+          "url": "files/基于有限差分法的二维稳态温度场数值计算与分析.md",
+          "type": "MD",
+          "size": 5841,
+          "originalSize": 5841,
+          "optimized": false,
+          "folder": "2026工程案例大作业"
+        },
+        {
+          "name": "基于有限差分法的二维稳态温度场数值计算与分析.pdf",
+          "url": "files/基于有限差分法的二维稳态温度场数值计算与分析.pdf",
+          "type": "PDF",
+          "size": 2242033,
+          "originalSize": 2242033,
+          "optimized": false,
+          "folder": "2026工程案例大作业"
+        },
+        {
+          "name": "基于有限差分法的二维稳态温度场数值计算与分析_文献顺序已调整.docx",
+          "url": "files/基于有限差分法的二维稳态温度场数值计算与分析_文献顺序已调整.docx",
+          "type": "DOCX",
+          "size": 624321,
+          "originalSize": 624321,
+          "optimized": false,
+          "folder": "2026工程案例大作业"
+        },
+        {
+          "name": "任务书.docx",
+          "url": "files/任务书.docx",
+          "type": "DOCX",
+          "size": 16081,
+          "originalSize": 16081,
+          "optimized": false,
+          "folder": "2026工程案例大作业"
+        },
+        {
+          "name": "数值分析工程案例_学生版模板.docx",
+          "url": "files/数值分析工程案例_学生版模板.docx",
+          "type": "DOCX",
+          "size": 100828,
+          "originalSize": 100828,
+          "optimized": false,
+          "folder": "2026工程案例大作业"
+        },
+        {
+          "name": "main.m",
+          "url": "files/main.m",
+          "type": "M",
+          "size": 24144,
+          "originalSize": 24144,
+          "optimized": false,
+          "folder": "2026工程案例大作业/code"
+        },
+        {
+          "name": "主要代码.m",
+          "url": "files/主要代码.m",
+          "type": "M",
+          "size": 7192,
+          "originalSize": 7192,
+          "optimized": false,
+          "folder": "2026工程案例大作业/code"
         }
       ],
       "images": [],
-      "time": "2026-09-24 22:06",
+      "time": "2026-11-18 16:00",
       "tags": [
         "数值分析",
         "数学"
       ],
-      "introIsHTML": true
+      "introIsHTML": true,
+      "folders": [
+        "2026工程案例大作业",
+        "2026工程案例大作业/code"
+      ]
     },
     {
       "icon": "📚",
@@ -1601,6 +1677,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-18 16:00",
+      "action": "编辑课程：数值分析"
+    },
+    {
       "time": "2026-11-18 15:57",
       "action": "编辑课程：自然辩证法概论"
     },
@@ -1995,10 +2075,6 @@
     {
       "time": "2026-09-30 10:16",
       "action": "添加生活服务：deepseek Harness"
-    },
-    {
-      "time": "2026-09-29 21:33",
-      "action": "编辑通知：Edgetunnel2.0 全新版本"
     }
   ],
   "categories": [

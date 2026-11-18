@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>无约束求极值：6大题型进阶拔高题库与详细解析（6类 × 5题 = 30题）</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      chtml: {
+        scale: 1.05,
+        mtextInheritFont: true,
+        displayAlign: 'center'
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" async></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f4f6fb;
+      color: #1e293b;
+      line-height: 1.85;
+    }
+    .math-display {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #0284c7;
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+      margin: 0.9rem 0;
+      overflow-x: auto;
+      font-size: 1.02rem;
+    }
+    .math-display mjx-container[jax="CHTML"][display="true"] {
+      margin: 0.35em 0 !important;
+    }
+    mjx-container[jax="CHTML"] {
+      overflow-x: auto;
+      overflow-y: hidden;
+      max-width: 100%;
+    }
+    .step-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.875rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    }
+    .step-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      font-size: 0.98rem;
+      margin-bottom: 0.65rem;
+    }
+    .step-badge {
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.65rem;
+      border-radius: 9999px;
+      letter-spacing: 0.02em;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      .print-expand { display: block !important; }
+      body { background: #ffffff; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Sticky Navigation Header -->
+  <header class="bg-slate-900/95 backdrop-blur text-white shadow-lg sticky top-0 z-30 no-print">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center font-bold text-lg shadow-md">
+          $\nabla f$
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold tracking-wide">无约束最优化求极值 · 进阶拔高题库与精解（共30题）</h1>
+          <p class="text-xs text-slate-300 mt-0.5">6大题型 × 每类5道全新拔高题 = 30题 · 纯题目与分步详解（不含知识点讲义）</p>
+        </div>
+      </div>
+
+      <!-- Global Action Toolbar -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button id="btnShowAllFull" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-indigo-600 hover:bg-indigo-500 text-white transition shadow-sm" title="展开所有题目的最终答案与详细分步推导">
+          📚 展开全部解析
+        </button>
+        <button id="btnShowAnswersOnly" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-amber-600 hover:bg-amber-500 text-white transition shadow-sm" title="仅展开最终答案，收起详细推导步骤">
+          👀 仅看最终答案
+        </button>
+        <button id="btnHideAll" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-emerald-600 hover:bg-emerald-500 text-white transition shadow-sm" title="隐藏所有题目的答案与解析，进入自测模式">
+          🙈 隐藏全部答案 (自测)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace Container -->
+  <main class="max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 flex-1">
+
+    <!-- Filter & Progress Dashboard -->
+    <section id="filterSection" class="bg-white rounded-2xl shadow-sm border border-slate-200/90 p-5 sm:p-6 mb-8 no-print">
+      <!-- Top Metrics Row -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 pb-5 mb-5 border-b border-slate-100">
+        <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200/70">
+          <div class="text-xs text-slate-500 font-medium">核心题型模块</div>
+          <div class="text-2xl font-bold text-slate-800 mt-1">6 <span class="text-xs font-normal text-slate-500">类 (每类5题)</span></div>
+        </div>
+        <div class="bg-blue-50/70 rounded-xl p-3.5 border border-blue-100">
+          <div class="text-xs text-blue-600 font-medium">当前显示题数</div>
+          <div class="text-2xl font-bold text-blue-700 mt-1"><span id="statVisibleCount">30</span> <span class="text-xs font-normal text-blue-500">/ 30 题</span></div>
+        </div>
+        <div class="bg-emerald-50/70 rounded-xl p-3.5 border border-emerald-100">
+          <div class="text-xs text-emerald-600 font-medium">已标记掌握</div>
+          <div class="text-2xl font-bold text-emerald-700 mt-1"><span id="statMasteredCount">0</span> <span class="text-xs font-normal text-emerald-500">题</span></div>
+        </div>
+        <div class="bg-amber-50/70 rounded-xl p-3.5 border border-amber-100">
+          <div class="text-xs text-amber-600 font-medium">重点收藏题</div>
+          <div class="text-2xl font-bold text-amber-700 mt-1"><span id="statStarredCount">0</span> <span class="text-xs font-normal text-amber-500">题</span></div>
+        </div>
+        <div class="col-span-2 sm:col-span-1 flex items-center justify-between sm:justify-center bg-slate-50 rounded-xl p-3.5 border border-slate-200/70">
+          <div class="text-xs text-slate-600 leading-snug">解析显示状态：<br><strong id="statModeLabel" class="text-indigo-700">默认展开全部详解</strong></div>
+          <button id="btnResetProgress" class="text-xs text-slate-400 hover:text-rose-600 underline ml-2">重置标记</button>
+        </div>
+      </div>
+
+      <!-- Filter Controls -->
+      <div class="flex flex-col lg:flex-row gap-3.5 items-stretch lg:items-center justify-between">
+        <div class="flex flex-wrap items-center gap-2.5">
+          <label for="typeSelect" class="text-xs sm:text-sm font-semibold text-slate-700">题型筛选：</label>
+          <select id="typeSelect" class="text-xs sm:text-sm rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="all">全部 6 大题型 (共 30 道进阶题)</option>
+            <option value="sec1">一、黄金分割法（0.618法 · 5题）</option>
+            <option value="sec2">二、最速下降法（梯度法 · 5题）</option>
+            <option value="sec3">三、牛顿法（Newton法 · 5题）</option>
+            <option value="sec4">四、共轭梯度法（FR/PRP法 · 5题）</option>
+            <option value="sec5">五、变尺度法（DFP/BFGS拟牛顿法 · 5题）</option>
+            <option value="sec6">六、可行下降方向（判定与构造 · 5题）</option>
+          </select>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <div class="inline-flex rounded-xl border border-slate-200 bg-slate-100 p-1 text-xs sm:text-sm">
+            <button data-status-filter="all" class="status-filter-btn px-3 py-1 rounded-lg bg-white text-slate-800 font-medium shadow-sm">全部</button>
+            <button data-status-filter="unmastered" class="status-filter-btn px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900">未掌握</button>
+            <button data-status-filter="mastered" class="status-filter-btn px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900">已掌握</button>
+            <button data-status-filter="starred" class="status-filter-btn px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900">⭐ 重点</button>
+          </div>
+          <div class="relative flex-1 sm:w-64">
+            <input id="searchInput" type="text" placeholder="搜索题号、关键词、函数、矩阵..." class="w-full text-xs sm:text-sm rounded-xl border border-slate-300 pl-3.5 pr-8 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <button id="btnClearSearch" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">✕</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Questions Container -->
+    <section id="questionsView" class="space-y-10"></section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 mt-16 text-center text-xs sm:text-sm text-slate-500 no-print">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <span>无约束最优化求极值 · 6大题型 × 每类5题 = 30道进阶拔高题与详细解析</span>
+      <span>支持浏览器直接阅读、按题型筛选自测或 Ctrl+P 导出 PDF</span>
+    </div>
+  </footer>
+
+  <script>
+    const QUESTION_CATEGORIES = [
+  {
+    "id": "sec1",
+    "sectionNum": "一",
+    "title": "一、黄金分割法（0.618法 —— 一维搜索 · 5题）",
+    "questions": [
+      {
+        "qid": "Q01",
+        "sourceTag": "题型一 · 第1题",
+        "difficulty": "三次多项式 · 3次区间缩减",
+        "stem": "用黄金分割法（取 $\\tau = 0.618$）求三次单峰函数 $\\varphi(\\alpha) = \\alpha^3 - 3\\alpha^2 + 4$ 在初始区间 $[0, 3]$ 上的极小点近似值，要求完整执行 <strong>3次区间缩减</strong>，写出每一步的试探点、函数值及保留区间（小数点后保留 4 位）。",
+        "shortAnswer": "第 1 次缩减后区间为 $[1.1460, \\; 3.0000]$；第 2 次缩减后区间为 $[1.1460, \\; 2.2918]$；第 3 次缩减后区间为 <strong>$[1.5837, \\; 2.2918]$</strong>；取最终区间中点得极小点近似值 <strong>$\\alpha^* \\approx 1.9377$</strong>（理论精确极小点为 $\\alpha = 2, \\; \\varphi(2) = 0$）。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 初始区间 $[a_1, b_1] = [0, 3]$ 与第 1 次区间缩减</div>\n            <p>初始区间长度 $L_1 = 3 - 0 = 3$，计算两个初始黄金分割试探点及其函数值：</p>\n            <div class=\"math-display\">$$\\begin{aligned}\n            \\lambda_1 &= 0 + 0.382 \\times 3 = 1.1460, \\qquad \\varphi(\\lambda_1) = (1.1460)^3 - 3(1.1460)^2 + 4 \\approx \\mathbf{1.5651} \\\\\n            \\mu_1 &= 0 + 0.618 \\times 3 = 1.8540, \\qquad \\varphi(\\mu_1) = (1.8540)^3 - 3(1.8540)^2 + 4 \\approx \\mathbf{0.0608}\n            \\end{aligned}$$</div>\n            <p>因 $\\varphi(\\lambda_1) > \\varphi(\\mu_1)$（即 $1.5651 > 0.0608$），舍去左段 $[0, \\lambda_1)$，得第 1 次缩减区间：$[a_2, b_2] = [\\lambda_1, b_1] = \\mathbf{[1.1460, \\; 3.0000]}$。</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 第 2 次取点与区间缩减</div>\n            <p>直接复用 $\\lambda_2 = \\mu_1 = 1.8540, \\; \\varphi(\\lambda_2) = 0.0608$；只需新算右试探点 $\\mu_2$：</p>\n            <div class=\"math-display\">$$\\mu_2 = 1.1460 + 0.618 \\times (3.0000 - 1.1460) = 2.2918, \\qquad \\varphi(\\mu_2) = (2.2918)^3 - 3(2.2918)^2 + 4 \\approx \\mathbf{0.2802}$$</div>\n            <p>因 $\\varphi(\\lambda_2) < \\varphi(\\mu_2)$（即 $0.0608 < 0.2802$），舍去右段 $(\\mu_2, 3]$，得第 2 次缩减区间：$[a_3, b_3] = [a_2, \\mu_2] = \\mathbf{[1.1460, \\; 2.2918]}$。</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 3 步</span> 第 3 次取点与区间缩减</div>\n            <p>直接复用 $\\mu_3 = \\lambda_2 = 1.8540, \\; \\varphi(\\mu_3) = 0.0608$；只需新算左试探点 $\\lambda_3$：</p>\n            <div class=\"math-display\">$$\\lambda_3 = 1.1460 + 0.382 \\times (2.2918 - 1.1460) = 1.5837, \\qquad \\varphi(\\lambda_3) = (1.5837)^3 - 3(1.5837)^2 + 4 \\approx \\mathbf{0.4478}$$</div>\n            <p>因 $\\varphi(\\lambda_3) > \\varphi(\\mu_3)$（即 $0.4478 > 0.0608$），舍去左段 $[1.1460, \\lambda_3)$，得第 3 次缩减区间：$[a_4, b_4] = [\\lambda_3, b_3] = \\mathbf{[1.5837, \\; 2.2918]}$。取中点得近似极小点 $\\alpha^* = \\dfrac{1.5837 + 2.2918}{2} \\approx \\mathbf{1.9377}$。</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q02",
+        "sourceTag": "题型一 · 第2题",
+        "difficulty": "分式函数 · 2次区间缩减",
+        "stem": "用黄金分割法（0.618法）求分式函数 $\\varphi(\\alpha) = \\alpha + \\dfrac{4}{\\alpha + 1}$ 在初始区间 $[0, 4]$ 上的极小点近似值，要求进行 <strong>2次区间缩减</strong>（保留 4 位小数）。",
+        "shortAnswer": "第 1 次缩减后区间为 $[0, \\; 2.4720]$；第 2 次缩减后区间为 <strong>$[0, \\; 1.5280]$</strong>；取区间中点得极小点近似值 <strong>$\\alpha^* = 0.7640$</strong>（理论精确极小点为 $\\alpha = 1, \\; \\varphi(1) = 3$）。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 初始试探点计算与第 1 次区间缩减</div>\n            <p>初始区间 $[a_1, b_1] = [0, 4]$，长度 $L_1 = 4$：</p>\n            <div class=\"math-display\">$$\\begin{aligned}\n            \\lambda_1 &= 0 + 0.382 \\times 4 = 1.5280, \\qquad \\varphi(\\lambda_1) = 1.5280 + \\frac{4}{2.5280} \\approx \\mathbf{3.1103} \\\\\n            \\mu_1 &= 0 + 0.618 \\times 4 = 2.4720, \\qquad \\varphi(\\mu_1) = 2.4720 + \\frac{4}{3.4720} \\approx \\mathbf{3.6241}\n            \\end{aligned}$$</div>\n            <p>因 $\\varphi(\\lambda_1) < \\varphi(\\mu_1)$，舍去右段 $(\\mu_1, 4]$，得第 1 次缩减区间：$[a_2, b_2] = [0, \\mu_1] = \\mathbf{[0, \\; 2.4720]}$。</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 第 2 次取点与区间缩减</div>\n            <p>令 $\\mu_2 = \\lambda_1 = 1.5280, \\; \\varphi(\\mu_2) = 3.1103$；计算新左试探点 $\\lambda_2$：</p>\n            <div class=\"math-display\">$$\\lambda_2 = 0 + 0.382 \\times 2.4720 = 0.9443, \\qquad \\varphi(\\lambda_2) = 0.9443 + \\frac{4}{1.9443} \\approx \\mathbf{3.0016}$$</div>\n            <p>因 $\\varphi(\\lambda_2) < \\varphi(\\mu_2)$（即 $3.0016 < 3.1103$），再次舍去右段 $(\\mu_2, 2.4720]$，得第 2 次缩减区间：$[a_3, b_3] = [0, \\mu_2] = \\mathbf{[0, \\; 1.5280]}$。取中点得近似极小点 $\\alpha^* = \\dfrac{0 + 1.5280}{2} = \\mathbf{0.7640}$。</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q03",
+        "sourceTag": "题型一 · 第3题",
+        "difficulty": "指数超越函数 · 2次缩减",
+        "stem": "用黄金分割法（0.618法）求超越函数 $\\varphi(\\alpha) = e^\\alpha - 3\\alpha$ 在初始区间 $[0, 2]$ 上的极小点近似值，要求进行 <strong>2次区间缩减</strong>（已知 $e^{0.764} \\approx 2.1468, \\; e^{1.236} \\approx 3.4418, \\; e^{1.5278} \\approx 4.6080$，结果保留 4 位小数）。",
+        "shortAnswer": "第 1 次缩减后区间为 $[0.7640, \\; 2.0000]$；第 2 次缩减后区间为 <strong>$[0.7640, \\; 1.5278]$</strong>；取区间中点得极小点近似值 <strong>$\\alpha^* \\approx 1.1459$</strong>（理论精确极小点为 $\\alpha = \\ln 3 \\approx 1.0986$）。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 初始试探点计算与第 1 次缩减</div>\n            <p>初始区间 $[a_1, b_1] = [0, 2]$，长度 $L_1 = 2$：</p>\n            <div class=\"math-display\">$$\\begin{aligned}\n            \\lambda_1 &= 0 + 0.382 \\times 2 = 0.7640, \\qquad \\varphi(\\lambda_1) = e^{0.7640} - 3(0.7640) \\approx 2.1468 - 2.2920 = \\mathbf{-0.1452} \\\\\n            \\mu_1 &= 0 + 0.618 \\times 2 = 1.2360, \\qquad \\varphi(\\mu_1) = e^{1.2360} - 3(1.2360) \\approx 3.4418 - 3.7080 = \\mathbf{-0.2662}\n            \\end{aligned}$$</div>\n            <p>因 $\\varphi(\\lambda_1) > \\varphi(\\mu_1)$（即 $-0.1452 > -0.2662$），舍去左段 $[0, \\lambda_1)$，得 $[a_2, b_2] = \\mathbf{[0.7640, \\; 2.0000]}$。</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 第 2 次取点与缩减</div>\n            <p>复用 $\\lambda_2 = \\mu_1 = 1.2360, \\; \\varphi(\\lambda_2) = -0.2662$；新算右试探点 $\\mu_2$：</p>\n            <div class=\"math-display\">$$\\mu_2 = 0.7640 + 0.618 \\times (2.0000 - 0.7640) = 1.5278, \\qquad \\varphi(\\mu_2) = e^{1.5278} - 3(1.5278) \\approx 4.6080 - 4.5834 = \\mathbf{0.0246}$$</div>\n            <p>因 $\\varphi(\\lambda_2) < \\varphi(\\mu_2)$（即 $-0.2662 < 0.0246$），舍去右段 $(\\mu_2, 2.0000]$，得第 2 次缩减区间 $[a_3, b_3] = \\mathbf{[0.7640, \\; 1.5278]}$，中点近似值为 $\\alpha^* = \\dfrac{0.7640 + 1.5278}{2} = \\mathbf{1.1459}$。</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q04",
+        "sourceTag": "题型一 · 第4题",
+        "difficulty": "多维方向线搜索结合0.618法",
+        "stem": "已知二元函数 $f(x_1, x_2) = 2x_1^2 + x_2^2 - 2x_1 x_2 + 2x_1$，从点 $x^{(0)} = (1, 2)^T$ 出发，沿方向 $d = (-1, -1)^T$ 进行一维搜索：<br>\n        （1）写出关于步长 $\\alpha$ 的一维目标函数 $\\varphi(\\alpha) = f(x^{(0)} + \\alpha d)$ 的最简二次多项式；<br>\n        （2）在步长区间 $[0, 2]$ 上用黄金分割法进行 <strong>2次区间缩减</strong>，求最佳步长 $\\alpha^*$ 的近似值及对应的近似迭代点 $x^{(1)}$。",
+        "shortAnswer": "（1）$\\varphi(\\alpha) = \\alpha^2 - 2\\alpha + 4$；<br>\n        （2）第 1 次缩减区间为 $[0, \\; 1.2360]$（或 $[0.7640, \\; 2.0000]$），第 2 次缩减区间为 <strong>$[0.4722, \\; 1.2360]$</strong>，中点步长 $\\alpha^* \\approx \\mathbf{0.8541}$，对应近似点 $x^{(1)} \\approx \\mathbf{(0.1459, \\; 1.1459)^T}$（精确极小步长为 $\\alpha = 1$）。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 将多维线搜索化为一元函数 $\\varphi(\\alpha)$</div>\n            <p>将 $x^{(0)} + \\alpha d = (1 - \\alpha, \\; 2 - \\alpha)^T$ 代入 $f(x_1, x_2)$：</p>\n            <div class=\"math-display\">$$\\begin{aligned}\n            \\varphi(\\alpha) &= 2(1 - \\alpha)^2 + (2 - \\alpha)^2 - 2(1 - \\alpha)(2 - \\alpha) + 2(1 - \\alpha) \\\\\n            &= (2 - 4\\alpha + 2\\alpha^2) + (4 - 4\\alpha + \\alpha^2) - (4 - 6\\alpha + 2\\alpha^2) + (2 - 2\\alpha) = \\mathbf{\\alpha^2 - 2\\alpha + 4}\n            \\end{aligned}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 在 $[0, 2]$ 上执行 2 次黄金分割缩减</div>\n            <p>初始试探点：$\\lambda_1 = 0.382 \\times 2 = 0.7640$，$\\mu_1 = 0.618 \\times 2 = 1.2360$。因 $\\lambda_1, \\mu_1$ 关于对称轴 $\\alpha = 1$ 对称，有：</p>\n            <div class=\"math-display\">$$\\varphi(\\lambda_1) = \\varphi(0.7640) = 3.0557, \\qquad \\varphi(\\mu_1) = \\varphi(1.2360) = 3.0557$$</div>\n            <p>按准则 $\\varphi(\\lambda_1) \\le \\varphi(\\mu_1)$ 保留左区间 $[a_2, b_2] = [0, \\; 1.2360]$。第 2 次取 $\\mu_2 = \\lambda_1 = 0.7640$，新算左试探点：</p>\n            <div class=\"math-display\">$$\\lambda_2 = 0 + 0.382 \\times 1.2360 = 0.4722, \\qquad \\varphi(\\lambda_2) = (0.4722)^2 - 2(0.4722) + 4 \\approx 3.2786 > \\varphi(\\mu_2)$$</div>\n            <p>舍去左段 $[0, 0.4722)$，得 $[a_3, b_3] = \\mathbf{[0.4722, \\; 1.2360]}$，中点 $\\alpha^* = \\dfrac{0.4722 + 1.2360}{2} = \\mathbf{0.8541}$，故 $x^{(1)} = x^{(0)} + \\alpha^* d \\approx \\mathbf{(0.1459, \\; 1.1459)^T}$。</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q05",
+        "sourceTag": "题型一 · 第5题",
+        "difficulty": "迭代次数反求与黄金分割比例推导",
+        "stem": "设单峰函数 $\\varphi(\\alpha)$ 定义在初始区间 $[a_1, b_1] = [0, 10]$ 上。<br>\n        （1）推导黄金分割常数 $\\tau = \\dfrac{\\sqrt{5}-1}{2} \\approx 0.618$ 所满足的代数方程，并说明为什么每次迭代只需计算 <strong>1 次</strong>新的函数值；<br>\n        （2）若要求经过 $n$ 次区间缩减后，最终不确定区间的长度 $|b_{n+1} - a_{n+1}|$ 不超过 $0.05$，问至少需要进行多少次区间缩减 $n$？共需计算多少次函数值（已知 $\\lg 0.618 \\approx -0.2090, \\; \\lg 2 \\approx 0.3010$）？",
+        "shortAnswer": "（1）由对称性与复用旧试探点条件 $(1 - \\tau) = \\tau^2 \\implies \\tau^2 + \\tau - 1 = 0$，解得正根 $\\tau = \\dfrac{\\sqrt{5}-1}{2} \\approx 0.618$；<br>\n        （2）由 $10 \\times (0.618)^n \\le 0.05 \\implies (0.618)^n \\le 0.005$，解得 $n \\ge 11.01$，故至少需进行 <strong>$n = 12$ 次区间缩减</strong>，共需计算 $n + 1 = \\mathbf{13}$ 次函数值。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 推导黄金分割方程 $\\tau^2 + \\tau - 1 = 0$</div>\n            <p>设每次缩减后的新区间长度与原区间长度之比恒为常数 $\\tau \\in (0, 1)$。在长度为 $1$ 的标准区间 $[0, 1]$ 上对称取两个试探点 $\\lambda = 1 - \\tau, \\; \\mu = \\tau$。若缩减后保留左区间 $[0, \\mu]$（长度为 $\\tau$），欲使原左点 $\\lambda = 1 - \\tau$ 恰好成为新区间 $[0, \\tau]$ 的右对称点 $\\tau \\cdot \\tau = \\tau^2$，从而无需重新计算该点函数值，必须满足：</p>\n            <div class=\"math-display\">$$1 - \\tau = \\tau^2 \\quad \\Longleftrightarrow \\quad \\tau^2 + \\tau - 1 = 0 \\quad \\Longrightarrow \\quad \\tau = \\frac{\\sqrt{5} - 1}{2} \\approx 0.618034$$</div>\n            <p>因此除第 1 步需计算 $\\lambda_1, \\mu_1$ 两个点的函数值外，此后每一步缩减均可复用上一个内点，每次仅需新增计算 1 次函数值。</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 计算最小缩减次数 $n$ 与总函数求值次数</div>\n            <p>经过 $n$ 次区间缩减后，区间长度为 $L_{n+1} = \\tau^n (b_1 - a_1) = 10 \\times (0.618)^n$。令其不超过 $0.05$：</p>\n            <div class=\"math-display\">$$10 \\times (0.618)^n \\le 0.05 \\quad \\Longrightarrow \\quad (0.618)^n \\le 0.005 = \\frac{1}{200}$$</div>\n            <p>两边取常用对数：</p>\n            <div class=\"math-display\">$$n \\ge \\frac{-\\lg 200}{\\lg 0.618} = \\frac{-(2 + \\lg 2)}{-0.2090} \\approx \\frac{2.3010}{0.2090} \\approx 11.01$$</div>\n            <p>向上取整得至少需要 <strong>$n = 12$ 次区间缩减</strong>；由于第 1 次缩减算 2 个点、后 11 次各算 1 个点，共需计算 $n + 1 = \\mathbf{13}$ 次函数值。</p>\n          </div>\n        "
+      }
+    ]
+  },
+  {
+    "id": "sec2",
+    "sectionNum": "二",
+    "title": "二、最速下降法（Steepest Descent Method / 梯度法 · 5题）",
+    "questions": [
+      {
+        "qid": "Q06",
+        "sourceTag": "题型二 · 第1题",
+        "difficulty": "含交叉项二次函数 · 两步迭代",
+        "stem": "用最速下降法求解无约束优化问题 $\\min f(x_1, x_2) = x_1^2 + x_2^2 - x_1 x_2 - 4x_1$，从初始点 $x^{(0)} = (0, 0)^T$ 出发，完整计算前两次迭代点 $x^{(1)}$ 和 $x^{(2)}$。",
+        "shortAnswer": "第 1 次迭代：$\\alpha_0 = \\dfrac{1}{2}, \\; x^{(1)} = \\mathbf{(2, \\; 0)^T}$；<br>\n        第 2 次迭代：$\\alpha_1 = \\dfrac{1}{2}, \\; x^{(2)} = \\mathbf{(2, \\; 1)^T}$。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 求梯度表达式与海森矩阵 $Q$</div>\n            <div class=\"math-display\">$$\\nabla f(x) = \\begin{pmatrix} 2x_1 - x_2 - 4 \\\\ 2x_2 - x_1 \\end{pmatrix}, \\qquad Q = \\nabla^2 f(x) = \\begin{pmatrix} 2 & -1 \\\\ -1 & 2 \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 第 1 次最速下降迭代 $x^{(0)} \\to x^{(1)}$</div>\n            <p>在 $x^{(0)} = (0, 0)^T$ 处：</p>\n            <div class=\"math-display\">$$g_0 = \\nabla f(x^{(0)}) = \\begin{pmatrix} -4 \\\\ 0 \\end{pmatrix}, \\qquad d^{(0)} = -g_0 = \\begin{pmatrix} 4 \\\\ 0 \\end{pmatrix}$$</div>\n            <p>由精确线搜索步长公式求 $\\alpha_0$：</p>\n            <div class=\"math-display\">$$\\alpha_0 = \\frac{(d^{(0)})^T d^{(0)}}{(d^{(0)})^T Q d^{(0)}} = \\frac{16}{\\begin{pmatrix} 4 & 0 \\end{pmatrix}\\begin{pmatrix} 2 & -1 \\\\ -1 & 2 \\end{pmatrix}\\begin{pmatrix} 4 \\\\ 0 \\end{pmatrix}} = \\frac{16}{32} = \\frac{1}{2}$$</div>\n            <div class=\"math-display\">$$x^{(1)} = x^{(0)} + \\alpha_0 d^{(0)} = \\begin{pmatrix} 0 \\\\ 0 \\end{pmatrix} + \\frac{1}{2}\\begin{pmatrix} 4 \\\\ 0 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 2 \\\\ 0 \\end{pmatrix}}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 3 步</span> 第 2 次最速下降迭代 $x^{(1)} \\to x^{(2)}$</div>\n            <p>在 $x^{(1)} = (2, 0)^T$ 处：</p>\n            <div class=\"math-display\">$$g_1 = \\nabla f(x^{(1)}) = \\begin{pmatrix} 2(2) - 0 - 4 \\\\ 0 - 2 \\end{pmatrix} = \\begin{pmatrix} 0 \\\\ -2 \\end{pmatrix}, \\qquad d^{(1)} = -g_1 = \\begin{pmatrix} 0 \\\\ 2 \\end{pmatrix}$$</div>\n            <div class=\"math-display\">$$\\alpha_1 = \\frac{(d^{(1)})^T d^{(1)}}{(d^{(1)})^T Q d^{(1)}} = \\frac{4}{\\begin{pmatrix} 0 & 2 \\end{pmatrix}\\begin{pmatrix} 2 & -1 \\\\ -1 & 2 \\end{pmatrix}\\begin{pmatrix} 0 \\\\ 2 \\end{pmatrix}} = \\frac{4}{8} = \\frac{1}{2}$$</div>\n            <div class=\"math-display\">$$x^{(2)} = x^{(1)} + \\alpha_1 d^{(1)} = \\begin{pmatrix} 2 \\\\ 0 \\end{pmatrix} + \\frac{1}{2}\\begin{pmatrix} 0 \\\\ 2 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 2 \\\\ 1 \\end{pmatrix}}$$</div>\n          </div>\n        "
+      },
+      {
+        "qid": "Q07",
+        "sourceTag": "题型二 · 第2题",
+        "difficulty": "三元二次函数 · 两步迭代",
+        "stem": "用最速下降法求解三元二次函数无约束极小化问题：\n        $$\\min f(x_1, x_2, x_3) = x_1^2 + 2x_2^2 + 3x_3^2 - 2x_1 x_2 - 2x_2 x_3 - 4x_1$$\n        取初始点 $x^{(0)} = (1, 1, 1)^T$，求第 1 次迭代点 $x^{(1)}$ 和第 2 次迭代点 $x^{(2)}$。",
+        "shortAnswer": "第 1 次迭代：$d^{(0)} = (4, 0, -4)^T, \\; \\alpha_0 = \\dfrac{1}{4}, \\; x^{(1)} = \\mathbf{(2, \\; 1, \\; 0)^T}$；<br>\n        第 2 次迭代：$d^{(1)} = (2, 0, 2)^T, \\; \\alpha_1 = \\dfrac{1}{4}, \\; x^{(2)} = \\mathbf{(2.5, \\; 1, \\; 0.5)^T}$。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 求三元梯度与海森矩阵 $Q$</div>\n            <div class=\"math-display\">$$\\nabla f(x) = \\begin{pmatrix} 2x_1 - 2x_2 - 4 \\\\ 4x_2 - 2x_1 - 2x_3 \\\\ 6x_3 - 2x_2 \\end{pmatrix}, \\qquad Q = \\begin{pmatrix} 2 & -2 & 0 \\\\ -2 & 4 & -2 \\\\ 0 & -2 & 6 \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 第 1 次迭代 $x^{(0)} \\to x^{(1)}$</div>\n            <p>代入 $x^{(0)} = (1, 1, 1)^T$：</p>\n            <div class=\"math-display\">$$g_0 = \\begin{pmatrix} 2 - 2 - 4 \\\\ 4 - 2 - 2 \\\\ 6 - 2 \\end{pmatrix} = \\begin{pmatrix} -4 \\\\ 0 \\\\ 4 \\end{pmatrix}, \\qquad d^{(0)} = -g_0 = \\begin{pmatrix} 4 \\\\ 0 \\\\ -4 \\end{pmatrix}$$</div>\n            <p>计算 $Q d^{(0)} = (8, 0, -24)^T$，从而 $(d^{(0)})^T Q d^{(0)} = 4(8) + 0 + (-4)(-24) = 128$，且 $(d^{(0)})^T d^{(0)} = 16 + 16 = 32$：</p>\n            <div class=\"math-display\">$$\\alpha_0 = \\frac{32}{128} = \\frac{1}{4}, \\qquad x^{(1)} = \\begin{pmatrix} 1 \\\\ 1 \\\\ 1 \\end{pmatrix} + \\frac{1}{4}\\begin{pmatrix} 4 \\\\ 0 \\\\ -4 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 2 \\\\ 1 \\\\ 0 \\end{pmatrix}}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 3 步</span> 第 2 次迭代 $x^{(1)} \\to x^{(2)}$</div>\n            <p>代入 $x^{(1)} = (2, 1, 0)^T$：</p>\n            <div class=\"math-display\">$$g_1 = \\begin{pmatrix} 4 - 2 - 4 \\\\ 4 - 4 - 0 \\\\ 0 - 2 \\end{pmatrix} = \\begin{pmatrix} -2 \\\\ 0 \\\\ -2 \\end{pmatrix}, \\qquad d^{(1)} = -g_1 = \\begin{pmatrix} 2 \\\\ 0 \\\\ 2 \\end{pmatrix}$$</div>\n            <p>计算 $Q d^{(1)} = (4, -8, 12)^T$，则 $(d^{(1)})^T Q d^{(1)} = 2(4) + 0 + 2(12) = 32$，且 $(d^{(1)})^T d^{(1)} = 4 + 4 = 8$：</p>\n            <div class=\"math-display\">$$\\alpha_1 = \\frac{8}{32} = \\frac{1}{4}, \\qquad x^{(2)} = \\begin{pmatrix} 2 \\\\ 1 \\\\ 0 \\end{pmatrix} + \\frac{1}{4}\\begin{pmatrix} 2 \\\\ 0 \\\\ 2 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 2.5 \\\\ 1 \\\\ 0.5 \\end{pmatrix}}$$</div>\n          </div>\n        "
+      },
+      {
+        "qid": "Q08",
+        "sourceTag": "题型二 · 第3题",
+        "difficulty": "四次非二次函数精确线搜索",
+        "stem": "用最速下降法求解四次非二次无约束极小化问题：\n        $$\\min f(x_1, x_2) = (x_1 - 1)^4 + 2(x_2 - 2)^2$$\n        取初始点 $x^{(0)} = (2, 2)^T$ 或 $x^{(0)} = (1, 0)^T$：<br>\n        （1）若取 $x^{(0)} = (0, 1)^T$，写出负梯度方向 $d^{(0)}$ 及关于步长 $\\alpha$ 的四次函数 $\\varphi(\\alpha) = f(x^{(0)} + \\alpha d^{(0)})$，并通过令 $\\varphi'(\\alpha) = 0$ 求出精确最优步长 $\\alpha_0$ 与迭代点 $x^{(1)}$；<br>\n        （2）求 $x^{(1)}$ 处的梯度 $\\nabla f(x^{(1)})$，验证相邻两步梯度正交性质 $\\nabla f(x^{(1)})^T \\nabla f(x^{(0)}) = 0$。",
+        "shortAnswer": "（1）在 $x^{(0)} = (0, 1)^T$ 处，$g_0 = (-4, -4)^T, \\; d^{(0)} = (4, 4)^T$；$\\varphi(\\alpha) = (4\\alpha - 1)^4 + 2(4\\alpha - 1)^2$，令 $\\varphi'(\\alpha) = 0$ 解得唯一实根 <strong>$\\alpha_0 = \\dfrac{1}{4}$</strong>，从而 <strong>$x^{(1)} = (1, \\; 2)^T$</strong>；<br>\n        （2）$\\nabla f(x^{(1)}) = (0, 0)^T$，显然满足 $\\nabla f(x^{(1)})^T \\nabla f(x^{(0)}) = 0$ 且一步直接到达全局极小点。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 构造四次函数一维精确线搜索并求解</div>\n            <p>计算目标函数梯度表达式：</p>\n            <div class=\"math-display\">$$\\nabla f(x) = \\begin{pmatrix} 4(x_1 - 1)^3 \\\\ 4(x_2 - 2) \\end{pmatrix} \\quad \\Longrightarrow \\quad g_0 = \\nabla f(0, 1) = \\begin{pmatrix} -4 \\\\ -4 \\end{pmatrix}, \\quad d^{(0)} = -g_0 = \\begin{pmatrix} 4 \\\\ 4 \\end{pmatrix}$$</div>\n            <p>将 $x^{(0)} + \\alpha d^{(0)} = (4\\alpha, \\; 1 + 4\\alpha)^T$ 代入目标函数：</p>\n            <div class=\"math-display\">$$\\varphi(\\alpha) = (4\\alpha - 1)^4 + 2(4\\alpha - 1)^2$$</div>\n            <p>对 $\\alpha$ 求导并令 $\\varphi'(\\alpha) = 0$：</p>\n            <div class=\"math-display\">$$\\varphi'(\\alpha) = 16(4\\alpha - 1)^3 + 16(4\\alpha - 1) = 16(4\\alpha - 1)\\big[(4\\alpha - 1)^2 + 1\\big] = 0$$</div>\n            <p>因 $(4\\alpha - 1)^2 + 1 \\ge 1 > 0$，唯一实根为 $4\\alpha_0 - 1 = 0 \\implies \\mathbf{\\alpha_0 = \\dfrac{1}{4}}$。更新得：</p>\n            <div class=\"math-display\">$$x^{(1)} = \\begin{pmatrix} 0 \\\\ 1 \\end{pmatrix} + \\frac{1}{4}\\begin{pmatrix} 4 \\\\ 4 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix}}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 验证梯度正交性与极小点</div>\n            <p>代入 $x^{(1)} = (1, 2)^T$ 得 $\\nabla f(x^{(1)}) = (0, 0)^T$，故 $\\nabla f(x^{(1)})^T \\nabla f(x^{(0)}) = 0$，一步即达全局极小点。</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q09",
+        "sourceTag": "题型二 · 第4题",
+        "difficulty": "一步收敛充要条件推导",
+        "stem": "设二次目标函数为 $f(x_1, x_2) = \\frac{1}{2}(x_1^2 + \\lambda x_2^2)$（其中常数 $\\lambda > 1$），从非零初始点 $x^{(0)} = (x_1^{(0)}, x_2^{(0)})^T \\neq (0, 0)^T$ 出发应用最速下降法。<br>\n        （1）求第 1 步迭代点 $x^{(1)}$ 的一般表达式；<br>\n        （2）证明：最速下降法<strong>一步迭代即可收敛到精确极小点 $(0, 0)^T$ 的充要条件</strong>是初始点位于坐标轴上（即 $x_1^{(0)} = 0$ 或 $x_2^{(0)} = 0$）；若 $x_1^{(0)} \\neq 0$ 且 $x_2^{(0)} \\neq 0$，则永远不可能在有限步内精确收敛。",
+        "shortAnswer": "（1）$x^{(1)} = \\left(\\dfrac{(\\lambda - 1)\\lambda (x_2^{(0)})^2 x_1^{(0)}}{(x_1^{(0)})^2 + \\lambda^3 (x_2^{(0)})^2}, \\; \\dfrac{(1 - \\lambda)(x_1^{(0)})^2 x_2^{(0)}}{(x_1^{(0)})^2 + \\lambda^3 (x_2^{(0)})^2}\\right)^T$；<br>\n        （2）令 $x^{(1)} = (0, 0)^T$，因 $\\lambda > 1$，分子同时为零当且仅当 $x_1^{(0)} x_2^{(0)} = 0$，即初始点在坐标轴上（特征向量方向）。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 推导 $x^{(1)}$ 的解析通式</div>\n            <p>记 $x^{(0)} = (u, v)^T$，则梯度 $g_0 = (u, \\lambda v)^T$，搜索方向 $d^{(0)} = (-u, -\\lambda v)^T$，海森矩阵 $Q = \\text{diag}(1, \\lambda)$。精确步长 $\\alpha_0$ 为：</p>\n            <div class=\"math-display\">$$\\alpha_0 = \\frac{u^2 + \\lambda^2 v^2}{u^2 + \\lambda^3 v^2}$$</div>\n            <p>代入 $x^{(1)} = x^{(0)} + \\alpha_0 d^{(0)}$ 化简得：</p>\n            <div class=\"math-display\">$$x_1^{(1)} = u\\left(1 - \\frac{u^2 + \\lambda^2 v^2}{u^2 + \\lambda^3 v^2}\\right) = \\frac{\\lambda^2(\\lambda - 1)u v^2}{u^2 + \\lambda^3 v^2}, \\qquad x_2^{(1)} = v(1 - \\lambda\\alpha_0) = \\frac{(1 - \\lambda)u^2 v}{u^2 + \\lambda^3 v^2}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 证明一步收敛与有限步收敛的充要条件</div>\n            <p>由于 $\\lambda > 1 \\implies \\lambda - 1 \\neq 0$，从上式直接看出：</p>\n            <div class=\"math-display\">$$x^{(1)} = \\begin{pmatrix} 0 \\\\ 0 \\end{pmatrix} \\quad \\Longleftrightarrow \\quad u v = 0 \\quad \\Longleftrightarrow \\quad x_1^{(0)} = 0 \\text{ 或 } x_2^{(0)} = 0$$</div>\n            <p>反之，若初始点 $u \\neq 0$ 且 $v \\neq 0$，则必有 $x_1^{(1)} \\neq 0$ 且 $x_2^{(1)} \\neq 0$；由数学归纳法知对任意 $k \\ge 1$ 均有 $x_1^{(k)} \\neq 0, \\; x_2^{(k)} \\neq 0$，轨迹呈锯齿形无限逼近原点，不可能在有限步内到达 $(0, 0)^T$。</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q10",
+        "sourceTag": "题型二 · 第5题",
+        "difficulty": "锯齿现象与正交性严格证明",
+        "stem": "设 $f(x)$ 为连续可微函数，最速下降法迭代格式为 $x^{(k+1)} = x^{(k)} + \\alpha_k d^{(k)}$，其中 $d^{(k)} = -\\nabla f(x^{(k)})$，且步长 $\\alpha_k$ 由精确一维线搜索 $\\varphi(\\alpha_k) = \\min_{\\alpha > 0} f(x^{(k)} + \\alpha d^{(k)})$ 确定。<br>\n        （1）严格证明：相邻两步的搜索方向必互相垂直（正交），即 $(d^{(k+1)})^T d^{(k)} = 0$，并由此解释最速下降法在狭长等值线山谷中产生<strong>“锯齿现象（Zig-zagging）”</strong>收敛缓慢的几何原因；<br>\n        （2）对二次函数 $f(x_1, x_2) = 2x_1^2 + x_2^2 - 4x_1 - 4x_2$，从 $x^{(0)} = (0, 0)^T$ 出发计算 $x^{(1)}, x^{(2)}$，并直接验证 $(d^{(1)})^T d^{(0)} = 0$。",
+        "shortAnswer": "（1）由精确线搜索极值必要条件 $\\varphi'(\\alpha_k) = \\nabla f(x^{(k)} + \\alpha_k d^{(k)})^T d^{(k)} = -(d^{(k+1)})^T d^{(k)} = 0$ 即证；<br>\n        （2）$d^{(0)} = (4, 4)^T, \\; \\alpha_0 = \\dfrac{1}{3}, \\; x^{(1)} = \\left(\\dfrac{4}{3}, \\dfrac{4}{3}\\right)^T$；$d^{(1)} = \\left(-\\dfrac{4}{3}, \\dfrac{4}{3}\\right)^T, \\; \\alpha_1 = \\dfrac{1}{3}, \\; x^{(2)} = \\left(\\dfrac{8}{9}, \\dfrac{16}{9}\\right)^T$；内积 $(d^{(1)})^T d^{(0)} = -\\dfrac{16}{3} + \\dfrac{16}{3} = 0$。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 证明相邻方向正交性 $(d^{(k+1)})^T d^{(k)} = 0$</div>\n            <p>记 $\\varphi(\\alpha) = f(x^{(k)} + \\alpha d^{(k)})$。因为 $\\alpha_k$ 是 $\\varphi(\\alpha)$ 的精确极小点，由一维极值必要条件知 $\\varphi'(\\alpha_k) = 0$。应用多元复合函数链式求导法则：</p>\n            <div class=\"math-display\">$$0 = \\varphi'(\\alpha_k) = \\nabla f\\big(x^{(k)} + \\alpha_k d^{(k)}\\big)^T d^{(k)} = \\nabla f(x^{(k+1)})^T d^{(k)} = -(d^{(k+1)})^T d^{(k)}$$</div>\n            <p>即 $(d^{(k+1)})^T d^{(k)} = 0$。几何上，每一步搜索停止于直线与等值线的切点处，下一步负梯度必与上一步方向呈 $90^\\circ$ 直角转折，在长短轴之比（条件数）很大的狭长椭圆山谷中只能作密集的小步直角锯齿折线前进，导致靠近极小点时收敛极慢。</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 数值计算与正交验证</div>\n            <p>由 $\\nabla f(x) = (4x_1 - 4, \\; 2x_2 - 4)^T, \\; Q = \\text{diag}(4, 2)$，在 $x^{(0)} = (0, 0)^T$ 处：</p>\n            <div class=\"math-display\">$$d^{(0)} = \\begin{pmatrix} 4 \\\\ 4 \\end{pmatrix}, \\quad \\alpha_0 = \\frac{16 + 16}{4(16) + 2(16)} = \\frac{32}{96} = \\frac{1}{3} \\implies x^{(1)} = \\begin{pmatrix} \\frac{4}{3} \\\\ \\frac{4}{3} \\end{pmatrix}$$</div>\n            <div class=\"math-display\">$$d^{(1)} = -\\nabla f(x^{(1)}) = \\begin{pmatrix} -\\frac{4}{3} \\\\ \\frac{4}{3} \\end{pmatrix}, \\quad \\alpha_1 = \\frac{\\frac{32}{9}}{\\frac{96}{9}} = \\frac{1}{3} \\implies x^{(2)} = \\begin{pmatrix} \\frac{8}{9} \\\\ \\frac{16}{9} \\end{pmatrix}$$</div>\n            <p>验证正交性：$(d^{(1)})^T d^{(0)} = \\left(-\\dfrac{4}{3}\\right)\\times 4 + \\dfrac{4}{3}\\times 4 = 0$。</p>\n          </div>\n        "
+      }
+    ]
+  },
+  {
+    "id": "sec3",
+    "sectionNum": "三",
+    "title": "三、牛顿法（Newton's Method · 5题）",
+    "questions": [
+      {
+        "qid": "Q11",
+        "sourceTag": "题型三 · 第1题",
+        "difficulty": "三元二次函数一步精确收敛",
+        "stem": "用牛顿法求三元正定二次函数无约束极小化问题：\n        $$\\min f(x_1, x_2, x_3) = x_1^2 + x_2^2 + x_3^2 - x_1 x_2 - x_2 x_3 - 2x_1$$\n        从初始点 $x^{(0)} = (0, 0, 0)^T$ 出发，通过求解线性方程组 $\\nabla^2 f(x^{(0)}) d^{(0)} = -\\nabla f(x^{(0)})$ 求牛顿方向 $d^{(0)}$ 及极小点 $x^{(1)}$。",
+        "shortAnswer": "$\\nabla f(x^{(0)}) = (-2, 0, 0)^T$，海森矩阵 $H = \\begin{pmatrix} 2 & -1 & 0 \\\\ -1 & 2 & -1 \\\\ 0 & -1 & 2 \\end{pmatrix}$；解方程组得牛顿方向 $d^{(0)} = \\left(\\dfrac{3}{2}, \\; 1, \\; \\dfrac{1}{2}\\right)^T$，一步收敛到精确极小点 <strong>$x^* = x^{(1)} = \\left(\\dfrac{3}{2}, \\; 1, \\; \\dfrac{1}{2}\\right)^T$</strong>。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 求一阶梯度与三阶海森矩阵</div>\n            <div class=\"math-display\">$$\\nabla f(x) = \\begin{pmatrix} 2x_1 - x_2 - 2 \\\\ -x_1 + 2x_2 - x_3 \\\\ -x_2 + 2x_3 \\end{pmatrix}, \\qquad H = \\nabla^2 f(x) = \\begin{pmatrix} 2 & -1 & 0 \\\\ -1 & 2 & -1 \\\\ 0 & -1 & 2 \\end{pmatrix}$$</div>\n            <p>在初始点 $x^{(0)} = (0, 0, 0)^T$ 处，$\\nabla f(x^{(0)}) = (-2, 0, 0)^T$。</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 解牛顿方程组 $H d^{(0)} = -\\nabla f(x^{(0)})$ 求 $x^{(1)}$</div>\n            <p>与其求三阶逆矩阵 $H^{-1}$，直接解三对角线性方程组更为简便：</p>\n            <div class=\"math-display\">$$\\begin{cases} 2d_1 - d_2 = 2 \\\\ -d_1 + 2d_2 - d_3 = 0 \\\\ -d_2 + 2d_3 = 0 \\end{cases} \\quad \\Longrightarrow \\quad d_2 = 2d_3, \\; d_1 = 3d_3 \\quad \\Longrightarrow \\quad 6d_3 - 2d_3 = 2 \\implies d_3 = \\frac{1}{2}$$</div>\n            <p>从而 $d^{(0)} = \\left(\\dfrac{3}{2}, \\; 1, \\; \\dfrac{1}{2}\\right)^T$，更新得 $x^{(1)} = x^{(0)} + d^{(0)} = \\mathbf{\\left(\\dfrac{3}{2}, \\; 1, \\; \\dfrac{1}{2}\\right)^T}$。验证 $\\nabla f(x^{(1)}) = (0, 0, 0)^T$，一步即达精确极小点。</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q12",
+        "sourceTag": "题型三 · 第2题",
+        "difficulty": "二元四次耦合非二次函数牛顿迭代",
+        "stem": "用牛顿法求解非二次无约束极小化问题：\n        $$\\min f(x_1, x_2) = (x_1 - x_2)^4 + x_1^2 + x_2^2 - 2x_1 + 2x_2$$\n        取初始点 $x^{(0)} = (1, 0)^T$，求第 1 次牛顿迭代点 $x^{(1)}$。",
+        "shortAnswer": "在 $x^{(0)} = (1, 0)^T$ 处，$\\nabla f(x^{(0)}) = (4, -2)^T$，海森矩阵 $H(x^{(0)}) = \\begin{pmatrix} 14 & -12 \\\\ -12 & 14 \\end{pmatrix}$；解得牛顿方向 $d^{(0)} = \\left(-\\dfrac{8}{13}, \\; -\\dfrac{5}{13}\\right)^T$，从而 <strong>$x^{(1)} = \\left(\\dfrac{5}{13}, \\; -\\dfrac{5}{13}\\right)^T$</strong>。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 求一阶梯度向量与二阶海森矩阵表达式</div>\n            <div class=\"math-display\">$$\\nabla f(x) = \\begin{pmatrix} 4(x_1 - x_2)^3 + 2x_1 - 2 \\\\ -4(x_1 - x_2)^3 + 2x_2 + 2 \\end{pmatrix}$$</div>\n            <div class=\"math-display\">$$\\nabla^2 f(x) = \\begin{pmatrix} 12(x_1 - x_2)^2 + 2 & -12(x_1 - x_2)^2 \\\\ -12(x_1 - x_2)^2 & 12(x_1 - x_2)^2 + 2 \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 代入 $x^{(0)} = (1, 0)^T$ 并计算牛顿步</div>\n            <p>因 $x_1^{(0)} - x_2^{(0)} = 1$，代入得：</p>\n            <div class=\"math-display\">$$\\nabla f(x^{(0)}) = \\begin{pmatrix} 4(1) + 2 - 2 \\\\ -4(1) + 0 + 2 \\end{pmatrix} = \\begin{pmatrix} 4 \\\\ -2 \\end{pmatrix}, \\qquad H(x^{(0)}) = \\begin{pmatrix} 14 & -12 \\\\ -12 & 14 \\end{pmatrix}$$</div>\n            <p>由 $\\det H(x^{(0)}) = 196 - 144 = 52 > 0$，求逆并计算牛顿方向 $d^{(0)}$：</p>\n            <div class=\"math-display\">$$d^{(0)} = -H(x^{(0)})^{-1}\\nabla f(x^{(0)}) = -\\frac{1}{52}\\begin{pmatrix} 14 & 12 \\\\ 12 & 14 \\end{pmatrix}\\begin{pmatrix} 4 \\\\ -2 \\end{pmatrix} = -\\frac{1}{52}\\begin{pmatrix} 32 \\\\ 20 \\end{pmatrix} = \\begin{pmatrix} -\\frac{8}{13} \\\\ -\\frac{5}{13} \\end{pmatrix}$$</div>\n            <p>更新迭代点得：$x^{(1)} = x^{(0)} + d^{(0)} = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix} + \\begin{pmatrix} -8/13 \\\\ -5/13 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 5/13 \\\\ -5/13 \\end{pmatrix}}$。</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q13",
+        "sourceTag": "题型三 · 第3题",
+        "difficulty": "经典香蕉函数(Rosenbrock)牛顿法一步收敛",
+        "stem": "著名的 Rosenbrock 测试函数（香蕉谷函数）定义为：\n        $$\\min f(x_1, x_2) = 100(x_2 - x_1^2)^2 + (1 - x_1)^2$$\n        若从初始点 $x^{(0)} = (1, 0)^T$（或 $x^{(0)} = (0, 0)^T$）出发，试用<strong>标准牛顿法</strong>从 $x^{(0)} = (0, 0)^T$ 出发计算两次迭代点 $x^{(1)}$ 和 $x^{(2)}$，验证牛顿法如何在 2 步内精确跳入弯曲山谷底部 $(1, 1)^T$。",
+        "shortAnswer": "第 1 步：在 $x^{(0)} = (0, 0)^T$ 处，$\\nabla f(x^{(0)}) = (-2, 0)^T, \\; H(x^{(0)}) = \\text{diag}(2, 200)$，得 $x^{(1)} = \\mathbf{(1, \\; 0)^T}$；<br>\n        第 2 步：在 $x^{(1)} = (1, 0)^T$ 处，$\\nabla f(x^{(1)}) = (400, -200)^T, \\; H(x^{(1)}) = \\begin{pmatrix} 1202 & -400 \\\\ -400 & 200 \\end{pmatrix}$，得 $d^{(1)} = (0, 1)^T$，从而 <strong>$x^{(2)} = (1, \\; 1)^T$</strong>（精确全局极小点！）。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 求 Rosenbrock 函数的梯度与海森矩阵通式</div>\n            <div class=\"math-display\">$$\\nabla f(x) = \\begin{pmatrix} -400x_1(x_2 - x_1^2) - 2(1 - x_1) \\\\ 200(x_2 - x_1^2) \\end{pmatrix}, \\qquad H(x) = \\begin{pmatrix} 1200x_1^2 - 400x_2 + 2 & -400x_1 \\\\ -400x_1 & 200 \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 第 1 次牛顿迭代 $x^{(0)} = (0, 0)^T \\to x^{(1)}$</div>\n            <div class=\"math-display\">$$\\nabla f(0, 0) = \\begin{pmatrix} -2 \\\\ 0 \\end{pmatrix}, \\quad H(0, 0) = \\begin{pmatrix} 2 & 0 \\\\ 0 & 200 \\end{pmatrix} \\implies d^{(0)} = -H(0,0)^{-1}\\nabla f(0,0) = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix} \\implies x^{(1)} = \\mathbf{\\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix}}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 3 步</span> 第 2 次牛顿迭代 $x^{(1)} = (1, 0)^T \\to x^{(2)}$</div>\n            <p>在 $x^{(1)} = (1, 0)^T$ 处：</p>\n            <div class=\"math-display\">$$\\nabla f(1, 0) = \\begin{pmatrix} 400 \\\\ -200 \\end{pmatrix}, \\qquad H(1, 0) = \\begin{pmatrix} 1202 & -400 \\\\ -400 & 200 \\end{pmatrix}$$</div>\n            <p>解方程组 $H(1, 0) d^{(1)} = -\\nabla f(1, 0)$，即 $\\begin{cases} 1202d_1 - 400d_2 = -400 \\\\ -400d_1 + 200d_2 = 200 \\end{cases}$，直接观察得 $d_1 = 0, \\; d_2 = 1$！因此：</p>\n            <div class=\"math-display\">$$x^{(2)} = x^{(1)} + d^{(1)} = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix} + \\begin{pmatrix} 0 \\\\ 1 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 1 \\\\ 1 \\end{pmatrix}}, \\qquad \\nabla f(1, 1) = \\begin{pmatrix} 0 \\\\ 0 \\end{pmatrix}$$</div>\n          </div>\n        "
+      },
+      {
+        "qid": "Q14",
+        "sourceTag": "题型三 · 第4题",
+        "difficulty": "海森矩阵非正定修正与阻尼牛顿法",
+        "stem": "考虑非凸目标函数 $f(x_1, x_2) = x_1^3 - 3x_1 + x_2^2 - 2x_2$。<br>\n        （1）求该函数的所有驻点，并利用海森矩阵判定哪个驻点是严格局部极小点，哪个是鞍点；<br>\n        （2）若取初始点 $x^{(0)} = (-0.5, 0)^T$，计算标准牛顿方向 $d^{(0)} = -H(x^{(0)})^{-1}\\nabla f(x^{(0)})$，判断该牛顿方向是否为 $x^{(0)}$ 处的<strong>下降方向</strong>？为什么？应如何采用 Levenberg-Marquardt 修正（$H_k + \\mu I$）恢复下降性？",
+        "shortAnswer": "（1）驻点为 $(1, 1)^T$（海森矩阵 $\\text{diag}(6, 2)$ 正定，<strong>严格极小点</strong>）和 $(-1, 1)^T$（海森矩阵 $\\text{diag}(-6, 2)$ 不定，<strong>鞍点</strong>）；<br>\n        （2）在 $x^{(0)} = (-0.5, 0)^T$ 处，$\\nabla f = (-2.25, -2)^T, \\; H = \\text{diag}(-3, 2)$ 非正定，标准牛顿方向 $d^{(0)} = (-0.75, 1)^T$ 满足 $\\nabla f^T d^{(0)} = -0.3125 < 0$ 虽整体略降但第一分量反而朝鞍点 $(-1, 1)^T$ 移动！需取 $\\mu > 3$ 使 $H(x^{(0)}) + \\mu I$ 正定。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 驻点求解与二阶充分条件分类</div>\n            <div class=\"math-display\">$$\\nabla f(x) = \\begin{pmatrix} 3x_1^2 - 3 \\\\ 2x_2 - 2 \\end{pmatrix} = \\begin{pmatrix} 0 \\\\ 0 \\end{pmatrix} \\implies x_1 = \\pm 1, \\; x_2 = 1; \\qquad H(x) = \\begin{pmatrix} 6x_1 & 0 \\\\ 0 & 2 \\end{pmatrix}$$</div>\n            <ul class=\"list-disc pl-6 space-y-1.5\">\n              <li>在 $(1, 1)^T$ 处：$H(1, 1) = \\text{diag}(6, 2)$ 特征值全正（正定），故 $(1, 1)^T$ 为<strong>严格局部极小点</strong>；</li>\n              <li>在 $(-1, 1)^T$ 处：$H(-1, 1) = \\text{diag}(-6, 2)$ 特征值一正一负（不定），故 $(-1, 1)^T$ 为<strong>鞍点</strong>。</li>\n            </ul>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 非正定区域牛顿方向失真分析与阻尼修正</div>\n            <p>在 $x^{(0)} = (-0.5, 0)^T$ 处，$\\nabla f(x^{(0)}) = (-2.25, -2)^T$，$H(x^{(0)}) = \\text{diag}(-3, 2)$（不定矩阵）。计算标准牛顿步：</p>\n            <div class=\"math-display\">$$d^{(0)} = -H(x^{(0)})^{-1}\\nabla f(x^{(0)}) = -\\begin{pmatrix} -1/3 & 0 \\\\ 0 & 1/2 \\end{pmatrix}\\begin{pmatrix} -2.25 \\\\ -2 \\end{pmatrix} = \\begin{pmatrix} -0.75 \\\\ 1 \\end{pmatrix} \\implies x^{(1)} = \\begin{pmatrix} -1.25 \\\\ 1 \\end{pmatrix}$$</div>\n            <p>由于第一分量二阶导数 $6x_1 = -3 < 0$，标准牛顿法在第一分量上与负梯度方向相反，把迭代点推向了鞍点 $(-1, 1)^T$ 甚至无界发散区！为此，引入阻尼因子 $\\mu > 3$（例如取 $\\mu = 4$），令修正海森矩阵为 $H + \\mu I = \\text{diag}(1, 6)$ 保持对称正定，此时搜索方向 $d = -(H + \\mu I)^{-1}\\nabla f = (2.25, 1/3)^T$ 保证向极小点 $(1, 1)^T$ 稳定下降。</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q15",
+        "sourceTag": "题型三 · 第5题",
+        "difficulty": "仿射不变性与一步收敛理论证明",
+        "stem": "（1）设 $f(x) = \\frac{1}{2}x^T Q x + b^T x + c$，其中 $Q \\in \\mathbb{R}^{n\\times n}$ 为对称正定矩阵。严格证明：对任意选取的初始点 $x^{(0)} \\in \\mathbb{R}^n$，标准牛顿法 $x^{(1)} = x^{(0)} - [\\nabla^2 f(x^{(0)})]^{-1}\\nabla f(x^{(0)})$ <strong>必在 1 步之内精确到达全局唯一极小点 $x^* = -Q^{-1}b$</strong>。<br>\n        （2）证明牛顿法具有<strong>非奇异线性变换（仿射变换）不变性</strong>：设 $x = Ty$（$T$ 为 $n$ 阶可逆阵），记 $\\tilde{f}(y) = f(Ty)$，若从 $x^{(0)} = Ty^{(0)}$ 出发，证明 $x^{(1)} = Ty^{(1)}$。",
+        "shortAnswer": "（1）因 $\\nabla f(x^{(0)}) = Qx^{(0)} + b, \\; \\nabla^2 f(x^{(0)}) = Q$，代入得 $x^{(1)} = x^{(0)} - Q^{-1}(Qx^{(0)} + b) = -Q^{-1}b = x^*$；<br>\n        （2）由链式法则 $\\nabla \\tilde{f}(y) = T^T \\nabla f(Ty), \\; \\nabla^2 \\tilde{f}(y) = T^T \\nabla^2 f(Ty) T$，代入 $y^{(1)}$ 展开消去 $T^T$ 即得 $Ty^{(1)} = x^{(1)}$。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 证明正定二次函数牛顿法一步精确收敛</div>\n            <p>对二次函数 $f(x) = \\frac{1}{2}x^T Q x + b^T x + c$，其梯度与海森矩阵分别为 $\\nabla f(x) = Qx + b$，$\\nabla^2 f(x) \\equiv Q$。唯一全局极小点满足 $Qx^* + b = 0 \\implies x^* = -Q^{-1}b$。对任意初始点 $x^{(0)} \\in \\mathbb{R}^n$，标准牛顿法第一步输出为：</p>\n            <div class=\"math-display\">$$x^{(1)} = x^{(0)} - \\big[\\nabla^2 f(x^{(0)})\\big]^{-1} \\nabla f(x^{(0)}) = x^{(0)} - Q^{-1}(Qx^{(0)} + b) = x^{(0)} - x^{(0)} - Q^{-1}b = -Q^{-1}b = x^*$$</div>\n            <p>即无论初始点 $x^{(0)}$ 距离极小点多远，牛顿法均一步直接命中 $x^*$。</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 证明牛顿法的仿射变换不变性</div>\n            <p>对复合函数 $\\tilde{f}(y) = f(Ty)$，由多元微积分链式法则有：</p>\n            <div class=\"math-display\">$$\\nabla \\tilde{f}(y) = T^T \\nabla f(Ty), \\qquad \\nabla^2 \\tilde{f}(y) = T^T \\nabla^2 f(Ty) T$$</div>\n            <p>在 $y$-坐标系下的牛顿步为：</p>\n            <div class=\"math-display\">$$y^{(1)} = y^{(0)} - \\big[\\nabla^2 \\tilde{f}(y^{(0)})\\big]^{-1} \\nabla \\tilde{f}(y^{(0)}) = y^{(0)} - \\big[T^T \\nabla^2 f(x^{(0)}) T\\big]^{-1} T^T \\nabla f(x^{(0)}) = y^{(0)} - T^{-1}\\big[\\nabla^2 f(x^{(0)})\\big]^{-1} \\nabla f(x^{(0)})$$</div>\n            <p>两边左乘可逆矩阵 $T$，立得 $Ty^{(1)} = Ty^{(0)} - [\\nabla^2 f(x^{(0)})]^{-1}\\nabla f(x^{(0)}) = x^{(0)} + d^{(0)} = x^{(1)}$。这表明牛顿法不受坐标系缩放或旋转条件数恶化的影响。</p>\n          </div>\n        "
+      }
+    ]
+  },
+  {
+    "id": "sec4",
+    "sectionNum": "四",
+    "title": "四、共轭梯度法（Conjugate Gradient Method — FR法 · 5题）",
+    "questions": [
+      {
+        "qid": "Q16",
+        "sourceTag": "题型四 · 第1题",
+        "difficulty": "含交叉项二次函数 · 两步精确收敛",
+        "stem": "用 Fletcher-Reeves (FR) 共轭梯度法求解无约束优化问题：\n        $$\\min f(x_1, x_2) = x_1^2 + x_2^2 - x_1 x_2 - 4x_1$$\n        取初始点 $x^{(0)} = (0, 0)^T$，完整写出两步迭代过程，求出共轭方向 $d^{(1)}$、步长 $\\alpha_1$ 及精确极小点 $x^{(2)}$（并与题型二第 1 题 Q06 的最速下降法结果进行对比）。",
+        "shortAnswer": "第 1 步：$x^{(1)} = (2, \\; 0)^T, \\; g_1 = (0, -2)^T$；<br>\n        第 2 步：$\\beta_0 = \\dfrac{1}{4}, \\; d^{(1)} = (1, \\; 2)^T, \\; \\alpha_1 = \\dfrac{2}{3}$，一步直达精确极小点 <strong>$x^* = x^{(2)} = \\left(\\dfrac{8}{3}, \\; \\dfrac{4}{3}\\right)^T$</strong>。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 第 1 次搜索 $x^{(0)} \\to x^{(1)}$</div>\n            <p>已知梯度 $\\nabla f(x) = \\begin{pmatrix} 2x_1 - x_2 - 4 \\\\ 2x_2 - x_1 \\end{pmatrix}$，海森矩阵 $Q = \\begin{pmatrix} 2 & -1 \\\\ -1 & 2 \\end{pmatrix}$。在 $x^{(0)} = (0, 0)^T$ 处：</p>\n            <div class=\"math-display\">$$g_0 = \\begin{pmatrix} -4 \\\\ 0 \\end{pmatrix}, \\qquad d^{(0)} = -g_0 = \\begin{pmatrix} 4 \\\\ 0 \\end{pmatrix}, \\qquad \\alpha_0 = \\frac{-g_0^T d^{(0)}}{(d^{(0)})^T Q d^{(0)}} = \\frac{16}{32} = \\frac{1}{2}$$</div>\n            <div class=\"math-display\">$$x^{(1)} = x^{(0)} + \\alpha_0 d^{(0)} = \\begin{pmatrix} 2 \\\\ 0 \\end{pmatrix}, \\qquad g_1 = \\nabla f(x^{(1)}) = \\begin{pmatrix} 0 \\\\ -2 \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 计算 FR 组合系数 $\\beta_0$ 与共轭方向 $d^{(1)}$</div>\n            <div class=\"math-display\">$$\\beta_0 = \\frac{\\|g_1\\|^2}{\\|g_0\\|^2} = \\frac{0^2 + (-2)^2}{(-4)^2 + 0^2} = \\frac{4}{16} = \\frac{1}{4}$$</div>\n            <div class=\"math-display\">$$d^{(1)} = -g_1 + \\beta_0 d^{(0)} = \\begin{pmatrix} 0 \\\\ 2 \\end{pmatrix} + \\frac{1}{4}\\begin{pmatrix} 4 \\\\ 0 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix}}$$</div>\n            <p>（验证 $Q$-共轭性：$(d^{(0)})^T Q d^{(1)} = \\begin{pmatrix} 4 & 0 \\end{pmatrix}\\begin{pmatrix} 0 \\\\ 3 \\end{pmatrix} = 0$，严格关于 $Q$ 共轭！）</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 3 步</span> 第 2 次搜索 $x^{(1)} \\to x^{(2)}$ 到达精确极小点</div>\n            <p>计算 $(d^{(1)})^T Q d^{(1)} = \\begin{pmatrix} 1 & 2 \\end{pmatrix}\\begin{pmatrix} 2 & -1 \\\\ -1 & 2 \\end{pmatrix}\\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix} = \\begin{pmatrix} 1 & 2 \\end{pmatrix}\\begin{pmatrix} 0 \\\\ 3 \\end{pmatrix} = 6$，且 $-g_1^T d^{(1)} = 4$：</p>\n            <div class=\"math-display\">$$\\alpha_1 = \\frac{-g_1^T d^{(1)}}{(d^{(1)})^T Q d^{(1)}} = \\frac{4}{6} = \\frac{2}{3}$$</div>\n            <div class=\"math-display\">$$x^{(2)} = x^{(1)} + \\alpha_1 d^{(1)} = \\begin{pmatrix} 2 \\\\ 0 \\end{pmatrix} + \\frac{2}{3}\\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} \\frac{8}{3} \\\\ \\frac{4}{3} \\end{pmatrix}}$$</div>\n            <p>验证梯度 $g_2 = \\nabla f\\left(\\dfrac{8}{3}, \\dfrac{4}{3}\\right) = (0, 0)^T$，2 步精确终止（而 Q06 中最速下降法第 2 步仅走到 $(2, 1)^T$）。</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q17",
+        "sourceTag": "题型四 · 第2题",
+        "difficulty": "含正交叉项二次函数 · 两步收敛",
+        "stem": "用 FR 共轭梯度法求解无约束优化问题：\n        $$\\min f(x_1, x_2) = 2x_1^2 + x_2^2 + 2x_1 x_2 - 4x_1$$\n        从初始点 $x^{(0)} = (0, 0)^T$ 出发，求第 1 步迭代点 $x^{(1)}$、共轭方向 $d^{(1)}$ 及第 2 步迭代点 $x^{(2)}$。",
+        "shortAnswer": "第 1 步：$\\alpha_0 = \\dfrac{1}{4}, \\; x^{(1)} = (1, \\; 0)^T, \\; g_1 = (0, 2)^T$；<br>\n        第 2 步：$\\beta_0 = \\dfrac{1}{4}, \\; d^{(1)} = (1, \\; -2)^T, \\; \\alpha_1 = 1$，精确收敛至极小点 <strong>$x^* = x^{(2)} = (2, \\; -2)^T$</strong>。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 第 1 次迭代 $x^{(0)} \\to x^{(1)}$</div>\n            <p>梯度 $\\nabla f(x) = \\begin{pmatrix} 4x_1 + 2x_2 - 4 \\\\ 2x_1 + 2x_2 \\end{pmatrix}$，海森矩阵 $Q = \\begin{pmatrix} 4 & 2 \\\\ 2 & 2 \\end{pmatrix}$。在 $x^{(0)} = (0, 0)^T$ 处：</p>\n            <div class=\"math-display\">$$g_0 = \\begin{pmatrix} -4 \\\\ 0 \\end{pmatrix}, \\qquad d^{(0)} = -g_0 = \\begin{pmatrix} 4 \\\\ 0 \\end{pmatrix}, \\qquad \\alpha_0 = \\frac{16}{4 \\times 16} = \\frac{1}{4}$$</div>\n            <div class=\"math-display\">$$x^{(1)} = \\begin{pmatrix} 0 \\\\ 0 \\end{pmatrix} + \\frac{1}{4}\\begin{pmatrix} 4 \\\\ 0 \\end{pmatrix} = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix}, \\qquad g_1 = \\nabla f(1, 0) = \\begin{pmatrix} 0 \\\\ 2 \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 构造共轭方向 $d^{(1)}$ 并完成第 2 步搜索</div>\n            <div class=\"math-display\">$$\\beta_0 = \\frac{\\|g_1\\|^2}{\\|g_0\\|^2} = \\frac{4}{16} = \\frac{1}{4}, \\qquad d^{(1)} = -g_1 + \\beta_0 d^{(0)} = \\begin{pmatrix} 0 \\\\ -2 \\end{pmatrix} + \\frac{1}{4}\\begin{pmatrix} 4 \\\\ 0 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 1 \\\\ -2 \\end{pmatrix}}$$</div>\n            <p>计算 $Q d^{(1)} = \\begin{pmatrix} 4 & 2 \\\\ 2 & 2 \\end{pmatrix}\\begin{pmatrix} 1 \\\\ -2 \\end{pmatrix} = \\begin{pmatrix} 0 \\\\ -2 \\end{pmatrix}$，故 $(d^{(1)})^T Q d^{(1)} = 4$，$-g_1^T d^{(1)} = 4$：</p>\n            <div class=\"math-display\">$$\\alpha_1 = \\frac{4}{4} = 1 \\quad \\Longrightarrow \\quad x^{(2)} = x^{(1)} + \\alpha_1 d^{(1)} = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix} + \\begin{pmatrix} 1 \\\\ -2 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 2 \\\\ -2 \\end{pmatrix}}$$</div>\n            <p>验证 $g_2 = \\nabla f(2, -2) = (0, 0)^T$，达到精确极小点。</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q18",
+        "sourceTag": "题型四 · 第3题",
+        "difficulty": "三元二次函数 · 3步精确终止",
+        "stem": "用 FR 共轭梯度法求解<strong>三元正定二次函数</strong>无约束极小化问题：\n        $$\\min f(x_1, x_2, x_3) = x_1^2 + x_2^2 + x_3^2 - x_1 x_2 - x_2 x_3 - 2x_1$$\n        从初始点 $x^{(0)} = (0, 0, 0)^T$ 出发，完整执行 3 步共轭梯度迭代求精确极小点 $x^{(3)}$，验证 $n$ 元正定二次函数至多 $n=3$ 步收敛的性质。",
+        "shortAnswer": "第 1 步：$\\alpha_0 = \\dfrac{1}{2}, \\; x^{(1)} = (1, 0, 0)^T$；<br>\n        第 2 步：$\\beta_0 = \\dfrac{1}{4}, \\; d^{(1)} = \\left(\\dfrac{1}{2}, 1, 0\\right)^T, \\; \\alpha_1 = \\dfrac{2}{3}, \\; x^{(2)} = \\left(\\dfrac{4}{3}, \\dfrac{2}{3}, 0\\right)^T$；<br>\n        第 3 步：$\\beta_1 = \\dfrac{4}{9}, \\; d^{(2)} = \\left(\\dfrac{2}{9}, \\dfrac{4}{9}, \\dfrac{2}{3}\\right)^T, \\; \\alpha_2 = \\dfrac{3}{4}$，精确收敛至 <strong>$x^* = x^{(3)} = \\left(\\dfrac{3}{2}, \\; 1, \\; \\dfrac{1}{2}\\right)^T$</strong>。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 第 1 次迭代 $x^{(0)} \\to x^{(1)}$</div>\n            <p>已知 $\\nabla f(x) = (2x_1 - x_2 - 2, \\; -x_1 + 2x_2 - x_3, \\; -x_2 + 2x_3)^T$，海森矩阵 $Q = \\begin{pmatrix} 2 & -1 & 0 \\\\ -1 & 2 & -1 \\\\ 0 & -1 & 2 \\end{pmatrix}$。在 $x^{(0)} = (0, 0, 0)^T$ 处：</p>\n            <div class=\"math-display\">$$g_0 = \\begin{pmatrix} -2 \\\\ 0 \\\\ 0 \\end{pmatrix}, \\quad d^{(0)} = \\begin{pmatrix} 2 \\\\ 0 \\\\ 0 \\end{pmatrix}, \\quad \\alpha_0 = \\frac{4}{8} = \\frac{1}{2} \\implies x^{(1)} = \\mathbf{\\begin{pmatrix} 1 \\\\ 0 \\\\ 0 \\end{pmatrix}}, \\quad g_1 = \\begin{pmatrix} 0 \\\\ -1 \\\\ 0 \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 第 2 次迭代 $x^{(1)} \\to x^{(2)}$</div>\n            <div class=\"math-display\">$$\\beta_0 = \\frac{\\|g_1\\|^2}{\\|g_0\\|^2} = \\frac{1}{4}, \\qquad d^{(1)} = -g_1 + \\beta_0 d^{(0)} = \\begin{pmatrix} \\frac{1}{2} \\\\ 1 \\\\ 0 \\end{pmatrix}$$</div>\n            <p>计算 $Q d^{(1)} = (0, \\; 3/2, \\; -1)^T$，则 $(d^{(1)})^T Q d^{(1)} = \\dfrac{3}{2}$，$-g_1^T d^{(1)} = 1$：</p>\n            <div class=\"math-display\">$$\\alpha_1 = \\frac{1}{3/2} = \\frac{2}{3} \\implies x^{(2)} = \\begin{pmatrix} 1 \\\\ 0 \\\\ 0 \\end{pmatrix} + \\frac{2}{3}\\begin{pmatrix} \\frac{1}{2} \\\\ 1 \\\\ 0 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} \\frac{4}{3} \\\\ \\frac{2}{3} \\\\ 0 \\end{pmatrix}}, \\qquad g_2 = \\nabla f(x^{(2)}) = \\begin{pmatrix} 0 \\\\ 0 \\\\ -\\frac{2}{3} \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 3 步</span> 第 3 次迭代 $x^{(2)} \\to x^{(3)}$ 精确收敛</div>\n            <div class=\"math-display\">$$\\beta_1 = \\frac{\\|g_2\\|^2}{\\|g_1\\|^2} = \\frac{4/9}{1} = \\frac{4}{9}, \\qquad d^{(2)} = -g_2 + \\beta_1 d^{(1)} = \\begin{pmatrix} 0 \\\\ 0 \\\\ \\frac{2}{3} \\end{pmatrix} + \\frac{4}{9}\\begin{pmatrix} \\frac{1}{2} \\\\ 1 \\\\ 0 \\end{pmatrix} = \\begin{pmatrix} \\frac{2}{9} \\\\ \\frac{4}{9} \\\\ \\frac{2}{3} \\end{pmatrix}$$</div>\n            <p>计算 $Q d^{(2)} = (0, \\; 0, \\; 8/9)^T$，则 $(d^{(2)})^T Q d^{(2)} = \\dfrac{16}{27}$，$-g_2^T d^{(2)} = \\dfrac{4}{9}$，故 $\\alpha_2 = \\dfrac{4/9}{16/27} = \\dfrac{3}{4}$：</p>\n            <div class=\"math-display\">$$x^{(3)} = x^{(2)} + \\alpha_2 d^{(2)} = \\begin{pmatrix} \\frac{4}{3} \\\\ \\frac{2}{3} \\\\ 0 \\end{pmatrix} + \\frac{3}{4}\\begin{pmatrix} \\frac{2}{9} \\\\ \\frac{4}{9} \\\\ \\frac{2}{3} \\end{pmatrix} = \\mathbf{\\begin{pmatrix} \\frac{3}{2} \\\\ 1 \\\\ \\frac{1}{2} \\end{pmatrix}}, \\qquad g_3 = \\begin{pmatrix} 0 \\\\ 0 \\\\ 0 \\end{pmatrix}$$</div>\n          </div>\n        "
+      },
+      {
+        "qid": "Q19",
+        "sourceTag": "题型四 · 第4题",
+        "difficulty": "任意已知方向构造Q-共轭方向",
+        "stem": "设目标函数为 $\\min f(x_1, x_2) = \\frac{3}{2}x_1^2 + x_2^2 + x_1 x_2 - 2x_1 - x_2$。<br>\n        （1）若给定初始点 $x^{(0)} = (0, 0)^T$ 及第 1 个非梯度搜索方向 $d^{(0)} = (1, 0)^T$，求沿 $d^{(0)}$ 精确线搜索后的点 $x^{(1)}$；<br>\n        （2）在 $x^{(1)}$ 处，按 $d^{(1)} = -g_1 + \\beta_0 d^{(0)}$ 构造与 $d^{(0)}$ 关于海森矩阵 $Q$ 共轭的方向 $d^{(1)}$（即满足 $(d^{(0)})^T Q d^{(1)} = 0$），求共轭系数 $\\beta_0$、方向 $d^{(1)}$ 以及沿 $d^{(1)}$ 搜索所得的极小点 $x^{(2)}$。",
+        "shortAnswer": "（1）$\\alpha_0 = \\dfrac{2}{3}, \\; x^{(1)} = \\left(\\dfrac{2}{3}, \\; 0\\right)^T, \\; g_1 = \\left(0, \\; -\\dfrac{1}{3}\\right)^T$；<br>\n        （2）由 $(d^{(0)})^T Q d^{(1)} = 0$ 解得 $\\beta_0 = -\\dfrac{1}{9}, \\; d^{(1)} = \\left(-\\dfrac{1}{9}, \\; \\dfrac{1}{3}\\right)^T, \\; \\alpha_1 = \\dfrac{3}{5}$，得精确极小点 <strong>$x^* = x^{(2)} = \\left(\\dfrac{3}{5}, \\; \\dfrac{1}{5}\\right)^T$</strong>。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 沿给定方向 $d^{(0)} = (1, 0)^T$ 精确搜索</div>\n            <p>梯度 $\\nabla f(x) = \\begin{pmatrix} 3x_1 + x_2 - 2 \\\\ x_1 + 2x_2 - 1 \\end{pmatrix}$，海森矩阵 $Q = \\begin{pmatrix} 3 & 1 \\\\ 1 & 2 \\end{pmatrix}$。在 $x^{(0)} = (0, 0)^T$ 处，$g_0 = (-2, -1)^T$：</p>\n            <div class=\"math-display\">$$\\alpha_0 = \\frac{-g_0^T d^{(0)}}{(d^{(0)})^T Q d^{(0)}} = \\frac{2}{3} \\quad \\Longrightarrow \\quad x^{(1)} = \\begin{pmatrix} \\frac{2}{3} \\\\ 0 \\end{pmatrix}, \\qquad g_1 = \\nabla f\\left(\\frac{2}{3}, 0\\right) = \\begin{pmatrix} 0 \\\\ -\\frac{1}{3} \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 由共轭条件 $(d^{(0)})^T Q d^{(1)} = 0$ 求 $\\beta_0$ 与 $x^{(2)}$</div>\n            <p>注意：因 $d^{(0)}$ 不是负梯度 $-g_0$，需用通用共轭条件 $(d^{(0)})^T Q(-g_1 + \\beta_0 d^{(0)}) = 0$ 求 $\\beta_0$：</p>\n            <div class=\"math-display\">$$\\beta_0 = \\frac{(d^{(0)})^T Q g_1}{(d^{(0)})^T Q d^{(0)}} = \\frac{\\begin{pmatrix} 1 & 0 \\end{pmatrix}\\begin{pmatrix} 3 & 1 \\\\ 1 & 2 \\end{pmatrix}\\begin{pmatrix} 0 \\\\ -1/3 \\end{pmatrix}}{3} = \\frac{-1/3}{3} = -\\frac{1}{9}$$</div>\n            <div class=\"math-display\">$$d^{(1)} = -g_1 + \\beta_0 d^{(0)} = \\begin{pmatrix} 0 \\\\ \\frac{1}{3} \\end{pmatrix} - \\frac{1}{9}\\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix} = \\begin{pmatrix} -\\frac{1}{9} \\\\ \\frac{1}{3} \\end{pmatrix}$$</div>\n            <p>计算 $Q d^{(1)} = \\left(0, \\; \\dfrac{5}{9}\\right)^T$，则 $(d^{(1)})^T Q d^{(1)} = \\dfrac{5}{27}$，$-g_1^T d^{(1)} = \\dfrac{1}{9}$，故步长 $\\alpha_1 = \\dfrac{1/9}{5/27} = \\dfrac{3}{5}$，代入更新 $x^{(2)}$：</p>\n            <div class=\"math-display\">$$x^{(2)} = \\begin{pmatrix} \\frac{2}{3} \\\\ 0 \\end{pmatrix} + \\frac{3}{5}\\begin{pmatrix} -\\frac{1}{9} \\\\ \\frac{1}{3} \\end{pmatrix} = \\mathbf{\\begin{pmatrix} \\frac{3}{5} \\\\ \\frac{1}{5} \\end{pmatrix}}$$</div>\n            <p>验证梯度：$g_2 = \\nabla f\\left(\\dfrac{3}{5}, \\dfrac{1}{5}\\right) = \\left(3\\times\\dfrac{3}{5} + \\dfrac{1}{5} - 2, \\; \\dfrac{3}{5} + \\dfrac{2}{5} - 1\\right)^T = (0, 0)^T$，精确命中极小点！</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q20",
+        "sourceTag": "题型四 · 第5题",
+        "difficulty": "FR与PRP公式等价性证明",
+        "stem": "设目标函数为正定二次函数 $f(x) = \\frac{1}{2}x^T Q x + b^T x + c$（$Q$ 对称正定），共轭梯度法中步长 $\\alpha_k$ 由精确线搜索确定，已知相邻梯度满足正交性 $g_{k+1}^T g_k = 0$ 且满足递推关系 $g_{k+1} - g_k = \\alpha_k Q d^{(k)}$。<br>\n        （1）证明：由共轭条件 $(d^{(k)})^T Q d^{(k+1)} = 0$（其中 $d^{(k+1)} = -g_{k+1} + \\beta_k d^{(k)}$）推导出的精确系数 $\\beta_k = \\dfrac{g_{k+1}^T Q d^{(k)}}{(d^{(k)})^T Q d^{(k)}}$ 可化简为 <strong>Polak-Ribière-Polyak (PRP) 公式</strong>与 <strong>Fletcher-Reeves (FR) 公式</strong>：\n        $$\\beta_k^{\\text{PRP}} = \\frac{g_{k+1}^T(g_{k+1} - g_k)}{g_k^T g_k} = \\frac{\\|g_{k+1}\\|^2}{\\|g_k\\|^2} = \\beta_k^{\\text{FR}}$$\n        （2）证明生成的方向 $d^{(k+1)}$ 必为 $x^{(k+1)}$ 处的严格下降方向，且满足 $g_{k+1}^T d^{(k+1)} = -\\|g_{k+1}\\|^2 < 0$。",
+        "shortAnswer": "（1）将 $Q d^{(k)} = \\dfrac{1}{\\alpha_k}(g_{k+1} - g_k)$ 代入 $\\beta_k$ 分子分母，结合精确线搜索 $g_{k+1}^T d^{(k)} = 0$、正交性 $g_{k+1}^T g_k = 0$ 及 $g_k^T d^{(k)} = -\\|g_k\\|^2$ 化简即得证；<br>\n        （2）$g_{k+1}^T d^{(k+1)} = g_{k+1}^T(-g_{k+1} + \\beta_k d^{(k)}) = -\\|g_{k+1}\\|^2 + \\beta_k g_{k+1}^T d^{(k)} = -\\|g_{k+1}\\|^2 < 0$。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 推导共轭系数并证明正定二次函数下 PRP 与 FR 公式恒等</div>\n            <p>将 $d^{(k+1)} = -g_{k+1} + \\beta_k d^{(k)}$ 代入 $Q$-共轭条件 $(d^{(k)})^T Q d^{(k+1)} = 0$，解得：</p>\n            <div class=\"math-display\">$$\\beta_k = \\frac{g_{k+1}^T Q d^{(k)}}{(d^{(k)})^T Q d^{(k)}}$$</div>\n            <p>由二次函数梯度差公式 $g_{k+1} - g_k = Q(x^{(k+1)} - x^{(k)}) = \\alpha_k Q d^{(k)}$，有 $Q d^{(k)} = \\dfrac{1}{\\alpha_k}(g_{k+1} - g_k)$。代入上式并约去 $\\dfrac{1}{\\alpha_k}$：</p>\n            <div class=\"math-display\">$$\\beta_k = \\frac{g_{k+1}^T (g_{k+1} - g_k)}{(d^{(k)})^T (g_{k+1} - g_k)}$$</div>\n            <p>由精确线搜索条件知 $g_{k+1}^T d^{(k)} = 0$，且对上一步有 $g_k^T d^{(k)} = g_k^T(-g_k + \\beta_{k-1}d^{(k-1)}) = -g_k^T g_k$。因此分母化为 $-(d^{(k)})^T g_k = g_k^T g_k$，从而得到 PRP 公式：</p>\n            <div class=\"math-display\">$$\\beta_k = \\frac{g_{k+1}^T(g_{k+1} - g_k)}{g_k^T g_k} = \\beta_k^{\\text{PRP}}$$</div>\n            <p>再由正定二次函数共轭梯度法的梯度正交性 $g_{k+1}^T g_k = 0$，分子简化为 $g_{k+1}^T g_{k+1} = \\|g_{k+1}\\|^2$，即证得 $\\beta_k^{\\text{PRP}} = \\dfrac{\\|g_{k+1}\\|^2}{\\|g_k\\|^2} = \\beta_k^{\\text{FR}}$。</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 证明 $d^{(k+1)}$ 的严格下降性</div>\n            <p>利用精确线搜索一阶条件 $g_{k+1}^T d^{(k)} = 0$，直接计算方向导数：</p>\n            <div class=\"math-display\">$$g_{k+1}^T d^{(k+1)} = g_{k+1}^T\\big(-g_{k+1} + \\beta_k d^{(k)}\\big) = -\\|g_{k+1}\\|^2 + \\beta_k \\underbrace{g_{k+1}^T d^{(k)}}_{= 0} = -\\|g_{k+1}\\|^2 < 0 \\quad (g_{k+1} \\neq 0)$$</div>\n            <p>故 $d^{(k+1)}$ 必为 $x^{(k+1)}$ 处的严格下降方向。</p>\n          </div>\n        "
+      }
+    ]
+  },
+  {
+    "id": "sec5",
+    "sectionNum": "五",
+    "title": "五、变尺度法（Quasi-Newton / DFP 拟牛顿法 · 5题）",
+    "questions": [
+      {
+        "qid": "Q21",
+        "sourceTag": "题型五 · 第1题",
+        "difficulty": "含交叉项二次函数 · DFP完整求解",
+        "stem": "用 DFP 变尺度法求解无约束优化问题：\n        $$\\min f(x_1, x_2) = x_1^2 + x_2^2 - x_1 x_2 - 4x_1$$\n        取初始点 $x^{(0)} = (0, 0)^T$，初始尺度矩阵 $H_0 = I$。求第 1 步校正后的尺度矩阵 $H_1$、第 2 步拟牛顿方向 $d^{(1)}$、步长 $\\alpha_1$ 及精确极小点 $x^{(2)}$。",
+        "shortAnswer": "第 1 步：$x^{(1)} = (2, 0)^T, \\; s_0 = (2, 0)^T, \\; y_0 = (4, -2)^T$；<br>\n        DFP 校正矩阵为 <strong>$H_1 = \\begin{pmatrix} \\frac{7}{10} & \\frac{2}{5} \\\\[4pt] \\frac{2}{5} & \\frac{4}{5} \\end{pmatrix}$</strong>；<br>\n        第 2 步：$d^{(1)} = \\left(\\dfrac{4}{5}, \\; \\dfrac{8}{5}\\right)^T, \\; \\alpha_1 = \\dfrac{5}{6}$，精确收敛到极小点 <strong>$x^* = x^{(2)} = \\left(\\dfrac{8}{3}, \\; \\dfrac{4}{3}\\right)^T$</strong>。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 第 1 次搜索与位移差 $s_0$、梯度差 $y_0$ 计算</div>\n            <p>梯度 $\\nabla f(x) = (2x_1 - x_2 - 4, \\; 2x_2 - x_1)^T$，海森矩阵 $Q = \\begin{pmatrix} 2 & -1 \\\\ -1 & 2 \\end{pmatrix}$。在 $x^{(0)} = (0, 0)^T$ 处，$g_0 = (-4, 0)^T$，$d^{(0)} = -H_0 g_0 = (4, 0)^T$，精确步长 $\\alpha_0 = \\dfrac{1}{2}$，得：</p>\n            <div class=\"math-display\">$$x^{(1)} = \\begin{pmatrix} 2 \\\\ 0 \\end{pmatrix}, \\quad g_1 = \\nabla f(2, 0) = \\begin{pmatrix} 0 \\\\ -2 \\end{pmatrix} \\quad \\Longrightarrow \\quad s_0 = x^{(1)} - x^{(0)} = \\begin{pmatrix} 2 \\\\ 0 \\end{pmatrix}, \\quad y_0 = g_1 - g_0 = \\begin{pmatrix} 4 \\\\ -2 \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 代入 DFP 公式计算尺度矩阵 $H_1$</div>\n            <div class=\"math-display\">$$\\frac{s_0 s_0^T}{s_0^T y_0} = \\frac{1}{2\\times 4 + 0}\\begin{pmatrix} 4 & 0 \\\\ 0 & 0 \\end{pmatrix} = \\begin{pmatrix} \\frac{1}{2} & 0 \\\\ 0 & 0 \\end{pmatrix}, \\qquad \\frac{H_0 y_0 y_0^T H_0}{y_0^T H_0 y_0} = \\frac{1}{16 + 4}\\begin{pmatrix} 16 & -8 \\\\ -8 & 4 \\end{pmatrix} = \\begin{pmatrix} \\frac{4}{5} & -\\frac{2}{5} \\\\ -\\frac{2}{5} & \\frac{1}{5} \\end{pmatrix}$$</div>\n            <div class=\"math-display\">$$H_1 = I + \\frac{s_0 s_0^T}{s_0^T y_0} - \\frac{y_0 y_0^T}{y_0^T y_0} = \\begin{pmatrix} 1 + \\frac{1}{2} - \\frac{4}{5} & \\frac{2}{5} \\\\[4pt] \\frac{2}{5} & 1 + 0 - \\frac{1}{5} \\end{pmatrix} = \\mathbf{\\begin{pmatrix} \\frac{7}{10} & \\frac{2}{5} \\\\[4pt] \\frac{2}{5} & \\frac{4}{5} \\end{pmatrix}}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 3 步</span> 第 2 次搜索 $x^{(1)} \\to x^{(2)}$</div>\n            <div class=\"math-display\">$$d^{(1)} = -H_1 g_1 = -\\begin{pmatrix} \\frac{7}{10} & \\frac{2}{5} \\\\[4pt] \\frac{2}{5} & \\frac{4}{5} \\end{pmatrix}\\begin{pmatrix} 0 \\\\ -2 \\end{pmatrix} = \\begin{pmatrix} \\frac{4}{5} \\\\[4pt] \\frac{8}{5} \\end{pmatrix}$$</div>\n            <p>计算 $Q d^{(1)} = \\left(0, \\; \\dfrac{12}{5}\\right)^T$，则 $(d^{(1)})^T Q d^{(1)} = \\dfrac{96}{25}$，$-g_1^T d^{(1)} = \\dfrac{16}{5}$，故 $\\alpha_1 = \\dfrac{16/5}{96/25} = \\dfrac{5}{6}$：</p>\n            <div class=\"math-display\">$$x^{(2)} = x^{(1)} + \\alpha_1 d^{(1)} = \\begin{pmatrix} 2 \\\\ 0 \\end{pmatrix} + \\frac{5}{6}\\begin{pmatrix} \\frac{4}{5} \\\\ \\frac{8}{5} \\end{pmatrix} = \\mathbf{\\begin{pmatrix} \\frac{8}{3} \\\\ \\frac{4}{3} \\end{pmatrix}}$$</div>\n          </div>\n        "
+      },
+      {
+        "qid": "Q22",
+        "sourceTag": "题型五 · 第2题",
+        "difficulty": "含正交叉项二次函数 · DFP完整求解",
+        "stem": "用 DFP 变尺度法求解无约束优化问题：\n        $$\\min f(x_1, x_2) = 2x_1^2 + x_2^2 + 2x_1 x_2 - 4x_1$$\n        取初始点 $x^{(0)} = (0, 0)^T$，初始矩阵 $H_0 = I$。求校正矩阵 $H_1$、方向 $d^{(1)}$、步长 $\\alpha_1$ 及极小点 $x^{(2)}$。",
+        "shortAnswer": "第 1 步：$x^{(1)} = (1, 0)^T, \\; s_0 = (1, 0)^T, \\; y_0 = (4, 2)^T$；<br>\n        DFP 校正矩阵为 <strong>$H_1 = \\begin{pmatrix} \\frac{9}{20} & -\\frac{2}{5} \\\\[4pt] -\\frac{2}{5} & \\frac{4}{5} \\end{pmatrix}$</strong>；<br>\n        第 2 步：$d^{(1)} = \\left(\\dfrac{4}{5}, \\; -\\dfrac{8}{5}\\right)^T, \\; \\alpha_1 = \\dfrac{5}{4}$，精确收敛到极小点 <strong>$x^* = x^{(2)} = (2, \\; -2)^T$</strong>。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 第 1 次搜索与 $s_0, y_0$ 计算</div>\n            <p>由 $\\nabla f(x) = (4x_1 + 2x_2 - 4, \\; 2x_1 + 2x_2)^T, \\; Q = \\begin{pmatrix} 4 & 2 \\\\ 2 & 2 \\end{pmatrix}$，在 $x^{(0)} = (0, 0)^T$ 处：$g_0 = (-4, 0)^T, \\; d^{(0)} = (4, 0)^T, \\; \\alpha_0 = \\dfrac{1}{4}$，故：</p>\n            <div class=\"math-display\">$$x^{(1)} = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix}, \\quad g_1 = \\begin{pmatrix} 0 \\\\ 2 \\end{pmatrix} \\quad \\Longrightarrow \\quad s_0 = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix}, \\quad y_0 = g_1 - g_0 = \\begin{pmatrix} 4 \\\\ 2 \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 计算 DFP 变尺度矩阵 $H_1$</div>\n            <div class=\"math-display\">$$\\frac{s_0 s_0^T}{s_0^T y_0} = \\frac{1}{4}\\begin{pmatrix} 1 & 0 \\\\ 0 & 0 \\end{pmatrix} = \\begin{pmatrix} \\frac{1}{4} & 0 \\\\ 0 & 0 \\end{pmatrix}, \\qquad \\frac{y_0 y_0^T}{y_0^T y_0} = \\frac{1}{20}\\begin{pmatrix} 16 & 8 \\\\ 8 & 4 \\end{pmatrix} = \\begin{pmatrix} \\frac{4}{5} & \\frac{2}{5} \\\\ \\frac{2}{5} & \\frac{1}{5} \\end{pmatrix}$$</div>\n            <div class=\"math-display\">$$H_1 = \\begin{pmatrix} 1 + \\frac{1}{4} - \\frac{4}{5} & -\\frac{2}{5} \\\\[4pt] -\\frac{2}{5} & 1 - \\frac{1}{5} \\end{pmatrix} = \\mathbf{\\begin{pmatrix} \\frac{9}{20} & -\\frac{2}{5} \\\\[4pt] -\\frac{2}{5} & \\frac{4}{5} \\end{pmatrix}}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 3 步</span> 第 2 次搜索求极小点 $x^{(2)}$</div>\n            <div class=\"math-display\">$$d^{(1)} = -H_1 g_1 = -\\begin{pmatrix} \\frac{9}{20} & -\\frac{2}{5} \\\\[4pt] -\\frac{2}{5} & \\frac{4}{5} \\end{pmatrix}\\begin{pmatrix} 0 \\\\ 2 \\end{pmatrix} = \\begin{pmatrix} \\frac{4}{5} \\\\[4pt] -\\frac{8}{5} \\end{pmatrix}$$</div>\n            <p>由 $Q d^{(1)} = \\left(0, \\; -\\dfrac{8}{5}\\right)^T$ 得 $(d^{(1)})^T Q d^{(1)} = \\dfrac{64}{25}$，$-g_1^T d^{(1)} = \\dfrac{16}{5}$，故 $\\alpha_1 = \\dfrac{16/5}{64/25} = \\dfrac{5}{4}$：</p>\n            <div class=\"math-display\">$$x^{(2)} = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix} + \\frac{5}{4}\\begin{pmatrix} \\frac{4}{5} \\\\ -\\frac{8}{5} \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 2 \\\\ -2 \\end{pmatrix}}$$</div>\n          </div>\n        "
+      },
+      {
+        "qid": "Q23",
+        "sourceTag": "题型五 · 第3题",
+        "difficulty": "验证2步DFP矩阵H2等于Q^-1",
+        "stem": "设二元正定二次函数为 $f(x_1, x_2) = x_1^2 + 2x_2^2 - 2x_1 x_2 - 4x_2$，其海森矩阵为 $Q = \\begin{pmatrix} 2 & -2 \\\\ -2 & 4 \\end{pmatrix}$，逆矩阵为 $Q^{-1} = \\begin{pmatrix} 1 & \\frac{1}{2} \\\\ \\frac{1}{2} & \\frac{1}{2} \\end{pmatrix}$。<br>\n        从初始点 $x^{(0)} = (0, 0)^T, \\; H_0 = I$ 出发执行 DFP 变尺度法，不仅求出 $H_1$ 和极小点 $x^{(2)}$，而且继续用 $s_1 = x^{(2)} - x^{(1)}, \\; y_1 = g_2 - g_1$ 计算<strong>第 2 次校正后的矩阵 $H_2$</strong>，直接验证 $n=2$ 步后 <strong>$H_2 \\equiv Q^{-1}$</strong> 的理论性质！",
+        "shortAnswer": "第 1 步：$x^{(1)} = (0, 1)^T, \\; H_1 = \\begin{pmatrix} \\frac{4}{5} & \\frac{2}{5} \\\\ \\frac{2}{5} & \\frac{9}{20} \\end{pmatrix}$；<br>\n        第 2 步：$x^{(2)} = (2, 2)^T, \\; s_1 = (2, 1)^T, \\; y_1 = (2, 0)^T$；代入 DFP 公式算得 <strong>$H_2 = \\begin{pmatrix} 1 & \\frac{1}{2} \\\\ \\frac{1}{2} & \\frac{1}{2} \\end{pmatrix} \\equiv Q^{-1}$</strong>！",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 1 步</span> 第 1 次迭代与 $H_1$ 计算</div>\n            <p>由 $\\nabla f(x) = (2x_1 - 2x_2, \\; -2x_1 + 4x_2 - 4)^T$，在 $x^{(0)} = (0, 0)^T$ 处：$g_0 = (0, -4)^T, \\; d^{(0)} = (0, 4)^T, \\; \\alpha_0 = \\dfrac{1}{4}$，得 $x^{(1)} = (0, 1)^T, \\; g_1 = (-2, 0)^T$。于是 $s_0 = (0, 1)^T, \\; y_0 = (-2, 4)^T$：</p>\n            <div class=\"math-display\">$$H_1 = I + \\frac{1}{4}\\begin{pmatrix} 0 & 0 \\\\ 0 & 1 \\end{pmatrix} - \\frac{1}{20}\\begin{pmatrix} 4 & -8 \\\\ -8 & 16 \\end{pmatrix} = \\begin{pmatrix} \\frac{4}{5} & \\frac{2}{5} \\\\[4pt] \\frac{2}{5} & \\frac{9}{20} \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 2 步</span> 第 2 次迭代与 $H_2 \\equiv Q^{-1}$ 的直接验证</div>\n            <p>计算 $d^{(1)} = -H_1 g_1 = \\left(\\dfrac{8}{5}, \\; \\dfrac{4}{5}\\right)^T$，精确步长 $\\alpha_1 = \\dfrac{5}{4}$，得 $x^{(2)} = (2, 2)^T, \\; g_2 = (0, 0)^T$。此时：</p>\n            <div class=\"math-display\">$$s_1 = x^{(2)} - x^{(1)} = \\begin{pmatrix} 2 \\\\ 1 \\end{pmatrix}, \\qquad y_1 = g_2 - g_1 = \\begin{pmatrix} 2 \\\\ 0 \\end{pmatrix}, \\qquad s_1^T y_1 = 4$$</div>\n            <p>计算 $H_1 y_1 = \\left(\\dfrac{8}{5}, \\; \\dfrac{4}{5}\\right)^T$，且 $y_1^T H_1 y_1 = \\dfrac{16}{5}$。代入 DFP 公式求 $H_2$：</p>\n            <div class=\"math-display\">$$\\begin{aligned}\n            H_2 &= H_1 + \\frac{s_1 s_1^T}{s_1^T y_1} - \\frac{(H_1 y_1)(H_1 y_1)^T}{y_1^T H_1 y_1} \\\\\n            &= \\begin{pmatrix} \\frac{4}{5} & \\frac{2}{5} \\\\[4pt] \\frac{2}{5} & \\frac{9}{20} \\end{pmatrix} + \\frac{1}{4}\\begin{pmatrix} 4 & 2 \\\\ 2 & 1 \\end{pmatrix} - \\frac{5}{16}\\begin{pmatrix} \\frac{64}{25} & \\frac{32}{25} \\\\[4pt] \\frac{32}{25} & \\frac{16}{25} \\end{pmatrix} \\\\\n            &= \\begin{pmatrix} \\frac{4}{5} + 1 - \\frac{4}{5} & \\frac{2}{5} + \\frac{1}{2} - \\frac{2}{5} \\\\[4pt] \\frac{2}{5} + \\frac{1}{2} - \\frac{2}{5} & \\frac{9}{20} + \\frac{1}{4} - \\frac{1}{5} \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 1 & \\frac{1}{2} \\\\[4pt] \\frac{1}{2} & \\frac{1}{2} \\end{pmatrix} \\equiv Q^{-1}}\n            \\end{aligned}$$</div>\n            <p>完美验证了 $n$ 元正定二次函数经 $n$ 步 DFP 迭代后，$H_n$ 精确收敛于海森逆矩阵 $Q^{-1}$！</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q24",
+        "sourceTag": "题型五 · 第4题",
+        "difficulty": "拟牛顿方程与正定性遗传证明",
+        "stem": "在 DFP 变尺度算法中，校正公式为：\n        $$H_{k+1} = H_k + \\frac{s_k s_k^T}{s_k^T y_k} - \\frac{H_k y_k y_k^T H_k}{y_k^T H_k y_k}$$\n        其中 $s_k = x^{(k+1)} - x^{(k)} \\neq 0, \\; y_k = g_{k+1} - g_k \\neq 0$。<br>\n        （1）证明校正后的矩阵 $H_{k+1}$ 满足<strong>拟牛顿方程（割线方程）</strong>：$H_{k+1} y_k = s_k$；<br>\n        （2）假设 $H_k$ 是对称正定矩阵，且满足曲率条件 $s_k^T y_k > 0$。利用柯西-施瓦茨不等式严格证明：<strong>$H_{k+1}$ 也必是对称正定矩阵</strong>（正定性保持定理）。",
+        "shortAnswer": "（1）将 $y_k$ 右乘 $H_{k+1}$，分子分母中的标量内积 $s_k^T y_k$ 与 $y_k^T H_k y_k$ 直接约消，得 $H_{k+1}y_k = H_k y_k + s_k - H_k y_k = s_k$；<br>\n        （2）对任意非零向量 $z \\neq 0$，由柯西不等式 $(z^T H_k y_k)^2 \\le (z^T H_k z)(y_k^T H_k y_k)$ 知 $z^T H_k z - \\dfrac{(z^T H_k y_k)^2}{y_k^T H_k y_k} \\ge 0$，结合 $\\dfrac{(z^T s_k)^2}{s_k^T y_k} \\ge 0$ 且两项不可能同时为零（因 $s_k^T y_k > 0$），证得 $z^T H_{k+1} z > 0$。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 验证拟牛顿方程 $H_{k+1} y_k = s_k$</div>\n            <p>将向量 $y_k$ 右乘 DFP 公式右端，利用矩阵乘法结合律（注意 $s_k^T y_k$ 和 $y_k^T H_k y_k$ 均为非零实标量）：</p>\n            <div class=\"math-display\">$$H_{k+1} y_k = H_k y_k + \\frac{s_k (s_k^T y_k)}{s_k^T y_k} - \\frac{H_k y_k (y_k^T H_k y_k)}{y_k^T H_k y_k} = H_k y_k + s_k - H_k y_k = s_k$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 严格证明 $H_{k+1}$ 的对称正定性</div>\n            <p>显然 $H_{k+1}^T = H_{k+1}$ 对称。任取非零向量 $z \\in \\mathbb{R}^n \\; (z \\neq 0)$，计算二次型 $z^T H_{k+1} z$：</p>\n            <div class=\"math-display\">$$z^T H_{k+1} z = \\left[z^T H_k z - \\frac{(z^T H_k y_k)^2}{y_k^T H_k y_k}\\right] + \\frac{(z^T s_k)^2}{s_k^T y_k}$$</div>\n            <p>因为 $H_k$ 对称正定，存在可逆平方根矩阵 $H_k^{1/2}$。令 $u = H_k^{1/2} z \\neq 0, \\; v = H_k^{1/2} y_k \\neq 0$，由欧氏内积的<strong>柯西-施瓦茨不等式</strong> $(u^T v)^2 \\le \\|u\\|^2 \\|v\\|^2$ 得：</p>\n            <div class=\"math-display\">$$(z^T H_k y_k)^2 \\le (z^T H_k z)(y_k^T H_k y_k) \\quad \\Longrightarrow \\quad z^T H_k z - \\frac{(z^T H_k y_k)^2}{y_k^T H_k y_k} \\ge 0$$</div>\n            <p>其中第一部分取等号当且仅当 $u, v$ 共线，即 $z = \\lambda y_k \\; (\\lambda \\neq 0)$。但当 $z = \\lambda y_k$ 时，第二部分的分子为 $(z^T s_k)^2 = \\lambda^2 (y_k^T s_k)^2 > 0$（因为题设 $s_k^T y_k > 0$）！故两项非负项不可能同时为零，对任意 $z \\neq 0$ 恒有 $z^T H_{k+1} z > 0$，即 $H_{k+1}$ 必对称正定。</p>\n          </div>\n        "
+      },
+      {
+        "qid": "Q25",
+        "sourceTag": "题型五 · 第5题",
+        "difficulty": "DFP与BFGS对偶校正对比计算",
+        "stem": "在拟牛顿法中，除了 DFP 公式外，另一著名的尺度矩阵校正公式是 <strong>BFGS（逆形式）公式</strong>：\n        $$H_{k+1}^{\\text{BFGS}} = \\left(I - \\frac{s_k y_k^T}{s_k^T y_k}\\right) H_k \\left(I - \\frac{y_k s_k^T}{s_k^T y_k}\\right) + \\frac{s_k s_k^T}{s_k^T y_k}$$\n        已知在某步迭代中，$H_0 = I$，位移向量 $s_0 = (1, 0)^T$，梯度差向量 $y_0 = (2, -1)^T$：<br>\n        （1）验证曲率条件 $s_0^T y_0 > 0$ 是否成立；<br>\n        （2）分别用 <strong>DFP 公式</strong>和 <strong>BFGS 公式</strong>计算更新后的尺度矩阵 $H_1^{\\text{DFP}}$ 与 $H_1^{\\text{BFGS}}$，并验证两者均满足拟牛顿方程 $H_1 y_0 = s_0$。",
+        "shortAnswer": "（1）$s_0^T y_0 = 2 > 0$，满足曲率正定条件；<br>\n        （2）$H_1^{\\text{DFP}} = \\begin{pmatrix} \\frac{7}{10} & \\frac{2}{5} \\\\[4pt] \\frac{2}{5} & \\frac{4}{5} \\end{pmatrix}$，$H_1^{\\text{BFGS}} = \\begin{pmatrix} \\frac{3}{4} & \\frac{1}{2} \\\\[4pt] \\frac{1}{2} & 1 \\end{pmatrix}$；两者右乘 $y_0 = (2, -1)^T$ 均精确等于 $s_0 = (1, 0)^T$。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 验证曲率条件与计算 $H_1^{\\text{DFP}}$</div>\n            <p>计算内积 $s_0^T y_0 = 1 \\times 2 + 0 \\times (-1) = 2 > 0$，且 $y_0^T H_0 y_0 = 2^2 + (-1)^2 = 5$。由 DFP 公式：</p>\n            <div class=\"math-display\">$$H_1^{\\text{DFP}} = \\begin{pmatrix} 1 & 0 \\\\ 0 & 1 \\end{pmatrix} + \\frac{1}{2}\\begin{pmatrix} 1 & 0 \\\\ 0 & 0 \\end{pmatrix} - \\frac{1}{5}\\begin{pmatrix} 4 & -2 \\\\ -2 & 1 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} \\frac{7}{10} & \\frac{2}{5} \\\\[4pt] \\frac{2}{5} & \\frac{4}{5} \\end{pmatrix}}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 计算 $H_1^{\\text{BFGS}}$ 并验证拟牛顿方程</div>\n            <p>先计算投影矩阵 $P = I - \\dfrac{s_0 y_0^T}{s_0^T y_0} = \\begin{pmatrix} 1 & 0 \\\\ 0 & 1 \\end{pmatrix} - \\dfrac{1}{2}\\begin{pmatrix} 2 & -1 \\\\ 0 & 0 \\end{pmatrix} = \\begin{pmatrix} 0 & \\frac{1}{2} \\\\ 0 & 1 \\end{pmatrix}$。代入 BFGS 公式：</p>\n            <div class=\"math-display\">$$H_1^{\\text{BFGS}} = P P^T + \\frac{s_0 s_0^T}{s_0^T y_0} = \\begin{pmatrix} 0 & \\frac{1}{2} \\\\ 0 & 1 \\end{pmatrix}\\begin{pmatrix} 0 & 0 \\\\ \\frac{1}{2} & 1 \\end{pmatrix} + \\begin{pmatrix} \\frac{1}{2} & 0 \\\\ 0 & 0 \\end{pmatrix} = \\begin{pmatrix} \\frac{1}{4} & \\frac{1}{2} \\\\ \\frac{1}{2} & 1 \\end{pmatrix} + \\begin{pmatrix} \\frac{1}{2} & 0 \\\\ 0 & 0 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} \\frac{3}{4} & \\frac{1}{2} \\\\[4pt] \\frac{1}{2} & 1 \\end{pmatrix}}$$</div>\n            <p>验证拟牛顿方程：$H_1^{\\text{DFP}} y_0 = \\begin{pmatrix} \\frac{14}{10} - \\frac{4}{10} \\\\ \\frac{8}{10} - \\frac{8}{10} \\end{pmatrix} = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix} = s_0$，$H_1^{\\text{BFGS}} y_0 = \\begin{pmatrix} \\frac{6}{4} - \\frac{1}{2} \\\\ 1 - 1 \\end{pmatrix} = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix} = s_0$。</p>\n          </div>\n        "
+      }
+    ]
+  },
+  {
+    "id": "sec6",
+    "sectionNum": "六",
+    "title": "六、可行下降方向（一阶/二阶判定准则与方向构造 · 5题）",
+    "questions": [
+      {
+        "qid": "Q26",
+        "sourceTag": "题型六 · 第1题",
+        "difficulty": "一阶正交时的二阶导数下降性判定",
+        "stem": "已知非凸目标函数 $f(x_1, x_2) = x_1^3 - 3x_1 x_2^2 + 2x_2^2$，当前迭代点为 $x^{(0)} = (1, 1)^T$。给定三个候选方向：$d^{(1)} = (1, 2)^T, \\; d^{(2)} = (2, -1)^T, \\; d^{(3)} = (1, 0)^T$。<br>\n        （1）计算 $x^{(0)}$ 处的梯度 $\\nabla f(x^{(0)})$ 与海森矩阵 $\\nabla^2 f(x^{(0)})$；<br>\n        （2）利用一阶方向导数 $\\nabla f(x^{(0)})^T d$ 与二阶泰勒展开项 $\\frac{1}{2}d^T \\nabla^2 f(x^{(0)}) d$，严格判断 $d^{(1)}, \\; d^{(2)}, \\; d^{(3)}$ 在 $x^{(0)}$ 处是否为<strong>下降方向</strong>（即是否存在 $\\bar{\\alpha} > 0$ 使 $\\forall \\alpha \\in (0, \\bar{\\alpha})$ 有 $f(x^{(0)} + \\alpha d) < f(x^{(0)})$）。",
+        "shortAnswer": "（1）$\\nabla f(1, 1) = (0, -2)^T, \\; \\nabla^2 f(1, 1) = \\begin{pmatrix} 6 & -6 \\\\ -6 & -2 \\end{pmatrix}$；<br>\n        （2）<strong>只有 $d^{(1)} = (1, 2)^T$ 是下降方向</strong>（一阶内积 $-4 < 0$）；$d^{(2)} = (2, -1)^T$ 是一阶上升方向（内积 $+2 > 0$）；$d^{(3)} = (1, 0)^T$ 与梯度正交（一阶内积为 $0$），进一步计算二阶方向导数 $(d^{(3)})^T \\nabla^2 f(1,1) d^{(3)} = +6 > 0$，故 $d^{(3)}$ 也不是下降方向。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 计算 $x^{(0)} = (1, 1)^T$ 处的梯度与海森矩阵</div>\n            <div class=\"math-display\">$$\\nabla f(x) = \\begin{pmatrix} 3x_1^2 - 3x_2^2 \\\\ -6x_1 x_2 + 4x_2 \\end{pmatrix} \\implies \\nabla f(1, 1) = \\begin{pmatrix} 0 \\\\ -2 \\end{pmatrix}$$</div>\n            <div class=\"math-display\">$$\\nabla^2 f(x) = \\begin{pmatrix} 6x_1 & -6x_2 \\\\ -6x_2 & -6x_1 + 4 \\end{pmatrix} \\implies \\nabla^2 f(1, 1) = \\begin{pmatrix} 6 & -6 \\\\ -6 & -2 \\end{pmatrix}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 逐一判定各候选方向（含一阶正交情形）</div>\n            <ul class=\"list-disc pl-6 space-y-2\">\n              <li><strong>方向 $d^{(1)} = (1, 2)^T$：</strong>$\\nabla f(1, 1)^T d^{(1)} = 0\\times 1 + (-2)\\times 2 = -4 < 0$，满足一阶严格下降充分条件，故 <strong>$d^{(1)}$ 是下降方向</strong>。</li>\n              <li><strong>方向 $d^{(2)} = (2, -1)^T$ 与 $d^{(3)} = (-2, 1)^T$：</strong>$\\nabla f(1, 1)^T d^{(2)} = +2 > 0, \\; \\nabla f(1, 1)^T d^{(3)} = -2 < 0$，故 <strong>$d^{(2)}$ 是上升方向，$d^{(3)}$ 是下降方向</strong>。</li>\n              <li><strong>特别地，考察一阶正交方向 $d = (\\pm 1, 0)^T$：</strong>此时 $\\nabla f(1, 1)^T d = 0$，需展开到二阶和高阶：$f(1 \\pm \\alpha, 1) - f(1, 1) = (1 \\pm \\alpha)^3 - 3(1 \\pm \\alpha) + 2 = 3\\alpha^2 \\pm \\alpha^3 > 0 \\; (\\text{当 } \\alpha > 0 \\text{ 充分小时})$，因为二阶导数 $d^T \\nabla^2 f(1,1) d = 6 > 0$，故正交方向 $(\\pm 1, 0)^T$ 在 $x^{(0)}$ 处<strong>不是下降方向</strong>。</li>\n            </ul>\n          </div>\n        "
+      },
+      {
+        "qid": "Q27",
+        "sourceTag": "题型六 · 第2题",
+        "difficulty": "与负梯度夹角条件与双参数范围",
+        "stem": "已知三元函数 $f(x_1, x_2, x_3) = x_1^2 + 2x_2^2 + x_3^2 - 2x_1 x_2 + 2x_3$，在点 $x^{(0)} = (2, 1, 1)^T$ 处：<br>\n        （1）若方向 $d = (k, \\; k - 1, \\; -1)^T$ 是 $x^{(0)}$ 处的下降方向，求实参数 $k$ 的取值范围；<br>\n        （2）当 $k = 0$ 时，求该下降方向 $d$ 与 $x^{(0)}$ 处<strong>最速下降方向</strong> $-\\nabla f(x^{(0)})$ 之间的夹角余弦 $\\cos\\theta$。",
+        "shortAnswer": "（1）$\\nabla f(2, 1, 1) = (2, 0, 4)^T$；由 $\\nabla f^T d = 2k - 4 < 0$ 解得参数范围为 <strong>$k < 2$</strong>；<br>\n        （2）当 $k = 0$ 时，$d = (0, -1, -1)^T$，与最速下降方向 $-\\nabla f = (-2, 0, -4)^T$ 的夹角余弦为 <strong>$\\cos\\theta = \\dfrac{\\sqrt{10}}{5} \\approx 0.6325$</strong>。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 计算梯度并求解参数 $k$ 的不等式</div>\n            <div class=\"math-display\">$$\\nabla f(x) = \\begin{pmatrix} 2x_1 - 2x_2 \\\\ 4x_2 - 2x_1 \\\\ 2x_3 + 2 \\end{pmatrix} \\quad \\Longrightarrow \\quad \\nabla f(2, 1, 1) = \\begin{pmatrix} 4 - 2 \\\\ 4 - 4 \\\\ 2 + 2 \\end{pmatrix} = \\begin{pmatrix} 2 \\\\ 0 \\\\ 4 \\end{pmatrix}$$</div>\n            <p>由一阶下降条件 $\\nabla f(x^{(0)})^T d < 0$：</p>\n            <div class=\"math-display\">$$\\begin{pmatrix} 2 & 0 & 4 \\end{pmatrix}\\begin{pmatrix} k \\\\ k - 1 \\\\ -1 \\end{pmatrix} = 2k + 0 - 4 < 0 \\quad \\Longrightarrow \\quad \\mathbf{k < 2}$$</div>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 计算与最速下降方向的夹角余弦</div>\n            <p>当 $k = 0$ 时，$d = (0, -1, -1)^T$，最速下降方向为 $v = -\\nabla f(x^{(0)}) = (-2, 0, -4)^T$。因此：</p>\n            <div class=\"math-display\">$$\\cos\\theta = \\frac{v^T d}{\\|v\\|_2 \\|d\\|_2} = \\frac{(-2)(0) + 0(-1) + (-4)(-1)}{\\sqrt{(-2)^2 + 0^2 + (-4)^2}\\cdot\\sqrt{0^2 + (-1)^2 + (-1)^2}} = \\frac{4}{\\sqrt{20}\\cdot\\sqrt{2}} = \\frac{4}{2\\sqrt{10}} = \\mathbf{\\frac{\\sqrt{10}}{5}}$$</div>\n          </div>\n        "
+      },
+      {
+        "qid": "Q28",
+        "sourceTag": "题型六 · 第3题",
+        "difficulty": "含参矩阵恒产下降方向的条件",
+        "stem": "在无约束优化算法中，常通过线性变换 $d = -M \\nabla f(x^{(k)})$ 构造搜索方向。给定含实参数 $a$ 的三阶对称矩阵：\n        $$M(a) = \\begin{pmatrix} 2 & -1 & 0 \\\\ -1 & 2 & a \\\\ 0 & a & 3 \\end{pmatrix}$$\n        （1）求实参数 $a$ 的取值范围，使得对<strong>任意</strong>非驻点 $x^{(k)}$（即 $\\nabla f(x^{(k)}) \\neq 0$），方向 $d = -M(a)\\nabla f(x^{(k)})$ <strong>恒为 $f(x)$ 在 $x^{(k)}$ 处的下降方向</strong>；<br>\n        （2）取 $a = 1$，当 $\\nabla f(x^{(k)}) = (1, 2, -1)^T$ 时，求出搜索方向 $d$ 及方向导数 $\\nabla f(x^{(k)})^T d$ 的值。",
+        "shortAnswer": "（1）充要条件是 $M(a)$ 对称正定，由西尔维斯特顺序主子式准则 $\\Delta_1 = 2 > 0, \\; \\Delta_2 = 3 > 0, \\; \\Delta_3 = 9 - 2a^2 > 0$，解得 <strong>$-\\dfrac{3\\sqrt{2}}{2} < a < \\dfrac{3\\sqrt{2}}{2}$</strong>；<br>\n        （2）当 $a = 1$ 时，$d = \\mathbf{(0, \\; -2, \\; 1)^T}$，$\\nabla f(x^{(k)})^T d = \\mathbf{-5 < 0}$。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 转化为对称矩阵正定性并求参数 $a$ 范围</div>\n            <p>要使对一切非零梯度 $g = \\nabla f(x^{(k)}) \\neq 0$ 恒有：</p>\n            <div class=\"math-display\">$$\\nabla f(x^{(k)})^T d = -g^T M(a) g < 0 \\quad \\Longleftrightarrow \\quad g^T M(a) g > 0 \\quad (\\forall g \\neq 0)$$</div>\n            <p>其充要条件是对称矩阵 $M(a)$ <strong>正定</strong>。由 Sylvester 顺序主子式正定判别法：</p>\n            <div class=\"math-display\">$$\\Delta_1 = 2 > 0, \\qquad \\Delta_2 = \\begin{vmatrix} 2 & -1 \\\\ -1 & 2 \\end{vmatrix} = 3 > 0, \\qquad \\Delta_3 = \\det M(a) = 3\\Delta_2 - 2a^2 = 9 - 2a^2 > 0$$</div>\n            <p>由 $a^2 < \\dfrac{9}{2}$ 解得参数 $a$ 的取值范围为 $\\mathbf{-\\dfrac{3\\sqrt{2}}{2} < a < \\dfrac{3\\sqrt{2}}{2}}$。</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 代入 $a = 1$ 计算方向向量与内积</div>\n            <div class=\"math-display\">$$d = -M(1)g = -\\begin{pmatrix} 2 & -1 & 0 \\\\ -1 & 2 & 1 \\\\ 0 & 1 & 3 \\end{pmatrix}\\begin{pmatrix} 1 \\\\ 2 \\\\ -1 \\end{pmatrix} = -\\begin{pmatrix} 0 \\\\ 2 \\\\ -1 \\end{pmatrix} = \\mathbf{\\begin{pmatrix} 0 \\\\ -2 \\\\ 1 \\end{pmatrix}}$$</div>\n            <div class=\"math-display\">$$\\nabla f(x^{(k)})^T d = 1(0) + 2(-2) + (-1)(1) = \\mathbf{-5 < 0}$$</div>\n          </div>\n        "
+      },
+      {
+        "qid": "Q29",
+        "sourceTag": "题型六 · 第4题",
+        "difficulty": "线性不等式约束边界处的可行下降方向",
+        "stem": "考虑带线性不等式约束的最优化问题：\n        $$\\begin{aligned}\n        \\min \\quad & f(x_1, x_2) = (x_1 - 3)^2 + (x_2 - 2)^2 \\\\\n        \\text{s.t.} \\quad & g_1(x) = x_1 + x_2 - 3 \\le 0 \\\\\n        & g_2(x) = x_1 - 2x_2 + 1 \\le 0\n        \\end{aligned}$$\n        已知当前迭代点 $x^{(0)} = (1, 2)^T$ 位于可行域边界上。<br>\n        （1）确定 $x^{(0)}$ 处的<strong>起作用约束（有效约束）指标集 $I(x^{(0)})$</strong>，并写出方向 $d = (d_1, d_2)^T$ 在 $x^{(0)}$ 处为<strong>可行方向</strong>与<strong>下降方向</strong>的代数充要条件；<br>\n        （2）判断候选方向 $d^{(1)} = (1, -1)^T, \\; d^{(2)} = (1, -2)^T, \\; d^{(3)} = (2, -1)^T$ 中哪些是 $x^{(0)}$ 处的<strong>可行下降方向</strong>。",
+        "shortAnswer": "（1）在 $x^{(0)} = (1, 2)^T$ 处，$g_1(1, 2) = 0, \\; g_2(1, 2) = -2 < 0$，有效约束仅为 $g_1$；可行条件为 $\\nabla g_1^T d = d_1 + d_2 \\le 0$，下降条件为 $\\nabla f(1, 2)^T d = -4d_1 < 0 \\Longleftrightarrow d_1 > 0$；<br>\n        （2）<strong>$d^{(1)} = (1, -1)^T$ 和 $d^{(2)} = (1, -2)^T$ 是可行下降方向</strong>；$d^{(3)} = (2, -1)^T$ 因 $d_1 + d_2 = 1 > 0$ 违背可行性，不是可行方向。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 确定有效约束集与可行下降方向充要条件</div>\n            <p>代入 $x^{(0)} = (1, 2)^T$ 检验约束：$g_1(1, 2) = 1 + 2 - 3 = 0$（起作用约束），$g_2(1, 2) = 1 - 4 + 1 = -2 < 0$（不起作用内部约束）。对于线性约束，方向 $d = (d_1, d_2)^T$ 在 $x^{(0)}$ 处：</p>\n            <ul class=\"list-disc pl-6 space-y-1.5\">\n              <li><strong>可行方向充要条件：</strong>$\\nabla g_1(x^{(0)})^T d \\le 0 \\Longleftrightarrow \\begin{pmatrix} 1 & 1 \\end{pmatrix}\\begin{pmatrix} d_1 \\\\ d_2 \\end{pmatrix} = \\mathbf{d_1 + d_2 \\le 0}$；</li>\n              <li><strong>下降方向一阶条件：</strong>因 $\\nabla f(x) = (2x_1 - 6, \\; 2x_2 - 4)^T \\implies \\nabla f(1, 2) = (-4, 0)^T$，故 $\\nabla f(1, 2)^T d = -4d_1 < 0 \\Longleftrightarrow \\mathbf{d_1 > 0}$。</li>\n            </ul>\n            <p>综上，$x^{(0)}$ 处的可行下降方向必须同时满足：$\\mathbf{d_1 > 0}$ 且 $\\mathbf{d_1 + d_2 \\le 0}$。</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 检验三个候选方向</div>\n            <ul class=\"list-disc pl-6 space-y-1.5\">\n              <li>$d^{(1)} = (1, -1)^T$：$d_1 = 1 > 0$（下降），且 $d_1 + d_2 = 0 \\le 0$（沿边界可行），<strong>是可行下降方向</strong>；</li>\n              <li>$d^{(2)} = (1, -2)^T$：$d_1 = 1 > 0$（下降），且 $d_1 + d_2 = -1 < 0$（指向可行域内部），<strong>是可行下降方向</strong>；</li>\n              <li>$d^{(3)} = (2, -1)^T$：虽 $d_1 = 2 > 0$ 下降，但 $d_1 + d_2 = 1 > 0$ 跑出可行域外，<strong>不是可行方向</strong>。</li>\n            </ul>\n          </div>\n        "
+      },
+      {
+        "qid": "Q30",
+        "sourceTag": "题型六 · 第5题",
+        "difficulty": "最速下降方向的解析推导证明",
+        "stem": "设函数 $f(x)$ 在点 $x^{(k)}$ 处一阶连续可微，且梯度 $\\nabla f(x^{(k)}) \\neq 0$。<br>\n        （1）利用一阶泰勒展开证明：若向量 $d \\in \\mathbb{R}^n$ 满足 $\\nabla f(x^{(k)})^T d < 0$，则必存在常数 $\\bar{\\alpha} > 0$，使得对任意步长 $\\alpha \\in (0, \\bar{\\alpha})$ 均有 $f(x^{(k)} + \\alpha d) < f(x^{(k)})$；<br>\n        （2）在所有欧氏范数等于 $1$ 的单位方向向量 $\\|d\\|_2 = 1$ 中，求解约束优化问题：\n        $$\\min_{\\|d\\|_2 = 1} \\nabla f(x^{(k)})^T d$$\n        利用柯西-施瓦茨不等式（或拉格朗日乘子法）证明：使方向导数下降最快的单位方向恰为<strong>单位负梯度方向</strong> $d^* = -\\dfrac{\\nabla f(x^{(k)})}{\\|\\nabla f(x^{(k)})\\|_2}$。",
+        "shortAnswer": "（1）由泰勒展开 $f(x^{(k)} + \\alpha d) - f(x^{(k)}) = \\alpha \\big[\\nabla f(x^{(k)})^T d + o(1)\\big]$，因 $\\nabla f(x^{(k)})^T d < 0$，由保号性当 $\\alpha > 0$ 充分小时括号内严格为负，故 $f(x^{(k)} + \\alpha d) < f(x^{(k)})$；<br>\n        （2）由柯西不等式 $\\nabla f(x^{(k)})^T d \\ge -\\|\\nabla f(x^{(k)})\\|_2 \\|d\\|_2 = -\\|\\nabla f(x^{(k)})\\|_2$，等号成立当且仅当 $d = -\\dfrac{\\nabla f(x^{(k)})}{\\|\\nabla f(x^{(k)})\\|_2}$。",
+        "detailedSolution": "\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (1) 问</span> 严格证明一阶下降充分条件</div>\n            <p>因为 $f(x)$ 在 $x^{(k)}$ 处可微，对任意 $\\alpha > 0$，由带皮亚诺余项的一阶泰勒展开式有：</p>\n            <div class=\"math-display\">$$f\\big(x^{(k)} + \\alpha d\\big) - f\\big(x^{(k)}\\big) = \\alpha \\nabla f\\big(x^{(k)}\\big)^T d + o(\\alpha) = \\alpha \\left[\\nabla f\\big(x^{(k)}\\big)^T d + \\frac{o(\\alpha)}{\\alpha}\\right]$$</div>\n            <p>由于 $\\lim_{\\alpha \\to 0^+} \\dfrac{o(\\alpha)}{\\alpha} = 0$，且已知 $\\nabla f(x^{(k)})^T d < 0$，取 $\\varepsilon = -\\dfrac{1}{2}\\nabla f(x^{(k)})^T d > 0$，则必存在 $\\bar{\\alpha} > 0$，当 $\\alpha \\in (0, \\bar{\\alpha})$ 时有 $\\left|\\dfrac{o(\\alpha)}{\\alpha}\\right| < \\varepsilon$，从而：</p>\n            <div class=\"math-display\">$$f\\big(x^{(k)} + \\alpha d\\big) - f\\big(x^{(k)}\\big) < \\alpha\\left[\\nabla f\\big(x^{(k)}\\big)^T d - \\frac{1}{2}\\nabla f\\big(x^{(k)}\\big)^T d\\right] = \\frac{\\alpha}{2}\\nabla f\\big(x^{(k)}\\big)^T d < 0$$</div>\n            <p>即 $f(x^{(k)} + \\alpha d) < f(x^{(k)})$，故 $d$ 必为下降方向。</p>\n          </div>\n          <div class=\"step-card\">\n            <div class=\"step-title\"><span class=\"step-badge\">第 (2) 问</span> 证明负梯度方向是局部下降最快的方向</div>\n            <p>对任意满足 $\\|d\\|_2 = 1$ 的单位方向向量 $d$，由柯西-施瓦茨不等式（或内积夹角公式 $\\nabla f^T d = \\|\\nabla f\\|_2 \\|d\\|_2 \\cos\\theta$）：</p>\n            <div class=\"math-display\">$$\\nabla f\\big(x^{(k)}\\big)^T d \\ge -\\big\\|\\nabla f\\big(x^{(k)}\\big)\\big\\|_2 \\cdot \\|d\\|_2 = -\\big\\|\\nabla f\\big(x^{(k)}\\big)\\big\\|_2$$</div>\n            <p>上述不等式左端达到最小值的充要条件是 $\\cos\\theta = -1$，即 $d$ 与梯度 $\\nabla f(x^{(k)})$ 反向共线。结合单位长度约束 $\\|d\\|_2 = 1$，唯一最优解为：</p>\n            <div class=\"math-display\">$$d^* = -\\frac{\\nabla f\\big(x^{(k)}\\big)}{\\big\\|\\nabla f\\big(x^{(k)}\\big)\\big\\|_2}$$</div>\n            <p>这就是负梯度方向被称为“最速下降方向”的严格数学依据。</p>\n          </div>\n        "
+      }
+    ]
+  }
+];
+
+    const state = {
+      typeFilter: "all",
+      statusFilter: "all",
+      searchQuery: "",
+      visibility: {},
+      progress: {}
+    };
+
+    function typesetMath(targetEl) {
+      if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+        window.MathJax.typesetPromise(targetEl ? [targetEl] : undefined).catch(() => {});
+      }
+    }
+
+    function loadProgress() {
+      try {
+        const raw = localStorage.getItem("unconstrained_opt_30_progress_v1");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object") {
+            state.progress = parsed;
+          }
+        }
+      } catch (e) {}
+    }
+
+    function saveProgress() {
+      try {
+        localStorage.setItem("unconstrained_opt_30_progress_v1", JSON.stringify(state.progress));
+      } catch (e) {}
+    }
+
+    function initState() {
+      loadProgress();
+      QUESTION_CATEGORIES.forEach(cat => {
+        cat.questions.forEach(q => {
+          // Default to expanded so detailed solutions are immediately visible, while still allowing 1-click hide for self-testing
+          state.visibility[q.qid] = { showShort: true, showDetail: true };
+          if (!state.progress[q.qid]) {
+            state.progress[q.qid] = { mastered: false, starred: false };
+          }
+        });
+      });
+    }
+
+    function syncQuestionCardDOM(qid) {
+      const card = document.getElementById(`card-${qid}`);
+      if (!card) return;
+      const vis = state.visibility[qid] || { showShort: true, showDetail: true };
+      const prog = state.progress[qid] || { mastered: false, starred: false };
+
+      const shortBox = document.getElementById(`short-box-${qid}`);
+      const detailBox = document.getElementById(`detail-box-${qid}`);
+      const btnShort = card.querySelector('[data-action="toggle-short"]');
+      const btnDetail = card.querySelector('[data-action="toggle-detail"]');
+      const btnStar = card.querySelector('[data-action="toggle-star"]');
+      const btnMaster = card.querySelector('[data-action="toggle-master"]');
+
+      if (shortBox) {
+        shortBox.classList.toggle("hidden", !vis.showShort);
+        shortBox.classList.toggle("block", vis.showShort);
+      }
+      if (detailBox) {
+        detailBox.classList.toggle("hidden", !vis.showDetail);
+        detailBox.classList.toggle("block", vis.showDetail);
+      }
+      if (btnShort) {
+        btnShort.textContent = vis.showShort ? "🙈 隐藏最终结论" : "👁️ 查看最终结论";
+        btnShort.className = `px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition ${vis.showShort ? 'bg-amber-600 text-white shadow-sm' : 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'}`;
+      }
+      if (btnDetail) {
+        btnDetail.textContent = vis.showDetail ? "🙈 隐藏详细解析" : "📖 查看详细分步解析";
+        btnDetail.className = `px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition ${vis.showDetail ? 'bg-indigo-600 text-white shadow-sm' : 'bg-indigo-50 text-indigo-800 border border-indigo-200 hover:bg-indigo-100'}`;
+      }
+      if (btnStar) {
+        btnStar.textContent = prog.starred ? "⭐ 已标重点" : "☆ 标为重点";
+        btnStar.className = `px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium border transition ${prog.starred ? 'bg-amber-100 border-amber-300 text-amber-800' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`;
+      }
+      if (btnMaster) {
+        btnMaster.textContent = prog.mastered ? "✅ 已掌握" : "○ 标记掌握";
+        btnMaster.className = `px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium border transition ${prog.mastered ? 'bg-emerald-100 border-emerald-300 text-emerald-800' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`;
+      }
+
+      card.className = `bg-white rounded-2xl border ${prog.mastered ? 'border-emerald-300 bg-emerald-50/10' : (prog.starred ? 'border-amber-300' : 'border-slate-200/90')} shadow-sm p-6 sm:p-8 transition`;
+      updateDashboardCounts();
+    }
+
+    function updateDashboardCounts() {
+      let masteredTotal = 0;
+      let starredTotal = 0;
+      QUESTION_CATEGORIES.forEach(cat => {
+        cat.questions.forEach(q => {
+          const prog = state.progress[q.qid] || {};
+          if (prog.mastered) masteredTotal++;
+          if (prog.starred) starredTotal++;
+        });
+      });
+      document.getElementById("statMasteredCount").textContent = masteredTotal;
+      document.getElementById("statStarredCount").textContent = starredTotal;
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById("questionsView");
+      const qLower = state.searchQuery.trim().toLowerCase();
+
+      let visibleQuestionsCount = 0;
+      const sectionsHtml = [];
+
+      QUESTION_CATEGORIES.forEach(cat => {
+        if (state.typeFilter !== "all" && cat.id !== state.typeFilter) return;
+
+        const filteredQs = cat.questions.filter(q => {
+          const prog = state.progress[q.qid] || {};
+          if (state.statusFilter === "mastered" && !prog.mastered) return false;
+          if (state.statusFilter === "unmastered" && prog.mastered) return false;
+          if (state.statusFilter === "starred" && !prog.starred) return false;
+
+          if (qLower) {
+            const hay = (cat.title + " " + q.qid + " " + q.sourceTag + " " + q.difficulty + " " + q.stem + " " + q.shortAnswer).toLowerCase();
+            if (!hay.includes(qLower)) return false;
+          }
+          return true;
+        });
+
+        if (filteredQs.length === 0) return;
+        visibleQuestionsCount += filteredQs.length;
+
+        const cardsHtml = filteredQs.map(q => {
+          const vis = state.visibility[q.qid] || { showShort: true, showDetail: true };
+          const prog = state.progress[q.qid] || { mastered: false, starred: false };
+
+          return `
+            <article id="card-${q.qid}" class="bg-white rounded-2xl border ${prog.mastered ? 'border-emerald-300 bg-emerald-50/10' : (prog.starred ? 'border-amber-300' : 'border-slate-200/90')} shadow-sm p-6 sm:p-8 transition">
+              <!-- Question Top Metadata Bar -->
+              <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-5 border-b border-slate-100">
+                <div class="flex flex-wrap items-center gap-2.5">
+                  <span class="px-3 py-1 rounded-lg bg-slate-900 text-white text-xs sm:text-sm font-bold tracking-wide">${q.qid}</span>
+                  <span class="px-3 py-1 rounded-lg bg-sky-50 text-sky-700 text-xs sm:text-sm font-semibold border border-sky-200">${q.sourceTag}</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 font-medium text-xs sm:text-sm">${q.difficulty}</span>
+                </div>
+
+                <div class="flex items-center gap-2 no-print">
+                  <button data-action="toggle-star" data-qid="${q.qid}" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium border transition ${prog.starred ? 'bg-amber-100 border-amber-300 text-amber-800' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}">
+                    ${prog.starred ? '⭐ 已标重点' : '☆ 标为重点'}
+                  </button>
+                  <button data-action="toggle-master" data-qid="${q.qid}" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium border transition ${prog.mastered ? 'bg-emerald-100 border-emerald-300 text-emerald-800' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}">
+                    ${prog.mastered ? '✅ 已掌握' : '○ 标记掌握'}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Spacious Question Stem -->
+              <div class="text-base sm:text-lg text-slate-800 font-medium leading-loose mb-6">
+                ${q.stem}
+              </div>
+
+              <!-- Toggle Answer Buttons -->
+              <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-slate-100 no-print">
+                <button data-action="toggle-short" data-qid="${q.qid}" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition ${vis.showShort ? 'bg-amber-600 text-white shadow-sm' : 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'}">
+                  ${vis.showShort ? '🙈 隐藏最终结论' : '👁️ 查看最终结论'}
+                </button>
+                <button data-action="toggle-detail" data-qid="${q.qid}" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition ${vis.showDetail ? 'bg-indigo-600 text-white shadow-sm' : 'bg-indigo-50 text-indigo-800 border border-indigo-200 hover:bg-indigo-100'}">
+                  ${vis.showDetail ? '🙈 隐藏详细解析' : '📖 查看详细分步解析'}
+                </button>
+              </div>
+
+              <!-- Collapsible Short Answer Box -->
+              <div id="short-box-${q.qid}" class="${vis.showShort ? 'block' : 'hidden'} print-expand mt-5 p-5 rounded-2xl bg-amber-50/80 border border-amber-200 text-sm sm:text-base text-slate-800 leading-relaxed">
+                <div class="font-bold text-amber-900 mb-2 flex items-center gap-1.5">
+                  <span>🎯 最终结论汇总</span>
+                </div>
+                <div>${q.shortAnswer}</div>
+              </div>
+
+              <!-- Collapsible Detailed Step-by-Step Solution Box -->
+              <div id="detail-box-${q.qid}" class="${vis.showDetail ? 'block' : 'hidden'} print-expand mt-5 p-6 sm:p-7 rounded-2xl bg-slate-50/90 border border-indigo-200/90 text-sm sm:text-base text-slate-800 leading-loose">
+                <div class="font-bold text-indigo-950 text-base sm:text-lg mb-4 pb-3 border-b border-indigo-100 flex flex-wrap items-center justify-between gap-2">
+                  <span>📐 详细分步解题与推导过程</span>
+                  <span class="text-xs sm:text-sm font-normal text-indigo-600">${cat.title}</span>
+                </div>
+                <div class="space-y-4">
+                  ${q.detailedSolution}
+                </div>
+              </div>
+            </article>
+          `;
+        }).join("");
+
+        sectionsHtml.push(`
+          <div class="bg-white/80 rounded-3xl border border-slate-200/90 p-6 sm:p-9 shadow-sm">
+            <!-- Category Header -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-200/80">
+              <div>
+                <h2 class="text-lg sm:text-xl font-bold text-slate-900">${cat.title}</h2>
+              </div>
+              <div class="flex items-center gap-2.5 no-print">
+                <button data-cat-action="show-cat" data-cat="${cat.id}" class="text-xs sm:text-sm px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition">展开本组 5 题解析</button>
+                <button data-cat-action="hide-cat" data-cat="${cat.id}" class="text-xs sm:text-sm px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition">隐藏本组 5 题答案</button>
+              </div>
+            </div>
+
+            <!-- Spacious 5 Questions Stack -->
+            <div class="space-y-7">
+              ${cardsHtml}
+            </div>
+          </div>
+        `);
+      });
+
+      if (sectionsHtml.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-3xl border border-slate-200 p-14 text-center">
+            <div class="text-4xl mb-3">🔍</div>
+            <h3 class="text-lg font-bold text-slate-800">没有找到匹配的题目</h3>
+            <p class="text-sm text-slate-500 mt-1.5">请尝试切换题型筛选、状态筛选或清空搜索关键词。</p>
+            <button id="btnResetFiltersEmpty" class="mt-5 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-500 transition">恢复显示全部 30 道题</button>
+          </div>
+        `;
+        const resetBtn = document.getElementById("btnResetFiltersEmpty");
+        if (resetBtn) {
+          resetBtn.addEventListener("click", () => {
+            state.typeFilter = "all";
+            state.statusFilter = "all";
+            state.searchQuery = "";
+            document.getElementById("typeSelect").value = "all";
+            document.getElementById("searchInput").value = "";
+            document.getElementById("btnClearSearch").classList.add("hidden");
+            updateStatusFilterUI();
+            renderQuestions();
+          });
+        }
+      } else {
+        container.innerHTML = sectionsHtml.join("");
+      }
+
+      document.getElementById("statVisibleCount").textContent = visibleQuestionsCount;
+      updateDashboardCounts();
+      typesetMath(container);
+    }
+
+    function updateStatusFilterUI() {
+      document.querySelectorAll(".status-filter-btn").forEach(btn => {
+        const val = btn.getAttribute("data-status-filter");
+        if (val === state.statusFilter) {
+          btn.className = "status-filter-btn px-3 py-1 rounded-lg bg-white text-slate-800 font-medium shadow-sm";
+        } else {
+          btn.className = "status-filter-btn px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900";
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initState();
+      renderQuestions();
+
+      document.getElementById("btnHideAll").addEventListener("click", () => {
+        Object.keys(state.visibility).forEach(qid => {
+          state.visibility[qid] = { showShort: false, showDetail: false };
+          syncQuestionCardDOM(qid);
+        });
+        document.getElementById("statModeLabel").textContent = "全部已隐藏 (自测模式)";
+        document.getElementById("statModeLabel").className = "text-emerald-700";
+      });
+
+      document.getElementById("btnShowAnswersOnly").addEventListener("click", () => {
+        Object.keys(state.visibility).forEach(qid => {
+          state.visibility[qid] = { showShort: true, showDetail: false };
+          syncQuestionCardDOM(qid);
+        });
+        document.getElementById("statModeLabel").textContent = "仅看全部最终结论";
+        document.getElementById("statModeLabel").className = "text-amber-700";
+        typesetMath(document.getElementById("questionsView"));
+      });
+
+      document.getElementById("btnShowAllFull").addEventListener("click", () => {
+        Object.keys(state.visibility).forEach(qid => {
+          state.visibility[qid] = { showShort: true, showDetail: true };
+          syncQuestionCardDOM(qid);
+        });
+        document.getElementById("statModeLabel").textContent = "已展开全部答案与详解";
+        document.getElementById("statModeLabel").className = "text-indigo-700";
+        typesetMath(document.getElementById("questionsView"));
+      });
+
+      document.getElementById("typeSelect").addEventListener("change", (e) => {
+        state.typeFilter = e.target.value;
+        renderQuestions();
+      });
+
+      document.querySelectorAll(".status-filter-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.statusFilter = btn.getAttribute("data-status-filter");
+          updateStatusFilterUI();
+          renderQuestions();
+        });
+      });
+
+      const searchInput = document.getElementById("searchInput");
+      const btnClearSearch = document.getElementById("btnClearSearch");
+      searchInput.addEventListener("input", (e) => {
+        state.searchQuery = e.target.value;
+        btnClearSearch.classList.toggle("hidden", !state.searchQuery);
+        renderQuestions();
+      });
+      btnClearSearch.addEventListener("click", () => {
+        state.searchQuery = "";
+        searchInput.value = "";
+        btnClearSearch.classList.add("hidden");
+        renderQuestions();
+      });
+
+      document.getElementById("btnResetProgress").addEventListener("click", () => {
+        Object.keys(state.progress).forEach(qid => {
+          state.progress[qid] = { mastered: false, starred: false };
+          syncQuestionCardDOM(qid);
+        });
+        saveProgress();
+        if (state.statusFilter !== "all") renderQuestions();
+      });
+
+      document.getElementById("questionsView").addEventListener("click", (e) => {
+        const actionBtn = e.target.closest("[data-action]");
+        if (actionBtn) {
+          const action = actionBtn.getAttribute("data-action");
+          const qid = actionBtn.getAttribute("data-qid");
+          if (!qid) return;
+
+          if (action === "toggle-short") {
+            state.visibility[qid].showShort = !state.visibility[qid].showShort;
+            syncQuestionCardDOM(qid);
+            typesetMath(document.getElementById(`card-${qid}`));
+          } else if (action === "toggle-detail") {
+            const nextState = !state.visibility[qid].showDetail;
+            state.visibility[qid].showDetail = nextState;
+            if (nextState) state.visibility[qid].showShort = true;
+            syncQuestionCardDOM(qid);
+            typesetMath(document.getElementById(`card-${qid}`));
+          } else if (action === "toggle-master") {
+            state.progress[qid].mastered = !state.progress[qid].mastered;
+            saveProgress();
+            if (state.statusFilter === "mastered" || state.statusFilter === "unmastered") {
+              renderQuestions();
+            } else {
+              syncQuestionCardDOM(qid);
+            }
+          } else if (action === "toggle-star") {
+            state.progress[qid].starred = !state.progress[qid].starred;
+            saveProgress();
+            if (state.statusFilter === "starred") {
+              renderQuestions();
+            } else {
+              syncQuestionCardDOM(qid);
+            }
+          }
+          return;
+        }
+
+        const catBtn = e.target.closest("[data-cat-action]");
+        if (catBtn) {
+          const catAction = catBtn.getAttribute("data-cat-action");
+          const catId = catBtn.getAttribute("data-cat");
+          const catObj = QUESTION_CATEGORIES.find(c => c.id === catId);
+          if (!catObj) return;
+          catObj.questions.forEach(q => {
+            if (catAction === "show-cat") {
+              state.visibility[q.qid] = { showShort: true, showDetail: true };
+            } else {
+              state.visibility[q.qid] = { showShort: false, showDetail: false };
+            }
+            syncQuestionCardDOM(q.qid);
+          });
+          typesetMath(document.getElementById("questionsView"));
+        }
+      });
+    });
+  </script>
+</body>
+</html>

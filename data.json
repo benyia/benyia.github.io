@@ -27,6 +27,7 @@
     },
     "homeSections": [
       "courses",
+      "collections",
       "papers",
       "notices",
       "classItems"
@@ -871,6 +872,10 @@
   "logs": [
     {
       "time": "2026-11-18 13:09",
+      "action": "修改首页显示内容"
+    },
+    {
+      "time": "2026-11-18 13:09",
       "action": "修改站点设置"
     },
     {
@@ -1264,10 +1269,6 @@
     {
       "time": "2026-09-28 10:50",
       "action": "添加音乐：头像1"
-    },
-    {
-      "time": "2026-09-28 10:45",
-      "action": "移除图片"
     }
   ],
   "categories": [

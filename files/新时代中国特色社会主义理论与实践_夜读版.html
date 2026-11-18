@@ -1,0 +1,1696 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="night">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0f141b">
+  <meta name="description" content="《新时代中国特色社会主义理论与实践》简答题与论述题夜读版">
+  <title>新时代中国特色社会主义理论与实践 · 夜读版</title>
+  <style>
+    :root {
+      --reader-size: 19px;
+      --reader-leading: 2;
+      --sidebar: 278px;
+      --radius: 20px;
+      --radius-sm: 12px;
+      --shadow: 0 18px 50px rgba(0, 0, 0, .2);
+      --font-ui: "Microsoft YaHei UI", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+      --font-reading: "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "SimSun", serif;
+    }
+
+    html[data-theme="night"] {
+      --bg: #0f141b;
+      --bg-deep: #0b0f15;
+      --sidebar-bg: rgba(15, 20, 27, .93);
+      --surface: #161d26;
+      --surface-raised: #1a232e;
+      --surface-soft: #1e2935;
+      --ink: #ddd8cc;
+      --ink-strong: #f1ecdf;
+      --muted: #9da6ad;
+      --faint: #737e88;
+      --line: rgba(224, 216, 196, .11);
+      --line-strong: rgba(224, 216, 196, .19);
+      --accent: #d4ad70;
+      --accent-bright: #ebc789;
+      --accent-soft: rgba(212, 173, 112, .12);
+      --accent-line: rgba(212, 173, 112, .35);
+      --mark: rgba(212, 173, 112, .16);
+    }
+
+    html[data-theme="ink"] {
+      --bg: #080a0d;
+      --bg-deep: #050608;
+      --sidebar-bg: rgba(8, 10, 13, .95);
+      --surface: #0e1115;
+      --surface-raised: #12161b;
+      --surface-soft: #161b21;
+      --ink: #c9c8c2;
+      --ink-strong: #e7e4da;
+      --muted: #8d9296;
+      --faint: #666c71;
+      --line: rgba(225, 220, 205, .09);
+      --line-strong: rgba(225, 220, 205, .16);
+      --accent: #d6b276;
+      --accent-bright: #e8c88e;
+      --accent-soft: rgba(214, 178, 118, .1);
+      --accent-line: rgba(214, 178, 118, .3);
+      --mark: rgba(214, 178, 118, .14);
+    }
+
+    html[data-theme="paper"] {
+      --bg: #eee9de;
+      --bg-deep: #e7e0d3;
+      --sidebar-bg: rgba(238, 233, 222, .94);
+      --surface: #f6f1e7;
+      --surface-raised: #fbf7ef;
+      --surface-soft: #e9e2d5;
+      --ink: #36342f;
+      --ink-strong: #1d1c19;
+      --muted: #716d64;
+      --faint: #938d82;
+      --line: rgba(74, 66, 52, .15);
+      --line-strong: rgba(74, 66, 52, .24);
+      --accent: #89622d;
+      --accent-bright: #6f4b1f;
+      --accent-soft: rgba(137, 98, 45, .1);
+      --accent-line: rgba(137, 98, 45, .28);
+      --mark: rgba(196, 151, 66, .2);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg-deep);
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 80% 4%, var(--accent-soft), transparent 30rem),
+        linear-gradient(180deg, var(--bg), var(--bg-deep));
+      font-family: var(--font-ui);
+      transition: background-color .25s ease, color .25s ease;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ::selection {
+      color: var(--ink-strong);
+      background: var(--mark);
+    }
+
+    .progress-track {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 100;
+      height: 3px;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+      box-shadow: 0 0 12px var(--accent-line);
+      transition: width .08s linear;
+    }
+
+    .page-shell {
+      width: min(100% - 40px, 1280px);
+      margin: 0 auto;
+      padding: 30px 0 64px;
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0, 880px);
+      gap: clamp(28px, 5vw, 64px);
+      align-items: start;
+    }
+
+    .toc {
+      position: sticky;
+      top: 24px;
+      max-height: calc(100vh - 48px);
+      padding: 24px 18px 18px;
+      overflow: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--line-strong) transparent;
+      background: var(--sidebar-bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .toc-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 4px 17px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      display: grid;
+      place-items: center;
+      color: var(--bg-deep);
+      background: linear-gradient(145deg, var(--accent-bright), var(--accent));
+      border-radius: 14px 14px 14px 5px;
+      font-family: var(--font-reading);
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .brand-text strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--ink-strong);
+      font-family: var(--font-reading);
+      font-size: 15px;
+      letter-spacing: .06em;
+    }
+
+    .brand-text span {
+      color: var(--faint);
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .toc-search {
+      width: 100%;
+      height: 38px;
+      margin: 17px 0 14px;
+      padding: 0 12px 0 34px;
+      color: var(--ink);
+      background: var(--surface-soft);
+      border: 1px solid transparent;
+      border-radius: 10px;
+      outline: 0;
+      transition: border-color .2s ease, background .2s ease;
+    }
+
+    .toc-search:focus {
+      background: var(--surface-raised);
+      border-color: var(--accent-line);
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap::before {
+      content: "⌕";
+      position: absolute;
+      top: 27px;
+      left: 12px;
+      z-index: 1;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .toc-label {
+      margin: 17px 8px 8px;
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .18em;
+    }
+
+    .toc-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .toc-list a {
+      position: relative;
+      display: block;
+      padding: 8px 10px 8px 30px;
+      color: var(--muted);
+      border-radius: 9px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      transition: color .18s ease, background .18s ease;
+    }
+
+    .toc-list a::before {
+      content: attr(data-num);
+      position: absolute;
+      top: 9px;
+      left: 9px;
+      color: var(--faint);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .toc-list a:hover {
+      color: var(--ink-strong);
+      background: var(--accent-soft);
+    }
+
+    .toc-list a.active {
+      color: var(--accent-bright);
+      background: var(--accent-soft);
+    }
+
+    .toc-list a.active::after {
+      content: "";
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 3px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 4px;
+    }
+
+    .toc-empty {
+      display: none;
+      padding: 12px 10px;
+      color: var(--faint);
+      font-size: 12px;
+    }
+
+    .toc-foot {
+      margin-top: 18px;
+      padding: 15px 9px 2px;
+      color: var(--faint);
+      border-top: 1px solid var(--line);
+      font-size: 10.5px;
+      line-height: 1.7;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 390px;
+      padding: clamp(32px, 6vw, 68px);
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, .025), transparent 55%),
+        var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "理";
+      position: absolute;
+      right: -22px;
+      bottom: -88px;
+      color: var(--accent);
+      font-family: "STKaiti", "KaiTi", var(--font-reading);
+      font-size: clamp(230px, 30vw, 370px);
+      line-height: 1;
+      opacity: .045;
+      transform: rotate(-7deg);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: 38px;
+      top: 34px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 17px 0 var(--accent-line), 0 34px 0 var(--accent-line);
+      opacity: .7;
+    }
+
+    .hero-kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+      color: var(--accent-bright);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .2em;
+    }
+
+    .hero-kicker::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .hero h1 {
+      max-width: 680px;
+      margin: 0;
+      color: var(--ink-strong);
+      font-family: var(--font-reading);
+      font-size: clamp(37px, 6vw, 59px);
+      font-weight: 700;
+      letter-spacing: -.035em;
+      line-height: 1.23;
+      text-wrap: balance;
+    }
+
+    .hero-subtitle {
+      max-width: 610px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-family: var(--font-reading);
+      font-size: 15px;
+      line-height: 1.85;
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 24px;
+      margin-top: 36px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .hero-stats span {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 7px;
+    }
+
+    .hero-stats strong {
+      color: var(--ink-strong);
+      font-family: var(--font-reading);
+      font-size: 23px;
+      font-weight: 600;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 12px;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 18px 0 34px;
+      padding: 9px;
+      background: rgba(15, 20, 27, .8);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, .18);
+      backdrop-filter: blur(18px);
+    }
+
+    html[data-theme="paper"] .toolbar {
+      background: rgba(246, 241, 231, .86);
+    }
+
+    .tool-btn {
+      display: inline-flex;
+      min-height: 34px;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 10px;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: color .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .tool-btn:hover {
+      color: var(--ink-strong);
+      background: var(--surface-soft);
+      border-color: var(--line);
+    }
+
+    .tool-btn:focus-visible,
+    .toc-search:focus-visible,
+    .toc-list a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .tool-btn:disabled {
+      opacity: .35;
+      cursor: default;
+    }
+
+    .tool-size {
+      width: 34px;
+      padding: 0;
+      font-family: var(--font-reading);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .toolbar-divider {
+      width: 1px;
+      height: 20px;
+      margin: 0 2px;
+      background: var(--line);
+    }
+
+    .toolbar-spacer {
+      flex: 1;
+    }
+
+    .progress-label {
+      min-width: 38px;
+      padding-right: 4px;
+      color: var(--accent-bright);
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .mobile-menu {
+      display: none;
+    }
+
+    .part-heading {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin: 54px 0 20px;
+      color: var(--ink-strong);
+      font-family: var(--font-reading);
+      font-size: 26px;
+    }
+
+    .part-heading:first-of-type {
+      margin-top: 12px;
+    }
+
+    .part-index {
+      display: grid;
+      width: 35px;
+      height: 35px;
+      place-items: center;
+      flex: 0 0 35px;
+      color: var(--bg-deep);
+      background: var(--accent);
+      border-radius: 50%;
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .part-heading::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: linear-gradient(90deg, var(--line-strong), transparent);
+    }
+
+    .qa {
+      position: relative;
+      margin: 15px 0;
+      overflow: clip;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      scroll-margin-top: 76px;
+      transition: border-color .2s ease, background .2s ease;
+    }
+
+    .qa:hover {
+      border-color: var(--line-strong);
+    }
+
+    .qa[open] {
+      background: var(--surface-raised);
+      border-color: var(--accent-line);
+    }
+
+    .qa summary {
+      position: relative;
+      display: grid;
+      grid-template-columns: 43px minmax(0, 1fr) 25px;
+      gap: 15px;
+      align-items: start;
+      padding: 22px 24px;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+
+    .qa summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .qa-number {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      color: var(--accent-bright);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-line);
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .qa-title {
+      padding-top: 3px;
+      color: var(--ink-strong);
+      font-family: var(--font-reading);
+      font-size: calc(var(--reader-size) + 1px);
+      font-weight: 700;
+      line-height: 1.62;
+      text-wrap: pretty;
+    }
+
+    .qa-title small {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--faint);
+      font-family: var(--font-ui);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: .15em;
+    }
+
+    .qa-chevron {
+      width: 25px;
+      height: 25px;
+      margin-top: 8px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      transition: transform .22s ease, border-color .22s ease;
+    }
+
+    .qa-chevron::before,
+    .qa-chevron::after {
+      content: "";
+      position: absolute;
+      background: var(--muted);
+      border-radius: 2px;
+    }
+
+    .qa-chevron {
+      position: relative;
+    }
+
+    .qa-chevron::before {
+      top: 7px;
+      left: 11px;
+      width: 1px;
+      height: 9px;
+    }
+
+    .qa-chevron::after {
+      top: 11px;
+      left: 7px;
+      width: 9px;
+      height: 1px;
+    }
+
+    .qa[open] .qa-chevron {
+      transform: rotate(45deg);
+      border-color: var(--accent-line);
+    }
+
+    .answer {
+      padding: 0 clamp(24px, 5vw, 52px) 34px calc(clamp(24px, 5vw, 52px) + 58px);
+      color: var(--ink);
+      font-family: var(--font-reading);
+      font-size: var(--reader-size);
+      line-height: var(--reader-leading);
+      overflow-wrap: anywhere;
+    }
+
+    .answer > :first-child {
+      margin-top: 0;
+    }
+
+    .answer > :last-child {
+      margin-bottom: 0;
+    }
+
+    .answer p {
+      margin: 0 0 1.15em;
+      text-align: justify;
+      text-justify: inter-ideograph;
+    }
+
+    .answer h3,
+    .answer h4 {
+      color: var(--ink-strong);
+      font-family: var(--font-reading);
+      font-weight: 700;
+    }
+
+    .answer h3 {
+      margin: 1.5em 0 .65em;
+      font-size: 1.08em;
+    }
+
+    .answer h4 {
+      margin: 1.3em 0 .45em;
+      font-size: 1em;
+    }
+
+    .answer strong {
+      color: var(--accent-bright);
+      font-weight: 700;
+    }
+
+    .answer .lead {
+      padding-left: 16px;
+      color: var(--ink-strong);
+      border-left: 2px solid var(--accent-line);
+    }
+
+    .answer ol,
+    .answer ul {
+      margin: .7em 0 1.2em;
+      padding-left: 1.35em;
+    }
+
+    .answer li {
+      margin: .45em 0;
+      padding-left: .15em;
+    }
+
+    .answer li::marker {
+      color: var(--accent);
+    }
+
+    .points {
+      display: grid;
+      gap: 9px;
+      margin: 1.2em 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: point;
+    }
+
+    .points li {
+      position: relative;
+      min-height: 38px;
+      margin: 0;
+      padding: 7px 12px 7px 45px;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      counter-increment: point;
+    }
+
+    .points li::before {
+      content: counter(point, decimal-leading-zero);
+      position: absolute;
+      top: 8px;
+      left: 11px;
+      color: var(--accent);
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .06em;
+    }
+
+    .points li::marker {
+      content: "";
+    }
+
+    .keyword-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 1em 0 1.35em;
+    }
+
+    .keyword-strip span {
+      padding: 5px 11px;
+      color: var(--accent-bright);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-line);
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-size: .73em;
+      letter-spacing: .04em;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 1.3em 0;
+    }
+
+    .feature {
+      padding: 16px 17px;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+    }
+
+    .feature strong {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--accent-bright);
+      font-size: .88em;
+      letter-spacing: .04em;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .86em;
+      line-height: 1.8;
+      text-align: left;
+    }
+
+    .note {
+      margin: 1.4em 0;
+      padding: 15px 17px;
+      color: var(--muted);
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      font-size: .9em;
+    }
+
+    .end-mark {
+      margin: 56px auto 0;
+      color: var(--faint);
+      font-family: var(--font-reading);
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-align: center;
+    }
+
+    .end-mark::before {
+      content: "◆";
+      display: block;
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-size: 8px;
+    }
+
+    .source-note {
+      max-width: 660px;
+      margin: 30px auto 0;
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    .backdrop {
+      display: none;
+    }
+
+    @media (max-width: 1050px) {
+      .page-shell {
+        display: block;
+        width: min(100% - 32px, 900px);
+        padding-top: 18px;
+      }
+
+      .toc {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 90;
+        width: min(88vw, 330px);
+        max-height: none;
+        border-radius: 0 22px 22px 0;
+        transform: translateX(-105%);
+        transition: transform .25s ease;
+      }
+
+      .toc.open {
+        transform: translateX(0);
+      }
+
+      .backdrop.open {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        display: block;
+        background: rgba(0, 0, 0, .55);
+        backdrop-filter: blur(3px);
+      }
+
+      .mobile-menu {
+        display: inline-flex;
+      }
+
+      .hero {
+        min-height: 350px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .page-shell {
+        width: min(100% - 22px, 900px);
+        padding-top: 11px;
+      }
+
+      .hero {
+        min-height: 0;
+        padding: 32px 23px 30px;
+        border-radius: 21px;
+      }
+
+      .hero::after {
+        right: 24px;
+        top: 25px;
+      }
+
+      .hero-kicker {
+        margin-bottom: 20px;
+        font-size: 9.5px;
+      }
+
+      .hero h1 {
+        font-size: clamp(32px, 10.8vw, 46px);
+      }
+
+      .hero-subtitle {
+        margin-top: 17px;
+        font-size: 13.5px;
+      }
+
+      .hero-stats {
+        margin-top: 27px;
+        gap: 8px 18px;
+      }
+
+      .hero-stats strong {
+        font-size: 20px;
+      }
+
+      .toolbar {
+        top: 7px;
+        gap: 3px;
+        margin: 12px 0 26px;
+        padding: 7px;
+        flex-wrap: wrap;
+      }
+
+      .tool-btn {
+        min-height: 32px;
+        padding: 0 8px;
+        white-space: nowrap;
+      }
+
+      .toolbar-divider,
+      .progress-label {
+        display: none;
+      }
+
+      .toolbar-spacer {
+        display: none;
+      }
+
+      .part-heading {
+        margin: 42px 5px 14px;
+        font-size: 23px;
+      }
+
+      .qa {
+        margin: 10px 0;
+        border-radius: 16px;
+        scroll-margin-top: 112px;
+      }
+
+      .qa summary {
+        grid-template-columns: 36px minmax(0, 1fr) 23px;
+        gap: 11px;
+        padding: 18px 15px;
+      }
+
+      .qa-number {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        font-size: 10.5px;
+      }
+
+      .qa-title {
+        font-size: calc(var(--reader-size) - .5px);
+      }
+
+      .qa-chevron {
+        margin-top: 5px;
+      }
+
+      .answer {
+        padding: 0 18px 27px;
+        font-size: var(--reader-size);
+      }
+
+      .answer p {
+        text-align: left;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .points li {
+        padding-right: 9px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+      }
+    }
+
+    @media print {
+      @page {
+        size: A4;
+        margin: 18mm;
+      }
+
+      :root {
+        --reader-size: 10.5pt;
+        --reader-leading: 1.8;
+      }
+
+      html,
+      body {
+        color: #111;
+        background: #fff;
+      }
+
+      .toc,
+      .toolbar,
+      .progress-track,
+      .backdrop,
+      .qa-chevron {
+        display: none !important;
+      }
+
+      .page-shell {
+        display: block;
+        width: 100%;
+        padding: 0;
+      }
+
+      .hero {
+        min-height: 0;
+        padding: 12mm 0;
+        color: #111;
+        background: #fff;
+        border: 0;
+        border-bottom: 1px solid #aaa;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .hero h1,
+      .part-heading,
+      .qa-title,
+      .answer h3,
+      .answer h4,
+      .answer strong {
+        color: #111;
+      }
+
+      .qa,
+      .qa[open] {
+        margin: 5mm 0;
+        color: #111;
+        background: #fff;
+        border-color: #ccc;
+        break-inside: avoid-page;
+      }
+
+      .qa summary {
+        padding: 4mm 0;
+      }
+
+      .answer {
+        padding: 0 0 4mm 55px;
+      }
+
+      .points li,
+      .feature {
+        color: #111;
+        background: #f7f7f7;
+        border-color: #ddd;
+      }
+
+      .source-note {
+        color: #666;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-track" aria-hidden="true">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="page-shell">
+    <aside class="toc" id="tocPanel" aria-label="文章目录">
+      <a class="toc-brand" href="#top">
+        <span class="brand-mark">新</span>
+        <span class="brand-text">
+          <strong>理论与实践</strong>
+          <span>Night Reader</span>
+        </span>
+      </a>
+
+      <div class="search-wrap">
+        <input class="toc-search" id="tocSearch" type="search" placeholder="筛选题目" aria-label="筛选题目">
+      </div>
+
+      <div class="toc-label">简答题</div>
+      <ol class="toc-list">
+        <li><a href="#q01" data-num="01">“两个结合”与“六个必须坚持”</a></li>
+        <li><a href="#q02" data-num="02">新时代的鲜明特征</a></li>
+        <li><a href="#q03" data-num="03">中国式现代化的本质要求</a></li>
+        <li><a href="#q04" data-num="04">中国式现代化的中国特色</a></li>
+        <li><a href="#q05" data-num="05">经济理论的丰富内涵</a></li>
+        <li><a href="#q06" data-num="06">政治发展道路的必然性</a></li>
+        <li><a href="#q07" data-num="07">马克思主义的理论特质</a></li>
+        <li><a href="#q08" data-num="08">增进民生福祉</a></li>
+        <li><a href="#q09" data-num="09">共建共治共享</a></li>
+        <li><a href="#q10" data-num="10">绿水青山与金山银山</a></li>
+        <li><a href="#q11" data-num="11">总体国家安全观</a></li>
+        <li><a href="#q12" data-num="12">新时代大国外交</a></li>
+        <li><a href="#q13" data-num="13">党建思想的科学内涵</a></li>
+      </ol>
+
+      <div class="toc-label">论述题</div>
+      <ol class="toc-list">
+        <li><a href="#e01" data-num="Ⅰ">社会主义基本经济制度</a></li>
+        <li><a href="#e02" data-num="Ⅱ">中华文明的突出特性</a></li>
+      </ol>
+      <div class="toc-empty" id="tocEmpty">没有匹配的题目</div>
+
+      <div class="toc-foot">
+        单文件 · 可离线阅读<br>
+        阅读进度与显示设置自动保存
+      </div>
+    </aside>
+
+    <div class="backdrop" id="backdrop"></div>
+
+    <main>
+      <header class="hero" id="top">
+        <div class="hero-kicker">课程问答 · 夜间阅读版</div>
+        <h1>新时代中国特色<br>社会主义理论与实践</h1>
+        <p class="hero-subtitle">
+          将原始扫描内容重新编排为清晰的长文阅读界面。保留答案要点与论述逻辑，新增题目导航、阅读进度和低蓝光主题。
+        </p>
+        <div class="hero-stats" aria-label="内容统计">
+          <span><strong>15</strong> 道题目</span>
+          <span><strong>13</strong> 道简答</span>
+          <span><strong>2</strong> 道论述</span>
+          <span><strong>10</strong> 页原文</span>
+        </div>
+      </header>
+
+      <nav class="toolbar" aria-label="阅读工具栏">
+        <button class="tool-btn mobile-menu" id="menuButton" type="button" aria-label="打开目录">☰ 目录</button>
+        <button class="tool-btn tool-size" id="decreaseFont" type="button" aria-label="减小字号" title="减小字号">A−</button>
+        <button class="tool-btn tool-size" id="increaseFont" type="button" aria-label="增大字号" title="增大字号">A+</button>
+        <span class="toolbar-divider" aria-hidden="true"></span>
+        <button class="tool-btn" id="themeButton" type="button" aria-label="切换阅读主题">◐ 暖夜</button>
+        <button class="tool-btn" id="leadingButton" type="button" aria-label="切换行距">行距 宽松</button>
+        <span class="toolbar-divider" aria-hidden="true"></span>
+        <button class="tool-btn" id="toggleAll" type="button">收起答案</button>
+        <button class="tool-btn" id="resumeButton" type="button" title="回到上次离开的位置" disabled>↺ 上次位置</button>
+        <span class="toolbar-spacer"></span>
+        <span class="progress-label" id="progressLabel">0%</span>
+      </nav>
+
+      <section aria-labelledby="shortTitle">
+        <h2 class="part-heading" id="shortTitle"><span class="part-index">一</span>简答题</h2>
+
+        <details class="qa" id="q01" open>
+          <summary>
+            <span class="qa-number">01</span>
+            <span class="qa-title"><small>简答题</small>党的二十大阐述了“两个结合”“六个必须坚持”等推进理论创新的科学方法，请简述其内容。</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <h3>一、“两个结合”</h3>
+            <p class="lead">推进马克思主义中国化时代化，根本途径就是坚持把马克思主义基本原理同中国具体实际相结合、同中华优秀传统文化相结合。这是我们在探索中国特色社会主义道路中得出的规律性认识。</p>
+
+            <h3>二、“六个必须坚持”</h3>
+            <div class="keyword-strip" aria-label="六个必须坚持">
+              <span>人民至上</span><span>自信自立</span><span>守正创新</span>
+              <span>问题导向</span><span>系统观念</span><span>胸怀天下</span>
+            </div>
+            <p>“六个必须坚持”深刻揭示了习近平新时代中国特色社会主义思想的根本价值立场、内在精神气质、鲜明理论品格、重要实践要求、基本的思想和工作方法、特有的大视野大境界，既讲是什么、为什么，又讲怎么看、怎么办；既部署“过河”的任务，又指导解决“桥或船”的问题，生动体现了科学的世界观和方法论的统一。</p>
+            <p>深刻认识和把握“六个必须坚持”，有助于我们更好领会党的创新理论的精髓要义，使思维方式和精神状态更好适应事业发展需要，使各项工作朝着正确方向、按照客观规律推进。</p>
+          </div>
+        </details>
+
+        <details class="qa" id="q02" open>
+          <summary>
+            <span class="qa-number">02</span>
+            <span class="qa-title"><small>简答题</small>简述中国特色社会主义新时代的鲜明特征。</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <ol class="points">
+              <li>新时代之新，在于我国社会主要矛盾发生新变化。</li>
+              <li>新时代之新，在于党的理论创新实现新飞跃。</li>
+              <li>新时代之新，在于党和国家事业确立新目标。</li>
+              <li>新时代之新，在于中国和世界关系开创新局面。</li>
+              <li>新时代之新，在于中国共产党展现新面貌。</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="qa" id="q03" open>
+          <summary>
+            <span class="qa-number">03</span>
+            <span class="qa-title"><small>简答题</small>简述中国式现代化的本质要求。</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <p>这一本质要求是：</p>
+            <ol class="points">
+              <li>坚持中国共产党领导</li>
+              <li>坚持中国特色社会主义</li>
+              <li>实现高质量发展</li>
+              <li>发展全过程人民民主</li>
+              <li>丰富人民精神世界</li>
+              <li>实现全体人民共同富裕</li>
+              <li>促进人与自然和谐共生</li>
+              <li>推动构建人类命运共同体</li>
+              <li>创造人类文明新形态</li>
+            </ol>
+            <p>这是我们党深刻总结我国和世界其他国家现代化建设的历史经验，对我国这样一个东方大国如何加快实现现代化在认识上不断深入、战略上不断成熟、实践上不断丰富而形成的思想理论结晶。</p>
+            <p>这九条本质要求是具有内在联系的整体，揭示了经济社会发展的各个方面一体推进、协同发力的现实要求，表明了中国式现代化是立体式全方位的现代化。</p>
+          </div>
+        </details>
+
+        <details class="qa" id="q04" open>
+          <summary>
+            <span class="qa-number">04</span>
+            <span class="qa-title"><small>简答题</small>简述中国式现代化的中国特色。</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <p>中国式现代化既有各国现代化的共同特征，更有基于自己国情的鲜明特色。中国式现代化鲜明的中国特色，是由中国独特的客观条件决定的，是由中国社会制度和治国理政的理念决定的，也是由中国在实现现代化长期实践中得到的规律性认识决定的。</p>
+            <p>党的二十大报告指出，中国式现代化是<strong>人口规模巨大的现代化</strong>、是<strong>全体人民共同富裕的现代化</strong>、是<strong>物质文明和精神文明相协调的现代化</strong>、是<strong>人与自然和谐共生的现代化</strong>、是<strong>走和平发展道路的现代化</strong>，深刻揭示了中国式现代化的科学内涵和中国特色。</p>
+          </div>
+        </details>
+
+        <details class="qa" id="q05" open>
+          <summary>
+            <span class="qa-number">05</span>
+            <span class="qa-title"><small>简答题</small>简述新时代中国特色社会主义经济理论的丰富内涵。</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <ol class="points">
+              <li>关于加强党对经济工作的全面领导。</li>
+              <li>关于坚持以人民为中心的发展思想。</li>
+              <li>关于推动高质量发展。</li>
+              <li>关于用新发展理念统领发展全局。</li>
+              <li>关于构建以国内大循环为主体、国内国际双循环相互促进的新发展格局。</li>
+              <li>关于发展新质生产力。</li>
+              <li>关于供给侧结构性改革。</li>
+              <li>关于社会主义市场经济改革。</li>
+              <li>关于经济发展战略。</li>
+              <li>关于坚定不移全面扩大开放。</li>
+              <li>关于统筹发展和安全。</li>
+              <li>关于坚持正确工作策略和方法。</li>
+            </ol>
+            <p>此外，还有关于经济发展进入新常态、关于新发展阶段、关于建设现代化经济体系、关于坚持创新驱动发展、关于大力发展制造业和实体经济等理论。这些理论共同构成新时代中国特色社会主义经济理论的丰富内涵，指导新时代新征程中国经济建设向第二个百年奋斗目标胜利前进。</p>
+          </div>
+        </details>
+
+        <details class="qa" id="q06" open>
+          <summary>
+            <span class="qa-number">06</span>
+            <span class="qa-title"><small>简答题</small>如何理解“这一道路是近代以来中国人民长期奋斗的历史逻辑、理论逻辑、实践逻辑的必然结果”？</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <p>改革开放以来，我们党成功开辟和坚持了中国特色社会主义政治发展道路。</p>
+            <p><strong>首先</strong>，坚持走中国特色社会主义政治发展道路，是近代以来中国人民长期奋斗的历史必然。</p>
+            <p><strong>其次</strong>，坚持走中国特色社会主义政治发展道路，是中国共产党人创造性运用和发展马克思主义政治理论的重大成果。</p>
+            <p><strong>最后</strong>，坚持走中国特色社会主义政治发展道路，是中国共产党践行党的根本宗旨、推进中国特色社会主义政治发展的实践要求。</p>
+          </div>
+        </details>
+
+        <details class="qa" id="q07" open>
+          <summary>
+            <span class="qa-number">07</span>
+            <span class="qa-title"><small>简答题</small>如何理解“马克思主义是科学的理论、人民的理论、实践的理论、不断发展的开放的理论”？</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <p>马克思主义是科学的理论、人民的理论、实践的理论、不断发展的开放的理论。</p>
+            <div class="feature-grid">
+              <div class="feature">
+                <strong>科学的理论</strong>
+                <p>它深刻揭示了自然界、人类社会、人类思维发展的普遍规律，为人类社会发展进步指明了方向，是“对”的理论。</p>
+              </div>
+              <div class="feature">
+                <strong>人民的理论</strong>
+                <p>它坚持实现人民解放、维护人民利益的立场，以实现人的自由而全面的发展和全人类解放为己任，反映了人类对理想社会的美好憧憬，是“好”的理论。</p>
+              </div>
+              <div class="feature">
+                <strong>实践的理论</strong>
+                <p>它具有鲜明的实践品格，为改变人民历史命运而创立，为人民认识世界、改造世界提供强大思想武器，是“行”的理论。</p>
+              </div>
+              <div class="feature">
+                <strong>开放的理论</strong>
+                <p>它始终站在时代前沿，不断探索时代和实践发展提出的新课题、回应人类社会面临的新挑战，是“活”的理论。</p>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="qa" id="q08" open>
+          <summary>
+            <span class="qa-number">08</span>
+            <span class="qa-title"><small>简答题</small>简述增进民生福祉是发展的根本目的。</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <p>在发展经济的基础上不断提高人民生活水平，是党和国家一切工作的根本目的。</p>
+            <p>发展是改善民生的物质基础，离开发展谈改善民生是无源之水、无本之木。</p>
+            <p>改善民生要尽力而为、量力而行。</p>
+            <p>在发展中保障和改善民生体现在民生建设的工作思路上，就是坚守底线、突出重点、完善制度、引导预期。坚守底线，就是实行以保障基本生活为主的社会保障，发挥社会政策的托底作用。</p>
+          </div>
+        </details>
+
+        <details class="qa" id="q09" open>
+          <summary>
+            <span class="qa-number">09</span>
+            <span class="qa-title"><small>简答题</small>如何理解打造共建共治共享的社会治理格局？</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <p>打造共建共治共享的社会治理格局，实现社会治理现代化，是建设社会文明、促进社会和谐的必然要求。</p>
+            <p><strong>共建是基础</strong>，突出制度和体系建设在社会治理格局中的基础性、战略性地位。</p>
+            <p><strong>共治是关键</strong>，要求树立大社会观、大治理观，将党总揽全局、协调各方的政治优势同政府资源整合优势、企业市场竞争优势、社会组织群众动员优势有机结合起来，打造全民参与的开放治理体系。</p>
+            <p><strong>共享是目标</strong>，要使社会治理的成效更多、更公平地惠及全体人民，不断增加人民的获得感、幸福感、安全感。</p>
+          </div>
+        </details>
+
+        <details class="qa" id="q10" open>
+          <summary>
+            <span class="qa-number">10</span>
+            <span class="qa-title"><small>简答题</small>如何理解绿水青山就是金山银山？</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <p>绿水青山与金山银山相辅相成、不可分割。</p>
+            <p>绿水青山就是生产力。</p>
+            <p>绿水青山不仅蕴含着无穷的经济价值，还能够源源不断创造综合效益，实现经济社会可持续发展。</p>
+            <p>绿水青山就是金山银山的理念符合人类社会发展规律，顺应人民群众对美好生活的期盼，已成为全党全社会的共识和行动。</p>
+          </div>
+        </details>
+
+        <details class="qa" id="q11" open>
+          <summary>
+            <span class="qa-number">11</span>
+            <span class="qa-title"><small>简答题</small>如何理解全面贯彻落实总体国家安全观？</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <p>总体国家安全观的关键是“总体”，强调的是做好国家安全工作的系统思维和方法，突出的是“大安全”理念，涵盖政治、军事、国土、经济、金融、文化、社会、科技、网络、粮食、生态、资源、核、海外利益、太空、深海、极地、生物、人工智能、数据等诸多领域，而且将随着社会发展不断动态调整。</p>
+            <p>这一安全观坚持以人民安全为宗旨、以政治安全为根本、以经济安全为基础、以军事科技文化社会安全为保障、以促进国际安全为依托，统筹外部安全和内部安全、国土安全和国民安全、传统安全和非传统安全、自身安全和共同安全，统筹维护和塑造国家安全，夯实国家安全和社会稳定基层基础，完善参与全球安全治理机制，建设更高水平的平安中国，以新安全格局保障新发展格局。</p>
+          </div>
+        </details>
+
+        <details class="qa" id="q12" open>
+          <summary>
+            <span class="qa-number">12</span>
+            <span class="qa-title"><small>简答题</small>简述新时代中国特色大国外交的指导思想。</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <ol class="points">
+              <li>坚持以维护党中央权威为统领，加强党对外工作的集中统一领导。</li>
+              <li>坚持以实现中华民族伟大复兴为使命，推进中国特色大国外交。这是新时代赋予对外工作的历史使命。做好新时代对外工作，要为全面深化改革和对外开放提供全方位、全覆盖、高质量的服务。</li>
+              <li>坚持以维护世界和平、促进共同发展为宗旨，推动构建人类命运共同体。</li>
+              <li>坚持以中国特色社会主义为根本，增强战略自信。这是新时代对外工作必须遵循的根本要求。</li>
+              <li>坚持以共商共建共享为原则，推动“一带一路”建设。</li>
+              <li>坚持以相互尊重、合作共赢为基础，走和平发展道路。</li>
+              <li>坚持以深化外交布局为依托，打造全球伙伴关系。</li>
+              <li>坚持以公平正义为理念，引领全球治理体系改革。</li>
+              <li>坚持以国家核心利益为底线，维护国家主权、安全、发展利益。这是对外工作的出发点和落脚点，是中国外交的神圣使命。必须坚决维护中国共产党领导和中国特色社会主义制度，坚决捍卫国家主权、安全、领土完整。</li>
+              <li>坚持以对外工作优良传统和时代特征相结合为方向，塑造中国外交独特风范。</li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="qa" id="q13" open>
+          <summary>
+            <span class="qa-number">13</span>
+            <span class="qa-title"><small>简答题</small>简述习近平党建思想的科学内涵。</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <p class="lead">坚持党的领导是中国特色社会主义最本质的特征。</p>
+            <ol class="points">
+              <li>坚持党中央集中统一领导；</li>
+              <li>坚持全面从严治党；</li>
+              <li>坚持不忘初心、牢记使命；</li>
+              <li>坚持以党的政治建设为统领；</li>
+              <li>坚持用党的创新理论凝心铸魂；</li>
+              <li>坚持锤炼，坚强党性；</li>
+              <li>坚持健全上下贯通、执行有力的组织体系；</li>
+              <li>坚持建设堪当民族复兴重任的高素质干部队伍；</li>
+              <li>坚持推进作风建设常态化长效化；</li>
+              <li>坚持用严明的纪律管党治党；</li>
+              <li>坚持一体推进不敢腐、不能腐、不想腐；</li>
+              <li>坚持制度治党、依规治党；</li>
+              <li>坚持落实管党治党政治责任。</li>
+            </ol>
+            <p>“十四个坚持”深刻把握管党治党、兴党强党和强国复兴的内在联系，统筹党的领导和党的建设，是对习近平总书记关于新时代党的建设具有标志性、引领性的新理念、新思想、新战略的集中概括，彰显出独特的理论品格。</p>
+            <p class="note">原文以“坚持党的领导是中国特色社会主义最本质的特征”开篇，后接所列各项“坚持”。为避免压缩原意，正文按扫描页保留列举顺序。</p>
+          </div>
+        </details>
+      </section>
+
+      <section aria-labelledby="essayTitle">
+        <h2 class="part-heading" id="essayTitle"><span class="part-index">二</span>论述题</h2>
+
+        <details class="qa" id="e01" open>
+          <summary>
+            <span class="qa-number">Ⅰ</span>
+            <span class="qa-title"><small>论述题</small>论述新时代中国特色社会主义经济制度。</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <p>社会主义基本经济制度，既体现了社会主义制度优越性，又同我国社会主义初级阶段社会生产力发展水平相适应，是党和人民的伟大创造。中国特色社会主义基本经济制度，主要包括以下三个方面。</p>
+
+            <h3>一是社会主义初级阶段的生产资料所有制</h3>
+            <p>公有制为主体、多种所有制经济共同发展，是我国社会主义初级阶段的生产资料所有制，决定着我国基本经济制度的根本性质和发展方向。</p>
+            <p>我国是中国共产党领导的社会主义国家，公有制经济是长期以来在国家发展历程中形成的，为国家建设、国防安全、人民生活改善作出了突出贡献。长期以来，我国非公有制经济在我们党的方针政策指引下快速发展，在稳定增长、促进创新、增加就业、改善民生等方面发挥了重要作用。公有制经济和非公有制经济，二者相辅相成、相得益彰。</p>
+
+            <h3>二是社会主义初级阶段的收入分配制度</h3>
+            <p>以按劳分配为主体、多种分配方式并存，是我国社会主义初级阶段的收入分配制度。</p>
+            <p>这一制度有利于充分调动各方面积极性，有利于实现效率与公平有机统一。坚持多劳多得，着重保护劳动所得，提高劳动报酬在初次分配中的比重，完善工资制度，健全工资合理增长机制，完善按要素分配政策制度，健全再分配调节机制，重视发挥第三次分配作用。</p>
+            <p>坚持好这一分配制度，能够有效实现各种分配方式各扬其长，各种市场主体各得其所，规范收入分配秩序，不断推动居民收入增长和经济增长同步、劳动报酬提高和劳动生产率提高同步，让广大人民群众共享发展成果，朝着共同富裕目标前进。</p>
+
+            <h3>三是社会主义市场经济体制</h3>
+            <p>市场经济体制是指以市场为配置资源基本手段的一种经济体制。经过改革开放以来的不断探索，我国已基本建立了社会主义市场经济体制。社会主义市场经济体制是适应我国社会主义初级阶段生产资料所有制的经济体制形式。</p>
+            <p>一方面，在多种所有制经济并存的商品交换关系下，价值规律仍然发挥作用，市场配置资源是最有效率的形式；另一方面，要坚持党的领导，更好发挥政府作用。</p>
+            <p>社会主义市场经济本质上是法治经济，使市场在资源配置中起决定性作用，更好发挥政府作用，必须以保护产权、维护契约、统一市场、平等交换、公平竞争、有效监管为基本导向，完善社会主义市场经济法律制度。</p>
+            <p>中国特色社会主义基本经济制度的三个重要组成部分，相互联系、相互支持、相互促进。所有制是基本经济制度的基础，决定分配方式和经济运行方式。同时，合理有效的分配方式和经济运行方式有利于进一步完善所有制结构，更好地坚持“两个毫不动摇”，促进经济社会持续健康发展。</p>
+          </div>
+        </details>
+
+        <details class="qa" id="e02" open>
+          <summary>
+            <span class="qa-number">Ⅱ</span>
+            <span class="qa-title"><small>论述题</small>如何理解中华文明的突出特性？</span>
+            <span class="qa-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="answer">
+            <div class="keyword-strip" aria-label="中华文明的五个突出特性">
+              <span>连续性</span><span>创新性</span><span>统一性</span><span>包容性</span><span>和平性</span>
+            </div>
+
+            <h3>突出的连续性</h3>
+            <p>中华文明尽管历经沧桑，却始终绵延不绝、生生不息，是世界上唯一绵延不断且以国家形态发展至今的伟大文明。中华文明具有自我发展、回应挑战、开创新局的文化主体性与旺盛生命力。深厚的家国情怀与深沉的历史意识，为中华民族打下了维护大一统的人心根基，成为中华民族历经千难万险而不断复兴的精神支撑。</p>
+            <p>中华文明的连续性，从根本上决定了中华民族必然走自己的路。只有从源远流长的历史连续性来认识中国，才能深刻理解古代中国、现代中国、未来中国。</p>
+
+            <h3>突出的创新性</h3>
+            <p>文明永续发展，既需要薪火相传、代代守护，更需要顺时应势、推陈出新。中华文明是革故鼎新、辉光日新的文明，静水深流与波澜壮阔交织。连续不是停滞、更不是僵化，而是以创新为支撑的历史进步过程。创新创造是文化的生命所在，是文化的本质特征。</p>
+            <p>中华民族始终以“苟日新，日日新，又日新”的精神不断创造自己的物质文明、精神文明和政治文明，在很长的历史时期内作为最繁荣最强大的文明体屹立于世。中华文明的创新性，从根本上决定了中华民族守正不守旧、尊古不复古的进取精神，决定了中华民族不惧新挑战、勇于接受新事物的无畏品格。</p>
+
+            <h3>突出的统一性</h3>
+            <p>一部中国史，就是一部各民族交融汇聚成中华民族的历史，就是各民族共同缔造、发展、巩固统一的伟大祖国的历史。中华文明长期的大一统传统，形成了多元一体、团结集中的统一性。“向内凝聚”的统一性追求，是文明连续的前提，也是文明连续的结果。</p>
+            <p>中华文明的统一性，从根本上决定了中华民族各民族文化融为一体、即使遭遇重大挫折也牢固凝聚，决定了国土不可分、国家不可乱、民族不可散、文明不可断的共同信念，决定了国家统一永远是中国核心利益的核心，决定了一个坚强统一的国家是各族人民的命运所系。</p>
+
+            <h3>突出的包容性</h3>
+            <p>中华文化兼收并蓄、精彩纷呈，是各民族文化的集大成。中华文明从来不用单一文化代替多元文化，而是由多元文化汇聚成共同文化，化解冲突，凝聚共识。中华文化认同超越地域乡土、血缘世系、宗教信仰等，把内部差异极大的广土巨族整合成多元一体的中华民族。越包容，就越是得到认同和维护，就越会绵延不断。</p>
+            <p>中华文明的包容性，从根本上决定了中华民族交往交流交融的历史取向，决定了中国各宗教信仰多元并存的和谐格局，决定了中华文化对世界文明兼收并蓄的开放胸怀。</p>
+
+            <h3>突出的和平性</h3>
+            <p>中华民族是爱好和平的民族，中国人民是爱好和平的人民。和平、和睦、和谐是中华文明 5000 多年来一直传承的理念，主张以道德秩序构造一个群己合一的世界，在人己关系中以他人为重。</p>
+            <p>倡导交通成和，反对隔绝闭塞；倡导共生并进，反对强人从己；倡导保合太和，反对丛林法则。</p>
+            <p>中华文明的和平性，从根本上决定了中国始终是世界和平的建设者、全球发展的贡献者、国际秩序的维护者，决定了中国不断追求文明交流互鉴而不搞文化霸权，决定了中国不会把自己的价值观念与政治体制强加于人，决定了中国坚持合作、不搞对抗，决不搞“党同伐异”的小圈子。</p>
+          </div>
+        </details>
+      </section>
+
+      <div class="end-mark">全文完 · 夜色正好</div>
+      <p class="source-note">
+        内容依据所提供 PDF 的 10 页扫描件逐页整理。为提升屏幕阅读体验，进行了段落、列表和重点层级编排；文字保留原意，未增加新的观点。
+      </p>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const storage = {
+        get(key, fallback) {
+          try {
+            const value = localStorage.getItem(key);
+            return value === null ? fallback : value;
+          } catch {
+            return fallback;
+          }
+        },
+        set(key, value) {
+          try {
+            localStorage.setItem(key, value);
+          } catch {
+            // Local storage can be unavailable in hardened browser contexts.
+          }
+        }
+      };
+
+      const reader = {
+        size: Number(storage.get("xds-reader-size", "19")),
+        leading: Number(storage.get("xds-reader-leading", "2")),
+        theme: storage.get("xds-reader-theme", "night")
+      };
+
+      const themes = [
+        ["night", "暖夜"],
+        ["ink", "深黑"],
+        ["paper", "日间"]
+      ];
+      const leadings = [
+        { value: 1.8, label: "行距 紧凑" },
+        { value: 2, label: "行距 宽松" },
+        { value: 2.2, label: "行距 特宽" }
+      ];
+
+      const themeButton = document.getElementById("themeButton");
+      const leadingButton = document.getElementById("leadingButton");
+      const decreaseFont = document.getElementById("decreaseFont");
+      const increaseFont = document.getElementById("increaseFont");
+      const progressBar = document.getElementById("progressBar");
+      const progressLabel = document.getElementById("progressLabel");
+      const resumeButton = document.getElementById("resumeButton");
+      const toggleAll = document.getElementById("toggleAll");
+      const tocPanel = document.getElementById("tocPanel");
+      const backdrop = document.getElementById("backdrop");
+      const menuButton = document.getElementById("menuButton");
+      const tocSearch = document.getElementById("tocSearch");
+      const tocEmpty = document.getElementById("tocEmpty");
+      const tocLinks = [...document.querySelectorAll(".toc-list a")];
+      const questions = [...document.querySelectorAll(".qa")];
+
+      function applyReaderSettings() {
+        reader.size = Math.max(16, Math.min(25, reader.size));
+        root.style.setProperty("--reader-size", `${reader.size}px`);
+        root.style.setProperty("--reader-leading", String(reader.leading));
+        root.dataset.theme = reader.theme;
+
+        const theme = themes.find((item) => item[0] === reader.theme) || themes[0];
+        const leading = leadings.find((item) => item.value === reader.leading) || leadings[1];
+        themeButton.textContent = `◐ ${theme[1]}`;
+        leadingButton.textContent = leading.label;
+        decreaseFont.disabled = reader.size <= 16;
+        increaseFont.disabled = reader.size >= 25;
+
+        storage.set("xds-reader-size", String(reader.size));
+        storage.set("xds-reader-leading", String(reader.leading));
+        storage.set("xds-reader-theme", reader.theme);
+      }
+
+      function setAllOpen(open) {
+        questions.forEach((item) => {
+          item.open = open;
+        });
+        toggleAll.textContent = open ? "收起答案" : "展开答案";
+      }
+
+      function closeToc() {
+        tocPanel.classList.remove("open");
+        backdrop.classList.remove("open");
+        menuButton.setAttribute("aria-expanded", "false");
+      }
+
+      function openToc() {
+        tocPanel.classList.add("open");
+        backdrop.classList.add("open");
+        menuButton.setAttribute("aria-expanded", "true");
+      }
+
+      function updateProgress() {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const percent = scrollable > 0 ? Math.min(100, Math.max(0, (window.scrollY / scrollable) * 100)) : 0;
+        progressBar.style.width = `${percent}%`;
+        progressLabel.textContent = `${Math.round(percent)}%`;
+      }
+
+      function updateActiveLink() {
+        let current = questions[0];
+        for (const question of questions) {
+          if (question.getBoundingClientRect().top <= 145) {
+            current = question;
+          } else {
+            break;
+          }
+        }
+        tocLinks.forEach((link) => {
+          link.classList.toggle("active", link.getAttribute("href") === `#${current.id}`);
+        });
+      }
+
+      let scrollTimer = 0;
+      function onScroll() {
+        updateProgress();
+        updateActiveLink();
+        window.clearTimeout(scrollTimer);
+        scrollTimer = window.setTimeout(() => {
+          storage.set("xds-reader-position", JSON.stringify({
+            y: window.scrollY,
+            at: Date.now()
+          }));
+          if (window.scrollY > 300) {
+            resumeButton.disabled = false;
+          }
+        }, 250);
+      }
+
+      decreaseFont.addEventListener("click", () => {
+        reader.size -= 1;
+        applyReaderSettings();
+      });
+
+      increaseFont.addEventListener("click", () => {
+        reader.size += 1;
+        applyReaderSettings();
+      });
+
+      themeButton.addEventListener("click", () => {
+        const index = themes.findIndex((item) => item[0] === reader.theme);
+        reader.theme = themes[(index + 1) % themes.length][0];
+        applyReaderSettings();
+      });
+
+      leadingButton.addEventListener("click", () => {
+        const index = leadings.findIndex((item) => item.value === reader.leading);
+        reader.leading = leadings[(index + 1) % leadings.length].value;
+        applyReaderSettings();
+      });
+
+      toggleAll.addEventListener("click", () => {
+        const anyOpen = questions.some((item) => item.open);
+        setAllOpen(!anyOpen);
+      });
+
+      menuButton.addEventListener("click", () => {
+        if (tocPanel.classList.contains("open")) {
+          closeToc();
+        } else {
+          openToc();
+        }
+      });
+
+      backdrop.addEventListener("click", closeToc);
+      tocLinks.forEach((link) => link.addEventListener("click", closeToc));
+
+      tocSearch.addEventListener("input", () => {
+        const term = tocSearch.value.trim().toLocaleLowerCase("zh-CN");
+        let visible = 0;
+        tocLinks.forEach((link) => {
+          const match = link.textContent.toLocaleLowerCase("zh-CN").includes(term);
+          link.parentElement.hidden = !match;
+          if (match) visible += 1;
+        });
+        tocEmpty.style.display = visible === 0 ? "block" : "none";
+      });
+
+      resumeButton.addEventListener("click", () => {
+        try {
+          const saved = JSON.parse(storage.get("xds-reader-position", "{}"));
+          if (Number.isFinite(saved.y)) {
+            window.scrollTo({ top: saved.y, behavior: "smooth" });
+          }
+        } catch {
+          // Ignore malformed position data.
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        const target = event.target;
+        if (target instanceof HTMLInputElement) return;
+        if (event.key === "+" || event.key === "=") {
+          reader.size += 1;
+          applyReaderSettings();
+        } else if (event.key === "-") {
+          reader.size -= 1;
+          applyReaderSettings();
+        } else if (event.key.toLowerCase() === "t") {
+          themeButton.click();
+        } else if (event.key === "Escape") {
+          closeToc();
+        }
+      });
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", updateProgress);
+
+      if (storage.get("xds-reader-position", "") && !resumeButton.disabled) {
+        resumeButton.disabled = false;
+      }
+
+      applyReaderSettings();
+      updateProgress();
+      updateActiveLink();
+    })();
+  </script>
+</body>
+</html>

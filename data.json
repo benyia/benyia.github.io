@@ -96,10 +96,260 @@
           "originalSize": 37715,
           "optimized": false,
           "folder": "考试习题"
+        },
+        {
+          "name": "00_前置部分(封面·版权·前言·目录).pdf",
+          "url": "files/00_前置部分(封面·版权·前言·目录).pdf",
+          "type": "PDF",
+          "size": 4935463,
+          "originalSize": 4935463,
+          "optimized": false,
+          "folder": "计算机控制系统第三版_分章"
+        },
+        {
+          "name": "11_参考文献.pdf",
+          "url": "files/11_参考文献.pdf",
+          "type": "PDF",
+          "size": 787604,
+          "originalSize": 787604,
+          "optimized": false,
+          "folder": "计算机控制系统第三版_分章"
+        },
+        {
+          "name": "第01章_计算机控制系统概述.pdf",
+          "url": "files/第01章_计算机控制系统概述.pdf",
+          "type": "PDF",
+          "size": 6651033,
+          "originalSize": 6651033,
+          "optimized": false,
+          "folder": "计算机控制系统第三版_分章"
+        },
+        {
+          "name": "第02章_信号转换与z变换.pdf",
+          "url": "files/第02章_信号转换与z变换.pdf",
+          "type": "PDF",
+          "size": 10097866,
+          "originalSize": 10097866,
+          "optimized": false,
+          "folder": "计算机控制系统第三版_分章"
+        },
+        {
+          "name": "第03章_计算机控制系统的数学描述与性能分析.pdf",
+          "url": "files/第03章_计算机控制系统的数学描述与性能分析.pdf",
+          "type": "PDF",
+          "size": 11037435,
+          "originalSize": 11037435,
+          "optimized": false,
+          "folder": "计算机控制系统第三版_分章"
+        },
+        {
+          "name": "第04章_数字控制器的模拟化设计方法.pdf",
+          "url": "files/第04章_数字控制器的模拟化设计方法.pdf",
+          "type": "PDF",
+          "size": 7246653,
+          "originalSize": 7246653,
+          "optimized": false,
+          "folder": "计算机控制系统第三版_分章"
+        },
+        {
+          "name": "第05章_数字控制器的直接设计方法.pdf",
+          "url": "files/第05章_数字控制器的直接设计方法.pdf",
+          "type": "PDF",
+          "size": 11845575,
+          "originalSize": 11845575,
+          "optimized": false,
+          "folder": "计算机控制系统第三版_分章"
+        },
+        {
+          "name": "第06章_基于状态空间模型的极点配置设计方法.pdf",
+          "url": "files/第06章_基于状态空间模型的极点配置设计方法.pdf",
+          "type": "PDF",
+          "size": 8741821,
+          "originalSize": 8741821,
+          "optimized": false,
+          "folder": "计算机控制系统第三版_分章"
+        },
+        {
+          "name": "第07章_先进控制规律的设计方法.pdf",
+          "url": "files/第07章_先进控制规律的设计方法.pdf",
+          "type": "PDF",
+          "size": 11133289,
+          "originalSize": 11133289,
+          "optimized": false,
+          "folder": "计算机控制系统第三版_分章"
+        },
+        {
+          "name": "第08章_基于网络的控制技术.pdf",
+          "url": "files/第08章_基于网络的控制技术.pdf",
+          "type": "PDF",
+          "size": 10423365,
+          "originalSize": 10423365,
+          "optimized": false,
+          "folder": "计算机控制系统第三版_分章"
+        },
+        {
+          "name": "第09章_计算机控制系统仿真分析.pdf",
+          "url": "files/第09章_计算机控制系统仿真分析.pdf",
+          "type": "PDF",
+          "size": 10706032,
+          "originalSize": 10706032,
+          "optimized": false,
+          "folder": "计算机控制系统第三版_分章"
+        },
+        {
+          "name": "第10章_计算机控制系统的设计与实现.pdf",
+          "url": "files/第10章_计算机控制系统的设计与实现.pdf",
+          "type": "PDF",
+          "size": 12280301,
+          "originalSize": 12280301,
+          "optimized": false,
+          "folder": "计算机控制系统第三版_分章"
+        },
+        {
+          "name": "2026级研究生《计算机控制系统》课程作业要求.pdf",
+          "url": "files/2026级研究生《计算机控制系统》课程作业要求.pdf",
+          "type": "PDF",
+          "size": 293222,
+          "originalSize": 293222,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业"
+        },
+        {
+          "name": "step_response_data无噪声.xlsx",
+          "url": "files/step_response_data无噪声.xlsx",
+          "type": "XLSX",
+          "size": 5311,
+          "originalSize": 5311,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业"
+        },
+        {
+          "name": "微信图片_20261011184907_136_84.jpg",
+          "url": "files/微信图片_20261011184907_136_84.jpg",
+          "type": "JPG",
+          "size": 457960,
+          "originalSize": 1342022,
+          "optimized": true,
+          "folder": "《计算机控制系统》仿真作业"
+        },
+        {
+          "name": "2026级研究生《计算机控制系统》课程作业要求.docx",
+          "url": "files/2026级研究生《计算机控制系统》课程作业要求.docx",
+          "type": "DOCX",
+          "size": 205594,
+          "originalSize": 205594,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业"
+        },
+        {
+          "name": "gemini_计算机控制系统仿真作业全套文件.7z",
+          "url": "files/gemini_计算机控制系统仿真作业全套文件.7z",
+          "type": "7Z",
+          "size": 8827741,
+          "originalSize": 8827741,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业"
+        },
+        {
+          "name": "202621226-史晏杰-研究生《计算机控制系统》.docx",
+          "url": "files/202621226-史晏杰-研究生《计算机控制系统》.docx",
+          "type": "DOCX",
+          "size": 365412,
+          "originalSize": 365412,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业/终版"
+        },
+        {
+          "name": "202621226-史晏杰-研究生《计算机控制系统》.pdf",
+          "url": "files/202621226-史晏杰-研究生《计算机控制系统》.pdf",
+          "type": "PDF",
+          "size": 1793191,
+          "originalSize": 1793191,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业/终版"
+        },
+        {
+          "name": "computer_control_system_solution6.m",
+          "url": "files/computer_control_system_solution6.m",
+          "type": "M",
+          "size": 14306,
+          "originalSize": 14306,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业/终版"
+        },
+        {
+          "name": "研究生《计算机控制系统》.docx",
+          "url": "files/研究生《计算机控制系统》.docx",
+          "type": "DOCX",
+          "size": 438493,
+          "originalSize": 438493,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业/终版"
+        },
+        {
+          "name": "研究生《计算机控制系统》.pdf",
+          "url": "files/研究生《计算机控制系统》.pdf",
+          "type": "PDF",
+          "size": 1826578,
+          "originalSize": 1826578,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业/终版"
+        },
+        {
+          "name": "《计算机控制系统》课程仿真作业报告.docx",
+          "url": "files/《计算机控制系统》课程仿真作业报告.docx",
+          "type": "DOCX",
+          "size": 1886762,
+          "originalSize": 1886762,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业/Claude Sonnet"
+        },
+        {
+          "name": "《计算机控制系统》课程仿真作业报告.pdf",
+          "url": "files/《计算机控制系统》课程仿真作业报告.pdf",
+          "type": "PDF",
+          "size": 3012714,
+          "originalSize": 3012714,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业/Claude Sonnet"
+        },
+        {
+          "name": "build_simulink_model.m",
+          "url": "files/build_simulink_model.m",
+          "type": "M",
+          "size": 3563,
+          "originalSize": 3563,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业/Claude Sonnet"
+        },
+        {
+          "name": "computer_control_simulation.m",
+          "url": "files/computer_control_simulation.m",
+          "type": "M",
+          "size": 15882,
+          "originalSize": 15882,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业/Claude Sonnet"
+        },
+        {
+          "name": "run_simulation.py",
+          "url": "files/run_simulation.py",
+          "type": "PY",
+          "size": 24405,
+          "originalSize": 24405,
+          "optimized": false,
+          "folder": "《计算机控制系统》仿真作业/Claude Sonnet"
+        },
+        {
+          "name": "step_response_data无噪声.xlsx",
+          "url": "files/step_response_data无噪声.xlsx",
+          "type": "XLSX",
+          "size": 5311,
+          "folder": "《计算机控制系统》仿真作业/Claude Sonnet"
         }
       ],
       "images": [],
-      "time": "2026-11-18 15:39",
+      "time": "2026-11-18 15:46",
       "tags": [
         "控制工程",
         "计算机控制",
@@ -107,7 +357,11 @@
       ],
       "introIsHTML": true,
       "folders": [
-        "考试习题"
+        "考试习题",
+        "计算机控制系统第三版_分章",
+        "《计算机控制系统》仿真作业",
+        "《计算机控制系统》仿真作业/Claude Sonnet",
+        "《计算机控制系统》仿真作业/终版"
       ]
     },
     {
@@ -1066,6 +1320,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-18 15:46",
+      "action": "编辑课程：计算机控制系统"
+    },
+    {
       "time": "2026-11-18 15:39",
       "action": "编辑课程：计算机控制系统"
     },
@@ -1460,10 +1718,6 @@
     {
       "time": "2026-09-29 15:07",
       "action": "发布通知：🚀 Edgetunnel2.0 全新版本，🎯 就是这么简单！✨ 就是这么方便！"
-    },
-    {
-      "time": "2026-09-29 14:57",
-      "action": "写日记：家里需要带的"
     }
   ],
   "categories": [

@@ -226,7 +226,7 @@ function setClassFilter(k){ classFilter = k; pageState["class"] = 1; renderFilte
 function applyColumns(){
   var n = String((blogData.siteConfig && blogData.siteConfig.columns) || "1");
   if(["1","2","3"].indexOf(n) < 0) n = "1";
-  ["homeList","coursesList","papersList","noticesList","classList"].forEach(function(id){
+  ["homeList","papersList","noticesList","classList"].forEach(function(id){
     var el = document.getElementById(id);
     if(el) el.className = "list-cols cols-" + n;
   });
@@ -943,7 +943,7 @@ function collFileBlock(f){
   var name = esc(f.name || '未命名文件');
   var url = esc(f.url || '');
   if(kind === 'image'){
-    return '<figure class="coll-media coll-image"><a href="' + url + '" target="_blank" rel="noopener"><img src="' + url + '" alt="' + name + '" loading="lazy"></a><figcaption><span>' + name + '</span>' + fileActionHTML(f.url, f.name) + '</figcaption></figure>';
+    return '<figure class="coll-media coll-image"><button type="button" class="coll-image-btn" data-file-preview="1" data-file-url="' + url + '" data-file-name="' + name + '"><img src="' + url + '" alt="' + name + '" loading="lazy"></button><figcaption><span>' + name + '</span>' + fileActionHTML(f.url, f.name) + '</figcaption></figure>';
   }
   if(kind === 'audio'){
     return '<div class="coll-media coll-audio"><div class="coll-media-head">' + collFileTitle(f) + fileActionHTML(f.url, f.name) + '</div><audio controls preload="metadata" src="' + url + '"></audio></div>';
@@ -1023,23 +1023,76 @@ function openCollection(idx){
 }
 function backToCollections(){ currentCollectionIdx = -1; backToOrigin('collections'); }
 
+function courseArtHTML(c){
+  var imgs = collectImages(c || {});
+  var cover = (imgs[0] && imgs[0].url) || (isImgUrl(c.icon) ? c.icon : "");
+  if(cover){
+    return '<div class="course-art has-image"><img src="' + esc(cover) + '" alt="" loading="lazy"></div>';
+  }
+  return '<div class="course-art is-icon" aria-hidden="true"><span>' + esc(c.icon || "📚") + '</span></div>';
+}
+function renderCourseSummary(){
+  var box = document.getElementById("courseSummary");
+  if(!box) return;
+  var courses = blogData.courses || [];
+  var files = 0, folders = 0, progress = 0;
+  courses.forEach(function(c){
+    files += collectFiles(c).length;
+    folders += cfsFolderList(c).length;
+    progress += Math.max(0, Math.min(100, Number(c.progress || 0)));
+  });
+  var avg = courses.length ? Math.round(progress / courses.length) : 0;
+  function stat(value, label){
+    return '<div class="course-summary-stat"><b>' + value + '</b><span>' + label + '</span></div>';
+  }
+  box.innerHTML = '<div class="course-summary-head">'
+    + '<span class="course-summary-kicker">COURSE LIBRARY</span>'
+    + '<h2>课程资料库</h2>'
+    + '<p>按课程归档课件、通知、考试与参考资料。</p>'
+    + '</div>'
+    + '<div class="course-summary-stats">'
+    + stat(courses.length, "门课程")
+    + stat(folders, "个文件夹")
+    + stat(files, "份资料")
+    + stat(avg + "%", "平均进度")
+    + '</div>';
+}
+function courseCardHTML(c, idx, ordinal){
+  var files = collectFiles(c).length;
+  var folders = cfsFolderList(c).length;
+  var pg = Math.max(0, Math.min(100, Number(c.progress || 0)));
+  var done = courseDone(c);
+  var desc = mdText(c.intro || c.desc || "").replace(/\s+/g, " ").trim();
+  if(desc.length > 150) desc = desc.slice(0, 150) + "…";
+  var tags = hpTagsOf(c.tags).slice(0, 3);
+  return '<article class="course-item' + (done ? ' is-done' : '') + '" data-course-idx="' + idx + '" tabindex="0" role="link" onclick="openCourse(' + idx + ')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openCourse(' + idx + ')}">'
+    + courseArtHTML(c)
+    + '<div class="course-item-body">'
+    +   '<div class="course-item-top">'
+    +     '<span class="course-index">COURSE ' + String(ordinal || 0).padStart(2, "0") + '</span>'
+    +     '<span class="course-state-pill' + (done ? ' done' : '') + '">' + (done ? '✓ 已完成' : '进行中 ' + pg + '%') + '</span>'
+    +   '</div>'
+    +   '<h3>' + esc(c.title || "未命名课程") + '</h3>'
+    +   '<p class="course-desc">' + (desc ? esc(desc) : "暂无课程简介") + '</p>'
+    +   (tags.length ? '<div class="course-tags">' + tags.map(function(t){ return '<span>#' + esc(t) + '</span>'; }).join("") + '</div>' : "")
+    +   '<div class="course-meta">'
+    +     '<span>📁 ' + folders + ' 个文件夹</span>'
+    +     '<span>📎 ' + files + ' 份资料</span>'
+    +     (c.time ? '<span>🕒 ' + esc(c.time) + '</span>' : "")
+    +   '</div>'
+    +   '<div class="course-progress-row">'
+    +     '<div class="course-progress-track"><i style="width:' + pg + '%"></i></div>'
+    +     '<b>' + pg + '%</b>'
+    +     '<span class="course-enter">查看课程 <em>→</em></span>'
+    +   '</div>'
+    + '</div></article>';
+}
 function renderCourses(){
+  renderCourseSummary();
   var arr = (blogData.courses||[]).map(function(c,i){ return {c:c, i:i}; });
   arr.sort(function(a,b){ return byTimeDesc(a.c, b.c); });
-  renderPaged("courses", "coursesList", "coursesPager", arr, function(it){
-    var c = it.c, i = it.i;
-    var nf = collectFiles(c).length, nd = cfsFolderList(c).length, pg = Number(c.progress || 0);
-    var done = courseDone(c);
-    return '<div class="article-card'+(done?"":" course-todo")+'" onclick="openCourse('+i+')">'+coverHTML(c, c.icon||"📐")
-      + '<div class="article-body">'
-      +   '<div class="article-title">'+esc(c.title)+'</div>'
-      +   '<div class="chip-row">'+courseBadgeHTML(c)+'<span class="info-chip green">📎 '+nf+' 个资料</span>'
-      +   (nd?'<span class="info-chip">📁 '+nd+' 个文件夹</span>':"")
-      +   (c.time?'<span class="info-chip">🕐 '+esc(c.time)+'</span>':"")+'</div>'
-      +   '<div class="progress-bar-wrap" style="margin:12px 0 10px"><div class="progress-bar" style="width:'+pg+'%"></div></div>'
-      +   (c.desc?'<div class="article-desc">'+esc(c.desc)+'</div>':"")
-      +   (c.intro?'<div class="article-desc" style="margin-top:6px;color:var(--text3)">'+esc(mdText(c.intro).slice(0,80))+'</div>':"")
-      + '</div></div>';
+  renderPaged("courses", "coursesList", "coursesPager", arr, function(it, ordinal){
+    return courseCardHTML(it.c, it.i, ordinal + 1);
   }, "暂无课程");
 }
 /* ============================================================

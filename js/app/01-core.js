@@ -173,7 +173,7 @@ function galleryHTML(item){
   var imgs = collectImages(item);
   if(!imgs.length) return "";
   return '<div class="gallery">'+imgs.map(function(f){
-    return '<a href="'+esc(f.url)+'" target="_blank" rel="noopener"><img src="'+esc(f.url)+'" alt=""></a>';
+    return '<button type="button" class="gallery-item" data-file-preview="1" data-file-url="'+esc(f.url)+'" data-file-name="'+esc(f.name || "图片")+'"><img src="'+esc(f.url)+'" alt="'+esc(f.name || "")+'"></button>';
   }).join("")+'</div>';
 }
 
@@ -199,12 +199,182 @@ function isExternalFile(url){
   }
   return false;
 }
+function filePreviewExt(name, url){
+  var n = String(name || "").split(/[?#]/)[0];
+  var m = n.match(/\.([a-z0-9]{1,10})$/i);
+  if(m) return m[1].toLowerCase();
+  try{
+    var p = new URL(String(url || ""), document.baseURI).pathname;
+    m = p.match(/\.([a-z0-9]{1,10})$/i);
+    return m ? m[1].toLowerCase() : "";
+  }catch(e){ return ""; }
+}
+function filePreviewKind(name, url){
+  var ext = filePreviewExt(name, url);
+  if(/^(png|jpe?g|gif|webp|svg|bmp|avif)$/.test(ext)) return "image";
+  if(ext === "pdf") return "pdf";
+  if(/^(html?|htm)$/.test(ext)) return "html";
+  if(/^(md|markdown)$/.test(ext)) return "markdown";
+  if(/^(txt|log|json|csv|tsv|xml|ya?ml|ini|conf|cfg|js|mjs|cjs|ts|css|scss|less|py|c|cpp|h|hpp|java|go|rs|sql|sh|bat|ps1)$/.test(ext)) return "text";
+  if(/^(mp3|wav|flac|aac|m4a|ogg|opus)$/.test(ext)) return "audio";
+  if(/^(mp4|webm|mov|mkv|avi|ogv)$/.test(ext)) return "video";
+  if(/^(doc|docx|ppt|pptx|xls|xlsx|odt|ods|odp)$/.test(ext)) return "office";
+  return "other";
+}
+function isLocalUploadPath(url){
+  var u = String(url || "").trim();
+  if(!u) return false;
+  if(/^(https?:)?\/\//i.test(u)){
+    try{
+      var parsed = new URL(u, location.href);
+      if(parsed.hostname !== location.hostname) return false;
+      return /^\/files\//i.test(parsed.pathname);
+    }catch(e){ return false; }
+  }
+  return /^(\.\/)?files\//i.test(u) || /^\/files\//i.test(u);
+}
+function filePreviewIcon(kind){
+  return kind === "image" ? "🖼️" : kind === "pdf" ? "📕" : kind === "html" ? "🌐" :
+    kind === "markdown" ? "📝" : kind === "text" ? "📄" : kind === "audio" ? "🎵" :
+    kind === "video" ? "🎬" : kind === "office" ? "📊" : "📎";
+}
+function openFilePreviewFromButton(btn){
+  if(!btn) return;
+  openFilePreview(btn.getAttribute("data-file-url") || "", btn.getAttribute("data-file-name") || "文件");
+}
 function fileActionHTML(url, name){
   if(!url) return "<span>待上传</span>";
+  var local = isLocalUploadPath(url);
+  var kind = filePreviewKind(name, url);
+  if(local){
+    var label = kind === "other" ? "打开" : "预览";
+    return '<button type="button" class="file-open file-preview-trigger" data-file-preview="1" data-file-url="' + esc(url) + '" data-file-name="' + esc(name || "文件") + '">' + label + '</button>';
+  }
   if(isExternalFile(url)){
     return '<a class="file-open" href="'+esc(url)+'" target="_blank" rel="noopener">打开</a>';
   }
   return '<a class="file-open" href="'+esc(url)+'" download="'+esc(name||"")+'" target="_blank" rel="noopener">下载</a>';
+}
+
+/* ============================================================
+   通用文件预览器：站内上传的常见文件直接在页面内打开
+   ============================================================ */
+var fileViewerLoadId = 0;
+function fileViewerAbsolute(url){
+  try{ return new URL(url, document.baseURI).href; }catch(e){ return String(url || ""); }
+}
+function openFilePreview(url, name){
+  if(!url) return;
+  var box = document.getElementById("fileViewer");
+  var body = document.getElementById("fileViewerBody");
+  var nameEl = document.getElementById("fileViewerName");
+  var metaEl = document.getElementById("fileViewerMeta");
+  var iconEl = document.getElementById("fileViewerIcon");
+  var openEl = document.getElementById("fileViewerOpen");
+  var dlEl = document.getElementById("fileViewerDownload");
+  if(!box || !body) return;
+  var abs = fileViewerAbsolute(url);
+  var ext = filePreviewExt(name, abs);
+  var kind = filePreviewKind(name, abs);
+  var loadId = ++fileViewerLoadId;
+  name = name || "文件";
+  if(nameEl) nameEl.textContent = name;
+  if(metaEl) metaEl.textContent = (ext ? ext.toUpperCase() : "文件") + " · " + ({
+    image:"图片预览", pdf:"PDF 文档", html:"HTML 页面", markdown:"Markdown 文档",
+    text:"文本文件", audio:"音频", video:"视频", office:"Office 文档", other:"文件"
+  }[kind] || "文件");
+  if(iconEl) iconEl.textContent = filePreviewIcon(kind);
+  if(openEl) openEl.href = abs;
+  if(dlEl){ dlEl.href = abs; dlEl.setAttribute("download", name); }
+  body.className = "file-viewer-body";
+  body.innerHTML = "";
+
+  if(kind === "image"){
+    body.className += " is-image";
+    body.innerHTML = '<img class="file-viewer-image" src="' + esc(abs) + '" alt="' + esc(name) + '">';
+  }else if(kind === "pdf"){
+    body.className += " is-frame";
+    body.innerHTML = '<iframe class="file-viewer-frame" src="' + esc(abs) + '" title="' + esc(name) + '"></iframe>';
+  }else if(kind === "html"){
+    body.className += " is-frame";
+    body.innerHTML = '<iframe class="file-viewer-frame" src="' + esc(abs) + '" title="' + esc(name) + '" sandbox="allow-scripts allow-forms allow-popups allow-modals allow-downloads"></iframe>';
+  }else if(kind === "audio"){
+    body.innerHTML = '<div class="file-viewer-media"><audio controls autoplay src="' + esc(abs) + '"></audio></div>';
+  }else if(kind === "video"){
+    body.innerHTML = '<div class="file-viewer-media"><video controls autoplay playsinline src="' + esc(abs) + '"></video></div>';
+  }else if(kind === "office"){
+    var localHost = /^(localhost|127\.0\.0\.1|\[::1\])$/i.test(location.hostname);
+    if(localHost){
+      body.innerHTML = '<div class="file-viewer-fallback"><span>📊</span><h3>' + esc(name) + '</h3><p>Office 在线预览需要部署到公网后再打开；本地开发时请先下载查看。</p><div class="file-viewer-fallback-actions"><a class="file-open" href="' + esc(abs) + '" target="_blank" rel="noopener">打开</a><a class="file-open" href="' + esc(abs) + '" download="' + esc(name) + '">下载</a></div></div>';
+    }else{
+      body.className += " is-frame";
+      body.innerHTML = '<iframe class="file-viewer-frame" src="https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(abs) + '" title="' + esc(name) + '"></iframe>';
+    }
+  }else if(kind === "markdown" || kind === "text"){
+    body.innerHTML = '<div class="file-viewer-loading">正在读取文件…</div>';
+    fetch(abs, {cache:"no-store"}).then(function(res){
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      return res.text();
+    }).then(function(text){
+      if(loadId !== fileViewerLoadId) return;
+      if(text.length > 500000) text = text.slice(0, 500000) + "\n\n…（预览已截断，完整内容请下载）";
+      if(kind === "markdown"){
+        body.className += " is-document";
+        body.innerHTML = '<article class="file-viewer-document md-body">' + (mdRenderHTML(text) || '<div class="empty">文件内容为空</div>') + '</article>';
+        if(typeof enhanceCodeBlocks === "function") enhanceCodeBlocks(body);
+      }else{
+        body.className += " is-document";
+        body.innerHTML = '<pre class="file-viewer-text">' + esc(text) + '</pre>';
+      }
+    }).catch(function(err){
+      if(loadId !== fileViewerLoadId) return;
+      body.innerHTML = '<div class="file-viewer-fallback"><span>⚠️</span><h3>暂时无法读取预览</h3><p>' + esc(err.message || "文件可能尚未发布") + '</p><div class="file-viewer-fallback-actions"><a class="file-open" href="' + esc(abs) + '" target="_blank" rel="noopener">新窗口打开</a><a class="file-open" href="' + esc(abs) + '" download="' + esc(name) + '">下载</a></div></div>';
+    });
+  }else{
+    body.innerHTML = '<div class="file-viewer-fallback"><span>' + filePreviewIcon(kind) + '</span><h3>' + esc(name) + '</h3><p>浏览器不能直接预览这个文件类型，可以在新窗口打开或下载。</p><div class="file-viewer-fallback-actions"><a class="file-open" href="' + esc(abs) + '" target="_blank" rel="noopener">打开</a><a class="file-open" href="' + esc(abs) + '" download="' + esc(name) + '">下载</a></div></div>';
+  }
+
+  box.classList.add("show");
+  box.setAttribute("aria-hidden", "false");
+  document.body.classList.add("file-viewer-open");
+  setTimeout(function(){
+    var close = document.getElementById("fileViewerClose");
+    if(close) close.focus();
+  }, 40);
+}
+function closeFilePreview(){
+  fileViewerLoadId++;
+  var box = document.getElementById("fileViewer");
+  var body = document.getElementById("fileViewerBody");
+  if(body) body.innerHTML = "";
+  if(box){ box.classList.remove("show"); box.setAttribute("aria-hidden", "true"); }
+  document.body.classList.remove("file-viewer-open");
+}
+function initFilePreview(){
+  if(window.__filePreviewBound) return;
+  window.__filePreviewBound = true;
+  document.addEventListener("click", function(e){
+    var trigger = e.target.closest("[data-file-preview], .file-preview-trigger");
+    if(trigger){
+      e.preventDefault();
+      e.stopPropagation();
+      openFilePreview(trigger.getAttribute("data-file-url") || trigger.getAttribute("href") || "",
+        trigger.getAttribute("data-file-name") || trigger.textContent.trim());
+      return;
+    }
+    var link = e.target.closest("a[href]");
+    if(!link || link.closest("#fileViewer")) return;
+    var href = link.getAttribute("href") || "";
+    if(!isLocalUploadPath(href) || link.hasAttribute("download")) return;
+    var ext = filePreviewExt("", href);
+    if(!ext) return;
+    e.preventDefault();
+    e.stopPropagation();
+    openFilePreview(href, link.getAttribute("data-file-name") || link.textContent.trim() || "文件");
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") closeFilePreview();
+  });
 }
 
 function fileListGrouped(item){

@@ -53,6 +53,7 @@ function togglePwdView(){
     if(!r.ok) return;
     var d = await r.json();
     document.title = adminTitleFromConfig(d && d.siteConfig);
+    applyAdminFavicon(d && d.siteConfig);
     var h = d && d.siteConfig ? d.siteConfig.loginHint : null;
     var box = document.getElementById("loginHint");
     if(box && h !== null && h !== undefined) box.textContent = h;
@@ -80,6 +81,46 @@ function syncAdminTitleField(){
   var sync = !$("cfgAdminTitleSync") || $("cfgAdminTitleSync").checked;
   if($("cfgAdminTitle")) $("cfgAdminTitle").disabled = sync;
   refreshAdminTitlePreview();
+}
+function adminFaviconLooksLikeImage(v){
+  var s = String(v || "").trim();
+  if(!s) return false;
+  if(/^data:image\//i.test(s)) return true;
+  if(/^(https?:)?\/\//i.test(s)) return true;
+  if(/^\/|^\.?\/(files|assets)\//i.test(s)) return true;
+  if(/^(files|assets)\//i.test(s)) return true;
+  return /\.(svg|png|jpe?g|webp|gif|ico|avif)([?#].*)?$/i.test(s);
+}
+function adminFaviconType(href){
+  var s = String(href || "").toLowerCase();
+  if(/^data:image\/svg\+xml/.test(s) || /\.svg([?#]|$)/.test(s)) return "image/svg+xml";
+  if(/\.ico([?#]|$)/.test(s)) return "image/x-icon";
+  if(/\.webp([?#]|$)/.test(s)) return "image/webp";
+  if(/\.gif([?#]|$)/.test(s)) return "image/gif";
+  if(/\.jpe?g([?#]|$)/.test(s)) return "image/jpeg";
+  return "image/png";
+}
+function applyAdminFavicon(sc){
+  sc = sc || (blogData && blogData.siteConfig) || {};
+  var raw = String(sc.favicon || sc.avatar || "").trim();
+  if(!adminFaviconLooksLikeImage(raw)) raw = "assets/favicon.svg";
+  var href = raw;
+  if(!/^(https?:)?\/\//i.test(href) && !/^data:image\//i.test(href)){
+    href = "/" + href.replace(/^\.?\//, "");
+  }
+  var head = document.head;
+  head.querySelectorAll('link[rel~="icon"], link[rel="apple-touch-icon"]').forEach(function(el){ el.remove(); });
+  var icon = document.createElement("link");
+  icon.id = "adminSiteFavicon";
+  icon.rel = "icon";
+  icon.type = adminFaviconType(href);
+  icon.href = href;
+  head.appendChild(icon);
+  var apple = document.createElement("link");
+  apple.id = "adminSiteTouchIcon";
+  apple.rel = "apple-touch-icon";
+  apple.href = href;
+  head.appendChild(apple);
 }
 function login(){
   var p = $("pwdInput").value;
@@ -273,6 +314,7 @@ async function syncNow(silent){
 
   renderAll();
   applyAdminTabTitle();
+  applyAdminFavicon();
   setSyncState(via === "api" ? "已就绪（API 直读）" : (getStoredToken() ? "已就绪" : "未设置 Token"));
   if(!silent) showToast(via === "api" ? "已从 GitHub 直接读取最新数据（绕过 CDN 缓存）" : "已从 GitHub 重新拉取数据");
 }

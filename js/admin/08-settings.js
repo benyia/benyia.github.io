@@ -33,6 +33,7 @@ function saveSiteConfig(){
   }catch(e){}
   saveData("修改站点设置");
   applyAdminTabTitle();
+  applyAdminFavicon();
   renderAll();
 }
 function clearSiteFavicon(){

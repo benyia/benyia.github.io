@@ -73,11 +73,11 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 
 <!-- 样式按模块拆分（顺序即层叠顺序，不要调换）：基础 → 组件 → 影音 → 独立页 → 首页
      改完任一文件请同步改这里的 ?v= 版本号，避免访客用到旧缓存 -->
-<link rel="stylesheet" href="css/site/01-base.css?v=20261118h">
-<link rel="stylesheet" href="css/site/02-components.css?v=20261118h">
-<link rel="stylesheet" href="css/site/03-media.css?v=20261118h">
-<link rel="stylesheet" href="css/site/04-pages.css?v=20261118h">
-<link rel="stylesheet" href="css/site/05-home.css?v=20261118h">
+<link rel="stylesheet" href="css/site/01-base.css?v=20261118k">
+<link rel="stylesheet" href="css/site/02-components.css?v=20261118k">
+<link rel="stylesheet" href="css/site/03-media.css?v=20261118k">
+<link rel="stylesheet" href="css/site/04-pages.css?v=20261118k">
+<link rel="stylesheet" href="css/site/05-home.css?v=20261118k">
 </head>
 <body>
 <a class="skip-link" href="#mainContent">跳到主要内容</a>
@@ -200,6 +200,7 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
     </div>
 
     <div class="section" id="sec-courses">
+      <div class="course-summary" id="courseSummary"></div>
       <div id="coursesList"></div>
       <div class="pager" id="coursesPager"></div>
     </div>
@@ -602,6 +603,24 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
   <div class="img-lightbox-hint">点击图片或空白处关闭</div>
 </div>
 
+<!-- 通用文件预览器：上传的 PDF / HTML / Markdown / 图片 / 音视频 / Office 文件 -->
+<div class="file-viewer" id="fileViewer" aria-hidden="true" onclick="if(event.target===this)closeFilePreview()">
+  <div class="file-viewer-shell" role="dialog" aria-modal="true" aria-labelledby="fileViewerName">
+    <div class="file-viewer-head">
+      <div class="file-viewer-title">
+        <span id="fileViewerIcon" aria-hidden="true">📄</span>
+        <div><b id="fileViewerName">文件预览</b><span id="fileViewerMeta"></span></div>
+      </div>
+      <div class="file-viewer-tools">
+        <a id="fileViewerOpen" href="#" target="_blank" rel="noopener">新窗口打开</a>
+        <a id="fileViewerDownload" href="#" download>下载</a>
+        <button type="button" id="fileViewerClose" onclick="closeFilePreview()" aria-label="关闭预览">✕</button>
+      </div>
+    </div>
+    <div class="file-viewer-body" id="fileViewerBody"></div>
+  </div>
+</div>
+
 <!-- 首页互动：本机评论 / 点赞 / 收藏 -->
 <div class="eng-dialog" id="engDialog" role="dialog" aria-modal="true" aria-labelledby="engDialogTitle" onclick="if(event.target===this)closeEngagementDialog()">
   <div class="eng-dialog-box">
@@ -622,14 +641,14 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 <div class="footer">© <span id="copyYear">2026</span> 思齐个人主页 · Powered by GitHub Pages</div>
 
 <!-- 脚本按模块拆分：普通 script 共享全局作用域，顺序即依赖顺序，不要调换 -->
-<script src="js/app/01-core.js?v=20261118h"></script>
-<script src="js/app/02-shell.js?v=20261118h"></script>
-<script src="js/app/03-content.js?v=20261118h"></script>
-<script src="js/app/04-markdown.js?v=20261118h"></script>
-<script src="js/app/05-pages.js?v=20261118h"></script>
-<script src="js/app/06-upload.js?v=20261118h"></script>
-<script src="js/app/07-views.js?v=20261118h"></script>
-<script src="js/app/08-music.js?v=20261118h"></script>
-<script src="js/app/09-welcome.js?v=20261118h"></script>
+<script src="js/app/01-core.js?v=20261118k"></script>
+<script src="js/app/02-shell.js?v=20261118k"></script>
+<script src="js/app/03-content.js?v=20261118k"></script>
+<script src="js/app/04-markdown.js?v=20261118k"></script>
+<script src="js/app/05-pages.js?v=20261118k"></script>
+<script src="js/app/06-upload.js?v=20261118k"></script>
+<script src="js/app/07-views.js?v=20261118k"></script>
+<script src="js/app/08-music.js?v=20261118k"></script>
+<script src="js/app/09-welcome.js?v=20261118k"></script>
 </body>
 </html>

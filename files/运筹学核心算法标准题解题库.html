@@ -1,0 +1,2461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>运筹学核心算法题解题库（依据《运筹学解题指导》规范）</title>
+<!-- MathJax 3 配置与加载 -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']],
+    processEscapes: true
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+:root {
+  --primary: #1e3a8a;
+  --primary-light: #3b82f6;
+  --primary-subtle: #eff6ff;
+  --secondary: #0d9488;
+  --accent: #b45309;
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-light: #e2e8f0;
+  --border-dark: #cbd5e1;
+  --pivot-bg: #fee2e2;
+  --pivot-border: #ef4444;
+  --highlight-bg: #fef3c7;
+  --success-bg: #dcfce7;
+  --success-border: #22c55e;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+  line-height: 1.65;
+  color: var(--text-main);
+  background-color: var(--bg-page);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar navigation */
+.sidebar {
+  width: 280px;
+  background: #ffffff;
+  border-right: 1px solid var(--border-light);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  padding: 1.5rem 1rem;
+  z-index: 100;
+}
+
+.sidebar-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--primary-light);
+}
+
+.sidebar-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.nav-group {
+  margin-bottom: 1.25rem;
+}
+
+.nav-group-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.nav-item {
+  display: block;
+  padding: 0.45rem 0.6rem;
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 0.875rem;
+  border-radius: 6px;
+  transition: all 0.15s ease-in-out;
+  margin-bottom: 0.2rem;
+}
+
+.nav-item:hover {
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Main Content */
+.main-wrapper {
+  margin-left: 280px;
+  flex: 1;
+  padding: 2.5rem 3.5rem;
+  max-width: 1200px;
+}
+
+header.doc-header {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.doc-badge {
+  display: inline-block;
+  background: var(--primary-subtle);
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.doc-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.doc-desc {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+}
+
+/* Section styling */
+section.method-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.section-header {
+  border-bottom: 2px solid var(--border-light);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-tag {
+  background: var(--secondary);
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.method-intro {
+  background-color: var(--primary-subtle);
+  border-left: 4px solid var(--primary-light);
+  padding: 0.85rem 1.25rem;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 1.5rem;
+  font-size: 0.925rem;
+}
+
+/* Problem Card */
+.problem-card {
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.problem-header {
+  background: #f1f5f9;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.problem-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.problem-source {
+  font-size: 0.8rem;
+  background: #e2e8f0;
+  color: #475569;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.problem-body {
+  padding: 1.25rem;
+}
+
+.solution-section {
+  margin-top: 1.25rem;
+  border-top: 1px dashed var(--border-light);
+  padding-top: 1.25rem;
+}
+
+.solution-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Callout Box */
+.callout {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.callout-info {
+  background: #f0fdf4;
+  border-left: 4px solid #22c55e;
+  color: #166534;
+}
+
+.callout-warning {
+  background: #fefce8;
+  border-left: 4px solid #eab308;
+  color: #854d0e;
+}
+
+/* Simplex & Math Tables */
+.table-container {
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+
+table.simplex-table, table.transport-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  text-align: center;
+  background: #ffffff;
+}
+
+table.simplex-table th, table.simplex-table td,
+table.transport-table th, table.transport-table td {
+  border: 1px solid var(--border-dark);
+  padding: 6px 8px;
+}
+
+table.simplex-table thead th {
+  background-color: #f8fafc;
+  font-weight: 600;
+  color: #334155;
+}
+
+table.simplex-table tr.sigma-row {
+  background-color: #f1f5f9;
+  font-weight: 600;
+}
+
+table.simplex-table td.pivot {
+  background-color: var(--pivot-bg);
+  color: #991b1b;
+  font-weight: 700;
+  border: 2px solid var(--pivot-border);
+}
+
+table.transport-table .cell-sub {
+  position: relative;
+  height: 48px;
+  min-width: 65px;
+}
+
+.cost-tag {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 0.725rem;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+  padding: 0 3px;
+  border-radius: 2px;
+  background: #f8fafc;
+}
+
+.alloc-num {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-top: 14px;
+}
+
+.alloc-empty {
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  margin-top: 14px;
+}
+
+/* Branch and Bound Tree */
+.tree-node {
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  background: #ffffff;
+  margin-bottom: 0.75rem;
+}
+
+.tree-node.pruned {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.tree-node.integer {
+  border-color: #22c55e;
+  background: #f0fdf4;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 4px;
+}
+.badge-blue { background: #dbeafe; color: #1e40af; }
+.badge-green { background: #dcfce7; color: #166534; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+.badge-amber { background: #fef3c7; color: #92400e; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main-wrapper { margin-left: 0; padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-title">运筹学题解指南</div>
+  <div class="sidebar-subtitle">教材规范 · 详细推导 · 典例真题</div>
+  
+  <div class="nav-group">
+    <div class="nav-group-title">一、运输问题</div>
+    <a class="nav-item" href="#sec-tp-1">题1: 最小元素法与闭回路</a>
+    <a class="nav-item" href="#sec-tp-2">题2: 伏格尔法与位势判定</a>
+  </div>
+  
+  <div class="nav-group">
+    <div class="nav-group-title">二、分支定界法</div>
+    <a class="nav-item" href="#sec-bb-1">题1: 习题 6.1(1) 全整数规划</a>
+    <a class="nav-item" href="#sec-bb-2">题2: 习题 6.1(2) 整数分支搜索</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">三、大M单纯形法</div>
+    <a class="nav-item" href="#sec-bm-1">题1: 习题 2.6(1) 等式与不等式</a>
+    <a class="nav-item" href="#sec-bm-2">题2: 习题 2.6(2) 无可行解判定</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">四、两阶段单纯形法</div>
+    <a class="nav-item" href="#sec-tp-phase-1">题1: 习题 2.6(1) 两阶段精解</a>
+    <a class="nav-item" href="#sec-tp-phase-2">题2: 典例 2 变量受限与自由</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">五、对偶单纯形法</div>
+    <a class="nav-item" href="#sec-ds-1">题1: 习题 3.9(1) 初始不可行迭代</a>
+    <a class="nav-item" href="#sec-ds-2">题2: 典例 4 极小化三约束对偶</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">六、割平面法 (Gomory)</div>
+    <a class="nav-item" href="#sec-cp-1">题1: 习题 6.3(1) 割平面与对偶</a>
+    <a class="nav-item" href="#sec-cp-2">题2: 典例 3 纯分数分解与割平面</a>
+  </div>
+</aside>
+
+<main class="main-wrapper">
+
+<header class="doc-header">
+  <span class="doc-badge">OPERATIONS RESEARCH MANUAL</span>
+  <h1 class="doc-title">运筹学核心算法标准题解题库</h1>
+  <p class="doc-desc">严格遵循《运筹学解题指导（第3版）》规范 · 包含完整单纯形表、位势计算、闭回路调整与割平面方程推导</p>
+</header>
+
+<section id="sec-tp" class="method-section">
+  <div class="section-header">
+    <div class="section-title">
+      <span>一、运输问题求解方法：最小元素法与伏格尔法</span>
+      <span class="section-tag">产销平衡 · 位势法 · 闭回路调整</span>
+    </div>
+  </div>
+  
+  <div class="method-intro">
+    <strong>方法核心原理与规范要求：</strong>
+    <p>运输问题是一类特殊的线性规划问题。通常采用<strong>最小元素法</strong>（就近供应原则）或<strong>伏格尔法</strong>（最大罚数法/差额法）确定初始基可行解（共 $m+n-1$ 个基变量格）；随后利用<strong>位势法</strong>（对偶变量法）设定某一 $u_i=0$，依据基变量格满足 $u_i + v_j = c_{ij}$ 解出所有行位势 $u_i$ 与列位势 $v_j$；再由公式 $\sigma_{ij} = c_{ij} - (u_i + v_j)$ 计算所有非基变量的检验数：若所有 $\sigma_{ij} \ge 0$，则当前解为最优解；若存在 $\sigma_{ij} < 0$，则选取负值最大者作为进基变量，作<strong>闭回路</strong>并确定调整量 $\theta$，进行数字格调整，直至达到最优解。</p>
+  </div>
+
+  <!-- 题目 1 -->
+  <div id="sec-tp-1" class="problem-card">
+    <div class="problem-header">
+      <span class="problem-title">【例题 1】最小元素法求初始解 + 位势法检验 + 闭回路调整法</span>
+      <span class="problem-source">经典产销平衡运输模型</span>
+    </div>
+    <div class="problem-body">
+      <p><strong>【题目描述】</strong></p>
+      <p>某公司拥有三个化工厂 $A_1, A_2, A_3$，日产量分别为 $16\text{ t}, 10\text{ t}, 22\text{ t}$；产品销往四个销售点 $B_1, B_2, B_3, B_4$，日需求量分别为 $8\text{ t}, 14\text{ t}, 12\text{ t}, 14\text{ t}$。各产地到各销地的单位运价（元/吨）如下表所示。请用<strong>最小元素法</strong>编制初始调运方案，用<strong>位势法</strong>进行最优性检验；若非最优，用<strong>闭回路法</strong>进行调整，求出最低运费方案。</p>
+      
+      <div class="table-container">
+        <table class="transport-table" style="max-width: 600px; margin: 0 auto;">
+          <thead>
+            <tr>
+              <th rowspan="2">产地 \ 销地</th>
+              <th colspan="4">销售地及需求量 $b_j$</th>
+              <th rowspan="2">产量 $a_i$</th>
+            </tr>
+            <tr>
+              <th>$B_1$ (8)</th>
+              <th>$B_2$ (14)</th>
+              <th>$B_3$ (12)</th>
+              <th>$B_4$ (14)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>$A_1$</th>
+              <td>4</td><td>12</td><td>4</td><td>11</td><th>16</th>
+            </tr>
+            <tr>
+              <th>$A_2$</th>
+              <td>2</td><td>10</td><td>3</td><td>9</td><th>10</th>
+            </tr>
+            <tr>
+              <th>$A_3$</th>
+              <td>8</td><td>5</td><td>11</td><td>6</td><th>22</th>
+            </tr>
+            <tr>
+              <th>需求合计</th>
+              <td>8</td><td>14</td><td>12</td><td>14</td><th>50 (平衡)</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="solution-section">
+        <div class="solution-title">📌 规范解答与推导过程</div>
+        
+        <p><strong>第一步：验证产销平衡关系</strong></p>
+        <p>总产量 $\sum a_i = 16 + 10 + 22 = 50$，总销量 $\sum b_j = 8 + 14 + 12 + 14 = 50$。产销平衡，基变量数为 $m + n - 1 = 3 + 4 - 1 = 6$ 个。</p>
+
+        <p><strong>第二步：最小元素法编制初始调运方案（写出初始基可行解）</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
+          <li>全局最小运价为 $c_{21} = 2$：分配 $x_{21} = \min(a_2, b_1) = \min(10, 8) = 8$。销地 $B_1$ 需求完全满足，划去第 1 列，$A_2$ 剩余供应量 $10 - 8 = 2$。</li>
+          <li>剩余格中最小运价为 $c_{23} = 3$：分配 $x_{23} = \min(2, 12) = 2$。产地 $A_2$ 供应完毕，划去第 2 行，$B_3$ 尚余需求 $12 - 2 = 10$。</li>
+          <li>未划去格中最小运价为 $c_{13} = 4$：分配 $x_{13} = \min(16, 10) = 10$。销地 $B_3$ 需求完全满足，划去第 3 列，$A_1$ 剩余供应量 $16 - 10 = 6$。</li>
+          <li>未划去格中最小运价为 $c_{32} = 5$：分配 $x_{32} = \min(22, 14) = 14$。销地 $B_2$ 需求完全满足，划去第 2 列，$A_3$ 剩余供应量 $22 - 14 = 8$。</li>
+          <li>未划去格中最小运价为 $c_{34} = 6$：分配 $x_{34} = \min(8, 14) = 8$。产地 $A_3$ 供应完毕，划去第 3 行，$B_4$ 尚余需求 $14 - 8 = 6$。</li>
+          <li>最后仅剩 $(1,4)$ 格，运价 $c_{14} = 11$：分配 $x_{14} = 6$，供需同时满足。</li>
+        </ol>
+
+        <p>初始基可行解包含 6 个数字格：$(2,1)=8, (2,3)=2, (1,3)=10, (1,4)=6, (3,2)=14, (3,4)=8$。无退化现象。</p>
+        <p>初始总运费：
+        $$z_0 = 8\times 2 + 2\times 3 + 10\times 4 + 6\times 11 + 14\times 5 + 8\times 6 = 16 + 6 + 40 + 66 + 70 + 48 = 246\text{ 元}$$
+        </p>
+
+        <p><strong>第三步：初始方案的位势法计算与最优性判定</strong></p>
+        <p>设定行位势 $u_1 = 0$。根据基变量格满足 $u_i + v_j = c_{ij}$：</p>
+        <ul>
+          <li>对基格 $(1,3)$：$u_1 + v_3 = c_{13} \implies 0 + v_3 = 4 \implies v_3 = 4$</li>
+          <li>对基格 $(1,4)$：$u_1 + v_4 = c_{14} \implies 0 + v_4 = 11 \implies v_4 = 11$</li>
+          <li>对基格 $(2,3)$：$u_2 + v_3 = c_{23} \implies u_2 + 4 = 3 \implies u_2 = -1$</li>
+          <li>对基格 $(2,1)$：$u_2 + v_1 = c_{21} \implies -1 + v_1 = 2 \implies v_1 = 3$</li>
+          <li>对基格 $(3,4)$：$u_3 + v_4 = c_{34} \implies u_3 + 11 = 6 \implies u_3 = -5$</li>
+          <li>对基格 $(3,2)$：$u_3 + v_2 = c_{32} \implies -5 + v_2 = 5 \implies v_2 = 10$</li>
+        </ul>
+        <p>计算各非基变量格检验数 $\sigma_{ij} = c_{ij} - (u_i + v_j)$：</p>
+        <ul>
+          <li>$\sigma_{11} = c_{11} - (u_1 + v_1) = 4 - (0 + 3) = 1 \ge 0$</li>
+          <li>$\sigma_{12} = c_{12} - (u_1 + v_2) = 12 - (0 + 10) = 2 \ge 0$</li>
+          <li>$\sigma_{22} = c_{22} - (u_2 + v_2) = 10 - (-1 + 10) = 1 \ge 0$</li>
+          <li><span class="badge badge-red">非最优格</span> $\sigma_{24} = c_{24} - (u_2 + v_4) = 9 - (-1 + 11) = -1 < 0$！</li>
+          <li>$\sigma_{31} = c_{31} - (u_3 + v_1) = 8 - (-5 + 3) = 10 \ge 0$</li>
+          <li>$\sigma_{33} = c_{33} - (u_3 + v_3) = 11 - (-5 + 4) = 12 \ge 0$</li>
+        </ul>
+        <p>由于 $\sigma_{24} = -1 < 0$，该初始方案不是最优解，需进行闭回路调整。</p>
+
+        <!-- 初始表 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 1-1 初始调运方案表及检验数（含位势）</p>
+          <table class="transport-table">
+            <thead>
+              <tr>
+                <th>产地</th>
+                <th>$B_1$</th>
+                <th>$B_2$</th>
+                <th>$B_3$</th>
+                <th>$B_4$</th>
+                <th>产量 $a_i$</th>
+                <th>行位势 $u_i$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>$A_1$</th>
+                <td><div class="cell-sub"><span class="cost-tag">4</span><span class="alloc-empty">$\sigma=1$</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">12</span><span class="alloc-empty">$\sigma=2$</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">4</span><span class="alloc-num">10</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">11</span><span class="alloc-num">6 (-)</span></div></td>
+                <td>16</td>
+                <td><strong>$u_1 = 0$</strong></td>
+              </tr>
+              <tr>
+                <th>$A_2$</th>
+                <td><div class="cell-sub"><span class="cost-tag">2</span><span class="alloc-num">8</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">10</span><span class="alloc-empty">$\sigma=1$</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">3</span><span class="alloc-num">2 (-)</span></div></td>
+                <td style="background-color: var(--highlight-bg);"><div class="cell-sub"><span class="cost-tag">9</span><span class="alloc-empty" style="color:#b91c1c; font-weight:700;">入基 (+) [$\sigma=-1$]</span></div></td>
+                <td>10</td>
+                <td><strong>$u_2 = -1$</strong></td>
+              </tr>
+              <tr>
+                <th>$A_3$</th>
+                <td><div class="cell-sub"><span class="cost-tag">8</span><span class="alloc-empty">$\sigma=10$</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">5</span><span class="alloc-num">14</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">11</span><span class="alloc-empty">$\sigma=12$</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">6</span><span class="alloc-num">8</span></div></td>
+                <td>22</td>
+                <td><strong>$u_3 = -5$</strong></td>
+              </tr>
+              <tr>
+                <th>销量 $b_j$</th>
+                <td>8</td><td>14</td><td>12</td><td>14</td><td>50</td><td>—</td>
+              </tr>
+              <tr style="background:#f1f5f9;">
+                <th>列位势 $v_j$</th>
+                <td><strong>$v_1 = 3$</strong></td>
+                <td><strong>$v_2 = 10$</strong></td>
+                <td><strong>$v_3 = 4$</strong></td>
+                <td><strong>$v_4 = 11$</strong></td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>第四步：闭回路调整与最优方案确定</strong></p>
+        <p>以检验数小于 0 的非基变量格 $(2,4)$ 作为进基格，作唯一的闭回路：
+        $$(2,4) \xrightarrow{+} (1,4) \xrightarrow{-} (1,3) \xrightarrow{+} (2,3) \xrightarrow{-} (2,4)$$
+        </p>
+        <p>回路各顶点的现存运量及符号：$(2,4)(+),\ (1,4)(-,\ 6),\ (1,3)(+,\ 10),\ (2,3)(-,\ 2)$。因此调整量为：
+        $$\theta = \min \{ x_{14}, x_{23} \} = \min(6, 2) = 2$$
+        </p>
+        <p>各格调整后的运量：</p>
+        <ul>
+          <li>$x_{24} = 0 + \theta = 2$（进基）</li>
+          <li>$x_{14} = 6 - \theta = 4$</li>
+          <li>$x_{13} = 10 + \theta = 12$</li>
+          <li>$x_{23} = 2 - \theta = 0$（出基）</li>
+          <li>其余基变量不变：$x_{21} = 8,\ x_{32} = 14,\ x_{34} = 8$</li>
+        </ul>
+
+        <p><strong>第五步：对调整后的方案进行位势检验</strong></p>
+        <p>设 $u_1 = 0$：
+        <ul>
+          <li>由 $(1,3)$: $v_3 = 4$；由 $(1,4)$: $v_4 = 11$</li>
+          <li>由 $(2,4)$: $u_2 + v_4 = 9 \implies u_2 = 9 - 11 = -2$</li>
+          <li>由 $(2,1)$: $u_2 + v_1 = 2 \implies v_1 = 2 - (-2) = 4$</li>
+          <li>由 $(3,4)$: $u_3 + v_4 = 6 \implies u_3 = 6 - 11 = -5$</li>
+          <li>由 $(3,2)$: $u_3 + v_2 = 5 \implies v_2 = 5 - (-5) = 10$</li>
+        </ul>
+        重新计算非基变量检验数：
+        $$\sigma_{11} = 4 - (0 + 4) = 0 \ge 0,\quad \sigma_{12} = 12 - (0 + 10) = 2 \ge 0$$
+        $$\sigma_{22} = 10 - (-2 + 10) = 2 \ge 0,\quad \sigma_{23} = 3 - (-2 + 4) = 1 \ge 0$$
+        $$\sigma_{31} = 8 - (-5 + 4) = 9 \ge 0,\quad \sigma_{33} = 11 - (-5 + 4) = 12 \ge 0$$
+        所有检验数 $\sigma_{ij} \ge 0$，已达到最优解！
+        </p>
+
+        <!-- 最终最优表 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 1-2 最终最优调运方案表及检验数</p>
+          <table class="transport-table">
+            <thead>
+              <tr>
+                <th>产地</th>
+                <th>$B_1$</th>
+                <th>$B_2$</th>
+                <th>$B_3$</th>
+                <th>$B_4$</th>
+                <th>产量 $a_i$</th>
+                <th>行位势 $u_i$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>$A_1$</th>
+                <td><div class="cell-sub"><span class="cost-tag">4</span><span class="alloc-empty">$\sigma=0$</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">12</span><span class="alloc-empty">$\sigma=2$</span></div></td>
+                <td style="background:#f0fdf4;"><div class="cell-sub"><span class="cost-tag">4</span><span class="alloc-num">12</span></div></td>
+                <td style="background:#f0fdf4;"><div class="cell-sub"><span class="cost-tag">11</span><span class="alloc-num">4</span></div></td>
+                <td>16</td>
+                <td><strong>$u_1 = 0$</strong></td>
+              </tr>
+              <tr>
+                <th>$A_2$</th>
+                <td style="background:#f0fdf4;"><div class="cell-sub"><span class="cost-tag">2</span><span class="alloc-num">8</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">10</span><span class="alloc-empty">$\sigma=2$</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">3</span><span class="alloc-empty">$\sigma=1$</span></div></td>
+                <td style="background:#f0fdf4;"><div class="cell-sub"><span class="cost-tag">9</span><span class="alloc-num">2</span></div></td>
+                <td>10</td>
+                <td><strong>$u_2 = -2$</strong></td>
+              </tr>
+              <tr>
+                <th>$A_3$</th>
+                <td><div class="cell-sub"><span class="cost-tag">8</span><span class="alloc-empty">$\sigma=9$</span></div></td>
+                <td style="background:#f0fdf4;"><div class="cell-sub"><span class="cost-tag">5</span><span class="alloc-num">14</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">11</span><span class="alloc-empty">$\sigma=12$</span></div></td>
+                <td style="background:#f0fdf4;"><div class="cell-sub"><span class="cost-tag">6</span><span class="alloc-num">8</span></div></td>
+                <td>22</td>
+                <td><strong>$u_3 = -5$</strong></td>
+              </tr>
+              <tr>
+                <th>销量 $b_j$</th>
+                <td>8</td><td>14</td><td>12</td><td>14</td><td>50</td><td>—</td>
+              </tr>
+              <tr style="background:#f1f5f9;">
+                <th>列位势 $v_j$</th>
+                <td><strong>$v_1 = 4$</strong></td>
+                <td><strong>$v_2 = 10$</strong></td>
+                <td><strong>$v_3 = 4$</strong></td>
+                <td><strong>$v_4 = 11$</strong></td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-info">
+          <strong>最优调运方案结论：</strong>
+          <p>$x_{13}^* = 12,\ x_{14}^* = 4,\ x_{21}^* = 8,\ x_{24}^* = 2,\ x_{32}^* = 14,\ x_{34}^* = 8$，其余 $x_{ij}^* = 0$。</p>
+          <p>最低总运费：
+          $$z^* = 12\times 4 + 4\times 11 + 8\times 2 + 2\times 9 + 14\times 5 + 8\times 6 = 48 + 44 + 16 + 18 + 70 + 48 = 244\text{ 元}$$
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 题目 2 -->
+  <div id="sec-tp-2" class="problem-card">
+    <div class="problem-header">
+      <span class="problem-title">【例题 2】伏格尔法（差额法）求初始解 + 位势法判定最优</span>
+      <span class="problem-source">典型伏格尔罚数决策模型</span>
+    </div>
+    <div class="problem-body">
+      <p><strong>【题目描述】</strong></p>
+      <p>设有三个产地 $A_1, A_2, A_3$，四个销售地 $B_1, B_2, B_3, B_4$。产量分别为 $30, 40, 20$；销量分别为 $20, 25, 25, 20$。单位运价如下表所示。试运用<strong>伏格尔法（Vogel's Approximation Method）</strong>确定初始基可行解，并用<strong>位势法</strong>检验该解是否已达到最优。</p>
+      
+      <div class="table-container">
+        <table class="transport-table" style="max-width: 600px; margin: 0 auto;">
+          <thead>
+            <tr>
+              <th>产地 \ 销地</th>
+              <th>$B_1$ (20)</th>
+              <th>$B_2$ (25)</th>
+              <th>$B_3$ (25)</th>
+              <th>$B_4$ (20)</th>
+              <th>产量 $a_i$</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th>$A_1$</th><td>3</td><td>11</td><td>4</td><td>5</td><td>30</td></tr>
+            <tr><th>$A_2$</th><td>6</td><td>10</td><td>2</td><td>8</td><td>40</td></tr>
+            <tr><th>$A_3$</th><td>7</td><td>4</td><td>9</td><td>3</td><td>20</td></tr>
+            <tr><th>需求量</th><td>20</td><td>25</td><td>25</td><td>20</td><td>90</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="solution-section">
+        <div class="solution-title">📌 规范解答与推导过程</div>
+        
+        <p><strong>第一步：伏格尔法迭代计算过程（按最大行/列罚数分配）</strong></p>
+        <p>伏格尔法的基本思想是：在各行或各列中计算出“次小运价与最小运价之差”（罚数/差额），差额最大者代表如果不按该方向的最小运价调运，将造成最大的运费惩罚，因而优先在最大罚数所在的行或列中选择最小运价格进行最大可能分配。</p>
+
+        <p><strong>【第 1 轮罚数计算】</strong></p>
+        <ul>
+          <li>行罚数：第1行 $|4 - 3| = 1$；第2行 $|6 - 2| = 4$；第3行 $|4 - 3| = 1$</li>
+          <li>列罚数：第1列 $|6 - 3| = 3$；<strong>第2列 $|10 - 4| = 6$（最大罚数）</strong>；第3列 $|4 - 2| = 2$；第4列 $|5 - 3| = 2$</li>
+          <li>决策：最大罚数为第 2 列（罚数 6）。该列最小运价为 $c_{32} = 4$。分配 $x_{32} = \min(a_3, b_2) = \min(20, 25) = 20$。</li>
+          <li>状态更新：产地 $A_3$ 供应完毕，划去第 3 行；销地 $B_2$ 尚余需求 $25 - 20 = 5$。</li>
+        </ul>
+
+        <p><strong>【第 2 轮罚数计算】（剔除第 3 行）</strong></p>
+        <ul>
+          <li>行罚数：第1行 $|4 - 3| = 1$；<strong>第2行 $|6 - 2| = 4$（最大罚数）</strong></li>
+          <li>列罚数：第1列 $|6 - 3| = 3$；第2列 $|11 - 10| = 1$；第3列 $|4 - 2| = 2$；第4列 $|8 - 5| = 3$</li>
+          <li>决策：最大罚数为第 2 行（罚数 4）。该行最小运价为 $c_{23} = 2$。分配 $x_{23} = \min(a_2, b_3) = \min(40, 25) = 25$。</li>
+          <li>状态更新：销地 $B_3$ 需求完全满足，划去第 3 列；产地 $A_2$ 尚余产量 $40 - 25 = 15$。</li>
+        </ul>
+
+        <p><strong>【第 3 轮罚数计算】（剔除第 3 行、第 3 列）</strong></p>
+        <ul>
+          <li>行罚数：第1行 $|5 - 3| = 2$；第2行 $|8 - 6| = 2$</li>
+          <li>列罚数：<strong>第1列 $|6 - 3| = 3$</strong>；第2列 $|11 - 10| = 1$；<strong>第4列 $|8 - 5| = 3$</strong></li>
+          <li>破平决策：第 1 列与第 4 列并列最大罚数 3。第 1 列最小运价 $c_{11} = 3$，第 4 列最小运价 $c_{14} = 5$；选择运价更低的第 1 列。</li>
+          <li>分配 $x_{11} = \min(a_1, b_1) = \min(30, 20) = 20$。销地 $B_1$ 需求完全满足，划去第 1 列；产地 $A_1$ 剩余供应量 $30 - 20 = 10$。</li>
+        </ul>
+
+        <p><strong>【第 4 轮罚数计算】（剩余第 1, 2 行与第 2, 4 列）</strong></p>
+        <ul>
+          <li>行罚数：<strong>第1行 $|11 - 5| = 6$（最大罚数）</strong>；第2行 $|10 - 8| = 2$</li>
+          <li>列罚数：第2列 $|11 - 10| = 1$；第4列 $|8 - 5| = 3$</li>
+          <li>决策：最大罚数为第 1 行（罚数 6）。该行最小运价为 $c_{14} = 5$。分配 $x_{14} = \min(10, 20) = 10$。</li>
+          <li>状态更新：产地 $A_1$ 供应完毕，划去第 1 行；销地 $B_4$ 尚余需求 $20 - 10 = 10$。</li>
+        </ul>
+
+        <p><strong>【第 5 轮收尾分配】</strong></p>
+        <p>此时只剩产地 $A_2$（剩余 15），直接满足 $B_2$ 剩余的 5 和 $B_4$ 剩余的 10：分配 $x_{22} = 5,\ x_{24} = 10$。各点供需完全平衡。</p>
+        
+        <p>基变量格共 6 个：$x_{11}=20,\ x_{14}=10,\ x_{22}=5,\ x_{23}=25,\ x_{24}=10,\ x_{32}=20$。</p>
+
+        <p><strong>第二步：位势法验证初始解的最优性</strong></p>
+        <p>选取基变量最多的第 2 行设定 $u_2 = 0$：</p>
+        <ul>
+          <li>由 $(2,2)$：$u_2 + v_2 = c_{22} \implies 0 + v_2 = 10 \implies v_2 = 10$</li>
+          <li>由 $(2,3)$：$u_2 + v_3 = c_{23} \implies 0 + v_3 = 2 \implies v_3 = 2$</li>
+          <li>由 $(2,4)$：$u_2 + v_4 = c_{24} \implies 0 + v_4 = 8 \implies v_4 = 8$</li>
+          <li>由 $(3,2)$：$u_3 + v_2 = c_{32} \implies u_3 + 10 = 4 \implies u_3 = -6$</li>
+          <li>由 $(1,4)$：$u_1 + v_4 = c_{14} \implies u_1 + 8 = 5 \implies u_1 = -3$</li>
+          <li>由 $(1,1)$：$u_1 + v_1 = c_{11} \implies -3 + v_1 = 3 \implies v_1 = 6$</li>
+        </ul>
+        <p>计算所有非基变量格检验数 $\sigma_{ij} = c_{ij} - (u_i + v_j)$：</p>
+        <ul>
+          <li>$\sigma_{12} = c_{12} - (u_1 + v_2) = 11 - (-3 + 10) = 4 \ge 0$</li>
+          <li>$\sigma_{13} = c_{13} - (u_1 + v_3) = 4 - (-3 + 2) = 5 \ge 0$</li>
+          <li>$\sigma_{21} = c_{21} - (u_2 + v_1) = 6 - (0 + 6) = 0 \ge 0$</li>
+          <li>$\sigma_{31} = c_{31} - (u_3 + v_1) = 7 - (-6 + 6) = 7 \ge 0$</li>
+          <li>$\sigma_{33} = c_{33} - (u_3 + v_3) = 9 - (-6 + 2) = 13 \ge 0$</li>
+          <li>$\sigma_{34} = c_{34} - (u_3 + v_4) = 3 - (-6 + 8) = 1 \ge 0$</li>
+        </ul>
+        <p><strong>最优性结论：</strong>由于所有非基变量检验数满足 $\sigma_{ij} \ge 0$，表明<strong>伏格尔法一步求得的初始基可行解直接就是最优解</strong>！</p>
+
+        <!-- 伏格尔综合解表 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 1-3 伏格尔法初始调运方案及位势检验全表</p>
+          <table class="transport-table">
+            <thead>
+              <tr>
+                <th>产地</th>
+                <th>$B_1$</th>
+                <th>$B_2$</th>
+                <th>$B_3$</th>
+                <th>$B_4$</th>
+                <th>产量 $a_i$</th>
+                <th>行位势 $u_i$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>$A_1$</th>
+                <td style="background:#f0fdf4;"><div class="cell-sub"><span class="cost-tag">3</span><span class="alloc-num">20</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">11</span><span class="alloc-empty">$\sigma=4$</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">4</span><span class="alloc-empty">$\sigma=5$</span></div></td>
+                <td style="background:#f0fdf4;"><div class="cell-sub"><span class="cost-tag">5</span><span class="alloc-num">10</span></div></td>
+                <td>30</td>
+                <td><strong>$u_1 = -3$</strong></td>
+              </tr>
+              <tr>
+                <th>$A_2$</th>
+                <td><div class="cell-sub"><span class="cost-tag">6</span><span class="alloc-empty">$\sigma=0$</span></div></td>
+                <td style="background:#f0fdf4;"><div class="cell-sub"><span class="cost-tag">10</span><span class="alloc-num">5</span></div></td>
+                <td style="background:#f0fdf4;"><div class="cell-sub"><span class="cost-tag">2</span><span class="alloc-num">25</span></div></td>
+                <td style="background:#f0fdf4;"><div class="cell-sub"><span class="cost-tag">8</span><span class="alloc-num">10</span></div></td>
+                <td>40</td>
+                <td><strong>$u_2 = 0$</strong></td>
+              </tr>
+              <tr>
+                <th>$A_3$</th>
+                <td><div class="cell-sub"><span class="cost-tag">7</span><span class="alloc-empty">$\sigma=7$</span></div></td>
+                <td style="background:#f0fdf4;"><div class="cell-sub"><span class="cost-tag">4</span><span class="alloc-num">20</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">9</span><span class="alloc-empty">$\sigma=13$</span></div></td>
+                <td><div class="cell-sub"><span class="cost-tag">3</span><span class="alloc-empty">$\sigma=1$</span></div></td>
+                <td>20</td>
+                <td><strong>$u_3 = -6$</strong></td>
+              </tr>
+              <tr>
+                <th>销量 $b_j$</th>
+                <td>20</td><td>25</td><td>25</td><td>20</td><td>90</td><td>—</td>
+              </tr>
+              <tr style="background:#f1f5f9;">
+                <th>列位势 $v_j$</th>
+                <td><strong>$v_1 = 6$</strong></td>
+                <td><strong>$v_2 = 10$</strong></td>
+                <td><strong>$v_3 = 2$</strong></td>
+                <td><strong>$v_4 = 8$</strong></td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-info">
+          <strong>计算结果总结：</strong>
+          <p>最优调运方案为：$x_{11}^* = 20,\ x_{14}^* = 10,\ x_{22}^* = 5,\ x_{23}^* = 25,\ x_{24}^* = 10,\ x_{32}^* = 20$。</p>
+          <p>最低总运费为：
+          $$z^* = 20\times 3 + 10\times 5 + 5\times 10 + 25\times 2 + 10\times 8 + 20\times 4 = 60 + 50 + 50 + 50 + 80 + 80 = 370\text{ 元}$$
+          </p>
+          <p><em>理论延伸：由于非基变量格 $(2,1)$ 的检验数 $\sigma_{21} = 0$，表示以 $(2,1)$ 进基可以得到另一个具有相同最小运费 $z=370$ 的替代最优解（具有无穷多最优解）。</em></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sec-bb" class="method-section">
+  <div class="section-header">
+    <div class="section-title">
+      <span>二、分支定界法 (Branch and Bound Method)</span>
+      <span class="section-tag">整数规划 · 松弛定界 · 树状分支 · 剪枝剪枝法则</span>
+    </div>
+  </div>
+  
+  <div class="method-intro">
+    <strong>方法核心原理与规范要求（依据教材第6章）：</strong>
+    <p>求解最大化整数规划时：
+    <br>1. 首先求解其不考虑整数约束的<strong>线性松弛规划</strong>，若得到的最优解刚好为整数解，则直接即为整数规划最优解；若为非整数解，其目标函数值构成原问题的一个<strong>上界 $\bar{z}$</strong>，任意已知可行整数解的目标值构成<strong>下界 $\underline{z}$</strong>。
+    <br>2. <strong>分支规则</strong>：选择一个非整数分量 $x_j^* = b_j$，构造两个互斥的约束条件：$x_j \le [b_j]$ 与 $x_j \ge [b_j] + 1$（其中 $[b_j]$ 表示不大于 $b_j$ 的最大整数），分别加入原模型形成两个子问题。
+    <br>3. <strong>剪枝（定界）准则</strong>：
+    （1）子问题无可行解，剪枝；
+    （2）子问题求得整数最优解，若其目标值优于现行下界，则更新下界 $\underline{z}$，并终止该支的进一步分支；
+    （3）子问题松弛最优解目标值 $z \le \underline{z}$，不可能产生更优解，剪枝。
+    重复分支与定界过程，直至所有分支均被剪枝，现行下界对应的整数解即为最优解。</p>
+  </div>
+
+  <!-- 题目 1 -->
+  <div id="sec-bb-1" class="problem-card">
+    <div class="problem-header">
+      <span class="problem-title">【例题 1】课后习题 6.1(1) 全整数线性规划的分支定界求解</span>
+      <span class="problem-source">《运筹学解题指导》第6章 习题 6.1(1)</span>
+    </div>
+    <div class="problem-body">
+      <p><strong>【题目描述】</strong></p>
+      <p>用分支定界法求解下列整数规划问题：
+      $$\begin{aligned}
+      \max \quad & z = 3x_1 + 2x_2 \\
+      \text{s.t.} \quad & 2x_1 + 3x_2 \le 14.5 \\
+      & 4x_1 + x_2 \le 16.5 \\
+      & x_1, x_2 \ge 0, \quad x_1, x_2 \text{ 为整数}
+      \end{aligned}$$
+      </p>
+
+      <div class="solution-section">
+        <div class="solution-title">📌 规范解答与完整分支树推导</div>
+
+        <p><strong>第一步：求解初始线性规划松弛问题（记为 $B_0$）</strong></p>
+        <p>暂时不考虑整数约束，联立两条约束直线边界：
+        $$\begin{cases} 2x_1 + 3x_2 = 14.5 \\ 4x_1 + x_2 = 16.5 \end{cases}$$
+        由第二式得 $x_2 = 16.5 - 4x_1$，代入第一式：
+        $$2x_1 + 3(16.5 - 4x_1) = 14.5 \implies -10x_1 + 49.5 = 14.5 \implies 10x_1 = 35 \implies x_1 = 3.5$$
+        代回得 $x_2 = 16.5 - 4\times 3.5 = 2.5$。
+        松弛问题最优解为：$X^{(0)} = \left(\dfrac{7}{2}, \dfrac{5}{2}\right)^T = (3.5, 2.5)^T$。
+        最优目标函数值：$z^{(0)} = 3\times 3.5 + 2\times 2.5 = 15.5$。
+        由于解含非整数分量，设置初始界：上界 $\bar{z} = 15.5$，由观察显见 $(0,0)$ 为可行整数解，初始下界 $\underline{z} = 0$。
+        </p>
+
+        <p><strong>第二步：对非整数变量 $x_1 = 3.5$ 进行第一轮分支</strong></p>
+        <p>构造两个互斥子问题：$[3.5] = 3$，分支为 $x_1 \le 3$ 与 $x_1 \ge 4$。</p>
+        
+        <div class="tree-node">
+          <strong>子问题 $B_1$：加入约束 $x_1 \le 3$</strong>
+          <p>约束系统为：$2x_1 + 3x_2 \le 14.5,\ 4x_1 + x_2 \le 16.5,\ 0 \le x_1 \le 3,\ x_2 \ge 0$。</p>
+          <p>在 $x_1 = 3$ 处，检验两条边界约束对 $x_2$ 的上限：
+          $$2(3) + 3x_2 \le 14.5 \implies 3x_2 \le 8.5 \implies x_2 \le \frac{17}{6} \approx 2.833$$
+          $$4(3) + x_2 \le 16.5 \implies x_2 \le 4.5$$
+          取较小者，得松弛最优解：$X^{(1)} = \left(3, \dfrac{17}{6}\right)^T$，目标函数值 $z_1 = 3\times 3 + 2\times \dfrac{17}{6} = \dfrac{44}{3} \approx 14.67$。
+          由于 $z_1 = 14.67 > \underline{z} = 0$，保留此分支待进一步分解。
+          </p>
+        </div>
+
+        <div class="tree-node">
+          <strong>子问题 $B_2$：加入约束 $x_1 \ge 4$</strong>
+          <p>约束系统为：$2x_1 + 3x_2 \le 14.5,\ 4x_1 + x_2 \le 16.5,\ x_1 \ge 4,\ x_2 \ge 0$。</p>
+          <p>由 $4x_1 + x_2 \le 16.5$ 及 $x_1 \ge 4$ 可知：$x_1$ 最大只能取 $4.125$；当 $x_1 = 4$ 时，必须满足 $x_2 \le 16.5 - 16 = 0.5$。
+          此时 $2(4) + 3(0.5) = 9.5 \le 14.5$ 满足。
+          松弛最优解在边界交点取得：$X^{(2)} = (4, 0.5)^T$。
+          目标函数值：$z_2 = 3\times 4 + 2\times 0.5 = 13$。
+          </p>
+        </div>
+
+        <p><strong>第三步：对子问题 $B_1$ 的非整数分量 $x_2 = \dfrac{17}{6} \approx 2.833$ 进行第二轮分支</strong></p>
+        <p>构造分支约束：$x_2 \le 2$ 与 $x_2 \ge 3$。</p>
+
+        <div class="tree-node integer">
+          <span class="badge badge-green">获得整数解</span> <strong>子问题 $B_3$：$x_1 \le 3,\ x_2 \le 2$</strong>
+          <p>在区域 $x_1 \le 3, x_2 \le 2$ 内，显然在右上顶点 $x_1 = 3, x_2 = 2$ 处取得极大化目标函数值：
+          $$z_3 = 3\times 3 + 2\times 2 = 13$$
+          检验约束条件：$2(3) + 3(2) = 12 \le 14.5$（满足），$4(3) + 2 = 14 \le 16.5$（满足）。
+          <strong>该解全为整数！</strong>
+          因此获得一个合格的整数可行解 $X = (3, 2)^T$，更新现行下界：
+          $$\underline{z} = \max(\underline{z}, 13) = 13$$
+          <strong>剪枝：</strong>由于本支已获得整数解，终止对 $B_3$ 的继续分支。
+          </p>
+        </div>
+
+        <div class="tree-node">
+          <strong>子问题 $B_4$：$x_1 \le 3,\ x_2 \ge 3$</strong>
+          <p>由于要求 $x_2 \ge 3$，由第一条约束：$2x_1 + 3(3) \le 14.5 \implies 2x_1 \le 5.5 \implies x_1 \le 2.75$。
+          当 $x_1 = 2.75, x_2 = 3$ 时，检验第二条约束：$4(2.75) + 3 = 11 + 3 = 14 \le 16.5$ 满足。
+          松弛最优解为：$X^{(4)} = (2.75, 3)^T = \left(\dfrac{11}{4}, 3\right)^T$。
+          目标函数值：$z_4 = 3\times 2.75 + 2\times 3 = 14.25 = \dfrac{57}{4}$。
+          由于 $z_4 = 14.25 > \underline{z} = 13$，且 $x_1 = 2.75$ 为非整数，需对 $B_4$ 继续分支。
+          </p>
+        </div>
+
+        <p><strong>第四步：对子问题 $B_4$ 的非整数分量 $x_1 = 2.75$ 进行第三轮分支</strong></p>
+        <p>构造分支约束：$x_1 \le 2$ 与 $x_1 \ge 3$。</p>
+
+        <div class="tree-node pruned">
+          <span class="badge badge-red">剪枝 (界不优)</span> <strong>子问题 $B_5$：$x_1 \le 2,\ x_2 \ge 3$</strong>
+          <p>由 $2x_1 + 3x_2 \le 14.5$ 及 $x_1 \le 2$：在 $x_1 = 2$ 处，$3x_2 \le 14.5 - 4 = 10.5 \implies x_2 \le 3.5$。
+          松弛最优解为 $x_1 = 2, x_2 = 3.5$，目标函数值 $z_5 = 3\times 2 + 2\times 3.5 = 13$。
+          由于 $z_5 = 13 \le \underline{z} = 13$，其松弛最优值不可能严格大于当前已知整数解，<strong>直接剪枝！</strong>
+          </p>
+        </div>
+
+        <div class="tree-node pruned">
+          <span class="badge badge-red">剪枝 (不可行)</span> <strong>子问题 $B_6$：$x_1 \ge 3$（且原已有 $x_1 \le 3, x_2 \ge 3$）</strong>
+          <p>同时满足 $x_1 \ge 3$ 与 $x_1 \le 3$ 意味着只能取 $x_1 = 3$。
+          但当 $x_1 = 3, x_2 \ge 3$ 时，代入约束：
+          $$2(3) + 3x_2 \ge 6 + 9 = 15 > 14.5$$
+          这与原约束 $2x_1 + 3x_2 \le 14.5$ 发生矛盾！子问题 $B_6$ <strong>可行域为空集，直接剪枝！</strong>
+          </p>
+        </div>
+
+        <p><strong>第五步：回溯考察未完成分支 $B_2$</strong></p>
+        <div class="tree-node pruned">
+          <span class="badge badge-red">剪枝 (界不优)</span> <strong>子问题 $B_2$：$x_1 \ge 4$</strong>
+          <p>在第二步中计算出 $B_2$ 的松弛最优目标值为 $z_2 = 13$。
+          由于 $z_2 = 13 \le \underline{z} = 13$，该分支绝不可能产生优于 13 的整数解，<strong>无需继续分支，直接剪枝！</strong>
+          </p>
+        </div>
+
+        <div class="callout callout-info">
+          <strong>【最终最优解结论】</strong>
+          <p>经过全面分支与定界搜索，所有分支已全部剪枝终止。最终唯一最优整数解为：
+          $$x_1^* = 3, \quad x_2^* = 2, \quad \max z^* = 13$$
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 题目 2 -->
+  <div id="sec-bb-2" class="problem-card">
+    <div class="problem-header">
+      <span class="problem-title">【例题 2】课后习题 6.1(2) 整数规划分支搜索与剪枝</span>
+      <span class="problem-source">《运筹学解题指导》第6章 习题 6.1(2)</span>
+    </div>
+    <div class="problem-body">
+      <p><strong>【题目描述】</strong></p>
+      <p>用分支定界法求解下列整数规划问题：
+      $$\begin{aligned}
+      \max \quad & z = 3x_1 + 2x_2 \\
+      \text{s.t.} \quad & 2x_1 + 3x_2 \le 14 \\
+      & 2x_1 + x_2 \le 9 \\
+      & x_1, x_2 \ge 0, \quad x_1, x_2 \text{ 为整数}
+      \end{aligned}$$
+      </p>
+
+      <div class="solution-section">
+        <div class="solution-title">📌 规范解答与推导过程</div>
+
+        <p><strong>第一步：求解松弛线性规划问题（$B_0$）</strong></p>
+        <p>联立两条约束直线方程：
+        $$\begin{cases} 2x_1 + 3x_2 = 14 \\ 2x_1 + x_2 = 9 \end{cases}$$
+        两式相减可得：$2x_2 = 5 \implies x_2 = 2.5$。
+        代入第二式得：$2x_1 = 9 - 2.5 = 6.5 \implies x_1 = 3.25$。
+        松弛问题的最优解为：
+        $$X^{(0)} = \left(\frac{13}{4}, \frac{5}{2}\right)^T = (3.25, 2.5)^T$$
+        对应的连续最优目标值为：
+        $$z^{(0)} = 3\times 3.25 + 2\times 2.5 = 9.75 + 5 = 14.75 = \frac{59}{4}$$
+        目标函数上界 $\bar{z} = 14.75$，初始下界 $\underline{z} = 0$。解中 $x_1, x_2$ 均为非整数，需进行分支。
+        </p>
+
+        <p><strong>第二步：选择非整数变量 $x_1 = 3.25$ 进行分支</strong></p>
+        <p>构造分支约束条件：$x_1 \le 3$（子问题 $B_1$）与 $x_1 \ge 4$（子问题 $B_2$）。</p>
+
+        <div class="tree-node">
+          <strong>子问题 $B_1$：加入约束 $x_1 \le 3$</strong>
+          <p>约束条件为：$2x_1 + 3x_2 \le 14,\ 2x_1 + x_2 \le 9,\ x_1 \le 3,\ x_1, x_2 \ge 0$。</p>
+          <p>分析可行域边界，在 $x_1 = 3$ 处：
+          $$2(3) + 3x_2 \le 14 \implies 3x_2 \le 8 \implies x_2 \le \frac{8}{3} \approx 2.667$$
+          $$2(3) + x_2 \le 9 \implies x_2 \le 3$$
+          因此 $x_2$ 最大取 $\dfrac{8}{3}$。
+          子问题 $B_1$ 的松弛最优解为：$X^{(1)} = \left(3, \dfrac{8}{3}\right)^T$。
+          最优目标函数值：$z_1 = 3\times 3 + 2\times \dfrac{8}{3} = 9 + \dfrac{16}{3} = \dfrac{43}{3} \approx 14.33$。
+          </p>
+        </div>
+
+        <div class="tree-node integer">
+          <span class="badge badge-green">获得整数最优解候选</span> <strong>子问题 $B_2$：加入约束 $x_1 \ge 4$</strong>
+          <p>约束条件为：$2x_1 + 3x_2 \le 14,\ 2x_1 + x_2 \le 9,\ x_1 \ge 4,\ x_1, x_2 \ge 0$。</p>
+          <p>由 $2x_1 + x_2 \le 9$ 与 $x_1 \ge 4$ 可知：$x_1$ 只能在 $[4, 4.5]$ 内取值。
+          为使目标函数 $3x_1 + 2x_2$ 尽可能大，在边界点 $x_1 = 4$ 处：
+          $$2(4) + x_2 \le 9 \implies x_2 \le 1$$
+          检验第一条约束：$2(4) + 3(1) = 11 \le 14$ 满足。
+          因此，在顶点 $(4, 1)$ 处取得最优解！
+          由于 $x_1 = 4, x_2 = 1$ <strong>均为整数</strong>，该解为整数可行解！
+          其目标函数值为：
+          $$z_2 = 3\times 4 + 2\times 1 = 14$$
+          <strong>立即更新下界：</strong>$\underline{z} = \max(0, 14) = 14$。
+          <strong>剪枝：</strong>本支已达到整数解，终止对 $B_2$ 继续分支。
+          </p>
+        </div>
+
+        <p><strong>第三步：对子问题 $B_1$ 进行剪枝判定与验证</strong></p>
+        <p>子问题 $B_1$ 的松弛最优值为 $z_1 = \dfrac{43}{3} \approx 14.33$。
+        由于原目标函数的系数 $(3, 2)$ 均为整数，对任意整数解 $(x_1, x_2)$，目标函数值 $z = 3x_1 + 2x_2$ 必为整数。
+        因此，$B_1$ 域内可能得到的整数目标值上限为 $[14.33] = 14$。
+        我们对 $B_1$ 进一步对非整数分量 $x_2 = 8/3 \approx 2.67$ 进行分支检验：
+        </p>
+
+        <div class="tree-node pruned">
+          <span class="badge badge-red">剪枝 (界不优)</span> <strong>分支 $x_2 \le 2$：</strong>
+          <p>在 $x_1 \le 3, x_2 \le 2$ 约束下，最大可能目标值为 $z = 3(3) + 2(2) = 13$。
+          由于 $13 < \underline{z} = 14$，直接剪枝！
+          </p>
+        </div>
+
+        <div class="tree-node pruned">
+          <span class="badge badge-red">剪枝 (界不优)</span> <strong>分支 $x_2 \ge 3$：</strong>
+          <p>代入约束 $2x_1 + 3(3) \le 14 \implies 2x_1 \le 5 \implies x_1 \le 2.5$。
+          最大目标值为 $z = 3(2.5) + 2(3) = 13.5$。
+          由于 $13.5 < \underline{z} = 14$，直接剪枝！
+          </p>
+        </div>
+
+        <div class="callout callout-info">
+          <strong>【最终最优解结论】</strong>
+          <p>所有分支均已剪枝定界。整数规划的最优解为：
+          $$x_1^* = 4, \quad x_2^* = 1, \quad \max z^* = 14$$
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sec-bm" class="method-section">
+  <div class="section-header">
+    <div class="section-title">
+      <span>三、大M单纯形法 (Big-M Method)</span>
+      <span class="section-tag">人工变量 · 惩罚因子 · 最优解与无解判定</span>
+    </div>
+  </div>
+  
+  <div class="method-intro">
+    <strong>方法核心原理与规范要求（依据教材第2章第6节）：</strong>
+    <p>当线性规划模型化为标准型后，若约束方程系数矩阵中不存在现成的单位矩阵（即缺乏初始基变量），需在相应的等式或“$\ge$”型约束中引入<strong>人工变量 $x_a \ge 0$</strong>。
+    <br>在目标函数中对人工变量赋予一个<strong>绝对值极其巨大的负罚数 $-M$</strong>（极小化问题为 $+M$），使得在单纯形法迭代寻求最大化时，系统必然优先将人工变量驱逐出基。
+    <br><strong>终止判别法则：</strong>
+    1. 当所有检验数 $\sigma_j \le 0$，且所有人工变量均已出基（或虽在基中但取值为 0），则当前解为原问题的最优解；
+    2. 当所有检验数 $\sigma_j \le 0$，但基变量中<strong>仍含有人工变量且其取值严格大于 0</strong>，则判定<strong>原线性规划问题无可行解</strong>。</p>
+  </div>
+
+  <!-- 题目 1 -->
+  <div id="sec-bm-1" class="problem-card">
+    <div class="problem-header">
+      <span class="problem-title">【例题 1】课后习题 2.6(1) 含等式与不等式约束的大M法求解（唯一最优解）</span>
+      <span class="problem-source">《运筹学解题指导》第2章 习题 2.6(1)</span>
+    </div>
+    <div class="problem-body">
+      <p><strong>【题目描述】</strong></p>
+      <p>分别用大M法求解下述线性规划问题，并指出属于哪一类解：
+      $$\begin{aligned}
+      \max \quad & z = 2x_1 + 3x_2 - 5x_3 \\
+      \text{s.t.} \quad & x_1 + x_2 + x_3 = 7 \\
+      & 2x_1 - 5x_2 + x_3 \ge 10 \\
+      & x_1, x_2, x_3 \ge 0
+      \end{aligned}$$
+      </p>
+
+      <div class="solution-section">
+        <div class="solution-title">📌 规范解答与完整单纯形表迭代</div>
+
+        <p><strong>第一步：化为标准型并引入人工变量与大M惩罚项</strong></p>
+        <p>第 1 个约束为等式约束，引入人工变量 $x_4 \ge 0$；
+        第 2 个约束为“$\ge$”型约束，减去剩余变量 $x_5 \ge 0$，并加上人工变量 $x_6 \ge 0$。
+        在目标函数中，人工变量 $x_4, x_6$ 的价值系数赋予 $-M$（$M$ 为充分大的正数）：
+        $$\begin{aligned}
+        \max \quad & z = 2x_1 + 3x_2 - 5x_3 - M x_4 + 0\cdot x_5 - M x_6 \\
+        \text{s.t.} \quad & x_1 + x_2 + x_3 + x_4 = 7 \\
+        & 2x_1 - 5x_2 + x_3 - x_5 + x_6 = 10 \\
+        & x_1, x_2, x_3, x_4, x_5, x_6 \ge 0
+        \end{aligned}$$
+        初始基变量为 $X_B = (x_4, x_6)^T$，对应价值系数 $C_B = (-M, -M)^T$。
+        </p>
+
+        <p><strong>第二步：大M单纯形法迭代计算表</strong></p>
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 3-1 习题 2.6(1) 大M法单纯形迭代全表（表 2-8）</p>
+          <table class="simplex-table">
+            <thead>
+              <tr>
+                <th colspan="3">$c_j \to$</th>
+                <th>2</th>
+                <th>3</th>
+                <th>-5</th>
+                <th>-M</th>
+                <th>0</th>
+                <th>-M</th>
+                <th rowspan="2">$\theta_i$</th>
+              </tr>
+              <tr>
+                <th>$C_B$</th>
+                <th>$X_B$</th>
+                <th>$b$</th>
+                <th>$x_1$</th>
+                <th>$x_2$</th>
+                <th>$x_3$</th>
+                <th>$x_4$</th>
+                <th>$x_5$</th>
+                <th>$x_6$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Iteration 0 -->
+              <tr>
+                <td>$-M$</td><td>$x_4$</td><td>7</td>
+                <td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td>
+                <td>$7/1 = 7$</td>
+              </tr>
+              <tr>
+                <td>$-M$</td><td>$x_6$</td><td>10</td>
+                <td class="pivot">[2]</td><td>-5</td><td>1</td><td>0</td><td>-1</td><td>1</td>
+                <td>$10/2 = 5$ ←</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z$</td><td>$17M$</td>
+                <td style="color:#b91c1c; font-weight:700;">$3M + 2$ ↑</td>
+                <td>$3 - 4M$</td><td>$2M - 5$</td><td>0</td><td>$-M$</td><td>0</td>
+                <td>入基 $x_1$，出基 $x_6$</td>
+              </tr>
+              <!-- Iteration 1 -->
+              <tr>
+                <td>$-M$</td><td>$x_4$</td><td>2</td>
+                <td>0</td><td class="pivot">[7/2]</td><td>1/2</td><td>1</td><td>1/2</td><td>-1/2</td>
+                <td>$2 / (7/2) = 4/7$ ←</td>
+              </tr>
+              <tr>
+                <td>2</td><td>$x_1$</td><td>5</td>
+                <td>1</td><td>-5/2</td><td>1/2</td><td>0</td><td>-1/2</td><td>1/2</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z$</td><td>$2M - 10$</td>
+                <td>0</td><td style="color:#b91c1c; font-weight:700;">$\dfrac{7}{2}M + 8$ ↑</td>
+                <td>$\dfrac{1}{2}M - 6$</td><td>0</td><td>$\dfrac{1}{2}M + 1$</td><td>$-\dfrac{3}{2}M - 1$</td>
+                <td>入基 $x_2$，出基 $x_4$</td>
+              </tr>
+              <!-- Iteration 2 -->
+              <tr style="background:#f0fdf4;">
+                <td>3</td><td>$x_2$</td><td>4/7</td>
+                <td>0</td><td>1</td><td>1/7</td><td>2/7</td><td>1/7</td><td>-1/7</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>2</td><td>$x_1$</td><td>45/7</td>
+                <td>1</td><td>0</td><td>6/7</td><td>5/7</td><td>-1/7</td><td>1/7</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row" style="background:#dcfce7;">
+                <td colspan="2">$-z$</td><td>$\dfrac{102}{7}$</td>
+                <td>0</td><td>0</td><td>$-50/7$</td><td>$-M - 16/7$</td><td>$-1/7$</td><td>$-M + 1/7$</td>
+                <td><strong>已达最优解</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>第三步：检验数计算与最优解分析</strong></p>
+        <p>在最终单纯形表中：
+        $$\sigma_3 = -5 - \left[3\times\frac{1}{7} + 2\times\frac{6}{7}\right] = -\frac{50}{7} \le 0$$
+        $$\sigma_4 = -M - \left[3\times\frac{2}{7} + 2\times\frac{5}{7}\right] = -M - \frac{16}{7} \le 0$$
+        $$\sigma_5 = 0 - \left[3\times\frac{1}{7} + 2\times\left(-\frac{1}{7}\right)\right] = -\frac{1}{7} \le 0$$
+        $$\sigma_6 = -M - \left[3\times\left(-\frac{1}{7}\right) + 2\times\frac{1}{7}\right] = -M + \frac{1}{7} \le 0$$
+        所有非基变量的检验数均严格为负，且人工变量 $x_4, x_6$ 已全部出基。
+        </p>
+
+        <div class="callout callout-info">
+          <strong>解的类型与结论：</strong>
+          <p>此线性规划问题存在<strong>唯一最优解</strong>：
+          $$X^* = \left(\frac{45}{7}, \frac{4}{7}, 0\right)^T$$
+          目标函数最优值为：
+          $$\max z^* = 2\times\frac{45}{7} + 3\times\frac{4}{7} - 5\times 0 = \frac{90 + 12}{7} = \frac{102}{7}$$
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 题目 2 -->
+  <div id="sec-bm-2" class="problem-card">
+    <div class="problem-header">
+      <span class="problem-title">【例题 2】课后习题 2.6(2) 大M法识别并判定无可行解</span>
+      <span class="problem-source">《运筹学解题指导》第2章 习题 2.6(2)</span>
+    </div>
+    <div class="problem-body">
+      <p><strong>【题目描述】</strong></p>
+      <p>用大M法求解下述线性规划问题，并指出属于哪一类解：
+      $$\begin{aligned}
+      \max \quad & z = 10x_1 + 15x_2 + 12x_3 \\
+      \text{s.t.} \quad & 5x_1 + 3x_2 + x_3 \le 9 \\
+      & -5x_1 + 6x_2 + 15x_3 \le 15 \\
+      & 2x_1 + x_2 + x_3 \ge 5 \\
+      & x_1, x_2, x_3 \ge 0
+      \end{aligned}$$
+      </p>
+
+      <div class="solution-section">
+        <div class="solution-title">📌 规范解答与完整单纯形表推导</div>
+
+        <p><strong>第一步：化为标准型并加入人工变量</strong></p>
+        <p>前两个约束为“$\le$”型，分别加入松弛变量 $x_4 \ge 0, x_5 \ge 0$；
+        第三个约束为“$\ge$”型，减去剩余变量 $x_6 \ge 0$ 并加入人工变量 $x_7 \ge 0$。
+        在目标函数中赋予 $x_7$ 系数 $-M$：
+        $$\begin{aligned}
+        \max \quad & z = 10x_1 + 15x_2 + 12x_3 + 0\cdot x_4 + 0\cdot x_5 + 0\cdot x_6 - M x_7 \\
+        \text{s.t.} \quad & 5x_1 + 3x_2 + x_3 + x_4 = 9 \\
+        & -5x_1 + 6x_2 + 15x_3 + x_5 = 15 \\
+        & 2x_1 + x_2 + x_3 - x_6 + x_7 = 5 \\
+        & x_j \ge 0 \quad (j = 1, 2, \dots, 7)
+        \end{aligned}$$
+        初始基变量：$X_B = (x_4, x_5, x_7)^T$，对应 $C_B = (0, 0, -M)^T$。
+        </p>
+
+        <p><strong>第二步：大M单纯形法迭代过程</strong></p>
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 3-2 习题 2.6(2) 大M法单纯形迭代全表（表 2-11）</p>
+          <table class="simplex-table">
+            <thead>
+              <tr>
+                <th colspan="3">$c_j \to$</th>
+                <th>10</th>
+                <th>15</th>
+                <th>12</th>
+                <th>0</th>
+                <th>0</th>
+                <th>0</th>
+                <th>-M</th>
+                <th rowspan="2">$\theta_i$</th>
+              </tr>
+              <tr>
+                <th>$C_B$</th>
+                <th>$X_B$</th>
+                <th>$b$</th>
+                <th>$x_1$</th>
+                <th>$x_2$</th>
+                <th>$x_3$</th>
+                <th>$x_4$</th>
+                <th>$x_5$</th>
+                <th>$x_6$</th>
+                <th>$x_7$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Iteration 0 -->
+              <tr>
+                <td>0</td><td>$x_4$</td><td>9</td>
+                <td class="pivot">[5]</td><td>3</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td>
+                <td>$9/5$ ←</td>
+              </tr>
+              <tr>
+                <td>0</td><td>$x_5$</td><td>15</td>
+                <td>-5</td><td>6</td><td>15</td><td>0</td><td>1</td><td>0</td><td>0</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>$-M$</td><td>$x_7$</td><td>5</td>
+                <td>2</td><td>1</td><td>1</td><td>0</td><td>0</td><td>-1</td><td>1</td>
+                <td>$5/2$</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z$</td><td>$5M$</td>
+                <td style="color:#b91c1c; font-weight:700;">$2M + 10$ ↑</td>
+                <td>$M + 15$</td><td>$M + 12$</td><td>0</td><td>0</td><td>$-M$</td><td>0</td>
+                <td>入基 $x_1$，出基 $x_4$</td>
+              </tr>
+              <!-- Iteration 1 -->
+              <tr>
+                <td>10</td><td>$x_1$</td><td>9/5</td>
+                <td>1</td><td>3/5</td><td>1/5</td><td>1/5</td><td>0</td><td>0</td><td>0</td>
+                <td>$9$</td>
+              </tr>
+              <tr>
+                <td>0</td><td>$x_5$</td><td>24</td>
+                <td>0</td><td>9</td><td class="pivot">[16]</td><td>1</td><td>1</td><td>0</td><td>0</td>
+                <td>$24/16 = 3/2$ ←</td>
+              </tr>
+              <tr>
+                <td>$-M$</td><td>$x_7$</td><td>7/5</td>
+                <td>0</td><td>-1/5</td><td>3/5</td><td>-2/5</td><td>0</td><td>-1</td><td>1</td>
+                <td>$7/3$</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z$</td><td>$\dfrac{7}{5}M - 18$</td>
+                <td>0</td><td>$9 - \dfrac{1}{5}M$</td><td style="color:#b91c1c; font-weight:700;">$\dfrac{3}{5}M + 10$ ↑</td>
+                <td>$-\dfrac{2}{5}M - 2$</td><td>0</td><td>$-M$</td><td>0</td>
+                <td>入基 $x_3$，出基 $x_5$</td>
+              </tr>
+              <!-- Iteration 2 -->
+              <tr style="background:#fef2f2;">
+                <td>10</td><td>$x_1$</td><td>3/2</td>
+                <td>1</td><td>39/80</td><td>0</td><td>3/16</td><td>-1/80</td><td>0</td><td>0</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#fef2f2;">
+                <td>12</td><td>$x_3$</td><td>3/2</td>
+                <td>0</td><td>9/16</td><td>1</td><td>1/16</td><td>1/16</td><td>0</td><td>0</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#fee2e2;">
+                <td>$-M$</td><td>$x_7$</td><td><strong>1/2</strong></td>
+                <td>0</td><td>-43/80</td><td>0</td><td>-7/16</td><td>-3/80</td><td>-1</td><td>1</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row" style="background:#fee2e2;">
+                <td colspan="2">$-z$</td><td>$\dfrac{M}{2} - 33$</td>
+                <td>0</td>
+                <td>$-\dfrac{27}{8} - \dfrac{43}{80}M$</td>
+                <td>0</td>
+                <td>$-\dfrac{21}{8} - \dfrac{7}{16}M$</td>
+                <td>$-\dfrac{5}{8} - \dfrac{3}{80}M$</td>
+                <td>$-M$</td><td>0</td>
+                <td><strong>最优性判别式成立</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>第三步：无解判定分析</strong></p>
+        <p>观察最终单纯形表：
+        所有非基变量的检验数分别为：
+        $$\sigma_2 = -\frac{27}{8} - \frac{43}{80}M < 0, \quad \sigma_4 = -\frac{21}{8} - \frac{7}{16}M < 0$$
+        $$\sigma_5 = -\frac{5}{8} - \frac{3}{80}M < 0, \quad \sigma_6 = -M < 0$$
+        当 $M$ 为充分大正数时，所有的非基变量检验数<strong>均满足 $\sigma_j \le 0$</strong>，算法无法继续通过换基增加目标函数值。
+        然而，<strong>基变量中仍然存在人工变量 $x_7$，且其取值为严格正数：</strong>
+        $$x_7 = \frac{1}{2} > 0$$
+        </p>
+
+        <div class="callout callout-warning">
+          <strong>解的类型与判定结论：</strong>
+          <p>由于所有非基变量检验数均已为负，但基变量中仍然存在非零的人工变量（$x_7 = 1/2$），说明原线性规划问题的可行域为空集，<strong>原线性规划问题无可行解</strong>。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sec-tp-phase" class="method-section">
+  <div class="section-header">
+    <div class="section-title">
+      <span>四、两阶段单纯形法 (Two-Phase Simplex Method)</span>
+      <span class="section-tag">辅助目标规划 · 第一阶段人工消除 · 第二阶段最优求解</span>
+    </div>
+  </div>
+  
+  <div class="method-intro">
+    <strong>方法核心原理与规范要求（依据教材第2章第6节）：</strong>
+    <p>两阶段法避免了大M法中引入抽象大常数 $M$ 带来的计算机数值计算误差。
+    <br><strong>第一阶段：</strong>构造辅助问题，只含人工变量且以人工变量之和最小为目标（$\min w = \sum x_a$ 或 $\max (-w) = -\sum x_a$），原问题决策变量在辅助目标函数中的价值系数全置为 0。使用单纯形法求解该辅助问题：
+    <ul>
+      <li>若最优目标值 $\min w = 0$，说明人工变量能被全部清零/驱逐出基，原问题存在可行解，转入第二阶段；</li>
+      <li>若最优目标值 $\min w > 0$，说明不可能消除人工变量，原问题<strong>无可行解</strong>，停止计算。</li>
+    </ul>
+    <strong>第二阶段：</strong>划去人工变量列，将第一阶段最终表中的目标行恢复为原问题的价值系数向量，以第一阶段求得的基可行解作为第二阶段初始表，继续用单纯形法迭代直至最优。</p>
+  </div>
+
+  <!-- 题目 1 -->
+  <div id="sec-tp-phase-1" class="problem-card">
+    <div class="problem-header">
+      <span class="problem-title">【例题 1】课后习题 2.6(1) 两阶段法标准规范求解</span>
+      <span class="problem-source">《运筹学解题指导》第2章 习题 2.6(1) 解法二</span>
+    </div>
+    <div class="problem-body">
+      <p><strong>【题目描述】</strong></p>
+      <p>用两阶段法求解下述线性规划问题：
+      $$\begin{aligned}
+      \max \quad & z = 2x_1 + 3x_2 - 5x_3 \\
+      \text{s.t.} \quad & x_1 + x_2 + x_3 = 7 \\
+      & 2x_1 - 5x_2 + x_3 \ge 10 \\
+      & x_1, x_2, x_3 \ge 0
+      \end{aligned}$$
+      </p>
+
+      <div class="solution-section">
+        <div class="solution-title">📌 规范解答与完整两阶段计算过程</div>
+
+        <p><strong>第一阶段：建立并求解辅助线性规划问题</strong></p>
+        <p>引入人工变量 $x_4 \ge 0, x_6 \ge 0$ 及剩余变量 $x_5 \ge 0$。第一阶段目标为极小化人工变量之和：
+        $$\begin{aligned}
+        \min \quad & w = x_4 + x_6 \\
+        \text{s.t.} \quad & x_1 + x_2 + x_3 + x_4 = 7 \\
+        & 2x_1 - 5x_2 + x_3 - x_5 + x_6 = 10 \\
+        & x_j \ge 0 \quad (j = 1, 2, \dots, 6)
+        \end{aligned}$$
+        初始基变量为 $X_B = (x_4, x_6)^T$。用单纯形表求解辅助问题如下：
+        </p>
+
+        <!-- 表 2-9 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 4-1 第一阶段单纯形迭代表（表 2-9）</p>
+          <table class="simplex-table">
+            <thead>
+              <tr>
+                <th colspan="3">$c_j \to$</th>
+                <th>0</th>
+                <th>0</th>
+                <th>0</th>
+                <th>1</th>
+                <th>0</th>
+                <th>1</th>
+                <th rowspan="2">$\theta_i$</th>
+              </tr>
+              <tr>
+                <th>$C_B$</th>
+                <th>$X_B$</th>
+                <th>$b$</th>
+                <th>$x_1$</th>
+                <th>$x_2$</th>
+                <th>$x_3$</th>
+                <th>$x_4$</th>
+                <th>$x_5$</th>
+                <th>$x_6$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Iter 0 -->
+              <tr>
+                <td>1</td><td>$x_4$</td><td>7</td>
+                <td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td>
+                <td>$7/1 = 7$</td>
+              </tr>
+              <tr>
+                <td>1</td><td>$x_6$</td><td>10</td>
+                <td class="pivot">[2]</td><td>-5</td><td>1</td><td>0</td><td>-1</td><td>1</td>
+                <td>$10/2 = 5$ ←</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-w$</td><td>-17</td>
+                <td style="color:#b91c1c; font-weight:700;">-3 ↑</td>
+                <td>4</td><td>-2</td><td>0</td><td>1</td><td>0</td>
+                <td>入基 $x_1$，出基 $x_6$</td>
+              </tr>
+              <!-- Iter 1 -->
+              <tr>
+                <td>1</td><td>$x_4$</td><td>2</td>
+                <td>0</td><td class="pivot">[7/2]</td><td>1/2</td><td>1</td><td>1/2</td><td>-1/2</td>
+                <td>$2 / (7/2) = 4/7$ ←</td>
+              </tr>
+              <tr>
+                <td>0</td><td>$x_1$</td><td>5</td>
+                <td>1</td><td>-5/2</td><td>1/2</td><td>0</td><td>-1/2</td><td>1/2</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-w$</td><td>-2</td>
+                <td>0</td><td style="color:#b91c1c; font-weight:700;">-7/2 ↑</td>
+                <td>-1/2</td><td>0</td><td>-1/2</td><td>3/2</td>
+                <td>入基 $x_2$，出基 $x_4$</td>
+              </tr>
+              <!-- Iter 2 -->
+              <tr style="background:#f0fdf4;">
+                <td>0</td><td>$x_2$</td><td>4/7</td>
+                <td>0</td><td>1</td><td>1/7</td><td>2/7</td><td>1/7</td><td>-1/7</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>0</td><td>$x_1$</td><td>45/7</td>
+                <td>1</td><td>0</td><td>6/7</td><td>5/7</td><td>-1/7</td><td>1/7</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row" style="background:#dcfce7;">
+                <td colspan="2">$-w$</td><td><strong>0</strong></td>
+                <td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td>
+                <td><strong>$\min w = 0$，进入第二阶段</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>第一阶段结果：最优目标值 $\min w = 0$，人工变量 $x_4, x_6$ 均已成功出基，求得原线性规划问题的一个初始基可行解：
+        $$X = \left(\frac{45}{7}, \frac{4}{7}, 0, 0\right)^T$$
+        </p>
+
+        <p><strong>第二阶段：求解原问题最优解</strong></p>
+        <p>从表中彻底剔除人工变量 $x_4, x_6$ 所在列，将各变量的价值系数替换为原问题的目标系数：
+        $$c_1 = 2, \quad c_2 = 3, \quad c_3 = -5, \quad c_5 = 0$$
+        此时基变量为 $X_B = (x_2, x_1)^T$，对应 $C_B = (3, 2)^T$。
+        </p>
+
+        <!-- 表 2-10 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 4-2 第二阶段单纯形计算表（表 2-10）</p>
+          <table class="simplex-table">
+            <thead>
+              <tr>
+                <th colspan="3">$c_j \to$</th>
+                <th>2</th>
+                <th>3</th>
+                <th>-5</th>
+                <th>0</th>
+                <th rowspan="2">$\theta_i$</th>
+              </tr>
+              <tr>
+                <th>$C_B$</th>
+                <th>$X_B$</th>
+                <th>$b$</th>
+                <th>$x_1$</th>
+                <th>$x_2$</th>
+                <th>$x_3$</th>
+                <th>$x_5$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:#f0fdf4;">
+                <td>3</td><td>$x_2$</td><td>4/7</td>
+                <td>0</td><td>1</td><td>1/7</td><td>1/7</td><td>—</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>2</td><td>$x_1$</td><td>45/7</td>
+                <td>1</td><td>0</td><td>6/7</td><td>-1/7</td><td>—</td>
+              </tr>
+              <tr class="sigma-row" style="background:#dcfce7;">
+                <td colspan="2">$-z$</td><td>$\dfrac{102}{7}$</td>
+                <td>0</td><td>0</td>
+                <td>$-\dfrac{50}{7}$</td>
+                <td>$-\dfrac{1}{7}$</td>
+                <td><strong>所有检验数 $\le 0$，已达最优</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-info">
+          <strong>【最终结论】</strong>
+          <p>原线性规划问题的最优解为：$X^* = \left(\dfrac{45}{7}, \dfrac{4}{7}, 0\right)^T$；
+          目标函数最优值为：$\max z^* = \dfrac{102}{7}$。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 题目 2 -->
+  <div id="sec-tp-phase-2" class="problem-card">
+    <div class="problem-header">
+      <span class="problem-title">【例题 2】典型例题精解 2 变量非正与自由变量的两阶段法求解</span>
+      <span class="problem-source">《运筹学解题指导》第2章 典型例题精解 2</span>
+    </div>
+    <div class="problem-body">
+      <p><strong>【题目描述】</strong></p>
+      <p>用两阶段法求解下列线性规划问题：
+      $$\begin{aligned}
+      \min \quad & z = 2x_1 - x_2 + 2x_3 \\
+      \text{s.t.} \quad & -x_1 + x_2 + x_3 = 4 \\
+      & -x_1 + x_2 - x_3 \le 6 \\
+      & x_1 \le 0, \quad x_2 \ge 0, \quad x_3 \text{ 无约束}
+      \end{aligned}$$
+      </p>
+
+      <div class="solution-section">
+        <div class="solution-title">📌 规范解答与完整两阶段计算过程</div>
+
+        <p><strong>第一步：变量符号变换与化标准型</strong></p>
+        <p>令 $x_1' = -x_1 \ge 0$；由于 $x_3$ 无符号约束，令 $x_3 = x_3' - x_3''$（$x_3', x_3'' \ge 0$）。
+        对约束 2 加入松弛变量 $x_4 \ge 0$：
+        $$\begin{aligned}
+        \min \quad & z = -2x_1' - x_2 + 2x_3' - 2x_3'' \\
+        \text{s.t.} \quad & x_1' + x_2 + x_3' - x_3'' = 4 \\
+        & x_1' + x_2 - x_3' + x_3'' + x_4 = 6 \\
+        & x_1', x_2, x_3', x_3'', x_4 \ge 0
+        \end{aligned}$$
+        约束 1 缺少初始基变量，引入人工变量 $x_5 \ge 0$。
+        </p>
+
+        <p><strong>第二步：第一阶段求解辅助问题（消去人工变量）</strong></p>
+        <p>构造辅助问题：$\min w = x_5$。
+        初始基变量为 $X_B = (x_5, x_4)^T$。单纯形表迭代如下：
+        </p>
+
+        <!-- 表 2-22 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 4-3 典例 2 第一阶段单纯形表（表 2-22）</p>
+          <table class="simplex-table">
+            <thead>
+              <tr>
+                <th colspan="3">$c_j \to$</th>
+                <th>0</th><th>0</th><th>0</th><th>0</th><th>0</th><th>1</th>
+                <th rowspan="2">$\theta_i$</th>
+              </tr>
+              <tr>
+                <th>$C_B$</th><th>$X_B$</th><th>$b$</th>
+                <th>$x_1'$</th><th>$x_2$</th><th>$x_3'$</th><th>$x_3''$</th><th>$x_4$</th><th>$x_5$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td><td>$x_5$</td><td>4</td>
+                <td class="pivot">[1]</td><td>1</td><td>1</td><td>-1</td><td>0</td><td>1</td>
+                <td>$4/1 = 4$ ←</td>
+              </tr>
+              <tr>
+                <td>0</td><td>$x_4$</td><td>6</td>
+                <td>1</td><td>1</td><td>-1</td><td>1</td><td>1</td><td>0</td>
+                <td>$6/1 = 6$</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$w$</td><td>4</td>
+                <td style="color:#b91c1c; font-weight:700;">-1 ↑</td>
+                <td>-1</td><td>-1</td><td>1</td><td>0</td><td>0</td>
+                <td>入基 $x_1'$，出基 $x_5$</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>0</td><td>$x_1'$</td><td>4</td>
+                <td>1</td><td>1</td><td>1</td><td>-1</td><td>0</td><td>1</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>0</td><td>$x_4$</td><td>2</td>
+                <td>0</td><td>0</td><td>-2</td><td>2</td><td>1</td><td>-1</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row" style="background:#dcfce7;">
+                <td colspan="2">$w$</td><td><strong>0</strong></td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td>
+                <td><strong>$\min w = 0$，人工变量已消除</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>第三步：第二阶段求解原问题最优解</strong></p>
+        <p>剔除人工变量 $x_5$，代入原问题极小化目标函数的价值系数：$(-2, -1, 2, -2, 0)$。
+        极小化问题以检验数 $\sigma_j < 0$ 作为进基判据：
+        </p>
+
+        <!-- 表 2-23 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 4-4 典例 2 第二阶段单纯形表（表 2-23）</p>
+          <table class="simplex-table">
+            <thead>
+              <tr>
+                <th colspan="3">$c_j \to$</th>
+                <th>-2</th><th>-1</th><th>2</th><th>-2</th><th>0</th>
+                <th rowspan="2">$\theta_i$</th>
+              </tr>
+              <tr>
+                <th>$C_B$</th><th>$X_B$</th><th>$b$</th>
+                <th>$x_1'$</th><th>$x_2$</th><th>$x_3'$</th><th>$x_3''$</th><th>$x_4$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>-2</td><td>$x_1'$</td><td>4</td>
+                <td>1</td><td>1</td><td>1</td><td>-1</td><td>0</td><td>—</td>
+              </tr>
+              <tr>
+                <td>0</td><td>$x_4$</td><td>2</td>
+                <td>0</td><td>0</td><td>-2</td><td class="pivot">[2]</td><td>1</td>
+                <td>$2/2 = 1$ ←</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z$</td><td>-8</td>
+                <td>0</td><td>1</td><td>4</td>
+                <td style="color:#b91c1c; font-weight:700;">-4 ↑</td><td>0</td>
+                <td>入基 $x_3''$，出基 $x_4$</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>-2</td><td>$x_1'$</td><td>5</td>
+                <td>1</td><td>1</td><td>0</td><td>0</td><td>1/2</td><td>—</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>-2</td><td>$x_3''$</td><td>1</td>
+                <td>0</td><td>0</td><td>-1</td><td>1</td><td>1/2</td><td>—</td>
+              </tr>
+              <tr class="sigma-row" style="background:#dcfce7;">
+                <td colspan="2">$-z$</td><td><strong>12</strong></td>
+                <td>0</td><td>1</td><td>0</td><td>0</td><td>2</td>
+                <td><strong>所有检验数 $\ge 0$（$\min$最优）</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>第四步：变量还原与原问题最优解</strong></p>
+        <p>由最终表解得：
+        $$x_1' = 5 \implies x_1 = -x_1' = -5$$
+        $$x_2 = 0$$
+        $$x_3' = 0, \quad x_3'' = 1 \implies x_3 = x_3' - x_3'' = -1$$
+        原问题的最优目标函数值为：
+        $$\min z^* = 2(-5) - 0 + 2(-1) = -10 - 2 = -12$$
+        </p>
+
+        <div class="callout callout-info">
+          <strong>【最终结论】</strong>
+          <p>原线性规划问题的最优解为：$X^* = (x_1, x_2, x_3)^T = (-5, 0, -1)^T$；
+          最优目标函数值为：$\min z^* = -12$。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sec-ds" class="method-section">
+  <div class="section-header">
+    <div class="section-title">
+      <span>五、对偶单纯形法 (Dual Simplex Method)</span>
+      <span class="section-tag">对偶可行性 · 消除负右端项 · 灵敏度与割平面基础</span>
+    </div>
+  </div>
+  
+  <div class="method-intro">
+    <strong>方法核心原理与规范要求（依据教材第3章第4节）：</strong>
+    <p>对偶单纯形法适用于<strong>具有正规解（即对偶可行，所有检验数 $\sigma_j \le 0$）</strong>，但常数项列向量 $b$ 中至少存在一个负分量（原问题不可行）的线性规划问题。
+    <br><strong>计算步骤：</strong>
+    <br>1. <strong>确定换出变量（出基）：</strong>按“负值最大”原则，取 $\min_i \{ b_i \mid b_i < 0 \} = b_l$，对应的基变量 $x_l$ 为换出变量。
+    <br>2. <strong>确定换入变量（进基）：</strong>检查换出变量所在行元素 $a_{lj}$，若所有 $a_{lj} \ge 0$，则该问题<strong>无可行解</strong>，停止计算；若存在 $a_{lj} < 0$，按 $\theta$ 规则计算比值：
+    $$\theta = \min_j \left\{ \frac{\sigma_j}{a_{lj}} \;\middle|\; a_{lj} < 0 \right\} = \frac{\sigma_k}{a_{lk}}$$
+    对应的非基变量 $x_k$ 为换入变量。
+    <br>3. 以 $a_{lk} < 0$ 为主元素进行行初等变换，使主元素化为 1，该列其余元素化为 0。重复迭代直至所有 $b_i \ge 0$ 时，即得原问题最优解。</p>
+  </div>
+
+  <!-- 题目 1 -->
+  <div id="sec-ds-1" class="problem-card">
+    <div class="problem-header">
+      <span class="problem-title">【例题 1】课后习题 3.9(1) 初始不可行问题的对偶单纯形法求解</span>
+      <span class="problem-source">《运筹学解题指导》第3章 习题 3.9(1)</span>
+    </div>
+    <div class="problem-body">
+      <p><strong>【题目描述】</strong></p>
+      <p>试用对偶单纯形法求解下列线性规划问题：
+      $$\begin{aligned}
+      \min \quad & z = x_1 + x_2 \\
+      \text{s.t.} \quad & 2x_1 + x_2 \ge 4 \\
+      & x_1 + 7x_2 \ge 7 \\
+      & x_1, x_2 \ge 0
+      \end{aligned}$$
+      </p>
+
+      <div class="solution-section">
+        <div class="solution-title">📌 规范解答与完整对偶单纯形表推导</div>
+
+        <p><strong>第一步：转化为对偶单纯形法标准形式</strong></p>
+        <p>令 $z' = -z$，则原问题等价于 $\max z' = -x_1 - x_2$。
+        将两个“$\ge$”约束两端乘以 $-1$，化为“$\le$”形式，并加入松弛变量 $x_3, x_4 \ge 0$：
+        $$\begin{aligned}
+        \max \quad & z' = -x_1 - x_2 + 0\cdot x_3 + 0\cdot x_4 \\
+        \text{s.t.} \quad & -2x_1 - x_2 + x_3 = -4 \\
+        & -x_1 - 7x_2 + x_4 = -7 \\
+        & x_1, x_2, x_3, x_4 \ge 0
+        \end{aligned}$$
+        初始基变量为 $X_B = (x_3, x_4)^T$，右端常数项为 $b = (-4, -7)^T$。
+        此时所有非基变量检验数：$\sigma_1 = -1 \le 0,\ \sigma_2 = -1 \le 0,\ \sigma_3 = 0,\ \sigma_4 = 0$，已具备对偶可行性（正规解）。
+        </p>
+
+        <p><strong>第二步：对偶单纯形表迭代过程</strong></p>
+        <!-- 表 3-7 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 5-1 习题 3.9(1) 对偶单纯形迭代表（表 3-7）</p>
+          <table class="simplex-table">
+            <thead>
+              <tr>
+                <th colspan="3">$c_j \to$</th>
+                <th>-1</th>
+                <th>-1</th>
+                <th>0</th>
+                <th>0</th>
+                <th rowspan="2">换出/换入判定 ($\theta_j$)</th>
+              </tr>
+              <tr>
+                <th>$C_B$</th>
+                <th>$X_B$</th>
+                <th>$b$</th>
+                <th>$x_1$</th>
+                <th>$x_2$</th>
+                <th>$x_3$</th>
+                <th>$x_4$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Iter 0 -->
+              <tr>
+                <td>0</td><td>$x_3$</td><td>-4</td>
+                <td>-2</td><td>-1</td><td>1</td><td>0</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#fee2e2;">
+                <td>0</td><td>$x_4$</td><td><strong>-7</strong></td>
+                <td>-1</td><td class="pivot">[-7]</td><td>0</td><td>1</td>
+                <td>$\min(-4, -7) = -7$ 出基 $x_4$</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z'$</td><td>-1</td>
+                <td>-1</td><td>-1</td><td>0</td><td>0</td>
+                <td>$\theta = \min\left\{\frac{-1}{-1}, \frac{-1}{-7}\right\} = \frac{1}{7}$ 入基 $x_2$</td>
+              </tr>
+              <!-- Iter 1 -->
+              <tr style="background:#fee2e2;">
+                <td>0</td><td>$x_3$</td><td><strong>-3</strong></td>
+                <td class="pivot">[-13/7]</td><td>0</td><td>1</td><td>-1/7</td>
+                <td>$b_1 = -3 < 0$ 出基 $x_3$</td>
+              </tr>
+              <tr>
+                <td>-1</td><td>$x_2$</td><td>1</td>
+                <td>1/7</td><td>1</td><td>0</td><td>-1/7</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z'$</td><td>1</td>
+                <td>-6/7</td><td>0</td><td>0</td><td>-1/7</td>
+                <td>$\theta = \min\left\{\frac{-6/7}{-13/7}, \frac{-1/7}{-1/7}\right\} = \frac{6}{13}$ 入基 $x_1$</td>
+              </tr>
+              <!-- Iter 2 -->
+              <tr style="background:#f0fdf4;">
+                <td>-1</td><td>$x_1$</td><td>21/13</td>
+                <td>1</td><td>0</td><td>-7/13</td><td>1/13</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>-1</td><td>$x_2$</td><td>10/13</td>
+                <td>0</td><td>1</td><td>1/13</td><td>-2/13</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row" style="background:#dcfce7;">
+                <td colspan="2">$-z'$</td><td>$\dfrac{31}{13}$</td>
+                <td>0</td><td>0</td>
+                <td>$-\dfrac{6}{13}$</td>
+                <td>$-\dfrac{1}{13}$</td>
+                <td><strong>$b \ge 0$，已达最优解</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>第三步：结果分析</strong></p>
+        <p>经过两次迭代，$b$ 列的所有分量均为非负数：
+        $$x_1^* = \frac{21}{13}, \quad x_2^* = \frac{10}{13}$$
+        松弛变量 $x_3^* = 0, x_4^* = 0$。
+        原极小化问题的最优目标函数值为：
+        $$\min z^* = -\max z' = \frac{21}{13} + \frac{10}{13} = \frac{31}{13}$$
+        </p>
+
+        <div class="callout callout-info">
+          <strong>【最终结论】</strong>
+          <p>原问题的最优解为：$X^* = \left(\dfrac{21}{13}, \dfrac{10}{13}, 0, 0\right)^T$；
+          目标函数最优值为：$\min z^* = \dfrac{31}{13}$。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 题目 2 -->
+  <div id="sec-ds-2" class="problem-card">
+    <div class="problem-header">
+      <span class="problem-title">【例题 2】典型例题精解 4 多约束极小化问题的对偶单纯形法</span>
+      <span class="problem-source">《运筹学解题指导》第3章 典型例题精解 4</span>
+    </div>
+    <div class="problem-body">
+      <p><strong>【题目描述】</strong></p>
+      <p>用对偶单纯形法求解下列线性规划问题：
+      $$\begin{aligned}
+      \min \quad & w = x_1 + x_2 \\
+      \text{s.t.} \quad & 2x_1 + x_2 \ge 4 \\
+      & x_1 + 2x_2 \ge 6 \\
+      & x_1 \le 4 \\
+      & x_1, x_2 \ge 0
+      \end{aligned}$$
+      </p>
+
+      <div class="solution-section">
+        <div class="solution-title">📌 规范解答与完整计算过程</div>
+
+        <p><strong>第一步：标准化与初始对偶可行性验证</strong></p>
+        <p>引入松弛变量 $x_3, x_4, x_5 \ge 0$，将前两式乘以 $-1$：
+        $$\begin{aligned}
+        \max \quad & z = -x_1 - x_2 \\
+        \text{s.t.} \quad & -2x_1 - x_2 + x_3 = -4 \\
+        & -x_1 - 2x_2 + x_4 = -6 \\
+        & x_1 + x_5 = 4 \\
+        & x_j \ge 0 \quad (j = 1, 2, \dots, 5)
+        \end{aligned}$$
+        初始基变量 $X_B = (x_3, x_4, x_5)^T$，常数项 $b = (-4, -6, 4)^T$。
+        检验数行：$\sigma_1 = -1 \le 0, \sigma_2 = -1 \le 0, \sigma_3 = \sigma_4 = \sigma_5 = 0$。符合对偶单纯形法启动条件。
+        </p>
+
+        <!-- 表 3-30 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 5-2 典例 4 对偶单纯形计算全表（表 3-30）</p>
+          <table class="simplex-table">
+            <thead>
+              <tr>
+                <th colspan="3">$c_j \to$</th>
+                <th>-1</th>
+                <th>-1</th>
+                <th>0</th>
+                <th>0</th>
+                <th>0</th>
+                <th rowspan="2">换基判断</th>
+              </tr>
+              <tr>
+                <th>$C_B$</th>
+                <th>$X_B$</th>
+                <th>$b$</th>
+                <th>$x_1$</th>
+                <th>$x_2$</th>
+                <th>$x_3$</th>
+                <th>$x_4$</th>
+                <th>$x_5$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Iter 0 -->
+              <tr>
+                <td>0</td><td>$x_3$</td><td>-4</td>
+                <td>-2</td><td>-1</td><td>1</td><td>0</td><td>0</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#fee2e2;">
+                <td>0</td><td>$x_4$</td><td><strong>-6</strong></td>
+                <td>-1</td><td class="pivot">[-2]</td><td>0</td><td>1</td><td>0</td>
+                <td>$\min(-4, -6) = -6$ 出基 $x_4$</td>
+              </tr>
+              <tr>
+                <td>0</td><td>$x_5$</td><td>4</td>
+                <td>1</td><td>0</td><td>0</td><td>0</td><td>1</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z$</td><td>0</td>
+                <td>1</td><td>1</td><td>0</td><td>0</td><td>0</td>
+                <td>$\theta = \min\left\{\frac{1}{|-1|}, \frac{1}{|-2|}\right\} = \frac{1}{2}$ 入基 $x_2$</td>
+              </tr>
+              <!-- Iter 1 -->
+              <tr style="background:#fee2e2;">
+                <td>0</td><td>$x_3$</td><td><strong>-1</strong></td>
+                <td class="pivot">[-3/2]</td><td>0</td><td>1</td><td>-1/2</td><td>0</td>
+                <td>$b_1 = -1 < 0$ 出基 $x_3$</td>
+              </tr>
+              <tr>
+                <td>-1</td><td>$x_2$</td><td>3</td>
+                <td>1/2</td><td>1</td><td>0</td><td>-1/2</td><td>0</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>0</td><td>$x_5$</td><td>4</td>
+                <td>1</td><td>0</td><td>0</td><td>0</td><td>1</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z$</td><td>-3</td>
+                <td>1/2</td><td>0</td><td>0</td><td>1/2</td><td>0</td>
+                <td>$\theta = \min\left\{\frac{1/2}{|-3/2|}, \frac{1/2}{|-1/2|}\right\} = \frac{1}{3}$ 入基 $x_1$</td>
+              </tr>
+              <!-- Iter 2 -->
+              <tr style="background:#f0fdf4;">
+                <td>-1</td><td>$x_1$</td><td>2/3</td>
+                <td>1</td><td>0</td><td>-2/3</td><td>1/3</td><td>0</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>-1</td><td>$x_2$</td><td>8/3</td>
+                <td>0</td><td>1</td><td>1/3</td><td>-2/3</td><td>0</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>0</td><td>$x_5$</td><td>10/3</td>
+                <td>0</td><td>0</td><td>2/3</td><td>-1/3</td><td>1</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row" style="background:#dcfce7;">
+                <td colspan="2">$-z$</td><td>$-\dfrac{10}{3}$</td>
+                <td>0</td><td>0</td>
+                <td>$\dfrac{1}{3}$</td>
+                <td>$\dfrac{1}{3}$</td><td>0</td>
+                <td><strong>$b \ge 0$，已达最优解</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>第二步：最优解总结</strong></p>
+        <p>最终表中常数项全部满足 $b_i \ge 0$：
+        $$x_1^* = \frac{2}{3}, \quad x_2^* = \frac{8}{3}, \quad x_5^* = \frac{10}{3}$$
+        原问题的极小化目标函数最优值为：
+        $$\min w^* = x_1^* + x_2^* = \frac{2}{3} + \frac{8}{3} = \frac{10}{3}$$
+        </p>
+
+        <div class="callout callout-info">
+          <strong>【最终结论】</strong>
+          <p>原问题的最优解为：$X^* = \left(\dfrac{2}{3}, \dfrac{8}{3}, 0, 0, \dfrac{10}{3}\right)^T$；
+          目标函数最优值为：$\min w^* = \dfrac{10}{3}$。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sec-cp" class="method-section">
+  <div class="section-header">
+    <div class="section-title">
+      <span>六、割平面法 (Gomory Cutting Plane Method)</span>
+      <span class="section-tag">纯小数分解 · 割平面方程 · 对偶单纯形整数迭代</span>
+    </div>
+  </div>
+  
+  <div class="method-intro">
+    <strong>方法核心原理与规范要求（依据教材第6章第2节）：</strong>
+    <p>割平面法通过不断添加线性约束（即“割平面”），切除非整数解同时保留全部整数可行解，从而迫使松弛单纯形法的最优解逼近整数格点。
+    <br><strong>推导步骤：</strong>
+    <br>1. 先忽略整数约束，用单纯形法求出松弛线性规划的最优解。若所得最优解均为整数，则已达最优；若存在非整数分量，转下一步。
+    <br>2. <strong>导出割平面方程：</strong>从最优单纯形表中，选取一个具有非整数解 $b_i$ 的基变量行方程：
+    $$x_i + \sum_k a_{ik} x_k = b_i$$
+    将所有系数 $a_{ik}$ 与常数项 $b_i$ 分解为整数 $N$ 与非负纯真分数 $f \in [0, 1)$：
+    $$a_{ik} = N_{ik} + f_{ik}, \quad b_i = N_{bi} + f_{bi} \quad (0 \le f < 1)$$
+    整理方程得：
+    $$x_i + \sum_k N_{ik} x_k - N_{bi} = f_{bi} - \sum_k f_{ik} x_k$$
+    因为当变量均为非负整数时，等式左边必为整数，而右边由于 $f_{bi} < 1$ 且 $\sum f_{ik} x_k \ge 0$，故右边必为 $\le 0$ 的非正整数。由此导出<strong>Gomory割平面方程</strong>：
+    $$f_{bi} - \sum_k f_{ik} x_k \le 0 \iff -\sum_k f_{ik} x_k \le -f_{bi}$$
+    <br>3. 引入松弛变量化为等式，添加入原最优单纯形表中，利用<strong>对偶单纯形法</strong>消除负的右端项，继续迭代直到求得全整数最优解。</p>
+  </div>
+
+  <!-- 题目 1 -->
+  <div id="sec-cp-1" class="problem-card">
+    <div class="problem-header">
+      <span class="problem-title">【例题 1】课后习题 6.3(1) 割平面法标准推导与对偶单纯形迭代</span>
+      <span class="problem-source">《运筹学解题指导》第6章 习题 6.3(1)</span>
+    </div>
+    <div class="problem-body">
+      <p><strong>【题目描述】</strong></p>
+      <p>用 Gomory 割平面法求解下列整数规划问题：
+      $$\begin{aligned}
+      \max \quad & z = x_1 + x_2 \\
+      \text{s.t.} \quad & 2x_1 + x_2 \le 6 \\
+      & 4x_1 + 5x_2 \le 20 \\
+      & x_1, x_2 \ge 0, \quad x_1, x_2 \text{ 为整数}
+      \end{aligned}$$
+      </p>
+
+      <div class="solution-section">
+        <div class="solution-title">📌 规范解答与完整割平面推导</div>
+
+        <p><strong>第一步：求解松弛线性规划问题</strong></p>
+        <p>引入松弛变量 $x_3, x_4 \ge 0$ 化为标准型：
+        $$\begin{aligned}
+        \max \quad & z = x_1 + x_2 + 0\cdot x_3 + 0\cdot x_4 \\
+        \text{s.t.} \quad & 2x_1 + x_2 + x_3 = 6 \\
+        & 4x_1 + 5x_2 + x_4 = 20 \\
+        & x_j \ge 0 \quad (j = 1, 2, 3, 4)
+        \end{aligned}$$
+        单纯形法迭代求解过程如下：
+        </p>
+
+        <!-- 表 6-4 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 6-1 习题 6.3(1) 连续松弛问题单纯形表（表 6-4）</p>
+          <table class="simplex-table">
+            <thead>
+              <tr>
+                <th colspan="3">$c_j \to$</th>
+                <th>1</th>
+                <th>1</th>
+                <th>0</th>
+                <th>0</th>
+                <th rowspan="2">$\theta_i$</th>
+              </tr>
+              <tr>
+                <th>$C_B$</th>
+                <th>$X_B$</th>
+                <th>$b$</th>
+                <th>$x_1$</th>
+                <th>$x_2$</th>
+                <th>$x_3$</th>
+                <th>$x_4$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0</td><td>$x_3$</td><td>6</td>
+                <td class="pivot">[2]</td><td>1</td><td>1</td><td>0</td>
+                <td>$6/2 = 3$ ←</td>
+              </tr>
+              <tr>
+                <td>0</td><td>$x_4$</td><td>20</td>
+                <td>4</td><td>5</td><td>0</td><td>1</td>
+                <td>$20/4 = 5$</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z$</td><td>0</td>
+                <td>1 ↑</td><td>1</td><td>0</td><td>0</td>
+                <td>入基 $x_1$，出基 $x_3$</td>
+              </tr>
+              <tr>
+                <td>1</td><td>$x_1$</td><td>3</td>
+                <td>1</td><td>1/2</td><td>1/2</td><td>0</td>
+                <td>$3 / (1/2) = 6$</td>
+              </tr>
+              <tr>
+                <td>0</td><td>$x_4$</td><td>8</td>
+                <td>0</td><td class="pivot">[3]</td><td>-2</td><td>1</td>
+                <td>$8/3$ ←</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z$</td><td>-3</td>
+                <td>0</td><td>1/2 ↑</td><td>-1/2</td><td>0</td>
+                <td>入基 $x_2$，出基 $x_4$</td>
+              </tr>
+              <tr style="background:#fefce8;">
+                <td>1</td><td>$x_1$</td><td><strong>5/3</strong></td>
+                <td>1</td><td>0</td><td>5/6</td><td>-1/6</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#fefce8;">
+                <td>1</td><td>$x_2$</td><td><strong>8/3</strong></td>
+                <td>0</td><td>1</td><td>-2/3</td><td>1/3</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row" style="background:#fef3c7;">
+                <td colspan="2">$-z$</td><td>$-\dfrac{13}{3}$</td>
+                <td>0</td><td>0</td><td>$-\dfrac{1}{6}$</td><td>$-\dfrac{1}{6}$</td>
+                <td><strong>松弛最优解（非整数）</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>由表 6-1 可知，松弛线性规划的最优解为：$X = \left(\dfrac{5}{3}, \dfrac{8}{3}, 0, 0\right)^T$，最优值 $\max z = \dfrac{13}{3}$。
+        解中分量不是整数解，需要引入割平面方程。</p>
+
+        <p><strong>第二步：严格推导 Gomory 割平面约束方程</strong></p>
+        <p>由最终表中基变量对应的两行方程分别为：
+        $$\begin{aligned}
+        x_1 + \frac{5}{6}x_3 - \frac{1}{6}x_4 &= \frac{5}{3} \\
+        x_2 - \frac{2}{3}x_3 + \frac{1}{3}x_4 &= \frac{8}{3}
+        \end{aligned}$$
+        根据割平面构造准则，将系数和常数项分解为整数与非负纯真分数：
+        <br>对第 2 行方程：
+        $$\frac{8}{3} = 2 + \frac{2}{3}, \quad -\frac{2}{3} = -1 + \frac{1}{3}, \quad \frac{1}{3} = 0 + \frac{1}{3}$$
+        原式分解改写为：
+        $$x_2 - x_3 - 2 = \frac{2}{3} - \left(\frac{1}{3}x_3 + \frac{1}{3}x_4\right)$$
+        由于变量全取非负整数，左端为整数，右端必 $\le 0$：
+        $$\frac{2}{3} - \left(\frac{1}{3}x_3 + \frac{1}{3}x_4\right) \le 0 \iff -\frac{1}{3}x_3 - \frac{1}{3}x_4 \le -\frac{2}{3}$$
+        两边同乘 3 化简得：
+        $$-x_3 - x_4 \le -2$$
+        加入非负松弛变量 $x_5 \ge 0$，标准化为：
+        $$-x_3 - x_4 + x_5 = -2$$
+        </p>
+
+        <p><strong>第三步：将割平面加入单纯形表中，利用对偶单纯形法迭代</strong></p>
+        <!-- 表 6-5 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 6-2 增加割平面后的对偶单纯形迭代（表 6-5）</p>
+          <table class="simplex-table">
+            <thead>
+              <tr>
+                <th colspan="3">$c_j \to$</th>
+                <th>1</th>
+                <th>1</th>
+                <th>0</th>
+                <th>0</th>
+                <th>0</th>
+                <th rowspan="2">换基判断</th>
+              </tr>
+              <tr>
+                <th>$C_B$</th>
+                <th>$X_B$</th>
+                <th>$b$</th>
+                <th>$x_1$</th>
+                <th>$x_2$</th>
+                <th>$x_3$</th>
+                <th>$x_4$</th>
+                <th>$x_5$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Iter 0 -->
+              <tr>
+                <td>1</td><td>$x_1$</td><td>5/3</td>
+                <td>1</td><td>0</td><td>5/6</td><td>-1/6</td><td>0</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>1</td><td>$x_2$</td><td>8/3</td>
+                <td>0</td><td>1</td><td>-2/3</td><td>1/3</td><td>0</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#fee2e2;">
+                <td>0</td><td>$x_5$</td><td><strong>-2</strong></td>
+                <td>0</td><td>0</td><td class="pivot">[-1]</td><td>-1</td><td>1</td>
+                <td>出基变量 $x_5$</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z$</td><td>$-13/3$</td>
+                <td>0</td><td>0</td><td>$-1/6$</td><td>$-1/6$</td><td>0</td>
+                <td>$\theta = \min\left\{\frac{-1/6}{|-1|}, \frac{-1/6}{|-1|}\right\} = \frac{1}{6}$ 入基 $x_3$</td>
+              </tr>
+              <!-- Iter 1 -->
+              <tr style="background:#f0fdf4;">
+                <td>1</td><td>$x_1$</td><td><strong>0</strong></td>
+                <td>1</td><td>0</td><td>0</td><td>-1</td><td>5/6</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>1</td><td>$x_2$</td><td><strong>4</strong></td>
+                <td>0</td><td>1</td><td>0</td><td>1</td><td>-2/3</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>0</td><td>$x_3$</td><td><strong>2</strong></td>
+                <td>0</td><td>0</td><td>1</td><td>1</td><td>-1</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row" style="background:#dcfce7;">
+                <td colspan="2">$-z$</td><td><strong>-4</strong></td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>$-\dfrac{1}{6}$</td>
+                <td><strong>已为整数最优解</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-info">
+          <strong>【最终结论】</strong>
+          <p>仅经过一次割平面添加与对偶单纯形迭代，$b$ 列已全部满足非负整数要求：
+          $$x_1^* = 0, \quad x_2^* = 4, \quad \max z^* = 4$$
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 题目 2 -->
+  <div id="sec-cp-2" class="problem-card">
+    <div class="problem-header">
+      <span class="problem-title">【例题 2】典型例题精解 3 割平面方程构造与整数解求解</span>
+      <span class="problem-source">《运筹学解题指导》第6章 典型例题精解 3</span>
+    </div>
+    <div class="problem-body">
+      <p><strong>【题目描述】</strong></p>
+      <p>用割平面法求解下列整数规划问题：
+      $$\begin{aligned}
+      \max \quad & z = 6x_1 + 4x_2 \\
+      \text{s.t.} \quad & 2x_1 + x_2 \le 10 \\
+      & -x_1 + 2x_2 \le 2 \\
+      & x_1, x_2 \ge 0, \quad x_1, x_2 \text{ 为整数}
+      \end{aligned}$$
+      </p>
+
+      <div class="solution-section">
+        <div class="solution-title">📌 规范解答与完整割平面推导</div>
+
+        <p><strong>第一步：松弛线性规划问题的单纯形求解</strong></p>
+        <p>引入松弛变量 $x_3, x_4 \ge 0$：
+        $$\begin{aligned}
+        \max \quad & z = 6x_1 + 4x_2 + 0\cdot x_3 + 0\cdot x_4 \\
+        \text{s.t.} \quad & 2x_1 + x_2 + x_3 = 10 \\
+        & -x_1 + 2x_2 + x_4 = 2 \\
+        & x_1, x_2, x_3, x_4 \ge 0
+        \end{aligned}$$
+        求得线性规划松弛最优单纯形表如下：
+        </p>
+
+        <!-- 表 6-13 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 6-3 典例 3 连续松弛问题最终单纯形表（表 6-13）</p>
+          <table class="simplex-table">
+            <thead>
+              <tr>
+                <th colspan="3">$c_j \to$</th>
+                <th>6</th>
+                <th>4</th>
+                <th>0</th>
+                <th>0</th>
+                <th rowspan="2">$\theta_i$</th>
+              </tr>
+              <tr>
+                <th>$C_B$</th>
+                <th>$X_B$</th>
+                <th>$b$</th>
+                <th>$x_1$</th>
+                <th>$x_2$</th>
+                <th>$x_3$</th>
+                <th>$x_4$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>6</td><td>$x_1$</td><td>18/5</td>
+                <td>1</td><td>0</td><td>2/5</td><td>-1/5</td><td>—</td>
+              </tr>
+              <tr>
+                <td>4</td><td>$x_2$</td><td>14/5</td>
+                <td>0</td><td>1</td><td>1/5</td><td>2/5</td><td>—</td>
+              </tr>
+              <tr class="sigma-row" style="background:#fef3c7;">
+                <td colspan="2">$-z$</td><td>$-164/5 = -32.8$</td>
+                <td>0</td><td>0</td><td>$-16/5$</td><td>$-2/5$</td>
+                <td><strong>最优连续解（非整数）</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>最优连续解为：$X_0 = \left(\dfrac{18}{5}, \dfrac{14}{5}, 0, 0\right)^T = (3.6, 2.8, 0, 0)^T$，$z_0 = 32.8$。非整数解。</p>
+
+        <p><strong>第二步：导出割平面方程</strong></p>
+        <p>从最优表中抄下 $x_2$ 所在的非整数行方程（一般选取 $b$ 值小数部分较大的方程）：
+        $$x_2 + \frac{1}{5}x_3 + \frac{2}{5}x_4 = \frac{14}{5}$$
+        拆分为整数部分与非负纯小数部分：
+        $$\frac{14}{5} = 2 + \frac{4}{5}, \quad \frac{1}{5} = 0 + \frac{1}{5}, \quad \frac{2}{5} = 0 + \frac{2}{5}$$
+        变形得：
+        $$x_2 - 2 = \frac{4}{5} - \left(\frac{1}{5}x_3 + \frac{2}{5}x_4\right)$$
+        由于左边是整数，右边必为非正整数，由此导出 Gomory 割平面方程：
+        $$\frac{4}{5} - \left(\frac{1}{5}x_3 + \frac{2}{5}x_4\right) \le 0 \iff -\frac{1}{5}x_3 - \frac{2}{5}x_4 \le -\frac{4}{5}$$
+        引入非负松弛变量 $x_5 \ge 0$，化为标准等式：
+        $$-\frac{1}{5}x_3 - \frac{2}{5}x_4 + x_5 = -\frac{4}{5}$$
+        </p>
+
+        <p><strong>第三步：对偶单纯形法迭代求最优整数解</strong></p>
+        <p>将新约束添加到原最优单纯形表中，构成表 6-4：</p>
+
+        <!-- 表 6-14 -->
+        <div class="table-container">
+          <p style="font-weight: 600; text-align: center; margin-bottom: 0.5rem;">表 6-4 增加割平面后的对偶单纯形计算表（表 6-14）</p>
+          <table class="simplex-table">
+            <thead>
+              <tr>
+                <th colspan="3">$c_j \to$</th>
+                <th>6</th>
+                <th>4</th>
+                <th>0</th>
+                <th>0</th>
+                <th>0</th>
+                <th rowspan="2">换基判断</th>
+              </tr>
+              <tr>
+                <th>$C_B$</th>
+                <th>$X_B$</th>
+                <th>$b$</th>
+                <th>$x_1$</th>
+                <th>$x_2$</th>
+                <th>$x_3$</th>
+                <th>$x_4$</th>
+                <th>$x_5$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Iter 0 -->
+              <tr>
+                <td>6</td><td>$x_1$</td><td>18/5</td>
+                <td>1</td><td>0</td><td>2/5</td><td>-1/5</td><td>0</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>4</td><td>$x_2$</td><td>14/5</td>
+                <td>0</td><td>1</td><td>1/5</td><td>2/5</td><td>0</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#fee2e2;">
+                <td>0</td><td>$x_5$</td><td><strong>-4/5</strong></td>
+                <td>0</td><td>0</td><td>-1/5</td><td class="pivot">[-2/5]</td><td>1</td>
+                <td>$b_3 = -4/5 < 0$ 出基 $x_5$</td>
+              </tr>
+              <tr class="sigma-row">
+                <td colspan="2">$-z$</td><td>$-164/5$</td>
+                <td>0</td><td>0</td><td>$-16/5$</td><td>$-2/5$</td><td>0</td>
+                <td>$\theta = \min\left\{\frac{-16/5}{|-1/5|}, \frac{-2/5}{|-2/5|}\right\} = \frac{2/5}{2/5} = 1$ 入基 $x_4$</td>
+              </tr>
+              <!-- Iter 1 -->
+              <tr style="background:#f0fdf4;">
+                <td>6</td><td>$x_1$</td><td><strong>4</strong></td>
+                <td>1</td><td>0</td><td>1/2</td><td>0</td><td>-1/2</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>4</td><td>$x_2$</td><td><strong>2</strong></td>
+                <td>0</td><td>1</td><td>0</td><td>0</td><td>1</td>
+                <td>—</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td>0</td><td>$x_4$</td><td><strong>2</strong></td>
+                <td>0</td><td>0</td><td>1/2</td><td>1</td><td>-5/2</td>
+                <td>—</td>
+              </tr>
+              <tr class="sigma-row" style="background:#dcfce7;">
+                <td colspan="2">$-z$</td><td><strong>-32</strong></td>
+                <td>0</td><td>0</td><td>-3</td><td>0</td><td>-1</td>
+                <td><strong>已为整数最优解</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-info">
+          <strong>【最终结论】</strong>
+          <p>由表 6-4 可见，$b$ 列全部分量已为非负整数：
+          $$x_1^* = 4, \quad x_2^* = 2, \quad \max z^* = 6\times 4 + 4\times 2 = 32$$
+          整数规划最优解求得。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

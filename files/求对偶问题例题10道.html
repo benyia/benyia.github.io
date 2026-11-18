@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>运筹学·线性规划对偶问题专练10题</title>
+  <!-- Tailwind CSS 3.4.17 -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <!-- MathJax 3 -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      startup: {
+        typeset: true
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    .math-scroll {
+      overflow-x: auto;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen font-sans antialiased">
+
+  <!-- Header -->
+  <header class="bg-indigo-900 text-white shadow-md border-b border-indigo-950 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-indigo-700 text-indigo-100 tracking-wide">运筹学专练</span>
+          <h1 class="text-xl md:text-2xl font-bold tracking-tight">线性规划对偶问题交互练习</h1>
+        </div>
+        <p class="text-xs md:text-sm text-indigo-200 mt-1">10 道阶梯式强化训练题 · 符号对照速查 · 逐题精细解析</p>
+      </div>
+
+      <!-- Action & Progress Bar -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+        <div class="bg-indigo-950/60 rounded-lg p-2.5 border border-indigo-800 text-xs flex flex-col gap-1 w-full sm:w-48">
+          <div class="flex justify-between items-center text-indigo-200">
+            <span>练习进度</span>
+            <span id="progress-text" class="font-bold text-white">0 / 10 (0%)</span>
+          </div>
+          <div class="w-full bg-indigo-900 rounded-full h-2 overflow-hidden">
+            <div id="progress-bar" class="bg-emerald-400 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="btn-expand-all" class="px-3 py-1.5 text-xs font-medium rounded-md bg-indigo-700 hover:bg-indigo-600 transition text-white shadow-sm">
+            展开全部解析
+          </button>
+          <button id="btn-collapse-all" class="px-3 py-1.5 text-xs font-medium rounded-md bg-indigo-800 hover:bg-indigo-700 transition text-indigo-200 shadow-sm">
+            收起全部解析
+          </button>
+          <button id="btn-reset" class="px-3 py-1.5 text-xs font-medium rounded-md bg-rose-700 hover:bg-rose-600 transition text-white shadow-sm">
+            重置
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6 space-y-6">
+
+    <!-- Cheat Sheet Card -->
+    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+      <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          </span>
+          <h2 class="text-base font-bold text-slate-800">对偶关系快速对照规则表</h2>
+        </div>
+        <span class="text-xs text-slate-500 font-medium">口诀：极大对极小，约束换变量，转置系数倒</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-100/80 text-slate-700 border-b border-slate-200">
+              <th class="py-2.5 px-3 font-semibold">项目类别</th>
+              <th class="py-2.5 px-3 font-semibold">极大化原问题 ($\max z$)</th>
+              <th class="py-2.5 px-3 font-semibold">对偶极小化问题 ($\min w$)</th>
+              <th class="py-2.5 px-3 font-semibold">极小化原问题 ($\min z$)</th>
+              <th class="py-2.5 px-3 font-semibold">对偶极大化问题 ($\max w$)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-slate-600">
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-2.5 px-3 font-medium text-slate-800">目标与右端常数</td>
+              <td class="py-2.5 px-3">价值系数 $c = (c_1, \dots, c_n)$</td>
+              <td class="py-2.5 px-3">常数项 $b = (b_1, \dots, b_m)$</td>
+              <td class="py-2.5 px-3">价值系数 $c = (c_1, \dots, c_n)$</td>
+              <td class="py-2.5 px-3">常数项 $b = (b_1, \dots, b_m)$</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-2.5 px-3 font-medium text-slate-800">规范约束</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-blue-600">第 $i$ 约束为 $\le$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-blue-600">对偶变量 $y_i \ge 0$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-blue-600">第 $i$ 约束为 $\ge$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-blue-600">对偶变量 $y_i \ge 0$</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-2.5 px-3 font-medium text-slate-800">反向约束</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-amber-600">第 $i$ 约束为 $\ge$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-amber-600">对偶变量 $y_i \le 0$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-amber-600">第 $i$ 约束为 $\le$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-amber-600">对偶变量 $y_i \le 0$</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-2.5 px-3 font-medium text-slate-800">等式约束</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-purple-600">第 $i$ 约束为 $=$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-purple-600">对偶变量 $y_i$ 无约束</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-purple-600">第 $i$ 约束为 $=$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-purple-600">对偶变量 $y_i$ 无约束</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-2.5 px-3 font-medium text-slate-800">规范变量</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-emerald-600">决策变量 $x_j \ge 0$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-emerald-600">第 $j$ 对偶约束为 $\ge$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-emerald-600">决策变量 $x_j \ge 0$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-emerald-600">第 $j$ 对偶约束为 $\le$</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-2.5 px-3 font-medium text-slate-800">反向变量</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-rose-600">决策变量 $x_j \le 0$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-rose-600">第 $j$ 对偶约束为 $\le$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-rose-600">决策变量 $x_j \le 0$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-rose-600">第 $j$ 对偶约束为 $\ge$</td>
+            </tr>
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-2.5 px-3 font-medium text-slate-800">自由变量</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-indigo-600">变量 $x_j$ 无约束</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-indigo-600">第 $j$ 对偶约束为 $=$</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-indigo-600">变量 $x_j$ 无约束</td>
+              <td class="py-2.5 px-3 font-mono font-medium text-indigo-600">第 $j$ 对偶约束为 $=$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Filter Buttons -->
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="text-xs font-semibold text-slate-500 mr-1">分类筛选:</span>
+      <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-indigo-600 text-white shadow-sm" data-filter="all">全部题目 (10)</button>
+      <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-slate-200 text-slate-700 hover:bg-slate-300" data-filter="tier-1">梯度1: 基础对称 (2)</button>
+      <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-slate-200 text-slate-700 hover:bg-slate-300" data-filter="tier-2">梯度2: 混合不等式 (2)</button>
+      <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-slate-200 text-slate-700 hover:bg-slate-300" data-filter="tier-3">梯度3: 含等式约束 (2)</button>
+      <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-slate-200 text-slate-700 hover:bg-slate-300" data-filter="tier-4">梯度4: 特殊变量符号 (2)</button>
+      <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-slate-200 text-slate-700 hover:bg-slate-300" data-filter="tier-5">梯度5: 综合考研真题 (2)</button>
+    </div>
+
+    <!-- Problems Container -->
+    <div id="problems-list" class="space-y-4">
+      <!-- Problem Cards rendered via script -->
+    </div>
+
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 py-8 text-center text-xs text-slate-400 border-t border-slate-200 mt-12">
+    运筹学线性规划对偶理论专练平台 · 基于经典教学大纲设计 · 支持随时切换做题与核对状态
+  </footer>
+
+  <script>
+    const problemsData = [
+      {
+        id: 1,
+        tier: "tier-1",
+        tierName: "基础极小化对称型",
+        badge: "bg-emerald-100 text-emerald-800",
+        primal: `\\min z = 3x_1 + 2x_2 + 5x_3 \\\\
+\\begin{cases}
+x_1 + 2x_2 + x_3 \\ge 4 \\\\
+2x_1 + x_2 + 3x_3 \\ge 7 \\\\
+x_1, x_2, x_3 \\ge 0
+\\end{cases}`,
+        analysis: [
+          "<strong>目标与对偶变量设定：</strong>原问题为 $\\min z$，对偶问题为 $\\max w$；原问题有 2 个约束，故引入 2 个对偶变量 $y_1, y_2$，目标函数为 $\\max w = 4y_1 + 7y_2$。",
+          "<strong>对偶变量符号：</strong>原问题为极小化，两个约束均为规范不等式 $\\ge$，因此对应对偶变量非负：$y_1 \\ge 0, y_2 \\ge 0$。",
+          "<strong>对偶约束方向：</strong>原问题决策变量 $x_1, x_2, x_3 \\ge 0$，因此对偶约束均为 $\\le$ 规范形式，右端项为原价值系数 $(3, 2, 5)^T$。"
+        ],
+        dual: `\\max w = 4y_1 + 7y_2 \\\\
+\\begin{cases}
+y_1 + 2y_2 \\le 3 \\\\
+2y_1 + y_2 \\le 2 \\\\
+y_1 + 3y_2 \\le 5 \\\\
+y_1, y_2 \\ge 0
+\\end{cases}`
+      },
+      {
+        id: 2,
+        tier: "tier-1",
+        tierName: "基础极大化对称型",
+        badge: "bg-emerald-100 text-emerald-800",
+        primal: `\\max z = 5x_1 + 4x_2 + 3x_3 \\\\
+\\begin{cases}
+2x_1 + 3x_2 + x_3 \\le 10 \\\\
+x_1 + 2x_2 + 2x_3 \\le 8 \\\\
+3x_1 + x_2 + 4x_3 \\le 15 \\\\
+x_1, x_2, x_3 \\ge 0
+\\end{cases}`,
+        analysis: [
+          "<strong>目标与对偶变量设定：</strong>原问题为 $\\max z$，对偶问题为 $\\min w$；原问题有 3 个约束，引入 3 个对偶变量 $y_1, y_2, y_3$，目标为 $\\min w = 10y_1 + 8y_2 + 15y_3$。",
+          "<strong>对偶变量符号：</strong>原问题为极大化，3 个约束均为规范不等式 $\\le$，故对应对偶变量非负：$y_1, y_2, y_3 \\ge 0$。",
+          "<strong>对偶约束方向：</strong>原问题决策变量均 $\\ge 0$，对偶极小化约束均为 $\\ge$ 规范形式，右端项为 $(5, 4, 3)^T$。"
+        ],
+        dual: `\\min w = 10y_1 + 8y_2 + 15y_3 \\\\
+\\begin{cases}
+2y_1 + y_2 + 3y_3 \\ge 5 \\\\
+3y_1 + 2y_2 + y_3 \\ge 4 \\\\
+y_1 + 2y_2 + 4y_3 \\ge 3 \\\\
+y_1, y_2, y_3 \\ge 0
+\\end{cases}`
+      },
+      {
+        id: 3,
+        tier: "tier-2",
+        tierName: "极小化·混合不等式型",
+        badge: "bg-blue-100 text-blue-800",
+        primal: `\\min z = 6x_1 + 8x_2 + 3x_3 \\\\
+\\begin{cases}
+x_1 + 2x_2 + 2x_3 \\ge 5 \\\\
+3x_1 + x_2 + 4x_3 \\le 12 \\\\
+2x_1 + 3x_2 - x_3 \\ge 6 \\\\
+x_1, x_2, x_3 \\ge 0
+\\end{cases}`,
+        analysis: [
+          "<strong>目标与对偶变量设定：</strong>对偶问题为 $\\max w = 5y_1 + 12y_2 + 6y_3$。",
+          "<strong>对偶变量符号（关键辨析）：</strong>原问题为极小化，第 1、3 约束为规范的 $\\ge$，对应 $y_1 \\ge 0, y_3 \\ge 0$；第 2 约束为反向的 $\\le$，对应对偶变量反转为非正：$y_2 \\le 0$。",
+          "<strong>对偶约束方向：</strong>原决策变量全为 $\\ge 0$，故对偶问题中 3 个约束全部保持规范的 $\\le$ 形式。"
+        ],
+        dual: `\\max w = 5y_1 + 12y_2 + 6y_3 \\\\
+\\begin{cases}
+y_1 + 3y_2 + 2y_3 \\le 6 \\\\
+2y_1 + y_2 + 3y_3 \\le 8 \\\\
+2y_1 + 4y_2 - y_3 \\le 3 \\\\
+y_1 \\ge 0, \\quad y_2 \\le 0, \\quad y_3 \\ge 0
+\\end{cases}`
+      },
+      {
+        id: 4,
+        tier: "tier-2",
+        tierName: "极大化·混合不等式型",
+        badge: "bg-blue-100 text-blue-800",
+        primal: `\\max z = 4x_1 + 3x_2 + 7x_3 \\\\
+\\begin{cases}
+2x_1 + x_2 + 3x_3 \\le 14 \\\\
+x_1 + 4x_2 + 2x_3 \\ge 9 \\\\
+3x_1 - 2x_2 + x_3 \\le 8 \\\\
+x_1, x_2, x_3 \\ge 0
+\\end{cases}`,
+        analysis: [
+          "<strong>目标与对偶变量设定：</strong>对偶问题为 $\\min w = 14y_1 + 9y_2 + 8y_3$。",
+          "<strong>对偶变量符号：</strong>原问题为极大化，第 1、3 约束为规范 $\\le$，对应 $y_1 \\ge 0, y_3 \\ge 0$；第 2 约束为反向 $\\ge$，对应 $y_2 \\le 0$。",
+          "<strong>对偶约束方向：</strong>原问题决策变量全为 $\\ge 0$，极小化对偶问题中全部约束为规范的 $\\ge$ 形式。"
+        ],
+        dual: `\\min w = 14y_1 + 9y_2 + 8y_3 \\\\
+\\begin{cases}
+2y_1 + y_2 + 3y_3 \\ge 4 \\\\
+y_1 + 4y_2 - 2y_3 \\ge 3 \\\\
+3y_1 + 2y_2 + y_3 \\ge 7 \\\\
+y_1 \\ge 0, \\quad y_2 \\le 0, \\quad y_3 \\ge 0
+\\end{cases}`
+      },
+      {
+        id: 5,
+        tier: "tier-3",
+        tierName: "极大化·含等式约束型",
+        badge: "bg-purple-100 text-purple-800",
+        primal: `\\max z = 2x_1 + 5x_2 + 3x_3 \\\\
+\\begin{cases}
+x_1 + 2x_2 + x_3 = 8 \\\\
+2x_1 - x_2 + 3x_3 \\le 6 \\\\
+3x_1 + x_2 + 4x_3 \\ge 4 \\\\
+x_1, x_2, x_3 \\ge 0
+\\end{cases}`,
+        analysis: [
+          "<strong>目标与对偶变量设定：</strong>对偶问题为 $\\min w = 8y_1 + 6y_2 + 4y_3$。",
+          "<strong>对偶变量符号（等式约束规则）：</strong>第 1 个约束为严格等式 $=$，没有不等式限制方向，因此对应对偶变量为<strong>自由变量（无约束）</strong>；第 2 约束 $\\le$ 对应 $y_2 \\ge 0$；第 3 约束 $\\ge$ 对应 $y_3 \\le 0$。",
+          "<strong>对偶约束方向：</strong>原变量均 $\\ge 0$，故对偶约束均为 $\\ge$。"
+        ],
+        dual: `\\min w = 8y_1 + 6y_2 + 4y_3 \\\\
+\\begin{cases}
+y_1 + 2y_2 + 3y_3 \\ge 2 \\\\
+2y_1 - y_2 + y_3 \\ge 5 \\\\
+y_1 + 3y_2 + 4y_3 \\ge 3 \\\\
+y_1 \\text{ 无约束}, \\quad y_2 \\ge 0, \\quad y_3 \\le 0
+\\end{cases}`
+      },
+      {
+        id: 6,
+        tier: "tier-3",
+        tierName: "极小化·含等式约束型",
+        badge: "bg-purple-100 text-purple-800",
+        primal: `\\min z = 7x_1 + 4x_2 + 2x_3 \\\\
+\\begin{cases}
+3x_1 + x_2 + 2x_3 = 10 \\\\
+x_1 + 3x_2 + 5x_3 \\ge 12 \\\\
+2x_1 - 2x_2 + x_3 \\le 5 \\\\
+x_1, x_2, x_3 \\ge 0
+\\end{cases}`,
+        analysis: [
+          "<strong>目标与对偶变量设定：</strong>对偶问题为 $\\max w = 10y_1 + 12y_2 + 5y_3$。",
+          "<strong>对偶变量符号：</strong>第 1 约束为等式 $=$，对应对偶变量 $y_1$ 无约束；第 2 约束 $\\ge$ 对应 $y_2 \\ge 0$；第 3 约束 $\\le$ 对应 $y_3 \\le 0$。",
+          "<strong>对偶约束方向：</strong>原问题为极小化且 $x_j \\ge 0$，对偶极大化约束均为 $\\le$。"
+        ],
+        dual: `\\max w = 10y_1 + 12y_2 + 5y_3 \\\\
+\\begin{cases}
+3y_1 + y_2 + 2y_3 \\le 7 \\\\
+y_1 + 3y_2 - 2y_3 \\le 4 \\\\
+2y_1 + 5y_2 + y_3 \\le 2 \\\\
+y_1 \\text{ 无约束}, \\quad y_2 \\ge 0, \\quad y_3 \\le 0
+\\end{cases}`
+      },
+      {
+        id: 7,
+        tier: "tier-4",
+        tierName: "极大化·含非正变量型",
+        badge: "bg-amber-100 text-amber-800",
+        primal: `\\max z = 3x_1 - 2x_2 + 4x_3 \\\\
+\\begin{cases}
+x_1 + 3x_2 + 2x_3 \\le 9 \\\\
+2x_1 - x_2 + x_3 \\ge 4 \\\\
+x_1 \\ge 0, \\quad x_2 \\le 0, \\quad x_3 \\ge 0
+\\end{cases}`,
+        analysis: [
+          "<strong>对偶变量设定：</strong>引入 2 个对偶变量，目标函数为 $\\min w = 9y_1 + 4y_2$。约束 1 为 $\\le \\implies y_1 \\ge 0$；约束 2 为 $\\ge \\implies y_2 \\le 0$。",
+          "<strong>对偶约束方向（非正变量规则）：</strong>",
+          "• $x_1 \\ge 0$（规范变量）$\\implies$ 对应第 1 个对偶约束为规范的 $\\ge$；",
+          "• $x_2 \\le 0$（反向变量）$\\implies$ 对应第 2 个对偶约束符号反转，变为 $\\le$！右端项为 $-2$；",
+          "• $x_3 \\ge 0$（规范变量）$\\implies$ 对应第 3 个对偶约束为规范的 $\\ge$。"
+        ],
+        dual: `\\min w = 9y_1 + 4y_2 \\\\
+\\begin{cases}
+y_1 + 2y_2 \\ge 3 \\\\
+3y_1 - y_2 \\le -2 \\\\
+2y_1 + y_2 \\ge 4 \\\\
+y_1 \\ge 0, \\quad y_2 \\le 0
+\\end{cases}`
+      },
+      {
+        id: 8,
+        tier: "tier-4",
+        tierName: "极小化·含自由变量型",
+        badge: "bg-amber-100 text-amber-800",
+        primal: `\\min z = 5x_1 + 2x_2 - 3x_3 \\\\
+\\begin{cases}
+2x_1 + x_2 + 4x_3 \\ge 6 \\\\
+x_1 - 2x_2 + 3x_3 \\le 8 \\\\
+3x_1 + 4x_2 - x_3 = 11 \\\\
+x_1 \\ge 0, \\quad x_2 \\ge 0, \\quad x_3 \\text{ 无约束}
+\\end{cases}`,
+        analysis: [
+          "<strong>对偶变量设定：</strong>目标函数为 $\\max w = 6y_1 + 8y_2 + 11y_3$。极小化下约束 1（$\\ge$）$\\implies y_1 \\ge 0$；约束 2（$\\le$）$\\implies y_2 \\le 0$；约束 3（$=$）$\\implies y_3$ 无约束。",
+          "<strong>对偶约束方向（自由变量规则）：</strong>",
+          "• $x_1, x_2 \\ge 0 \\implies$ 对应第 1、2 个对偶约束为规范的 $\\le$；",
+          "• $x_3$ 无约束（自由变量）$\\implies$ 对应第 3 个对偶约束变为<strong>严格等式约束 $=$</strong>！右端项为 $-3$。"
+        ],
+        dual: `\\max w = 6y_1 + 8y_2 + 11y_3 \\\\
+\\begin{cases}
+2y_1 + y_2 + 3y_3 \\le 5 \\\\
+y_1 - 2y_2 + 4y_3 \\le 2 \\\\
+4y_1 + 3y_2 - y_3 = -3 \\\\
+y_1 \\ge 0, \\quad y_2 \\le 0, \\quad y_3 \\text{ 无约束}
+\\end{cases}`
+      },
+      {
+        id: 9,
+        tier: "tier-5",
+        tierName: "综合全要素型 (直击考研大题)",
+        badge: "bg-rose-100 text-rose-800",
+        primal: `\\max z = 2x_1 + 3x_2 - x_3 + 5x_4 \\\\
+\\begin{cases}
+x_1 - 2x_2 + 3x_3 + x_4 = 4 \\\\
+3x_1 + x_2 - 2x_3 + 2x_4 \\ge 7 \\\\
+2x_1 + 4x_2 + x_3 - 3x_4 \\le 10 \\\\
+x_1 \\ge 0, \\quad x_2 \\le 0, \\quad x_3 \\ge 0, \\quad x_4 \\text{ 无约束}
+\\end{cases}`,
+        analysis: [
+          "<strong>对偶目标与变量设定：</strong>原问题极大化 $\\implies$ 对偶极小化 $\\min w = 4y_1 + 7y_2 + 10y_3$。",
+          "<strong>约束与变量对应：</strong>",
+          "• 约束 1 为等式 $=$ $\\implies y_1$ 无约束；",
+          "• 约束 2 为 $\\ge$ $\\implies y_2 \\le 0$（极大化下反向不等式对应非正变量）；",
+          "• 约束 3 为 $\\le$ $\\implies y_3 \\ge 0$。",
+          "<strong>变量与对偶约束对应：</strong>",
+          "• $x_1 \\ge 0 \\implies$ 约束 1 为 $\\ge 2$；",
+          "• $x_2 \\le 0 \\implies$ 约束 2 为 $\\le 3$（反向变量导致约束方向反转）；",
+          "• $x_3 \\ge 0 \\implies$ 约束 3 为 $\\ge -1$；",
+          "• $x_4$ 无约束 $\\implies$ 约束 4 为等式 $= 5$。"
+        ],
+        dual: `\\min w = 4y_1 + 7y_2 + 10y_3 \\\\
+\\begin{cases}
+y_1 + 3y_2 + 2y_3 \\ge 2 \\\\
+-2y_1 + y_2 + 4y_3 \\le 3 \\\\
+3y_1 - 2y_2 + y_3 \\ge -1 \\\\
+y_1 + 2y_2 - 3y_3 = 5 \\\\
+y_1 \\text{ 无约束}, \\quad y_2 \\le 0, \\quad y_3 \\ge 0
+\\end{cases}`
+      },
+      {
+        id: 10,
+        tier: "tier-5",
+        tierName: "综合全要素型 (极小化全约束)",
+        badge: "bg-rose-100 text-rose-800",
+        primal: `\\min z = 4x_1 - x_2 + 6x_3 + 2x_4 \\\\
+\\begin{cases}
+2x_1 + 3x_2 - x_3 + 4x_4 \\ge 8 \\\\
+x_1 - 2x_2 + 5x_3 - x_4 \\le 6 \\\\
+3x_1 + x_2 + 2x_3 + 3x_4 = 15 \\\\
+x_1 \\ge 0, \\quad x_2 \\ge 0, \\quad x_3 \\le 0, \\quad x_4 \\text{ 无约束}
+\\end{cases}`,
+        analysis: [
+          "<strong>对偶目标与变量设定：</strong>原问题极小化 $\\implies$ 对偶极大化 $\\max w = 8y_1 + 6y_2 + 15y_3$。",
+          "<strong>约束与变量对应：</strong>",
+          "• 约束 1 为 $\\ge$ $\\implies y_1 \\ge 0$（极小化下规范形式对应非负变量）；",
+          "• 约束 2 为 $\\le$ $\\implies y_2 \\le 0$（反向形式对应非正变量）；",
+          "• 约束 3 为等式 $=$ $\\implies y_3$ 无约束。",
+          "<strong>变量与对偶约束对应：</strong>",
+          "• $x_1 \\ge 0, x_2 \\ge 0 \\implies$ 约束 1、2 均为规范的 $\\le$；",
+          "• $x_3 \\le 0 \\implies$ 约束 3 方向反转为 $\\ge 6$；",
+          "• $x_4$ 无约束 $\\implies$ 约束 4 变为严格等式 $= 2$。"
+        ],
+        dual: `\\max w = 8y_1 + 6y_2 + 15y_3 \\\\
+\\begin{cases}
+2y_1 + y_2 + 3y_3 \\le 4 \\\\
+3y_1 - 2y_2 + y_3 \\le -1 \\\\
+-y_1 + 5y_2 + 2y_3 \\ge 6 \\\\
+4y_1 - y_2 + 3y_3 = 2 \\\\
+y_1 \\ge 0, \\quad y_2 \\le 0, \\quad y_3 \\text{ 无约束}
+\\end{cases}`
+      }
+    ];
+
+    // LocalStorage Key
+    const STORAGE_KEY = "dual_lp_completed_problems";
+
+    function getCompleted() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveCompleted(arr) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+      } catch (e) {}
+    }
+
+    function updateProgress() {
+      const completed = getCompleted();
+      const count = completed.length;
+      const pct = Math.round((count / problemsData.length) * 100);
+      const textElem = document.getElementById("progress-text");
+      const barElem = document.getElementById("progress-bar");
+      if (textElem) textElem.innerText = `${count} / ${problemsData.length} (${pct}%)`;
+      if (barElem) barElem.style.width = `${pct}%`;
+    }
+
+    function renderProblems(filter = "all") {
+      const container = document.getElementById("problems-list");
+      if (!container) return;
+      container.innerHTML = "";
+
+      const completed = getCompleted();
+
+      problemsData.forEach((p) => {
+        if (filter !== "all" && p.tier !== filter) return;
+
+        const isDone = completed.includes(p.id);
+
+        const card = document.createElement("div");
+        card.className = `bg-white rounded-xl shadow-sm border transition p-5 ${isDone ? "border-emerald-300 bg-emerald-50/20" : "border-slate-200"}`;
+        card.id = `card-${p.id}`;
+
+        card.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-4">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center border border-slate-300">
+                ${p.id}
+              </span>
+              <h3 class="text-sm font-bold text-slate-800">习题 ${p.id}：${p.tierName}</h3>
+              <span class="text-xs px-2 py-0.5 rounded font-medium ${p.badge}">${p.tierName.split("·")[0]}</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <label class="flex items-center gap-1.5 text-xs text-slate-600 font-medium cursor-pointer select-none">
+                <input type="checkbox" class="done-checkbox rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4" data-id="${p.id}" ${isDone ? "checked" : ""}>
+                <span>标记已掌握</span>
+              </label>
+              <button class="toggle-btn px-3 py-1 rounded text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 transition" data-id="${p.id}">
+                查看解析
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Primal Problem Box -->
+            <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-3.5">
+              <div class="text-xs font-bold text-slate-600 mb-2 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                <span>原线性规划问题：</span>
+              </div>
+              <div class="math-scroll text-sm text-slate-800">
+                \\[ ${p.primal} \\]
+              </div>
+            </div>
+
+            <!-- Solution Section (Initially Hidden) -->
+            <div id="solution-${p.id}" class="solution-panel hidden space-y-3 pt-3 border-t border-slate-100">
+              <div class="bg-indigo-50/50 border border-indigo-100 rounded-lg p-3 text-xs text-slate-700 space-y-1.5">
+                <div class="font-bold text-indigo-900 mb-1 flex items-center gap-1">
+                  <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span>逐步转换解析依据：</span>
+                </div>
+                ${p.analysis.map(step => `<p class="leading-relaxed pl-4 border-l-2 border-indigo-200">${step}</p>`).join("")}
+              </div>
+
+              <!-- Dual Model Box -->
+              <div class="bg-emerald-50/50 border border-emerald-200/80 rounded-lg p-3.5">
+                <div class="text-xs font-bold text-emerald-800 mb-2 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                  <span>对偶问题标准解答：</span>
+                </div>
+                <div class="math-scroll text-sm text-emerald-950 font-medium">
+                  \\[ ${p.dual} \\]
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      // Bind Listeners
+      container.querySelectorAll(".toggle-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id");
+          const panel = document.getElementById(`solution-${id}`);
+          if (panel) {
+            const isHidden = panel.classList.contains("hidden");
+            if (isHidden) {
+              panel.classList.remove("hidden");
+              btn.innerText = "收起解析";
+              btn.classList.add("bg-indigo-100", "text-indigo-800", "border-indigo-300");
+              btn.classList.remove("bg-slate-100", "text-slate-700", "border-slate-300");
+            } else {
+              panel.classList.add("hidden");
+              btn.innerText = "查看解析";
+              btn.classList.remove("bg-indigo-100", "text-indigo-800", "border-indigo-300");
+              btn.classList.add("bg-slate-100", "text-slate-700", "border-slate-300");
+            }
+          }
+        });
+      });
+
+      container.querySelectorAll(".done-checkbox").forEach(chk => {
+        chk.addEventListener("change", (e) => {
+          const id = parseInt(chk.getAttribute("data-id"));
+          let current = getCompleted();
+          if (chk.checked) {
+            if (!current.includes(id)) current.push(id);
+          } else {
+            current = current.filter(x => x !== id);
+          }
+          saveCompleted(current);
+          updateProgress();
+
+          const card = document.getElementById(`card-${id}`);
+          if (card) {
+            if (chk.checked) {
+              card.classList.add("border-emerald-300", "bg-emerald-50/20");
+              card.classList.remove("border-slate-200");
+            } else {
+              card.classList.remove("border-emerald-300", "bg-emerald-50/20");
+              card.classList.add("border-slate-200");
+            }
+          }
+        });
+      });
+
+      // Typeset MathJax
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProblems("all");
+      updateProgress();
+
+      // Filters
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".filter-btn").forEach(b => {
+            b.classList.remove("bg-indigo-600", "text-white", "shadow-sm");
+            b.classList.add("bg-slate-200", "text-slate-700");
+          });
+          btn.classList.add("bg-indigo-600", "text-white", "shadow-sm");
+          btn.classList.remove("bg-slate-200", "text-slate-700");
+
+          const filter = btn.getAttribute("data-filter");
+          renderProblems(filter);
+        });
+      });
+
+      // Global buttons
+      document.getElementById("btn-expand-all").addEventListener("click", () => {
+        document.querySelectorAll(".solution-panel").forEach(p => p.classList.remove("hidden"));
+        document.querySelectorAll(".toggle-btn").forEach(b => {
+          b.innerText = "收起解析";
+          b.classList.add("bg-indigo-100", "text-indigo-800", "border-indigo-300");
+          b.classList.remove("bg-slate-100", "text-slate-700", "border-slate-300");
+        });
+      });
+
+      document.getElementById("btn-collapse-all").addEventListener("click", () => {
+        document.querySelectorAll(".solution-panel").forEach(p => p.classList.add("hidden"));
+        document.querySelectorAll(".toggle-btn").forEach(b => {
+          b.innerText = "查看解析";
+          b.classList.remove("bg-indigo-100", "text-indigo-800", "border-indigo-300");
+          b.classList.add("bg-slate-100", "text-slate-700", "border-slate-300");
+        });
+      });
+
+      document.getElementById("btn-reset").addEventListener("click", () => {
+        saveCompleted([]);
+        updateProgress();
+        renderProblems("all");
+      });
+    });
+  </script>
+</body>
+</html>

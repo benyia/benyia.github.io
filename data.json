@@ -1233,26 +1233,7 @@
         "学校通知",
         "学籍"
       ],
-      "images": [
-        {
-          "name": "F4E2303094BF9436F414B9E54F1_FD97019D_C872.png",
-          "url": "files/1790491270106_4_66ni82n2_F4E2303094BF9436F414B9E54F1_FD97019D_C872.png",
-          "type": "PNG",
-          "size": 51314
-        },
-        {
-          "name": "0E6E42CDABDE9DE286088CF2B90_F25707AE_15F0C.png",
-          "url": "files/1790491839214_6_s09mvzqn_0E6E42CDABDE9DE286088CF2B90_F25707AE_15F0C.png",
-          "type": "PNG",
-          "size": 89868
-        },
-        {
-          "name": "BB2D8F5465BB9FFC11F977AE2B4_4D0BC133_1F1CD.png",
-          "url": "files/1790491845334_7_k3q7avjr_BB2D8F5465BB9FFC11F977AE2B4_4D0BC133_1F1CD.png",
-          "type": "PNG",
-          "size": 127437
-        }
-      ],
+      "images": [],
       "files": [
         {
           "name": "官网",
@@ -1263,7 +1244,7 @@
           "external": true
         }
       ],
-      "time": "2026-09-28 17:39"
+      "time": "2026-11-18 17:05"
     },
     {
       "title": "关于2026级研究生乘车区间维护的通知",
@@ -1799,6 +1780,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-18 17:05",
+      "action": "编辑通知：关于2026级研究生学信网学籍信息确认的通知"
+    },
+    {
       "time": "2026-11-18 16:45",
       "action": "添加合辑：win优化教程"
     },
@@ -2193,10 +2178,6 @@
     {
       "time": "2026-09-30 11:50",
       "action": "添加应用：Reddit（红迪）"
-    },
-    {
-      "time": "2026-09-30 11:42",
-      "action": "编辑应用：DeepSeek"
     }
   ],
   "categories": [

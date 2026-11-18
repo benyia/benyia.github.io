@@ -104,19 +104,24 @@ function renderNotices(){
   arr.sort(function(a,b){ return byTimeDesc(a.n, b.n); });
   renderPaged("notices", "noticesList", "noticesPager", arr, function(it){
     var n = it.n, i = it.i;
-    var body = mdText(n.content);
+    var body = mdText(n.content).replace(/\s+/g," ").trim();
+    if(body.length > 150) body = body.slice(0,150) + "…";
     var nf = collectFiles(n).length;
-    return '<div class="article-card" onclick="openNotice('+i+')">'+coverHTML(n, "🔔")
-      + '<div class="article-body">'
-      +   '<div class="article-title">'+esc(n.title)+'</div>'
-      +   '<div class="chip-row">'
-      +     (n.source?'<span class="info-chip">🏛 '+esc(n.source)+'</span>':"")
-      +     (n.date?'<span class="info-chip">📅 '+esc(n.date)+'</span>':"")
-      +     (nf?'<span class="info-chip green">📎 '+nf+' 个附件</span>':"")
+    var tags = (n.tags||[]).slice(0,4);
+    return '<article class="lib-item" tabindex="0" role="link" onclick="openNotice('+i+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openNotice('+i+')}">'
+      + '<div class="lib-mark">🔔</div>'
+      + '<div class="lib-body">'
+      +   '<div class="lib-top"><span class="lib-kind">NOTICE</span>'
+      +     (n.source?'<span class="lib-pill">'+esc(n.source)+'</span>':"") + '</div>'
+      +   '<h3>'+esc(n.title||"未命名通知")+'</h3>'
+      +   '<p class="lib-desc">'+esc(body || "暂无正文")+'</p>'
+      +   (tags.length?'<div class="lib-tags">'+tags.map(function(t){return '<span>#'+esc(t)+'</span>';}).join("")+'</div>':"")
+      +   '<div class="lib-meta">'
+      +     (n.date?'<span>📅 '+esc(n.date)+'</span>':"")
+      +     (nf?'<span>📎 '+nf+' 个附件</span>':"")
+      +     '<span class="lib-enter">查看通知 <em>→</em></span>'
       +   '</div>'
-      +   (body?'<div class="article-desc" style="margin-top:10px">'+esc(body.slice(0,110))+'</div>':'<div class="article-desc" style="margin-top:10px;color:var(--text3)">（暂无正文）</div>')
-      +   imgStrip(n)
-      + '</div></div>';
+      + '</div></article>';
   }, "暂无通知");
 }
 function openNotice(idx){
@@ -160,7 +165,24 @@ function renderClass(){
   list.sort(byTimeDesc);
   renderPaged("class", "classList", "classPager", list, function(c){
     var idx = all.indexOf(c);
-    return '<div class="article-card" onclick="openClass('+idx+')">'+coverHTML(c, "👥")+'<div class="article-body"><div class="article-title">'+esc(c.title)+'</div><div class="article-meta"><span>'+esc(c.type)+'</span><span>'+esc(c.date||"")+'</span>'+(c.time?'<span class="time">🕐 '+esc(c.time)+'</span>':"")+'</div><div class="article-desc">'+esc(mdText(c.content).slice(0,100))+'</div>'+imgStrip(c)+'</div></div>';
+    var summary = mdText(c.content).replace(/\s+/g," ").trim();
+    if(summary.length > 150) summary = summary.slice(0,150) + "…";
+    var nf = collectFiles(c).length;
+    var tags = (c.tags||[]).slice(0,4);
+    return '<article class="lib-item" tabindex="0" role="link" onclick="openClass('+idx+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openClass('+idx+')}">'
+      + '<div class="lib-mark">👥</div>'
+      + '<div class="lib-body">'
+      +   '<div class="lib-top"><span class="lib-kind">CLASS</span><span class="lib-pill">'+esc(c.type||"班级")+'</span></div>'
+      +   '<h3>'+esc(c.title||"未命名内容")+'</h3>'
+      +   '<p class="lib-desc">'+esc(summary || "暂无正文")+'</p>'
+      +   (tags.length?'<div class="lib-tags">'+tags.map(function(t){return '<span>#'+esc(t)+'</span>';}).join("")+'</div>':"")
+      +   '<div class="lib-meta">'
+      +     (c.date?'<span>📅 '+esc(c.date)+'</span>':"")
+      +     (c.time?'<span>🕒 '+esc(c.time)+'</span>':"")
+      +     (nf?'<span>📎 '+nf+' 个附件</span>':"")
+      +     '<span class="lib-enter">查看内容 <em>→</em></span>'
+      +   '</div>'
+      + '</div></article>';
   }, "暂无内容");
 }
 function switchClassTab(mode, keepTitle){

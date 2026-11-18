@@ -66,14 +66,49 @@ function delImageBtn(btn){
   renderAll();
 }
 
-/* 列表里显示文件行（已保存的） */
+/* 列表里显示文件：默认折叠成「文件夹 / 数量」摘要，点开才列出全部文件 */
+var ADMIN_FILE_OPEN = {};
+function adminFileKey(kind, idx){ return String(kind) + ":" + String(idx); }
+function toggleAdminFiles(btn){
+  var key = btn.getAttribute("data-fkey");
+  if(!key) return;
+  ADMIN_FILE_OPEN[key] = !ADMIN_FILE_OPEN[key];
+  var box = document.getElementById("afiles-" + key.replace(/[^a-zA-Z0-9_-]/g, "_"));
+  if(box) box.hidden = !ADMIN_FILE_OPEN[key];
+  btn.textContent = ADMIN_FILE_OPEN[key] ? "收起文件 ▲" : ("展开 " + btn.getAttribute("data-fcount") + " 个文件 ▼");
+  btn.setAttribute("aria-expanded", ADMIN_FILE_OPEN[key] ? "true" : "false");
+}
 function fileRows(files, kind, idx){
   const arr = files||[];
-  if(!arr.length) return "";
-  return `<div style="margin-top:6px">`+arr.map((f,i)=>`
-    <span class="tag-chip">${f.folder ? ("📁 " + esc(f.folder) + " / ") : ""}📄 ${esc(f.name)}</span>
-    <button class="btn btn-ghost btn-sm" style="margin:0 6px 2px 0" onclick="delFile('${kind}',${idx},${i})">×</button>
-  `).join("")+`</div>`;
+  if(!arr.length) return '<div class="afiles-empty">暂无文件</div>';
+  var groups = {}, order = [];
+  arr.forEach(function(f){
+    var g = f.folder || "";
+    if(!groups[g]){ groups[g] = []; order.push(g); }
+    groups[g].push(f);
+  });
+  var key = adminFileKey(kind, idx);
+  var open = !!ADMIN_FILE_OPEN[key];
+  var summary = order.slice(0, 4).map(function(g){
+    return '<span class="afiles-folder">📁 ' + esc(g || "根目录") + '<em>' + groups[g].length + '</em></span>';
+  }).join("");
+  if(order.length > 4) summary += '<span class="afiles-more">+' + (order.length - 4) + ' 个文件夹</span>';
+  var detail = order.map(function(g){
+    return '<div class="afiles-group"><div class="afiles-group-title">📁 ' + esc(g || "根目录") + '<span>' + groups[g].length + ' 个文件</span></div>'
+      + groups[g].map(function(f){
+        var i = arr.indexOf(f);
+        return '<div class="afiles-line"><span class="afiles-name">' + adminFileThumb(f, "afiles-ico") + '<b>' + esc(f.name) + '</b></span>'
+          + '<span class="afiles-type">' + esc(f.type || "文件") + (f.size ? " · " + fmtSize(f.size) : "") + '</span>'
+          + '<button class="btn btn-ghost btn-sm" onclick="delFile(\'' + kind + '\',' + idx + ',' + i + ')">移除</button></div>';
+      }).join("")
+      + '</div>';
+  }).join("");
+  return '<div class="afiles">'
+    + '<div class="afiles-bar"><div class="afiles-summary">' + summary + '</div>'
+    + '<button class="btn btn-ghost btn-sm afiles-toggle" data-fkey="' + esc(key) + '" data-fcount="' + arr.length + '" aria-expanded="' + (open ? "true" : "false") + '" onclick="toggleAdminFiles(this)">'
+    + (open ? "收起文件 ▲" : ("展开 " + arr.length + " 个文件 ▼")) + '</button></div>'
+    + '<div class="afiles-detail" id="afiles-' + esc(key.replace(/[^a-zA-Z0-9_-]/g, "_")) + '"' + (open ? "" : " hidden") + '>' + detail + '</div>'
+    + '</div>';
 }
 
 async function delFile(kind, idx, fileIdx){

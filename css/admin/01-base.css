@@ -156,6 +156,34 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
   .course-fm-move{max-width:none;flex:1}
   .course-fm-quick{padding-left:0}
 }
+/* ===== 后台列表：文件默认折叠成资料库摘要 ===== */
+.afiles{margin-top:9px;border:1px solid var(--border);border-radius:10px;background:#fbfdfe;overflow:hidden}
+.afiles-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;flex-wrap:wrap;background:#f8fafc}
+.afiles-summary{display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0}
+.afiles-folder{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border:1px solid var(--border);border-radius:99px;background:#fff;font-size:.73rem;color:var(--text2);max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.afiles-folder em{font-style:normal;font-size:.68rem;color:var(--primary-dark);font-weight:700;font-variant-numeric:tabular-nums}
+.afiles-more{font-size:.71rem;color:var(--text3)}
+.afiles-toggle{white-space:nowrap;flex:0 0 auto}
+.afiles-detail{border-top:1px dashed var(--border);padding:8px 10px;max-height:420px;overflow:auto}
+.afiles-group+.afiles-group{margin-top:10px}
+.afiles-group-title{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.75rem;font-weight:600;color:var(--primary-dark);margin-bottom:5px}
+.afiles-group-title span{font-weight:400;font-size:.68rem;color:var(--text3)}
+.afiles-line{display:flex;align-items:center;gap:8px;padding:6px 7px;border:1px solid #e8eef5;border-radius:8px;background:#fff;margin-bottom:4px;flex-wrap:wrap}
+.afiles-name{display:flex;align-items:center;gap:7px;flex:1;min-width:0}
+.afiles-name b{font-size:.78rem;font-weight:500;line-height:1.45;word-break:break-all}
+.afiles-ico{width:30px;height:30px;flex:0 0 30px;border-radius:7px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:.9rem;overflow:hidden}
+.afiles-ico img{width:100%;height:100%;object-fit:cover;display:block}
+.afiles-type{font-size:.68rem;color:var(--text3);white-space:nowrap}
+.afiles-empty{font-size:.76rem;color:var(--text3);margin-top:6px}
+@media(max-width:700px){
+  .afiles-bar{align-items:flex-start;flex-direction:column}
+  .afiles-toggle{width:100%}
+  .afiles-folder{max-width:100%}
+  .afiles-detail{max-height:340px}
+  .afiles-line{align-items:flex-start}
+  .afiles-name{min-width:100%}
+  .afiles-type{margin-left:37px}
+}
 .progress-track{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:8px;display:none}
 .progress-track.on{display:block}
 .progress-bar{height:100%;width:0;background:var(--primary);transition:width .15s}

@@ -224,11 +224,9 @@ function setPaperFilter(k){ paperFilter = k; renderFilters(); renderPapers(); }
 function setClassFilter(k){ classFilter = k; pageState["class"] = 1; renderFilters(); renderClass(); }
 
 function applyColumns(){
-  var n = String((blogData.siteConfig && blogData.siteConfig.columns) || "1");
-  if(["1","2","3"].indexOf(n) < 0) n = "1";
   ["homeList","papersList","noticesList","classList"].forEach(function(id){
     var el = document.getElementById(id);
-    if(el) el.className = "list-cols cols-" + n;
+    if(el) el.className = "";
   });
 }
 /* 按图片比例自动决定往哪个方向滑：图片比框更"高"就纵向滑，否则横向滑 */
@@ -1176,19 +1174,24 @@ function renderPapers(){
   document.getElementById("papersList").innerHTML = list.map(function(p){
     var idx = all.indexOf(p);
     var nf = collectFiles(p).length;
-    return '<div class="article-card" onclick="openPaper('+idx+')">'+coverHTML(p, "📝")
-      + '<div class="article-body">'
-      +   '<div class="article-title">'+esc(p.title)+'</div>'
-      +   '<div class="chip-row">'
-      +     (p.status?'<span class="info-chip green">'+esc(p.status)+'</span>':"")
-      +     (p.year?'<span class="info-chip">📅 '+esc(p.year)+'</span>':"")
-      +     (nf?'<span class="info-chip">📎 '+nf+' 个文件</span>':"")
-      +     (p.time?'<span class="info-chip">🕐 '+esc(p.time)+'</span>':"")
+    var summary = mdText(p.abstract||p.desc||"").replace(/\s+/g," ").trim();
+    if(summary.length > 150) summary = summary.slice(0,150) + "…";
+    var tags = (p.tags||[]).slice(0,4);
+    return '<article class="lib-item" tabindex="0" role="link" onclick="openPaper('+idx+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openPaper('+idx+')}">'
+      + '<div class="lib-mark">📝</div>'
+      + '<div class="lib-body">'
+      +   '<div class="lib-top"><span class="lib-kind">PAPER</span>'
+      +     (p.status?'<span class="lib-pill">'+esc(p.status)+'</span>':"") + '</div>'
+      +   '<h3>'+esc(p.title||"未命名论文")+'</h3>'
+      +   '<p class="lib-desc">'+esc(summary || "暂无摘要")+'</p>'
+      +   (tags.length?'<div class="lib-tags">'+tags.map(function(t){return '<span>#'+esc(t)+'</span>';}).join("")+'</div>':"")
+      +   '<div class="lib-meta">'
+      +     (p.year?'<span>📅 '+esc(p.year)+'</span>':"")
+      +     '<span>📎 '+nf+' 个文件</span>'
+      +     (p.time?'<span>🕒 '+esc(p.time)+'</span>':"")
+      +     '<span class="lib-enter">查看论文 <em>→</em></span>'
       +   '</div>'
-      +   '<div class="article-desc" style="margin-top:10px">'+esc(mdText(p.abstract||p.desc||"").slice(0,110))+'</div>'
-      +   '<div class="article-tags">'+((p.tags||[]).map(function(t){return '<span class="tag-chip">'+esc(t)+'</span>';}).join(""))+'</div>'
-      +   imgStrip(p)
-      + '</div></div>';
+      + '</div></article>';
   }).join("") || '<div class="empty">暂无匹配的论文</div>';
 }
 function openPaper(idx){

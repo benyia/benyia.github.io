@@ -433,7 +433,28 @@ html[data-theme="dark"] .sk{background:linear-gradient(90deg,#1b2739 25%,#243247
 .links-toggle:hover{background:var(--soft)}
 
 /* ===== 课程目录：资料库概览 + 单列课程卡片 ===== */
-#coursesList{display:flex;flex-direction:column;gap:14px}
+#coursesList,#papersList,#noticesList,#classList{display:flex;flex-direction:column;gap:13px}
+.lib-item{display:flex;gap:16px;padding:15px 16px;border:1px solid var(--glass-border);border-radius:15px;background:var(--card);box-shadow:var(--shadow),var(--glass-hi);cursor:pointer;outline:none;transition:transform .2s,border-color .2s,box-shadow .2s}
+.lib-item:hover,.lib-item:focus-visible{transform:translateY(-2px);border-color:rgba(16,185,129,.55);box-shadow:0 14px 32px rgba(15,23,42,.10)}
+.lib-mark{flex:0 0 52px;width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--primary-light),var(--soft));display:flex;align-items:center;justify-content:center;font-size:1.35rem}
+.lib-body{flex:1;min-width:0}
+.lib-top{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:4px}
+.lib-kind{font-family:ui-monospace,Consolas,monospace;font-size:.63rem;letter-spacing:.13em;color:var(--text3)}
+.lib-pill{font-size:.67rem;padding:2px 8px;border-radius:99px;background:var(--primary-light);color:var(--primary-dark);font-weight:650;white-space:nowrap}
+.lib-item h3{font-size:.98rem;line-height:1.45;color:var(--text);margin:0 0 5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lib-desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.81rem;line-height:1.65;color:var(--text2);margin:0 0 7px}
+.lib-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px}
+.lib-tags span{font-size:.66rem;line-height:1;color:var(--text3);background:var(--soft);border:1px solid var(--border);border-radius:99px;padding:4px 8px}
+.lib-meta{display:flex;flex-wrap:wrap;align-items:center;gap:7px 13px;font-size:.7rem;color:var(--text3)}
+.lib-enter{margin-left:auto;color:var(--text3);white-space:nowrap;transition:color .18s}
+.lib-enter em{font-style:normal;color:var(--primary);margin-left:2px}
+.lib-item:hover .lib-enter{color:var(--primary-dark)}
+@media(max-width:640px){
+  .lib-item{gap:11px;padding:13px}
+  .lib-mark{flex-basis:40px;width:40px;height:40px;border-radius:11px;font-size:1.1rem}
+  .lib-desc{-webkit-line-clamp:3}
+  .lib-enter{margin-left:0;width:100%;padding-top:2px}
+}
 .course-summary{
   position:relative;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:22px;align-items:center;
   margin:0 0 18px;padding:20px 22px;border:1px solid var(--glass-border);border-radius:18px;

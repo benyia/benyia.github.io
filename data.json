@@ -871,6 +871,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-18 13:17",
+      "action": "添加合辑：申请教程"
+    },
+    {
       "time": "2026-11-18 13:11",
       "action": "修改站点设置"
     },
@@ -1265,10 +1269,6 @@
     {
       "time": "2026-09-28 11:09",
       "action": "编辑日记：DeepSeek V4.1 Flash越狱教程"
-    },
-    {
-      "time": "2026-09-28 11:02",
-      "action": "添加图片：头像1"
     }
   ],
   "categories": [
@@ -2062,5 +2062,31 @@
       "views": 0
     }
   ],
-  "collections": []
+  "collections": [
+    {
+      "icon": "files/uf-1059-apply.webp",
+      "title": "申请教程",
+      "desc": "各种账号的申请教程",
+      "intro": "",
+      "tags": [
+        "邮箱注册"
+      ],
+      "author": "思齐",
+      "files": [
+        {
+          "name": "申请教育邮箱方法.docx",
+          "url": "files/申请教育邮箱方法.docx",
+          "type": "DOCX",
+          "size": 305387,
+          "originalSize": 305387,
+          "optimized": false,
+          "folder": ""
+        }
+      ],
+      "images": [],
+      "time": "2026-11-18 13:17",
+      "created": "2026-11-18 13:17",
+      "views": 0
+    }
+  ]
 }

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>凸规划判定练习题（共10题）</title>
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=shSign2l7_5lqbMnFdFTnk0R44VXd-uHpXFrFKAmKXiwkSeE1a5M0XIJ76Qgop8gQmUIxx6UaLTZ_RO6l0Sp86KKytEUjB83DPCkBBRCFB0T5DixfZ5_W8ndGUfXmWxSlIca5q-Y3h06TQHotf2Lt-ylMGJuk1fa4SM5sqaPdfaRPe9eqFMel0uUoQ2AdO7KP8OzvOM0RfvJWyiG8SiHc5FS7eRNy0Oewnx7hU0JrIFXkYFu3NfkxFXcATi4JlBoz2ckhFEmtRj6FyDIwWidM3f2_jrSVVuEXHp-JNuWIMuWf2D9phuuxd8YNi3TyZ7hIq677WOTIwqDj3mTizsN7YB6vrPxCe56BzaEdosKr_Y" charset="UTF-8"></script><script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      chtml: {
+        scale: 1.05
+      }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        :root {
+            --primary: #1d4ed8;
+            --primary-bg: #eff6ff;
+            --success: #15803d;
+            --danger: #b91c1c;
+            --border: #e2e8f0;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background-color: #f1f5f9;
+            color: var(--text-main);
+            line-height: 1.65;
+            padding: 30px 15px;
+            margin: 0;
+        }
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 36px 32px;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+        h1 {
+            font-size: 1.75rem;
+            text-align: center;
+            color: #0f172a;
+            margin-top: 0;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        .rule-card {
+            background-color: var(--primary-bg);
+            border-left: 5px solid var(--primary);
+            padding: 16px 20px;
+            margin-bottom: 28px;
+            border-radius: 0 10px 10px 0;
+            font-size: 0.95rem;
+        }
+        .rule-card strong {
+            color: var(--primary);
+            font-size: 1.05rem;
+        }
+        .problem-card {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 22px;
+            background: #fff;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+        }
+        .problem-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1e293b;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 8px;
+        }
+        .formula-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 12px 0 16px;
+            overflow-x: auto;
+        }
+        details {
+            margin-top: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fafafa;
+        }
+        summary {
+            padding: 10px 16px;
+            background: #f1f5f9;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+        }
+        summary:hover {
+            background: #e2e8f0;
+        }
+        .solution-content {
+            padding: 16px 18px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 9999px;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+        .badge-yes {
+            background: #dcfce7;
+            color: var(--success);
+            border: 1px solid #86efac;
+        }
+        .badge-no {
+            background: #fee2e2;
+            color: var(--danger);
+            border: 1px solid #fca5a5;
+        }
+        ol {
+            margin: 8px 0;
+            padding-left: 22px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        .mark-danger {
+            color: var(--danger);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>凸规划判定练习题（教材规范版）</h1>
+    <div class="rule-card">
+        <strong>【教材标准形式及判定定理】</strong>
+        <p style="margin: 8px 0 4px 0;">非线性规划的标准形式为：</p>
+        <div style="background: white; padding: 10px; border-radius: 6px; margin: 6px 0; border: 1px solid #cbd5e1;">
+            $$\begin{cases}
+            \min f(\boldsymbol{X}) \\
+            h_i(\boldsymbol{X}) = 0, \quad (i = 1,2,\cdots,m) \\
+            g_j(\boldsymbol{X}) \geqslant 0, \quad (j = 1,2,\cdots,l)
+            \end{cases}$$
+        </div>
+        判定该问题是否为<strong>凸规划</strong>的充分必要条件：
+        <ol style="margin: 6px 0 0 0; padding-left: 20px;">
+            <li>目标函数 $f(\boldsymbol{X})$ 为<strong>凸函数</strong>（Hessian 矩阵半正定或正定）；</li>
+            <li>不等式约束按 $g_j(\boldsymbol{X}) \geqslant 0$ 书写时，各约束函数 $g_j(\boldsymbol{X})$ 必须为<strong>凹函数</strong>（Hessian 矩阵半负定或负定）；</li>
+            <li>等式约束 $h_i(\boldsymbol{X}) = 0$ 中的函数 $h_i(\boldsymbol{X})$ 必须全为<strong>线性（仿射）函数</strong>。</li>
+        </ol>
+    </div>
+
+    <!-- 第 1 题 -->
+    <div class="problem-card">
+        <div class="problem-title">第 1 题</div>
+        <div>试判定下述非线性规划是否为凸规划：</div>
+        <div class="formula-box">
+            $$\begin{cases}
+            \min f(\boldsymbol{X}) = 2x_1^2 + x_2^2 - 2x_1x_2 + 4x_1 + 1 \\
+            4 - x_1^2 - x_2^2 \geqslant 0 \\
+            x_1 + 2x_2 - 3 = 0 \\
+            x_1 \geqslant 0, \quad x_2 \geqslant 0
+            \end{cases}$$
+        </div>
+        <details>
+            <summary>点击查看判定结果与分步解析</summary>
+            <div class="solution-content">
+                <p><strong>判定结论：</strong><span class="badge badge-yes">是凸规划</span></p>
+                <ol>
+                    <li><strong>目标函数：</strong>其 Hessian 矩阵为 $\nabla^2 f(\boldsymbol{X}) = \begin{pmatrix} 4 & -2 \\ -2 & 2 \end{pmatrix}$。一阶主子式 $4 > 0$，行列式 $4 \times 2 - (-2)^2 = 4 > 0$，为正定矩阵，因此 $f(\boldsymbol{X})$ 是严格凸函数。</li>
+                    <li><strong>不等式约束：</strong>约束已为 $g_j(\boldsymbol{X}) \geqslant 0$ 标准形式。令 $g_1(\boldsymbol{X}) = 4 - x_1^2 - x_2^2 \geqslant 0$，其 Hessian 矩阵为 $\begin{pmatrix} -2 & 0 \\ 0 & -2 \end{pmatrix}$，负定，故 $g_1(\boldsymbol{X})$ 是凹函数；非负条件 $g_2(\boldsymbol{X}) = x_1 \geqslant 0, g_3(\boldsymbol{X}) = x_2 \geqslant 0$ 均为线性函数（既是凸函数也是凹函数）。</li>
+                    <li><strong>等式约束：</strong>$h_1(\boldsymbol{X}) = x_1 + 2x_2 - 3 = 0$ 是线性函数。</li>
+                </ol>
+                <p>综上，全部满足凸规划条件，故是凸规划。</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- 第 2 题 -->
+    <div class="problem-card">
+        <div class="problem-title">第 2 题</div>
+        <div>试判定下述非线性规划是否为凸规划：</div>
+        <div class="formula-box">
+            $$\begin{cases}
+            \min f(\boldsymbol{X}) = x_1^2 + 3x_2^2 \\
+            x_1^2 - x_2 \geqslant 0 \\
+            2 - x_1 - x_2 \geqslant 0 \\
+            x_1 \geqslant 0, \quad x_2 \geqslant 0
+            \end{cases}$$
+        </div>
+        <details>
+            <summary>点击查看判定结果与分步解析</summary>
+            <div class="solution-content">
+                <p><strong>判定结论：</strong><span class="badge badge-no">不是凸规划</span></p>
+                <ol>
+                    <li><strong>目标函数：</strong>$f(\boldsymbol{X}) = x_1^2 + 3x_2^2$ 的 Hessian 矩阵为 $\mathrm{diag}(2, 6)$，正定，是凸函数。</li>
+                    <li><strong>不等式约束：</strong>对于已写作 $\geqslant 0$ 的约束 $g_1(\boldsymbol{X}) = x_1^2 - x_2 \geqslant 0$，其 Hessian 矩阵为 $\nabla^2 g_1(\boldsymbol{X}) = \begin{pmatrix} 2 & 0 \\ 0 & 0 \end{pmatrix}$，半正定，即 $g_1(\boldsymbol{X})$ 为<span class="mark-danger">凸函数而非凹函数</span>。</li>
+                </ol>
+                <p class="mark-danger">按教材准则，在 $g_j(\boldsymbol{X}) \geqslant 0$ 规范形式下函数必须为凹函数。此处 $g_1(\boldsymbol{X})$ 是凸函数，其上水平集 $\{X \mid x_2 \leqslant x_1^2\}$ 不是凸集，故不是凸规划。</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- 第 3 题 -->
+    <div class="problem-card">
+        <div class="problem-title">第 3 题</div>
+        <div>试判定下述非线性规划是否为凸规划：</div>
+        <div class="formula-box">
+            $$\begin{cases}
+            \min f(\boldsymbol{X}) = x_1^2 + 2x_2^2 + x_3^2 \\
+            4 - x_1 - x_2^2 \geqslant 0 \\
+            2x_1 + x_2^2 + x_3 - 5 = 0 \\
+            x_1 \geqslant 0, \quad x_2 \geqslant 0, \quad x_3 \geqslant 0
+            \end{cases}$$
+        </div>
+        <details>
+            <summary>点击查看判定结果与分步解析</summary>
+            <div class="solution-content">
+                <p><strong>判定结论：</strong><span class="badge badge-no">不是凸规划</span></p>
+                <ol>
+                    <li>目标函数 $f(\boldsymbol{X})$ 是凸函数。</li>
+                    <li>不等式约束 $g_1(\boldsymbol{X}) = 4 - x_1 - x_2^2 \geqslant 0$ 为凹函数。</li>
+                    <li><strong>等式约束：</strong>$h_1(\boldsymbol{X}) = 2x_1 + x_2^2 + x_3 - 5 = 0$ 中包含二次非线性项 $x_2^2$，<span class="mark-danger">不是线性函数</span>。</li>
+                </ol>
+                <p class="mark-danger">教材定理规定：凸规划中的等式约束 $h_i(\boldsymbol{X}) = 0$ 必须全部为线性函数。非线性等式约束的解集构成的超曲面不是凸集，故该规划不是凸规划。</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- 第 4 题 -->
+    <div class="problem-card">
+        <div class="problem-title">第 4 题</div>
+        <div>试判定下述非线性规划是否为凸规划：</div>
+        <div class="formula-box">
+            $$\begin{cases}
+            \max F(\boldsymbol{X}) = -(x_1 - 1)^2 - (x_2 - 2)^2 \\
+            5 - e^{x_1} - x_2^2 \geqslant 0 \\
+            3x_1 - 2x_2 - 1 = 0 \\
+            x_1 \geqslant 0
+            \end{cases}$$
+        </div>
+        <details>
+            <summary>点击查看判定结果与分步解析</summary>
+            <div class="solution-content">
+                <p><strong>判定结论：</strong><span class="badge badge-yes">是凸规划</span></p>
+                <ol>
+                    <li><strong>目标函数：</strong>原问题为极大化 $\max F(\boldsymbol{X})$，转化为教材标准极小化问题 $\min f(\boldsymbol{X}) = -F(\boldsymbol{X}) = (x_1 - 1)^2 + (x_2 - 2)^2$。由于 $f(\boldsymbol{X})$ 的 Hessian 矩阵为 $2\boldsymbol{I}_2$，严格正定，故 $f(\boldsymbol{X})$ 为严格凸函数。</li>
+                    <li><strong>不等式约束：</strong>$g_1(\boldsymbol{X}) = 5 - e^{x_1} - x_2^2 \geqslant 0$，其 Hessian 矩阵为 $\begin{pmatrix} -e^{x_1} & 0 \\ 0 & -2 \end{pmatrix}$，各对角线元素恒负，为严格负定，故 $g_1(\boldsymbol{X})$ 是严格凹函数；$x_1 \geqslant 0$ 为线性函数。</li>
+                    <li><strong>等式约束：</strong>$h_1(\boldsymbol{X}) = 3x_1 - 2x_2 - 1 = 0$ 是线性函数。</li>
+                </ol>
+                <p>满足所有判定条件，故是凸规划。</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- 第 5 题 -->
+    <div class="problem-card">
+        <div class="problem-title">第 5 题</div>
+        <div>试判定下述非线性规划是否为凸规划：</div>
+        <div class="formula-box">
+            $$\begin{cases}
+            \min f(\boldsymbol{X}) = x_1^2 - 2x_1x_2 + 3x_2^2 + x_3^2 \\
+            x_3 - x_1^2 - 2x_2^2 \geqslant 0 \\
+            6 - x_1 - 4x_2 + 2x_3 \geqslant 0 \\
+            x_3 \geqslant 0
+            \end{cases}$$
+        </div>
+        <details>
+            <summary>点击查看判定结果与分步解析</summary>
+            <div class="solution-content">
+                <p><strong>判定结论：</strong><span class="badge badge-yes">是凸规划</span></p>
+                <ol>
+                    <li><strong>目标函数：</strong>其 Hessian 矩阵为 $\begin{pmatrix} 2 & -2 & 0 \\ -2 & 6 & 0 \\ 0 & 0 & 2 \end{pmatrix}$。主子式依次为 $2 > 0$、$12 - 4 = 8 > 0$、$8 \times 2 = 16 > 0$，正定，故目标函数为严格凸函数。</li>
+                    <li><strong>不等式约束：</strong>令 $g_1(\boldsymbol{X}) = x_3 - x_1^2 - 2x_2^2 \geqslant 0$，其 Hessian 矩阵为 $\mathrm{diag}(-2, -4, 0)$，特征值全非正，属于半负定矩阵，因此 $g_1(\boldsymbol{X})$ 是凹函数；其余不等式皆为线性函数。</li>
+                </ol>
+                <p>目标函数是凸函数，不等式约束函数均为凹函数，故是凸规划。</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- 第 6 题 -->
+    <div class="problem-card">
+        <div class="problem-title">第 6 题</div>
+        <div>试判定下述非线性规划是否为凸规划：</div>
+        <div class="formula-box">
+            $$\begin{cases}
+            \min f(\boldsymbol{X}) = x_1^2 - 4x_1x_2 + x_2^2 \\
+            9 - x_1^2 - x_2^2 \geqslant 0 \\
+            x_1 + x_2 - 1 \geqslant 0
+            \end{cases}$$
+        </div>
+        <details>
+            <summary>点击查看判定结果与分步解析</summary>
+            <div class="solution-content">
+                <p><strong>判定结论：</strong><span class="badge badge-no">不是凸规划</span></p>
+                <ol>
+                    <li><strong>目标函数：</strong>计算 Hessian 矩阵：$\nabla^2 f(\boldsymbol{X}) = \begin{pmatrix} 2 & -4 \\ -4 & 2 \end{pmatrix}$。行列式为 $4 - 16 = -12 < 0$，矩阵特征值为 $6$ 和 $-2$。<span class="mark-danger">Hessian 矩阵不定，因此目标函数 $f(\boldsymbol{X})$ 不是凸函数</span>（鞍面）。</li>
+                </ol>
+                <p class="mark-danger">即使该题的可行域为凸集，但因为目标函数非凸，故该规划不是凸规划。</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- 第 7 题 -->
+    <div class="problem-card">
+        <div class="problem-title">第 7 题</div>
+        <div>试判定下述非线性规划是否为凸规划：</div>
+        <div class="formula-box">
+            $$\begin{cases}
+            \min f(\boldsymbol{X}) = x_1 + 2x_2 \\
+            x_2 - \frac{4}{x_1} \geqslant 0 \\
+            x_1 > 0, \quad x_2 \geqslant 0
+            \end{cases}$$
+        </div>
+        <details>
+            <summary>点击查看判定结果与分步解析</summary>
+            <div class="solution-content">
+                <p><strong>判定结论：</strong><span class="badge badge-yes">是凸规划</span></p>
+                <ol>
+                    <li><strong>目标函数：</strong>$f(\boldsymbol{X}) = x_1 + 2x_2$ 为线性函数，既凸亦凹，满足目标函数为凸函数的要求。</li>
+                    <li><strong>不等式约束：</strong>约束为 $g_1(\boldsymbol{X}) = x_2 - \frac{4}{x_1} \geqslant 0$（在 $x_1 > 0$ 区域）。计算二阶偏导：$\frac{\partial^2 g_1}{\partial x_1^2} = -\frac{8}{x_1^3} < 0$，Hessian 矩阵为 $\begin{pmatrix} -8/x_1^3 & 0 \\ 0 & 0 \end{pmatrix}$，特征值分别为 $-8/x_1^3 < 0$ 和 $0$，为半负定矩阵，因此 $g_1(\boldsymbol{X})$ 是凹函数。</li>
+                </ol>
+                <p>满足 $g_1(\boldsymbol{X}) \geqslant 0$ 且为凹函数的判定要求，故是凸规划。</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- 第 8 题 -->
+    <div class="problem-card">
+        <div class="problem-title">第 8 题</div>
+        <div>试判定下述非线性规划是否为凸规划：</div>
+        <div class="formula-box">
+            $$\begin{cases}
+            \min f(\boldsymbol{X}) = (x_1 - 2)^2 + (x_2 - 1)^2 \\
+            x_1^2 + x_2^2 - 1 \geqslant 0 \\
+            3 - x_1 - x_2 \geqslant 0 \\
+            x_1 \geqslant 0, \quad x_2 \geqslant 0
+            \end{cases}$$
+        </div>
+        <details>
+            <summary>点击查看判定结果与分步解析</summary>
+            <div class="solution-content">
+                <p><strong>判定结论：</strong><span class="badge badge-no">不是凸规划</span></p>
+                <ol>
+                    <li>目标函数是严格凸函数。</li>
+                    <li><strong>不等式约束：</strong>约束为 $g_1(\boldsymbol{X}) = x_1^2 + x_2^2 - 1 \geqslant 0$。其 Hessian 矩阵为 $\begin{pmatrix} 2 & 0 \\ 0 & 2 \end{pmatrix}$，严格正定，即 $g_1(\boldsymbol{X})$ 是<span class="mark-danger">严格凸函数而非凹函数</span>。</li>
+                    <li>几何意义上，$x_1^2 + x_2^2 \geqslant 1$ 为单位圆及外部区域（挖掉了圆心附近开球），是非凸集合。</li>
+                </ol>
+                <p class="mark-danger">按教材准则，不等式约束函数 $g_1(\boldsymbol{X})$ 不是凹函数，故不是凸规划。</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- 第 9 题 -->
+    <div class="problem-card">
+        <div class="problem-title">第 9 题</div>
+        <div>试判定下述非线性规划是否为凸规划：</div>
+        <div class="formula-box">
+            $$\begin{cases}
+            \min f(\boldsymbol{X}) = \frac{1}{2}x_1^2 + \frac{1}{2}x_2^2 + \frac{1}{2}x_3^2 \\
+            25 - (x_1^2 + x_2^2 + x_3^2) \geqslant 0 \\
+            x_1 - 2x_2 + 3x_3 - 4 = 0
+            \end{cases}$$
+        </div>
+        <details>
+            <summary>点击查看判定结果与分步解析</summary>
+            <div class="solution-content">
+                <p><strong>判定结论：</strong><span class="badge badge-yes">是凸规划</span></p>
+                <ol>
+                    <li><strong>目标函数：</strong>Hessian 矩阵为单位阵 $\boldsymbol{I}_3$，正定，是严格凸函数。</li>
+                    <li><strong>不等式约束：</strong>$g_1(\boldsymbol{X}) = 25 - (x_1^2 + x_2^2 + x_3^2) \geqslant 0$，其 Hessian 矩阵为 $-2\boldsymbol{I}_3$，严格负定，是严格凹函数。</li>
+                    <li><strong>等式约束：</strong>$h_1(\boldsymbol{X}) = x_1 - 2x_2 + 3x_3 - 4 = 0$ 是线性函数。</li>
+                </ol>
+                <p>所有条件均完全满足，故是凸规划。</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- 第 10 题 -->
+    <div class="problem-card">
+        <div class="problem-title">第 10 题</div>
+        <div>试判定下述非线性规划是否为凸规划：</div>
+        <div class="formula-box">
+            $$\begin{cases}
+            \min f(\boldsymbol{X}) = x_1^4 + x_2^4 + x_1 + x_2 \\
+            x_2^3 - x_1^2 \geqslant 0 \\
+            x_1 \geqslant 0, \quad x_2 \geqslant 0
+            \end{cases}$$
+        </div>
+        <details>
+            <summary>点击查看判定结果与分步解析</summary>
+            <div class="solution-content">
+                <p><strong>判定结论：</strong><span class="badge badge-no">不是凸规划</span></p>
+                <ol>
+                    <li><strong>目标函数：</strong>Hessian 矩阵为 $\mathrm{diag}(12x_1^2, 12x_2^2)$，半正定，是凸函数。</li>
+                    <li><strong>不等式约束：</strong>令 $g_1(\boldsymbol{X}) = x_2^3 - x_1^2 \geqslant 0$。其 Hessian 矩阵为 $\nabla^2 g_1(\boldsymbol{X}) = \begin{pmatrix} -2 & 0 \\ 0 & 6x_2 \end{pmatrix}$。当 $x_2 > 0$ 时，对角元一负一正，行列式为 $-12x_2 < 0$，<span class="mark-danger">Hessian 矩阵不定，故 $g_1(\boldsymbol{X})$ 不是凹函数</span>。</li>
+                </ol>
+                <p class="mark-danger">约束函数 $g_1(\boldsymbol{X})$ 不满足凹函数要求，故不是凸规划。</p>
+            </div>
+        </details>
+    </div>
+
+</div>
+</body>
+</html>

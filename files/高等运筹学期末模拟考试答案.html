@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>高等运筹学期末模拟考试A卷 试题</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "SimSun", "Times New Roman", serif;
+            max-width: 920px;
+            margin: 24px auto;
+            padding: 0 20px;
+            font-size: 16px;
+            line-height: 1.75;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .info-block {
+            border:1px solid #aaa;
+            padding:12px 16px;
+            border-radius:4px;
+            margin:16px 0;
+        }
+        .problem {
+            margin:26px 0;
+        }
+        table {
+            border-collapse: collapse;
+            margin:12px 0;
+        }
+        table td, table th {
+            border:1px solid #333;
+            padding:7px 14px;
+        }
+        .note {
+            color:#333;
+        }
+    </style>
+</head>
+<body>
+<h1>高等运筹学期末模拟考试 | A 卷</h1>
+<h2>2026秋季学期｜模拟卷A</h2>
+
+<div class="info-block">
+<p><strong>依据2025年高等运筹学期末考试题知识结构改编</strong></p>
+<p>考试时间：120分钟  满分：100分  考试形式：闭卷</p>
+<table style="border:none;">
+    <tr>
+        <td style="border:none;">姓名：___________</td>
+        <td style="border:none;">班级：___________</td>
+    </tr>
+</table>
+<p><strong>作答说明</strong>：本卷为试题卷，共10题。请在答题纸上写清题号与必要过程。除特别说明外，数值结果保留两位小数。</p>
+<p>题号分值：1(12)、2(10)、3(12)、4(8)、5(10)、6(12)、7(10)、8(8)、9(8)、10(10)</p>
+</div>
+
+
+<div class="problem">
+<h3>第1题 线性规划的图解法（12分）</h3>
+<p>用图解法求解下列线性规划问题：</p>
+\[
+\begin{aligned}
+\max z &=2 x_{1}+3 x_{2}\\
+\text{s.t.}\quad
+x_{1}+x_{2} &\le 4\\
+x_{1}+2 x_{2} &\le 6\\
+x_{1},\ x_{2} &\ge 0
+\end{aligned}
+\]
+<p>(1)画出可行域，并写出可行域的全部顶点；</p>
+<p>(2)求最优解、最优值，并说明最优解是否唯一。</p>
+</div>
+
+
+<div class="problem">
+<h3>第2题 线性规划的对偶问题（10分）</h3>
+<p>写出下列原线性规划问题的对偶问题，并标明各对偶变量的符号限制：</p>
+\[
+\begin{aligned}
+\max z &=6 x_{1}+4 x_{2}+3 x_{3}\\
+\text{s.t.}\quad
+2 x_{1}+x_{2}+x_{3} &\le 10\\
+x_{1}-2 x_{2}+x_{3} &\ge 2\\
+x_{1}+x_{3} &=3\\
+x_{1},\ x_{2},\ x_{3} &\ge 0
+\end{aligned}
+\]
+</div>
+
+
+<div class="problem">
+<h3>第3题 产销平衡运输问题（12分）</h3>
+<p>某公司有三个产地 \(A_1,A_2,A_3\) 和四个销地 \(B_1,B_2,B_3,B_4\)。各产地供应量分别为7、7、6，各销地需求量分别为6、5、4、5，单位运价如下表：</p>
+<table>
+<tr>
+<th>产地\销地</th>
+<th>\(B_1\)</th>
+<th>\(B_2\)</th>
+<th>\(B_3\)</th>
+<th>\(B_4\)</th>
+<th>供应量</th>
+</tr>
+<tr>
+<td>\(A_1\)</td>
+<td>4</td>
+<td>6</td>
+<td>8</td>
+<td>7</td>
+<td>7</td>
+</tr>
+<tr>
+<td>\(A_2\)</td>
+<td>6</td>
+<td>5</td>
+<td>3</td>
+<td>5</td>
+<td>7</td>
+</tr>
+<tr>
+<td>\(A_3\)</td>
+<td>7</td>
+<td>4</td>
+<td>6</td>
+<td>8</td>
+<td>6</td>
+</tr>
+<tr>
+<td>需求量</td>
+<td>6</td>
+<td>5</td>
+<td>4</td>
+<td>5</td>
+<td>20</td>
+</tr>
+</table>
+<p>(1)验证该问题是否产销平衡，并建立其运输问题数学模型；</p>
+<p>(2)用最小元素法求初始基本可行解，说明基本变量个数；</p>
+<p>(3)用位势法判断并给出一个最优调运方案及最低总运费。</p>
+</div>
+
+
+<div class="problem">
+<h3>第4题 凸规划判定（8分）</h3>
+<p>判断下列优化问题是否为凸规划，并说明理由：</p>
+\[
+\begin{aligned}
+\min f(x)&=\left(x_{1}-1\right)^{2}+\left(x_{2}-2\right)^{2}\\
+\text{s.t.}\quad
+x_{1}^{2}-x_{2} &\le 0\\
+x_{1}+x_{2}-3 &\le 0\\
+-x_{1} &\le 0\\
+-x_{2} &\le 0
+\end{aligned}
+\]
+</div>
+
+
+<div class="problem">
+<h3>第5题 K‑T条件（10分）</h3>
+<p>写出下列约束优化问题的K‑T(KKT)条件，并验证点 \(\big(\frac52,\frac52\big)\) 是否为最优解：</p>
+\[
+\begin{aligned}
+\min f(x)&=x_{1}^{2}+x_{2}^{2}\\
+\text{s.t.}\quad
+g_1(x)&=x_{1}+x_{2}-5 \ge 0\\
+g_2(x)&=2 x_{1}+x_{2}-7 \ge 0
+\end{aligned}
+\]
+</div>
+
+
+<div class="problem">
+<h3>第6题 对偶单纯形法（12分）</h3>
+<p>用对偶单纯形法求解下列线性规划问题，并给出每一步的基变量与基本解：</p>
+\[
+\begin{aligned}
+\min z &=3 x_{1}+5 x_{2}+12 x_{3}\\
+\text{s.t.}\quad
+x_{1}+2 x_{3} &\ge 4\\
+2 x_{2}+x_{3} &\ge 5\\
+x_{1},\ x_{2},\ x_{3} &\ge 0
+\end{aligned}
+\]
+</div>
+
+
+<div class="problem">
+<h3>第7题 共轭梯度法（10分）</h3>
+<p>对二次规划问题</p>
+\[
+\min f(x)=x_{1}^{2}+2 x_{2}^{2}-4 x_{1}-8 x_{2}+12
+\]
+<p>取初始点 \(x^{(0)}=(0,0)^T\)，采用精确线搜索的共轭梯度法。写出前两次迭代的搜索方向、步长与迭代点，并给出最优点和目标函数最小值。</p>
+</div>
+
+
+<div class="problem">
+<h3>第8题 外点罚函数法（8分）</h3>
+<p>用外点罚函数法求解：</p>
+\[
+\begin{aligned}
+\min f(x)&=x_{1}^{2}+x_{2}^{2}\\
+\text{s.t.}\quad
+2 x_{1}+x_{2}-4 &=0
+\end{aligned}
+\]
+<p>要求写出含罚因子的迭代点表达式，并说明当 \(\sigma \to +\infty\) 时的极限。</p>
+</div>
+
+
+<div class="problem">
+<h3>第9题 内点障碍函数法（8分）</h3>
+<p>用内点法求解：</p>
+\[
+\begin{aligned}
+\min f(x)&=(x+2)^{2}\\
+\text{s.t.}\quad
+x &\ge 0
+\end{aligned}
+\]
+<p>要求构造对数障碍函数，写出障碍问题的驻点随障碍参数 \(r\) 的变化式，并求原问题最优解。</p>
+</div>
+
+
+<div class="problem">
+<h3>第10题 指派问题（10分）</h3>
+<p>有 4 名人员 \(W_1,W_2,W_3,W_4\) 和 4 项任务 \(T_1,T_2,T_3,T_4\)。下表给出每人完成每项任务的费用。用匈牙利法求总费用最小的指派方案：</p>
+<table>
+<tr>
+<th>人员\任务</th>
+<th>\(T_1\)</th>
+<th>\(T_2\)</th>
+<th>\(T_3\)</th>
+<th>\(T_4\)</th>
+</tr>
+<tr>
+<td>\(W_1\)</td>
+<td>9</td>
+<td>7</td>
+<td>7</td>
+<td>8</td>
+</tr>
+<tr>
+<td>\(W_2\)</td>
+<td>6</td>
+<td>3</td>
+<td>3</td>
+<td>7</td>
+</tr>
+<tr>
+<td>\(W_3\)</td>
+<td>5</td>
+<td>1</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>\(W_4\)</td>
+<td>7</td>
+<td>9</td>
+<td>9</td>
+<td>4</td>
+</tr>
+</table>
+<p>要求写出行、列约简后的矩阵，并指出最优指派与最小总费用。</p>
+</div>
+
+</body>
+</html>

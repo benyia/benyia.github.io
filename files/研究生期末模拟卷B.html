@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>《研究生英语综合教程》期末全真模拟试卷（满分100分 · 交互作答与详尽解析版）</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f4f6fb;
+      color: #0f172a;
+      line-height: 1.8;
+    }
+    .serif-en {
+      font-family: Georgia, "Times New Roman", Times, serif;
+    }
+    .cloze-select {
+      display: inline-block;
+      min-width: 135px;
+      padding: 2px 8px;
+      margin: 2px 4px;
+      border-radius: 6px;
+      border: 2px solid #94a3b8;
+      background-color: #ffffff;
+      color: #1e293b;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .cloze-select:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+    }
+    .cloze-select.correct {
+      border-color: #059669;
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    .cloze-select.wrong {
+      border-color: #dc2626;
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+    .opt-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .opt-btn:hover {
+      border-color: #94a3b8;
+      background: #f1f5f9;
+    }
+    .opt-btn.selected {
+      border-color: #2563eb;
+      background: #eff6ff;
+      color: #1e40af;
+      font-weight: 600;
+    }
+    .opt-btn.graded-correct {
+      border-color: #059669;
+      background: #ecfdf5;
+      color: #065f46;
+      font-weight: 700;
+    }
+    .opt-btn.graded-wrong {
+      border-color: #dc2626;
+      background: #fef2f2;
+      color: #991b1b;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #ffffff; }
+      .print-card { box-shadow: none !important; border: 1px solid #cbd5e1 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top Sticky Exam Control Header -->
+  <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-30 no-print">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold text-lg shadow">
+          EN
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight">《研究生英语综合教程》期末全真模拟试卷</h1>
+          <p class="text-xs text-slate-300">严格按题源命制：I. Vocabulary (20%) · II. 语篇填空 (20%) · III. Reading (20%) · IV. 课内互译 (20%) · V. Writing (20%)</p>
+        </div>
+      </div>
+
+      <!-- Exam Action Buttons -->
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs flex items-center gap-2">
+          <span>⏱️ 计时：<strong id="timerDisplay" class="font-mono text-amber-400">00:00</strong></span>
+          <button id="btnToggleTimer" class="text-slate-300 hover:text-white underline ml-1">暂停</button>
+        </div>
+        <button id="btnSubmitExam" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow">
+          ✅ 交卷并批改客观题
+        </button>
+        <button id="btnShowAllExp" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition shadow">
+          📖 展开全部答案与解析
+        </button>
+        <button id="btnHideAllExp" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-slate-700 hover:bg-slate-600 text-slate-100 transition">
+          🙈 隐藏全部答案 (自测)
+        </button>
+        <button id="btnResetExam" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-600/90 hover:bg-rose-500 text-white transition">
+          ↺ 重置试卷
+        </button>
+      </div>
+    </div>
+
+    <!-- Section Jump Navigation Bar -->
+    <div class="bg-slate-800/90 border-t border-slate-700/80">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="text-slate-400 font-semibold mr-1">题型导航：</span>
+          <a href="#sec-part1" class="px-2.5 py-1 rounded-md bg-slate-700/80 hover:bg-blue-600 text-slate-200 hover:text-white transition">I. Vocabulary 单选 (20%)</a>
+          <a href="#sec-part2" class="px-2.5 py-1 rounded-md bg-slate-700/80 hover:bg-blue-600 text-slate-200 hover:text-white transition">II. 语篇填空 15选10 (20%)</a>
+          <a href="#sec-part3" class="px-2.5 py-1 rounded-md bg-slate-700/80 hover:bg-blue-600 text-slate-200 hover:text-white transition">III. Reading 阅读理解 (20%)</a>
+          <a href="#sec-part4" class="px-2.5 py-1 rounded-md bg-slate-700/80 hover:bg-blue-600 text-slate-200 hover:text-white transition">IV. 课内英汉互译 (20%)</a>
+          <a href="#sec-part5" class="px-2.5 py-1 rounded-md bg-slate-700/80 hover:bg-blue-600 text-slate-200 hover:text-white transition">V. Writing 写作 (20%)</a>
+        </div>
+        <div class="text-slate-300 font-medium">
+          当前总分：<strong id="liveTotalScore" class="text-amber-400 text-sm">0.0</strong> / 100 分
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Exam Paper Container -->
+  <main class="max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 flex-1 space-y-10">
+
+    <!-- Exam Paper Title Banner & Score Breakdown Table -->
+    <section class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 print-card">
+      <div class="text-center border-b border-slate-200 pb-6 mb-6">
+        <div class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">FINAL EXAMINATION · GRADUATE ENGLISH COMPREHENSIVE COURSE</div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">《研究生英语综合教程》期末全真模拟试题</h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-2">命题范围：Unit 1 (J.K.罗琳哈佛演讲) · Unit 2 (乔布斯斯坦福演讲) · Unit 4 (卡耐基论感恩) · Unit 5 (乔布斯传书评) · Unit 8 (美国梦与千禧一代)</p>
+      </div>
+
+      <!-- Score Card Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-6 gap-3 text-center">
+        <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200">
+          <div class="text-xs text-slate-500 font-semibold">Part I · 词汇单选</div>
+          <div class="text-lg font-bold text-slate-800 mt-1"><span id="scorePart1">0</span> <span class="text-xs font-normal text-slate-500">/ 20 分 (20%)</span></div>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200">
+          <div class="text-xs text-slate-500 font-semibold">Part II · 语篇填空</div>
+          <div class="text-lg font-bold text-slate-800 mt-1"><span id="scorePart2">0</span> <span class="text-xs font-normal text-slate-500">/ 20 分 (20%)</span></div>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200">
+          <div class="text-xs text-slate-500 font-semibold">Part III · 阅读理解</div>
+          <div class="text-lg font-bold text-slate-800 mt-1"><span id="scorePart3">0</span> <span class="text-xs font-normal text-slate-500">/ 20 分 (20%)</span></div>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200">
+          <div class="text-xs text-slate-500 font-semibold">Part IV · 课内互译</div>
+          <div class="text-lg font-bold text-slate-800 mt-1"><span id="scorePart4">0</span> <span class="text-xs font-normal text-slate-500">/ 20 分 (20%)</span></div>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200">
+          <div class="text-xs text-slate-500 font-semibold">Part V · 主题写作</div>
+          <div class="text-lg font-bold text-slate-800 mt-1"><span id="scorePart5">0</span> <span class="text-xs font-normal text-slate-500">/ 20 分 (20%)</span></div>
+        </div>
+        <div class="bg-blue-50/90 rounded-2xl p-3.5 border border-blue-200">
+          <div class="text-xs text-blue-700 font-bold">卷面总得分</div>
+          <div class="text-xl font-extrabold text-blue-800 mt-0.5"><span id="scoreTotalBox">0</span> <span class="text-xs font-normal text-blue-600">/ 100 分</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PART I: VOCABULARY (20% = 20 Questions × 1 point = 20 Points)       -->
+    <!-- =================================================================== -->
+    <section id="sec-part1" class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 print-card scroll-mt-28">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-slate-200">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-blue-100 text-blue-800">Part I · 20% (20 Points)</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-1.5">I. Vocabulary and Structure（词汇与语法单选题 · 共 20 小题，每题 1 分，满分 20 分）</h3>
+          <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Directions: There are 20 incomplete sentences in this part. For each sentence there are four choices marked A, B, C and D. Choose the ONE that best completes the sentence.</p>
+        </div>
+      </div>
+      <div id="part1Container" class="space-y-6"></div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PART II: BANKED CLOZE / 语篇填空 (20% = 2 Passages × 10 = 20 Points) -->
+    <!-- =================================================================== -->
+    <section id="sec-part2" class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 print-card scroll-mt-28">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-slate-200">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800">Part II · 20% (20 Points)</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-1.5">II. Banked Cloze（语篇选词填空“十五选十” · 共 2 篇 20 空，每空 1 分，满分 20 分）</h3>
+          <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Directions: Fill in each blank in the following two passages by selecting a suitable word from the 15-word bank given for each passage. Each word may be used only ONCE.</p>
+        </div>
+      </div>
+      <div id="part2Container" class="space-y-10"></div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PART III: READING COMPREHENSION (20% = 2 Passages × 5 × 2 = 20 Pts) -->
+    <!-- =================================================================== -->
+    <section id="sec-part3" class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 print-card scroll-mt-28">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-slate-200">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-amber-100 text-amber-800">Part III · 20% (20 Points)</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-1.5">III. Reading Comprehension（深度阅读理解 · 共 2 篇 10 小题，每题 2 分，满分 20 分）</h3>
+          <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Directions: Read the following two passages carefully and choose the best answer (A, B, C or D) for each question.</p>
+        </div>
+      </div>
+      <div id="part3Container" class="space-y-10"></div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PART IV: IN-CLASS TRANSLATION (20% = 10 pts E-C + 10 pts C-E)       -->
+    <!-- =================================================================== -->
+    <section id="sec-part4" class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 print-card scroll-mt-28">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-slate-200">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-purple-100 text-purple-800">Part IV · 20% (20 Points)</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-1.5">IV. Translation（课内英汉互译 · 英译汉 10 分 + 汉译英 10 分，满分 20 分）</h3>
+          <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Directions: Section A consists of 5 English sentences selected from our five intensive reading units (translate into Chinese, 2 points each). Section B consists of 5 Chinese sentences from the same texts (translate into English, 2 points each).</p>
+        </div>
+      </div>
+      <div id="part4Container" class="space-y-8"></div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PART V: WRITING (20% = 20 Points)                                   -->
+    <!-- =================================================================== -->
+    <section id="sec-part5" class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 print-card scroll-mt-28">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-slate-200">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-rose-100 text-rose-800">Part V · 20% (20 Points)</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-1.5">V. Writing（主题命题写作 · 满分 20 分）</h3>
+          <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Directions: Write a well-structured essay of 180–220 words based on the given topic and prompts drawn from our textbook units.</p>
+        </div>
+      </div>
+      <div id="part5Container"></div>
+    </section>
+
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500 no-print">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <span>《研究生英语综合教程》期末全真模拟卷 · 100% 源自三大上传题库（五篇精读课文 + 十五选十题库 + 选择题题库）</span>
+      <span>支持在线作答、客观题自动批改、主观题参考范文隐藏/展开与自评计分</span>
+    </div>
+  </footer>
+
+  <script>
+    // =========================================================================
+    // PART I: 20 Multiple-Choice Vocabulary Questions (20% = 20 pts)
+    // Selected from 英语选择题刷题.html & 英语精读合集五篇.html
+    // =========================================================================
+    const PART1_QUESTIONS = [
+      {
+        num: 1,
+        unit: "Unit 1 · J.K.罗琳哈佛演讲",
+        stem: "It is impossible to live without failing at something, unless you live so ______ that you might as well not have lived at all — in which case, you fail by default.",
+        options: {
+          A: "cautiously",
+          B: "paradoxically",
+          C: "academically",
+          D: "tentatively"
+        },
+        ans: "A",
+        explanation: "【答案 A】cautiously（小心翼翼地、谨慎地）。句意：“人活一世不可能不在某件事上遭遇失败，除非你活得如此小心翼翼，以至于还不如根本没有活过——那样的话，你便是不战自败（fail by default）。”paradoxically 矛盾地；academically 学术上；tentatively 试探性地。"
+      },
+      {
+        num: 2,
+        unit: "Unit 1 · J.K.罗琳哈佛演讲",
+        stem: "Poverty ______ fear, and stress, and sometimes depression; it means a thousand petty humiliations and hardships.",
+        options: {
+          A: "entails",
+          B: "excludes",
+          C: "refers",
+          D: "details"
+        },
+        ans: "A",
+        explanation: "【答案 A】entails（必然伴随、牵涉、意味着）。与后半句的 it means 同义平行。句意：“贫穷伴随着恐惧、压力，有时还有抑郁；它意味着成千上万次琐碎的羞辱与艰辛。”excludes 排除；refers 提及（需加 to）；details 详述。"
+      },
+      {
+        num: 3,
+        unit: "Unit 1 · J.K.罗琳哈佛演讲",
+        stem: "An exceptionally short-lived marriage had ______, and I was jobless, a lone parent, and as poor as it is possible to be in modern Britain, without being homeless.",
+        options: {
+          A: "exploded",
+          B: "perplexed",
+          C: "imploded",
+          D: "uploaded"
+        },
+        ans: "C",
+        explanation: "【答案 C】imploded（内爆、从内部骤然瓦解崩溃）。句意：“一段异常短暂的婚姻从内部骤然破裂了，我失了业，成了单亲妈妈，穷到了现代英国所能允许的极限。”exploded 向外爆炸；perplexed 使困惑。"
+      },
+      {
+        num: 4,
+        unit: "Unit 1 · J.K.罗琳哈佛演讲",
+        stem: "Imagination is not only the uniquely human capacity to ______ that which is not, and therefore the fount of all invention and innovation.",
+        options: {
+          A: "imagination",
+          B: "project",
+          C: "envision",
+          D: "vision"
+        },
+        ans: "C",
+        explanation: "【答案 C】envision（设想、构想、展望，及物动词）。capacity to do sth. 后接动词原形，envision that which is not 意为“构想尚不存在之物”。the fount of all invention 意为“一切发明的源泉”。"
+      },
+      {
+        num: 5,
+        unit: "Unit 1 · J.K.罗琳哈佛演讲",
+        stem: "She had just had to give him the news that in ______ for his own outspokenness against his country’s regime, his mother had been seized and executed.",
+        options: {
+          A: "return",
+          B: "retaliation",
+          C: "restore",
+          D: "revival"
+        },
+        ans: "B",
+        explanation: "【答案 B】retaliation（报复、打击报复）。固定搭配 in retaliation for... 意为“为了报复……（他公开批评本国政权，其母亲遭抓捕并处决）”。in return for 多指正面或等价的“作为回报”。"
+      },
+      {
+        num: 6,
+        unit: "Unit 1 · J.K.罗琳哈佛演讲",
+        stem: "For without ever committing an act of outright evil ourselves, we ______ with it, through our own apathy.",
+        options: {
+          A: "connect",
+          B: "cooperate",
+          C: "join",
+          D: "collude"
+        },
+        ans: "D",
+        explanation: "【答案 D】collude（勾结、同谋、串通）。collude with evil through our own apathy 意为“即使我们自己从未犯下公然的恶行，我们也会通过自身的冷漠与恶同谋”。"
+      },
+      {
+        num: 7,
+        unit: "Unit 2 · 乔布斯斯坦福演讲",
+        stem: "My biological mother refused to sign the final adoption papers. She only ______ a few months later when my parents promised that I would someday go to college.",
+        options: {
+          A: "signed",
+          B: "relented",
+          C: "retained",
+          D: "connected"
+        },
+        ans: "B",
+        explanation: "【答案 B】relented（态度缓和、心软让步）。句意：“我的生母拒绝签署最终收养文件，直到几个月后养父母承诺将来一定送我上大学，她才终于松口让步（relented）。”"
+      },
+      {
+        num: 8,
+        unit: "Unit 2 · 乔布斯斯坦福演讲",
+        stem: "As Apple grew, we hired someone who I thought was very talented to run the company with me, but then our visions of the future began to ______ and eventually we had a falling out.",
+        options: {
+          A: "diverge",
+          B: "submerge",
+          C: "converge",
+          D: "emerge"
+        },
+        ans: "A",
+        explanation: "【答案 A】diverge（分叉、产生分歧）。our visions of the future began to diverge 意为“我们对未来的愿景开始出现分歧，最终彻底闹翻（had a falling out）”。converge 汇合；emerge 浮现。"
+      },
+      {
+        num: 9,
+        unit: "Unit 2 · 乔布斯斯坦福演讲",
+        stem: "I was a very public failure, and I even thought about running away from the valley. But something slowly began to ______ on me — I still loved what I did.",
+        options: {
+          A: "crown",
+          B: "down",
+          C: "draw",
+          D: "dawn"
+        },
+        ans: "D",
+        explanation: "【答案 D】dawn（破晓、开始明白）。高频习语 sth. dawns on sb. 意为“某人渐渐明白/意识到某事（有个念头慢慢浮现在我脑海中）”。"
+      },
+      {
+        num: 10,
+        unit: "Unit 2 · 乔布斯斯坦福演讲",
+        stem: "Later that evening I had a biopsy. I was ______, but my wife, who was there, told me that when they viewed the cells under a microscope the doctors started crying because it was curable with surgery.",
+        options: {
+          A: "imagined",
+          B: "overwhelmed",
+          C: "sedated",
+          D: "triggered"
+        },
+        ans: "C",
+        explanation: "【答案 C】sedated（服了镇静剂的、处于麻醉镇静状态的）。做穿刺活检（biopsy）时乔布斯被注射了镇静剂，因此由在场的妻子事后告诉他医生的反应。"
+      },
+      {
+        num: 11,
+        unit: "Unit 4 · 卡耐基论感恩",
+        stem: "Charles Schwab told me that he had once saved a bank cashier who had ______ in the stock market with funds belonging to the bank.",
+        options: {
+          A: "specialized",
+          B: "specked",
+          C: "spectacled",
+          D: "speculated"
+        },
+        ans: "D",
+        explanation: "【答案 D】speculated（投机买卖、炒股）。固定搭配 speculate in the stock market 意为“在股票市场投机”。注意区分 specialize in（专攻）。"
+      },
+      {
+        num: 12,
+        unit: "Unit 4 · 卡耐基论感恩",
+        stem: "Because Old Andy had left 365 million dollars to public charities — and had “cut him off with one ______ million,” as he put it.",
+        options: {
+          A: "measly",
+          B: "generous",
+          C: "abundant",
+          D: "massive"
+        },
+        ans: "A",
+        explanation: "【答案 A】measly（少得可怜的、微不足道的，带贬义抱怨色彩）。卡耐基的亲戚抱怨老卡耐基把3.65亿捐给慈善机构，却只拿“区区（measly）一百万”打发他。"
+      },
+      {
+        num: 13,
+        unit: "Unit 4 · 卡耐基论感恩",
+        stem: "To illustrate — the next time we are tempted to ______ someone’s kindness in the presence of our children, let’s stop.",
+        options: {
+          A: "extol",
+          B: "belittle",
+          C: "cultivate",
+          D: "pamper"
+        },
+        ans: "B",
+        explanation: "【答案 B】belittle（贬低、轻视、看轻）。belittle someone’s kindness 意为“在孩子面前贬低别人的善意（如嫌弃表姐亲手织的洗碗布不值钱）”。extol 颂扬；cultivate 培育；pamper 娇惯。"
+      },
+      {
+        num: 14,
+        unit: "Unit 5 · 《乔布斯传》书评",
+        stem: "As often happens, the people at Apple mostly adjusted to Steve Jobs’s way because, in spite of his ______ personality, he caused highly talented people to achieve things beyond their wildest expectations.",
+        options: {
+          A: "exceptional",
+          B: "profane",
+          C: "volatile",
+          D: "latent"
+        },
+        ans: "C",
+        explanation: "【答案 C】volatile（喜怒无常的、易变的、暴躁的）。in spite of his volatile personality 意为“尽管他性格喜怒无常、脾气暴烈”。"
+      },
+      {
+        num: 15,
+        unit: "Unit 5 · 《乔布斯传》书评",
+        stem: "In the Steve Jobs world, the casualty rate in such a Darwinian atmosphere was great. But — and here is the ______ — the work usually got done, the objectives were achieved, the products shipped.",
+        options: {
+          A: "will",
+          B: "conundrum",
+          C: "demand",
+          D: "character"
+        },
+        ans: "B",
+        explanation: "【答案 B】conundrum（令人费解的难题、悖论、吊诡之处）。一方面是极高的淘汰率，另一方面却是极佳的产品交付，这种矛盾现象被称为 conundrum。"
+      },
+      {
+        num: 16,
+        unit: "Unit 5 · 《乔布斯传》书评",
+        stem: "The pastor’s answer badly ______ the young teen’s intellect and left him unsatisfied. Jobs walked away from the church that day and never returned.",
+        options: {
+          A: "undergrew",
+          B: "underlined",
+          C: "underestimated",
+          D: "underscored"
+        },
+        ans: "C",
+        explanation: "【答案 C】underestimated（低估、小看）。牧师敷衍的回答严重低估了13岁乔布斯的智力与思考深度（intellect）。underline 和 underscore 均意为“强调”。"
+      },
+      {
+        num: 17,
+        unit: "Unit 8 · 美国梦与千禧一代",
+        stem: "Rather than waste early years in ______ work, Scott reasoned, he would hold out for a corporate position that would draw on his college training and put him on the bottom rungs of a career ladder.",
+        options: {
+          A: "dead-end",
+          B: "cutting-edge",
+          C: "high-profile",
+          D: "far-reaching"
+        },
+        ans: "A",
+        explanation: "【答案 A】dead-end（没有前途的、死胡同式的）。出自 Unit 8 第 4 段：Rather than waste early years in dead-end work, he would hold out for a corporate position...（与其把早年岁月浪费在没有晋升前途的工作上，他宁可坚持等待能够站上职业阶梯底层的企业岗位）。"
+      },
+      {
+        num: 18,
+        unit: "Unit 8 · 美国梦与千禧一代",
+        stem: "While Scott Nicholson viewed the Hanover job as likely to ______ his career, his father, accustomed to better times and easier mobility, viewed it as an opportunity.",
+        options: {
+          A: "boost",
+          B: "stunt",
+          C: "unfold",
+          D: "surpass"
+        },
+        ans: "B",
+        explanation: "【答案 B】stunt（阻碍……的正常生长或发展）。出自 Unit 8 第 6 段：viewed the Hanover job as likely to stunt his career（认为汉诺威保险理赔员的工作会阻碍自己的职业发展）。"
+      },
+      {
+        num: 19,
+        unit: "校外拓展 · 高频核心词汇",
+        stem: "One reason for the high crime rate among young people who have no scruples about ______ crimes is that their level of general education is too low.",
+        options: {
+          A: "offending",
+          B: "violating",
+          C: "rebelling",
+          D: "committing"
+        },
+        ans: "D",
+        explanation: "【答案 D】committing（犯［罪、错］）。固定搭配 commit crimes（犯罪）；have no scruples about doing sth. 意为“对做某事毫无顾忌”。violate 需搭配 the law/rules。"
+      },
+      {
+        num: 20,
+        unit: "校外拓展 · 高频核心词汇",
+        stem: "All students in this university are requested to ______ with the regulations.",
+        options: {
+          A: "consent",
+          B: "yield",
+          C: "comply",
+          D: "submit"
+        },
+        ans: "C",
+        explanation: "【答案 C】comply（遵守、依从）。固定搭配 comply with the regulations（遵守规章制度）。consent, yield, submit 均与介词 to 搭配。"
+      }
+    ];
+
+    // =========================================================================
+    // PART II: Banked Cloze (20% = 2 Passages × 10 Blanks × 1 pt = 20 pts)
+    // Selected from 英语期末考试“十五选十”选词填空精编交互题库.html
+    // =========================================================================
+    const PART2_PASSAGES = [
+      {
+        id: "cloze1",
+        title: "Passage A · J.K.罗琳哈佛演讲：特权、责任与想象力的力量（对应题库原题 9，共 10 空，每空 1 分）",
+        wordBank: [
+          ["A", "powerless", "adj. 无权无势的，弱势的"],
+          ["B", "bear", "v. 施加 (bring to bear on)"],
+          ["C", "celebrate", "v. 庆祝，歌颂，赞美"],
+          ["D", "except for", "phr. 除……之外"],
+          ["E", "capacity", "n. 能力 (capacity for)"],
+          ["F", "on behalf of", "phr. 代表，替……发声"],
+          ["G", "humble", "adj. 谦逊的，卑微的"],
+          ["H", "earned", "v. 凭努力赢得，获得"],
+          ["I", "choose", "v. 选择"],
+          ["J", "belong to", "phr. 属于"],
+          ["K", "transfer", "v. 转移，调动"],
+          ["L", "vary", "v. 变化，相异"],
+          ["M", "desire", "n./v. 渴望"],
+          ["N", "advantages", "n. 优势，优越条件"],
+          ["O", "transform", "v. 改变，改造"]
+        ],
+        segments: [
+          "But how much more are you, Harvard graduates of 2008, likely to touch other people’s lives? Your intelligence, your ",
+          { blank: 21, ans: "E", word: "capacity", exp: "形容词性物主代词 your 后接名词，capacity for hard work 意为“刻苦工作的能力”。" },
+          " for hard work, and the education you have ",
+          { blank: 22, ans: "H", word: "earned", exp: "have ___ and received 构成现在完成时并列过去分词，the education you have earned and received 意为“你们凭努力赢得并接受的教育”。" },
+          " and received, give you unique status, and unique responsibilities. Even your nationality sets you apart. The great majority of you ",
+          { blank: 23, ans: "J", word: "belong to", exp: "belong to the world’s only remaining superpower 意为“属于世界上唯一仅存的超级大国”。" },
+          " the world’s only remaining superpower. The way you vote, the way you live, the way you protest, the pressure you bring to ",
+          { blank: 24, ans: "B", word: "bear", exp: "固定习语 bring pressure to bear on... 意为“向……施加压力”。" },
+          " on your government, has an impact way beyond your borders. That is your privilege, and your burden. If you ",
+          { blank: 25, ans: "I", word: "choose", exp: "与后半句排比结构 if you choose to identify... 完全一致，填动词原形 choose。" },
+          " to use your status and influence to raise your voice ",
+          { blank: 26, ans: "F", word: "on behalf of", exp: "raise your voice on behalf of those who have no voice 意为“代表那些无法发声的人仗义执言”。" },
+          " those who have no voice; if you choose to identify not only with the powerful, but with the ",
+          { blank: 27, ans: "A", word: "powerless", exp: "not only with the powerful, but with the powerless 构成鲜明反义对照，指“弱势群体”。" },
+          "; if you retain the ability to imagine yourself into the lives of those who do not have your ",
+          { blank: 28, ans: "N", word: "advantages", exp: "those who do not have your advantages 意为“那些没有你们这些优越条件的人”。" },
+          ", then it will not only be your proud families who ",
+          { blank: 29, ans: "C", word: "celebrate", exp: "celebrate your existence 意为“为你们的存在而欢呼庆贺”。" },
+          " your existence, but thousands and millions of people whose reality you have helped change. We do not need magic to ",
+          { blank: 30, ans: "O", word: "transform", exp: "transform the world 意为“改变世界”，与前句 helped change 同义呼应。" },
+          " the world. We carry all the power we need inside ourselves already: we have the power to imagine better."
+        ]
+      },
+      {
+        id: "cloze2",
+        title: "Passage B · 《史蒂夫·乔布斯传》书评：抗击癌症与对生命存续的思考（对应题库原题 19，共 10 空，每空 1 分）",
+        wordBank: [
+          ["A", "advanced", "v. 推进，促进"],
+          ["B", "accidentally", "adv. 偶然地"],
+          ["C", "extinction", "n. 消亡，熄灭"],
+          ["D", "accumulate", "v. 积累，积聚"],
+          ["E", "existence", "n. 存在，生命"],
+          ["F", "endures", "v. 持续，长存"],
+          ["G", "address", "n. 演讲 (commencement address)"],
+          ["H", "perceives", "v. 感知"],
+          ["I", "frustrated", "v. 使沮丧，使受挫"],
+          ["J", "wisdom", "n. 智慧"],
+          ["K", "missed", "v. 错过"],
+          ["L", "lost", "v. 输掉 (lost this last battle)"],
+          ["M", "waking", "adj. 清醒的 (every waking day)"],
+          ["N", "hurting", "v. 伤害"],
+          ["O", "typically", "adv. 一如既往地，典型地"]
+        ],
+        segments: [
+          "When Steve Jobs discovered that he had cancer, ",
+          { blank: 31, ans: "O", word: "typically", exp: "修饰全句，符合乔布斯一贯极强控制欲的性格，typically he tried to manage his own healing process（他一如既往地试图亲自掌控治疗过程）。" },
+          " he tried to manage his own healing process. There were some bad decisions that ",
+          { blank: 32, ans: "I", word: "frustrated", exp: "some bad decisions that frustrated his doctors 意为“一些让他的医生感到挫败无奈的错误决定”。" },
+          " his doctors. But there were also good choices that apparently ",
+          { blank: 33, ans: "A", word: "advanced", exp: "good choices that apparently advanced the process 意为“显然推进了探寻癌症疗法进程的正确选择”。" },
+          " the process of seeking a cure for cancer. But in the end, he ",
+          { blank: 34, ans: "L", word: "lost", exp: "lost this last battle and died 意为“最终他输掉了最后这场战斗并离世”。" },
+          " this last battle and died. “I am about fifty-fifty on believing in God,” he told Isaacson not long before he died. “For most of my life, I’ve felt that there must be more to our ",
+          { blank: 35, ans: "E", word: "existence", exp: "more to our existence than meets the eye 意为“我们的存在必定不只是肉眼所见那么简单”。" },
+          " than meets the eye ... I’d like to think that something survives after you die. It’s strange to think that you ",
+          { blank: 36, ans: "D", word: "accumulate", exp: "you accumulate all this experience 意为“你一生积累了所有这些经验”。" },
+          " all this experience, and maybe a little ",
+          { blank: 37, ans: "J", word: "wisdom", exp: "all this experience, and maybe a little wisdom 意为“积累了这么多经验，或许还有一点智慧”。" },
+          ", and it just goes away. So I really want to believe that something survives, that maybe your consciousness ",
+          { blank: 38, ans: "F", word: "endures", exp: "与 something survives 同义呼应，maybe your consciousness endures 意为“也许你的意识会继续长存”。" },
+          ". But on the other hand, perhaps it’s like an on-off switch. Click! And you’re gone. Maybe that’s why I never like to put on-off switches on Apple devices.” Once in a commencement ",
+          { blank: 39, ans: "G", word: "address", exp: "固定搭配 a commencement address at Stanford 意为“在斯坦福大学的一次毕业典礼演讲中”。" },
+          " at Stanford, Jobs told graduates that death may be life’s greatest gift in that a true respect for death might force one to give his best in every ",
+          { blank: 40, ans: "M", word: "waking", exp: "固定搭配 in every waking day 意为“在每个清醒的日子里都拿出自己最好的状态”。" },
+          " day."
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // PART III: Reading Comprehension (20% = 2 Passages × 5 Qs × 2 pts = 20 pts)
+    // Selected from Unit 4 (Dale Carnegie) & Unit 8 (American Dream)
+    // =========================================================================
+    const PART3_PASSAGES = [
+      {
+        id: "rc1",
+        title: "Passage One · 选自 Unit 4 “If You Do This, You Will Never Worry About Ingratitude” (Dale Carnegie)",
+        text: `
+          <p class="mb-3">I know a man in Chicago who has cause to complain of the ingratitude of his stepsons. He slaved in a box factory, seldom earning more than forty dollars a week. He married a widow, and she persuaded him to borrow money and send her two grown sons to college. Out of his salary of forty dollars a week, he had to pay for food, rent, fuel, clothes, and also for the payments on his notes. He did this for four years, working like a coolie, and never complaining.</p>
+          <p class="mb-3">Did he get any thanks? No; his wife took it all for granted — and so did her sons. They never imagined that they owed their stepfather anything — not even thanks! Who was to blame? The boys? Yes; but the mother was even more to blame. She thought it was a shame to burden their young lives with “a sense of obligation”. She didn’t want her sons to “start out under debt”. So she never dreamed of saying: “What a prince your stepfather is to help you through college!” Instead, she took the attitude: “Oh, that’s the least he can do.”</p>
+          <p class="mb-3">She thought she was sparing her sons, but in reality, she was sending them out into life with the dangerous idea that the world owed them a living. And it was a dangerous idea — for one of those sons tried to “borrow” from an employer, and ended up in jail!</p>
+          <p>We must remember that our children are very much what we make them. To raise grateful children, we have to be grateful. Let us remember “little pitchers have big ears” — and watch what we say. The next time we are tempted to belittle someone’s kindness in the presence of our children, let’s stop. Let’s never say: “Look at these dishcloths Cousin Sue sent for Christmas. She knit them herself. They didn’t cost her a cent!” The remark may seem trivial to us — but the children are listening. Instead, we had better say: “Look at the hours Cousin Sue spent making these for Christmas! Isn’t she nice? Let’s write her a thank-you note right now.” And our children may unconsciously absorb the habit of praise and appreciation.</p>
+        `,
+        questions: [
+          {
+            num: 41,
+            stem: "Why did the stepfather in Chicago work “like a coolie” for four years without complaining?",
+            options: {
+              A: "Because he had speculated in the stock market and owed a huge debt to his factory.",
+              B: "Because he had to cover family living expenses and repay the loans borrowed for his stepsons’ college education.",
+              C: "Because his stepsons promised to pay him back double after graduating from business school.",
+              D: "Because he wanted to save enough money to give his employees Christmas bonuses."
+            },
+            ans: "B",
+            explanation: "【答案 B】由第一段可知，这位继父每周工资仅40美元，不仅要负担全家吃住穿用，还要偿还为供两个继子上大学而借下的债务（payments on his notes）。"
+          },
+          {
+            num: 42,
+            stem: "According to the author, why was the mother even more to blame than her sons for their ingratitude?",
+            options: {
+              A: "She openly reviled and denounced her husband in front of the neighbors.",
+              B: "She refused to let her sons attend college and forced them to work in a box factory.",
+              C: "She took her husband’s sacrifice for granted and fostered a sense of entitlement in her sons.",
+              D: "She demanded that her sons pay back every penny of their college tuition immediately."
+            },
+            ans: "C",
+            explanation: "【答案 C】由第二、三段可知，这位母亲不想让儿子背负“人情债（a sense of obligation）”，认为继父供他们上大学“不过是他最起码该做的事（the least he can do）”，从而助长了儿子认为“世界欠他们一条生路（the world owed them a living）”的理所当然心态。"
+          },
+          {
+            num: 43,
+            stem: "What happened to one of the stepsons as a result of the “dangerous idea” he carried into life?",
+            options: {
+              A: "He became a successful stock broker in Worcester.",
+              B: "He stole money from his employer and was eventually put into prison.",
+              C: "He joined the Marine Corps and became a second lieutenant.",
+              D: "He repented and wrote a thank-you note to his stepfather."
+            },
+            ans: "B",
+            explanation: "【答案 B】由第三段末句 “for one of those sons tried to ‘borrow’ from an employer, and ended up in jail!” 可知，其中一个儿子因认为别人理应供养自己，企图盗用雇主资金（打引号的“借”），最终锒铛入狱。"
+          },
+          {
+            num: 44,
+            stem: "What does the proverb “little pitchers have big ears” in Paragraph 4 imply in this context?",
+            options: {
+              A: "Children are attentive to adults’ casual remarks and will imitate their attitudes toward others’ kindness.",
+              B: "Handmade kitchenware such as pitchers and dishcloths are more durable than store-bought gifts.",
+              C: "Parents should never discuss financial debts or family budgets at the dinner table.",
+              D: "Children are naturally grateful unless they are spoiled by their relatives."
+            },
+            ans: "A",
+            explanation: "【答案 A】第四段指出 “little pitchers have big ears — and watch what we say... The remark may seem trivial to us — but the children are listening”，意为“小孩子耳朵很灵”，父母在孩子面前贬低他人善意的随口评价会被孩子听在耳里并潜移默化地模仿。"
+          },
+          {
+            num: 45,
+            stem: "Which of the following best summarizes the author’s advice on raising grateful children?",
+            options: {
+              A: "Parents should demand gratitude from their children as their rightful due.",
+              B: "Parents should avoid giving handmade gifts that do not cost any money.",
+              C: "Gratitude does not grow naturally like weeds; parents must model appreciation and praise in daily life.",
+              D: "Children should be required to pay for their own college tuition and board."
+            },
+            ans: "C",
+            explanation: "【答案 C】卡耐基在文中指出，忘恩负义像野草一样天生自然，而感恩像玫瑰一样需要精心培育；要培养懂得感恩的孩子，父母自己必须以身作则表达赞美与感激（To raise grateful children, we have to be grateful）。"
+          }
+        ]
+      },
+      {
+        id: "rc2",
+        title: "Passage Two · 选自 Unit 8 “American Dream Is Elusive for New Generation” (Louis Uchitelle)",
+        text: `
+          <p class="mb-3">Over the last five months, only one job materialized. After several interviews, the Hanover Insurance Group in nearby Worcester offered to hire Scott Nicholson, a 24-year-old graduate of Colgate University, as an associate claims adjuster, at $40,000 a year. But even before the formal offer, Mr. Nicholson had decided not to take the job. Rather than waste early years in dead-end work, he reasoned, he would hold out for a corporate position that would draw on his college training and put him, as he sees it, on the bottom rungs of a career ladder.</p>
+          <p class="mb-3">While Scott viewed the Hanover job as likely to stunt his career, his father David Nicholson, 57, accustomed to better times and easier mobility, viewed it as an opportunity. Once in the door, the father has insisted to his son, opportunities will present themselves as they did in the father’s rise over 35 years to general manager of a manufacturing company. Complicating the generational divide, Scott’s grandfather, William S. Nicholson, a World War II veteran and a retired stock broker, has watched what he described as America’s once mighty economic engine losing its pre-eminence in a global economy, and encouraged his grandson to go abroad.</p>
+          <p class="mb-3">For young adults, the prospects in the workplace, even for the college-educated, have rarely been so bleak. Starved for jobs at adequate pay, the millennials tend to seek refuge in college and the military and to put off marriage and child-bearing. Those who are working often stay with the jobs they have rather than jump to better paying but less secure ones, as young people seeking advancement normally do. “They are definitely more risk-averse,” said Lisa B. Kahn, an economist at the Yale School of Management, “and more likely to fall behind.” In a recent study, she found that those who graduated from college during the severe early ’80s recession earned up to 30 percent less in their first three years than new graduates who landed their first jobs in a strong economy. Even 15 years later, their annual pay was 8 to 10 percent less.</p>
+          <p>Yet surveys show that the majority of the nation’s millennials remain confident, as Scott Nicholson is, that they will have satisfactory careers. “They are better educated than previous generations and they were raised by baby boomers who lavished a lot of attention on their children,” said Andrew Kohut, the Pew Research Center’s director. That helps to explain their persistent optimism, even as they struggle to succeed.</p>
+        `,
+        questions: [
+          {
+            num: 46,
+            stem: "Why did Scott Nicholson turn down the $40,000-a-year job at the Hanover Insurance Group?",
+            options: {
+              A: "Because he wanted to join his father’s tool manufacturing company instead.",
+              B: "Because he considered it a dead-end position that would hinder his long-term career advancement.",
+              C: "Because the company required him to relocate to Europe immediately.",
+              D: "Because he had already been commissioned as a second lieutenant in the Marine Corps."
+            },
+            ans: "B",
+            explanation: "【答案 B】由第一段末句及第二段首句可知，Scott 认为助理理赔员是一份没有晋升前途的工作（dead-end work），会阻碍自己的职业发展（stunt his career），因此宁可继续等待能踏上企业晋升阶梯的岗位。"
+          },
+          {
+            num: 47,
+            stem: "How did Scott’s father and grandfather differ from Scott in their views on his career prospects?",
+            options: {
+              A: "Both his father and grandfather urged him to reject the insurance job and apply to law school.",
+              B: "His father believed getting a foot in the door would lead to upward mobility, while his grandfather advised him to seek opportunities abroad.",
+              C: "His father advised him to move to Europe, while his grandfather offered him a job at a Worcester brokerage firm.",
+              D: "Both insisted that personal perseverance mattered far more than social connections in landing a first job."
+            },
+            ans: "B",
+            explanation: "【答案 B】由第二段可知，父亲从自己35年晋升为总经理的经历出发，认为“只要先进门（Once in the door），机会自然会出现”；而外祖父则认为美国经济引擎已失去全球主导地位（losing its pre-eminence），鼓励外孙去海外寻找机会。"
+          },
+          {
+            num: 48,
+            stem: "According to the passage, how has the severe economic recession affected the behavior of millennials?",
+            options: {
+              A: "They frequently switch jobs to pursue higher salaries despite lower job security.",
+              B: "They are marrying and having children at a much younger age than baby boomers did.",
+              C: "They have become more risk-averse, delaying marriage and clinging to existing jobs rather than taking risks.",
+              D: "They have completely lost confidence in ever achieving a satisfactory career."
+            },
+            ans: "C",
+            explanation: "【答案 C】由第三段可知，千禧一代因缺乏合适薪酬的工作而推迟婚育（put off marriage and child-bearing），已就业者也往往紧守现有工作而不敢跳槽，变得更加规避风险（more risk-averse）。"
+          },
+          {
+            num: 49,
+            stem: "What did Economist Lisa B. Kahn’s study reveal about college graduates who entered the workforce during a severe recession?",
+            options: {
+              A: "Their income disadvantage disappeared completely within three years after graduation.",
+              B: "They suffered a long-lasting wage penalty that persisted even 15 years after graduation.",
+              C: "They earned 8 to 10 percent more than those who graduated in a booming economy.",
+              D: "They were more likely to start their own manufacturing businesses within five years."
+            },
+            ans: "B",
+            explanation: "【答案 B】由第三段末可知，在80年代初严重衰退期毕业的大学生，前三年收入比经济景气时毕业的人低达30%，甚至在15年后年薪仍然低8%至10%，说明衰退期毕业造成的收入创伤具有长期性。"
+          },
+          {
+            num: 50,
+            stem: "According to Andrew Kohut, why do most millennials maintain “persistent optimism” despite bleak job prospects?",
+            options: {
+              A: "Because the G.I. Bill guarantees them high-paying corporate positions.",
+              B: "Because the unemployment rate for young adults has dropped to its lowest level since 1980.",
+              C: "Because they are better educated and were brought up by doting baby-boomer parents.",
+              D: "Because manufacturing jobs in New England are booming again."
+            },
+            ans: "C",
+            explanation: "【答案 C】由最后一段皮尤研究中心主任 Andrew Kohut 的分析可知，千禧一代比前几代人受教育程度更高，且由对子女倾注大量心血的婴儿潮一代父母抚养长大（raised by baby boomers who lavished a lot of attention on their children），因此依然保持着持久的乐观。"
+          }
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // PART IV: In-Class Translation (20% = 10 pts E->C + 10 pts C->E = 20 pts)
+    // 100% drawn from the 5 texts in 英语精读合集五篇.html
+    // =========================================================================
+    const PART4_TRANSLATION = {
+      enToZh: [
+        {
+          num: 51,
+          unit: "Unit 1 · J.K.罗琳哈佛演讲 (Para. 19)",
+          source: "Failure meant a stripping away of the inessential. I stopped pretending to myself that I was anything other than what I was, and began to direct all my energy into finishing the only work that mattered to me. And so rock bottom became the solid foundation on which I rebuilt my life.",
+          reference: "失败意味着剥离掉那些不必要的东西。我不再对自己假装我是别的什么人，而是开始把所有精力投入到完成那件对我来说唯一重要的工作上。于是，人生的谷底成了我重建生活的坚实基础。",
+          keyPoints: "采分点：① stripping away of the inessential（剥离非本质/不必要的东西）；② anything other than what I was（除真实自我以外的任何人）；③ rock bottom became the solid foundation（谷底成了坚实基础）。"
+        },
+        {
+          num: 52,
+          unit: "Unit 2 · 乔布斯斯坦福演讲 (Para. 9)",
+          source: "You can’t connect the dots looking forward; you can only connect them looking backwards. So you have to trust that the dots will somehow connect in your future.",
+          reference: "向前展望时，你无法把生命中的点滴串联起来；只有在回头看时，你才能将它们串联起来。所以你必须相信，这些点滴总会在你的未来以某种方式连接起来。",
+          keyPoints: "采分点：① connect the dots（把点滴串联起来）；② looking forward / looking backwards（向前展望 / 回头看）；③ somehow（以某种方式）。"
+        },
+        {
+          num: 53,
+          unit: "Unit 4 · 卡耐基论感恩 (Para. 22)",
+          source: "But why should children be thankful — unless we train them to be? Ingratitude is natural — like weeds. Gratitude is like a rose. It has to be fed and watered and cultivated and loved and protected.",
+          reference: "可是，除非我们从小培养孩子学会感恩，否则他们怎么会懂得感恩呢？忘恩负义是天生的——就像野草；而感恩则像一朵玫瑰，需要施肥、浇水、培育、关爱和呵护。",
+          keyPoints: "采分点：① unless we train them to be（除非我们培养他们如此）；② Ingratitude is natural — like weeds（忘恩负义像野草一样自然生长）；③ cultivated（精心培育/栽培）。"
+        },
+        {
+          num: 54,
+          unit: "Unit 5 · 《乔布斯传》书评 (Para. 11)",
+          source: "Decades later this principle learned in boyhood would shape the development of Apple devices. Jobs always insisted that the inner parts of anything bearing the Apple name be as perfectly designed and built as the outer parts, even though a customer would never see them.",
+          reference: "几十年后，这个在童年学到的准则塑造了苹果设备的研发。乔布斯始终坚持，任何冠以苹果之名的产品，其内部零件都必须像外部零件一样设计精良、制造完美，哪怕顾客永远看不到它们。",
+          keyPoints: "采分点：① shape the development of（塑造……的研发）；② anything bearing the Apple name（任何带有苹果名称/标志的产品）；③ insisted that ... be as perfectly designed（坚持认为……虚拟语气）。"
+        },
+        {
+          num: 55,
+          unit: "Unit 8 · 美国梦与千禧一代 (Para. 23)",
+          source: "Starved for jobs at adequate pay, the millennials tend to seek refuge in college and the military and to put off marriage and child-bearing.",
+          reference: "由于极度缺乏薪酬足够的工作，千禧一代往往到大学和军队中寻求庇护，并推迟结婚和生育。",
+          keyPoints: "采分点：① Starved for jobs at adequate pay（极度缺乏薪酬合适的工作）；② seek refuge in（在……中寻求庇护/避风港）；③ put off marriage and child-bearing（推迟结婚与生育）。"
+        }
+      ],
+      zhToEn: [
+        {
+          num: 56,
+          unit: "Unit 1 · J.K.罗琳哈佛演讲 (Para. 22 & 42)",
+          source: "除非你自己和你的关系都经历过逆境的考验，否则你永远不会真正了解自己。我们不需要魔法来改变世界，因为我们内心早已拥有所需的全部力量。",
+          reference: "You will never truly know yourself, or the strength of your relationships, until both have been tested by adversity. We do not need magic to transform the world, for we carry all the power we need inside ourselves already.",
+          keyPoints: "核心表达：① be tested by adversity（经受逆境的考验）；② transform the world（改变世界）；③ carry all the power we need inside ourselves（内心拥有所需的全部力量）。"
+        },
+        {
+          num: 57,
+          unit: "Unit 2 · 乔布斯斯坦福演讲 (Para. 23)",
+          source: "你的时间有限，所以不要浪费时间去过别人的生活。不要被教条所困，也不要让他人意见的噪音淹没你内心的声音。",
+          reference: "Your time is limited, so don’t waste it living someone else’s life. Don’t be trapped by dogma, and don’t let the noise of others’ opinions drown out your own inner voice.",
+          keyPoints: "核心表达：① waste it living someone else’s life（浪费时间过别人的生活）；② be trapped by dogma（被教条困住）；③ drown out your own inner voice（淹没你自己内心的声音）。"
+        },
+        {
+          num: 58,
+          unit: "Unit 4 · 卡耐基论感恩 (Para. 10 & 20)",
+          source: "如果我们到处指望别人感恩，那简直就是自寻苦恼。如果我们想要获得幸福，就应该停止计较感恩或忘恩负义，纯粹为了给予本身的内心喜悦而给予。",
+          reference: "If we go around expecting gratitude, we are headed straight for a lot of heartaches. If we want to find happiness, let’s stop thinking about gratitude or ingratitude and give for the inner joy of giving.",
+          keyPoints: "核心表达：① go around expecting gratitude（到处指望感恩）；② be headed straight for a lot of heartaches（径直走向许多心痛/自寻苦恼）；③ give for the inner joy of giving（为了给予的内心喜悦而付出）。"
+        },
+        {
+          num: 59,
+          unit: "Unit 5 · 《乔布斯传》书评 (Para. 25 & 50)",
+          source: "他们的合作是一种强大的技能协同：沃兹尼亚克精通计算机的内部运行机制，而乔布斯则对产品的设计与实用性有着敏锐的直觉。",
+          reference: "Theirs was a powerful synergy of skills: Wozniak’s grasp of the inner workings of a computer and Jobs’s instinct for its design and utility.",
+          keyPoints: "核心表达：① a powerful synergy of skills（强大的技能协同）；② grasp of the inner workings（对内部运行机制的掌握）；③ instinct for its design and utility（对设计与实用性的直觉）。"
+        },
+        {
+          num: 60,
+          unit: "Unit 8 · 美国梦与千禧一代 (Para. 4 & 12)",
+          source: "对年轻人而言，即便受过大学教育，职场前景也很少如此黯淡。与其把早年岁月浪费在没有前途的工作上，他宁可坚持等待一个能运用大学所学的企业职位。",
+          reference: "For young adults, the prospects in the workplace, even for the college-educated, have rarely been so bleak. Rather than waste early years in dead-end work, he would hold out for a corporate position that would draw on his college training.",
+          keyPoints: "核心表达：① prospects in the workplace ... bleak（职场前景黯淡）；② dead-end work（没有前途的工作）；③ hold out for（坚持等待）& draw on his college training（运用大学所学）。"
+        }
+      ]
+    };
+
+    // =========================================================================
+    // PART V: Writing (20% = 20 Points)
+    // Synthesizing themes from Units 1, 2, 4, 5, 8
+    // =========================================================================
+    const PART5_WRITING = {
+      title: "The Value of Setbacks and Inner Conviction on the Threshold of Real Life",
+      directions: `
+        <p class="mb-2">In Unit 1, J.K. Rowling states that <em>“rock bottom became the solid foundation on which I rebuilt my life”</em>; in Unit 2, Steve Jobs urges graduates to <em>“have the courage to follow your heart and intuition”</em> and <em>“not settle”</em> even when life hits you with a brick; and in Unit 8, we see young graduates struggling to find a foothold in a bleak job market.</p>
+        <p>Write an essay of <strong>180–220 words</strong> entitled <strong><em>How Should Young Graduates Face Career Setbacks and Uncertainty?</em></strong> In your essay, you should:<br>
+        1) Describe the pressure and uncertainty young graduates often face when stepping across the threshold of society;<br>
+        2) Explain how failure and setbacks can strip away the inessential and foster resilience (citing insights from Rowling or Jobs);<br>
+        3) Offer practical suggestions on balancing realistic adaptability with one’s inner voice.</p>
+      `,
+      usefulExpressions: [
+        "stand on the threshold of real life（站在真实人生的门槛上 — Unit 1）",
+        "strip away the inessential（剥离无关紧要之物 — Unit 1）",
+        "emerge wiser and stronger from setbacks / adversity（从挫折/逆境中变得更明智、更坚强 — Unit 1）",
+        "connect the dots looking backwards（回首往事时将点滴串联起来 — Unit 2）",
+        "let the noise of others’ opinions drown out one’s inner voice（让他人意见的噪音淹没内心的声音 — Unit 2）",
+        "get a foothold in the workforce / climb the career ladder（在职场站稳脚跟 / 攀登职业阶梯 — Unit 8）"
+      ],
+      modelEssay: `
+        <p class="mb-3"><strong>How Should Young Graduates Face Career Setbacks and Uncertainty?</strong></p>
+        <p class="mb-3">As university graduates stand on the threshold of what is often called “real life,” many find themselves confronting a bleak and competitive job market. Much like Scott Nicholson in Unit 8, young adults today are frequently torn between holding out for an ideal career ladder and compromising under economic pressure. Driven by a deep-seated fear of falling behind, they may view any early setback as an irreversible defeat.</p>
+        <p class="mb-3">However, both J.K. Rowling and Steve Jobs remind us that adversity is far from a dead end. As Rowling eloquently observed at Harvard, failure means a stripping away of the inessential, allowing us to stop pretending and discover an inner security that no examination or résumé could ever confer. Similarly, Jobs’s public dismissal from Apple at age thirty freed him from the heaviness of success and ushered in the lightness of a beginner. What appears to be a devastating blow at the moment often turns out to be a defining turning point when we connect the dots looking backwards.</p>
+        <p>Therefore, to navigate uncertainty, young graduates should cultivate both humility and courage. On the one hand, we should shun the trap of entitlement and be willing to start from the bottom rungs with a strong work ethic. On the other hand, we must never allow the noise of external expectations to drown out our own inner voice. By embracing setbacks with resilience and staying hungry for growth, we can transform rock bottom into a solid foundation for a meaningful life.</p>
+      `
+    };
+
+    // =========================================================================
+    // State Management & Scoring Logic
+    // =========================================================================
+    const state = {
+      part1Ans: {}, // { 1: 'A', ... }
+      part2Ans: {}, // { 21: 'E', ... }
+      part3Ans: {}, // { 41: 'B', ... }
+      part4Texts: {}, // { 51: '...', ... }
+      part4SelfScore: 0, // 0..20
+      part5Text: "",
+      part5SelfScore: 0, // 0..20
+      graded: false,
+      showExp: {}, // { 'p1-1': true, 'p2-cloze1': true, 'p3-41': true, 'p4-51': true, 'p5': true }
+      timerSeconds: 0,
+      timerRunning: true
+    };
+
+    let timerInterval = null;
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!state.timerRunning) return;
+        state.timerSeconds++;
+        const mins = String(Math.floor(state.timerSeconds / 60)).padStart(2, "0");
+        const secs = String(state.timerSeconds % 60).padStart(2, "0");
+        const el = document.getElementById("timerDisplay");
+        if (el) el.textContent = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function computeScores() {
+      let s1 = 0;
+      PART1_QUESTIONS.forEach(q => {
+        if (state.part1Ans[q.num] === q.ans) s1 += 1;
+      });
+
+      let s2 = 0;
+      PART2_PASSAGES.forEach(p => {
+        p.segments.forEach(seg => {
+          if (typeof seg === "object" && seg.blank) {
+            if (state.part2Ans[seg.blank] === seg.ans) s2 += 1;
+          }
+        });
+      });
+
+      let s3 = 0;
+      PART3_PASSAGES.forEach(p => {
+        p.questions.forEach(q => {
+          if (state.part3Ans[q.num] === q.ans) s3 += 2;
+        });
+      });
+
+      const s4 = Number(state.part4SelfScore) || 0;
+      const s5 = Number(state.part5SelfScore) || 0;
+      const total = s1 + s2 + s3 + s4 + s5;
+
+      document.getElementById("scorePart1").textContent = s1;
+      document.getElementById("scorePart2").textContent = s2;
+      document.getElementById("scorePart3").textContent = s3;
+      document.getElementById("scorePart4").textContent = s4;
+      document.getElementById("scorePart5").textContent = s5;
+      document.getElementById("scoreTotalBox").textContent = total;
+      document.getElementById("liveTotalScore").textContent = total.toFixed(1);
+    }
+
+    // =========================================================================
+    // Render Functions for Parts I - V
+    // =========================================================================
+    function renderPart1() {
+      const container = document.getElementById("part1Container");
+      container.innerHTML = PART1_QUESTIONS.map(q => {
+        const userChoice = state.part1Ans[q.num] || "";
+        const expVisible = !!state.showExp[`p1-${q.num}`];
+
+        const optsHtml = ["A", "B", "C", "D"].map(letter => {
+          let cls = "opt-btn";
+          let badge = "";
+          if (state.graded || expVisible) {
+            if (letter === q.ans) {
+              cls += " graded-correct";
+              badge = `<span class="ml-auto text-xs font-bold text-emerald-700">✓ 正确</span>`;
+            } else if (userChoice === letter && letter !== q.ans) {
+              cls += " graded-wrong";
+              badge = `<span class="ml-auto text-xs font-bold text-rose-700">✗ 误选</span>`;
+            }
+          } else if (userChoice === letter) {
+            cls += " selected";
+          }
+
+          return `
+            <button type="button" data-p1-q="${q.num}" data-opt="${letter}" class="${cls}">
+              <span class="font-bold text-sm">${letter}.</span>
+              <span class="text-sm sm:text-base">${q.options[letter]}</span>
+              ${badge}
+            </button>
+          `;
+        }).join("");
+
+        return `
+          <div class="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-slate-50/40">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-md bg-slate-900 text-white text-xs font-bold">第 ${q.num} 题 (1分)</span>
+                <span class="text-xs font-medium px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200">${q.unit}</span>
+              </div>
+              <button type="button" data-toggle-exp="p1-${q.num}" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 no-print">
+                ${expVisible ? "🙈 隐藏解析" : "👁️ 查看答案与解析"}
+              </button>
+            </div>
+            <p class="serif-en text-base sm:text-lg text-slate-900 mb-4 leading-relaxed">${q.stem}</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              ${optsHtml}
+            </div>
+            <div class="${expVisible ? 'block' : 'hidden'} mt-4 p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 text-xs sm:text-sm text-slate-800">
+              ${q.explanation}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderPart2() {
+      const container = document.getElementById("part2Container");
+      container.innerHTML = PART2_PASSAGES.map(p => {
+        const expVisible = !!state.showExp[`p2-${p.id}`];
+        const usedLetters = new Set();
+        p.segments.forEach(seg => {
+          if (typeof seg === "object" && seg.blank && state.part2Ans[seg.blank]) {
+            usedLetters.add(state.part2Ans[seg.blank]);
+          }
+        });
+
+        const wordBankHtml = p.wordBank.map(([letter, word, mean]) => {
+          const isUsed = usedLetters.has(letter);
+          return `
+            <div class="p-2.5 rounded-xl border ${isUsed ? 'bg-slate-100 border-slate-200 text-slate-400 line-through' : 'bg-white border-slate-200 text-slate-800 shadow-sm'} text-xs sm:text-sm">
+              <span class="font-bold text-emerald-700 mr-1">${letter}.</span>
+              <span class="font-semibold serif-en">${word}</span>
+              <div class="text-xs text-slate-500 mt-0.5 ${expVisible ? 'block' : 'hidden'}">${mean}</div>
+            </div>
+          `;
+        }).join("");
+
+        const passageHtml = p.segments.map(seg => {
+          if (typeof seg === "string") return seg;
+          const bnum = seg.blank;
+          const curVal = state.part2Ans[bnum] || "";
+          let cls = "cloze-select";
+          if (state.graded || expVisible) {
+            if (curVal === seg.ans) cls += " correct";
+            else if (curVal && curVal !== seg.ans) cls += " wrong";
+          }
+          const optionsList = [`<option value="">(${bnum}) 选择答案</option>`].concat(
+            p.wordBank.map(([letter, word]) => `<option value="${letter}" ${curVal === letter ? 'selected' : ''}>[${letter}] ${word}</option>`)
+          ).join("");
+
+          const ansHint = expVisible ? `<span class="inline-block px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-bold ml-1">[正解: ${seg.ans}. ${seg.word}]</span>` : "";
+          return `<select data-cloze-blank="${bnum}" class="${cls}" aria-label="Blank ${bnum}">${optionsList}</select>${ansHint}`;
+        }).join("");
+
+        const expListHtml = p.segments
+          .filter(seg => typeof seg === "object" && seg.blank)
+          .map(seg => `
+            <div class="p-3 rounded-xl bg-white border border-slate-200 text-xs sm:text-sm">
+              <span class="font-bold text-emerald-800">第 ${seg.blank} 空：${seg.ans}. ${seg.word}</span>
+              <p class="text-slate-600 mt-1">${seg.exp}</p>
+            </div>
+          `).join("");
+
+        return `
+          <div class="p-5 sm:p-7 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h4 class="text-base sm:text-lg font-bold text-slate-900">${p.title}</h4>
+              <button type="button" data-toggle-exp="p2-${p.id}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-900 no-print">
+                ${expVisible ? "🙈 隐藏本篇答案与解析" : "👁️ 查看本篇答案与逐空解析"}
+              </button>
+            </div>
+
+            <!-- 15-Word Bank Box -->
+            <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200">
+              <div class="text-xs font-bold text-emerald-900 mb-2.5 uppercase tracking-wider">Word Bank (15选10 备选词库 · 展开解析时显示词性与中文释义)</div>
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+                ${wordBankHtml}
+              </div>
+            </div>
+
+            <!-- Passage with Dropdown Blanks -->
+            <div class="serif-en text-base sm:text-lg leading-loose bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 text-slate-800">
+              ${passageHtml}
+            </div>
+
+            <!-- Collapsible Detailed Analysis -->
+            <div class="${expVisible ? 'block' : 'hidden'} space-y-3 pt-2">
+              <div class="text-sm font-bold text-emerald-900">🔑 逐空语法与语境解析：</div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                ${expListHtml}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderPart3() {
+      const container = document.getElementById("part3Container");
+      container.innerHTML = PART3_PASSAGES.map(p => {
+        const questionsHtml = p.questions.map(q => {
+          const userChoice = state.part3Ans[q.num] || "";
+          const expVisible = !!state.showExp[`p3-${q.num}`];
+
+          const optsHtml = ["A", "B", "C", "D"].map(letter => {
+            let cls = "opt-btn";
+            let badge = "";
+            if (state.graded || expVisible) {
+              if (letter === q.ans) {
+                cls += " graded-correct";
+                badge = `<span class="ml-auto text-xs font-bold text-emerald-700">✓ 正确</span>`;
+              } else if (userChoice === letter && letter !== q.ans) {
+                cls += " graded-wrong";
+                badge = `<span class="ml-auto text-xs font-bold text-rose-700">✗ 误选</span>`;
+              }
+            } else if (userChoice === letter) {
+              cls += " selected";
+            }
+
+            return `
+              <button type="button" data-p3-q="${q.num}" data-opt="${letter}" class="${cls}">
+                <span class="font-bold text-sm">${letter}.</span>
+                <span class="text-sm sm:text-base">${q.options[letter]}</span>
+                ${badge}
+              </button>
+            `;
+          }).join("");
+
+          return `
+            <div class="p-5 rounded-2xl bg-white border border-slate-200">
+              <div class="flex items-center justify-between gap-2 mb-2.5">
+                <span class="px-2.5 py-0.5 rounded-md bg-amber-600 text-white text-xs font-bold">第 ${q.num} 题 (2分)</span>
+                <button type="button" data-toggle-exp="p3-${q.num}" class="text-xs font-semibold text-amber-700 hover:text-amber-900 no-print">
+                  ${expVisible ? "🙈 隐藏解析" : "👁️ 查看解析"}
+                </button>
+              </div>
+              <p class="font-semibold text-slate-900 text-sm sm:text-base mb-3.5">${q.stem}</p>
+              <div class="space-y-2">
+                ${optsHtml}
+              </div>
+              <div class="${expVisible ? 'block' : 'hidden'} mt-3.5 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs sm:text-sm text-slate-800">
+                ${q.explanation}
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        return `
+          <div class="p-5 sm:p-7 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-6">
+            <h4 class="text-base sm:text-lg font-bold text-slate-900">${p.title}</h4>
+            <div class="serif-en text-base sm:text-lg leading-relaxed bg-white p-5 sm:p-7 rounded-2xl border border-slate-200 text-slate-800">
+              ${p.text}
+            </div>
+            <div class="space-y-4">
+              ${questionsHtml}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderPart4() {
+      const container = document.getElementById("part4Container");
+
+      const renderTransItem = (item, typeLabel) => {
+        const expVisible = !!state.showExp[`p4-${item.num}`];
+        const savedText = state.part4Texts[item.num] || "";
+        return `
+          <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50/40 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-md bg-purple-700 text-white text-xs font-bold">第 ${item.num} 题 (2分 · ${typeLabel})</span>
+                <span class="text-xs font-medium px-2.5 py-0.5 rounded-md bg-purple-50 text-purple-800 border border-purple-200">${item.unit}</span>
+              </div>
+              <button type="button" data-toggle-exp="p4-${item.num}" class="text-xs font-semibold text-purple-700 hover:text-purple-900 no-print">
+                ${expVisible ? "🙈 隐藏参考译文" : "👁️ 查看标准参考译文与采分点"}
+              </button>
+            </div>
+            <p class="text-base sm:text-lg font-medium text-slate-900 leading-relaxed">${item.source}</p>
+            <textarea data-trans-input="${item.num}" rows="2" placeholder="在此输入你的译文（交卷或点击右上角按钮可对照标准参考译文）..." class="w-full rounded-xl border border-slate-300 p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white">${savedText}</textarea>
+            <div class="${expVisible ? 'block' : 'hidden'} p-4 rounded-xl bg-purple-50/80 border border-purple-200 space-y-1.5 text-xs sm:text-sm">
+              <div class="font-bold text-purple-950">🎯 课内标准参考译文：</div>
+              <p class="text-slate-900 font-medium leading-relaxed">${item.reference}</p>
+              <p class="text-purple-800 pt-1 border-t border-purple-200/70">${item.keyPoints}</p>
+            </div>
+          </div>
+        `;
+      };
+
+      container.innerHTML = `
+        <div class="space-y-4">
+          <h4 class="text-base sm:text-lg font-bold text-slate-800 border-l-4 border-purple-600 pl-3">Section A: English-to-Chinese Translation（课内英译汉 · 共 5 题，每题 2 分，共 10 分）</h4>
+          ${PART4_TRANSLATION.enToZh.map(item => renderTransItem(item, "英译汉")).join("")}
+        </div>
+        <div class="space-y-4 pt-4">
+          <h4 class="text-base sm:text-lg font-bold text-slate-800 border-l-4 border-purple-600 pl-3">Section B: Chinese-to-English Translation（课内汉译英 · 共 5 题，每题 2 分，共 10 分）</h4>
+          ${PART4_TRANSLATION.zhToEn.map(item => renderTransItem(item, "汉译英")).join("")}
+        </div>
+        <div class="p-4 rounded-2xl bg-purple-50 border border-purple-200 flex flex-wrap items-center justify-between gap-3 no-print">
+          <div class="text-xs sm:text-sm text-purple-900 font-medium">
+            💡 对照参考译文后，请为你的 Part IV 课内翻译自评打分（0 ~ 20 分）：
+          </div>
+          <div class="flex items-center gap-2">
+            <input id="inputScorePart4" type="number" min="0" max="20" step="0.5" value="${state.part4SelfScore}" class="w-24 rounded-lg border border-purple-300 px-3 py-1.5 text-sm font-bold text-purple-900 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+            <span class="text-xs sm:text-sm font-semibold text-purple-800">/ 20 分</span>
+          </div>
+        </div>
+      `;
+
+      const scoreInput = document.getElementById("inputScorePart4");
+      if (scoreInput) {
+        scoreInput.addEventListener("input", (e) => {
+          state.part4SelfScore = Math.min(20, Math.max(0, Number(e.target.value) || 0));
+          computeScores();
+        });
+      }
+    }
+
+    function renderPart5() {
+      const container = document.getElementById("part5Container");
+      const expVisible = !!state.showExp["p5"];
+
+      container.innerHTML = `
+        <div class="p-5 sm:p-7 rounded-2xl border border-slate-200 bg-slate-50/40 space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h4 class="text-base sm:text-lg font-bold text-slate-900">Topic: How Should Young Graduates Face Career Setbacks and Uncertainty?</h4>
+            <button type="button" data-toggle-exp="p5" class="text-xs sm:text-sm font-semibold text-rose-700 hover:text-rose-900 no-print">
+              ${expVisible ? "🙈 隐藏高分范文与金句" : "👁️ 查看课内高级表达与高分范文"}
+            </button>
+          </div>
+
+          <div class="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 text-sm sm:text-base text-slate-800 leading-relaxed">
+            ${PART5_WRITING.directions}
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between text-xs text-slate-500 mb-1.5">
+              <span>写作作答区（建议词数：180–220 词）</span>
+              <span>当前词数：<strong id="essayWordCount" class="text-slate-800">0</strong> 词</span>
+            </div>
+            <textarea id="essayTextarea" rows="9" placeholder="Write your essay here..." class="w-full rounded-2xl border border-slate-300 p-4 serif-en text-base leading-relaxed focus:outline-none focus:ring-2 focus:ring-rose-500 bg-white">${state.part5Text}</textarea>
+          </div>
+
+          <div class="${expVisible ? 'block' : 'hidden'} space-y-4 p-5 rounded-2xl bg-rose-50/70 border border-rose-200 text-sm sm:text-base">
+            <div>
+              <div class="font-bold text-rose-950 mb-2">✨ 推荐直接化用的课内满分亮点表达：</div>
+              <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm text-rose-900">
+                ${PART5_WRITING.usefulExpressions.map(expr => `<li>${expr}</li>`).join("")}
+              </ul>
+            </div>
+            <div class="pt-3 border-t border-rose-200">
+              <div class="font-bold text-rose-950 mb-2">🏆 高分参考范文（215 Words · 融合 Unit 1, 2, 8 核心语料）：</div>
+              <div class="serif-en bg-white p-5 rounded-xl border border-rose-100 text-slate-800 leading-relaxed">
+                ${PART5_WRITING.modelEssay}
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 flex flex-wrap items-center justify-between gap-3 no-print">
+            <div class="text-xs sm:text-sm text-rose-900 font-medium">
+              💡 对照高分范文与评分标准后，请为你的 Part V 写作自评打分（0 ~ 20 分）：
+            </div>
+            <div class="flex items-center gap-2">
+              <input id="inputScorePart5" type="number" min="0" max="20" step="0.5" value="${state.part5SelfScore}" class="w-24 rounded-lg border border-rose-300 px-3 py-1.5 text-sm font-bold text-rose-900 focus:outline-none focus:ring-2 focus:ring-rose-500" />
+              <span class="text-xs sm:text-sm font-semibold text-rose-800">/ 20 分</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const essayEl = document.getElementById("essayTextarea");
+      const wcEl = document.getElementById("essayWordCount");
+      const updateWC = () => {
+        const text = (essayEl.value || "").trim();
+        state.part5Text = essayEl.value;
+        const words = text ? text.split(/\s+/).length : 0;
+        if (wcEl) wcEl.textContent = words;
+      };
+      if (essayEl) {
+        updateWC();
+        essayEl.addEventListener("input", updateWC);
+      }
+
+      const scoreInput5 = document.getElementById("inputScorePart5");
+      if (scoreInput5) {
+        scoreInput5.addEventListener("input", (e) => {
+          state.part5SelfScore = Math.min(20, Math.max(0, Number(e.target.value) || 0));
+          computeScores();
+        });
+      }
+    }
+
+    function renderAll() {
+      renderPart1();
+      renderPart2();
+      renderPart3();
+      renderPart4();
+      renderPart5();
+      computeScores();
+    }
+
+    // =========================================================================
+    // Event Listeners
+    // =========================================================================
+    document.addEventListener("DOMContentLoaded", () => {
+      renderAll();
+      startTimer();
+
+      // Timer Toggle
+      document.getElementById("btnToggleTimer").addEventListener("click", (e) => {
+        state.timerRunning = !state.timerRunning;
+        e.target.textContent = state.timerRunning ? "暂停" : "继续";
+      });
+
+      // Submit & Grade
+      document.getElementById("btnSubmitExam").addEventListener("click", () => {
+        state.graded = true;
+        PART1_QUESTIONS.forEach(q => { state.showExp[`p1-${q.num}`] = true; });
+        PART2_PASSAGES.forEach(p => { state.showExp[`p2-${p.id}`] = true; });
+        PART3_PASSAGES.forEach(p => {
+          p.questions.forEach(q => { state.showExp[`p3-${q.num}`] = true; });
+        });
+        PART4_TRANSLATION.enToZh.forEach(t => { state.showExp[`p4-${t.num}`] = true; });
+        PART4_TRANSLATION.zhToEn.forEach(t => { state.showExp[`p4-${t.num}`] = true; });
+        state.showExp["p5"] = true;
+        renderAll();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      // Show All Explanations
+      document.getElementById("btnShowAllExp").addEventListener("click", () => {
+        state.graded = true;
+        PART1_QUESTIONS.forEach(q => { state.showExp[`p1-${q.num}`] = true; });
+        PART2_PASSAGES.forEach(p => { state.showExp[`p2-${p.id}`] = true; });
+        PART3_PASSAGES.forEach(p => {
+          p.questions.forEach(q => { state.showExp[`p3-${q.num}`] = true; });
+        });
+        PART4_TRANSLATION.enToZh.forEach(t => { state.showExp[`p4-${t.num}`] = true; });
+        PART4_TRANSLATION.zhToEn.forEach(t => { state.showExp[`p4-${t.num}`] = true; });
+        state.showExp["p5"] = true;
+        renderAll();
+      });
+
+      // Hide All Explanations
+      document.getElementById("btnHideAllExp").addEventListener("click", () => {
+        state.graded = false;
+        state.showExp = {};
+        renderAll();
+      });
+
+      // Reset Exam
+      document.getElementById("btnResetExam").addEventListener("click", () => {
+        state.part1Ans = {};
+        state.part2Ans = {};
+        state.part3Ans = {};
+        state.part4Texts = {};
+        state.part4SelfScore = 0;
+        state.part5Text = "";
+        state.part5SelfScore = 0;
+        state.graded = false;
+        state.showExp = {};
+        state.timerSeconds = 0;
+        renderAll();
+      });
+
+      // Delegated Clicks inside Main
+      document.querySelector("main").addEventListener("click", (e) => {
+        const p1Btn = e.target.closest("[data-p1-q]");
+        if (p1Btn) {
+          const qnum = Number(p1Btn.getAttribute("data-p1-q"));
+          const opt = p1Btn.getAttribute("data-opt");
+          state.part1Ans[qnum] = opt;
+          renderPart1();
+          computeScores();
+          return;
+        }
+
+        const p3Btn = e.target.closest("[data-p3-q]");
+        if (p3Btn) {
+          const qnum = Number(p3Btn.getAttribute("data-p3-q"));
+          const opt = p3Btn.getAttribute("data-opt");
+          state.part3Ans[qnum] = opt;
+          renderPart3();
+          computeScores();
+          return;
+        }
+
+        const expBtn = e.target.closest("[data-toggle-exp]");
+        if (expBtn) {
+          const key = expBtn.getAttribute("data-toggle-exp");
+          state.showExp[key] = !state.showExp[key];
+          renderAll();
+          return;
+        }
+      });
+
+      // Delegated Change/Input inside Main
+      document.querySelector("main").addEventListener("change", (e) => {
+        const clozeSel = e.target.closest("[data-cloze-blank]");
+        if (clozeSel) {
+          const bnum = Number(clozeSel.getAttribute("data-cloze-blank"));
+          state.part2Ans[bnum] = clozeSel.value;
+          renderPart2();
+          computeScores();
+        }
+      });
+
+      document.querySelector("main").addEventListener("input", (e) => {
+        const transArea = e.target.closest("[data-trans-input]");
+        if (transArea) {
+          const tnum = Number(transArea.getAttribute("data-trans-input"));
+          state.part4Texts[tnum] = transArea.value;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

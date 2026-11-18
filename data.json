@@ -518,7 +518,7 @@
       ]
     },
     {
-      "icon": "📚",
+      "icon": "英语",
       "title": "研究生英语",
       "desc": "",
       "intro": "<h1>《研究生英语》课程简介</h1><p>研究生英语是硕士研究生公共基础必修课。课程聚焦学术英语能力培养，内容涵盖专业文献阅读、英文摘要写作、学术演讲与国际交流听说训练。课程依托学科前沿英文材料，训练学生检索研读外文文献、规范撰写学术短文、进行学术口头表达的能力，兼顾跨文化交流素养。旨在提升研究生运用英语开展专业学习与科研交流的水平，满足文献研读、国际学术交流等科研场景需求。</p>",
@@ -531,15 +531,207 @@
           "size": 0,
           "folder": "",
           "external": true
+        },
+        {
+          "name": "（本研）关于举办2026“外研社·国才杯”“理解当代中国”辽宁省大学外语能力大赛笔译赛项校赛的通知.docx",
+          "url": "files/（本研）关于举办2026“外研社·国才杯”“理解当代中国”辽宁省大学外语能力大赛笔译赛项校赛的通知.docx",
+          "type": "DOCX",
+          "size": 17935,
+          "originalSize": 17935,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "908454371-研究生英语综合教程-Comprehensive-English-Towards-Free-Reading-Yan-仲伟合总主编-石佑启-袁泉副总主编-吴霞辉本册主编-WU-XIA-HUI-ZHONG-WEI-HE-SHI-2013-2013-武汉-武汉大学出版社.pdf",
+          "url": "files/908454371-研究生英语综合教程-Comprehensive-English-Towards-Free-Reading-Yan-仲伟合总主编-石佑启-袁泉.pdf",
+          "type": "PDF",
+          "size": 10475825,
+          "originalSize": 10475825,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "Unit1_英语课文JK罗琳_中英对照精读.html",
+          "url": "files/Unit1_英语课文JK罗琳_中英对照精读.html",
+          "type": "HTML",
+          "size": 229508,
+          "originalSize": 229508,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "Unit2_课后练习答案.docx",
+          "url": "files/Unit2_课后练习答案.docx",
+          "type": "DOCX",
+          "size": 42650,
+          "originalSize": 42650,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "Unit2_乔布斯斯坦福演讲_中英对照精读.html",
+          "url": "files/Unit2_乔布斯斯坦福演讲_中英对照精读.html",
+          "type": "HTML",
+          "size": 116516,
+          "originalSize": 116516,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "Unit4_卡耐基论忘恩负义_中英对照精读.html",
+          "url": "files/Unit4_卡耐基论忘恩负义_中英对照精读.html",
+          "type": "HTML",
+          "size": 108438,
+          "originalSize": 108438,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "Unit5_乔布斯的灵魂_中英对照精读.html",
+          "url": "files/Unit5_乔布斯的灵魂_中英对照精读.html",
+          "type": "HTML",
+          "size": 146431,
+          "originalSize": 146431,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "Unit8_美国梦对新一代遥不可及_中英对照精读.html",
+          "url": "files/Unit8_美国梦对新一代遥不可及_中英对照精读.html",
+          "type": "HTML",
+          "size": 131434,
+          "originalSize": 131434,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "四六级通过情况统计（英语6班）.xlsx",
+          "url": "files/四六级通过情况统计（英语6班）.xlsx",
+          "type": "XLSX",
+          "size": 17203,
+          "originalSize": 17203,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "四六级通过统计-8c5c657ffd182d30.xlsx",
+          "url": "files/四六级通过统计-8c5c657ffd182d30.xlsx",
+          "type": "XLSX",
+          "size": 6233,
+          "originalSize": 6233,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "王春晖十一补课.xls",
+          "url": "files/王春晖十一补课.xls",
+          "type": "XLS",
+          "size": 27136,
+          "originalSize": 27136,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "研究生英语-选词填空.pdf",
+          "url": "files/研究生英语-选词填空.pdf",
+          "type": "PDF",
+          "size": 11366205,
+          "originalSize": 11366205,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "研究生英语综合教程_中英对照.docx",
+          "url": "files/研究生英语综合教程_中英对照.docx",
+          "type": "DOCX",
+          "size": 212725,
+          "originalSize": 212725,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "英语精读合集五篇.html",
+          "url": "files/英语精读合集五篇.html",
+          "type": "HTML",
+          "size": 677022,
+          "originalSize": 677022,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "英语期末考试“十五选十”选词填空精编交互题库.html",
+          "url": "files/英语期末考试“十五选十”选词填空精编交互题库.html",
+          "type": "HTML",
+          "size": 228949,
+          "originalSize": 228949,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "英语期末考试选词填空精编题库.docx",
+          "url": "files/英语期末考试选词填空精编题库.docx",
+          "type": "DOCX",
+          "size": 144338,
+          "originalSize": 144338,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "英语期末考试选词填空精编题库.pdf",
+          "url": "files/英语期末考试选词填空精编题库.pdf",
+          "type": "PDF",
+          "size": 3665881,
+          "originalSize": 3665881,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "英语选择题刷题.html",
+          "url": "files/英语选择题刷题.html",
+          "type": "HTML",
+          "size": 284693,
+          "originalSize": 284693,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "研究生期末模拟卷B.html",
+          "url": "files/研究生期末模拟卷B.html",
+          "type": "HTML",
+          "size": 88799,
+          "originalSize": 88799,
+          "optimized": false,
+          "folder": "英语模拟卷"
+        },
+        {
+          "name": "研究生英语期末考试试卷（A卷） 副本.docx",
+          "url": "files/研究生英语期末考试试卷（A卷） 副本.docx",
+          "type": "DOCX",
+          "size": 19551,
+          "originalSize": 19551,
+          "optimized": false,
+          "folder": "英语模拟卷"
+        },
+        {
+          "name": "研究生英语综合教程_全部单元课后练习答案.docx",
+          "url": "files/研究生英语综合教程_全部单元课后练习答案.docx",
+          "type": "DOCX",
+          "size": 76036,
+          "originalSize": 76036,
+          "optimized": false,
+          "folder": "英语模拟卷"
         }
       ],
       "images": [],
-      "time": "2026-10-17 11:43",
+      "time": "2026-11-18 15:56",
       "tags": [
         "公共课",
         "英语"
       ],
-      "introIsHTML": true
+      "introIsHTML": true,
+      "folders": [
+        "英语模拟卷"
+      ]
     },
     {
       "icon": "运",
@@ -1389,6 +1581,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-18 15:56",
+      "action": "编辑课程：研究生英语"
+    },
+    {
       "time": "2026-11-18 15:54",
       "action": "编辑课程：计算机控制系统"
     },
@@ -1782,10 +1978,6 @@
     },
     {
       "time": "2026-09-29 20:53",
-      "action": "编辑通知：Edgetunnel2.0 全新版本"
-    },
-    {
-      "time": "2026-09-29 20:41",
       "action": "编辑通知：Edgetunnel2.0 全新版本"
     }
   ],

@@ -200,6 +200,59 @@
         "英语"
       ],
       "introIsHTML": true
+    },
+    {
+      "icon": "运",
+      "title": "运筹学",
+      "desc": "我最讨厌的一门",
+      "intro": "",
+      "introIsHTML": true,
+      "tags": [
+        "课程"
+      ],
+      "progress": 100,
+      "folders": [
+        "运筹学试卷"
+      ],
+      "files": [
+        {
+          "name": "运筹学试卷.pdf",
+          "url": "files/运筹学试卷.pdf",
+          "type": "PDF",
+          "size": 9481520,
+          "originalSize": 9481520,
+          "optimized": false,
+          "folder": "运筹学试卷"
+        },
+        {
+          "name": "运筹学2020A3.pdf",
+          "url": "files/运筹学2020A3.pdf",
+          "type": "PDF",
+          "size": 1465710,
+          "originalSize": 1465710,
+          "optimized": false,
+          "folder": "运筹学试卷"
+        },
+        {
+          "name": "运筹学2016A3.pdf",
+          "url": "files/运筹学2016A3.pdf",
+          "type": "PDF",
+          "size": 5916373,
+          "originalSize": 5916373,
+          "optimized": false,
+          "folder": "运筹学试卷"
+        },
+        {
+          "name": "运筹学课本/课后答案",
+          "url": "https://pan.baidu.com/s/1UPJqUYpXQbTVHXj7-karsA?pwd=746q",
+          "type": "链接",
+          "size": 0,
+          "folder": "",
+          "external": true
+        }
+      ],
+      "images": [],
+      "time": "2026-11-18 13:25"
     }
   ],
   "papers": [
@@ -871,6 +924,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-18 13:25",
+      "action": "添加课程：运筹学"
+    },
+    {
       "time": "2026-11-18 13:17",
       "action": "添加合辑：申请教程"
     },
@@ -1265,10 +1322,6 @@
     {
       "time": "2026-09-28 14:39",
       "action": "修改入场欢迎页"
-    },
-    {
-      "time": "2026-09-28 11:09",
-      "action": "编辑日记：DeepSeek V4.1 Flash越狱教程"
     }
   ],
   "categories": [

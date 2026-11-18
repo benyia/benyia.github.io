@@ -1,0 +1,2239 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="If You Do This, You Will Never Worry About Ingratitude 中英对照精读版。">
+  <title>If You Do This, You Will Never Worry About Ingratitude｜Dale Carnegie · 戴尔·卡耐基 著 中英对照</title>
+  <style>
+
+    :root {
+      --paper: #f4eee2;
+      --paper-2: #fbf8f1;
+      --paper-3: #efe6d6;
+      --ink: #24211d;
+      --ink-soft: #514a40;
+      --muted: #756d62;
+      --crimson: #9d2235;
+      --crimson-dark: #711626;
+      --gold: #b98b45;
+      --line: rgba(36, 33, 29, 0.14);
+      --ui: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --serif: Georgia, "Times New Roman", "Songti SC", "SimSun", serif;
+      --zh: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
+      --en-size: 19px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 6% 2%, rgba(185, 139, 69, 0.14), transparent 30rem),
+        radial-gradient(circle at 96% 8%, rgba(157, 34, 53, 0.08), transparent 34rem),
+        var(--paper);
+      font-family: var(--ui);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.55;
+      background-image: repeating-linear-gradient(
+        0deg,
+        rgba(79, 57, 34, 0.018) 0,
+        rgba(79, 57, 34, 0.018) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+    }
+
+    a { color: inherit; }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 70;
+      height: 3px;
+      width: 0;
+      background: linear-gradient(90deg, var(--crimson), var(--gold));
+      box-shadow: 0 0 14px rgba(157, 34, 53, 0.28);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 64px;
+      padding: 10px clamp(16px, 4vw, 52px);
+      background: rgba(247, 242, 233, 0.88);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--crimson);
+      font-family: var(--serif);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .brand::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--crimson);
+      box-shadow: 0 0 0 4px rgba(157, 34, 53, 0.1);
+    }
+
+    .tools {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .tool {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--ink-soft);
+      background: rgba(255, 255, 255, 0.38);
+      font: 500 12px/1 var(--ui);
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+
+    .tool:hover,
+    .tool:focus-visible {
+      color: var(--crimson);
+      background: #fff;
+      border-color: rgba(157, 34, 53, 0.35);
+      outline: none;
+    }
+
+    .tool.active {
+      color: #fff;
+      background: var(--crimson);
+      border-color: var(--crimson);
+    }
+
+    .sizer {
+      display: inline-flex;
+      gap: 4px;
+      margin: 0 2px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.26);
+    }
+
+    .sizer .tool {
+      width: 29px;
+      height: 29px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      font-family: var(--serif);
+      font-size: 13px;
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+      gap: clamp(34px, 5vw, 76px);
+      align-items: end;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: clamp(54px, 8vw, 108px) clamp(20px, 5vw, 64px) 54px;
+    }
+
+    .hero::after {
+      content: "HARVARD · 2008";
+      position: absolute;
+      right: 7px;
+      top: 58%;
+      color: rgba(36, 33, 29, 0.22);
+      font-family: var(--serif);
+      font-size: 9px;
+      letter-spacing: 0.26em;
+      transform: rotate(90deg) translateX(50%);
+      transform-origin: right center;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0;
+      color: var(--crimson);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 38px;
+      height: 1px;
+      background: var(--crimson);
+    }
+
+    .hero h1 {
+      margin: 18px 0 20px;
+      font-family: var(--zh);
+      font-size: clamp(38px, 6.2vw, 76px);
+      font-weight: 700;
+      line-height: 1.13;
+      letter-spacing: -0.045em;
+    }
+
+    .hero h1 span { color: var(--crimson); }
+
+    .en-title {
+      max-width: 760px;
+      margin: 0 0 18px;
+      color: #5d5448;
+      font-family: var(--serif);
+      font-size: clamp(17px, 2vw, 23px);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .byline {
+      margin: 0;
+      color: var(--ink-soft);
+      font-family: var(--serif);
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .byline strong {
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    .hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.28);
+      font-size: 11px;
+      letter-spacing: 0.03em;
+    }
+
+    .hero-card {
+      position: relative;
+      padding: 30px 28px 26px;
+      border: 1px solid rgba(157, 34, 53, 0.22);
+      background: rgba(255, 255, 255, 0.38);
+      box-shadow: 0 24px 60px rgba(72, 51, 29, 0.08);
+    }
+
+    .hero-card::before {
+      content: "“";
+      display: block;
+      height: 56px;
+      color: var(--gold);
+      font-family: var(--serif);
+      font-size: 96px;
+      line-height: 0.8;
+    }
+
+    .hero-card p {
+      margin: 0 0 18px;
+      font-family: var(--serif);
+      font-size: clamp(19px, 2vw, 24px);
+      font-style: italic;
+      line-height: 1.55;
+    }
+
+    .hero-card cite {
+      display: block;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-family: var(--zh);
+      font-size: 13px;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    .start {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 28px;
+      color: var(--crimson-dark);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .start span {
+      display: inline-grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      border: 1px solid rgba(157, 34, 53, 0.3);
+      border-radius: 50%;
+      font-size: 14px;
+    }
+
+    .guide {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 0 clamp(20px, 5vw, 64px) 46px;
+    }
+
+    .guide-inner {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-column: 1 / -1;
+      gap: 1px;
+      border: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .guide-item {
+      min-height: 132px;
+      padding: 22px 24px;
+      background: rgba(251, 248, 241, 0.76);
+    }
+
+    .guide-item b {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--crimson);
+      font-family: var(--serif);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .guide-item p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .toc {
+      max-width: 1220px;
+      margin: 0 auto 24px;
+      padding: 0 clamp(20px, 5vw, 64px);
+    }
+
+    .toc-inner {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 24px;
+      padding: 20px 0;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .toc-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .toc-links {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .toc-links a {
+      display: block;
+      padding: 4px 0 10px;
+      border-bottom: 2px solid transparent;
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.55;
+      text-decoration: none;
+      transition: 160ms ease;
+    }
+
+    .toc-links a:hover {
+      color: var(--crimson);
+      border-bottom-color: var(--crimson);
+    }
+
+    .toc-kicker {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--gold);
+      font-family: var(--serif);
+      font-size: 15px;
+      font-style: italic;
+    }
+
+    .reading {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px clamp(18px, 5vw, 40px) 76px;
+    }
+
+    .section {
+      margin-top: 76px;
+      scroll-margin-top: 90px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+      margin-bottom: 28px;
+      padding-top: 22px;
+      border-top: 1px solid var(--ink);
+    }
+
+    .kicker {
+      color: var(--crimson);
+      font-family: var(--serif);
+      font-size: 54px;
+      font-style: italic;
+      line-height: 0.82;
+    }
+
+    .section h2 {
+      margin: 0 0 8px;
+      font-family: var(--zh);
+      font-size: clamp(27px, 3.4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+    }
+
+    .section-sub {
+      margin: 0;
+      color: var(--muted);
+      font-family: var(--serif);
+      font-size: 14px;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .para {
+      display: grid;
+      grid-template-columns: 68px minmax(0, 1fr);
+      gap: 24px;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 96px;
+    }
+
+    .pno {
+      padding-top: 8px;
+      color: #b7a78e;
+      font-family: var(--serif);
+      font-size: 9px;
+      letter-spacing: 0.13em;
+    }
+
+    .pno b {
+      display: block;
+      margin-bottom: 8px;
+      color: #c7baa6;
+      font-size: 34px;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .en {
+      margin: 0;
+      color: #211e19;
+      font-family: var(--serif);
+      font-size: var(--en-size);
+      letter-spacing: 0.003em;
+      line-height: 1.95;
+    }
+
+    .zh {
+      margin: 15px 0 0;
+      padding: 3px 0 3px 18px;
+      border-left: 2px solid rgba(185, 139, 69, 0.55);
+      color: var(--ink-soft);
+      font-family: var(--zh);
+      font-size: calc(var(--en-size) * 0.93);
+      line-height: 1.95;
+    }
+
+    .hl {
+      padding-bottom: 1px;
+      border-bottom: 1.5px dotted rgba(157, 34, 53, 0.7);
+      color: inherit;
+      background: transparent;
+      cursor: help;
+      transition: background 160ms ease;
+    }
+
+    .hl:hover { background: rgba(185, 139, 69, 0.18); }
+
+    .keys {
+      margin-top: 19px;
+      padding: 15px 17px 16px;
+      border: 1px solid rgba(36, 33, 29, 0.1);
+      background: rgba(255, 255, 255, 0.34);
+    }
+
+    .keys-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--crimson);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .keys-count {
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: none;
+    }
+
+    .key-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 11px;
+    }
+
+    .key {
+      min-width: 0;
+      padding: 11px 13px 12px;
+      border-left: 2px solid rgba(157, 34, 53, 0.36);
+      background: rgba(247, 242, 233, 0.62);
+    }
+
+    .key-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 5px 7px;
+    }
+
+    .key-w {
+      color: var(--crimson-dark);
+      font-family: var(--serif);
+      font-size: 15.5px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .key-ipa {
+      color: var(--muted);
+      font-family: var(--serif);
+      font-size: 11.5px;
+      line-height: 1.35;
+    }
+
+    .key-pos {
+      padding: 2px 5px;
+      border: 1px solid rgba(36, 33, 29, 0.13);
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.2;
+    }
+
+    .key-zh {
+      margin-top: 5px;
+      color: var(--ink-soft);
+      font-family: var(--zh);
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.55;
+    }
+
+    .key-note {
+      margin-top: 3px;
+      color: #6c6459;
+      font-size: 11.5px;
+      line-height: 1.65;
+    }
+
+    body.hide-zh .zh { display: none; }
+    body.hide-keys .keys { display: none; }
+    body.hide-keys .para { padding-bottom: 30px; }
+
+    .glossary {
+      max-width: 1220px;
+      margin: 84px auto 0;
+      padding: 0 clamp(20px, 5vw, 64px);
+      scroll-margin-top: 90px;
+    }
+
+    .glossary-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 340px);
+      gap: 26px;
+      align-items: end;
+      padding-top: 24px;
+      border-top: 1px solid var(--ink);
+    }
+
+    .glossary h2 {
+      margin: 0 0 7px;
+      font-family: var(--zh);
+      font-size: clamp(28px, 3.5vw, 42px);
+      letter-spacing: -0.03em;
+    }
+
+    .glossary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.7;
+    }
+
+    .search-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-wrap::before {
+      content: "⌕";
+      position: absolute;
+      left: 13px;
+      color: var(--muted);
+      font-family: var(--serif);
+      font-size: 20px;
+      pointer-events: none;
+    }
+
+    .search {
+      width: 100%;
+      padding: 12px 14px 12px 39px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.42);
+      font: 13px/1.4 var(--ui);
+    }
+
+    .search:focus {
+      border-color: rgba(157, 34, 53, 0.5);
+      outline: none;
+      background: #fff;
+    }
+
+    .glossary-status {
+      margin: 18px 0 12px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+    }
+
+    .g-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .g-item {
+      min-height: 118px;
+      padding: 14px 15px;
+      border: 1px solid rgba(36, 33, 29, 0.1);
+      background: rgba(251, 248, 241, 0.66);
+      break-inside: avoid;
+    }
+
+    .g-item[hidden] { display: none; }
+
+    .g-word {
+      color: var(--crimson-dark);
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .g-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+      color: var(--muted);
+      font-family: var(--serif);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .g-meta i {
+      color: #9b8f80;
+      font-family: var(--ui);
+      font-size: 9.5px;
+      font-style: normal;
+    }
+
+    .g-zh {
+      margin-top: 7px;
+      color: var(--ink-soft);
+      font-family: var(--zh);
+      font-size: 12.5px;
+      font-weight: 600;
+      line-height: 1.55;
+    }
+
+    .g-note {
+      margin-top: 4px;
+      color: #746b60;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .site-footer {
+      max-width: 1220px;
+      margin: 78px auto 0;
+      padding: 24px clamp(20px, 5vw, 64px) 42px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .site-footer strong {
+      color: var(--ink-soft);
+      font-weight: 600;
+    }
+
+    .backtop {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 55;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(157, 34, 53, 0.28);
+      border-radius: 50%;
+      color: var(--crimson);
+      background: rgba(251, 248, 241, 0.92);
+      box-shadow: 0 8px 24px rgba(72, 51, 29, 0.1);
+      font-size: 16px;
+      text-decoration: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: 180ms ease;
+    }
+
+    .backtop.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        align-items: start;
+      }
+
+      .hero::after { display: none; }
+      .hero-card { max-width: 520px; }
+
+      .toc-inner {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .toc-links { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .g-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      .topbar {
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 16px 10px;
+      }
+
+      .brand {
+        flex: 1 0 100%;
+        padding-top: 0;
+      }
+
+      .tools {
+        width: 100%;
+        max-width: none;
+        gap: 5px;
+        justify-content: space-between;
+      }
+
+      .tool {
+        flex: 1 1 0;
+        padding: 7px 9px;
+        font-size: 11px;
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      .sizer { display: none; }
+
+      .hero {
+        padding-top: 46px;
+        padding-bottom: 40px;
+      }
+
+      .hero h1 {
+        font-size: clamp(34px, 9.4vw, 46px);
+        line-height: 1.16;
+        letter-spacing: -0.05em;
+      }
+
+      .guide-inner { grid-template-columns: 1fr; }
+      .guide-item { min-height: 0; }
+      .toc-links { grid-template-columns: 1fr 1fr; }
+
+      .section-head {
+        grid-template-columns: 64px minmax(0, 1fr);
+        gap: 14px;
+      }
+
+      .kicker { font-size: 42px; }
+
+      .para {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 28px 0;
+      }
+
+      .pno {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-top: 0;
+      }
+
+      .pno b {
+        margin: 0;
+        font-size: 24px;
+      }
+
+      .en { font-size: calc(var(--en-size) - 1px); }
+      .zh { font-size: calc(var(--en-size) * 0.9); }
+      .key-grid { grid-template-columns: 1fr; }
+
+      .glossary-head { grid-template-columns: 1fr; }
+      .g-grid { grid-template-columns: 1fr; }
+      .g-item { min-height: 0; }
+    }
+
+    @media (max-width: 430px) {
+      .hero-meta span { font-size: 10px; }
+      .hero-card { padding: 24px 21px; }
+    }
+
+    @media print {
+      @page { margin: 15mm 14mm; }
+
+      body {
+        background: #fff;
+        font-size: 10pt;
+      }
+
+      body::before,
+      .topbar,
+      .progress,
+      .guide,
+      .toc,
+      .start,
+      .backtop,
+      .search-wrap,
+      .glossary-status {
+        display: none !important;
+      }
+
+      .hero {
+        display: block;
+        max-width: none;
+        padding: 0 0 12mm;
+      }
+
+      .hero h1 { font-size: 28pt; }
+      .en-title { font-size: 13pt; }
+      .hero-card,
+      .hero::after { display: none; }
+
+      .reading,
+      .glossary {
+        max-width: none;
+        padding: 0;
+      }
+
+      .section {
+        margin-top: 0;
+        break-before: page;
+      }
+
+      .section:first-child { break-before: auto; }
+      .section-head { padding-top: 4mm; margin-bottom: 4mm; }
+      .kicker { font-size: 30pt; }
+      .section h2 { font-size: 20pt; }
+
+      .para {
+        grid-template-columns: 10mm minmax(0, 1fr);
+        gap: 5mm;
+        padding: 5mm 0;
+        break-inside: avoid;
+      }
+
+      .pno b { font-size: 19pt; }
+      .en { font-size: 10.2pt; line-height: 1.55; }
+      .zh { font-size: 9.5pt; line-height: 1.65; }
+      .hl { border-bottom: 0; font-weight: 700; }
+      .keys { margin-top: 3mm; padding: 0; border: 0; background: none; }
+      .keys-head { margin-bottom: 1.5mm; }
+      .key-grid { gap: 2mm; }
+      .key { padding: 2mm 3mm; background: #f6f3ed; break-inside: avoid; }
+      .key-w { font-size: 9.5pt; }
+      .key-zh, .key-note { font-size: 8pt; }
+
+      .glossary { break-before: page; margin-top: 0; }
+      .glossary-head { display: block; }
+      .g-grid { grid-template-columns: 1fr 1fr; gap: 2mm; }
+      .g-item { min-height: 0; padding: 2.5mm; }
+      .g-word { font-size: 9.5pt; }
+      .g-zh, .g-note { font-size: 8pt; }
+    }
+  
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#top">Dale Carnegie · On Ingratitude</a>
+    <div class="tools" aria-label="阅读工具">
+      <button class="tool" id="toggleZh" type="button" aria-pressed="false">隐藏中文</button>
+      <button class="tool" id="toggleKeys" type="button" aria-pressed="false">收起重点词</button>
+      <div class="sizer" aria-label="调整字号">
+        <button class="tool" id="fontMinus" type="button" title="缩小字号">A−</button>
+        <button class="tool" id="fontPlus" type="button" title="放大字号">A+</button>
+      </div>
+      <button class="tool" id="printBtn" type="button">打印</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">How to Stop Worrying and Start Living · 选读</p>
+        <h1>这样做，你就永远<br><span>不必为忘恩负义而烦恼</span></h1>
+        <p class="en-title">If You Do This, You Will Never Worry About Ingratitude</p>
+        <p class="byline"><strong>Dale Carnegie</strong> · 戴尔·卡耐基 著</p>
+        <div class="hero-meta">
+          <span>全文 30 段</span>
+          <span>约 2,193 词</span>
+          <span>中英逐段对照</span>
+          <span>重点词音标与注释</span>
+        </div>
+        <a class="start" href="expect">开始阅读 <span>↓</span></a>
+      </div>
+      <aside class="hero-card">
+        <p>Gratitude is a fruit of great cultivation.</p>
+        <cite>感恩是良好修养结出的果实。<br>—— Samuel Johnson</cite>
+      </aside>
+    </section>
+
+    <section class="guide" aria-label="阅读提示">
+      <div class="guide-inner">
+        <div class="guide-item">
+          <b>01 · 逐段精读</b>
+          <p>每段先读英文，再对照中文。译文以准确传达语气和逻辑为主，保留原文的口语节奏。</p>
+        </div>
+        <div class="guide-item">
+          <b>02 · 重点词标注</b>
+          <p>英文中的虚线下划线是重点词。每段下方列出音标、词性、释义与用法提示，页末附总表。</p>
+        </div>
+        <div class="guide-item">
+          <b>03 · 两种阅读模式</b>
+          <p>可用顶部按钮隐藏中文或收起重点词，先做纯英文阅读，再回看翻译与词汇，检测理解。</p>
+        </div>
+      </div>
+    </section>
+
+    <nav class="toc" aria-label="目录">
+      <div class="toc-inner">
+        <div class="toc-label">Contents / 目录</div>
+        <div class="toc-links">
+      <a href="#expect">
+        <span class="toc-kicker">I</span>
+        <span>不要期待感恩</span>
+      </a>
+      <a href="#giving">
+        <span class="toc-kicker">II</span>
+        <span>为给予本身而喜悦</span>
+      </a>
+      <a href="#children">
+        <span class="toc-kicker">III</span>
+        <span>培养感恩的孩子</span>
+      </a>
+      </div>
+      </div>
+    </nav>
+
+    <div class="reading">
+      <section class="section" id="expect">
+        <div class="section-head">
+          <div class="kicker" aria-hidden="true">I</div>
+          <div>
+            <h2>不要期待感恩</h2>
+            <p class="section-sub">人性本如此，期待只会换来心痛</p>
+          </div>
+        </div>
+          <article class="para" id="p1">
+            <div class="pno" aria-hidden="true"><b>01</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">I recently met a business man in Texas who was burned up with <mark class="hl" title="愤慨；义愤 /ˌɪndɪɡˈneɪʃn/">indignation</mark>. I was warned that he would tell me about it within fifteen minutes after I met him. He did. The incident he was angry about had occurred eleven months previously, but he was still burned up about it. He couldn't speak of anything else. He had given his thirty-four employees ten thousand dollars in Christmas bonuses — approximately three hundred dollars each — and no one had thanked him. "I am sorry," he complained bitterly, "that I ever gave them a penny!"</p>
+              <p class="zh" lang="zh-CN">最近我在得克萨斯州遇到一位商人，他怒火中烧。有人提醒我，我见到他后十五分钟内他就会跟我讲这件事。他确实如此。让他生气的那件事发生在十一个月前，但他至今仍耿耿于怀。他张口闭口都是这件事。他给了他的三十四名员工一万美元的圣诞奖金——每人大约三百美元——但没有一个人感谢他。"我真后悔，"他痛苦地抱怨道，"我当初一分钱都不该给他们！"</p>
+              <div class="keys" aria-label="第 1 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">3 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">burn up</span>
+                  <span class="key-ipa">/bɜːn ʌp/</span>
+                  <span class="key-pos">短语</span>
+                </div>
+                <div class="key-zh">怒火中烧</div>
+                <div class="key-note">be burned up with indignation = 义愤填膺。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">indignation</span>
+                  <span class="key-ipa">/ˌɪndɪɡˈneɪʃn/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">愤慨；义愤</div>
+                <div class="key-note">indignant adj. 愤怒的。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">bonus</span>
+                  <span class="key-ipa">/ˈbəʊnəs/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">奖金；红包</div>
+                <div class="key-note">Christmas bonus = 年终奖。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p2">
+            <div class="pno" aria-hidden="true"><b>02</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">"An angry man," said <mark class="hl" title="孔子 /kənˈfjuːʃəs/">Confucius</mark>, "is always full of poison." This man was so full of poison that I honestly pitied him. He was about sixty years old. Now, life-insurance companies figure that, on the average, we will live slightly more than two-thirds of the difference between our present age and eighty. So this man — if he was lucky — probably had about fourteen or fifteen years to live. Yet he had already wasted almost one of his few remaining years by his bitterness and <mark class="hl" title="怨恨；愤恨 /rɪˈzentmənt/">resentment</mark> over an event that was past and gone. I pitied him.</p>
+              <p class="zh" lang="zh-CN">"愤怒的人，"孔子说，"心中总是充满毒素。"这个人心中充满了毒素，我真心同情他。他大约六十岁。现在，人寿保险公司计算，平均而言，我们还能活的时间是当前年龄到八十岁之间差的三分之二多一点。所以这个人——如果他运气好的话——大概还能活十四五年。然而，他已经因为对一件早已过去的事情的痛苦和怨恨，浪费了他所剩无几的岁月中将近一年的时间。我同情他。</p>
+              <div class="keys" aria-label="第 2 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">Confucius</span>
+                  <span class="key-ipa">/kənˈfjuːʃəs/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">孔子</div>
+                <div class="key-note">"An angry man is always full of poison" 出自《论语》。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">resentment</span>
+                  <span class="key-ipa">/rɪˈzentmənt/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">怨恨；愤恨</div>
+                <div class="key-note">resent v. 怨恨。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p3">
+            <div class="pno" aria-hidden="true"><b>03</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Instead of wallowing in resentment and <mark class="hl" title="自怜 /ˌself ˈpɪti/">self-pity</mark>, he might have asked himself why he didn't get any appreciation. Maybe he had underpaid and overworked his employees. Maybe they considered a Christmas bonus not a gift, but something they had earned. Maybe he was so critical and <mark class="hl" title="难以接近的 /ˌʌnəˈprəʊtʃəbl/">unapproachable</mark> that no one dared or cared to thank him. Maybe they felt he gave the bonus because most of the profits were going for taxes, anyway.</p>
+              <p class="zh" lang="zh-CN">与其沉溺于怨恨和自怜，他本可以问问自己为什么没有得到任何感激。也许他给员工的薪水太低、工作太重。也许他们认为圣诞奖金不是礼物，而是他们应得的。也许他太挑剔、太难以接近，以至于没有人敢或愿意感谢他。也许他们觉得他给奖金是因为反正大部分利润都要交税。</p>
+              <div class="keys" aria-label="第 3 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">3 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">wallow</span>
+                  <span class="key-ipa">/ˈwɒləʊ/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">沉湎；打滚</div>
+                <div class="key-note">wallow in resentment = 沉溺在怨恨里。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">self-pity</span>
+                  <span class="key-ipa">/ˌself ˈpɪti/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">自怜</div>
+                <div class="key-note">self-pitying adj. 自怨自艾的。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">unapproachable</span>
+                  <span class="key-ipa">/ˌʌnəˈprəʊtʃəbl/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">难以接近的</div>
+                <div class="key-note">un- + approachable（平易近人的）。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p4">
+            <div class="pno" aria-hidden="true"><b>04</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">On the other hand, maybe the employees were selfish, mean, and ill-mannered. Maybe this. Maybe that. I Don't know any more about it than you do. But I do know what Dr. Samuel Johnson said: "Gratitude is a fruit of great <mark class="hl" title="修养；培养 /ˌkʌltɪˈveɪʃn/">cultivation</mark>. You do not find it among <mark class="hl" title="粗鲁的；粗俗的 /ɡrəʊs/">gross</mark> people."</p>
+              <p class="zh" lang="zh-CN">另一方面，也许员工们自私、吝啬、没有礼貌。也许是这样，也许是那样。我对此知道的不比你多。但我确实知道塞缪尔·约翰逊博士说过的话："感恩是深厚教养的果实。你在粗俗的人中间找不到它。"</p>
+              <div class="keys" aria-label="第 4 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">cultivation</span>
+                  <span class="key-ipa">/ˌkʌltɪˈveɪʃn/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">修养；培养</div>
+                <div class="key-note">a fruit of great cultivation = 高度修养结出的果实。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">gross</span>
+                  <span class="key-ipa">/ɡrəʊs/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">粗鲁的；粗俗的</div>
+                <div class="key-note">此处意为 coarse/rude。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p5">
+            <div class="pno" aria-hidden="true"><b>05</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Here is the point I am trying to make: this man made the human and distressing mistake of expecting gratitude. He just didn't know human nature.</p>
+              <p class="zh" lang="zh-CN">我想说明的要点是：这个人犯了一个人之常情却令人痛苦的错误——期望感恩。他就是不了解人性。</p>
+            </div>
+          </article>
+          <article class="para" id="p6">
+            <div class="pno" aria-hidden="true"><b>06</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">If you saved a man's life, would you expect him to be grateful? You might — but Samuel Leibowitz, who was a famous criminal lawyer before he became a judge, saved seventy-eight men from going to the <mark class="hl" title="电椅 /ɪˈlektrɪk tʃeə/">electric chair</mark>! How many of these men, do you suppose, stopped to thank Samuel Leibowitz, or ever took the trouble to send him a Christmas card? How many? Guess. ... That's right — none.</p>
+              <p class="zh" lang="zh-CN">如果你救了一个人的命，你会期望他感恩吗？你可能会——但塞缪尔·莱博维茨，在成为法官之前是一位著名的刑事律师，曾挽救了七十八个人免于坐上电椅！你猜这些人中有多少人曾停下来感谢塞缪尔·莱博维茨，或者哪怕费心给他寄一张圣诞贺卡？有多少？猜猜看……没错——一个都没有。</p>
+              <div class="keys" aria-label="第 6 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">electric chair</span>
+                  <span class="key-ipa">/ɪˈlektrɪk tʃeə/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">电椅</div>
+                <div class="key-note">go to the electric chair = 被处电刑。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p7">
+            <div class="pno" aria-hidden="true"><b>07</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Christ healed ten lepers in one afternoon — but how many of those lepers even stopped to thank Him? Only one. Look it up in Saint Luke. When Christ turned around to His disciples and asked: "Where are the other nine?" they had all run away. Disappeared without thanks! Let me ask you a question: Why should you and I — or this business man in Texas — expect more thanks for our small favors than was given Jesus Christ?</p>
+              <p class="zh" lang="zh-CN">基督在一个下午治愈了十个麻风病人——但那些麻风病人中有多少人甚至停下来感谢他呢？只有一个。去《路加福音》里查一查。当基督转身问他的门徒："那九个在哪里呢？"他们全都跑掉了。没有感谢就消失了！让我问你一个问题：为什么你我——或者这位得克萨斯州的商人——期望我们的小小恩惠得到比耶稣基督所得到的更多的感谢呢？</p>
+              <div class="keys" aria-label="第 7 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">leper</span>
+                  <span class="key-ipa">/ˈlepə/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">麻风病人</div>
+                <div class="key-note">Christ healed ten lepers 典出《路加福音》。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">disciple</span>
+                  <span class="key-ipa">/dɪˈsaɪpl/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">门徒；使徒</div>
+                <div class="key-note">the other nine 指其余九个麻风病人。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p8">
+            <div class="pno" aria-hidden="true"><b>08</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">And when it comes to money matters! Well, that is even more hopeless. Charles Schwab told me that he had once saved a bank cashier who had speculated in the stock market with funds belonging to the bank. Schwab put up the money to save this man from going to the <mark class="hl" title="监狱 /ˌpenɪˈtenʃri/">penitentiary</mark>. Was the cashier grateful? Oh, yes, for a little while. Then he turned against Schwab and reviled him and denounced him — the very man who had kept him out of jail!</p>
+              <p class="zh" lang="zh-CN">说到钱的事情！唉，那就更没希望了。查尔斯·施瓦布告诉我，他曾经救过一个银行出纳员，这个人用银行的资金在股市投机。施瓦布出钱救了这个人，使他免于入狱。那个出纳员感恩吗？哦，是的，感激了一小段时间。然后他就转而反对施瓦布，辱骂他、谴责他——就是那个让他免于牢狱之灾的人！</p>
+              <div class="keys" aria-label="第 8 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">3 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">speculate</span>
+                  <span class="key-ipa">/ˈspekjuleɪt/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">投机；推测</div>
+                <div class="key-note">speculate in the stock market = 在股市投机。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">penitentiary</span>
+                  <span class="key-ipa">/ˌpenɪˈtenʃri/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">监狱</div>
+                <div class="key-note">美式英语，指州监狱。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">revile</span>
+                  <span class="key-ipa">/rɪˈvaɪl/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">辱骂；斥责</div>
+                <div class="key-note">与 denounce 并列。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p9">
+            <div class="pno" aria-hidden="true"><b>09</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">If you gave one of your relatives a million dollars, would you expect him to be grateful? Andrew Carnegie did just that. But if Andrew Carnegie had come back from the grave a little while later, he would have been shocked to find this relative cursing him! Why? Because Old Andy had left 365 million dollars to public charities — and had "cut him off with one <mark class="hl" title="少得可怜的 /ˈmiːzli/">measly</mark> million," as he put it.</p>
+              <p class="zh" lang="zh-CN">如果你给了你的一个亲戚一百万美元，你会期望他感恩吗？安德鲁·卡内基就是这么做的。但如果安德鲁·卡内基死后不久从坟墓里回来，他会震惊地发现这个亲戚在诅咒他！为什么？因为老安迪留给了公共慈善机构三亿六千五百万美元——而用他的话说，只"给了他区区一百万就把他打发了"。</p>
+              <div class="keys" aria-label="第 9 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">cut off</span>
+                  <span class="key-ipa">/kʌt ɒf/</span>
+                  <span class="key-pos">短语</span>
+                </div>
+                <div class="key-zh">断绝（关系/供给）</div>
+                <div class="key-note">cut him off with one measly million = 只给可怜的一百万就打发了他。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">measly</span>
+                  <span class="key-ipa">/ˈmiːzli/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">少得可怜的</div>
+                <div class="key-note">口语，强调数量微不足道。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p10">
+            <div class="pno" aria-hidden="true"><b>10</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">That's how it goes. Human nature has always been human nature — and it probably won't change in your lifetime. So why not accept it? Why not be as realistic about it as was old Marcus Aurelius, one of the wisest men who ever ruled the Roman Empire. He wrote in his diary one day: "I am going to meet people today who talk too much — people who are selfish, <mark class="hl" title="自大的；自我中心的 /ˌiːɡəˈtɪstɪkl/">egotistical</mark>, ungrateful. But I won't be surprised or disturbed, for I couldn't imagine a world without such people." That makes sense, doesn't it? If you and I go around grumbling about ingratitude, who is to blame? Is it human nature — or is it our ignorance of human nature? Let's not expect gratitude. Then, if we get some occasionally, it will come as a delightful surprise. If we don't get it, we won't be disturbed.</p>
+              <p class="zh" lang="zh-CN">事情就是这样。人性一直是人性——在你的有生之年它大概也不会改变。那为什么不接受它呢？为什么不像老马可·奥勒留那样现实地看待它呢？他是统治过罗马帝国的最有智慧的人之一。有一天他在日记中写道："我今天要遇到的人会话太多——自私、自我中心、忘恩负义的人。但我不会惊讶或不安，因为我无法想象一个没有这样的人的世界。"这很有道理，不是吗？如果你我到处抱怨忘恩负义，该怪谁呢？是怪人性——还是怪我们对人性的无知？让我们不要期望感恩。那么，如果我们偶尔得到一些，它会是一个令人愉快的惊喜。如果我们得不到，我们也不会心烦意乱。</p>
+              <div class="keys" aria-label="第 10 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">egotistical</span>
+                  <span class="key-ipa">/ˌiːɡəˈtɪstɪkl/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">自大的；自我中心的</div>
+                <div class="key-note">ego（自我）+ tistical。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">grumble</span>
+                  <span class="key-ipa">/ˈɡrʌmbl/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">抱怨；嘟囔</div>
+                <div class="key-note">grumble about = 抱怨。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p11">
+            <div class="pno" aria-hidden="true"><b>11</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Here is the first point I am trying to make in this chapter: It is natural for people to forget to be grateful; so, if we go around expecting gratitude, we are headed straight for a lot of heartaches.</p>
+              <p class="zh" lang="zh-CN">这是我在本章中想说明的第一个要点：人们忘记感恩是很自然的；所以，如果我们到处期望感恩，我们就会直接走向一大堆心痛。</p>
+              <div class="keys" aria-label="第 11 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">heartache</span>
+                  <span class="key-ipa">/ˈhɑːteɪk/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">伤心；痛心</div>
+                <div class="key-note">a lot of heartaches = 诸多苦恼。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+      </section>
+
+      <section class="section" id="giving">
+        <div class="section-head">
+          <div class="kicker" aria-hidden="true">II</div>
+          <div>
+            <h2>为给予本身而喜悦</h2>
+            <p class="section-sub">不求回报的人反而最富有</p>
+          </div>
+        </div>
+          <article class="para" id="p12">
+            <div class="pno" aria-hidden="true"><b>12</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">I know a woman in New York who is always complaining because she is lonely. Not one of her relatives wants to go near her — and no wonder. If you visit her, she will tell you for hours what she did for her nieces when they were children: she nursed them through the <mark class="hl" title="麻疹 /ˈmiːzlz/">measles</mark> and the <mark class="hl" title="腮腺炎 /mʌmps/">mumps</mark> and the whooping-cough; she boarded them for years; she helped to send one of them through business school, and she made a home for the other until she got married.</p>
+              <p class="zh" lang="zh-CN">我认识纽约的一位女士，她总是因为孤独而抱怨。她的亲戚中没有一个愿意靠近她——这也难怪。如果你去看她，她会花好几个小时告诉你她在侄女们小时候为她们做了什么：她照顾她们度过麻疹、腮腺炎和百日咳；她多年供她们食宿；她帮助其中一个读完商学院，还为另一个提供住所直到她结婚。</p>
+              <div class="keys" aria-label="第 12 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">3 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">measles</span>
+                  <span class="key-ipa">/ˈmiːzlz/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">麻疹</div>
+                <div class="key-note">与 mumps（腮腺炎）、whooping-cough（百日咳）并列。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">mumps</span>
+                  <span class="key-ipa">/mʌmps/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">腮腺炎</div>
+                <div class="key-note">复数形式作单数用。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">board</span>
+                  <span class="key-ipa">/bɔːd/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">寄宿；供膳宿</div>
+                <div class="key-note">board them for years = 供她们吃住多年。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p13">
+            <div class="pno" aria-hidden="true"><b>13</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Do the nieces come to see her? Oh, yes, now and then, out of a spirit of duty. But they dread these visits. They know they will have to sit and listen for hours to half-veiled reproaches. They will be treated to an endless <mark class="hl" title="冗长的述说；连篇 /ˈlɪtəni/">litany</mark> of bitter complaints and self-pitying sighs. And when this woman can no longer <mark class="hl" title="恫吓；连击 /ˈblʌdʒən/">bludgeon</mark>, <mark class="hl" title="威吓；唬住 /ˈbraʊbiːt/">browbeat</mark>, or bully her nieces into coming to see her, she has one of her "spells". She develops a heart attack.</p>
+              <p class="zh" lang="zh-CN">侄女们来看她吗？哦，是的，偶尔来，出于责任感。但她们害怕这些探望。她们知道自己不得不坐下来听好几个小时半遮半掩的责备。她们会被无尽的苦涩抱怨和自怜叹息所淹没。当这位女士再也无法用威逼、恐吓或胁迫的方式让侄女们来看她时，她就会"发作"一次。她会心脏病发作。</p>
+              <div class="keys" aria-label="第 13 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">4 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">reproach</span>
+                  <span class="key-ipa">/rɪˈprəʊtʃ/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">责备；指责</div>
+                <div class="key-note">half-veiled reproaches = 半遮半掩的责备。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">litany</span>
+                  <span class="key-ipa">/ˈlɪtəni/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">冗长的述说；连篇</div>
+                <div class="key-note">原指连祷文，此处喻没完没了的抱怨。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">bludgeon</span>
+                  <span class="key-ipa">/ˈblʌdʒən/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">恫吓；连击</div>
+                <div class="key-note">bludgeon sb into doing = 威逼某人做某事。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">browbeat</span>
+                  <span class="key-ipa">/ˈbraʊbiːt/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">威吓；唬住</div>
+                <div class="key-note">由 brow + beat 构成。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p14">
+            <div class="pno" aria-hidden="true"><b>14</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Is the heart attack real? Oh, yes. The doctors say she has "a nervous heart", suffers from palpitations. But the doctors also say they can do nothing for her — her trouble is emotional.</p>
+              <p class="zh" lang="zh-CN">心脏病发作是真的吗？哦，是的。医生说她有"神经性心脏"，患有心悸。但医生也说他们对她无能为力——她的问题是情绪上的。</p>
+              <div class="keys" aria-label="第 14 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">palpitation</span>
+                  <span class="key-ipa">/ˌpælpɪˈteɪʃn/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">心悸</div>
+                <div class="key-note">常用复数 palpitations。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p15">
+            <div class="pno" aria-hidden="true"><b>15</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">What this woman really wants is love and attention. But she calls it "gratitude". And she will never get gratitude or love, because she demands it. She thinks it's her <mark class="hl" title="应得之物 /djuː/">due</mark>.</p>
+              <p class="zh" lang="zh-CN">这位女士真正想要的是爱和关注。但她称之为"感恩"。而她永远不会得到感恩或爱，因为她是在索取。她认为这是她应得的。</p>
+              <div class="keys" aria-label="第 15 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">due</span>
+                  <span class="key-ipa">/djuː/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">应得之物</div>
+                <div class="key-note">It's her due = 她认为这是自己应得的。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p16">
+            <div class="pno" aria-hidden="true"><b>16</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">There are thousands of women like her, women who are ill from "ingratitude", loneliness, and neglect. They long to be loved; but the only way in this world that they can ever hope to be loved is to stop asking for it and to start pouring out love without hope of return.</p>
+              <p class="zh" lang="zh-CN">有成千上万像她这样的女性，她们因"忘恩负义"、孤独和被忽视而生病。她们渴望被爱；但在这个世界上，她们唯一有希望被爱的方法，就是停止索取爱，开始不求回报地付出爱。</p>
+            </div>
+          </article>
+          <article class="para" id="p17">
+            <div class="pno" aria-hidden="true"><b>17</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Does that sound like sheer, impractical, <mark class="hl" title="空想的；不切实际的 /ˈvɪʒənri/">visionary</mark> idealism? It isn't. It is just <mark class="hl" title="常识；起码的务实 /hɔːs sens/">horse sense</mark>. It is a good way for you and me to find the happiness we long for. I know. I have seen it happen right in my own family. My own mother and father gave for the joy of helping others. We were poor — always overwhelmed by debts. Yet, poor as we were, my father and mother always managed to send money every year to an orphans' home — the Christian Home in Council Bluffs, Iowa. Mother and Father never visited that home. Probably no one thanked them for their gifts — except by letter — but they were richly repaid, for they had the joy of helping little children — without wishing for or expecting any gratitude in return.</p>
+              <p class="zh" lang="zh-CN">这听起来是不是纯粹的、不切实际的、空想的理想主义？不是的。这只是常识。这是你我找到我们渴望的幸福的好方法。我知道。我亲眼在自己家里看到过。我的父母为了帮助他人的快乐而付出。我们很穷——总是被债务压得喘不过气。然而，尽管我们穷，我的父母每年总是设法寄钱给一家孤儿院——爱荷华州康瑟尔布拉夫斯的基督教之家。父母从未去过那家孤儿院。可能没有人感谢他们的馈赠——除了写信——但他们得到了丰厚的回报，因为他们拥有帮助小孩子的快乐——不希望也不期望任何感恩的回报。</p>
+              <div class="keys" aria-label="第 17 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">visionary</span>
+                  <span class="key-ipa">/ˈvɪʒənri/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">空想的；不切实际的</div>
+                <div class="key-note">sheer impractical visionary idealism = 纯粹不切实际的理想主义。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">horse sense</span>
+                  <span class="key-ipa">/hɔːs sens/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">常识；起码的务实</div>
+                <div class="key-note">口语，意为 common sense。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p18">
+            <div class="pno" aria-hidden="true"><b>18</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">After I left home, I would always send Father and Mother a cheque at Christmas and urge them to <mark class="hl" title="纵容；使享受 /ɪnˈdʌldʒ/">indulge</mark> in a few luxuries for themselves. But they rarely did. When I came home a few days before Christmas, Father would tell me of the coal and groceries they had bought for some "widder woman" in town who had a lot of children and no money to buy food and fuel. What joy they got out of these gifts — the joy of giving without accepting anything whatever in return!</p>
+              <p class="zh" lang="zh-CN">我离开家后，每年圣诞节总会给父母寄一张支票，劝他们为自己买些奢侈品享受一下。但他们很少这样做。当我在圣诞节前几天回家时，父亲会告诉我他们为镇上某个"寡妇"买了煤和杂货，她有很多孩子，没有钱买食物和燃料。他们从这些馈赠中得到了多大的快乐啊——那种不求任何回报的给予的快乐！</p>
+              <div class="keys" aria-label="第 18 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">indulge</span>
+                  <span class="key-ipa">/ɪnˈdʌldʒ/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">纵容；使享受</div>
+                <div class="key-note">indulge in luxuries = 享受奢侈品。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p19">
+            <div class="pno" aria-hidden="true"><b>19</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">I believe my father would almost have qualified for Aristotle's description of the ideal man — the man most worthy of being happy. "The ideal man," said Aristotle, "takes joy in doing favors for others; but he feels ashamed to have others do favors for him. For it is a mark of superiority to <mark class="hl" title="给予；授予 /kənˈfɜː/">confer</mark> a kindness; but it is a mark of inferiority to receive it."</p>
+              <p class="zh" lang="zh-CN">我相信我父亲几乎符合亚里士多德对理想之人的描述——最值得幸福的人。"理想的人，"亚里士多德说，"以帮助他人为乐；但以接受他人帮助为耻。因为施恩是优越的标志；而受恩是 inferior 的标志。"</p>
+              <div class="keys" aria-label="第 19 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">confer</span>
+                  <span class="key-ipa">/kənˈfɜː/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">给予；授予</div>
+                <div class="key-note">confer a kindness = 施恩于人。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p20">
+            <div class="pno" aria-hidden="true"><b>20</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Here is the second point I am trying to make in this chapter: If we want to find happiness, let's stop thinking about gratitude or ingratitude and give for the inner joy of giving.</p>
+              <p class="zh" lang="zh-CN">这是我在本章中想说明的第二个要点：如果我们想找到幸福，让我们停止思考感恩或忘恩负义，为给予的内在快乐而给予。</p>
+            </div>
+          </article>
+      </section>
+
+      <section class="section" id="children">
+        <div class="section-head">
+          <div class="kicker" aria-hidden="true">III</div>
+          <div>
+            <h2>培养感恩的孩子</h2>
+            <p class="section-sub">身教胜于言传，先做感恩的人</p>
+          </div>
+        </div>
+          <article class="para" id="p21">
+            <div class="pno" aria-hidden="true"><b>21</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Parents have been tearing their hair about the ingratitude of children for ten thousand years. Even Shakespeare's King Lear cried out: "How sharper than a <mark class="hl" title="毒蛇 /ˈsɜːpənt/">serpent</mark>'s tooth it is to have a <mark class="hl" title="忘恩负义的 /ˈθæŋkləs/">thankless</mark> child!"</p>
+              <p class="zh" lang="zh-CN">一万年来，父母们一直在为孩子的忘恩负义而抓狂。就连莎士比亚笔下的李尔王也呼喊："养一个不孝的儿女，比毒蛇的牙齿还要尖利！"</p>
+              <div class="keys" aria-label="第 21 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">serpent</span>
+                  <span class="key-ipa">/ˈsɜːpənt/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">毒蛇</div>
+                <div class="key-note">莎士比亚《李尔王》名句：How sharper than a serpent's tooth...</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">thankless</span>
+                  <span class="key-ipa">/ˈθæŋkləs/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">忘恩负义的</div>
+                <div class="key-note">thankless child = 不孝之子。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p22">
+            <div class="pno" aria-hidden="true"><b>22</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">But why should children be thankful — unless we train them to be? Ingratitude is natural — like weeds. Gratitude is like a rose. It has to be fed and watered and cultivated and loved and protected.</p>
+              <p class="zh" lang="zh-CN">但孩子们为什么要感恩呢——除非我们训练他们感恩？忘恩负义是自然的——就像杂草。感恩就像玫瑰。它需要施肥、浇水、培育、爱护和保护。</p>
+              <div class="keys" aria-label="第 22 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">cultivate</span>
+                  <span class="key-ipa">/ˈkʌltɪveɪt/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">培养；培育</div>
+                <div class="key-note">感恩像玫瑰，需要浇水培育。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p23">
+            <div class="pno" aria-hidden="true"><b>23</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">If our children are ungrateful, who is to blame? Maybe we are. If we have never taught them to express gratitude to others, how can we expect them to be grateful to us?</p>
+              <p class="zh" lang="zh-CN">如果我们的孩子忘恩负义，该怪谁呢？也许该怪我们自己。如果我们从未教过他们向他人表达感恩，我们怎么能期望他们对我们感恩呢？</p>
+            </div>
+          </article>
+          <article class="para" id="p24">
+            <div class="pno" aria-hidden="true"><b>24</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">I know a man in Chicago who has cause to complain of the ingratitude of his stepsons. He slaved in a box factory, seldom earning more than forty dollars a week. He married a widow, and she persuaded him to borrow money and send her two grown sons to college. Out of his salary of forty dollars a week, he had to pay for food, rent, fuel, clothes, and also for the payments on his notes. He did this for four years, working like a <mark class="hl" title="苦工；苦力 /ˈkuːli/">coolie</mark>, and never complaining.</p>
+              <p class="zh" lang="zh-CN">我认识芝加哥的一个人，他有理由抱怨继子们的忘恩负义。他在一家纸箱厂辛苦劳作，每周很少挣到四十美元以上。他娶了一个寡妇，她说服他借钱送她的两个已成年的儿子上大学。从他每周四十美元的工资中，他要支付食物、房租、燃料、衣服，还要支付他的借据。他这样做了四年，像苦力一样工作，从不抱怨。</p>
+              <div class="keys" aria-label="第 24 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">coolie</span>
+                  <span class="key-ipa">/ˈkuːli/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">苦工；苦力</div>
+                <div class="key-note">working like a coolie = 像苦力一样干活。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p25">
+            <div class="pno" aria-hidden="true"><b>25</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Did he get any thanks? No; his wife took it all for granted — and so did her sons. They never imagined that they owed their stepfather anything — not even thanks!</p>
+              <p class="zh" lang="zh-CN">他得到感谢了吗？没有；他的妻子认为这一切都是理所当然的——她的儿子们也是如此。他们从未想过自己欠继父任何东西——甚至连一声谢谢都没有！</p>
+            </div>
+          </article>
+          <article class="para" id="p26">
+            <div class="pno" aria-hidden="true"><b>26</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Who was to blame? The boys? Yes; but the mother was even more to blame. She thought it was a shame to burden their young lives with "a sense of <mark class="hl" title="义务；感恩之情 /ˌɒblɪˈɡeɪʃn/">obligation</mark>". She didn't want her sons to "start out under debt". So she never dreamed of saying: "What a prince your stepfather is to help you through college!" Instead, she took the attitude: "Oh, that's the least he can do."</p>
+              <p class="zh" lang="zh-CN">谁该受责备？男孩们吗？是的；但母亲更该受责备。她认为让他们年轻的生命背负"义务感"是一种耻辱。她不想让她的儿子们"负债起步"。所以她从未想过要说："你们的继父真是个好人，帮助你们读完大学！"相反，她采取的态度是："哦，这是他最起码能做的。"</p>
+              <div class="keys" aria-label="第 26 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">obligation</span>
+                  <span class="key-ipa">/ˌɒblɪˈɡeɪʃn/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">义务；感恩之情</div>
+                <div class="key-note">a sense of obligation = 感恩意识。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p27">
+            <div class="pno" aria-hidden="true"><b>27</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">She thought she was sparing her sons, but in reality, she was sending them out into life with the dangerous idea that the world owed them a living. And it was a dangerous idea — for one of those sons tried to "borrow" from an employer, and ended up in jail!</p>
+              <p class="zh" lang="zh-CN">她以为自己是在保护儿子们，但实际上，她是在把他们送入生活，带着一个危险的观念：世界欠他们一份生计。而这是一个危险的观念——因为其中一个儿子试图从雇主那里"借钱"，结果进了监狱！</p>
+              <div class="keys" aria-label="第 27 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">1 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">owe</span>
+                  <span class="key-ipa">/əʊ/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">欠；应感激</div>
+                <div class="key-note">the world owed them a living = 他们觉得世界欠他们一份生计。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p28">
+            <div class="pno" aria-hidden="true"><b>28</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">We must remember that our children are very much what we make them. For example, my mother's sister — Viola Alexander, of 144 West Minnehaha Parkway, Minneapolis — is a shining example of a woman who has never had cause to complain about the "ingratitude" of children. When I was a boy, Aunt Viola took her own mother into her home to love and take care of; and she did the same thing for her husband's mother. I can still close my eyes and see those two old ladies sitting before the fire in Aunt Viola's farmhouse. Were they any "trouble" to Aunt Viola? Oh, often, I suppose. But you would never have guessed it from her attitude. She loved those old ladies — so she pampered them, and spoiled them, and made them feel at home. In addition, Aunt Viola had six children of her own; but it never occurred to her that she was doing anything especially noble, or deserved any halos for taking these old ladies into her home. To her, it was the natural thing, the right thing, the thing she wanted to do.</p>
+              <p class="zh" lang="zh-CN">我们必须记住，我们的孩子在很大程度上是我们塑造的。例如，我母亲的妹妹——明尼阿波利斯市西明尼哈哈大道144号的维奥拉·亚历山大——就是一个光辉的榜样，她从来没有理由抱怨孩子的"忘恩负义"。我小时候，维奥拉姨妈把她自己的母亲接到家里来爱护和照顾；她对丈夫的母亲也做了同样的事。我仍然可以闭上眼睛，看到那两位老太太坐在维奥拉姨妈农舍的炉火前。她们给维奥拉姨妈带来"麻烦"了吗？哦，我想经常有。但从她的态度中你永远猜不到。她爱那些老太太——所以她纵容她们、娇惯她们，让她们有宾至如归的感觉。此外，维奥拉姨妈自己有六个孩子；但她从未想过自己在做什么特别高尚的事，或者因为把这些老太太接到家里而值得任何光环。对她来说，这是自然的事，正确的事，她想做的事。</p>
+              <div class="keys" aria-label="第 28 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">pamper</span>
+                  <span class="key-ipa">/ˈpæmpə/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">娇宠；悉心照料</div>
+                <div class="key-note">与 spoil 并列。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">halo</span>
+                  <span class="key-ipa">/ˈheɪləʊ/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">光环；荣光</div>
+                <div class="key-note">deserve halos = 理应戴上光环。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p29">
+            <div class="pno" aria-hidden="true"><b>29</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">Where is Aunt Viola today? Well, she has now been a widow for twenty-odd years, and she has five grown-up children — five separate households — all clamoring to share her, and to have her come and live in their homes! Her children adore her; they never get enough of her. Out of "gratitude"? Nonsense! It is love — sheer love. Those children breathed in warmth and <mark class="hl" title="洋溢的；光芒四射的 /ˈreɪdiənt/">radiant</mark> human-kindness all during their childhoods. Is it any wonder that, now that the situation is reversed, they give back love?</p>
+              <p class="zh" lang="zh-CN">维奥拉姨妈今天在哪里呢？嗯，她已经守寡二十多年了，她有五个成年的孩子——五个独立的家庭——都在争着要她，要她去他们家住！她的孩子们崇拜她；他们永远和她待不够。是出于"感恩"吗？胡说！是爱——纯粹的爱。那些孩子在整个童年时期都沐浴在温暖和灿烂的人性善良之中。现在情况反过来了，他们回报以爱，这有什么奇怪的吗？</p>
+              <div class="keys" aria-label="第 29 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">clamor</span>
+                  <span class="key-ipa">/ˈklæmə/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">大声要求；喧闹</div>
+                <div class="key-note">clamoring to share her = 争相要接她去住。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">radiant</span>
+                  <span class="key-ipa">/ˈreɪdiənt/</span>
+                  <span class="key-pos">adj.</span>
+                </div>
+                <div class="key-zh">洋溢的；光芒四射的</div>
+                <div class="key-note">radiant human-kindness = 温暖如春的善意。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="para" id="p30">
+            <div class="pno" aria-hidden="true"><b>30</b>PARA</div>
+            <div class="pbody">
+              <p class="en" lang="en">So let us remember that to raise grateful children, we have to be grateful. Let us remember "little pitchers have big ears" — and watch what we say. To illustrate — the next time we are tempted to <mark class="hl" title="贬低；轻视 /bɪˈlɪtl/">belittle</mark> someone's kindness in the presence of our children, let's stop. Let's never say: "Look at these dishcloths Cousin Sue sent for Christmas. She knit them herself. They didn't cost her a cent!" The remark may seem trivial to us — but the children are listening. So, instead, we had better say: "Look at the hours Cousin Sue spent making these for Christmas! Isn't she nice? Let's write her a thank-you note right now." And our children may unconsciously absorb the habit of praise and appreciation.</p>
+              <p class="zh" lang="zh-CN">所以让我们记住，要培养感恩的孩子，我们自己必须感恩。让我们记住"小罐子耳朵大"——注意我们说的话。举例来说——下次当我们忍不住要在孩子面前贬低某人的善意时，让我们停下来。我们永远不要说："看看苏表姐圣诞节寄来的这些洗碗布。她自己织的。一分钱都没花！"这话对我们来说可能微不足道——但孩子们在听。所以，相反，我们最好说："看看苏表姐花了多少时间为圣诞节做这些！她真好！我们现在就给她写一封感谢信吧。"这样我们的孩子可能会在不知不觉中养成赞美和欣赏的习惯。</p>
+              <div class="keys" aria-label="第 30 段重点词">
+                <div class="keys-head">
+                  <span>重点词</span>
+                  <span class="keys-count">2 个</span>
+                </div>
+                <div class="key-grid">
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">belittle</span>
+                  <span class="key-ipa">/bɪˈlɪtl/</span>
+                  <span class="key-pos">v.</span>
+                </div>
+                <div class="key-zh">贬低；轻视</div>
+                <div class="key-note">be- + little；在孩子面前贬低别人的善意。</div>
+              </div>
+              <div class="key">
+                <div class="key-top">
+                  <span class="key-w">dishcloth</span>
+                  <span class="key-ipa">/ˈdɪʃklɒθ/</span>
+                  <span class="key-pos">n.</span>
+                </div>
+                <div class="key-zh">洗碗布</div>
+                <div class="key-note">反面教材：别这么评价亲戚送的手工洗碗布。</div>
+              </div>
+              </div>
+            </div>
+          </article>
+      </section>
+    </div>
+
+    <section class="glossary" id="glossary">
+      <div class="glossary-head">
+        <div>
+          <h2>重点词汇总表</h2>
+          <p>按字母排序，共 46 个词条。可输入英文、中文释义或词性筛选。</p>
+        </div>
+        <label class="search-wrap">
+          <span class="sr-only" hidden>搜索词汇</span>
+          <input class="search" id="glossarySearch" type="search" placeholder="搜索单词、音标或中文释义…" autocomplete="off">
+        </label>
+      </div>
+      <div class="glossary-status" id="glossaryStatus">显示全部 46 个词条</div>
+      <div class="g-grid" id="glossaryGrid">
+      <div class="g-item" data-search="belittle /bɪˈlɪtl/ v. 贬低；轻视 be- + little；在孩子面前贬低别人的善意。">
+        <div class="g-word">belittle</div>
+        <div class="g-meta"><span>/bɪˈlɪtl/</span><i>v.</i></div>
+        <div class="g-zh">贬低；轻视</div>
+        <div class="g-note">be- + little；在孩子面前贬低别人的善意。</div>
+      </div>
+      <div class="g-item" data-search="bludgeon /ˈblʌdʒən/ v. 恫吓；连击 bludgeon sb into doing = 威逼某人做某事。">
+        <div class="g-word">bludgeon</div>
+        <div class="g-meta"><span>/ˈblʌdʒən/</span><i>v.</i></div>
+        <div class="g-zh">恫吓；连击</div>
+        <div class="g-note">bludgeon sb into doing = 威逼某人做某事。</div>
+      </div>
+      <div class="g-item" data-search="board /bɔːd/ v. 寄宿；供膳宿 board them for years = 供她们吃住多年。">
+        <div class="g-word">board</div>
+        <div class="g-meta"><span>/bɔːd/</span><i>v.</i></div>
+        <div class="g-zh">寄宿；供膳宿</div>
+        <div class="g-note">board them for years = 供她们吃住多年。</div>
+      </div>
+      <div class="g-item" data-search="bonus /ˈbəʊnəs/ n. 奖金；红包 Christmas bonus = 年终奖。">
+        <div class="g-word">bonus</div>
+        <div class="g-meta"><span>/ˈbəʊnəs/</span><i>n.</i></div>
+        <div class="g-zh">奖金；红包</div>
+        <div class="g-note">Christmas bonus = 年终奖。</div>
+      </div>
+      <div class="g-item" data-search="browbeat /ˈbraʊbiːt/ v. 威吓；唬住 由 brow + beat 构成。">
+        <div class="g-word">browbeat</div>
+        <div class="g-meta"><span>/ˈbraʊbiːt/</span><i>v.</i></div>
+        <div class="g-zh">威吓；唬住</div>
+        <div class="g-note">由 brow + beat 构成。</div>
+      </div>
+      <div class="g-item" data-search="burn up /bɜːn ʌp/ 短语 怒火中烧 be burned up with indignation = 义愤填膺。">
+        <div class="g-word">burn up</div>
+        <div class="g-meta"><span>/bɜːn ʌp/</span><i>短语</i></div>
+        <div class="g-zh">怒火中烧</div>
+        <div class="g-note">be burned up with indignation = 义愤填膺。</div>
+      </div>
+      <div class="g-item" data-search="clamor /ˈklæmə/ v. 大声要求；喧闹 clamoring to share her = 争相要接她去住。">
+        <div class="g-word">clamor</div>
+        <div class="g-meta"><span>/ˈklæmə/</span><i>v.</i></div>
+        <div class="g-zh">大声要求；喧闹</div>
+        <div class="g-note">clamoring to share her = 争相要接她去住。</div>
+      </div>
+      <div class="g-item" data-search="confer /kənˈfɜː/ v. 给予；授予 confer a kindness = 施恩于人。">
+        <div class="g-word">confer</div>
+        <div class="g-meta"><span>/kənˈfɜː/</span><i>v.</i></div>
+        <div class="g-zh">给予；授予</div>
+        <div class="g-note">confer a kindness = 施恩于人。</div>
+      </div>
+      <div class="g-item" data-search="Confucius /kənˈfjuːʃəs/ n. 孔子 "An angry man is always full of poison" 出自《论语》。">
+        <div class="g-word">Confucius</div>
+        <div class="g-meta"><span>/kənˈfjuːʃəs/</span><i>n.</i></div>
+        <div class="g-zh">孔子</div>
+        <div class="g-note">"An angry man is always full of poison" 出自《论语》。</div>
+      </div>
+      <div class="g-item" data-search="coolie /ˈkuːli/ n. 苦工；苦力 working like a coolie = 像苦力一样干活。">
+        <div class="g-word">coolie</div>
+        <div class="g-meta"><span>/ˈkuːli/</span><i>n.</i></div>
+        <div class="g-zh">苦工；苦力</div>
+        <div class="g-note">working like a coolie = 像苦力一样干活。</div>
+      </div>
+      <div class="g-item" data-search="cultivate /ˈkʌltɪveɪt/ v. 培养；培育 感恩像玫瑰，需要浇水培育。">
+        <div class="g-word">cultivate</div>
+        <div class="g-meta"><span>/ˈkʌltɪveɪt/</span><i>v.</i></div>
+        <div class="g-zh">培养；培育</div>
+        <div class="g-note">感恩像玫瑰，需要浇水培育。</div>
+      </div>
+      <div class="g-item" data-search="cultivation /ˌkʌltɪˈveɪʃn/ n. 修养；培养 a fruit of great cultivation = 高度修养结出的果实。">
+        <div class="g-word">cultivation</div>
+        <div class="g-meta"><span>/ˌkʌltɪˈveɪʃn/</span><i>n.</i></div>
+        <div class="g-zh">修养；培养</div>
+        <div class="g-note">a fruit of great cultivation = 高度修养结出的果实。</div>
+      </div>
+      <div class="g-item" data-search="cut off /kʌt ɒf/ 短语 断绝（关系/供给） cut him off with one measly million = 只给可怜的一百万就打发了他。">
+        <div class="g-word">cut off</div>
+        <div class="g-meta"><span>/kʌt ɒf/</span><i>短语</i></div>
+        <div class="g-zh">断绝（关系/供给）</div>
+        <div class="g-note">cut him off with one measly million = 只给可怜的一百万就打发了他。</div>
+      </div>
+      <div class="g-item" data-search="disciple /dɪˈsaɪpl/ n. 门徒；使徒 the other nine 指其余九个麻风病人。">
+        <div class="g-word">disciple</div>
+        <div class="g-meta"><span>/dɪˈsaɪpl/</span><i>n.</i></div>
+        <div class="g-zh">门徒；使徒</div>
+        <div class="g-note">the other nine 指其余九个麻风病人。</div>
+      </div>
+      <div class="g-item" data-search="dishcloth /ˈdɪʃklɒθ/ n. 洗碗布 反面教材：别这么评价亲戚送的手工洗碗布。">
+        <div class="g-word">dishcloth</div>
+        <div class="g-meta"><span>/ˈdɪʃklɒθ/</span><i>n.</i></div>
+        <div class="g-zh">洗碗布</div>
+        <div class="g-note">反面教材：别这么评价亲戚送的手工洗碗布。</div>
+      </div>
+      <div class="g-item" data-search="due /djuː/ n. 应得之物 It's her due = 她认为这是自己应得的。">
+        <div class="g-word">due</div>
+        <div class="g-meta"><span>/djuː/</span><i>n.</i></div>
+        <div class="g-zh">应得之物</div>
+        <div class="g-note">It's her due = 她认为这是自己应得的。</div>
+      </div>
+      <div class="g-item" data-search="egotistical /ˌiːɡəˈtɪstɪkl/ adj. 自大的；自我中心的 ego（自我）+ tistical。">
+        <div class="g-word">egotistical</div>
+        <div class="g-meta"><span>/ˌiːɡəˈtɪstɪkl/</span><i>adj.</i></div>
+        <div class="g-zh">自大的；自我中心的</div>
+        <div class="g-note">ego（自我）+ tistical。</div>
+      </div>
+      <div class="g-item" data-search="electric chair /ɪˈlektrɪk tʃeə/ n. 电椅 go to the electric chair = 被处电刑。">
+        <div class="g-word">electric chair</div>
+        <div class="g-meta"><span>/ɪˈlektrɪk tʃeə/</span><i>n.</i></div>
+        <div class="g-zh">电椅</div>
+        <div class="g-note">go to the electric chair = 被处电刑。</div>
+      </div>
+      <div class="g-item" data-search="gross /ɡrəʊs/ adj. 粗鲁的；粗俗的 此处意为 coarse/rude。">
+        <div class="g-word">gross</div>
+        <div class="g-meta"><span>/ɡrəʊs/</span><i>adj.</i></div>
+        <div class="g-zh">粗鲁的；粗俗的</div>
+        <div class="g-note">此处意为 coarse/rude。</div>
+      </div>
+      <div class="g-item" data-search="grumble /ˈɡrʌmbl/ v. 抱怨；嘟囔 grumble about = 抱怨。">
+        <div class="g-word">grumble</div>
+        <div class="g-meta"><span>/ˈɡrʌmbl/</span><i>v.</i></div>
+        <div class="g-zh">抱怨；嘟囔</div>
+        <div class="g-note">grumble about = 抱怨。</div>
+      </div>
+      <div class="g-item" data-search="halo /ˈheɪləʊ/ n. 光环；荣光 deserve halos = 理应戴上光环。">
+        <div class="g-word">halo</div>
+        <div class="g-meta"><span>/ˈheɪləʊ/</span><i>n.</i></div>
+        <div class="g-zh">光环；荣光</div>
+        <div class="g-note">deserve halos = 理应戴上光环。</div>
+      </div>
+      <div class="g-item" data-search="heartache /ˈhɑːteɪk/ n. 伤心；痛心 a lot of heartaches = 诸多苦恼。">
+        <div class="g-word">heartache</div>
+        <div class="g-meta"><span>/ˈhɑːteɪk/</span><i>n.</i></div>
+        <div class="g-zh">伤心；痛心</div>
+        <div class="g-note">a lot of heartaches = 诸多苦恼。</div>
+      </div>
+      <div class="g-item" data-search="horse sense /hɔːs sens/ n. 常识；起码的务实 口语，意为 common sense。">
+        <div class="g-word">horse sense</div>
+        <div class="g-meta"><span>/hɔːs sens/</span><i>n.</i></div>
+        <div class="g-zh">常识；起码的务实</div>
+        <div class="g-note">口语，意为 common sense。</div>
+      </div>
+      <div class="g-item" data-search="indignation /ˌɪndɪɡˈneɪʃn/ n. 愤慨；义愤 indignant adj. 愤怒的。">
+        <div class="g-word">indignation</div>
+        <div class="g-meta"><span>/ˌɪndɪɡˈneɪʃn/</span><i>n.</i></div>
+        <div class="g-zh">愤慨；义愤</div>
+        <div class="g-note">indignant adj. 愤怒的。</div>
+      </div>
+      <div class="g-item" data-search="indulge /ɪnˈdʌldʒ/ v. 纵容；使享受 indulge in luxuries = 享受奢侈品。">
+        <div class="g-word">indulge</div>
+        <div class="g-meta"><span>/ɪnˈdʌldʒ/</span><i>v.</i></div>
+        <div class="g-zh">纵容；使享受</div>
+        <div class="g-note">indulge in luxuries = 享受奢侈品。</div>
+      </div>
+      <div class="g-item" data-search="leper /ˈlepə/ n. 麻风病人 Christ healed ten lepers 典出《路加福音》。">
+        <div class="g-word">leper</div>
+        <div class="g-meta"><span>/ˈlepə/</span><i>n.</i></div>
+        <div class="g-zh">麻风病人</div>
+        <div class="g-note">Christ healed ten lepers 典出《路加福音》。</div>
+      </div>
+      <div class="g-item" data-search="litany /ˈlɪtəni/ n. 冗长的述说；连篇 原指连祷文，此处喻没完没了的抱怨。">
+        <div class="g-word">litany</div>
+        <div class="g-meta"><span>/ˈlɪtəni/</span><i>n.</i></div>
+        <div class="g-zh">冗长的述说；连篇</div>
+        <div class="g-note">原指连祷文，此处喻没完没了的抱怨。</div>
+      </div>
+      <div class="g-item" data-search="measles /ˈmiːzlz/ n. 麻疹 与 mumps（腮腺炎）、whooping-cough（百日咳）并列。">
+        <div class="g-word">measles</div>
+        <div class="g-meta"><span>/ˈmiːzlz/</span><i>n.</i></div>
+        <div class="g-zh">麻疹</div>
+        <div class="g-note">与 mumps（腮腺炎）、whooping-cough（百日咳）并列。</div>
+      </div>
+      <div class="g-item" data-search="measly /ˈmiːzli/ adj. 少得可怜的 口语，强调数量微不足道。">
+        <div class="g-word">measly</div>
+        <div class="g-meta"><span>/ˈmiːzli/</span><i>adj.</i></div>
+        <div class="g-zh">少得可怜的</div>
+        <div class="g-note">口语，强调数量微不足道。</div>
+      </div>
+      <div class="g-item" data-search="mumps /mʌmps/ n. 腮腺炎 复数形式作单数用。">
+        <div class="g-word">mumps</div>
+        <div class="g-meta"><span>/mʌmps/</span><i>n.</i></div>
+        <div class="g-zh">腮腺炎</div>
+        <div class="g-note">复数形式作单数用。</div>
+      </div>
+      <div class="g-item" data-search="obligation /ˌɒblɪˈɡeɪʃn/ n. 义务；感恩之情 a sense of obligation = 感恩意识。">
+        <div class="g-word">obligation</div>
+        <div class="g-meta"><span>/ˌɒblɪˈɡeɪʃn/</span><i>n.</i></div>
+        <div class="g-zh">义务；感恩之情</div>
+        <div class="g-note">a sense of obligation = 感恩意识。</div>
+      </div>
+      <div class="g-item" data-search="owe /əʊ/ v. 欠；应感激 the world owed them a living = 他们觉得世界欠他们一份生计。">
+        <div class="g-word">owe</div>
+        <div class="g-meta"><span>/əʊ/</span><i>v.</i></div>
+        <div class="g-zh">欠；应感激</div>
+        <div class="g-note">the world owed them a living = 他们觉得世界欠他们一份生计。</div>
+      </div>
+      <div class="g-item" data-search="palpitation /ˌpælpɪˈteɪʃn/ n. 心悸 常用复数 palpitations。">
+        <div class="g-word">palpitation</div>
+        <div class="g-meta"><span>/ˌpælpɪˈteɪʃn/</span><i>n.</i></div>
+        <div class="g-zh">心悸</div>
+        <div class="g-note">常用复数 palpitations。</div>
+      </div>
+      <div class="g-item" data-search="pamper /ˈpæmpə/ v. 娇宠；悉心照料 与 spoil 并列。">
+        <div class="g-word">pamper</div>
+        <div class="g-meta"><span>/ˈpæmpə/</span><i>v.</i></div>
+        <div class="g-zh">娇宠；悉心照料</div>
+        <div class="g-note">与 spoil 并列。</div>
+      </div>
+      <div class="g-item" data-search="penitentiary /ˌpenɪˈtenʃri/ n. 监狱 美式英语，指州监狱。">
+        <div class="g-word">penitentiary</div>
+        <div class="g-meta"><span>/ˌpenɪˈtenʃri/</span><i>n.</i></div>
+        <div class="g-zh">监狱</div>
+        <div class="g-note">美式英语，指州监狱。</div>
+      </div>
+      <div class="g-item" data-search="radiant /ˈreɪdiənt/ adj. 洋溢的；光芒四射的 radiant human-kindness = 温暖如春的善意。">
+        <div class="g-word">radiant</div>
+        <div class="g-meta"><span>/ˈreɪdiənt/</span><i>adj.</i></div>
+        <div class="g-zh">洋溢的；光芒四射的</div>
+        <div class="g-note">radiant human-kindness = 温暖如春的善意。</div>
+      </div>
+      <div class="g-item" data-search="reproach /rɪˈprəʊtʃ/ n. 责备；指责 half-veiled reproaches = 半遮半掩的责备。">
+        <div class="g-word">reproach</div>
+        <div class="g-meta"><span>/rɪˈprəʊtʃ/</span><i>n.</i></div>
+        <div class="g-zh">责备；指责</div>
+        <div class="g-note">half-veiled reproaches = 半遮半掩的责备。</div>
+      </div>
+      <div class="g-item" data-search="resentment /rɪˈzentmənt/ n. 怨恨；愤恨 resent v. 怨恨。">
+        <div class="g-word">resentment</div>
+        <div class="g-meta"><span>/rɪˈzentmənt/</span><i>n.</i></div>
+        <div class="g-zh">怨恨；愤恨</div>
+        <div class="g-note">resent v. 怨恨。</div>
+      </div>
+      <div class="g-item" data-search="revile /rɪˈvaɪl/ v. 辱骂；斥责 与 denounce 并列。">
+        <div class="g-word">revile</div>
+        <div class="g-meta"><span>/rɪˈvaɪl/</span><i>v.</i></div>
+        <div class="g-zh">辱骂；斥责</div>
+        <div class="g-note">与 denounce 并列。</div>
+      </div>
+      <div class="g-item" data-search="self-pity /ˌself ˈpɪti/ n. 自怜 self-pitying adj. 自怨自艾的。">
+        <div class="g-word">self-pity</div>
+        <div class="g-meta"><span>/ˌself ˈpɪti/</span><i>n.</i></div>
+        <div class="g-zh">自怜</div>
+        <div class="g-note">self-pitying adj. 自怨自艾的。</div>
+      </div>
+      <div class="g-item" data-search="serpent /ˈsɜːpənt/ n. 毒蛇 莎士比亚《李尔王》名句：How sharper than a serpent's tooth...">
+        <div class="g-word">serpent</div>
+        <div class="g-meta"><span>/ˈsɜːpənt/</span><i>n.</i></div>
+        <div class="g-zh">毒蛇</div>
+        <div class="g-note">莎士比亚《李尔王》名句：How sharper than a serpent's tooth...</div>
+      </div>
+      <div class="g-item" data-search="speculate /ˈspekjuleɪt/ v. 投机；推测 speculate in the stock market = 在股市投机。">
+        <div class="g-word">speculate</div>
+        <div class="g-meta"><span>/ˈspekjuleɪt/</span><i>v.</i></div>
+        <div class="g-zh">投机；推测</div>
+        <div class="g-note">speculate in the stock market = 在股市投机。</div>
+      </div>
+      <div class="g-item" data-search="thankless /ˈθæŋkləs/ adj. 忘恩负义的 thankless child = 不孝之子。">
+        <div class="g-word">thankless</div>
+        <div class="g-meta"><span>/ˈθæŋkləs/</span><i>adj.</i></div>
+        <div class="g-zh">忘恩负义的</div>
+        <div class="g-note">thankless child = 不孝之子。</div>
+      </div>
+      <div class="g-item" data-search="unapproachable /ˌʌnəˈprəʊtʃəbl/ adj. 难以接近的 un- + approachable（平易近人的）。">
+        <div class="g-word">unapproachable</div>
+        <div class="g-meta"><span>/ˌʌnəˈprəʊtʃəbl/</span><i>adj.</i></div>
+        <div class="g-zh">难以接近的</div>
+        <div class="g-note">un- + approachable（平易近人的）。</div>
+      </div>
+      <div class="g-item" data-search="visionary /ˈvɪʒənri/ adj. 空想的；不切实际的 sheer impractical visionary idealism = 纯粹不切实际的理想主义。">
+        <div class="g-word">visionary</div>
+        <div class="g-meta"><span>/ˈvɪʒənri/</span><i>adj.</i></div>
+        <div class="g-zh">空想的；不切实际的</div>
+        <div class="g-note">sheer impractical visionary idealism = 纯粹不切实际的理想主义。</div>
+      </div>
+      <div class="g-item" data-search="wallow /ˈwɒləʊ/ v. 沉湎；打滚 wallow in resentment = 沉溺在怨恨里。">
+        <div class="g-word">wallow</div>
+        <div class="g-meta"><span>/ˈwɒləʊ/</span><i>v.</i></div>
+        <div class="g-zh">沉湎；打滚</div>
+        <div class="g-note">wallow in resentment = 沉溺在怨恨里。</div>
+      </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p><strong>研究生英语综合教程 · 中英对照精读</strong>　按 J. K. Rowling 哈佛演讲同款排版生成。顶部按钮可切换中文显隐、重点词折叠与字号。</p>
+    </footer>
+  </main>
+
+  <a class="backtop" id="backtop" href="#top" aria-label="回到顶部">↑</a>
+
+  <script>
+
+    (() => {
+      const body = document.body;
+      const root = document.documentElement;
+      const toggleZh = document.getElementById("toggleZh");
+      const toggleKeys = document.getElementById("toggleKeys");
+      const fontMinus = document.getElementById("fontMinus");
+      const fontPlus = document.getElementById("fontPlus");
+      const printBtn = document.getElementById("printBtn");
+      const progress = document.getElementById("progress");
+      const backtop = document.getElementById("backtop");
+      const search = document.getElementById("glossarySearch");
+      const status = document.getElementById("glossaryStatus");
+      const items = [...document.querySelectorAll(".g-item")];
+      let fontSize = 19;
+
+      const setPressed = (button, pressed) => {
+        button.classList.toggle("active", pressed);
+        button.setAttribute("aria-pressed", String(pressed));
+      };
+
+      toggleZh.addEventListener("click", () => {
+        const hidden = body.classList.toggle("hide-zh");
+        toggleZh.textContent = hidden ? "显示中文" : "隐藏中文";
+        setPressed(toggleZh, hidden);
+      });
+
+      toggleKeys.addEventListener("click", () => {
+        const hidden = body.classList.toggle("hide-keys");
+        toggleKeys.textContent = hidden ? "展开重点词" : "收起重点词";
+        setPressed(toggleKeys, hidden);
+      });
+
+      const applyFontSize = () => {
+        root.style.setProperty("--en-size", fontSize + "px");
+      };
+
+      fontMinus.addEventListener("click", () => {
+        fontSize = Math.max(16, fontSize - 1);
+        applyFontSize();
+      });
+
+      fontPlus.addEventListener("click", () => {
+        fontSize = Math.min(24, fontSize + 1);
+        applyFontSize();
+      });
+
+      printBtn.addEventListener("click", () => window.print());
+
+      const updateScroll = () => {
+        const top = window.scrollY || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - window.innerHeight;
+        const ratio = height > 0 ? Math.min(1, Math.max(0, top / height)) : 0;
+        progress.style.width = (ratio * 100).toFixed(2) + "%";
+        backtop.classList.toggle("show", top > 650);
+      };
+
+      window.addEventListener("scroll", updateScroll, { passive: true });
+      window.addEventListener("resize", updateScroll);
+      updateScroll();
+
+      search.addEventListener("input", () => {
+        const query = search.value.trim().toLocaleLowerCase("zh-CN");
+        let visible = 0;
+        for (const item of items) {
+          const haystack = (item.dataset.search || "").toLocaleLowerCase("zh-CN");
+          const match = !query || haystack.includes(query);
+          item.hidden = !match;
+          if (match) visible += 1;
+        }
+        status.textContent = query
+          ? "找到 " + visible + " 个词条"
+          : "显示全部 " + items.length + " 个词条";
+      });
+    })();
+  
+  </script>
+</body>
+</html>

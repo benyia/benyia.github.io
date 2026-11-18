@@ -73,11 +73,11 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 
 <!-- 样式按模块拆分（顺序即层叠顺序，不要调换）：基础 → 组件 → 影音 → 独立页 → 首页
      改完任一文件请同步改这里的 ?v= 版本号，避免访客用到旧缓存 -->
-<link rel="stylesheet" href="css/site/01-base.css?v=20261118m">
-<link rel="stylesheet" href="css/site/02-components.css?v=20261118m">
-<link rel="stylesheet" href="css/site/03-media.css?v=20261118m">
-<link rel="stylesheet" href="css/site/04-pages.css?v=20261118m">
-<link rel="stylesheet" href="css/site/05-home.css?v=20261118m">
+<link rel="stylesheet" href="css/site/01-base.css?v=20261118q">
+<link rel="stylesheet" href="css/site/02-components.css?v=20261118q">
+<link rel="stylesheet" href="css/site/03-media.css?v=20261118q">
+<link rel="stylesheet" href="css/site/04-pages.css?v=20261118q">
+<link rel="stylesheet" href="css/site/05-home.css?v=20261118q">
 </head>
 <body>
 <a class="skip-link" href="#mainContent">跳到主要内容</a>
@@ -621,6 +621,45 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
   </div>
 </div>
 
+<!-- 合辑条目：阅读 / 前台编辑 -->
+<div class="coll-entry-modal" id="collEntryModal" aria-hidden="true" onclick="if(event.target===this)closeCollEntry()">
+  <div class="coll-entry-shell" role="dialog" aria-modal="true" aria-labelledby="collEntryHeading">
+    <div class="coll-entry-head">
+      <div class="coll-entry-head-main">
+        <span class="coll-entry-badge" id="collEntryBadge">MD</span>
+        <div>
+          <b id="collEntryHeading">合辑条目</b>
+          <span id="collEntryMeta"></span>
+        </div>
+      </div>
+      <div class="coll-entry-head-actions">
+        <button type="button" class="coll-entry-btn" id="collEntryEditBtn" onclick="startCollEntryEdit()" hidden>✏️ 编辑</button>
+        <button type="button" class="coll-entry-close" onclick="closeCollEntry()" aria-label="关闭">✕</button>
+      </div>
+    </div>
+    <div class="coll-entry-view" id="collEntryView"></div>
+    <div class="coll-entry-editor" id="collEntryEditor" hidden>
+      <div class="coll-entry-form">
+        <input type="text" id="collEntryTitle" placeholder="标题，例如：1月1日 广告优化">
+        <input type="date" id="collEntryDate">
+        <select id="collEntryKind">
+          <option value="md">Markdown</option>
+          <option value="html">HTML</option>
+        </select>
+      </div>
+      <div class="coll-entry-edit-bar">
+        <span>正文</span>
+        <span id="collEntrySaveState"></span>
+      </div>
+      <textarea id="collEntryText" spellcheck="false" placeholder="在这里直接写 Markdown 或 HTML……"></textarea>
+      <div class="coll-entry-actions">
+        <button type="button" class="btn btn-ghost" onclick="cancelCollEntryEdit()">取消</button>
+        <button type="button" class="btn btn-primary" id="collEntrySaveBtn" onclick="saveCollEntry()">保存到博客</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 首页互动：本机评论 / 点赞 / 收藏 -->
 <div class="eng-dialog" id="engDialog" role="dialog" aria-modal="true" aria-labelledby="engDialogTitle" onclick="if(event.target===this)closeEngagementDialog()">
   <div class="eng-dialog-box">
@@ -641,14 +680,14 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 <div class="footer">© <span id="copyYear">2026</span> 思齐个人主页 · Powered by GitHub Pages</div>
 
 <!-- 脚本按模块拆分：普通 script 共享全局作用域，顺序即依赖顺序，不要调换 -->
-<script src="js/app/01-core.js?v=20261118m"></script>
-<script src="js/app/02-shell.js?v=20261118m"></script>
-<script src="js/app/03-content.js?v=20261118m"></script>
-<script src="js/app/04-markdown.js?v=20261118m"></script>
-<script src="js/app/05-pages.js?v=20261118m"></script>
-<script src="js/app/06-upload.js?v=20261118m"></script>
-<script src="js/app/07-views.js?v=20261118m"></script>
-<script src="js/app/08-music.js?v=20261118m"></script>
-<script src="js/app/09-welcome.js?v=20261118m"></script>
+<script src="js/app/01-core.js?v=20261118q"></script>
+<script src="js/app/02-shell.js?v=20261118q"></script>
+<script src="js/app/03-content.js?v=20261118q"></script>
+<script src="js/app/04-markdown.js?v=20261118q"></script>
+<script src="js/app/05-pages.js?v=20261118q"></script>
+<script src="js/app/06-upload.js?v=20261118q"></script>
+<script src="js/app/07-views.js?v=20261118q"></script>
+<script src="js/app/08-music.js?v=20261118q"></script>
+<script src="js/app/09-welcome.js?v=20261118q"></script>
 </body>
 </html>

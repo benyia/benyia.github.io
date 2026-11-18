@@ -962,6 +962,177 @@ function collectionFilesHTML(c){
   if(!files.length) return '<div class="info-card"><h3>📎 系列资料</h3><div class="empty">这个合辑还没有上传文件</div></div>';
   return '<div class="info-card collection-library"><h3>📎 系列资料 <span class="coll-count">' + files.length + '</span></h3><div class="coll-file-grid">' + files.map(collFileBlock).join('') + '</div></div>';
 }
+
+/* ============================================================
+   合辑条目：每个系列下按日期排列的 Markdown / HTML 条目
+   站长浏览器存过 GitHub Token 时，可点「编辑」直接写回 data.json
+   ============================================================ */
+var collEntryCtx = { ci: -1, ei: -1 };
+function collEntryList(c){
+  return Array.isArray(c && c.entries) ? c.entries : [];
+}
+function collEntrySorted(c){
+  return collEntryList(c).map(function(e, i){ return {e:e, i:i}; }).sort(function(a, b){
+    var da = String(a.e.date || ""), db = String(b.e.date || "");
+    if(da !== db) return db.localeCompare(da);
+    return (b.e.updated || b.e.created || "").localeCompare(a.e.updated || a.e.created || "");
+  });
+}
+function collEntryBodyHTML(e){
+  if(!e) return "";
+  if(String(e.kind || "md").toLowerCase() === "html"){
+    return '<div class="coll-entry-html">' + String(e.body || "") + '</div>';
+  }
+  return mdRenderHTML(e.body || "") || '<div class="empty">这条还没有内容</div>';
+}
+function collEntryListHTML(c){
+  var list = collEntrySorted(c);
+  var canEdit = collEntryCanEdit();
+  var head = '<div class="coll-entry-list-head"><h3>📚 系列条目 <span class="coll-count">' + list.length + '</span></h3>'
+    + (canEdit ? '<button type="button" class="coll-entry-new" onclick="newCollEntry()">+ 新建条目</button>' : '')
+    + '</div>';
+  if(!list.length){
+    return '<div class="info-card coll-entry-list">' + head
+      + '<div class="empty">这个系列还没有条目' + (canEdit ? '，点右上角「新建条目」开始写。' : '。') + '</div></div>';
+  }
+  var rows = list.map(function(it){
+    var e = it.e;
+    var kind = String(e.kind || "md").toLowerCase() === "html" ? "HTML" : "MD";
+    var preview = String(e.body || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 90);
+    return '<button type="button" class="coll-entry-row" data-cei="' + it.i + '" onclick="openCollEntry(' + it.i + ')">'
+      +   '<span class="coll-entry-date">' + esc(e.date || "未设日期") + '</span>'
+      +   '<span class="coll-entry-row-main"><b>' + esc(e.title || "未命名条目") + '</b><span>' + esc(preview || "暂无内容") + '</span></span>'
+      +   '<span class="coll-entry-kind">' + kind + '</span>'
+      +   '<span class="coll-entry-arrow" aria-hidden="true">›</span>'
+      + '</button>';
+  }).join("");
+  return '<div class="info-card coll-entry-list">' + head + '<div class="coll-entry-rows">' + rows + '</div></div>';
+}
+function collEntryCanEdit(){
+  return typeof frontToken === "function" && !!frontToken();
+}
+function openCollEntry(ei){
+  var c = (blogData.collections || [])[currentCollectionIdx];
+  if(!c) return;
+  var e = collEntryList(c)[ei];
+  if(!e) return;
+  collEntryCtx = { ci: currentCollectionIdx, ei: ei };
+  var modal = document.getElementById("collEntryModal");
+  var view = document.getElementById("collEntryView");
+  var editor = document.getElementById("collEntryEditor");
+  if(!modal || !view || !editor) return;
+  var kind = String(e.kind || "md").toLowerCase() === "html" ? "html" : "md";
+  document.getElementById("collEntryHeading").textContent = e.title || "未命名条目";
+  document.getElementById("collEntryMeta").textContent = (c.title || "") + (e.date ? " · " + e.date : "");
+  document.getElementById("collEntryBadge").textContent = kind === "html" ? "HTML" : "MD";
+  view.innerHTML = collEntryBodyHTML(e);
+  view.className = "coll-entry-view md-body";
+  editor.hidden = true;
+  view.hidden = false;
+  var canEdit = collEntryCanEdit();
+  var editBtn = document.getElementById("collEntryEditBtn");
+  if(editBtn) editBtn.hidden = !canEdit;
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("coll-entry-open");
+  if(typeof enhanceCodeBlocks === "function") enhanceCodeBlocks(view);
+  window.scrollTo(0, 0);
+}
+function closeCollEntry(){
+  var modal = document.getElementById("collEntryModal");
+  if(modal){ modal.classList.remove("show"); modal.setAttribute("aria-hidden", "true"); }
+  document.body.classList.remove("coll-entry-open");
+  collEntryCtx = { ci: -1, ei: -1 };
+}
+function newCollEntry(){
+  var c = (blogData.collections || [])[currentCollectionIdx];
+  if(!c) return;
+  if(!collEntryCanEdit()){
+    showToast("需要先在管理后台「站点设置」保存 GitHub Token", "error");
+    return;
+  }
+  collEntryCtx = { ci: currentCollectionIdx, ei: -1 };
+  var modal = document.getElementById("collEntryModal");
+  if(!modal) return;
+  document.getElementById("collEntryHeading").textContent = "新建条目";
+  document.getElementById("collEntryMeta").textContent = c.title || "";
+  document.getElementById("collEntryBadge").textContent = "MD";
+  document.getElementById("collEntryView").hidden = true;
+  document.getElementById("collEntryEditor").hidden = false;
+  document.getElementById("collEntryEditBtn").hidden = true;
+  document.getElementById("collEntryTitle").value = "";
+  document.getElementById("collEntryDate").value = todayStr();
+  document.getElementById("collEntryKind").value = "md";
+  document.getElementById("collEntryText").value = "";
+  document.getElementById("collEntrySaveState").textContent = "";
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("coll-entry-open");
+  setTimeout(function(){ document.getElementById("collEntryTitle").focus(); }, 50);
+}
+function startCollEntryEdit(){
+  var c = (blogData.collections || [])[collEntryCtx.ci];
+  var e = c && collEntryList(c)[collEntryCtx.ei];
+  if(!e) return;
+  document.getElementById("collEntryView").hidden = true;
+  document.getElementById("collEntryEditor").hidden = false;
+  document.getElementById("collEntryEditBtn").hidden = true;
+  document.getElementById("collEntryTitle").value = e.title || "";
+  document.getElementById("collEntryDate").value = String(e.date || "").slice(0, 10);
+  document.getElementById("collEntryKind").value = String(e.kind || "md").toLowerCase() === "html" ? "html" : "md";
+  document.getElementById("collEntryText").value = e.body || "";
+  document.getElementById("collEntrySaveState").textContent = "";
+}
+function cancelCollEntryEdit(){
+  var c = (blogData.collections || [])[collEntryCtx.ci];
+  var e = c && collEntryList(c)[collEntryCtx.ei];
+  if(!e){ closeCollEntry(); return; }
+  document.getElementById("collEntryEditor").hidden = true;
+  document.getElementById("collEntryView").hidden = false;
+  document.getElementById("collEntryEditBtn").hidden = false;
+}
+async function saveCollEntry(){
+  var ctx = collEntryCtx;
+  var title = document.getElementById("collEntryTitle").value.trim();
+  var date = document.getElementById("collEntryDate").value;
+  var kind = document.getElementById("collEntryKind").value === "html" ? "html" : "md";
+  var body = document.getElementById("collEntryText").value;
+  var state = document.getElementById("collEntrySaveState");
+  var btn = document.getElementById("collEntrySaveBtn");
+  if(!title){ if(state) state.textContent = "请填写标题"; return; }
+  if(typeof pushDataChange !== "function"){ if(state) state.textContent = "保存功能不可用"; return; }
+  if(btn){ btn.disabled = true; btn.textContent = "保存中…"; }
+  if(state) state.textContent = "正在写入 GitHub…";
+  try{
+    await pushDataChange(function(latest){
+      latest.collections = latest.collections || [];
+      var col = latest.collections[ctx.ci];
+      if(!col) throw new Error("合辑不存在，请刷新页面");
+      col.entries = Array.isArray(col.entries) ? col.entries : [];
+      var now = nowStr();
+      if(ctx.ei >= 0 && col.entries[ctx.ei]){
+        var old = col.entries[ctx.ei];
+        col.entries[ctx.ei] = Object.assign({}, old, { title:title, date:date, kind:kind, body:body, updated:now });
+      }else{
+        col.entries.push({ title:title, date:date, kind:kind, body:body, created:now, updated:now });
+        ctx.ei = col.entries.length - 1;
+      }
+      col.time = now;
+    }, "更新合辑条目：" + title);
+    var c = (blogData.collections || [])[currentCollectionIdx];
+    if(c){
+      document.getElementById("colDetailFiles").innerHTML = galleryHTML(c) + collEntryListHTML(c) + collectionFilesHTML(c);
+      if(typeof renderCollections === "function") renderCollections();
+    }
+    closeCollEntry();
+    showToast("已保存到博客，约 1 分钟后前台全部生效");
+  }catch(err){
+    if(state) state.textContent = "保存失败：" + err.message;
+    showToast("保存失败：" + err.message, "error");
+  }finally{
+    if(btn){ btn.disabled = false; btn.textContent = "保存到博客"; }
+  }
+}
 function hydrateCollectionDocs(root){
   if(!root) return;
   root.querySelectorAll('[data-coll-doc-url]').forEach(function(box){
@@ -1006,10 +1177,11 @@ function openCollection(idx){
   var intro = document.getElementById('colDetailIntro');
   intro.innerHTML = mdRenderHTML(c.intro || c.desc || '') || '<div class="empty">暂无系列介绍</div>';
   intro.className = 'md-body';
-  document.getElementById('colDetailFiles').innerHTML = galleryHTML(c) + collectionFilesHTML(c);
+  document.getElementById('colDetailFiles').innerHTML = galleryHTML(c) + collEntryListHTML(c) + collectionFilesHTML(c);
   showSideInfo('📦 合辑信息',
       '<div class="kv"><span class="k">系列名称</span><span class="v">' + esc(c.title || '') + '</span></div>'
     + '<div class="kv"><span class="k">资料数量</span><span class="v">' + files.length + ' 个</span></div>'
+    + '<div class="kv"><span class="k">系列条目</span><span class="v">' + collEntryList(c).length + ' 条</span></div>'
     + (c.author ? '<div class="kv"><span class="k">整理人</span><span class="v">' + esc(c.author) + '</span></div>' : '')
     + (c.time ? '<div class="kv"><span class="k">更新时间</span><span class="v">' + esc(c.time) + '</span></div>' : ''));
   setPageTitle('collectionDetail', c.title || '合辑', '');

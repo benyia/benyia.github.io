@@ -153,6 +153,54 @@
 .class-switch button:hover{color:var(--primary-dark)}
 .class-switch button.active{background:var(--card);color:var(--primary-dark);font-weight:650;box-shadow:0 2px 8px rgba(15,23,42,.08)}
 /* ===== 合辑：系列卡片 + 任意文件预览 ===== */
+.coll-entry-list{margin-bottom:14px}
+.coll-entry-list-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.coll-entry-list-head h3{margin:0;font-size:.92rem}
+.coll-entry-new{border:1px solid var(--border);background:var(--card);color:var(--primary-dark);font-family:inherit;font-size:.75rem;padding:6px 11px;border-radius:8px;cursor:pointer;transition:background .16s,border-color .16s}
+.coll-entry-new:hover{background:var(--primary-light);border-color:var(--primary)}
+.coll-entry-rows{display:flex;flex-direction:column;gap:8px}
+.coll-entry-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px 12px;border:1px solid var(--border);border-radius:11px;background:var(--card);font-family:inherit;cursor:pointer;transition:border-color .16s,transform .16s,box-shadow .16s;outline:none}
+.coll-entry-row:hover,.coll-entry-row:focus-visible{border-color:var(--primary);transform:translateY(-1px);box-shadow:0 8px 18px rgba(15,23,42,.08)}
+.coll-entry-date{flex:0 0 92px;font-size:.72rem;color:var(--text3);font-variant-numeric:tabular-nums}
+.coll-entry-row-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.coll-entry-row-main b{font-size:.86rem;line-height:1.4;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.coll-entry-row-main span{font-size:.73rem;line-height:1.5;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.coll-entry-kind{flex:0 0 auto;font-family:ui-monospace,Consolas,monospace;font-size:.62rem;letter-spacing:.08em;padding:3px 7px;border-radius:6px;background:var(--soft);border:1px solid var(--border);color:var(--text3)}
+.coll-entry-arrow{color:var(--primary);font-size:1.1rem;line-height:1}
+body.coll-entry-open{overflow:hidden}
+.coll-entry-modal{position:fixed;inset:0;z-index:3600;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(8,15,28,.66);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.coll-entry-modal.show{display:flex}
+.coll-entry-shell{width:min(860px,96vw);max-height:92vh;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--glass-border);border-radius:16px;overflow:hidden;box-shadow:0 28px 80px rgba(2,6,23,.42)}
+.coll-entry-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border);flex:0 0 auto}
+.coll-entry-head-main{display:flex;align-items:center;gap:10px;min-width:0}
+.coll-entry-badge{flex:0 0 auto;font-family:ui-monospace,Consolas,monospace;font-size:.64rem;letter-spacing:.06em;padding:5px 8px;border-radius:7px;background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.coll-entry-head-main b{display:block;font-size:.9rem;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.coll-entry-head-main span{display:block;font-size:.7rem;color:var(--text3);margin-top:1px}
+.coll-entry-head-actions{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.coll-entry-btn,.coll-entry-close{border:1px solid var(--border);background:var(--soft);color:var(--text2);font-family:inherit;font-size:.74rem;padding:6px 10px;border-radius:8px;cursor:pointer}
+.coll-entry-btn:hover,.coll-entry-close:hover{background:var(--primary-light);border-color:var(--primary);color:var(--primary-dark)}
+.coll-entry-close{width:32px;height:32px;padding:0;font-size:.86rem}
+.coll-entry-view{flex:1;overflow:auto;padding:22px 26px 40px;line-height:1.85}
+.coll-entry-html img,.coll-entry-view img{max-width:100%;height:auto;border-radius:10px}
+.coll-entry-editor{flex:1;min-height:0;display:flex;flex-direction:column;padding:14px 16px 16px;overflow:auto}
+.coll-entry-form{display:grid;grid-template-columns:1fr 150px 110px;gap:8px;margin-bottom:10px}
+.coll-entry-form input,.coll-entry-form select{border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-family:inherit;font-size:.82rem;background:var(--card);color:var(--text);outline:none}
+.coll-entry-form input:focus,.coll-entry-form select:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+.coll-entry-edit-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.74rem;color:var(--text3);margin-bottom:6px}
+#collEntrySaveState{color:var(--primary-dark)}
+.coll-entry-editor textarea{flex:1;min-height:320px;resize:vertical;border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-family:ui-monospace,Consolas,monospace;font-size:.82rem;line-height:1.7;background:var(--soft);color:var(--text);outline:none}
+.coll-entry-editor textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light);background:var(--card)}
+.coll-entry-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+@media(max-width:700px){
+  .coll-entry-modal{padding:0}
+  .coll-entry-shell{width:100vw;max-height:100dvh;height:100dvh;border-radius:0;border:0}
+  .coll-entry-view{padding:16px 15px 40px}
+  .coll-entry-form{grid-template-columns:1fr 1fr;gap:7px}
+  .coll-entry-form input:first-child{grid-column:1 / -1}
+  .coll-entry-date{flex-basis:78px;font-size:.68rem}
+  .coll-entry-row-main span{display:none}
+  .coll-entry-editor textarea{min-height:260px}
+}
 .collection-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:14px}
 .coll-card{border:1px solid var(--glass-border);border-radius:15px;background:var(--card);overflow:hidden;cursor:pointer;box-shadow:var(--shadow);transition:transform .18s,border-color .18s,box-shadow .18s;display:flex;flex-direction:column;min-width:0}
 .coll-card:hover{transform:translateY(-2px);border-color:var(--primary);box-shadow:0 12px 30px rgba(15,23,42,.10)}
@@ -433,25 +481,26 @@ html[data-theme="dark"] .sk{background:linear-gradient(90deg,#1b2739 25%,#243247
 .links-toggle:hover{background:var(--soft)}
 
 /* ===== 课程目录：资料库概览 + 单列课程卡片 ===== */
-#coursesList,#papersList,#noticesList,#classList{display:flex;flex-direction:column;gap:13px}
-.lib-item{display:flex;gap:16px;padding:15px 16px;border:1px solid var(--glass-border);border-radius:15px;background:var(--card);box-shadow:var(--shadow),var(--glass-hi);cursor:pointer;outline:none;transition:transform .2s,border-color .2s,box-shadow .2s}
-.lib-item:hover,.lib-item:focus-visible{transform:translateY(-2px);border-color:rgba(16,185,129,.55);box-shadow:0 14px 32px rgba(15,23,42,.10)}
-.lib-mark{flex:0 0 52px;width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--primary-light),var(--soft));display:flex;align-items:center;justify-content:center;font-size:1.35rem}
+#coursesList,#papersList,#noticesList,#classList{display:flex;flex-direction:column;gap:22px}
+.lib-item{display:flex;gap:14px;padding:12px 14px;border:1px solid var(--glass-border);border-radius:13px;background:var(--card);box-shadow:var(--shadow),var(--glass-hi);cursor:pointer;outline:none;transition:transform .2s,border-color .2s,box-shadow .2s}
+.lib-item:hover,.lib-item:focus-visible{transform:translateY(-2px);border-color:rgba(16,185,129,.55);box-shadow:0 12px 26px rgba(15,23,42,.09)}
+.lib-mark{flex:0 0 42px;width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--primary-light),var(--soft));display:flex;align-items:center;justify-content:center;font-size:1.15rem}
 .lib-body{flex:1;min-width:0}
 .lib-top{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:4px}
 .lib-kind{font-family:ui-monospace,Consolas,monospace;font-size:.63rem;letter-spacing:.13em;color:var(--text3)}
 .lib-pill{font-size:.67rem;padding:2px 8px;border-radius:99px;background:var(--primary-light);color:var(--primary-dark);font-weight:650;white-space:nowrap}
-.lib-item h3{font-size:.98rem;line-height:1.45;color:var(--text);margin:0 0 5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.lib-desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.81rem;line-height:1.65;color:var(--text2);margin:0 0 7px}
+.lib-item h3{font-size:.92rem;line-height:1.4;color:var(--text);margin:0 0 4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lib-desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.78rem;line-height:1.6;color:var(--text2);margin:0 0 6px}
 .lib-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px}
 .lib-tags span{font-size:.66rem;line-height:1;color:var(--text3);background:var(--soft);border:1px solid var(--border);border-radius:99px;padding:4px 8px}
-.lib-meta{display:flex;flex-wrap:wrap;align-items:center;gap:7px 13px;font-size:.7rem;color:var(--text3)}
+.lib-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:.68rem;color:var(--text3)}
 .lib-enter{margin-left:auto;color:var(--text3);white-space:nowrap;transition:color .18s}
 .lib-enter em{font-style:normal;color:var(--primary);margin-left:2px}
 .lib-item:hover .lib-enter{color:var(--primary-dark)}
 @media(max-width:640px){
-  .lib-item{gap:11px;padding:13px}
-  .lib-mark{flex-basis:40px;width:40px;height:40px;border-radius:11px;font-size:1.1rem}
+  #coursesList,#papersList,#noticesList,#classList{gap:18px}
+  .lib-item{gap:10px;padding:11px 12px;border-radius:12px}
+  .lib-mark{flex-basis:34px;width:34px;height:34px;border-radius:10px;font-size:.95rem}
   .lib-desc{-webkit-line-clamp:3}
   .lib-enter{margin-left:0;width:100%;padding-top:2px}
 }
@@ -473,18 +522,18 @@ html[data-theme="dark"] .course-summary-stat{background:rgba(255,255,255,.045)}
 .course-summary-stat b{display:block;font-size:1.02rem;line-height:1.2;color:var(--primary-dark);font-variant-numeric:tabular-nums}
 .course-summary-stat span{display:block;margin-top:2px;font-size:.68rem;color:var(--text3);white-space:nowrap}
 .course-item{
-  display:flex;align-items:stretch;gap:18px;padding:15px;border:1px solid var(--glass-border);border-radius:16px;
+  display:flex;align-items:stretch;gap:15px;padding:12px 13px;border:1px solid var(--glass-border);border-radius:14px;
   background:var(--card);box-shadow:var(--shadow),var(--glass-hi);cursor:pointer;overflow:hidden;
   transition:transform .2s,border-color .2s,box-shadow .2s,background .2s;outline:none;
 }
 .course-item:hover,.course-item:focus-visible{transform:translateY(-2px);border-color:rgba(16,185,129,.55);box-shadow:0 14px 34px rgba(15,23,42,.10);background:linear-gradient(180deg,rgba(16,185,129,.035),transparent 42%),var(--card)}
-.course-art{position:relative;flex:0 0 172px;width:172px;height:126px;border-radius:12px;overflow:hidden;background:var(--soft);isolation:isolate}
+.course-art{position:relative;flex:0 0 146px;width:146px;height:104px;border-radius:11px;overflow:hidden;background:var(--soft);isolation:isolate}
 .course-art.has-image img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .45s cubic-bezier(.22,1,.36,1)}
 .course-item:hover .course-art.has-image img{transform:scale(1.035)}
 .course-art.is-icon{display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 28% 26%,rgba(255,255,255,.9),transparent 40%),linear-gradient(135deg,var(--primary-light),var(--soft) 78%)}
 .course-art.is-icon::before{content:"";position:absolute;inset:auto -24px -34px auto;width:110px;height:110px;border-radius:50%;background:rgba(16,185,129,.14)}
 .course-art.is-icon::after{content:"";position:absolute;left:-18px;top:-24px;width:74px;height:74px;border-radius:50%;border:1px solid rgba(16,185,129,.2)}
-.course-art.is-icon span{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:20px;background:rgba(255,255,255,.68);box-shadow:0 10px 24px rgba(16,185,129,.12);font-size:2.6rem;line-height:1;filter:drop-shadow(0 8px 14px rgba(15,23,42,.10))}
+.course-art.is-icon span{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:16px;background:rgba(255,255,255,.68);box-shadow:0 8px 18px rgba(16,185,129,.12);font-size:2.1rem;line-height:1;filter:drop-shadow(0 6px 12px rgba(15,23,42,.10))}
 html[data-theme="dark"] .course-art.is-icon span{background:rgba(255,255,255,.08)}
 .course-item-body{flex:1;min-width:0;display:flex;flex-direction:column}
 .course-item-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -492,12 +541,12 @@ html[data-theme="dark"] .course-art.is-icon span{background:rgba(255,255,255,.08
 .course-state-pill{padding:3px 9px;border-radius:99px;background:rgba(217,119,6,.12);border:1px solid rgba(217,119,6,.24);color:#b45309;font-size:.68rem;font-weight:650;white-space:nowrap}
 .course-state-pill.done{background:var(--primary-light);border-color:transparent;color:var(--primary-dark)}
 html[data-theme="dark"] .course-state-pill{color:#fbbf24;background:rgba(217,119,6,.18);border-color:rgba(217,119,6,.3)}
-.course-item h3{font-size:1.05rem;line-height:1.42;color:var(--text);margin:5px 0 5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.course-desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.82rem;line-height:1.65;color:var(--text2);margin:0 0 7px}
+.course-item h3{font-size:.97rem;line-height:1.4;color:var(--text);margin:4px 0 4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.course-desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.78rem;line-height:1.6;color:var(--text2);margin:0 0 6px}
 .course-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px}
 .course-tags span{font-size:.67rem;line-height:1;color:var(--text3);background:var(--soft);border:1px solid var(--border);border-radius:99px;padding:4px 8px}
 .course-meta{display:flex;flex-wrap:wrap;gap:7px 13px;margin-top:auto;font-size:.7rem;color:var(--text3);min-width:0}
-.course-progress-row{display:flex;align-items:center;gap:9px;margin-top:9px;padding-top:8px;border-top:1px dashed var(--border)}
+.course-progress-row{display:flex;align-items:center;gap:9px;margin-top:7px;padding-top:7px;border-top:1px dashed var(--border)}
 .course-progress-track{flex:1;height:6px;border-radius:99px;background:var(--soft);border:1px solid var(--border);overflow:hidden;min-width:60px}
 .course-progress-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--primary),#34d399)}
 .course-progress-row b{font-size:.7rem;font-weight:700;color:var(--primary-dark);min-width:34px;text-align:right;font-variant-numeric:tabular-nums}
@@ -509,10 +558,10 @@ html[data-theme="dark"] .course-state-pill{color:#fbbf24;background:rgba(217,119
   .course-summary-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .course-summary-stat{padding:9px 10px}
   .course-summary-stat span{font-size:.66rem}
-  .course-item{flex-direction:column;gap:13px;padding:13px}
-  .course-art{flex:0 0 140px;width:100%;height:140px}
-  .course-art.is-icon{flex-basis:112px;height:112px}
-  .course-art.is-icon span{font-size:3rem}
+  .course-item{flex-direction:column;gap:11px;padding:11px 12px}
+  .course-art{flex:0 0 118px;width:100%;height:118px}
+  .course-art.is-icon{flex-basis:92px;height:92px}
+  .course-art.is-icon span{width:50px;height:50px;border-radius:14px;font-size:1.85rem}
   .course-item h3{white-space:normal}
   .course-enter{margin-left:auto}
 }
@@ -541,12 +590,16 @@ html[data-theme="dark"] .course-badge{background:rgba(217,119,6,.18);color:#fbbf
 @media(max-width:1080px){
   /* 平板：收起右侧栏，主内容占满，左右两栏并排在上面 */
   .main{grid-template-columns:1fr 1fr;gap:18px}
+  body.article-open .main{grid-template-columns:1fr 1fr;max-width:1340px}
   .center-col{grid-column:1 / -1;order:-1}
+  body.article-open .center-col{max-width:none}
   .left-col,.right-col{flex-direction:row;flex-wrap:wrap;gap:16px}
   .left-col>.side-card,.right-col>.side-card{flex:1 1 260px;min-width:0}
 }
 @media(max-width:900px){
   .main{grid-template-columns:1fr}
+  body.article-open .main{grid-template-columns:1fr;max-width:1340px}
+  body.article-open .center-col{max-width:none}
   .left-col,.right-col{order:2;flex-direction:column}
   /* 关键：小屏不再隐藏导航，改用汉堡 + 抽屉 */
   .nav-links{display:none}
@@ -564,5 +617,9 @@ html[data-theme="dark"] .course-badge{background:rgba(217,119,6,.18);color:#fbbf
   .page-title{padding:20px 14px}
   .page-title h1{font-size:1.3rem}
   .main{padding:12px;gap:14px}
+  .hero-banner{height:88px;font-size:2rem}
+  .hero-body{padding:14px 16px}
+  .hero-body h2{font-size:1.18rem;margin-bottom:8px}
+  .section-header{margin-bottom:10px}
 }
 

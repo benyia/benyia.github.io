@@ -458,6 +458,7 @@ document.addEventListener("keydown", function(e){
   if(e.key === "Escape"){
     closeDrawer();
     if(typeof closeEngagementDialog === "function") closeEngagementDialog();
+    if(typeof closeCollEntry === "function") closeCollEntry();
   }
 });
 window.addEventListener("resize", function(){ if(window.innerWidth > 900) closeDrawer(); });

@@ -1,0 +1,2434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>运筹学两套期末冲刺卷｜标准公式排版与答案精解（全面审校版）</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      chtml: {
+        scale: 1.04,
+        mtextInheritFont: true,
+        displayAlign: 'center'
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" async></script>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #667085;
+      --line: #dce3ee;
+      --paper: #ffffff;
+      --soft: #f3f6fb;
+      --blue: #2457d6;
+      --blue-dark: #163d9f;
+      --blue-soft: #eaf0ff;
+      --teal: #087f75;
+      --teal-soft: #e6f5f2;
+      --amber: #a15c00;
+      --amber-soft: #fff4db;
+      --red: #b42318;
+      --shadow: 0 16px 46px rgba(28, 48, 84, 0.10);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 2%, rgba(36, 87, 214, 0.10), transparent 28rem),
+        radial-gradient(circle at 92% 14%, rgba(8, 127, 117, 0.08), transparent 30rem),
+        #edf1f7;
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", -apple-system, sans-serif;
+      line-height: 1.82;
+    }
+
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    a { color: var(--blue); text-underline-offset: 3px; }
+
+    .wrap {
+      width: min(1120px, calc(100% - 34px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 54px 0 34px;
+      color: #fff;
+      background: linear-gradient(135deg, #142955 0%, #234fae 58%, #087f75 120%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero::before { width: 430px; height: 430px; right: -130px; top: -250px; }
+    .hero::after { width: 260px; height: 260px; right: 120px; bottom: -220px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.22);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 860px;
+      font-size: clamp(28px, 4.5vw, 44px);
+      line-height: 1.22;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      max-width: 850px;
+      margin: 16px 0 0;
+      color: rgba(255,255,255,0.86);
+      font-size: 15.5px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .chip {
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      color: #e9efff;
+      background: rgba(255,255,255,0.11);
+      border: 1px solid rgba(255,255,255,0.20);
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .stat {
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.16);
+      backdrop-filter: blur(8px);
+    }
+
+    .stat strong { display: block; font-size: 24px; line-height: 1.2; }
+    .stat span { color: rgba(255,255,255,0.72); font-size: 12px; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(248,250,253,0.95);
+      border-bottom: 1px solid rgba(210,220,235,0.92);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .nav-tabs { display: flex; gap: 8px; }
+
+    .tab,
+    .action {
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 9px 15px;
+      cursor: pointer;
+      color: var(--muted);
+      background: transparent;
+      transition: 0.18s ease;
+      white-space: nowrap;
+      font-weight: 600;
+    }
+
+    .tab:hover, .action:hover { background: #e9eef8; color: var(--ink); }
+    .tab.active { color: #fff; background: var(--blue); box-shadow: 0 6px 18px rgba(36,87,214,0.22); }
+
+    .actions { display: flex; gap: 8px; }
+    .action.primary { color: var(--blue-dark); background: var(--blue-soft); border-color: #cfdafa; }
+    .action.plain { border-color: var(--line); background: #fff; color: var(--ink); }
+
+    main { padding: 30px 0 72px; }
+
+    .intro-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px 26px;
+      box-shadow: 0 8px 28px rgba(28,48,84,0.06);
+      margin-bottom: 24px;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 24px;
+    }
+
+    .intro-card h2 { margin: 0 0 8px; font-size: 20px; color: var(--blue-dark); }
+    .intro-card p { margin: 0 0 6px; color: #475467; font-size: 14.5px; }
+    .intro-card ul { margin: 8px 0 0; padding-left: 20px; color: #475467; font-size: 14px; }
+    .intro-card li { margin: 4px 0; }
+
+    .formula-strip {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .mini-note {
+      padding: 11px 13px;
+      border-radius: 12px;
+      background: var(--soft);
+      border: 1px solid #e7ecf4;
+      font-size: 13px;
+      color: #475467;
+    }
+
+    .mini-note b { display: block; color: var(--ink); margin-bottom: 3px; font-size: 13.5px; }
+
+    .paper {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .paper[hidden] { display: none; }
+
+    .paper-head {
+      padding: 28px 34px;
+      color: #fff;
+      background: linear-gradient(120deg, #173a82, #2457d6);
+      display: flex;
+      justify-content: space-between;
+      gap: 22px;
+      align-items: flex-end;
+    }
+
+    #setB .paper-head { background: linear-gradient(120deg, #075e58, #098b80); }
+
+    .paper-kicker {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      color: rgba(255,255,255,0.75);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .paper-head h2 { margin: 0; font-size: clamp(24px, 3vw, 32px); line-height: 1.25; }
+    .paper-head p { margin: 8px 0 0; color: rgba(255,255,255,0.82); font-size: 14px; }
+
+    .paper-meta {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .paper-meta span {
+      text-align: center;
+      padding: 7px 11px;
+      border-radius: 9px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.20);
+      font-size: 12.5px;
+      white-space: nowrap;
+    }
+
+    .paper-body { padding: 10px 34px 36px; }
+
+    .paper-guide {
+      margin: 18px 0 22px;
+      padding: 13px 16px;
+      background: var(--teal-soft);
+      border-left: 4px solid var(--teal);
+      border-radius: 8px;
+      color: #1f504b;
+      font-size: 14px;
+    }
+
+    .question {
+      padding: 26px 0 28px;
+      border-top: 1px solid #e9edf4;
+      scroll-margin-top: 82px;
+    }
+
+    .question:first-of-type { border-top: 0; }
+
+    .q-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .q-title {
+      margin: 0;
+      font-size: 19.5px;
+      line-height: 1.45;
+      color: #14223d;
+    }
+
+    .q-no {
+      display: inline-block;
+      color: #fff;
+      background: var(--blue);
+      padding: 2px 9px;
+      border-radius: 7px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-right: 9px;
+      vertical-align: middle;
+    }
+    #setB .q-no { background: var(--teal); }
+
+    .points {
+      flex: 0 0 auto;
+      color: var(--blue-dark);
+      font-weight: 600;
+      font-size: 13px;
+      border: 1px solid #cdd9f6;
+      border-radius: 999px;
+      padding: 3px 11px;
+      background: #f3f7ff;
+    }
+
+    .prompt { color: #2c384e; font-size: 15.5px; }
+    .prompt p { margin: 8px 0; }
+
+    .eq-block {
+      margin: 12px 0;
+      padding: 12px 18px;
+      overflow-x: auto;
+      border: 1px solid #e2e8f2;
+      border-left: 4px solid var(--blue);
+      border-radius: 11px;
+      background: #f8fafd;
+      font-size: 15px;
+    }
+    #setB .eq-block { border-left-color: var(--teal); }
+
+    mjx-container[jax="CHTML"][display="true"] {
+      margin: 0.35em 0 !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .step-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f2;
+      border-radius: 12px;
+      padding: 15px 18px;
+      margin: 12px 0;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+    }
+
+    .step-title {
+      font-weight: 700;
+      color: #163d9f;
+      font-size: 15.5px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #setB .step-title { color: #075e58; }
+
+    .step-tag {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 999px;
+    }
+    #setB .step-tag { background: #d1fae5; color: #065f46; }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 14px;
+      text-align: center;
+      background: #fff;
+    }
+
+    .data-table th,
+    .data-table td {
+      border: 1px solid #d5deeb;
+      padding: 8px 10px;
+    }
+
+    .data-table th { background: #eef3fb; color: #1e3358; font-weight: 700; }
+    .data-table tr:nth-child(even) td { background: #fbfcfe; }
+    .data-table .rowhead { background: #eef3fb; font-weight: 700; color: #1e3358; }
+    .data-table .opt { color: var(--red); font-weight: 800; background: #fff5f5 !important; }
+    .data-table .sigma-row td { background: #f4f7fc !important; font-weight: 600; border-top: 2px solid #b8c7e0; }
+
+    .simplex {
+      min-width: 680px;
+      font-size: 13.5px;
+    }
+
+    .simplex td, .simplex th { padding: 8px 9px; white-space: nowrap; }
+
+    .table-scroll { overflow-x: auto; margin: 12px 0; }
+
+    details.answer {
+      margin-top: 16px;
+      border: 1px solid #d4e0f7;
+      border-radius: 14px;
+      background: #f8faff;
+      overflow: hidden;
+    }
+
+    details.answer > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 18px;
+      color: var(--blue-dark);
+      background: var(--blue-soft);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      user-select: none;
+    }
+    #setB details.answer > summary {
+      color: #075e58;
+      background: #dff3ef;
+    }
+
+    details.answer > summary::-webkit-details-marker { display: none; }
+
+    details.answer > summary::after {
+      content: "点击展开详解";
+      font-size: 12px;
+      color: #4f67a2;
+      font-weight: 600;
+    }
+
+    details.answer[open] > summary::after { content: "点击收起详解"; }
+
+    .answer-body { padding: 16px 20px 20px; color: #2d384c; font-size: 15px; }
+    .answer-body > :first-child { margin-top: 0; }
+    .answer-body > :last-child { margin-bottom: 0; }
+    .answer-body p { margin: 8px 0; }
+    .answer-body ol, .answer-body ul { margin: 8px 0; padding-left: 22px; }
+    .answer-body li { margin: 5px 0; }
+
+    .result {
+      margin: 14px 0 4px;
+      padding: 13px 16px;
+      border-radius: 11px;
+      color: #134640;
+      background: var(--teal-soft);
+      border: 1px solid #b8e2da;
+      font-weight: 700;
+    }
+
+    .warn {
+      margin: 12px 0;
+      padding: 12px 15px;
+      border-radius: 10px;
+      color: #613c00;
+      background: var(--amber-soft);
+      border: 1px solid #f1dcaf;
+      font-size: 14px;
+    }
+
+    .tree {
+      display: grid;
+      gap: 9px;
+      margin: 14px 0;
+      padding: 16px;
+      border-radius: 12px;
+      background: #f7f9fc;
+      border: 1px solid #e1e8f2;
+    }
+
+    .tree-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .node {
+      min-width: 170px;
+      padding: 10px 14px;
+      text-align: center;
+      border: 1px solid #cfd9e8;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+
+    .node.root { border-color: #9eb1df; background: #eef3ff; }
+    .node.prune { border-color: #e5c58c; background: #fff7e8; }
+    .node.best { border-color: #6bc2b3; background: #e6f7f3; }
+
+    .arrow-down {
+      text-align: center;
+      color: #5b6b86;
+      line-height: 1.2;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .figure {
+      margin: 14px 0;
+      padding: 14px;
+      border-radius: 12px;
+      background: #fbfcff;
+      border: 1px solid #e2e8f2;
+    }
+
+    .figure svg { width: 100%; height: auto; display: block; }
+    .caption { margin-top: 8px; color: var(--muted); font-size: 13px; text-align: center; }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      padding: 0 15px;
+    }
+
+    .backtop {
+      margin: 14px 0 10px;
+      text-align: right;
+    }
+
+    .backtop a { font-size: 13px; text-decoration: none; font-weight: 600; }
+
+    @media (max-width: 860px) {
+      .dashboard { grid-template-columns: repeat(2, 1fr); }
+      .intro-grid { grid-template-columns: 1fr; }
+      .formula-strip { grid-template-columns: 1fr; }
+      .paper-head { display: block; padding: 24px; }
+      .paper-meta { margin-top: 18px; justify-content: start; }
+      .paper-body { padding: 6px 20px 28px; }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 22px, 1120px); }
+      .hero { padding-top: 42px; }
+      .dashboard { gap: 8px; }
+      .stat { padding: 11px; }
+      .stat strong { font-size: 20px; }
+      .topbar-inner { flex-wrap: wrap; justify-content: flex-start; padding: 7px 0 8px; gap: 6px; }
+      .nav-tabs, .actions { width: 100%; flex: 0 0 100%; }
+      .nav-tabs .tab, .actions .action { flex: 1; text-align: center; }
+      .action { padding: 8px 10px; font-size: 13px; }
+      .paper-head, .paper-body { padding-left: 16px; padding-right: 16px; }
+      .q-title { font-size: 17px; }
+      .q-head { align-items: flex-start; }
+      .question { scroll-margin-top: 126px; }
+      .paper-meta { grid-template-columns: repeat(3, 1fr); }
+      .paper-meta span { padding: 6px; white-space: normal; }
+      .answer-body { padding: 14px; }
+    }
+
+    @media print {
+      @page { size: A4; margin: 12mm 10mm 12mm; }
+      body { background: #fff; font-size: 10.5pt; line-height: 1.55; }
+      .hero, .topbar, .intro-card, .footer-note, .backtop { display: none !important; }
+      main { padding: 0; }
+      .wrap { width: 100%; }
+      .paper { display: block !important; border: 0; box-shadow: none; margin: 0; overflow: visible; }
+      .paper + .paper { break-before: page; }
+      .paper-head { color: #111; background: #eef3fb !important; border: 1px solid #ccd5e2; print-color-adjust: exact; }
+      #setB .paper-head { background: #edf6f4 !important; }
+      .paper-head p, .paper-kicker { color: #475467; }
+      .paper-meta span { border: 1px solid #ccd5e2; background: #fff; color: #111; }
+      .paper-body { padding: 0 3mm; }
+      .question { break-inside: avoid-page; padding: 14px 0; }
+      .q-title { font-size: 13pt; }
+      details.answer { border-color: #c9d4e4; background: #fff; }
+      details.answer > summary { background: #edf2fa !important; print-color-adjust: exact; }
+      details.answer > summary::after { display: none; }
+      details.answer .answer-body { display: block !important; }
+      .result, .warn, .mini-note, .data-table th, .step-box, .node {
+        print-color-adjust: exact;
+      }
+      .data-table, .simplex { break-inside: auto; }
+      tr, .eq-block, .result, .warn, .step-box { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero" id="top">
+    <div class="wrap">
+      <div class="eyebrow">期末自测 · 标准数学公式排版 · 全题审校增强版</div>
+      <h1>运筹学两套期末冲刺卷<br>标准公式排版与分步详解</h1>
+      <p>对原卷全部 24 道大题进行了逐题数学验算、公式标准化升级（采用 MathJax 标准 LaTeX 数学排版）与分步解析扩充。补全了完整的单纯形表（含 $c_B, X_B, b, \sigma_j, \theta_i$）、位势表、匈牙利覆盖线调整及修正后的精确坐标图。</p>
+      <div class="chips">
+        <span class="chip">A 卷：基础巩固（12 题）</span>
+        <span class="chip">B 卷：综合提升（12 题）</span>
+        <span class="chip">MathJax 标准数学公式排版</span>
+        <span class="chip">已审校修正原卷细节笔误</span>
+      </div>
+      <div class="dashboard">
+        <div class="stat"><strong>2</strong><span>套完整期末冲刺卷</span></div>
+        <div class="stat"><strong>24</strong><span>道核心计算大题</span></div>
+        <div class="stat"><strong>100%</strong><span>逐题验算与勘误核对</span></div>
+        <div class="stat"><strong>LaTeX</strong><span>标准矩阵/方程组/单纯形表</span></div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="topbar" aria-label="页面工具栏">
+    <div class="wrap topbar-inner">
+      <div class="nav-tabs">
+        <button class="tab active" data-set="setA">A 卷 · 基础巩固（12题）</button>
+        <button class="tab" data-set="setB">B 卷 · 综合提升（12题）</button>
+      </div>
+      <div class="actions">
+        <button class="action plain" id="toggleAll">收起全部答案（进入自测）</button>
+        <button class="action primary" id="printAll">打印 / 导出 PDF（含答案）</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <section class="intro-card" aria-labelledby="usage-title">
+      <div class="intro-grid">
+        <div>
+          <h2 id="usage-title">审校说明与作答指南</h2>
+          <p>本升级版对原试卷全部 24 道题进行了严格的数学复核与排版规范化：</p>
+          <ul>
+            <li><strong>公式标准化：</strong>所有线性规划模型、矩阵、海森矩阵、K-T 条件方程组及分式运算均升级为标准 LaTeX 数学公式。</li>
+            <li><strong>步骤精细化：</strong>所有大 $M$ 法、两阶段法、对偶单纯形法均补全了带 $c_B$、基变量 $X_B$、右端项 $b$、检验数行 $\sigma_j = c_j - z_j$ 与比值 $\theta_i$ 的完整标准单纯形表。</li>
+            <li><strong>原卷细节勘误：</strong>修正了 A 卷第 1 题图解法顶点 $B(0,2)$ 的 SVG 坐标偏移、A 卷第 2 题大 $M$ 表人工列系数笔误、以及 B 卷第 7 题伏格尔法首轮行罚数 $\Delta R_3 = 3$ 与位势递推公式笔误。</li>
+          </ul>
+        </div>
+        <div>
+          <div class="formula-strip">
+            <div class="mini-note"><b>单纯形最优判据</b>求 $\max z$：所有 $\sigma_j = c_j - z_j \le 0$；求 $\min z$：所有 $\sigma_j = c_j - z_j \ge 0$。</div>
+            <div class="mini-note"><b>对偶单纯形比值</b>先选负右端 $b_r < 0$ 出基，再按 $\theta = \min_{a_{rj}<0} \left|\dfrac{\sigma_j}{a_{rj}}\right|$ 选入基列。</div>
+            <div class="mini-note"><b>互补松弛定理</b>原变量与对偶松弛、对偶变量与原松弛逐对乘积为零：$x_j^* e_j^* = 0, \, y_i^* s_i^* = 0$。</div>
+            <div class="mini-note"><b>运输问题位势法</b>基格满足 $u_i + v_j = c_{ij}$；非基格检验数 $\sigma_{ij} = c_{ij} - (u_i + v_j) \ge 0$。</div>
+            <div class="mini-note"><b>K-T 必要与充分条件</b>一阶平稳性 + 原可行 + 乘子非负 $\lambda_i \ge 0$ + 互补松弛 $\lambda_i g_i(x) = 0$。</div>
+            <div class="mini-note"><b>罚函数与障碍函数</b>外点罚函数 $\sigma \to +\infty$ 从域外逼近；内点障碍函数 $\mu \to 0^+$ 从域内逼近。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="paper" id="setA" aria-labelledby="setA-title">
+      <div class="paper-head">
+        <div>
+          <div class="paper-kicker">Paper A · Foundation &amp; Standard Methods</div>
+          <h2 id="setA-title">运筹学期末冲刺卷 A（基础巩固卷）</h2>
+          <p>涵盖线性规划、对偶理论、运输与指派、整数规划、K-T 条件与非线性优化核心题型</p>
+        </div>
+        <div class="paper-meta">
+          <span>满分 100 分</span>
+          <span>120 分钟</span>
+          <span>共 12 道大题</span>
+        </div>
+      </div>
+
+      <div class="paper-body">
+        <div class="paper-guide">答题要求：写出完整的标准形、单纯形迭代表、位势检验过程或 K-T 方程组，注明每一步停止准则与最终结论；分数结果优先保留最简分数。</div>
+        
+        <article class="question" id="A1">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">一</span>线性规划图解法与几何寻优</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>用图解法求解下列线性规划问题，在直角坐标系中标出可行域、等值线移动方向及全部极点（顶点），并求最优解 $x^*$ 与最优目标值 $z^*$：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \max \quad & z = x_1 + 2x_2 \\
+              \text{s.t.} \quad & \begin{cases}
+              x_1 + x_2 \le 4 \\
+              x_1 + 3x_2 \le 6 \\
+              x_1, \, x_2 \ge 0
+              \end{cases}
+              \end{aligned}$$
+            </div>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 绘制约束边界直线并确定可行域顶点</div>
+                <p>将各不等式约束改写为边界直线方程，求其与坐标轴的交点及两直线的交点：</p>
+                <ul>
+                  <li>直线 $L_1: x_1 + x_2 = 4$ 过点 $A(4, 0)$ 与 $(0, 4)$，取左下侧半平面 $x_1 + x_2 \le 4$；</li>
+                  <li>直线 $L_2: x_1 + 3x_2 = 6$ 过点 $(6, 0)$ 与 $B(0, 2)$，取左下侧半平面 $x_1 + 3x_2 \le 6$；</li>
+                  <li>结合非负象限 $x_1 \ge 0, \, x_2 \ge 0$，联立 $L_1$ 与 $L_2$ 求交点 $C$：</li>
+                </ul>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  x_1 + x_2 = 4 \\
+                  x_1 + 3x_2 = 6
+                  \end{cases}
+                  \quad \Longrightarrow \quad
+                  2x_2 = 2 \implies x_2 = 1, \quad x_1 = 4 - 1 = 3 \quad \Longrightarrow \quad C(3, 1)$$
+                </div>
+                <p>故可行域 $D$ 是以 $O(0, 0)$、$A(4, 0)$、$C(3, 1)$、$B(0, 2)$ 为顶点的有界凸四边形区域。</p>
+              </div>
+
+              <div class="figure">
+                <svg viewBox="0 0 620 330" role="img" aria-label="A卷图解法可行域与等值线">
+                  <rect width="620" height="330" rx="12" fill="#fbfcff"/>
+                  <g stroke="#e5eaf2" stroke-width="1" fill="none">
+                    <path d="M70 40V280H555"/>
+                    <path d="M70 220H555 M70 160H555 M70 100H555 M70 40H555"/>
+                    <path d="M130 40V280 M190 40V280 M250 40V280 M310 40V280 M370 40V280 M430 40V280 M490 40V280"/>
+                  </g>
+                  <!-- 可行域多边形 O(0,0)->A(4,0)->C(3,1)->B(0,2) -->
+                  <path d="M70 280 L310 280 L250 220 L70 160 Z" fill="#e4edfc" stroke="#2457d6" stroke-width="2.2"/>
+                  <line x1="70" y1="280" x2="555" y2="280" stroke="#172033" stroke-width="2"/>
+                  <line x1="70" y1="280" x2="70" y2="40" stroke="#172033" stroke-width="2"/>
+                  <!-- 约束直线与目标等值线 -->
+                  <g stroke-width="2" fill="none">
+                    <line x1="70" y1="40" x2="310" y2="280" stroke="#3b66d1"/>
+                    <line x1="70" y1="160" x2="430" y2="280" stroke="#087f75"/>
+                    <!-- 虚线：平行移动的目标函数等值线 z=3 与最优等值线 z=5 -->
+                    <line x1="70" y1="190" x2="250" y2="280" stroke="#b56a00" stroke-dasharray="5,5"/>
+                    <line x1="70" y1="130" x2="370" y2="280" stroke="#b42318" stroke-width="2.4" stroke-dasharray="7,4"/>
+                  </g>
+                  <!-- 顶点圆点（修正了原图 B(0,2) 的纵坐标位置 cy=160） -->
+                  <g fill="#172033" font-family="Microsoft YaHei, sans-serif" font-size="13">
+                    <text x="557" y="285">x₁</text><text x="52" y="40">x₂</text>
+                    <circle cx="70" cy="280" r="4.5"/><text x="38" y="302">O(0,0)</text>
+                    <circle cx="310" cy="280" r="4.5"/><text x="285" y="303">A(4,0)</text>
+                    <circle cx="70" cy="160" r="4.5"/><text x="18" y="164">B(0,2)</text>
+                    <circle cx="250" cy="220" r="5.5" fill="#b42318"/><text x="258" y="213" fill="#b42318" font-weight="bold">C(3,1) 最优点</text>
+                  </g>
+                  <g font-family="Microsoft YaHei, sans-serif" font-size="12">
+                    <text x="316" y="266" fill="#3b66d1">x₁ + x₂ = 4</text>
+                    <text x="435" y="274" fill="#087f75">x₁ + 3x₂ = 6</text>
+                    <text x="275" y="226" fill="#b42318" font-weight="bold">最优等值线 x₁ + 2x₂ = 5</text>
+                  </g>
+                </svg>
+                <div class="caption">图 1：阴影区域为可行域 $OACB$；沿法向量 $\nabla z = (1, 2)^T$ 向右上方平移等值线，最后在顶点 $C(3, 1)$ 处离开可行域。</div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 移动目标函数等值线并对比全部极点目标值</div>
+                <p>目标函数等值线为 $x_1 + 2x_2 = z$，其斜率为 $k = -\dfrac{1}{2}$，介于直线 $L_1$ 的斜率 $k_1 = -1$ 与直线 $L_2$ 的斜率 $k_2 = -\dfrac{1}{3}$ 之间（即 $-1 < -\dfrac{1}{2} < -\dfrac{1}{3}$）。因此沿法向量 $\nabla z = (1, 2)^T$ 向右上方平移时，必在唯一交点 $C(3, 1)$ 处取得最大值：</p>
+                <table class="data-table">
+                  <thead><tr><th>可行域顶点</th><th>坐标 $(x_1, x_2)$</th><th>目标函数值 $z = x_1 + 2x_2$</th><th>状态判定</th></tr></thead>
+                  <tbody>
+                    <tr><td>顶点 $O$</td><td>$(0, 0)$</td><td>$0 + 2\times 0 = 0$</td><td>最小点</td></tr>
+                    <tr><td>顶点 $A$</td><td>$(4, 0)$</td><td>$4 + 2\times 0 = 4$</td><td>非最优极点</td></tr>
+                    <tr><td>顶点 $B$</td><td>$(0, 2)$</td><td>$0 + 2\times 2 = 4$</td><td>非最优极点</td></tr>
+                    <tr><td class="opt">顶点 $C$</td><td class="opt">$(3, 1)$</td><td class="opt">$3 + 2\times 1 = 5$</td><td class="opt">唯一最优解</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="result">结论：唯一最优解为 $x^* = (3, 1)^T$，最优目标值为 $z^* = 5$，且两条不等式约束在最优解处均为紧约束（取等号）。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="A2">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">二</span>大 $M$ 法求解线性规划</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>构造大 $M$ 法标准形与初始单纯形表，并完整迭代求解下列线性规划问题：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \min \quad & z = 2x_1 + 3x_2 \\
+              \text{s.t.} \quad & \begin{cases}
+              x_1 + x_2 = 4 \\
+              x_1 + 2x_2 \ge 5 \\
+              x_1, \, x_2 \ge 0
+              \end{cases}
+              \end{aligned}$$
+            </div>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 引入剩余变量与人工变量，化为大 $M$ 法标准形</div>
+                <p>第 2 条“$\ge$”约束先减去剩余变量 $s_1 \ge 0$；为构造单位矩阵初始可行基，在第 1、2 条约束中分别引入人工变量 $a_1 \ge 0, \, a_2 \ge 0$，并在极小化目标函数中赋予极大的正惩罚系数 $M \gg 1$：</p>
+                <div class="eq-block">
+                  $$\begin{aligned}
+                  \min \quad & z = 2x_1 + 3x_2 + 0s_1 + M a_1 + M a_2 \\
+                  \text{s.t.} \quad & \begin{cases}
+                  x_1 + x_2 + a_1 = 4 \\
+                  x_1 + 2x_2 - s_1 + a_2 = 5 \\
+                  x_1, \, x_2, \, s_1, \, a_1, \, a_2 \ge 0
+                  \end{cases}
+                  \end{aligned}$$
+                </div>
+                <p>初始基变量为 $X_B = (a_1, a_2)^T = (4, 5)^T$，基变量目标系数为 $C_B = (M, M)^T$。</p>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 构造完整大 $M$ 法单纯形表（极小化判优准则：$\sigma_j = c_j - z_j \ge 0$）</div>
+                <p>计算各列检验数 $\sigma_j = c_j - C_B^T P_j$。由于本题为<strong>求 $\min z$</strong>，每次选择<strong>最负的检验数 $\sigma_k < 0$</strong> 对应的变量入基，直到所有 $\sigma_j \ge 0$：</p>
+                <div class="table-scroll">
+                  <table class="data-table simplex">
+                    <thead>
+                      <tr>
+                        <th>迭代</th><th>$c_B$</th><th>基变量 $X_B$</th><th>$b$ (RHS)</th>
+                        <th>$x_1 (2)$</th><th>$x_2 (3)$</th><th>$s_1 (0)$</th><th>$a_1 (M)$</th><th>$a_2 (M)$</th><th>比值 $\theta_i$</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td rowspan="3">第 0 表</td><td>$M$</td><td>$a_1$</td><td>$4$</td><td>$1$</td><td>$1$</td><td>$0$</td><td>$1$</td><td>$0$</td><td>$4 / 1 = 4$</td>
+                      </tr>
+                      <tr>
+                        <td>$M$</td><td>$a_2$</td><td>$5$</td><td>$1$</td><td>$\mathbf{[2]}$</td><td>$-1$</td><td>$0$</td><td>$1$</td><td>$5 / 2 = \mathbf{2.5} \downarrow$</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td>$z = 9M$</td>
+                        <td>$2 - 2M$</td><td class="opt">$3 - 3M \uparrow$</td><td>$M$</td><td>$0$</td><td>$0$</td><td>$x_2$ 入基，$a_2$ 出基</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">第 1 表</td><td>$M$</td><td>$a_1$</td><td>$3/2$</td><td>$\mathbf{[1/2]}$</td><td>$0$</td><td>$1/2$</td><td>$1$</td><td>$-1/2$</td><td>$(3/2)/(1/2) = \mathbf{3} \downarrow$</td>
+                      </tr>
+                      <tr>
+                        <td>$3$</td><td>$x_2$</td><td>$5/2$</td><td>$1/2$</td><td>$1$</td><td>$-1/2$</td><td>$0$</td><td>$1/2$</td><td>$(5/2)/(1/2) = 5$</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td>$z = \frac{15}{2} + \frac{3}{2}M$</td>
+                        <td class="opt">$\frac{1}{2} - \frac{1}{2}M \uparrow$</td><td>$0$</td><td>$\frac{3}{2} - \frac{1}{2}M$</td><td>$0$</td><td>$\frac{3}{2}M - \frac{3}{2}$</td><td>$x_1$ 入基，$a_1$ 出基</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">第 2 表</td><td>$2$</td><td>$x_1$</td><td>$3$</td><td>$1$</td><td>$0$</td><td>$1$</td><td>$2$</td><td>$-1$</td><td>—</td>
+                      </tr>
+                      <tr>
+                        <td>$3$</td><td>$x_2$</td><td>$1$</td><td>$0$</td><td>$1$</td><td>$-1$</td><td>$-1$</td><td>$1$</td><td>—</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td class="opt">$z^* = 9$</td>
+                        <td>$0$</td><td>$0$</td><td>$1 \ge 0$</td><td>$M - 1 > 0$</td><td>$M - 1 > 0$</td><td>全部 $\sigma_j \ge 0$，最优</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 3</span> 最优性检验与原问题可行性确认</div>
+                <p>在第 2 表中，人工变量 $a_1, a_2$ 均已全部退出基（取值为 $a_1 = a_2 = 0$），且所有非基变量的检验数 $\sigma_{s_1} = 1 > 0, \, \sigma_{a_1} = M - 1 > 0, \, \sigma_{a_2} = M - 1 > 0$ 均满足极小化问题最优条件 $\sigma_j \ge 0$。</p>
+                <div class="warn"><strong>考场审题纠错提示：</strong>原卷简表中第 2 表的人工变量列元素写成了 $(1, -1)^T$，实际上由第 1 表的 $a_1$ 行乘以 $2$ 可知，$a_1$ 列元素应为 $(2, -1)^T$（虽不影响非人工变量列，但规范书写需保持初等行变换严格一致）。</div>
+              </div>
+              <div class="result">结论：原问题最优解为 $x^* = (x_1^*, x_2^*)^T = (3, 1)^T$（剩余变量 $s_1^* = 0$），最小目标值为 $z^* = 2\times 3 + 3\times 1 = 9$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="A3">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">三</span>两阶段法求解线性规划</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>用两阶段法（Two-Phase Simplex Method）求解下列线性规划问题：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \max \quad & z = 3x_1 + 2x_2 \\
+              \text{s.t.} \quad & \begin{cases}
+              x_1 + x_2 \ge 4 \\
+              2x_1 + x_2 \le 6 \\
+              x_1, \, x_2 \ge 0
+              \end{cases}
+              \end{aligned}$$
+            </div>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 第一阶段（Phase I）：消去人工变量，寻找初始基本可行解</div>
+                <p>在第 1 式中减去剩余变量 $s_1 \ge 0$ 并引入人工变量 $a_1 \ge 0$；在第 2 式中加上松弛变量 $s_2 \ge 0$。第一阶段仅以极小化人工变量之和为目标（或等价地最大化 $-w = -a_1$）：</p>
+                <div class="eq-block">
+                  $$\begin{aligned}
+                  \min \quad & w = 0x_1 + 0x_2 + 0s_1 + 0s_2 + 1a_1 \\
+                  \text{s.t.} \quad & \begin{cases}
+                  x_1 + x_2 - s_1 + a_1 = 4 \\
+                  2x_1 + x_2 + s_2 = 6 \\
+                  x_1, \, x_2, \, s_1, \, s_2, \, a_1 \ge 0
+                  \end{cases}
+                  \end{aligned}$$
+                </div>
+                <p>对极小化目标 $\min w$，检验数定义为 $\sigma_j^{(w)} = c_j^{(w)} - z_j^{(w)}$（负检验数入基）：</p>
+                <div class="table-scroll">
+                  <table class="data-table simplex">
+                    <thead>
+                      <tr>
+                        <th>阶段/表</th><th>$c_B^{(w)}$</th><th>基变量 $X_B$</th><th>$b$ (RHS)</th>
+                        <th>$x_1 (0)$</th><th>$x_2 (0)$</th><th>$s_1 (0)$</th><th>$s_2 (0)$</th><th>$a_1 (1)$</th><th>比值 $\theta_i$</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td rowspan="3">第一阶段<br>第 0 表</td><td>$1$</td><td>$a_1$</td><td>$4$</td><td>$1$</td><td>$1$</td><td>$-1$</td><td>$0$</td><td>$1$</td><td>$4 / 1 = 4$</td>
+                      </tr>
+                      <tr>
+                        <td>$0$</td><td>$s_2$</td><td>$6$</td><td>$\mathbf{[2]}$</td><td>$1$</td><td>$0$</td><td>$1$</td><td>$0$</td><td>$6 / 2 = \mathbf{3} \downarrow$</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j^{(w)} = c_j^{(w)} - z_j^{(w)}$</td><td>$w = 4$</td>
+                        <td class="opt">$-1 \uparrow$</td><td>$-1$</td><td>$1$</td><td>$0$</td><td>$0$</td><td>$x_1$ 入基，$s_2$ 出基</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">第一阶段<br>第 1 表</td><td>$1$</td><td>$a_1$</td><td>$1$</td><td>$0$</td><td>$\mathbf{[1/2]}$</td><td>$-1$</td><td>$-1/2$</td><td>$1$</td><td>$1/(1/2) = \mathbf{2} \downarrow$</td>
+                      </tr>
+                      <tr>
+                        <td>$0$</td><td>$x_1$</td><td>$3$</td><td>$1$</td><td>$1/2$</td><td>$0$</td><td>$1/2$</td><td>$0$</td><td>$3/(1/2) = 6$</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j^{(w)} = c_j^{(w)} - z_j^{(w)}$</td><td>$w = 1$</td>
+                        <td>$0$</td><td class="opt">$-1/2 \uparrow$</td><td>$1$</td><td>$1/2$</td><td>$0$</td><td>$x_2$ 入基，$a_1$ 出基</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">第一阶段<br>第 2 表</td><td>$0$</td><td>$x_2$</td><td>$2$</td><td>$0$</td><td>$1$</td><td>$-2$</td><td>$-1$</td><td>$2$</td><td>—</td>
+                      </tr>
+                      <tr>
+                        <td>$0$</td><td>$x_1$</td><td>$2$</td><td>$1$</td><td>$0$</td><td>$1$</td><td>$1$</td><td>$-1$</td><td>—</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j^{(w)} = c_j^{(w)} - z_j^{(w)}$</td><td class="opt">$w^* = 0$</td>
+                        <td>$0$</td><td>$0$</td><td>$0$</td><td>$0$</td><td>$1$</td><td>$w^*=0$，进入第二阶段</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 第二阶段（Phase II）：删去人工变量列，恢复原目标 $\max z = 3x_1 + 2x_2$</div>
+                <p>由于第一阶段最优值 $w^* = 0$ 且人工变量 $a_1$ 已离基，删去 $a_1$ 列，将基变量 $x_2, x_1$ 的目标系数恢复为原问题系数 $c_B = (2, 3)^T$。对<strong>最大化问题 $\max z$</strong>，当存在正检验数 $\sigma_j = c_j - z_j > 0$ 时继续迭代，直至全部 $\sigma_j \le 0$：</p>
+                <div class="table-scroll">
+                  <table class="data-table simplex">
+                    <thead>
+                      <tr>
+                        <th>阶段/表</th><th>$c_B$</th><th>基变量 $X_B$</th><th>$b$ (RHS)</th>
+                        <th>$x_1 (3)$</th><th>$x_2 (2)$</th><th>$s_1 (0)$</th><th>$s_2 (0)$</th><th>比值 $\theta_i$</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td rowspan="3">第二阶段<br>第 0 表</td><td>$2$</td><td>$x_2$</td><td>$2$</td><td>$0$</td><td>$1$</td><td>$-2$</td><td>$-1$</td><td>$(a_{13} = -2 < 0\text{ 不参比})$</td>
+                      </tr>
+                      <tr>
+                        <td>$3$</td><td>$x_1$</td><td>$2$</td><td>$1$</td><td>$0$</td><td>$\mathbf{[1]}$</td><td>$1$</td><td>$2 / 1 = \mathbf{2} \downarrow$</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td>$z = 10$</td>
+                        <td>$0$</td><td>$0$</td><td class="opt">$1 \uparrow$</td><td>$-1$</td><td>$s_1$ 入基，$x_1$ 出基</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">第二阶段<br>第 1 表</td><td>$2$</td><td>$x_2$</td><td>$6$</td><td>$2$</td><td>$1$</td><td>$0$</td><td>$1$</td><td>—</td>
+                      </tr>
+                      <tr>
+                        <td>$0$</td><td>$s_1$</td><td>$2$</td><td>$1$</td><td>$0$</td><td>$1$</td><td>$1$</td><td>—</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td class="opt">$z^* = 12$</td>
+                        <td>$-1 \le 0$</td><td>$0$</td><td>$0$</td><td>$-2 \le 0$</td><td>全部 $\sigma_j \le 0$，最优</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="result">结论：最优解为 $x^* = (x_1^*, x_2^*)^T = (0, 6)^T$（此时剩余变量 $s_1^* = 2, \, s_2^* = 0$），最大目标值为 $z^* = 12$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="A4">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">四</span>对偶问题构造、互补松弛定理与影子价格分析</h3>
+            <span class="points">10 分</span>
+          </div>
+          <div class="prompt">
+            <p>沿用第一题的原线性规划问题：</p>
+            <div class="eq-block">
+              $$\max \; z = x_1 + 2x_2 \quad \text{s.t.} \quad \begin{cases} x_1 + x_2 \le 4 \\ x_1 + 3x_2 \le 6 \\ x_1, \, x_2 \ge 0 \end{cases}$$
+            </div>
+            <p>（1）写出其对偶问题（Dual Problem）；（2）已知原问题最优解为 $x^* = (3, 1)^T$，利用<strong>互补松弛定理</strong>求出对偶问题的最优解 $y^*$；（3）解释两种资源的影子价格含义，并求出在最优基保持不变的前提下，第 1 种资源右端项 $b_1$ 的允许变化范围及最优值函数 $z(b_1)$。</p>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 构造对偶线性规划问题</div>
+                <p>设第 1、2 条资源约束对应的对偶变量（影子价格）分别为 $y_1, y_2$。由对称形式对偶规则（$\max \leftrightarrow \min$，“$\le$”约束配 $y_i \ge 0$，$x_j \ge 0$ 配“$\ge$”对偶约束），写出对偶问题：</p>
+                <div class="eq-block">
+                  $$\begin{aligned}
+                  \min \quad & w = 4y_1 + 6y_2 \\
+                  \text{s.t.} \quad & \begin{cases}
+                  y_1 + y_2 \ge 1 \\
+                  y_1 + 3y_2 \ge 2 \\
+                  y_1, \, y_2 \ge 0
+                  \end{cases}
+                  \end{aligned}$$
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 应用互补松弛定理求对偶最优解 $y^*$</div>
+                <p>记原问题松弛变量为 $s_1 = 4 - x_1 - x_2, \, s_2 = 6 - x_1 - 3x_2$；记对偶问题剩余变量为 $e_1 = y_1 + y_2 - 1, \, e_2 = y_1 + 3y_2 - 2$。互补松弛定理要求：</p>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  x_j^* e_j^* = 0 & (j = 1, 2) \\
+                  y_i^* s_i^* = 0 & (i = 1, 2)
+                  \end{cases}$$
+                </div>
+                <p>因为原问题最优解 $x_1^* = 3 > 0$ 且 $x_2^* = 1 > 0$，由 $x_1^* e_1^* = 0$ 与 $x_2^* e_2^* = 0$ 可知，两条对偶约束必须严格取等号（$e_1^* = e_2^* = 0$）：</p>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  y_1^* + y_2^* = 1 \\
+                  y_1^* + 3y_2^* = 2
+                  \end{cases}
+                  \quad \Longrightarrow \quad
+                  \begin{cases}
+                  y_1^* = \dfrac{1}{2} \\[6pt]
+                  y_2^* = \dfrac{1}{2}
+                  \end{cases}$$
+                </div>
+                <p>检验非负性与强对偶定理：$y_1^* = \dfrac{1}{2} \ge 0, \, y_2^* = \dfrac{1}{2} \ge 0$，且 $w^* = 4\times\dfrac{1}{2} + 6\times\dfrac{1}{2} = 5 = z^*$。</p>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 3</span> 影子价格经济解释与右端项 $b_1$ 的灵敏度范围</div>
+                <p>设第 1 种资源右端项为 $b_1 = 4 + \Delta b_1$（固定 $b_2 = 6$）。当最优基 $X_B = (x_1, x_2)^T$ 保持不变时，联立紧约束方程组：</p>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  x_1 + x_2 = b_1 \\
+                  x_1 + 3x_2 = 6
+                  \end{cases}
+                  \quad \Longrightarrow \quad
+                  \begin{cases}
+                  x_1(b_1) = \dfrac{3b_1 - 6}{2} \ge 0 \\[6pt]
+                  x_2(b_1) = \dfrac{6 - b_1}{2} \ge 0
+                  \end{cases}
+                  \quad \Longrightarrow \quad
+                  \mathbf{2 \le b_1 \le 6} \; (\text{即 } -2 \le \Delta b_1 \le 2)$$
+                </div>
+                <p>在该稳定区间 $b_1 \in [2, 6]$ 内，最优目标值关于 $b_1$ 的线性函数为：</p>
+                <div class="eq-block">
+                  $$z^*(b_1) = x_1(b_1) + 2x_2(b_1) = \frac{3b_1 - 6}{2} + (6 - b_1) = \frac{1}{2}b_1 + 3 = 5 + \frac{1}{2}\Delta b_1, \qquad \frac{\partial z^*}{\partial b_1} = y_1^* = \frac{1}{2}$$
+                </div>
+              </div>
+              <div class="result">结论：对偶最优解为 $y^* = \left(\dfrac{1}{2}, \dfrac{1}{2}\right)^T$；两种资源的影子价格均为 $\dfrac{1}{2}$。在允许范围 $b_1 \in [2, 6]$ 内，资源 1 每增加 1 个单位，最大目标值精确增加 $\dfrac{1}{2}$ 个单位。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="A5">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">五</span>对偶单纯形法</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>用对偶单纯形法（Dual Simplex Method）求解下列线性规划问题：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \min \quad & z = 4x_1 + 3x_2 \\
+              \text{s.t.} \quad & \begin{cases}
+              x_1 + x_2 \ge 4 \\
+              2x_1 + x_2 \ge 6 \\
+              x_1, \, x_2 \ge 0
+              \end{cases}
+              \end{aligned}$$
+            </div>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 将“$\ge$”约束两边乘以 $-1$，化为对偶可行但原问题不可行的标准表</div>
+                <p>将两条约束同乘 $-1$ 化为“$\le$”型，并引入松弛变量 $s_1, s_2 \ge 0$：</p>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  -x_1 - x_2 + s_1 = -4 \\
+                  -2x_1 - x_2 + s_2 = -6 \\
+                  x_1, \, x_2, \, s_1, \, s_2 \ge 0
+                  \end{cases}$$
+                </div>
+                <p>取初始基 $X_B = (s_1, s_2)^T = (-4, -6)^T$。对极小化问题 $\min z$，初始检验数 $\sigma = (4, 3, 0, 0) \ge 0$ 已全部非负（<strong>对偶可行</strong>），但右端项 $b < 0$（<strong>原问题不可行</strong>），适用对偶单纯形法。</p>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 按“先定负右端出基行，再按最小比值 $\theta = \min_{a_{rj}<0} \left|\dfrac{\sigma_j}{a_{rj}}\right|$ 定入基列”迭代</div>
+                <div class="table-scroll">
+                  <table class="data-table simplex">
+                    <thead>
+                      <tr>
+                        <th>迭代</th><th>$c_B$</th><th>基变量 $X_B$</th><th>$b$ (RHS)</th>
+                        <th>$x_1 (4)$</th><th>$x_2 (3)$</th><th>$s_1 (0)$</th><th>$s_2 (0)$</th><th>出基/入基判据</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td rowspan="3">第 0 表</td><td>$0$</td><td>$s_1$</td><td>$-4$</td><td>$-1$</td><td>$-1$</td><td>$1$</td><td>$0$</td><td>—</td>
+                      </tr>
+                      <tr>
+                        <td>$0$</td><td>$s_2$</td><td class="opt">$-6 \rightarrow$</td><td>$\mathbf{[-2]}$</td><td>$-1$</td><td>$0$</td><td>$1$</td><td>最负右端 $b_2 = -6$，$s_2$ 出基</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td>$z = 0$</td>
+                        <td>$4$</td><td>$3$</td><td>$0$</td><td>$0$</td>
+                        <td>$\theta = \min\left(\frac{4}{|-2|}=\mathbf{2}, \, \frac{3}{|-1|}=3\right) \implies x_1$ 入基</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">第 1 表</td><td>$0$</td><td>$s_1$</td><td class="opt">$-1 \rightarrow$</td><td>$0$</td><td>$\mathbf{[-1/2]}$</td><td>$1$</td><td>$-1/2$</td><td>负右端 $b_1 = -1$，$s_1$ 出基</td>
+                      </tr>
+                      <tr>
+                        <td>$4$</td><td>$x_1$</td><td>$3$</td><td>$1$</td><td>$1/2$</td><td>$0$</td><td>$-1/2$</td><td>—</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td>$z = 12$</td>
+                        <td>$0$</td><td>$1$</td><td>$0$</td><td>$2$</td>
+                        <td>$\theta = \min\left(\frac{1}{|-1/2|}=\mathbf{2}, \, \frac{2}{|-1/2|}=4\right) \implies x_2$ 入基</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">第 2 表</td><td>$3$</td><td>$x_2$</td><td>$2$</td><td>$0$</td><td>$1$</td><td>$-2$</td><td>$1$</td><td>$b_1 = 2 \ge 0$</td>
+                      </tr>
+                      <tr>
+                        <td>$4$</td><td>$x_1$</td><td>$2$</td><td>$1$</td><td>$0$</td><td>$1$</td><td>$-1$</td><td>$b_2 = 2 \ge 0$</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td class="opt">$z^* = 14$</td>
+                        <td>$0$</td><td>$0$</td><td>$2 \ge 0$</td><td>$1 \ge 0$</td>
+                        <td>$b \ge 0$ 且 $\sigma \ge 0$，达到最优</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="result">结论：当右端项恢复全部非负（$b_1 = 2 \ge 0, \, b_2 = 2 \ge 0$）且检验数保持非负时迭代终止，最优解为 $x^* = (2, 2)^T$，最小目标值为 $z^* = 14$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="A6">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">六</span>纯整数规划：分支定界法与割平面法原理</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>（1）用分支定界法（Branch and Bound）求解下列纯整数规划问题，画出完整的分支定界树：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \max \quad & z = 3x_1 + 2x_2 \\
+              \text{s.t.} \quad & \begin{cases}
+              2x_1 + x_2 \le 5 \\
+              x_1 + 2x_2 \le 3 \\
+              x_1, \, x_2 \in \mathbb{Z}_{\ge 0}
+              \end{cases}
+              \end{aligned}$$
+            </div>
+            <p>（2）简述割平面法（Cutting Plane Method）的基本思想，并严格写出“有效割平面”必须满足的两个数学条件。</p>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (1) 问</span> 分支定界法完整求解过程</div>
+                <p><strong>① 解根节点松弛问题 $\text{LP}_0$：</strong>去掉整数约束，联立两条紧约束 $2x_1 + x_2 = 5$ 与 $x_1 + 2x_2 = 3$，解得松弛最优解为 $x^{(0)} = \left(\dfrac{7}{3}, \dfrac{1}{3}\right)^T$，上界 $\overline{z} = \dfrac{23}{3} \approx 7.67$（由于目标系数与变量均为整数，最优整数目标值必满足 $z^* \le \lfloor 7.67 \rfloor = 7$）。</p>
+                <p><strong>② 第一次分支（对分数变量 $x_1 = \dfrac{7}{3} = 2 + \dfrac{1}{3}$ 分支）：</strong></p>
+                <ul>
+                  <li><strong>子问题 $\text{LP}_1$（附加 $x_1 \le 2$）：</strong>在 $x_1 \le 2, \, 2x_1 + x_2 \le 5, \, x_1 + 2x_2 \le 3$ 下，取 $x_1 = 2$，由 $2 + 2x_2 \le 3$ 得 $x_2 = \dfrac{1}{2}$，故松弛最优解为 $x^{(1)} = \left(2, \dfrac{1}{2}\right)^T$，目标值 $z_1 = 3(2) + 2\left(\dfrac{1}{2}\right) = 7$；</li>
+                  <li><strong>子问题 $\text{LP}_2$（附加 $x_1 \ge 3$）：</strong>与 $2x_1 + x_2 \le 5 \implies x_1 \le 2.5$ 矛盾，<strong>无可行解（不可行剪枝）</strong>。</li>
+                </ul>
+                <p><strong>③ 第二次分支（由 $\text{LP}_1$ 对分数变量 $x_2 = \dfrac{1}{2}$ 分支）：</strong></p>
+                <ul>
+                  <li><strong>子问题 $\text{LP}_{11}$（附加 $x_1 \le 2, \, x_2 \le 0$）：</strong>即 $x_2 = 0$，得整数最优解 $x^{(11)} = (2, 0)^T$，目标值 $z_{11} = 6$，更新当前下界（最好整数解值）$\underline{z} = 6$；</li>
+                  <li><strong>子问题 $\text{LP}_{12}$（附加 $x_1 \le 2, \, x_2 \ge 1$）：</strong>由 $x_1 + 2x_2 \le 3$ 及 $x_2 \ge 1$ 得 $x_1 = 1, \, x_2 = 1$，得整数解 $x^{(12)} = (1, 1)^T$，目标值 $z_{12} = 5 < \underline{z} = 6$（劣于已知整数解，定界剪枝）。</li>
+                </ul>
+              </div>
+
+              <div class="tree">
+                <div class="tree-row"><div class="node root">根节点 $\text{LP}_0$<br>$x^{(0)} = (7/3, 1/3)^T$<br>松弛上界 $z_0 = 23/3 \approx 7.67$</div></div>
+                <div class="arrow-down">↙ $x_1 \le 2$ 　　　　　　 $x_1 \ge 3$ ↘</div>
+                <div class="tree-row">
+                  <div class="node">子问题 $\text{LP}_1$ ($x_1 \le 2$)<br>$x^{(1)} = (2, 1/2)^T$<br>上界 $z_1 = 7$</div>
+                  <div class="node prune">子问题 $\text{LP}_2$ ($x_1 \ge 3$)<br>违反 $2x_1 + x_2 \le 5$<br><strong>不可行剪枝</strong></div>
+                </div>
+                <div class="arrow-down">↙ $x_2 \le 0$ 　　　　 $x_2 \ge 1$ ↘</div>
+                <div class="tree-row">
+                  <div class="node best">子问题 $\text{LP}_{11}$ ($x_2 = 0$)<br><strong>$x^* = (2, 0)^T, \; z^* = 6$</strong><br>最优整数解</div>
+                  <div class="node prune">子问题 $\text{LP}_{12}$ ($x_2 \ge 1$)<br>$x^{(12)} = (1, 1)^T, \; z = 5 < 6$<br><strong>定界剪枝</strong></div>
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (2) 问</span> 割平面法的基本思想与有效割平面条件</div>
+                <p>记整数规划松弛可行域为 $P = \{x \in \mathbb{R}_{\ge 0}^n \mid Ax \le b\}$，整数可行集为 $S = P \cap \mathbb{Z}^n$。若松弛问题 $\text{LP}$ 的最优顶点 $x^* \notin \mathbb{Z}^n$，则利用单纯形表中的分数基变量行构造线性不等式 $\alpha^T x \le \beta$（如 Gomory 分数割），该超平面称为<strong>有效割平面</strong>，当且仅当同时满足：</p>
+                <ol>
+                  <li><strong>保整性（不损失任何整数可行解）：</strong>对任意 $x \in S$，均有 $\alpha^T x \le \beta$（即 $S \subset \{x \mid \alpha^T x \le \beta\}$）；</li>
+                  <li><strong>切割性（严格切去当前非整数最优顶点）：</strong>当前分数最优解不满足该不等式，即 $\alpha^T x^* > \beta$。</li>
+                </ol>
+              </div>
+              <div class="result">结论：（1）纯整数规划最优解为 $x^* = (2, 0)^T$，最大目标值为 $z^* = 6$；（2）割平面法通过不断添加同时满足保整性与切割性的线性不等式缩紧松弛多面体，直至极点恰为整数点。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="A7">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">七</span>产销平衡运输问题：最小元素法与位势法</h3>
+            <span class="points">10 分</span>
+          </div>
+          <div class="prompt">
+            <p>某公司有三个产地 $A_1, A_2, A_3$，供应量分别为 $a_1 = 6, \, a_2 = 5, \, a_3 = 4$；三个销地 $B_1, B_2, B_3$，需求量分别为 $b_1 = 5, \, b_2 = 5, \, b_3 = 5$。单位运价 $c_{ij}$ 如下表所示。要求：（1）用<strong>最小元素法</strong>求初始基本可行解；（2）用<strong>位势法（MODI法）</strong>计算全部行位势 $u_i$、列位势 $v_j$ 及非基格检验数 $\sigma_{ij}$，求最优调运方案与最小总运费。</p>
+            <table class="data-table">
+              <thead><tr><th>产地 \ 销地</th><th>$B_1$</th><th>$B_2$</th><th>$B_3$</th><th>供应量 $a_i$</th></tr></thead>
+              <tbody>
+                <tr><td class="rowhead">$A_1$</td><td>$2$</td><td>$9$</td><td>$1$</td><td>$6$</td></tr>
+                <tr><td class="rowhead">$A_2$</td><td>$3$</td><td>$4$</td><td>$8$</td><td>$5$</td></tr>
+                <tr><td class="rowhead">$A_3$</td><td>$7$</td><td>$5$</td><td>$6$</td><td>$4$</td></tr>
+                <tr><td class="rowhead">需求量 $b_j$</td><td>$5$</td><td>$5$</td><td>$5$</td><td>$15$</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 产销平衡检验与最小元素法构造初始方案</div>
+                <p>总供应量 $\sum_{i=1}^3 a_i = 6 + 5 + 4 = 15$，总需求量 $\sum_{j=1}^3 b_j = 5 + 5 + 5 = 15$，属于产销平衡运输问题，基变量个数应为 $m + n - 1 = 3 + 3 - 1 = 5$ 个。按全表单位运价从小到大依次优先分配：</p>
+                <ol>
+                  <li>最小运价 $c_{13} = 1$：分配 $x_{13} = \min(6, 5) = 5$，划去列 $B_3$，$A_1$ 余量 $6 - 5 = 1$；</li>
+                  <li>未划去格中最小运价 $c_{11} = 2$：分配 $x_{11} = \min(1, 5) = 1$，划去行 $A_1$，$B_1$ 余量 $5 - 1 = 4$；</li>
+                  <li>未划去格中最小运价 $c_{21} = 3$：分配 $x_{21} = \min(5, 4) = 4$，划去列 $B_1$，$A_2$ 余量 $5 - 4 = 1$；</li>
+                  <li>未划去格中最小运价 $c_{22} = 4$：分配 $x_{22} = \min(1, 5) = 1$，划去行 $A_2$，$B_2$ 余量 $5 - 1 = 4$；</li>
+                  <li>最后唯一剩余格 $(A_3, B_2)$：分配 $x_{32} = 4$，产销全部结清。</li>
+                </ol>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 位势法求位势 $u_i, v_j$ 与非基格检验数 $\sigma_{ij} = c_{ij} - (u_i + v_j)$</div>
+                <p>当前共有 5 个基变量格：$(1,1), (1,3), (2,1), (2,2), (3,2)$。对所有基格建立方程 $u_i + v_j = c_{ij}$，令 $u_1 = 0$（或令 $v_1 = 0$，检验数完全不变）：</p>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  u_1 = 0 \\
+                  u_1 + v_1 = c_{11} = 2 \implies v_1 = 2 \\
+                  u_1 + v_3 = c_{13} = 1 \implies v_3 = 1 \\
+                  u_2 + v_1 = c_{21} = 3 \implies u_2 = 3 - 2 = 1 \\
+                  u_2 + v_2 = c_{22} = 4 \implies v_2 = 4 - 1 = 3 \\
+                  u_3 + v_2 = c_{32} = 5 \implies u_3 = 5 - 3 = 2
+                  \end{cases}$$
+                </div>
+                <p>计算其余 4 个非基格（空格）的检验数 $\sigma_{ij} = c_{ij} - u_i - v_j$：</p>
+                <div class="eq-block">
+                  $$\begin{aligned}
+                  \sigma_{12} &= c_{12} - (u_1 + v_2) = 9 - (0 + 3) = +6 > 0, \qquad
+                  \sigma_{23} = c_{23} - (u_2 + v_3) = 8 - (1 + 1) = +6 > 0 \\
+                  \sigma_{31} &= c_{31} - (u_3 + v_1) = 7 - (2 + 2) = +3 > 0, \qquad
+                  \sigma_{33} = c_{33} - (u_3 + v_3) = 6 - (2 + 1) = +3 > 0
+                  \end{aligned}$$
+                </div>
+                <table class="data-table">
+                  <thead><tr><th>产地 \ 销地</th><th>$B_1 \; (v_1=2)$</th><th>$B_2 \; (v_2=3)$</th><th>$B_3 \; (v_3=1)$</th><th>供应量 $a_i$</th><th>行位势 $u_i$</th></tr></thead>
+                  <tbody>
+                    <tr><td class="rowhead">$A_1$</td><td class="opt"><strong>$x_{11}=1$</strong> $(c=2)$</td><td>$(\sigma_{12}=+6)$</td><td class="opt"><strong>$x_{13}=5$</strong> $(c=1)$</td><td>$6$</td><td>$u_1 = 0$</td></tr>
+                    <tr><td class="rowhead">$A_2$</td><td class="opt"><strong>$x_{21}=4$</strong> $(c=3)$</td><td class="opt"><strong>$x_{22}=1$</strong> $(c=4)$</td><td>$(\sigma_{23}=+6)$</td><td>$5$</td><td>$u_2 = 1$</td></tr>
+                    <tr><td class="rowhead">$A_3$</td><td>$(\sigma_{31}=+3)$</td><td class="opt"><strong>$x_{32}=4$</strong> $(c=5)$</td><td>$(\sigma_{33}=+3)$</td><td>$4$</td><td>$u_3 = 2$</td></tr>
+                    <tr><td class="rowhead">需求量 $b_j$</td><td>$5$</td><td>$5$</td><td>$5$</td><td>$15$</td><td>—</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="result">结论：所有非基格检验数均严格大于 $0$（$\sigma_{ij} > 0$），故初始调运方案即为唯一最优方案：$x_{11}^*=1, \, x_{13}^*=5, \, x_{21}^*=4, \, x_{22}^*=1, \, x_{32}^*=4$（其余 $x_{ij}^*=0$），最小总运费为 $Z^* = 1\times 2 + 5\times 1 + 4\times 3 + 1\times 4 + 4\times 5 = 43$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="A8">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">八</span>最大化指派问题与匈牙利算法</h3>
+            <span class="points">10 分</span>
+          </div>
+          <div class="prompt">
+            <p>4 名人员 $P_1, P_2, P_3, P_4$ 完成 4 项任务 $T_1, T_2, T_3, T_4$ 的效益（利润）矩阵 $P = (p_{ij})_{4\times 4}$ 如下表所示。每人只承担一项任务，每项任务只由一人完成。试用<strong>匈牙利法（Hungarian Algorithm）</strong>求最大总利润及全部最优指派方案。</p>
+            <table class="data-table">
+              <thead><tr><th>人员 \ 任务</th><th>$T_1$</th><th>$T_2$</th><th>$T_3$</th><th>$T_4$</th></tr></thead>
+              <tbody>
+                <tr><td class="rowhead">$P_1$</td><td>$9$</td><td>$10$</td><td>$7$</td><td>$17$</td></tr>
+                <tr><td class="rowhead">$P_2$</td><td>$12$</td><td>$13$</td><td>$8$</td><td>$7$</td></tr>
+                <tr><td class="rowhead">$P_3$</td><td>$7$</td><td>$6$</td><td>$12$</td><td>$14$</td></tr>
+                <tr><td class="rowhead">$P_4$</td><td>$10$</td><td>$18$</td><td>$18$</td><td>$6$</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 将最大化效益矩阵转化为最小化机会损失矩阵 $C$</div>
+                <p>取全表最大元素 $M = \max_{i,j} p_{ij} = 18$（或取 $20$，差一常数不影响每行每列归约结果），构造非负最小化费用矩阵 $C = (c_{ij}) = (18 - p_{ij})$：</p>
+                <div class="eq-block">
+                  $$P = \begin{pmatrix}
+                  9 & 10 & 7 & 17 \\
+                  12 & 13 & 8 & 7 \\
+                  7 & 6 & 12 & 14 \\
+                  10 & 18 & 18 & 6
+                  \end{pmatrix}
+                  \quad \xrightarrow{c_{ij} = 18 - p_{ij}} \quad
+                  C = \begin{pmatrix}
+                  9 & 8 & 11 & 1 \\
+                  6 & 5 & 10 & 11 \\
+                  11 & 12 & 6 & 4 \\
+                  8 & 0 & 0 & 12
+                  \end{pmatrix}$$
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 行归约与列归约</div>
+                <p>第 1~4 行的行最小值分别为 $1, \, 5, \, 4, \, 0$，各行减去本行最小值；随后第 1~4 列的列最小值为 $1, \, 0, \, 0, \, 0$，第 1 列再减去 $1$ 得归约矩阵 $R$：</p>
+                <div class="eq-block">
+                  $$\xrightarrow{\text{各行减行最小 }(1, 5, 4, 0)}
+                  \begin{pmatrix}
+                  8 & 7 & 10 & 0 \\
+                  1 & 0 & 5 & 6 \\
+                  7 & 8 & 2 & 0 \\
+                  8 & 0 & 0 & 12
+                  \end{pmatrix}
+                  \xrightarrow{\text{第1列减 }1}
+                  R = \begin{pmatrix}
+                  7 & 7 & 10 & 0 \\
+                  0 & 0 & 5 & 6 \\
+                  6 & 8 & 2 & 0 \\
+                  7 & 0 & 0 & 12
+                  \end{pmatrix}$$
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 3</span> 独立零元素试指派与最少覆盖线调整</div>
+                <p>在矩阵 $R$ 中，第 1 行与第 3 行均仅在第 4 列有 $0$（冲突），最多只能选出 $3$ 个独立零元素。用最少水平/垂直直线覆盖所有 $0$：画<strong>第 2 行、第 4 行、第 4 列</strong>共 $l = 3 < 4$ 条覆盖线。未被覆盖区域（第 1、3 行的前 3 列 $\{7, 7, 10; \, 6, 8, 2\}$）中的最小元素为 $\theta = 2$。</p>
+                <p>对未被覆盖的行（第 1、3 行）各减去 $\theta = 2$，对覆盖线交叉点（$(2,4)$ 与 $(4,4)$）各加上 $\theta = 2$，得新矩阵 $R'$：</p>
+                <div class="eq-block">
+                  $$R' = \begin{pmatrix}
+                  5 & 5 & 8 & \mathbf{[0]} \\
+                  \mathbf{[0]} & 0 & 5 & 8 \\
+                  4 & 6 & \mathbf{[0]} & 0 \\
+                  7 & \mathbf{[0]} & 0 & 14
+                  \end{pmatrix}$$
+                </div>
+                <p>此时可顺利选出 4 个不同行不同列的独立零元素：$(1,4), \, (2,1), \, (3,3), \, (4,2)$。</p>
+              </div>
+              <div class="result">结论：唯一最优指派方案为 $P_1 \to T_4 \; (17)$，$P_2 \to T_1 \; (12)$，$P_3 \to T_3 \; (12)$，$P_4 \to T_2 \; (18)$；最大总利润为 $Z^* = 17 + 12 + 12 + 18 = 59$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="A9">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">九</span>非线性规划：凸性判定与库恩-塔克（K-T）条件</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>（1）利用海森（Hessian）矩阵判定二元函数 $f(x_1, x_2) = x_1^2 + 4x_1 x_2 + 5x_2^2$ 在 $\mathbb{R}^2$ 上的凸性。</p>
+            <p>（2）写出下列非线性规划问题的完整库恩-塔克（KKT / K-T）条件，并求出其全局最优解 $x^*$、最优乘子 $\lambda^*$ 及最优目标值 $F^*$：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \min \quad & F(x_1, x_2) = (x_1 - 2)^2 + (x_2 - 1)^2 \\
+              \text{s.t.} \quad & \begin{cases}
+              x_1 + x_2 \le 2 \\
+              x_1, \, x_2 \ge 0
+              \end{cases}
+              \end{aligned}$$
+            </div>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (1) 问</span> 计算海森矩阵及顺序主子式判定严格凸性</div>
+                <div class="eq-block">
+                  $$\nabla f(x) = \begin{pmatrix} 2x_1 + 4x_2 \\ 4x_1 + 10x_2 \end{pmatrix}, \qquad H(x) = \nabla^2 f(x) = \begin{pmatrix} 2 & 4 \\ 4 & 10 \end{pmatrix}$$
+                </div>
+                <p>计算各阶顺序主子式：$\Delta_1 = 2 > 0$，$\Delta_2 = \det H = 2\times 10 - 4^2 = 4 > 0$。由西尔维斯特准则知 $H(x)$ 在 $\mathbb{R}^2$ 上恒对称正定，故 $f(x_1, x_2)$ 是 $\mathbb{R}^2$ 上的<strong>严格凸函数</strong>。</p>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (2) 问</span> 建立标准 K-T 条件并求解全局极小点</div>
+                <p>将全部不等式约束统一写为 $g_i(x) \le 0$ 的标准形式：$g_1(x) = x_1 + x_2 - 2 \le 0, \; g_2(x) = -x_1 \le 0, \; g_3(x) = -x_2 \le 0$，引入非负拉格朗日乘子 $\lambda_1, \lambda_2, \lambda_3 \ge 0$，构造拉格朗日函数 $L(x, \lambda) = (x_1 - 2)^2 + (x_2 - 1)^2 + \lambda_1(x_1 + x_2 - 2) - \lambda_2 x_1 - \lambda_3 x_2$。完整 K-T 条件为：</p>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  \text{① 一阶平稳性条件：} & 2(x_1 - 2) + \lambda_1 - \lambda_2 = 0, \quad 2(x_2 - 1) + \lambda_1 - \lambda_3 = 0 \\[4pt]
+                  \text{② 原问题可行性：} & x_1 + x_2 - 2 \le 0, \quad x_1 \ge 0, \quad x_2 \ge 0 \\[4pt]
+                  \text{③ 对偶乘子非负性：} & \lambda_1 \ge 0, \quad \lambda_2 \ge 0, \quad \lambda_3 \ge 0 \\[4pt]
+                  \text{④ 互补松弛条件：} & \lambda_1(x_1 + x_2 - 2) = 0, \quad \lambda_2 x_1 = 0, \quad \lambda_3 x_2 = 0
+                  \end{cases}$$
+                </div>
+                <p><strong>分情况讨论求解：</strong></p>
+                <ul>
+                  <li>若 $\lambda_1 = 0$（约束 $g_1$ 不起作用），由 $2(x_1 - 2) = \lambda_2 \ge 0, \, 2(x_2 - 1) = \lambda_3 \ge 0$ 及互补松弛得 $x_1 = 2, \, x_2 = 1$，但 $x_1 + x_2 = 3 > 2$ 违反原可行性，舍去；</li>
+                  <li>故必有 $x_1 + x_2 = 2$（边界紧约束）。考察内部正分量情形 $x_1 > 0, \, x_2 > 0$，由互补松弛得 $\lambda_2 = \lambda_3 = 0$，代入平稳性方程组：</li>
+                </ul>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  2(x_1 - 2) + \lambda_1 = 0 \\
+                  2(x_2 - 1) + \lambda_1 = 0 \\
+                  x_1 + x_2 = 2
+                  \end{cases}
+                  \quad \Longrightarrow \quad
+                  x_1 - x_2 = 1, \; x_1 + x_2 = 2 \quad \Longrightarrow \quad
+                  \begin{cases}
+                  x_1^* = \dfrac{3}{2} > 0 \\[6pt]
+                  x_2^* = \dfrac{1}{2} > 0 \\[6pt]
+                  \lambda_1^* = 1 > 0
+                  \end{cases}$$
+                </div>
+                <p>由于目标函数 $F(x)$ 的海森矩阵 $\nabla^2 F = 2I$ 正定（严格凸函数），且所有约束均为线性函数（凸可行域且自动满足约束规范条件），因此 K-T 条件既是必要条件也是充分条件，该 K-T 点即为唯一全局最优解。</p>
+              </div>
+              <div class="result">结论：（1）$f(x_1, x_2)$ 为严格凸函数；（2）唯一 K-T 点即全局最优解为 $x^* = \left(\dfrac{3}{2}, \dfrac{1}{2}\right)^T$，对应最优乘子 $\lambda^* = (1, 0, 0)^T$，最小目标值为 $F^* = \left(\dfrac{3}{2}-2\right)^2 + \left(\dfrac{1}{2}-1\right)^2 = \dfrac{1}{2}$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="A10">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">十</span>无约束优化：最速下降法与一维黄金分割法</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>（1）从初始点 $x^{(0)} = (2, 2)^T$ 出发，对目标函数 $f(x_1, x_2) = x_1^2 + 2x_2^2$ 执行 <strong>1 次最速下降法迭代</strong>（采用精确一维线搜索），求步长 $\alpha_0$、新迭代点 $x^{(1)}$ 及 $f(x^{(1)})$。</p>
+            <p>（2）用一维黄金分割法（取 $\tau = 0.618$）求单峰函数 $\varphi(t) = t^2 - 4t + 5$ 在初始区间 $[0, 5]$ 上的极小点近似值，执行 <strong>2 次区间缩减</strong>，写出每次的试探点、函数值及保留区间。</p>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (1) 问</span> 最速下降法一步精确线搜索</div>
+                <p>计算目标函数的梯度向量与初始点负梯度方向：</p>
+                <div class="eq-block">
+                  $$\nabla f(x) = \begin{pmatrix} 2x_1 \\ 4x_2 \end{pmatrix} \quad \Longrightarrow \quad \nabla f(x^{(0)}) = \begin{pmatrix} 4 \\ 8 \end{pmatrix}, \qquad d^{(0)} = -\nabla f(x^{(0)}) = \begin{pmatrix} -4 \\ -8 \end{pmatrix}$$
+                </div>
+                <p>沿方向 $d^{(0)}$ 作一维精确线搜索，构造关于步长 $\alpha > 0$ 的函数 $\psi(\alpha) = f(x^{(0)} + \alpha d^{(0)})$：</p>
+                <div class="eq-block">
+                  $$\begin{aligned}
+                  \psi(\alpha) &= (2 - 4\alpha)^2 + 2(2 - 8\alpha)^2 = (4 - 16\alpha + 16\alpha^2) + (8 - 64\alpha + 128\alpha^2) = 144\alpha^2 - 80\alpha + 12 \\
+                  \psi'(\alpha) &= 288\alpha - 80 = 0 \quad \Longrightarrow \quad \alpha_0 = \frac{80}{288} = \frac{5}{18}
+                  \end{aligned}$$
+                </div>
+                <p>更新迭代点并计算函数值：</p>
+                <div class="eq-block">
+                  $$x^{(1)} = x^{(0)} + \alpha_0 d^{(0)} = \begin{pmatrix} 2 \\ 2 \end{pmatrix} + \frac{5}{18}\begin{pmatrix} -4 \\ -8 \end{pmatrix} = \begin{pmatrix} \frac{8}{9} \\[4pt] -\frac{2}{9} \end{pmatrix}, \qquad f(x^{(1)}) = \frac{64}{81} + 2\times\frac{4}{81} = \frac{72}{81} = \frac{8}{9}$$
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (2) 问</span> 一维黄金分割法（0.618法）两次区间缩减</div>
+                <p><strong>① 第 1 次缩减（在 $[a_0, b_0] = [0, 5]$ 上，区间长度 $L_0 = 5$）：</strong></p>
+                <div class="eq-block">
+                  $$\begin{aligned}
+                  t_1 &= 0 + 0.382 \times 5 = 1.910, \qquad \varphi(1.910) = (1.910 - 2)^2 + 1 = \mathbf{1.0081} \\
+                  t_2 &= 0 + 0.618 \times 5 = 3.090, \qquad \varphi(3.090) = (3.090 - 2)^2 + 1 = \mathbf{2.1881}
+                  \end{aligned}$$
+                </div>
+                <p>因 $\varphi(t_1) < \varphi(t_2)$，舍去右段 $(3.090, 5]$，保留新区间 $[a_1, b_1] = \mathbf{[0, \; 3.090]}$。</p>
+                <p><strong>② 第 2 次缩减（在 $[0, 3.090]$ 上）：</strong>复用右试探点 $t_4 = t_1 = 1.910, \; \varphi(t_4) = 1.0081$；新算左试探点 $t_3$：</p>
+                <div class="eq-block">
+                  $$t_3 = 0 + 0.382 \times 3.090 \approx 1.180, \qquad \varphi(1.180) = (1.180 - 2)^2 + 1 \approx \mathbf{1.6724}$$
+                </div>
+                <p>因 $\varphi(t_3) > \varphi(t_4)$（即 $1.6724 > 1.0081$），舍去左段 $[0, 1.180)$，保留最终区间 $[a_2, b_2] = \mathbf{[1.180, \; 3.090]}$，取中点得近似极小点 $t^* \approx \dfrac{1.180 + 3.090}{2} = \mathbf{2.135}$（理论精确最小点为 $t = 2, \, \varphi_{\min} = 1$）。</p>
+              </div>
+              <div class="result">结论：（1）最速下降一步后 $x^{(1)} = \left(\dfrac{8}{9}, -\dfrac{2}{9}\right)^T, \; f(x^{(1)}) = \dfrac{8}{9}$；（2）黄金分割法两次缩减后区间为 $[1.180, 3.090]$，中点近似值为 $2.135$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="A11">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">十一</span>牛顿法与 Fletcher-Reeves 共轭梯度法</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>（1）对二元函数 $F(x_1, x_2) = 2x_1^2 + x_1 x_2 + x_2^2 - 2x_1 - x_2$，从初始点 $x^{(0)} = (0, 0)^T$ 出发，按牛顿法迭代公式求极小点 $x^*$ 与极小值 $F^*$。</p>
+            <p>（2）对二次函数 $f(x_1, x_2) = x_1^2 + 2x_2^2 - 4x_1 - 8x_2$，从初始点 $x^{(0)} = (0, 1)^T$ 出发，按 Fletcher-Reeves (FR) 共轭梯度法完整迭代求最优解 $x^*$。</p>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (1) 问</span> 牛顿法一步精确收敛推导</div>
+                <p>计算一阶梯度向量 $\nabla F(x)$ 与二阶海森矩阵 $H(x) = \nabla^2 F(x)$：</p>
+                <div class="eq-block">
+                  $$\nabla F(x) = \begin{pmatrix} 4x_1 + x_2 - 2 \\ x_1 + 2x_2 - 1 \end{pmatrix}, \qquad H = \nabla^2 F(x) = \begin{pmatrix} 4 & 1 \\ 1 & 2 \end{pmatrix}$$
+                </div>
+                <p>因 $\det H = 8 - 1 = 7 > 0$，$H$ 正定，其逆矩阵为 $H^{-1} = \dfrac{1}{7}\begin{pmatrix} 2 & -1 \\ -1 & 4 \end{pmatrix}$。在 $x^{(0)} = (0, 0)^T$ 处，$\nabla F(x^{(0)}) = (-2, -1)^T$，代入牛顿法迭代公式：</p>
+                <div class="eq-block">
+                  $$x^{(1)} = x^{(0)} - H^{-1}\nabla F(x^{(0)}) = \begin{pmatrix} 0 \\ 0 \end{pmatrix} - \frac{1}{7}\begin{pmatrix} 2 & -1 \\ -1 & 4 \end{pmatrix}\begin{pmatrix} -2 \\ -1 \end{pmatrix} = \frac{1}{7}\begin{pmatrix} 3 \\ 2 \end{pmatrix} = \begin{pmatrix} \frac{3}{7} \\[4pt] \frac{2}{7} \end{pmatrix}$$
+                </div>
+                <p>验证 $\nabla F\left(\dfrac{3}{7}, \dfrac{2}{7}\right) = (0, 0)^T$，故一步即达全局唯一极小点，极小值为 $F^* = \dfrac{1}{2} (x^*)^T \nabla F(0,0) = \dfrac{1}{2}\left(-2\times\dfrac{3}{7} - 1\times\dfrac{2}{7}\right) = -\dfrac{4}{7}$。</p>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (2) 问</span> Fletcher-Reeves 共轭梯度法两步迭代</div>
+                <p>记 $g_k = \nabla f(x^{(k)}) = (2x_1 - 4, \; 4x_2 - 8)^T$，海森矩阵 $Q = \begin{pmatrix} 2 & 0 \\ 0 & 4 \end{pmatrix}$。</p>
+                <p><strong>① 第 1 步迭代（$x^{(0)} = (0, 1)^T \to x^{(1)}$）：</strong></p>
+                <div class="eq-block">
+                  $$g_0 = \nabla f(0, 1) = \begin{pmatrix} -4 \\ -4 \end{pmatrix}, \qquad p^{(0)} = -g_0 = \begin{pmatrix} 4 \\ 4 \end{pmatrix}$$
+                </div>
+                <div class="eq-block">
+                  $$\lambda_0 = \frac{-g_0^T p^{(0)}}{(p^{(0)})^T Q p^{(0)}} = \frac{16 + 16}{2(16) + 4(16)} = \frac{32}{96} = \frac{1}{3} \quad \Longrightarrow \quad x^{(1)} = \begin{pmatrix} 0 \\ 1 \end{pmatrix} + \frac{1}{3}\begin{pmatrix} 4 \\ 4 \end{pmatrix} = \begin{pmatrix} \frac{4}{3} \\[4pt] \frac{7}{3} \end{pmatrix}$$
+                </div>
+                <p><strong>② 构造共轭方向 $p^{(1)}$ 并完成第 2 步迭代（$x^{(1)} \to x^{(2)}$）：</strong></p>
+                <div class="eq-block">
+                  $$g_1 = \nabla f\left(\frac{4}{3}, \frac{7}{3}\right) = \begin{pmatrix} -\frac{4}{3} \\[4pt] \frac{4}{3} \end{pmatrix}, \qquad \beta_0 = \frac{\|g_1\|^2}{\|g_0\|^2} = \frac{32/9}{32} = \frac{1}{9}$$
+                </div>
+                <div class="eq-block">
+                  $$p^{(1)} = -g_1 + \beta_0 p^{(0)} = \begin{pmatrix} \frac{4}{3} \\[4pt] -\frac{4}{3} \end{pmatrix} + \frac{1}{9}\begin{pmatrix} 4 \\ 4 \end{pmatrix} = \begin{pmatrix} \frac{16}{9} \\[4pt] -\frac{8}{9} \end{pmatrix}$$
+                </div>
+                <div class="eq-block">
+                  $$\lambda_1 = \frac{-g_1^T p^{(1)}}{(p^{(1)})^T Q p^{(1)}} = \frac{32/9}{768/81} = \frac{3}{8} \quad \Longrightarrow \quad x^{(2)} = \begin{pmatrix} \frac{4}{3} \\[4pt] \frac{7}{3} \end{pmatrix} + \frac{3}{8}\begin{pmatrix} \frac{16}{9} \\[4pt] -\frac{8}{9} \end{pmatrix} = \begin{pmatrix} 2 \\ 2 \end{pmatrix}$$
+                </div>
+                <p>验证 $g_2 = \nabla f(2, 2) = (0, 0)^T$，2 步精确终止。</p>
+              </div>
+              <div class="result">结论：（1）牛顿法一步得 $x^* = \left(\dfrac{3}{7}, \dfrac{2}{7}\right)^T, \; F^* = -\dfrac{4}{7}$；（2）FR 共轭梯度法两步得 $x^* = (2, 2)^T, \; f^* = -12$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="A12">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">十二</span>约束优化：外点罚函数法与内点障碍函数法</h3>
+            <span class="points">6 分</span>
+          </div>
+          <div class="prompt">
+            <p>考虑一维约束极小化问题：$\min \; f(x) = (x + 1)^2, \quad \text{s.t.} \; x \ge 0$。</p>
+            <p>（1）构造二次<strong>外点罚函数</strong> $P(x, \sigma)$，求罚因子 $\sigma = 3$ 时的无约束极小点 $x(\sigma)$，并分析当 $\sigma \to +\infty$ 时的极限；</p>
+            <p>（2）构造对数<strong>内点障碍函数</strong> $B(x, \mu)$，求障碍因子 $\mu = \dfrac{1}{2}$ 时的严格内点极小点 $x(\mu)$，并分析当 $\mu \to 0^+$ 时的极限。</p>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (1) 问</span> 外点罚函数法（Exterior Penalty Method）</div>
+                <p>将约束写为 $g(x) = -x \le 0$，违反量函数为 $[\max(0, -x)]^2$。构造外点罚函数：</p>
+                <div class="eq-block">
+                  $$P(x, \sigma) = (x + 1)^2 + \sigma \big[\max(0, -x)\big]^2 = \begin{cases}
+                  (x + 1)^2, & x \ge 0 \\
+                  (x + 1)^2 + \sigma x^2, & x < 0
+                  \end{cases}$$
+                </div>
+                <p>由于无约束极小点 $x = -1$ 位于不可行域 $x < 0$ 内，对 $x < 0$ 分支求导并令 $P'_x(x, \sigma) = 0$：</p>
+                <div class="eq-block">
+                  $$P'_x(x, \sigma) = 2(x + 1) + 2\sigma x = 0 \quad \Longrightarrow \quad x(\sigma) = -\frac{1}{1 + \sigma} < 0$$
+                </div>
+                <p>当 $\sigma = 3$ 时，$x(3) = -\dfrac{1}{1 + 3} = \mathbf{-\dfrac{1}{4} = -0.25}$；当罚参数 $\sigma \to +\infty$ 时，$\lim_{\sigma \to +\infty} x(\sigma) = 0^-$，从可行域<strong>外部</strong>逼近精确最优点 $x^* = 0$。</p>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (2) 问</span> 对数内点障碍函数法（Logarithmic Barrier Method）</div>
+                <p>在严格可行域内部 $x > 0$ 上构造对数障碍函数（或倒数障碍函数）：</p>
+                <div class="eq-block">
+                  $$B(x, \mu) = (x + 1)^2 - \mu \ln x \qquad (x > 0, \; \mu > 0)$$
+                </div>
+                <p>在 $(0, +\infty)$ 上求导并令 $B'_x(x, \mu) = 0$：</p>
+                <div class="eq-block">
+                  $$B'_x(x, \mu) = 2(x + 1) - \frac{\mu}{x} = 0 \quad \Longleftrightarrow \quad 2x^2 + 2x - \mu = 0 \quad \Longrightarrow \quad x(\mu) = \frac{-1 + \sqrt{1 + 2\mu}}{2} > 0$$
+                </div>
+                <p>当 $\mu = \dfrac{1}{2}$ 时，$x\left(\dfrac{1}{2}\right) = \mathbf{\dfrac{\sqrt{2} - 1}{2} \approx 0.2071}$；当障碍参数 $\mu \to 0^+$ 时，$\lim_{\mu \to 0^+} x(\mu) = 0^+$，始终保持在可行域<strong>内部</strong>逼近精确最优点 $x^* = 0$。</p>
+              </div>
+              <div class="result">结论：外点法在 $\sigma = 3$ 时近似解为 $x = -\dfrac{1}{4}$；内点法在 $\mu = \dfrac{1}{2}$ 时近似解为 $x = \dfrac{\sqrt{2}-1}{2} \approx 0.2071$。当 $\sigma \to +\infty, \, \mu \to 0^+$ 时，两者分别从可行域外侧与内侧收敛于约束最优解 $x^* = 0, \; f^* = 1$。</div>
+            </div>
+          </details>
+        </article>
+
+        <div class="backtop"><a href="#top">↑ 返回页首</a></div>
+      </div>
+    </section>
+
+    <section class="paper" id="setB" aria-labelledby="setB-title" hidden>
+      <div class="paper-head">
+        <div>
+          <div class="paper-kicker">Paper B · Comprehensive Synthesis</div>
+          <h2 id="setB-title">运筹学期末冲刺卷 B（综合提升卷）</h2>
+          <p>强化目标方向转换（max/min）、剩余变量二次入基、Gomory 割平面推导与伏格尔法调优</p>
+        </div>
+        <div class="paper-meta">
+          <span>满分 100 分</span>
+          <span>120 分钟</span>
+          <span>共 12 道大题</span>
+        </div>
+      </div>
+
+      <div class="paper-body">
+        <div class="paper-guide">答题要求：注意最大化与最小化问题的检验数符号判据差异；对偶问题、影子价格与互补松弛需相互印证。</div>
+        
+        <article class="question" id="B1">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">一</span>线性规划图解法与最优解</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>用图解法求解下列线性规划问题，画出可行域与等值线，求出全部极点坐标、最优解 $x^*$ 及最优目标值 $z^*$：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \max \quad & z = 4x_1 + 3x_2 \\
+              \text{s.t.} \quad & \begin{cases}
+              2x_1 + x_2 \le 10 \\
+              x_1 + x_2 \le 6 \\
+              x_1, \, x_2 \ge 0
+              \end{cases}
+              \end{aligned}$$
+            </div>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 求约束边界交点并确定可行域极点</div>
+                <ul>
+                  <li>边界直线 $L_1: 2x_1 + x_2 = 10$ 与坐标轴交于 $A(5, 0)$ 和 $(0, 10)$；</li>
+                  <li>边界直线 $L_2: x_1 + x_2 = 6$ 与坐标轴交于 $(6, 0)$ 和 $B(0, 6)$；</li>
+                  <li>联立两条直线方程求交点 $C$：</li>
+                </ul>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  2x_1 + x_2 = 10 \\
+                  x_1 + x_2 = 6
+                  \end{cases}
+                  \quad \Longrightarrow \quad
+                  x_1 = 4, \quad x_2 = 6 - 4 = 2 \quad \Longrightarrow \quad C(4, 2)$$
+                </div>
+                <p>在第一象限内，可行域是以 $O(0, 0)$、$A(5, 0)$、$C(4, 2)$、$B(0, 6)$ 为顶点的凸四边形。</p>
+              </div>
+
+              <div class="figure">
+                <svg viewBox="0 0 620 330" role="img" aria-label="B卷图解法可行域与等值线">
+                  <rect width="620" height="330" rx="12" fill="#fbfcff"/>
+                  <g stroke="#e5eaf2" stroke-width="1" fill="none">
+                    <path d="M70 30V280H555"/>
+                    <path d="M70 230H555 M70 180H555 M70 130H555 M70 80H555"/>
+                    <path d="M130 30V280 M190 30V280 M250 30V280 M310 30V280 M370 30V280 M430 30V280 M490 30V280"/>
+                  </g>
+                  <!-- 比例：x1 每单位 60px，x2 每单位 25px：O(70,280), A(5,0)->(370,280), C(4,2)->(310,230), B(0,6)->(70,130) -->
+                  <path d="M70 280 L370 280 L310 230 L70 130 Z" fill="#e6f5f2" stroke="#087f75" stroke-width="2.2"/>
+                  <line x1="70" y1="280" x2="555" y2="280" stroke="#172033" stroke-width="2"/>
+                  <line x1="70" y1="280" x2="70" y2="30" stroke="#172033" stroke-width="2"/>
+                  <g stroke-width="2" fill="none">
+                    <line x1="70" y1="30" x2="370" y2="280" stroke="#2457d6"/>
+                    <line x1="70" y1="130" x2="430" y2="280" stroke="#087f75"/>
+                    <line x1="70" y1="96.7" x2="400" y2="280" stroke="#b42318" stroke-width="2.4" stroke-dasharray="7,4"/>
+                  </g>
+                  <g fill="#172033" font-family="Microsoft YaHei, sans-serif" font-size="13">
+                    <text x="557" y="285">x₁</text><text x="52" y="36">x₂</text>
+                    <circle cx="70" cy="280" r="4.5"/><text x="38" y="302">O(0,0)</text>
+                    <circle cx="370" cy="280" r="4.5"/><text x="348" y="303">A(5,0)</text>
+                    <circle cx="70" cy="130" r="4.5"/><text x="18" y="135">B(0,6)</text>
+                    <circle cx="310" cy="230" r="5.5" fill="#b42318"/><text x="320" y="224" fill="#b42318" font-weight="bold">C(4,2) 最优点</text>
+                  </g>
+                  <g font-family="Microsoft YaHei, sans-serif" font-size="12">
+                    <text x="195" y="125" fill="#2457d6">2x₁ + x₂ = 10</text>
+                    <text x="435" y="274" fill="#087f75">x₁ + x₂ = 6</text>
+                    <text x="330" y="200" fill="#b42318" font-weight="bold">最优等值线 4x₁ + 3x₂ = 22</text>
+                  </g>
+                </svg>
+                <div class="caption">图 2：B 卷可行域 $OACB$ 与目标等值线 $4x_1 + 3x_2 = z$（在顶点 $C(4, 2)$ 处达到最大值 $z^* = 22$）。</div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 比较各顶点目标值</div>
+                <table class="data-table">
+                  <thead><tr><th>可行域顶点</th><th>坐标 $(x_1, x_2)$</th><th>目标函数值 $z = 4x_1 + 3x_2$</th><th>状态判定</th></tr></thead>
+                  <tbody>
+                    <tr><td>顶点 $O$</td><td>$(0, 0)$</td><td>$0$</td><td>最小点</td></tr>
+                    <tr><td>顶点 $B$</td><td>$(0, 6)$</td><td>$4\times 0 + 3\times 6 = 18$</td><td>非最优极点</td></tr>
+                    <tr><td>顶点 $A$</td><td>$(5, 0)$</td><td>$4\times 5 + 3\times 0 = 20$</td><td>次优极点</td></tr>
+                    <tr><td class="opt">顶点 $C$</td><td class="opt">$(4, 2)$</td><td class="opt">$4\times 4 + 3\times 2 = 22$</td><td class="opt">唯一最优解</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="result">结论：唯一最优解为 $x^* = (4, 2)^T$，最优目标值为 $z^* = 22$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="B2">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">二</span>大 $M$ 法求解线性规划</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>用大 $M$ 法求解下列线性规划问题，写出完整单纯形表并说明人工变量的处理规则：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \min \quad & z = 3x_1 + 2x_2 \\
+              \text{s.t.} \quad & \begin{cases}
+              2x_1 + x_2 \ge 4 \\
+              x_1 + x_2 = 3 \\
+              x_1, \, x_2 \ge 0
+              \end{cases}
+              \end{aligned}$$
+            </div>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 引入剩余变量 $s_1$ 与人工变量 $a_1, a_2$ 构造大 $M$ 法标准形</div>
+                <div class="eq-block">
+                  $$\begin{aligned}
+                  \min \quad & z = 3x_1 + 2x_2 + 0s_1 + M a_1 + M a_2 \\
+                  \text{s.t.} \quad & \begin{cases}
+                  2x_1 + x_2 - s_1 + a_1 = 4 \\
+                  x_1 + x_2 + a_2 = 3 \\
+                  x_1, \, x_2, \, s_1, \, a_1, \, a_2 \ge 0
+                  \end{cases}
+                  \end{aligned}$$
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 构造完整大 $M$ 法单纯形表</div>
+                <div class="table-scroll">
+                  <table class="data-table simplex">
+                    <thead>
+                      <tr>
+                        <th>迭代</th><th>$c_B$</th><th>基变量 $X_B$</th><th>$b$ (RHS)</th>
+                        <th>$x_1 (3)$</th><th>$x_2 (2)$</th><th>$s_1 (0)$</th><th>$a_1 (M)$</th><th>$a_2 (M)$</th><th>比值 $\theta_i$</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td rowspan="3">第 0 表</td><td>$M$</td><td>$a_1$</td><td>$4$</td><td>$\mathbf{[2]}$</td><td>$1$</td><td>$-1$</td><td>$1$</td><td>$0$</td><td>$4 / 2 = \mathbf{2} \downarrow$</td>
+                      </tr>
+                      <tr>
+                        <td>$M$</td><td>$a_2$</td><td>$3$</td><td>$1$</td><td>$1$</td><td>$0$</td><td>$0$</td><td>$1$</td><td>$3 / 1 = 3$</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td>$z = 7M$</td>
+                        <td class="opt">$3 - 3M \uparrow$</td><td>$2 - 2M$</td><td>$M$</td><td>$0$</td><td>$0$</td><td>$x_1$ 入基，$a_1$ 出基</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">第 1 表</td><td>$3$</td><td>$x_1$</td><td>$2$</td><td>$1$</td><td>$1/2$</td><td>$-1/2$</td><td>$1/2$</td><td>$0$</td><td>$2/(1/2) = 4$</td>
+                      </tr>
+                      <tr>
+                        <td>$M$</td><td>$a_2$</td><td>$1$</td><td>$0$</td><td>$\mathbf{[1/2]}$</td><td>$1/2$</td><td>$-1/2$</td><td>$1$</td><td>$1/(1/2) = \mathbf{2} \downarrow$</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td>$z = 6 + M$</td>
+                        <td>$0$</td><td class="opt">$\frac{1}{2} - \frac{1}{2}M \uparrow$</td><td>$\frac{3}{2} - \frac{1}{2}M$</td><td>$\frac{3}{2}M - \frac{3}{2}$</td><td>$0$</td><td>$x_2$ 入基，$a_2$ 出基</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">第 2 表</td><td>$3$</td><td>$x_1$</td><td>$1$</td><td>$1$</td><td>$0$</td><td>$-1$</td><td>$1$</td><td>$-1$</td><td>—</td>
+                      </tr>
+                      <tr>
+                        <td>$2$</td><td>$x_2$</td><td>$2$</td><td>$0$</td><td>$1$</td><td>$1$</td><td>$-1$</td><td>$2$</td><td>—</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td class="opt">$z^* = 7$</td>
+                        <td>$0$</td><td>$0$</td><td>$1 \ge 0$</td><td>$M - 1 > 0$</td><td>$M - 1 > 0$</td><td>全部 $\sigma_j \ge 0$，最优</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="result">结论：人工变量 $a_1, a_2$ 全部离基且取值为 $0$，全部检验数 $\sigma_j \ge 0$，原问题最优解为 $x^* = (1, 2)^T$，最小目标值为 $z^* = 7$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="B3">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">三</span>两阶段法求解线性规划</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>用两阶段法求解下列线性规划问题：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \min \quad & z = 2x_1 + 3x_2 \\
+              \text{s.t.} \quad & \begin{cases}
+              x_1 + x_2 \ge 4 \\
+              2x_1 + x_2 \le 6 \\
+              x_1, \, x_2 \ge 0
+              \end{cases}
+              \end{aligned}$$
+            </div>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 第一阶段（Phase I）：极小化人工变量 $w = a_1$</div>
+                <p>引入剩余变量 $s_1 \ge 0$、人工变量 $a_1 \ge 0$ 与松弛变量 $s_2 \ge 0$，约束与 A 卷第三题相同。经两次旋转消去人工变量后，第一阶段终表（第 2 表）为：</p>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  x_1 + s_1 + s_2 = 2 \\
+                  x_2 - 2s_1 - s_2 = 2
+                  \end{cases}
+                  \qquad (w^* = 0, \; a_1 = 0\text{ 已离基})$$
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 第二阶段（Phase II）：恢复原极小化目标 $\min z = 2x_1 + 3x_2$</div>
+                <p>删去人工变量列 $a_1$，基变量为 $X_B = (x_1, x_2)^T = (2, 2)^T$，目标系数为 $c_B = (2, 3)^T$。直接构造第二阶段初始单纯形表并计算检验数 $\sigma_j = c_j - z_j$：</p>
+                <div class="table-scroll">
+                  <table class="data-table simplex">
+                    <thead>
+                      <tr>
+                        <th>阶段/表</th><th>$c_B$</th><th>基变量 $X_B$</th><th>$b$ (RHS)</th>
+                        <th>$x_1 (2)$</th><th>$x_2 (3)$</th><th>$s_1 (0)$</th><th>$s_2 (0)$</th><th>状态判定</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td rowspan="3">第二阶段<br>第 0 表</td><td>$2$</td><td>$x_1$</td><td>$2$</td><td>$1$</td><td>$0$</td><td>$1$</td><td>$1$</td><td>—</td>
+                      </tr>
+                      <tr>
+                        <td>$3$</td><td>$x_2$</td><td>$2$</td><td>$0$</td><td>$1$</td><td>$-2$</td><td>$-1$</td><td>—</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td class="opt">$z^* = 10$</td>
+                        <td>$0$</td><td>$0$</td><td>$4 \ge 0$</td><td>$1 \ge 0$</td><td>全部 $\sigma_j \ge 0$，一步即最优</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p>由于第二阶段是<strong>极小化问题 $\min z$</strong>，非基变量检验数 $\sigma_{s_1} = 0 - (2\times 1 + 3\times(-2)) = +4 > 0$，$\sigma_{s_2} = 0 - (2\times 1 + 3\times(-1)) = +1 > 0$，无需再次换基即已达到最优！</p>
+              </div>
+              <div class="result">结论：最优解为 $x^* = (2, 2)^T$（$s_1^* = s_2^* = 0$），最小目标值为 $z^* = 2\times 2 + 3\times 2 = 10$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="B4">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">四</span>对偶问题、互补松弛定理与影子价格</h3>
+            <span class="points">10 分</span>
+          </div>
+          <div class="prompt">
+            <p>写出下列原问题的对偶问题。已知原问题最优解为 $x^* = (2, 2)^T$，用互补松弛定理求对偶最优解 $y^*$，并说明两个影子价格的经济含义：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \min \quad & z = 4x_1 + 3x_2 \\
+              \text{s.t.} \quad & \begin{cases}
+              x_1 + x_2 \ge 4 \\
+              2x_1 + x_2 \ge 6 \\
+              x_1, \, x_2 \ge 0
+              \end{cases}
+              \end{aligned}$$
+            </div>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 写出对称形式的对偶问题</div>
+                <p>原问题为 $\min z = c^T x \; (\text{s.t. } Ax \ge b, \, x \ge 0)$，其对偶问题为 $\max w = b^T y \; (\text{s.t. } A^T y \le c, \, y \ge 0)$：</p>
+                <div class="eq-block">
+                  $$\begin{aligned}
+                  \max \quad & w = 4y_1 + 6y_2 \\
+                  \text{s.t.} \quad & \begin{cases}
+                  y_1 + 2y_2 \le 4 \\
+                  y_1 + y_2 \le 3 \\
+                  y_1, \, y_2 \ge 0
+                  \end{cases}
+                  \end{aligned}$$
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 应用互补松弛定理求对偶最优解 $y^*$</div>
+                <p>记对偶问题松弛变量为 $t_1 = 4 - (y_1 + 2y_2), \; t_2 = 3 - (y_1 + y_2)$。由互补松弛条件 $x_j^* t_j^* = 0 \; (j = 1, 2)$，因为原问题最优解 $x_1^* = 2 > 0$ 且 $x_2^* = 2 > 0$，故必有 $t_1^* = 0$ 且 $t_2^* = 0$：</p>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  y_1^* + 2y_2^* = 4 \\
+                  y_1^* + y_2^* = 3
+                  \end{cases}
+                  \quad \Longrightarrow \quad
+                  \begin{cases}
+                  y_1^* = 2 > 0 \\
+                  y_2^* = 1 > 0
+                  \end{cases}$$
+                </div>
+                <p>验证强对偶定理：$w^* = 4\times 2 + 6\times 1 = 14 = 4\times 2 + 3\times 2 = z^*$。</p>
+              </div>
+              <div class="result">结论：对偶最优解为 $y^* = (2, 1)^T$。第 1、2 条约束右端项的影子价格分别为 $2$ 和 $1$，表示在最优基不变的局部范围内，第 1 项最低任务指标每提高 1 单位，最小总成本增加 2 单位；第 2 项最低任务指标每提高 1 单位，最小总成本增加 1 单位。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="B5">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">五</span>对偶单纯形法</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>用对偶单纯形法求解下列线性规划问题：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \min \quad & z = 5x_1 + 2x_2 \\
+              \text{s.t.} \quad & \begin{cases}
+              x_1 + x_2 \ge 3 \\
+              x_1 + 2x_2 \ge 4 \\
+              x_1, \, x_2 \ge 0
+              \end{cases}
+              \end{aligned}$$
+            </div>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 转化为“$\le$”型方程组并构造初始对偶可行表</div>
+                <p>两边同乘 $-1$ 并加入松弛变量 $s_1, s_2 \ge 0$：</p>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  -x_1 - x_2 + s_1 = -3 \\
+                  -x_1 - 2x_2 + s_2 = -4 \\
+                  x_1, \, x_2, \, s_1, \, s_2 \ge 0
+                  \end{cases}$$
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 对偶单纯形表完整迭代过程（注意第 2 轮剩余变量 $s_2$ 重新入基！）</div>
+                <div class="table-scroll">
+                  <table class="data-table simplex">
+                    <thead>
+                      <tr>
+                        <th>迭代</th><th>$c_B$</th><th>基变量 $X_B$</th><th>$b$ (RHS)</th>
+                        <th>$x_1 (5)$</th><th>$x_2 (2)$</th><th>$s_1 (0)$</th><th>$s_2 (0)$</th><th>出基/入基判据</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td rowspan="3">第 0 表</td><td>$0$</td><td>$s_1$</td><td>$-3$</td><td>$-1$</td><td>$-1$</td><td>$1$</td><td>$0$</td><td>—</td>
+                      </tr>
+                      <tr>
+                        <td>$0$</td><td>$s_2$</td><td class="opt">$-4 \rightarrow$</td><td>$-1$</td><td>$\mathbf{[-2]}$</td><td>$0$</td><td>$1$</td><td>最负右端 $b_2 = -4$，$s_2$ 出基</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td>$z = 0$</td>
+                        <td>$5$</td><td>$2$</td><td>$0$</td><td>$0$</td>
+                        <td>$\theta = \min\left(\frac{5}{|-1|}=5, \, \frac{2}{|-2|}=\mathbf{1}\right) \implies x_2$ 入基</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">第 1 表</td><td>$0$</td><td>$s_1$</td><td class="opt">$-1 \rightarrow$</td><td>$-1/2$</td><td>$0$</td><td>$1$</td><td>$\mathbf{[-1/2]}$</td><td>负右端 $b_1 = -1$，$s_1$ 出基</td>
+                      </tr>
+                      <tr>
+                        <td>$2$</td><td>$x_2$</td><td>$2$</td><td>$1/2$</td><td>$1$</td><td>$0$</td><td>$-1/2$</td><td>—</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td>$z = 4$</td>
+                        <td>$4$</td><td>$0$</td><td>$0$</td><td>$1$</td>
+                        <td>$\theta = \min\left(\frac{4}{|-1/2|}=8, \, \frac{1}{|-1/2|}=\mathbf{2}\right) \implies s_2$ 入基</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">第 2 表</td><td>$0$</td><td>$s_2$</td><td>$2$</td><td>$1$</td><td>$0$</td><td>$-2$</td><td>$1$</td><td>$b_1 = 2 \ge 0$</td>
+                      </tr>
+                      <tr>
+                        <td>$2$</td><td>$x_2$</td><td>$3$</td><td>$1$</td><td>$1$</td><td>$-1$</td><td>$0$</td><td>$b_2 = 3 \ge 0$</td>
+                      </tr>
+                      <tr class="sigma-row">
+                        <td colspan="3">检验数 $\sigma_j = c_j - z_j$</td><td class="opt">$z^* = 6$</td>
+                        <td>$3 \ge 0$</td><td>$0$</td><td>$2 \ge 0$</td><td>$0$</td>
+                        <td>$b \ge 0$ 且 $\sigma \ge 0$，达到最优</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p>注意：在第 1 表中，必须同时比较非基列 $x_1$ 与 $s_2$ 的比值 $\left|\dfrac{\sigma_j}{a_{1j}}\right|$，由于 $s_2$ 列的比值 $2 < 8$，故由 $s_2$ 重新入基替换 $s_1$，从而得到边界极点 $x_1^* = 0, \, x_2^* = 3, \, s_2^* = 2$。</p>
+              </div>
+              <div class="result">结论：最优解为 $x^* = (0, 3)^T$（此时第 1 约束紧 $s_1^* = 0$，第 2 约束过剩 $s_2^* = 2$），最小目标值为 $z^* = 5\times 0 + 2\times 3 = 6$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="B6">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">六</span>整数规划：分支定界法与 Gomory 割平面方程推导</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>（1）用分支定界法求解纯整数规划问题：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \max \quad & z = 2x_1 + 3x_2 \\
+              \text{s.t.} \quad & \begin{cases}
+              2x_1 + x_2 \le 5 \\
+              x_1 + 2x_2 \le 3 \\
+              x_1, \, x_2 \in \mathbb{Z}_{\ge 0}
+              \end{cases}
+              \end{aligned}$$
+            </div>
+            <p>（2）已知该问题松弛线性规划在最优单纯形表中的第 1 条基变量方程为 $x_1 + \dfrac{2}{3}s_1 - \dfrac{1}{3}s_2 = \dfrac{7}{3}$（或某整数规划松弛表基变量行为 $x_1 + \dfrac{2}{3}x_2 + \dfrac{1}{3}s = \dfrac{7}{3}$，其中 $3x_1 + 2x_2 + s = 7$），试导出对应的 <strong>Gomory 分数割平面不等式</strong>，并将其还原为仅含原决策变量的约束。</p>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (1) 问</span> 分支定界法求解过程</div>
+                <p>根节点 $\text{LP}_0$ 最优解为 $x^{(0)} = \left(\dfrac{7}{3}, \dfrac{1}{3}\right)^T$，目标上界 $z_0 = \dfrac{17}{3} \approx 5.67$（故整数最优值至多为 $5$）。</p>
+                <div class="tree">
+                  <div class="tree-row"><div class="node root">根节点 $\text{LP}_0$<br>$x^{(0)} = (7/3, 1/3)^T$<br>上界 $z_0 = 17/3 \approx 5.67$</div></div>
+                  <div class="arrow-down">↙ $x_1 \le 2$ 　　　　　　 $x_1 \ge 3$ ↘</div>
+                  <div class="tree-row">
+                    <div class="node">子问题 $\text{LP}_1$ ($x_1 \le 2$)<br>$x^{(1)} = (2, 1/2)^T$<br>上界 $z_1 = 5.5$</div>
+                    <div class="node prune">子问题 $\text{LP}_2$ ($x_1 \ge 3$)<br>$2x_1 \ge 6 > 5$<br><strong>不可行剪枝</strong></div>
+                  </div>
+                  <div class="arrow-down">↙ $x_2 \le 0$ 　　　　 $x_2 \ge 1$ ↘</div>
+                  <div class="tree-row">
+                    <div class="node prune">子问题 $\text{LP}_{11}$ ($x_2 = 0$)<br>$x^{(11)} = (2, 0)^T, \; z = 4$<br>次优整数解</div>
+                    <div class="node best">子问题 $\text{LP}_{12}$ ($x_2 \ge 1$)<br><strong>$x^* = (1, 1)^T, \; z^* = 5$</strong><br>最优整数解</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (2) 问</span> Gomory 分数割平面严格推导</div>
+                <p>对基变量行 $x_1 + \dfrac{2}{3}x_2 + \dfrac{1}{3}s = \dfrac{7}{3}$，将每个系数和右端常数分解为<strong>最大不超过它的整数部分 $\lfloor a \rfloor$ 与非负小数部分 $f = a - \lfloor a \rfloor \in [0, 1)$</strong>：</p>
+                <div class="eq-block">
+                  $$x_1 + \left(0 + \frac{2}{3}\right)x_2 + \left(0 + \frac{1}{3}\right)s = 2 + \frac{1}{3} \quad \Longleftrightarrow \quad \frac{2}{3}x_2 + \frac{1}{3}s - \frac{1}{3} = 2 - x_1 \in \mathbb{Z}$$
+                </div>
+                <p>因为 $x_2 \ge 0, \, s \ge 0$，左端 $\dfrac{2}{3}x_2 + \dfrac{1}{3}s - \dfrac{1}{3} > -1$；又因为右端 $2 - x_1$ 为整数，一个大于 $-1$ 的整数必定大于或等于 $0$！由此得到标准 <strong>Gomory 分数割不等式</strong>：</p>
+                <div class="eq-block">
+                  $$\frac{2}{3}x_2 + \frac{1}{3}s \ge \frac{1}{3} \quad \Longleftrightarrow \quad -\frac{2}{3}x_2 - \frac{1}{3}s + s_{\text{cut}} = -\frac{1}{3} \quad (s_{\text{cut}} \ge 0)$$
+                </div>
+                <p>将原约束关系 $s = 7 - 3x_1 - 2x_2$ 代入上式消去松弛变量 $s$：</p>
+                <div class="eq-block">
+                  $$\frac{2}{3}x_2 + \frac{1}{3}(7 - 3x_1 - 2x_2) \ge \frac{1}{3} \quad \Longrightarrow \quad \frac{7}{3} - x_1 \ge \frac{1}{3} \quad \Longrightarrow \quad \mathbf{x_1 \le 2}$$
+                </div>
+                <p>可见该 Gomory 割在几何上恰为垂直切割平面 $x_1 \le 2$，直接切去了非整数极点 $x_1 = \dfrac{7}{3}$。</p>
+              </div>
+              <div class="result">结论：（1）整数规划最优解为 $x^* = (1, 1)^T, \; z^* = 5$；（2）Gomory 分数割为 $\dfrac{2}{3}x_2 + \dfrac{1}{3}s \ge \dfrac{1}{3}$，化为原变量约束即 $x_1 \le 2$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="B7">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">七</span>产销平衡运输问题：伏格尔法（VAM）与位势法（MODI）</h3>
+            <span class="points">10 分</span>
+          </div>
+          <div class="prompt">
+            <p>三个产地 $A_1, A_2, A_3$ 的供应量分别为 $a_1 = 5, \, a_2 = 4, \, a_3 = 3$；三个销地 $B_1, B_2, B_3$ 的需求量均为 $b_1 = b_2 = b_3 = 4$。单位运价 $c_{ij}$ 如下表所示。要求：（1）用<strong>伏格尔近似法（Vogel's Approximation Method, VAM）</strong>求初始调运方案；（2）用<strong>位势法（MODI法）</strong>检验并调整至最优方案，求最小总运费。</p>
+            <table class="data-table">
+              <thead><tr><th>产地 \ 销地</th><th>$B_1$</th><th>$B_2$</th><th>$B_3$</th><th>供应量 $a_i$</th></tr></thead>
+              <tbody>
+                <tr><td class="rowhead">$A_1$</td><td>$4$</td><td>$9$</td><td>$2$</td><td>$5$</td></tr>
+                <tr><td class="rowhead">$A_2$</td><td>$3$</td><td>$5$</td><td>$7$</td><td>$4$</td></tr>
+                <tr><td class="rowhead">$A_3$</td><td>$6$</td><td>$4$</td><td>$1$</td><td>$3$</td></tr>
+                <tr><td class="rowhead">需求量 $b_j$</td><td>$4$</td><td>$4$</td><td>$4$</td><td>$12$</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="warn">
+                <strong>【原卷答案勘误提示】</strong>原卷在伏格尔法第 1 轮中称“初始行罚数均为 $2$”，漏算了行 $A_3$ 的最小运价 $1$ 与次小运价 $4$ 之差为 $\Delta R_3 = 4 - 1 = \mathbf{3}$（全表最大罚数）；且在位势法计算中将 $v_2 = c_{22} - u_2 = 5 - 3 = 2$ 误写成了“$v_2 = 6 - u_1 = 2$”。下面给出严格规范的伏格尔法、位势法及闭回路调整全过程。
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 伏格尔法（VAM）求初始基本可行解</div>
+                <p>每轮计算各未划去行、列的罚数（$\text{次小运价} - \text{最小运价}$），选最大罚数所在行/列的最小运价格优先分配：</p>
+                <ol>
+                  <li><strong>第 1 轮：</strong>行罚数为 $\Delta R_1 = 4 - 2 = 2, \; \Delta R_2 = 5 - 3 = 2, \; \Delta R_3 = 4 - 1 = \mathbf{3}$；列罚数为 $\Delta C_1 = 4 - 3 = 1, \; \Delta C_2 = 5 - 4 = 1, \; \Delta C_3 = 2 - 1 = 1$。最大罚数为行 $A_3$ 的 $\Delta R_3 = 3$，选该行最小运价格 $c_{33} = 1$，分配 $x_{33} = \min(3, 4) = \mathbf{3}$，划去行 $A_3$，列 $B_3$ 剩 $1$。</li>
+                  <li><strong>第 2 轮（剩 $A_1, A_2$ 两行）：</strong>行罚数为 $\Delta R_1 = 4 - 2 = 2, \; \Delta R_2 = 5 - 3 = 2$；列罚数为 $\Delta C_1 = 4 - 3 = 1, \; \Delta C_2 = 9 - 5 = 4, \; \Delta C_3 = 7 - 2 = \mathbf{5}$。最大罚数为列 $B_3$ 的 $\Delta C_3 = 5$，选最小运价格 $c_{13} = 2$，分配 $x_{13} = \min(5, 1) = \mathbf{1}$，划去列 $B_3$，行 $A_1$ 剩 $4$。</li>
+                  <li><strong>第 3 轮（剩 $A_1, A_2 \times B_1, B_2$）：</strong>行罚数为 $\Delta R_1 = 9 - 4 = \mathbf{5}, \; \Delta R_2 = 5 - 3 = 2$；列罚数为 $\Delta C_1 = 4 - 3 = 1, \; \Delta C_2 = 9 - 5 = 4$。最大罚数为行 $A_1$ 的 $\Delta R_1 = 5$，选 $c_{11} = 4$，分配 $x_{11} = \min(4, 4) = \mathbf{4}$，划去行 $A_1$，并在 $(A_2, B_1)$ 格保留退化基变量 $x_{21} = \mathbf{0}$；最后分配 $x_{22} = \mathbf{4}$（初始总运费 $Z_0 = 4\times 4 + 1\times 2 + 0\times 3 + 4\times 5 + 3\times 1 = 41$）。</li>
+                </ol>
+                <p><em>（注：若在第 1 轮直接按列 $B_3$ 最小元优先满足 $A_1 \to B_3$ 分配 $x_{13}=4, \, x_{11}=1, \, x_{32}=3, \, x_{21}=3, \, x_{22}=1$，则直接得到下一步闭回路调整后的最优方案。）</em></p>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 位势法检验与闭回路调整</div>
+                <p>对严格 VAM 初始方案的基格 $(1,1), (1,3), (2,1), (2,2), (3,3)$，令 $u_1 = 0$，由 $u_i + v_j = c_{ij}$ 解得 $u_1=0, \, u_2=-1, \, u_3=-1, \, v_1=4, \, v_2=6, \, v_3=2$。计算非基格检验数 $\sigma_{ij} = c_{ij} - (u_i + v_j)$：</p>
+                <div class="eq-block">
+                  $$\sigma_{12} = 9 - 6 = +3, \quad \sigma_{23} = 7 - 1 = +6, \quad \sigma_{31} = 6 - 3 = +3, \quad \sigma_{32} = 4 - (-1 + 6) = \mathbf{-1 < 0}$$
+                </div>
+                <p>因 $\sigma_{32} = -1 < 0$，令 $(A_3, B_2)$ 入基，沿闭回路 $(3,2)^+ \to (2,2)^- \to (2,1)^+ \to (1,1)^- \to (1,3)^+ \to (3,3)^- \to (3,2)$ 调整运量 $\theta = \min(x_{22}=4, \, x_{11}=4, \, x_{33}=3) = \mathbf{3}$，使 $(3,3)$ 出基，得到新方案：$x_{11}=1, \, x_{13}=4, \, x_{21}=3, \, x_{22}=1, \, x_{32}=3$。</p>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 3</span> 对调整后方案再次进行位势法最优性检验</div>
+                <p>对当前 5 个基格 $(1,1), (1,3), (2,1), (2,2), (3,2)$，取 $v_1 = 0$，由 $u_i + v_j = c_{ij}$ 依次解出全部位势：</p>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  v_1 = 0 \\
+                  u_1 = c_{11} - v_1 = 4 - 0 = 4, \quad u_2 = c_{21} - v_1 = 3 - 0 = 3 \\
+                  v_3 = c_{13} - u_1 = 2 - 4 = -2 \\
+                  v_2 = c_{22} - u_2 = 5 - 3 = 2 \\
+                  u_3 = c_{32} - v_2 = 4 - 2 = 2
+                  \end{cases}$$
+                </div>
+                <p>计算全部 4 个非基格检验数 $\sigma_{ij} = c_{ij} - u_i - v_j$：</p>
+                <div class="eq-block">
+                  $$\begin{aligned}
+                  \sigma_{12} &= c_{12} - (u_1 + v_2) = 9 - (4 + 2) = +3 > 0, \qquad
+                  \sigma_{23} = c_{23} - (u_2 + v_3) = 7 - (3 - 2) = +6 > 0 \\
+                  \sigma_{31} &= c_{31} - (u_3 + v_1) = 6 - (2 + 0) = +4 > 0, \qquad
+                  \sigma_{33} = c_{33} - (u_3 + v_3) = 1 - (2 - 2) = +1 > 0
+                  \end{aligned}$$
+                </div>
+                <table class="data-table">
+                  <thead><tr><th>产地 \ 销地</th><th>$B_1 \; (v_1=0)$</th><th>$B_2 \; (v_2=2)$</th><th>$B_3 \; (v_3=-2)$</th><th>供应量 $a_i$</th><th>行位势 $u_i$</th></tr></thead>
+                  <tbody>
+                    <tr><td class="rowhead">$A_1$</td><td class="opt"><strong>$x_{11}=1$</strong> $(c=4)$</td><td>$(\sigma_{12}=+3)$</td><td class="opt"><strong>$x_{13}=4$</strong> $(c=2)$</td><td>$5$</td><td>$u_1 = 4$</td></tr>
+                    <tr><td class="rowhead">$A_2$</td><td class="opt"><strong>$x_{21}=3$</strong> $(c=3)$</td><td class="opt"><strong>$x_{22}=1$</strong> $(c=5)$</td><td>$(\sigma_{23}=+6)$</td><td>$4$</td><td>$u_2 = 3$</td></tr>
+                    <tr><td class="rowhead">$A_3$</td><td>$(\sigma_{31}=+4)$</td><td class="opt"><strong>$x_{32}=3$</strong> $(c=4)$</td><td>$(\sigma_{33}=+1)$</td><td>$3$</td><td>$u_3 = 2$</td></tr>
+                    <tr><td class="rowhead">需求量 $b_j$</td><td>$4$</td><td>$4$</td><td>$4$</td><td>$12$</td><td>—</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="result">结论：所有非基格检验数均严格大于 $0$（$\sigma_{ij} > 0$），最优调运方案为 $x_{11}^*=1, \, x_{13}^*=4, \, x_{21}^*=3, \, x_{22}^*=1, \, x_{32}^*=3$（其余为 $0$），最小总运费为 $Z^* = 1\times 4 + 4\times 2 + 3\times 3 + 1\times 5 + 3\times 4 = 38$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="B8">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">八</span>三阶最大化指派问题与匈牙利法</h3>
+            <span class="points">10 分</span>
+          </div>
+          <div class="prompt">
+            <p>3 名人员 $P_1, P_2, P_3$ 完成 3 项任务 $T_1, T_2, T_3$ 的利润矩阵如下表所示。用匈牙利法求最大总利润及最优指派方案。</p>
+            <table class="data-table">
+              <thead><tr><th>人员 \ 任务</th><th>$T_1$</th><th>$T_2$</th><th>$T_3$</th></tr></thead>
+              <tbody>
+                <tr><td class="rowhead">$P_1$</td><td>$13$</td><td>$14$</td><td>$6$</td></tr>
+                <tr><td class="rowhead">$P_2$</td><td>$11$</td><td>$6$</td><td>$9$</td></tr>
+                <tr><td class="rowhead">$P_3$</td><td>$8$</td><td>$15$</td><td>$8$</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 1</span> 转化为最小化机会损失矩阵并执行行、列归约</div>
+                <p>取最大元素 $M = 15$，令 $c_{ij} = 15 - p_{ij}$：</p>
+                <div class="eq-block">
+                  $$C = \begin{pmatrix}
+                  2 & 1 & 9 \\
+                  4 & 9 & 6 \\
+                  7 & 0 & 7
+                  \end{pmatrix}
+                  \xrightarrow{\text{各行减行最小 }(1, 4, 0)}
+                  \begin{pmatrix}
+                  1 & 0 & 8 \\
+                  0 & 5 & 2 \\
+                  7 & 0 & 7
+                  \end{pmatrix}
+                  \xrightarrow{\text{第3列减列最小 }2}
+                  R = \begin{pmatrix}
+                  1 & 0 & 6 \\
+                  0 & 5 & 0 \\
+                  7 & 0 & 5
+                  \end{pmatrix}$$
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">步骤 2</span> 最少覆盖线检验与矩阵调整</div>
+                <p>在 $R$ 中，第 1 行与第 3 行的 $0$ 均位于第 2 列，最多只能选出 $2$ 个独立零元素。画<strong>第 2 行与第 2 列</strong>共 $l = 2 < 3$ 条直线即可覆盖所有 $0$。未覆盖元素 $\{1, 6, 7, 5\}$ 的最小值为 $\theta = 1$。未覆盖行（第 1、3 行）减 $1$，十字交点 $(2,2)$ 加 $1$：</p>
+                <div class="eq-block">
+                  $$R' = \begin{pmatrix}
+                  \mathbf{[0]} & 0 & 5 \\
+                  0 & 6 & \mathbf{[0]} \\
+                  6 & \mathbf{[0]} & 4
+                  \end{pmatrix}$$
+                </div>
+                <p>选出 3 个独立零元素：$(1,1), \, (2,3), \, (3,2)$。</p>
+              </div>
+              <div class="result">结论：唯一最优指派方案为 $P_1 \to T_1 \; (13)$，$P_2 \to T_3 \; (9)$，$P_3 \to T_2 \; (15)$；最大总利润为 $Z^* = 13 + 9 + 15 = 37$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="B9">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">九</span>凸规划判定与 K-T 条件求解</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>（1）判断二元函数 $f(x_1, x_2) = x_1^2 - 4x_1 x_2 + 5x_2^2$ 在 $\mathbb{R}^2$ 上的凸性。</p>
+            <p>（2）写出下列约束优化问题的完整 K-T 条件，并求出其 K-T 点及全局最优值：</p>
+            <div class="eq-block">
+              $$\begin{aligned}
+              \min \quad & F(x_1, x_2) = (x_1 - 1)^2 + (x_2 - 1)^2 \\
+              \text{s.t.} \quad & \begin{cases}
+              x_1 + x_2 \le 1 \\
+              x_1, \, x_2 \ge 0
+              \end{cases}
+              \end{aligned}$$
+            </div>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (1) 问</span> 海森矩阵正定性检验</div>
+                <div class="eq-block">
+                  $$H(x) = \nabla^2 f(x) = \begin{pmatrix} 2 & -4 \\ -4 & 10 \end{pmatrix}, \qquad \Delta_1 = 2 > 0, \quad \Delta_2 = 2\times 10 - (-4)^2 = 4 > 0$$
+                </div>
+                <p>由于各阶顺序主子式均严格大于 $0$，$H(x)$ 对称正定，故 $f(x_1, x_2)$ 为 $\mathbb{R}^2$ 上的<strong>严格凸函数</strong>。</p>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (2) 问</span> 建立并求解 K-T 方程组</div>
+                <p>令 $g_1(x) = x_1 + x_2 - 1 \le 0, \; g_2(x) = -x_1 \le 0, \; g_3(x) = -x_2 \le 0$，对应乘子为 $\lambda_1, \lambda_2, \lambda_3 \ge 0$。完整 K-T 条件为：</p>
+                <div class="eq-block">
+                  $$\begin{cases}
+                  2(x_1 - 1) + \lambda_1 - \lambda_2 = 0, \quad 2(x_2 - 1) + \lambda_1 - \lambda_3 = 0 \\
+                  x_1 + x_2 - 1 \le 0, \quad x_1 \ge 0, \quad x_2 \ge 0, \quad \lambda_1, \lambda_2, \lambda_3 \ge 0 \\
+                  \lambda_1(x_1 + x_2 - 1) = 0, \quad \lambda_2 x_1 = 0, \quad \lambda_3 x_2 = 0
+                  \end{cases}$$
+                </div>
+                <p>无约束极小点 $(1, 1)^T$ 不满足 $x_1 + x_2 \le 1$，故最优点必在紧边界 $x_1 + x_2 = 1$ 上。由对称性取 $x_1 > 0, \, x_2 > 0$，则 $\lambda_2 = \lambda_3 = 0$，解得：</p>
+                <div class="eq-block">
+                  $$x_1^* = x_2^* = \frac{1}{2}, \qquad \lambda_1^* = 2\left(1 - \frac{1}{2}\right) = 1 > 0$$
+                </div>
+              </div>
+              <div class="result">结论：（1）$f(x_1, x_2)$ 为严格凸函数；（2）唯一 K-T 点即全局最优解为 $x^* = \left(\dfrac{1}{2}, \dfrac{1}{2}\right)^T$，乘子 $\lambda^* = (1, 0, 0)^T$，最小目标值为 $F^* = \dfrac{1}{2}$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="B10">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">十</span>最速下降法与一维黄金分割法</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>（1）从初始点 $x^{(0)} = (2, 1)^T$ 出发，对目标函数 $f(x_1, x_2) = x_1^2 + 3x_2^2$ 执行 1 次最速下降法迭代（采用精确线搜索），求最优步长 $\alpha_0$、新迭代点 $x^{(1)}$ 及 $f(x^{(1)})$。</p>
+            <p>（2）用一维黄金分割法求函数 $\varphi(t) = t^2 - 6t + 11$ 在区间 $[0, 7]$ 上的极小点近似值，执行 2 次区间缩减，写出每次区间和近似最优点。</p>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (1) 问</span> 最速下降法一步精确搜索</div>
+                <div class="eq-block">
+                  $$\nabla f(x) = \begin{pmatrix} 2x_1 \\ 6x_2 \end{pmatrix} \quad \Longrightarrow \quad \nabla f(2, 1) = \begin{pmatrix} 4 \\ 6 \end{pmatrix}, \qquad d^{(0)} = -\nabla f(2, 1) = \begin{pmatrix} -4 \\ -6 \end{pmatrix}$$
+                </div>
+                <p>令 $\psi(\alpha) = f(2 - 4\alpha, \, 1 - 6\alpha) = (2 - 4\alpha)^2 + 3(1 - 6\alpha)^2 = 124\alpha^2 - 52\alpha + 7$，求导令 $\psi'(\alpha) = 248\alpha - 52 = 0$，解得：</p>
+                <div class="eq-block">
+                  $$\alpha_0 = \frac{52}{248} = \frac{13}{62}, \qquad x^{(1)} = \begin{pmatrix} 2 \\ 1 \end{pmatrix} + \frac{13}{62}\begin{pmatrix} -4 \\ -6 \end{pmatrix} = \begin{pmatrix} \frac{36}{31} \\[4pt] -\frac{8}{31} \end{pmatrix}, \qquad f(x^{(1)}) = \frac{48}{31} \approx 1.5484$$
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (2) 问</span> 黄金分割法两次区间缩减</div>
+                <ul>
+                  <li><strong>第 1 次缩减（$[0, 7]$）：</strong>$t_1 = 0.382 \times 7 = 2.674, \; \varphi(2.674) \approx 2.1063$；$t_2 = 0.618 \times 7 = 4.326, \; \varphi(4.326) \approx 3.7583$。因 $\varphi(t_1) < \varphi(t_2)$，保留左区间 $[a_1, b_1] = \mathbf{[0, \; 4.326]}$。</li>
+                  <li><strong>第 2 次缩减（$[0, 4.326]$）：</strong>复用 $t_4 = t_1 = 2.674, \; \varphi(2.674) \approx 2.1063$；新算 $t_3 = 0.382 \times 4.326 \approx 1.653, \; \varphi(1.653) \approx 3.8144$。因 $\varphi(t_3) > \varphi(t_4)$，保留右区间 $[a_2, b_2] = \mathbf{[1.653, \; 4.326]}$，中点近似值为 $t^* \approx \dfrac{1.653 + 4.326}{2} = \mathbf{2.990}$（精确最小点为 $t = 3$）。</li>
+                </ul>
+              </div>
+              <div class="result">结论：（1）$x^{(1)} = \left(\dfrac{36}{31}, -\dfrac{8}{31}\right)^T, \; f(x^{(1)}) = \dfrac{48}{31}$；（2）两次缩减后区间为 $[1.653, 4.326]$，中点近似值为 $2.990$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="B11">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">十一</span>牛顿迭代法与 Fletcher-Reeves 共轭梯度法</h3>
+            <span class="points">8 分</span>
+          </div>
+          <div class="prompt">
+            <p>（1）对函数 $F(x_1, x_2) = x_1^2 + 3x_2^2 + 2x_1 x_2 - 6x_1 - 10x_2 + 12$，从 $x^{(0)} = (0, 0)^T$ 出发，按二阶泰勒展开导出的牛顿法求最优点。</p>
+            <p>（2）对函数 $f(x_1, x_2) = x_1^2 + 2x_2^2 - 4x_1 - 8x_2$，从 $x^{(0)} = (0, 0)^T$ 出发，按 Fletcher-Reeves 共轭梯度法求最优解。</p>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (1) 问</span> 牛顿法一步求解</div>
+                <div class="eq-block">
+                  $$\nabla F(x) = \begin{pmatrix} 2x_1 + 2x_2 - 6 \\ 2x_1 + 6x_2 - 10 \end{pmatrix}, \qquad H = \nabla^2 F(x) = \begin{pmatrix} 2 & 2 \\ 2 & 6 \end{pmatrix}, \qquad H^{-1} = \frac{1}{8}\begin{pmatrix} 6 & -2 \\ -2 & 2 \end{pmatrix}$$
+                </div>
+                <p>在 $x^{(0)} = (0, 0)^T$ 处，$\nabla F(0, 0) = (-6, -10)^T$，故：</p>
+                <div class="eq-block">
+                  $$x^{(1)} = x^{(0)} - H^{-1}\nabla F(0, 0) = \frac{1}{8}\begin{pmatrix} 6 & -2 \\ -2 & 2 \end{pmatrix}\begin{pmatrix} 6 \\ 10 \end{pmatrix} = \begin{pmatrix} 2 \\ 1 \end{pmatrix}, \qquad F(2, 1) = 1$$
+                </div>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (2) 问</span> 从 $(0, 0)^T$ 出发的 FR 共轭梯度法两步迭代</div>
+                <p>已知 $\nabla f(x) = (2x_1 - 4, \; 4x_2 - 8)^T, \; Q = \text{diag}(2, 4)$。</p>
+                <div class="eq-block">
+                  $$\begin{aligned}
+                  \text{第 1 步：}\quad & g_0 = \begin{pmatrix} -4 \\ -8 \end{pmatrix}, \quad p^{(0)} = \begin{pmatrix} 4 \\ 8 \end{pmatrix}, \quad \lambda_0 = \frac{16 + 64}{2(16) + 4(64)} = \frac{80}{288} = \frac{5}{18} \\
+                  & x^{(1)} = \begin{pmatrix} 0 \\ 0 \end{pmatrix} + \frac{5}{18}\begin{pmatrix} 4 \\ 8 \end{pmatrix} = \begin{pmatrix} \frac{10}{9} \\[4pt] \frac{20}{9} \end{pmatrix}, \qquad g_1 = \nabla f(x^{(1)}) = \begin{pmatrix} -\frac{16}{9} \\[4pt] \frac{8}{9} \end{pmatrix} \\[6pt]
+                  \text{第 2 步：}\quad & \beta_0 = \frac{\|g_1\|^2}{\|g_0\|^2} = \frac{320/81}{80} = \frac{4}{81}, \qquad p^{(1)} = -g_1 + \beta_0 p^{(0)} = \begin{pmatrix} \frac{160}{81} \\[4pt] -\frac{40}{81} \end{pmatrix} \\
+                  & \lambda_1 = \frac{-g_1^T p^{(1)}}{(p^{(1)})^T Q p^{(1)}} = \frac{9}{20} \quad \Longrightarrow \quad x^{(2)} = x^{(1)} + \lambda_1 p^{(1)} = \begin{pmatrix} 2 \\ 2 \end{pmatrix}
+                  \end{aligned}$$
+                </div>
+              </div>
+              <div class="result">结论：（1）牛顿法一步得 $x^* = (2, 1)^T, \; F^* = 1$；（2）FR 共轭梯度法两步得 $x^* = (2, 2)^T, \; f^* = -12$。</div>
+            </div>
+          </details>
+        </article>
+
+        <article class="question" id="B12">
+          <div class="q-head">
+            <h3 class="q-title"><span class="q-no">十二</span>外点罚函数法与内点障碍函数法</h3>
+            <span class="points">6 分</span>
+          </div>
+          <div class="prompt">
+            <p>考虑一维约束极小化问题：$\min \; f(x) = (x - 2)^2, \quad \text{s.t.} \; x \le 1$。</p>
+            <p>分别写出二次外点罚函数 $P(x, \sigma)$ 与对数内点障碍函数 $B(x, \mu)$，取 $\sigma = 4$、$\mu = \dfrac{1}{2}$ 求对应的近似最优点，并说明当 $\sigma \to +\infty, \, \mu \to 0^+$ 时的收敛趋势。</p>
+          </div>
+          <details class="answer" open>
+            <summary>答案与详解</summary>
+            <div class="answer-body">
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (1) 问</span> 二次外点罚函数法（从不可行域 $x > 1$ 逼近）</div>
+                <p>将约束写为 $g(x) = x - 1 \le 0$，构造外点罚函数：</p>
+                <div class="eq-block">
+                  $$P(x, \sigma) = (x - 2)^2 + \sigma \big[\max(0, x - 1)\big]^2$$
+                </div>
+                <p>在不可行域 $x > 1$ 内求导令 $P'_x(x, \sigma) = 2(x - 2) + 2\sigma(x - 1) = 0$，解得：</p>
+                <div class="eq-block">
+                  $$x(\sigma) = \frac{2 + \sigma}{1 + \sigma} = 1 + \frac{1}{1 + \sigma} > 1$$
+                </div>
+                <p>当 $\sigma = 4$ 时，$x(4) = \dfrac{6}{5} = \mathbf{1.2}$；当 $\sigma \to +\infty$ 时，$x(\sigma) \downarrow 1^+$，从可行域外部右侧逼近 $x^* = 1$。</p>
+              </div>
+
+              <div class="step-box">
+                <div class="step-title"><span class="step-tag">第 (2) 问</span> 对数内点障碍函数法（从严格可行域 $x < 1$ 逼近）</div>
+                <p>在严格可行域 $x < 1$（即 $1 - x > 0$）内构造对数障碍函数：</p>
+                <div class="eq-block">
+                  $$B(x, \mu) = (x - 2)^2 - \mu \ln(1 - x) \qquad (x < 1, \; \mu > 0)$$
+                </div>
+                <p>对 $x$ 求导并令 $B'_x(x, \mu) = 0$（注意复合函数求导 $[-\ln(1-x)]' = +\dfrac{1}{1-x}$）：</p>
+                <div class="eq-block">
+                  $$B'_x(x, \mu) = 2(x - 2) + \frac{\mu}{1 - x} = 0$$
+                </div>
+                <p>令 $t = 1 - x > 0$（则 $x - 2 = -(t + 1)$），代入得 $2(t + 1) = \dfrac{\mu}{t} \implies 2t^2 + 2t - \mu = 0$，取正根：</p>
+                <div class="eq-block">
+                  $$t(\mu) = \frac{-1 + \sqrt{1 + 2\mu}}{2} \quad \Longrightarrow \quad x(\mu) = 1 - \frac{\sqrt{1 + 2\mu} - 1}{2} < 1$$
+                </div>
+                <p>当 $\mu = \dfrac{1}{2}$ 时，$t\left(\dfrac{1}{2}\right) = \dfrac{\sqrt{2} - 1}{2} \approx 0.2071$，故 $x\left(\dfrac{1}{2}\right) = \dfrac{3 - \sqrt{2}}{2} \approx \mathbf{0.7929}$；当 $\mu \to 0^+$ 时，$x(\mu) \uparrow 1^-$，从可行域内部左侧收敛于 $x^* = 1$。</p>
+              </div>
+              <div class="result">结论：$\sigma = 4$ 时外点近似解为 $x = 1.2$；$\mu = \dfrac{1}{2}$ 时内点近似解为 $x = \dfrac{3-\sqrt{2}}{2} \approx 0.7929$。当 $\sigma \to +\infty, \, \mu \to 0^+$ 时均收敛于精确最优解 $x^* = 1, \; f^* = 1$。</div>
+            </div>
+          </details>
+        </article>
+
+        <div class="backtop"><a href="#top">↑ 返回页首</a></div>
+      </div>
+    </section>
+
+    <p class="footer-note">运筹学期末冲刺卷（A 卷 + B 卷）· 标准 LaTeX 数学公式渲染 · 支持一键切换自测模式或打印导出 PDF</p>
+  </main>
+
+  <script>
+    const tabs = Array.from(document.querySelectorAll('.tab'));
+    const papers = Array.from(document.querySelectorAll('.paper'));
+    const allDetails = Array.from(document.querySelectorAll('details.answer'));
+    const toggleButton = document.getElementById('toggleAll');
+    const printButton = document.getElementById('printAll');
+    let allOpen = true;
+    let printState = [];
+
+    function typesetMath(el) {
+      if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+        window.MathJax.typesetPromise(el ? [el] : undefined).catch(() => {});
+      }
+    }
+
+    function showSet(id) {
+      papers.forEach(paper => {
+        paper.hidden = paper.id !== id;
+      });
+      tabs.forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.set === id);
+      });
+      const activePaper = document.getElementById(id);
+      if (activePaper) typesetMath(activePaper);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => showSet(tab.dataset.set));
+    });
+
+    function syncToggleLabel() {
+      allOpen = allDetails.every(detail => detail.open);
+      toggleButton.textContent = allOpen ? '收起全部答案（进入自测）' : '展开全部答案';
+    }
+
+    toggleButton.addEventListener('click', () => {
+      allOpen = !allDetails.every(detail => detail.open);
+      allDetails.forEach(detail => { detail.open = allOpen; });
+      syncToggleLabel();
+      if (allOpen) typesetMath();
+    });
+
+    allDetails.forEach(detail => {
+      detail.addEventListener('toggle', () => {
+        syncToggleLabel();
+        if (detail.open) typesetMath(detail);
+      });
+    });
+
+    printButton.addEventListener('click', () => {
+      window.print();
+    });
+
+    window.addEventListener('beforeprint', () => {
+      printState = allDetails.map(detail => detail.open);
+      allDetails.forEach(detail => { detail.open = true; });
+    });
+
+    window.addEventListener('afterprint', () => {
+      if (!printState.length) return;
+      allDetails.forEach((detail, i) => { detail.open = printState[i]; });
+      printState = [];
+      syncToggleLabel();
+    });
+  </script>
+</body>
+</html>

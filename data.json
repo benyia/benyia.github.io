@@ -1841,6 +1841,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-19 13:54",
+      "action": "编辑合辑：win优化教程"
+    },
+    {
       "time": "2026-11-19 13:51",
       "action": "编辑通知：关于开展2026年“感恩·励志之星”评选活动的通知"
     },
@@ -2235,10 +2239,6 @@
     {
       "time": "2026-10-02 14:08",
       "action": "写日记：米游社 & 库街区 · 每日自动打卡签到小工具"
-    },
-    {
-      "time": "2026-10-01 23:59",
-      "action": "添加应用：FlClash"
     }
   ],
   "categories": [
@@ -3067,11 +3067,20 @@
         "win11"
       ],
       "author": "思齐",
-      "files": [],
+      "files": [
+        {
+          "name": "HiBitUninstaller-Portable.exe",
+          "url": "files/HiBitUninstaller-Portable.exe",
+          "type": "EXE",
+          "size": 13650944,
+          "folder": ""
+        }
+      ],
       "images": [],
-      "time": "2026-11-18 17:06",
+      "time": "2026-11-19 13:54",
       "created": "2026-11-18 16:45",
-      "views": 0
+      "views": 0,
+      "entries": []
     }
   ]
 }

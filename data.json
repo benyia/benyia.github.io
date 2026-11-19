@@ -1841,6 +1841,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-19 13:57",
+      "action": "编辑合辑：win优化教程"
+    },
+    {
       "time": "2026-11-19 13:55",
       "action": "编辑合辑：win优化教程"
     },
@@ -2234,10 +2238,6 @@
     },
     {
       "time": "2026-10-02 15:13",
-      "action": "编辑日记：米游社 & 库街区 · 每日自动打卡签到小工具"
-    },
-    {
-      "time": "2026-10-02 15:10",
       "action": "编辑日记：米游社 & 库街区 · 每日自动打卡签到小工具"
     }
   ],
@@ -3067,27 +3067,35 @@
         "win11"
       ],
       "author": "思齐",
-      "files": [
-        {
-          "name": "HiBitUninstaller-Portable.exe",
-          "url": "files/HiBitUninstaller-Portable.exe",
-          "type": "EXE",
-          "size": 13650944,
-          "folder": ""
-        },
-        {
-          "name": "HiBitUninstaller-setup-3.2.70.exe",
-          "url": "files/HiBitUninstaller-setup-3.2.70.exe",
-          "type": "EXE",
-          "size": 4150019,
-          "folder": ""
-        }
-      ],
+      "files": [],
       "images": [],
-      "time": "2026-11-19 13:55",
+      "time": "2026-11-19 13:57",
       "created": "2026-11-18 16:45",
       "views": 0,
-      "entries": []
+      "entries": [
+        {
+          "title": "hibit Uninstaller使用和下载",
+          "date": "2026-11-19",
+          "kind": "exe",
+          "file": {
+            "name": "HiBitUninstaller-setup-3.2.70.exe",
+            "url": "files/HiBitUninstaller-setup-3.2.70.exe",
+            "type": "EXE",
+            "size": 4150019
+          }
+        },
+        {
+          "title": "hibit Uninstaller 便携式使用和下载",
+          "date": "2026-11-19",
+          "kind": "exe",
+          "file": {
+            "name": "HiBitUninstaller-Portable.exe",
+            "url": "files/HiBitUninstaller-Portable.exe",
+            "type": "EXE",
+            "size": 13650944
+          }
+        }
+      ]
     }
   ]
 }

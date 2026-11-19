@@ -1390,6 +1390,37 @@
       "images": [],
       "files": [],
       "time": "2026-11-02 09:41"
+    },
+    {
+      "title": "关于开展2026年“感恩·励志之星”评选活动的通知",
+      "source": "党委学生工作部",
+      "date": "2026-11-19",
+      "level": "normal",
+      "content": "<img src=\"files/25bac4a80384e2bde984d8378a5d6b49.png\" alt=\"\"><img src=\"files/25bac4a80384e2bde984d8378a5d6b49.png\" alt=\"\"><p></p>",
+      "contentIsHTML": true,
+      "tags": [],
+      "images": [],
+      "files": [
+        {
+          "name": "25bac4a80384e2bde984d8378a5d6b49.png",
+          "url": "files/25bac4a80384e2bde984d8378a5d6b49.png",
+          "type": "PNG",
+          "size": 51451,
+          "originalSize": 51451,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "沈阳工业大学2026年“感恩·励志之星”推荐表.docx",
+          "url": "files/沈阳工业大学2026年“感恩·励志之星”推荐表.docx",
+          "type": "DOCX",
+          "size": 209279,
+          "originalSize": 209279,
+          "optimized": false,
+          "folder": ""
+        }
+      ],
+      "time": "2026-11-19 13:49"
     }
   ],
   "classItems": [
@@ -1810,6 +1841,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-19 13:49",
+      "action": "发布通知：关于开展2026年“感恩·励志之星”评选活动的通知"
+    },
+    {
       "time": "2026-11-19 13:46",
       "action": "写日记：我的学生证"
     },
@@ -2204,10 +2239,6 @@
     {
       "time": "2026-10-01 10:43",
       "action": "写日记：我的邮箱"
-    },
-    {
-      "time": "2026-09-30 14:52",
-      "action": "删除通知"
     }
   ],
   "categories": [

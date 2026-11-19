@@ -1755,6 +1755,35 @@
       "images": [],
       "media": [],
       "time": "2026-10-02 14:08"
+    },
+    {
+      "date": "2026-11-19",
+      "title": "我的学生证",
+      "content": "今天学生证发了，但是还没有乘车区间，不过无所谓，12306已经可以用了<br>今天低保也发了，嘿嘿",
+      "contentIsHTML": true,
+      "tags": [],
+      "images": [],
+      "media": [
+        {
+          "name": "学生证存档.pdf",
+          "url": "files/学生证存档.pdf",
+          "type": "PDF",
+          "size": 778491,
+          "originalSize": 778491,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "学生证扫描件.pdf",
+          "url": "files/学生证扫描件.pdf",
+          "type": "PDF",
+          "size": 23909693,
+          "originalSize": 23909693,
+          "optimized": false,
+          "folder": ""
+        }
+      ],
+      "time": "2026-11-19 13:46"
     }
   ],
   "advisor": [
@@ -1780,6 +1809,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-11-19 13:46",
+      "action": "写日记：我的学生证"
+    },
     {
       "time": "2026-11-19 13:17",
       "action": "修改站点设置"
@@ -2175,10 +2208,6 @@
     {
       "time": "2026-09-30 14:52",
       "action": "删除通知"
-    },
-    {
-      "time": "2026-09-30 11:54",
-      "action": "编辑应用：Reddit（红迪）"
     }
   ],
   "categories": [

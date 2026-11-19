@@ -1396,8 +1396,8 @@
       "source": "党委学生工作部",
       "date": "2026-11-19",
       "level": "normal",
-      "content": "<img src=\"files/25bac4a80384e2bde984d8378a5d6b49.png\" alt=\"\"><img src=\"files/25bac4a80384e2bde984d8378a5d6b49.png\" alt=\"\"><p></p>",
-      "contentIsHTML": true,
+      "content": "![图片](files/25bac4a80384e2bde984d8378a5d6b49.png)![图片](files/25bac4a80384e2bde984d8378a5d6b49.png)",
+      "contentIsHTML": false,
       "tags": [],
       "images": [],
       "files": [
@@ -1420,7 +1420,7 @@
           "folder": ""
         }
       ],
-      "time": "2026-11-19 13:49"
+      "time": "2026-11-19 13:51"
     }
   ],
   "classItems": [
@@ -1841,6 +1841,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-19 13:51",
+      "action": "编辑通知：关于开展2026年“感恩·励志之星”评选活动的通知"
+    },
+    {
       "time": "2026-11-19 13:49",
       "action": "发布通知：关于开展2026年“感恩·励志之星”评选活动的通知"
     },
@@ -2235,10 +2239,6 @@
     {
       "time": "2026-10-01 23:59",
       "action": "添加应用：FlClash"
-    },
-    {
-      "time": "2026-10-01 10:43",
-      "action": "写日记：我的邮箱"
     }
   ],
   "categories": [

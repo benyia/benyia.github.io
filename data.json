@@ -1815,6 +1815,73 @@
         }
       ],
       "time": "2026-11-19 13:46"
+    },
+    {
+      "date": "2026-11-19",
+      "title": "拼多多/淘宝/京东/咸鱼_20261119-202656_含图详细购买信息",
+      "content": "",
+      "contentIsHTML": true,
+      "tags": [
+        "账单"
+      ],
+      "images": [],
+      "media": [
+        {
+          "name": "Reflow_统计报表_2026-11-19.xlsx",
+          "url": "files/Reflow_统计报表_2026-11-19.xlsx",
+          "type": "XLSX",
+          "size": 9986,
+          "originalSize": 9986,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "Reflow_平台对比_2026-11-19.xlsx",
+          "url": "files/Reflow_平台对比_2026-11-19.xlsx",
+          "type": "XLSX",
+          "size": 8481,
+          "originalSize": 8481,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "拼多多_20261119-202656_含图.xlsx",
+          "url": "files/拼多多_20261119-202656_含图.xlsx",
+          "type": "XLSX",
+          "size": 40846245,
+          "originalSize": 40846245,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "淘宝_20261119-203120_含图.xlsx",
+          "url": "files/淘宝_20261119-203120_含图.xlsx",
+          "type": "XLSX",
+          "size": 418803,
+          "originalSize": 418803,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "京东_20261119-203137_含图.xlsx",
+          "url": "files/京东_20261119-203137_含图.xlsx",
+          "type": "XLSX",
+          "size": 2779384,
+          "originalSize": 2779384,
+          "optimized": false,
+          "folder": ""
+        },
+        {
+          "name": "闲鱼_20261119-203148_含图.xlsx",
+          "url": "files/闲鱼_20261119-203148_含图.xlsx",
+          "type": "XLSX",
+          "size": 133337,
+          "originalSize": 133337,
+          "optimized": false,
+          "folder": ""
+        }
+      ],
+      "time": "2026-11-19 21:41"
     }
   ],
   "advisor": [
@@ -1840,6 +1907,10 @@
     }
   ],
   "logs": [
+    {
+      "time": "2026-11-19 21:41",
+      "action": "写日记：拼多多/淘宝/京东/咸鱼_20261119-202656_含图详细购买信息"
+    },
     {
       "time": "2026-11-19 13:57",
       "action": "编辑合辑：win优化教程"
@@ -2235,10 +2306,6 @@
     {
       "time": "2026-10-02 15:54",
       "action": "修改首页显示内容"
-    },
-    {
-      "time": "2026-10-02 15:13",
-      "action": "编辑日记：米游社 & 库街区 · 每日自动打卡签到小工具"
     }
   ],
   "categories": [

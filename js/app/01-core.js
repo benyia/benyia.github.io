@@ -42,7 +42,7 @@ const PAGE_TITLES = {
 };
 
 const DEFAULT_DATA = {
-  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", favicon:"", name:"思齐", bio:"控制工程研究生", defaultImage:"files/default-cover.jpg", defaultAvatar:"files/default-avatar.png", coverPan:true, coverPanSec:3, adminTitle:"", adminTitleSync:true,
+  siteConfig: {title:"思齐个人主页", subtitle:"钟爱奥迪A6", about:"", avatar:"思", favicon:"", name:"思齐", bio:"控制工程研究生", defaultImage:"files/default-cover.jpg", defaultAvatar:"files/default-avatar.png", coverPan:true, coverPanSec:3, bgOpacity:15, bgBlur:0, adminTitle:"", adminTitleSync:true,
     startDate:"2026-09-01",
     notice:"欢迎来到我的小站 🌿\n这里记录我的课程、论文、学习笔记和生活随笔。\n公告内容可以在后台「首页」里改。",
     noticeBtn:"", noticeUrl:"",

@@ -20,7 +20,7 @@ const FRESH_KEY = "benyia_data_fresh";
 const MAX_FILE_MB = 100;
 
 const DEFAULT_DATA = {
-  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",avatar:"思",favicon:"",name:"思齐",bio:"控制工程研究生",coverPan:true,coverPanSec:3,adminTitle:"",adminTitleSync:true},
+  siteConfig:{title:"思齐个人主页",subtitle:"钟爱奥迪A6",about:"你好，我是思齐，控制工程研究生。\n\n热爱技术，记录学习与生活。",avatar:"思",favicon:"",name:"思齐",bio:"控制工程研究生",coverPan:true,coverPanSec:3,bgOpacity:15,bgBlur:0,adminTitle:"",adminTitleSync:true},
   categories:[
     {icon:"📚",name:"课程学习",section:"courses"},
     {icon:"📝",name:"论文",section:"papers"},

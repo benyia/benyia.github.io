@@ -3,6 +3,12 @@
    ============================================================ */
 function saveSiteConfig(){
   var favicon = $("cfgFavicon").value.trim();
+  var bgOpacity = parseInt($("cfgBgOpacity") ? $("cfgBgOpacity").value : "15", 10);
+  if(!isFinite(bgOpacity)) bgOpacity = 15;
+  bgOpacity = Math.max(0, Math.min(100, bgOpacity));
+  var bgBlur = parseInt($("cfgBgBlur") ? $("cfgBgBlur").value : "0", 10);
+  if(!isFinite(bgBlur)) bgBlur = 0;
+  bgBlur = Math.max(0, Math.min(30, bgBlur));
   blogData.siteConfig = {
     title: $("cfgTitle").value.trim() || "思齐个人主页",
     adminTitle: $("cfgAdminTitle") ? $("cfgAdminTitle").value.trim() : "",
@@ -16,6 +22,8 @@ function saveSiteConfig(){
     loginHint: $("cfgLoginHint").value,
     coverPan: $("cfgCoverPan").checked,
     coverPanSec: parseInt($("cfgCoverPanSec").value, 10) || 3,
+    bgOpacity: bgOpacity,
+    bgBlur: bgBlur,
     name: $("cfgName").value.trim() || "思齐",
     bio: $("cfgBio").value.trim(),
     /* 欢迎页 / 公告 / 建站日期由「首页」面板单独保存，这里必须原样带过去，否则会被覆盖掉 */
@@ -34,6 +42,33 @@ function saveSiteConfig(){
   applyAdminTabTitle();
   applyAdminFavicon();
   renderAll();
+}
+function syncBgSettingsPreview(){
+  var opEl = $("cfgBgOpacity"), blurEl = $("cfgBgBlur");
+  if(!opEl || !blurEl) return;
+  var op = Math.max(0, Math.min(100, parseInt(opEl.value, 10) || 0));
+  var blur = Math.max(0, Math.min(30, parseInt(blurEl.value, 10) || 0));
+  if($("cfgBgOpacityVal")) $("cfgBgOpacityVal").textContent = op + "%";
+  if($("cfgBgBlurVal")) $("cfgBgBlurVal").textContent = blur + "px";
+  var ratio = Math.max(0, Math.min(1, (op - 15) / 85));
+  var top = (0.86 - 0.44 * ratio).toFixed(3);
+  var mid = (0.78 - 0.30 * ratio).toFixed(3);
+  var bottom = (0.94 - 0.36 * ratio).toFixed(3);
+  var img = $("cfgBgPreviewImg");
+  if(img){
+    img.style.opacity = String(op / 100);
+    img.style.filter = "blur(" + blur + "px)";
+  }
+  var veil = $("cfgBgPreviewVeil");
+  if(veil){
+    veil.style.background = "linear-gradient(180deg,rgba(245,250,248," + top + ") 0,rgba(239,247,243," + mid + ") 40%,rgba(237,244,241," + bottom + ") 100%)";
+  }
+}
+function resetBgSettings(){
+  if($("cfgBgOpacity")) $("cfgBgOpacity").value = 15;
+  if($("cfgBgBlur")) $("cfgBgBlur").value = 0;
+  syncBgSettingsPreview();
+  showToast("已恢复默认背景参数，记住点「保存设置」");
 }
 function clearSiteFavicon(){
   $("cfgFavicon").value = "";

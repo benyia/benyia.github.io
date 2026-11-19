@@ -16,6 +16,17 @@ function renderAll(){
   $("cfgLoginHint").value = (sc.loginHint === undefined ? "" : sc.loginHint);
   $("cfgCoverPan").checked = (sc.coverPan !== false);
   $("cfgCoverPanSec").value = (sc.coverPanSec || 3);
+  if($("cfgBgOpacity")){
+    var bgOp = Number(sc.bgOpacity);
+    if(!isFinite(bgOp)) bgOp = 15;
+    $("cfgBgOpacity").value = Math.max(0, Math.min(100, bgOp));
+  }
+  if($("cfgBgBlur")){
+    var bgBlur = Number(sc.bgBlur);
+    if(!isFinite(bgBlur)) bgBlur = 0;
+    $("cfgBgBlur").value = Math.max(0, Math.min(30, bgBlur));
+  }
+  if(typeof syncBgSettingsPreview === "function") syncBgSettingsPreview();
   $("cfgName").value   = sc.name || "";
   $("cfgBio").value    = sc.bio || "";
   $("tagsInput").value = (blogData.tags||[]).join(",");

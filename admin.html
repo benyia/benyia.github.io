@@ -10,9 +10,9 @@
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <!-- 样式按模块拆分（顺序即层叠顺序）：骨架/登录 → 富文本编辑器 → 弹窗
      改完任一文件请同步改这里的 ?v= 版本号 -->
-<link rel="stylesheet" href="css/admin/01-base.css?v=20261119j">
-<link rel="stylesheet" href="css/admin/02-editor.css?v=20261119j">
-<link rel="stylesheet" href="css/admin/03-dialog.css?v=20261119j">
+<link rel="stylesheet" href="css/admin/01-base.css?v=20261119l">
+<link rel="stylesheet" href="css/admin/02-editor.css?v=20261119l">
+<link rel="stylesheet" href="css/admin/03-dialog.css?v=20261119l">
 <link rel="stylesheet" href="assets/katex/katex.min.css">
 <script defer src="assets/katex/katex.min.js"></script>
 <script defer src="assets/katex/contrib/auto-render.min.js"></script>
@@ -129,6 +129,24 @@
         <div class="form-row">
           <label style="font-size:.88rem;display:flex;align-items:center;gap:6px"><input type="checkbox" id="cfgCoverPan"> 鼠标悬停时封面自动滑动</label>
           <label style="font-size:.88rem;display:flex;align-items:center;gap:6px">滑动时长：<input type="number" id="cfgCoverPanSec" min="1" max="60" step="1" value="3" style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:8px"> 秒（越小越快）</label>
+        </div>
+        <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 页面背景</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">调整整页背景图的可见度与模糊度</span></div>
+        <div class="bg-tune">
+          <div class="bg-tune-preview"><img id="cfgBgPreviewImg" src="assets/image1.jpg" alt="背景预览"><span id="cfgBgPreviewVeil"></span></div>
+          <div class="bg-tune-row">
+            <label for="cfgBgOpacity">背景可见度</label>
+            <input type="range" id="cfgBgOpacity" min="0" max="100" step="1" value="15" oninput="syncBgSettingsPreview()">
+            <output id="cfgBgOpacityVal">15%</output>
+          </div>
+          <div class="bg-tune-row">
+            <label for="cfgBgBlur">背景模糊</label>
+            <input type="range" id="cfgBgBlur" min="0" max="30" step="1" value="0" oninput="syncBgSettingsPreview()">
+            <output id="cfgBgBlurVal">0px</output>
+          </div>
+        </div>
+        <div class="note" style="margin-top:-4px;display:flex;justify-content:space-between;gap:10px;align-items:center">
+          <span>可见度越高，背景图越清晰；模糊值越大越柔和。保存后前台生效。</span>
+          <button class="btn btn-ghost btn-sm" type="button" onclick="resetBgSettings()">恢复默认</button>
         </div>
         <div class="form-row"><textarea id="cfgAbout" placeholder="关于我的介绍..." style="min-height:150px"></textarea></div>
         <button class="btn btn-primary" onclick="saveSiteConfig()">保存设置</button>
@@ -914,13 +932,13 @@
 </div>
 
 <!-- 脚本按模块拆分：普通 script 共享全局作用域，顺序即依赖顺序，不要调换 -->
-<script src="js/admin/01-core.js?v=20261119j"></script>
-<script src="js/admin/02-editor.js?v=20261119j"></script>
-<script src="js/admin/03-list.js?v=20261119j"></script>
-<script src="js/admin/04-api.js?v=20261119j"></script>
-<script src="js/admin/05-upload.js?v=20261119j"></script>
-<script src="js/admin/06-forms.js?v=20261119j"></script>
-<script src="js/admin/07-render.js?v=20261119j"></script>
-<script src="js/admin/08-settings.js?v=20261119j"></script>
+<script src="js/admin/01-core.js?v=20261119l"></script>
+<script src="js/admin/02-editor.js?v=20261119l"></script>
+<script src="js/admin/03-list.js?v=20261119l"></script>
+<script src="js/admin/04-api.js?v=20261119l"></script>
+<script src="js/admin/05-upload.js?v=20261119l"></script>
+<script src="js/admin/06-forms.js?v=20261119l"></script>
+<script src="js/admin/07-render.js?v=20261119l"></script>
+<script src="js/admin/08-settings.js?v=20261119l"></script>
 </body>
 </html>

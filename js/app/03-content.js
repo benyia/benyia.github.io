@@ -326,6 +326,23 @@ function applySiteConfig(){
   applyFavicon(sc.favicon || sc.avatar);
   var brand = document.querySelector(".nav-brand");
   if(brand) brand.innerHTML = '<span class="dot"></span>' + esc((sc.name || "思齐") + "的博客");
+  applyBackgroundTuning(sc);
+}
+function applyBackgroundTuning(sc){
+  sc = sc || {};
+  var opacity = Number(sc.bgOpacity);
+  if(!isFinite(opacity)) opacity = 15;
+  opacity = Math.max(0, Math.min(100, opacity));
+  var blur = Number(sc.bgBlur);
+  if(!isFinite(blur)) blur = 0;
+  blur = Math.max(0, Math.min(30, blur));
+  var ratio = Math.max(0, Math.min(1, (opacity - 15) / 85));
+  var root = document.documentElement;
+  root.style.setProperty("--bg-image-opacity", String(opacity / 100));
+  root.style.setProperty("--bg-image-blur", blur + "px");
+  root.style.setProperty("--bg-veil-top", (0.86 - 0.44 * ratio).toFixed(3));
+  root.style.setProperty("--bg-veil-mid", (0.78 - 0.30 * ratio).toFixed(3));
+  root.style.setProperty("--bg-veil-bottom", (0.94 - 0.36 * ratio).toFixed(3));
 }
 /* 把后台设置的图标同步成浏览器标签 / iOS 桌面图标；不是图片地址就恢复内置 favicon */
 var FAVICON_DEFAULT = {

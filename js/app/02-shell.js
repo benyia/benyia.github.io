@@ -56,8 +56,15 @@ var lazyObserver = null;
 function swapLazy(img){
   var src = img.getAttribute("data-src");
   if(!src) return;
+  var prevError = img.onerror;
   img.onload = function(){ img.classList.add("img-loaded"); };
-  img.onerror = function(){ img.classList.add("img-loaded"); };
+  img.onerror = function(e){
+    img.classList.add("img-loaded");
+    /* 保留模板里自带的兜底处理（例如坏图时显示占位图标） */
+    if(typeof prevError === "function"){
+      try { prevError.call(img, e); } catch(err){}
+    }
+  };
   img.setAttribute("src", src);
   img.removeAttribute("data-src");
 }

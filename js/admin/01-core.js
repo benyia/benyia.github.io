@@ -54,6 +54,9 @@ const drafts  = {course:[], paper:[], class:[], collection:[], life:[], media:[]
 /* 课程的文件夹草稿：存相对路径，例如「课件」「课件/第1章」 */
 let courseDraftFolders = [];
 let courseCurrentFolder = "";
+/* 合辑条目草稿：{ title, date, file:{name,url,type,size} } */
+let collectionEntryDrafts = [];
+let collectionEntryPick = null;
 
 /* ============================================================
    小工具

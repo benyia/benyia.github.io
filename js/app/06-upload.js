@@ -75,18 +75,18 @@ async function onFrontImagePick(e){
     sayStatus("fdStatus", "图片上传失败：" + err.message, "#ef4444");
   }
 }
-/* 前台表单初始化：写入口只对站长（本机存过 Token）显示。
-   注意：站点标题/头像等「站点设置」只在管理后台改，前台不提供编辑入口。
-   导师指导的「记一次」表单已移除，记录改在后台维护。 */
+/* 前台只读：不显示任何内容写入表单。
+   记账、课程、合辑、日记、导师指导等全部在管理后台维护。 */
 function initFrontForms(){
   var hasToken = !!frontToken();
-  var ownerOnly = ["ledgerFormBox", "ledgerStatsBox", "ledgerHint"];
+  var ownerOnly = ["ledgerFormBox", "ledgerHint"];
   ownerOnly.forEach(function(id){
     var el = document.getElementById(id);
     if(!el) return;
-    if(hasToken) el.removeAttribute("hidden");
-    else el.setAttribute("hidden", "");
+    el.setAttribute("hidden", "");
   });
+  var stats = document.getElementById("ledgerStatsBox");
+  if(stats) stats.removeAttribute("hidden");
   var visitorHint = document.getElementById("visitorLedgerNote");
   if(visitorHint) visitorHint.style.display = hasToken ? "none" : "";
 }

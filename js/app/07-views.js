@@ -231,7 +231,7 @@ function setPageTitle(key, h1, p){
   var site = siteTitleText();
   document.getElementById("titleH1").textContent = finalH1;
   document.getElementById("titleP").textContent = p !== undefined ? p : (PAGE_TITLES[key]?PAGE_TITLES[key][1]:"");
-  document.title = key === "home" ? site : (finalH1 + " · " + site);
+  document.title = key === "home" ? (site + " | 控制工程研究生的学习与生活记录") : (finalH1 + " · " + site);
 }
 function applyRouteFromLocation(){
   var raw = location.pathname || "/";
@@ -458,7 +458,6 @@ document.addEventListener("keydown", function(e){
   if(e.key === "Escape"){
     closeDrawer();
     if(typeof closeEngagementDialog === "function") closeEngagementDialog();
-    if(typeof closeCollEntry === "function") closeCollEntry();
   }
 });
 window.addEventListener("resize", function(){ if(window.innerWidth > 900) closeDrawer(); });

@@ -250,6 +250,8 @@ async function initPanel(){
   initDropZones();
   /* 课程资料库的空白状态 / 当前草稿 */
   renderCourseFileManager();
+  /* 合辑条目草稿列表 */
+  renderCollectionEntryAdmin();
   await syncNow(true);
 }
 

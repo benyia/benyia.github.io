@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <base href="/">
-<meta name="theme-color" content="#10b981">
+<meta name="theme-color" content="#0f766e">
 <title>思齐个人主页 | 控制工程研究生的学习与生活记录</title>
 
 <!-- 搜索引擎 -->
@@ -16,7 +16,7 @@
 
 <!-- 分享卡片（微信 / QQ / 微博 / Twitter 等） -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="博客">
+<meta property="og:site_name" content="思齐的博客">
 <meta property="og:title" content="思齐个人主页 | 控制工程研究生的学习与生活记录">
 <meta property="og:description" content="控制工程研究生的课程、论文、学习笔记与生活记录。">
 <meta property="og:url" content="https://benyia.github.io/">
@@ -73,11 +73,12 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 
 <!-- 样式按模块拆分（顺序即层叠顺序，不要调换）：基础 → 组件 → 影音 → 独立页 → 首页
      改完任一文件请同步改这里的 ?v= 版本号，避免访客用到旧缓存 -->
-<link rel="stylesheet" href="css/site/01-base.css?v=20261118q">
-<link rel="stylesheet" href="css/site/02-components.css?v=20261118q">
-<link rel="stylesheet" href="css/site/03-media.css?v=20261118q">
-<link rel="stylesheet" href="css/site/04-pages.css?v=20261118q">
-<link rel="stylesheet" href="css/site/05-home.css?v=20261118q">
+<link rel="stylesheet" href="css/site/01-base.css?v=20261119j">
+<link rel="stylesheet" href="css/site/02-components.css?v=20261119j">
+<link rel="stylesheet" href="css/site/03-media.css?v=20261119j">
+<link rel="stylesheet" href="css/site/04-pages.css?v=20261119j">
+<link rel="stylesheet" href="css/site/05-home.css?v=20261119j">
+<link rel="stylesheet" href="css/site/06-refine.css?v=20261119j">
 </head>
 <body>
 <a class="skip-link" href="#mainContent">跳到主要内容</a>
@@ -95,7 +96,10 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 <script>/* 欢迎页不等 js 模块：背景图已在 HTML 里，这里补上问候语并开始计时，第一帧就完整 */
 (function(){
   var w = document.getElementById("wk"); if(!w) return;
-  var off = false; try { off = localStorage.getItem("wk_off") === "1"; } catch(e) {}
+  var off = false;
+  try {
+    off = localStorage.getItem("wk_off") === "1" || sessionStorage.getItem("wk_seen") === "1";
+  } catch(e) {}
   if(off){ window.__wkWasOff = true; w.classList.add("wk-pre", "gone"); return; }
   document.body.classList.add("wk-lock");
   var t = document.getElementById("wkTip");
@@ -106,11 +110,18 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
     t.textContent = n.getFullYear() + "年" + (n.getMonth() + 1) + "月" + n.getDate() + "日" + p + hh + "点" + (mm > 0 ? mm + "分" : "") + "，很高兴与你相遇";
   }
   var closed = false;
-  var done = function(){ if(closed) return; closed = true; w.classList.add("hide"); document.body.classList.remove("wk-lock"); setTimeout(function(){ w.classList.add("gone"); }, 850); };
+  var done = function(){
+    if(closed) return;
+    closed = true;
+    try { sessionStorage.setItem("wk_seen", "1"); } catch(e) {}
+    w.classList.add("hide");
+    document.body.classList.remove("wk-lock");
+    setTimeout(function(){ w.classList.add("gone"); }, 850);
+  };
   window.__wkEarlyClose = done;
   w.addEventListener("click", done);
   document.addEventListener("keydown", function(e){ if(e.key === "Escape" || e.key === " " || e.key === "Enter") done(); });
-  setTimeout(done, 3500);
+  setTimeout(done, 2600);
 })();</script>
 
 <nav class="topnav">
@@ -375,20 +386,12 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
         <button type="button" class="active" data-record-tab="ledger" onclick="switchRecordTab('ledger')">记账</button>
         <button type="button" data-record-tab="diary" onclick="switchRecordTab('diary')">日记</button>
       </div>
-      <!-- 记一笔：只有站长（本机存过 Token）能看到 -->
-      <div class="ledger-stats" id="ledgerStatsBox" hidden>
+      <!-- 账目概览：前台只读，记录统一在管理后台维护 -->
+      <div class="ledger-stats" id="ledgerStatsBox">
         <div class="stat-card income"><div class="num" id="statInc">¥0</div><div class="label">本月收入</div></div>
         <div class="stat-card expense"><div class="num" id="statExp">¥0</div><div class="label">本月支出</div></div>
         <div class="stat-card"><div class="num" id="statBal">¥0</div><div class="label">本月结余</div></div>
       </div>
-      <div class="ledger-form" id="ledgerFormBox" hidden>
-        <select id="lgType" onchange="updateLgCategories()"><option value="expense">支出</option><option value="income">收入</option></select>
-        <select id="lgCategory"></select>
-        <input type="number" id="lgAmt" placeholder="金额">
-        <input type="text" id="lgDesc" placeholder="备注">
-        <button class="btn" onclick="addLedgerFromFront()">记一笔</button>
-      </div>
-      <div id="lgHint" style="font-size:.8rem;color:var(--text3);margin-bottom:12px" hidden></div>
       <div id="ledgerList"></div>
     </div>
 
@@ -552,23 +555,6 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
 </aside>
 <button class="rtoc-fab" id="rtocFab" type="button" onclick="openToc()">📑 目录</button>
 
-<!-- 前台轻量弹窗：图片地址 / 链接地址 / 表格，替代浏览器自带 prompt -->
-<div class="fdlg-mask" id="fdlgMask" onclick="if(event.target===this)closeFdlg()">
-  <div class="fdlg" role="dialog" aria-modal="true">
-    <h3 id="fdlgTitle">输入</h3>
-    <div class="fdlg-hint" id="fdlgHint"></div>
-    <input type="text" id="fdlgInput" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();submitFdlg();}">
-    <div class="fdlg-row" id="fdlgRow2" style="display:none"><input type="text" id="fdlgInput2" autocomplete="off"></div>
-    <div class="fdlg-err" id="fdlgErr"></div>
-    <div class="fdlg-actions">
-      <button class="fdlg-btn up" type="button" id="fdlgUp" style="display:none" onclick="fdlgPickFile()">选择文件上传</button>
-      <button class="fdlg-btn ghost" type="button" onclick="closeFdlg()">取消</button>
-      <button class="fdlg-btn primary" type="button" onclick="submitFdlg()" id="fdlgOk">确定</button>
-    </div>
-    <input type="file" id="fdlgFile" multiple style="display:none" onchange="onFdlgFile(event)">
-  </div>
-</div>
-
 <!-- 🎵 歌曲列表：独立的弹出界面（点播放器卡片打开），支持按歌名 / 歌手搜索 -->
 <div class="mp-sheet-mask" id="mpSheetMask" onclick="mpCloseSheet()"></div>
 <div class="mp-sheet" id="mpSheet" role="dialog" aria-modal="true" aria-label="歌曲列表">
@@ -609,7 +595,7 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
     <div class="file-viewer-head">
       <div class="file-viewer-title">
         <span id="fileViewerIcon" aria-hidden="true">📄</span>
-        <div><b id="fileViewerName">文件预览</b><span id="fileViewerMeta"></span></div>
+        <div><b id="fileViewerName">文件预览</b><span class="fv-meta"><span id="fileViewerMeta"></span><em class="fv-readonly">只读预览</em></span></div>
       </div>
       <div class="file-viewer-tools">
         <a id="fileViewerOpen" href="#" target="_blank" rel="noopener">新窗口打开</a>
@@ -621,73 +607,17 @@ window.__dataPromise = (function(){ try { return fetch("data.json"); } catch(e) 
   </div>
 </div>
 
-<!-- 合辑条目：阅读 / 前台编辑 -->
-<div class="coll-entry-modal" id="collEntryModal" aria-hidden="true" onclick="if(event.target===this)closeCollEntry()">
-  <div class="coll-entry-shell" role="dialog" aria-modal="true" aria-labelledby="collEntryHeading">
-    <div class="coll-entry-head">
-      <div class="coll-entry-head-main">
-        <span class="coll-entry-badge" id="collEntryBadge">MD</span>
-        <div>
-          <b id="collEntryHeading">合辑条目</b>
-          <span id="collEntryMeta"></span>
-        </div>
-      </div>
-      <div class="coll-entry-head-actions">
-        <button type="button" class="coll-entry-btn" id="collEntryEditBtn" onclick="startCollEntryEdit()" hidden>✏️ 编辑</button>
-        <button type="button" class="coll-entry-close" onclick="closeCollEntry()" aria-label="关闭">✕</button>
-      </div>
-    </div>
-    <div class="coll-entry-view" id="collEntryView"></div>
-    <div class="coll-entry-editor" id="collEntryEditor" hidden>
-      <div class="coll-entry-form">
-        <input type="text" id="collEntryTitle" placeholder="标题，例如：1月1日 广告优化">
-        <input type="date" id="collEntryDate">
-        <select id="collEntryKind">
-          <option value="md">Markdown</option>
-          <option value="html">HTML</option>
-        </select>
-      </div>
-      <div class="coll-entry-edit-bar">
-        <span>正文</span>
-        <span id="collEntrySaveState"></span>
-      </div>
-      <textarea id="collEntryText" spellcheck="false" placeholder="在这里直接写 Markdown 或 HTML……"></textarea>
-      <div class="coll-entry-actions">
-        <button type="button" class="btn btn-ghost" onclick="cancelCollEntryEdit()">取消</button>
-        <button type="button" class="btn btn-primary" id="collEntrySaveBtn" onclick="saveCollEntry()">保存到博客</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 首页互动：本机评论 / 点赞 / 收藏 -->
-<div class="eng-dialog" id="engDialog" role="dialog" aria-modal="true" aria-labelledby="engDialogTitle" onclick="if(event.target===this)closeEngagementDialog()">
-  <div class="eng-dialog-box">
-    <div class="eng-dialog-head">
-      <h3 id="engDialogTitle">评论</h3>
-      <button type="button" class="eng-dialog-close" onclick="closeEngagementDialog()" aria-label="关闭">✕</button>
-    </div>
-    <div class="eng-dialog-note">评论保存在当前浏览器；要支持多人公开评论，需要接入 GitHub Discussions / Giscus 等后端。</div>
-    <div id="engCommentsList" class="eng-comments"></div>
-    <textarea id="engCommentInput" placeholder="写点评论……" maxlength="1000"></textarea>
-    <div class="eng-dialog-actions">
-      <button type="button" class="btn btn-ghost" onclick="closeEngagementDialog()">取消</button>
-      <button type="button" class="btn btn-primary" onclick="submitEngagementComment()">发布评论</button>
-    </div>
-  </div>
-</div>
-
 <div class="footer">© <span id="copyYear">2026</span> 思齐个人主页 · Powered by GitHub Pages</div>
 
 <!-- 脚本按模块拆分：普通 script 共享全局作用域，顺序即依赖顺序，不要调换 -->
-<script src="js/app/01-core.js?v=20261118q"></script>
-<script src="js/app/02-shell.js?v=20261118q"></script>
-<script src="js/app/03-content.js?v=20261118q"></script>
-<script src="js/app/04-markdown.js?v=20261118q"></script>
-<script src="js/app/05-pages.js?v=20261118q"></script>
-<script src="js/app/06-upload.js?v=20261118q"></script>
-<script src="js/app/07-views.js?v=20261118q"></script>
-<script src="js/app/08-music.js?v=20261118q"></script>
-<script src="js/app/09-welcome.js?v=20261118q"></script>
+<script src="js/app/01-core.js?v=20261119j"></script>
+<script src="js/app/02-shell.js?v=20261119j"></script>
+<script src="js/app/03-content.js?v=20261119j"></script>
+<script src="js/app/04-markdown.js?v=20261119j"></script>
+<script src="js/app/05-pages.js?v=20261119j"></script>
+<script src="js/app/06-upload.js?v=20261119j"></script>
+<script src="js/app/07-views.js?v=20261119j"></script>
+<script src="js/app/08-music.js?v=20261119j"></script>
+<script src="js/app/09-welcome.js?v=20261119j"></script>
 </body>
 </html>

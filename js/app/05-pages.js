@@ -28,9 +28,8 @@ function renderFriends(){
     sideWrap.style.display = top.length ? "block" : "none";
   }
 }
-/* 访客申请友链：没有后端，优先走配置好的表单地址，否则回退到 GitHub Issue */
-/* 友链申请：先直接写进 data.json 的 friendApplies（访客不用 GitHub 账号，也不需要 Token），
-   同时开一个 GitHub Issue 当通知；后台「友链」面板能看到并一键转为正式友链。 */
+/* 访客申请友链：优先走配置好的表单地址，否则打开 GitHub Issue。
+   前台不直接写 data.json，正式入库统一在管理后台完成。 */
 function submitFriendApply(e){
   if(e && e.preventDefault) e.preventDefault();
   var g = function(id){ var el = document.getElementById(id); return el ? el.value.trim() : ""; };
@@ -77,23 +76,7 @@ function submitFriendApply(e){
     return false;
   }
 
-  /* ③ 有 Token（站长自己浏览器）：直接写进 data.json，后台立刻能看到 */
-  if(frontToken()){
-    say("提交中…");
-    pushDataChange(function(d){
-      d.friendApplies = d.friendApplies || [];
-      d.friendApplies.push(apply);
-    }, "友链申请：" + name).then(function(){
-      say("✅ 已存入后台「友链申请」列表，去后台点一下就能加上。", "var(--primary-dark)");
-      try { window.open(issueLink, "_blank", "noopener"); } catch(err){}
-    }).catch(function(err){
-      say("写入失败：" + err.message + "（已打开 GitHub 申请页作为备选）", "#ef4444");
-      try { window.open(issueLink, "_blank", "noopener"); } catch(e2){}
-    });
-    return false;
-  }
-
-  /* ④ 普通访客：打开 GitHub 申请页（仓库里的 Action 会自动收进后台列表） */
+  /* 打开 GitHub 申请页（仓库里的 Action 会自动收进后台列表） */
   window.open(issueLink, "_blank", "noopener");
   say("已打开申请页：登录 GitHub 后点「Submit new issue」提交即可，我这边会自动收到。", "var(--primary-dark)");
   return false;
@@ -287,7 +270,7 @@ function appIconHTML(a, big){
 }
 function appCardHTML(a, idx){
   var tags = (a.tags||[]).slice(0,4).map(function(t){ return '<span class="app-chip">'+esc(t)+'</span>'; }).join("");
-  return '<div class="app-card" onclick="openApp('+idx+')">'
+  return '<div class="app-card" tabindex="0" role="link" onclick="openApp('+idx+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openApp('+idx+')}">'
     + '<div class="app-head"><div class="app-icon">'+appIconHTML(a)+'</div>'
     + '<div style="min-width:0"><div class="app-name">'+esc(a.name||"未命名应用")+'</div></div></div>'
     + '<div class="app-sum">'+esc(a.summary||"")+'</div>'
@@ -452,73 +435,15 @@ function renderLedger(){
     var bills = imgs.length ? '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">'+imgs.map(function(f){ return '<a href="'+esc(f.url)+'" target="_blank" rel="noopener"><img src="'+esc(f.url)+'" style="width:64px;height:64px;object-fit:cover;border-radius:8px" alt=""></a>'; }).join("")+'</div>' : "";
     return '<div class="ledger-item" id="ledgerItem-'+records.indexOf(r)+'" style="border-left-color:'+(r.type==="income"?"#10b981":"#ef4444")+'"><div style="flex:1;min-width:180px"><div class="date">'+esc(r.date)+(r.time?(' '+esc(r.time)):"")+' · '+esc(r.category||"其他")+'</div><div>'+esc(r.desc||"无备注")+'</div>'+bills+'</div><div class="amount" style="color:'+(r.type==="income"?"#10b981":"#ef4444")+'">'+(r.type==="income"?"+":"-")+'¥'+(parseFloat(r.amount)||0).toFixed(2)+'</div></div>';
   }).join("") || '<div class="empty">暂无记录</div>';
-  updateLgCategories();
+  if(document.getElementById("lgType")) updateLgCategories();
 }
-async function addLedgerFromFront(){
-  var amt = parseFloat(document.getElementById("lgAmt").value);
-  var desc = document.getElementById("lgDesc").value.trim();
-  var type = document.getElementById("lgType").value;
-  var category = document.getElementById("lgCategory").value;
-  var hint = document.getElementById("lgHint");
-  if(!amt || amt<=0){ if(hint){ hint.textContent="请输入金额"; hint.style.color="#ef4444"; } return; }
-  if(!frontToken()){ if(hint){ hint.textContent="记账需要在管理后台「站点设置」里保存 GitHub Token（仅你自己的浏览器）"; hint.style.color="#ef4444"; } return; }
-  hint.textContent = "保存中…"; hint.style.color = "#64748b";
-  try{
-    /* 和日记/指导记录走同一套：读最新 → 改 → 提交，冲突自动重试 */
-    await pushDataChange(function(d){
-      d.ledger = d.ledger || [];
-      d.ledger.push({ date: todayStr(), type: type, amount: amt, desc: desc, category: category });
-    }, "记账");
-    document.getElementById("lgAmt").value=""; document.getElementById("lgDesc").value="";
-    renderLedger();
-    hint.textContent = "✅ 已记一笔，稍等约 1 分钟前台生效"; hint.style.color = "#059669";
-  }catch(e){ hint.textContent = "保存失败："+e.message; hint.style.color = "#ef4444"; }
-}
-
 /* ============================================================
-   前台写入（和「记一笔」同一套）：拉线上最新 data.json → 改 → 提交
-   需要浏览器里存过 GitHub Token（后台「站点设置」保存一次即可）
+   前台只读：内容写入统一在管理后台完成。
+   这里仅保留读取 Token 的兼容函数，供旧的本地预览逻辑判断登录态；
+   不再提供任何写入 data.json 的前台入口。
    ============================================================ */
 function frontToken(){
   try { return (localStorage.getItem("benyia_gh_token") || "").trim(); } catch(e){ return ""; }
-}
-/* 读线上最新 data.json（写入前必须先读，避免覆盖别人的改动） */
-async function readRemoteData(h){
-  var res = await fetch("https://api.github.com/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/data.json?ref=main&t=" + Date.now(), { headers: h, cache: "no-store" });
-  if(!res.ok) throw new Error("读取线上数据失败（HTTP " + res.status + "），请检查 Token 是否有效");
-  var meta = await res.json();
-  return { data: JSON.parse(decodeURIComponent(escape(atob(String(meta.content || "").replace(/\s/g, ""))))), sha: meta.sha };
-}
-function b64EncodeUtf8(obj){
-  var bytes = new TextEncoder().encode(JSON.stringify(obj, null, 2));
-  var bin = "", CHUNK = 0x8000;
-  for(var i = 0; i < bytes.length; i += CHUNK) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
-  return btoa(bin);
-}
-/* 写入线上 data.json：遇到 409/422（别人刚改过）自动重读并重试一次，
-   重试时会用全新数据重新执行 mutate，所以不会丢改动、也不会重复添加 */
-async function pushDataChange(mutate, commitMessage){
-  var token = frontToken();
-  if(!token) throw new Error("需要先在管理后台「站点设置」里保存 GitHub Token（只存在你自己的浏览器里）");
-  var h = { "Authorization":"Bearer "+token, "Accept":"application/vnd.github+json", "Content-Type":"application/json" };
-  var lastErr = null;
-  for(var attempt = 0; attempt < 2; attempt++){
-    var remote = await readRemoteData(h);
-    var latest = remote.data;
-    mutate(latest);                       /* 每次都用最新数据重新执行，避免覆盖与重复 */
-    var put = await fetch("https://api.github.com/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/data.json", {
-      method: "PUT", headers: h,
-      body: JSON.stringify({ message: commitMessage || "前台更新", content: b64EncodeUtf8(latest), branch: "main", sha: remote.sha })
-    });
-    if(put.ok){ blogData = latest; return latest; }   /* 本地立即生效，不用等 Pages 构建 */
-    var msg = "HTTP " + put.status;
-    try { var j = await put.json(); if(j.message) msg += "：" + j.message; } catch(e){}
-    lastErr = new Error(msg);
-    /* sha 过期（有人同时写）→ 重读一次再试；其它错误直接抛 */
-    if(put.status !== 409 && put.status !== 422) throw lastErr;
-    await new Promise(function(r){ setTimeout(r, 600); });
-  }
-  throw new Error((lastErr ? lastErr.message : "") + "（刚有人同时修改，已重试一次仍冲突，请再点一次保存）");
 }
 function sayStatus(id, text, color){
   var el = document.getElementById(id);

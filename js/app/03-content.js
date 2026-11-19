@@ -317,9 +317,8 @@ function courseBadgeHTML(c){
 function applySiteConfig(){
   var sc = (blogData && blogData.siteConfig) || {};
   var title = sc.title || "思齐个人主页";
-  /* 浏览器标签标题：只用「网站标题」，不再拼「XX的博客」后缀
-     （标题在管理后台「站点设置 → 网站标题」里改） */
-  var tab = title.length > 16 ? title.slice(0, 16) + "…" : title;
+  /* 浏览器标签标题：短标题补上站点定位，长标题保持后台原样 */
+  var tab = title.length < 10 ? title + " | 控制工程研究生的学习与生活记录" : title;
   document.title = tab;
   var h1 = document.getElementById("titleH1"); if(h1) h1.textContent = title;
   var p = document.getElementById("titleP"); if(p) p.textContent = sc.subtitle || "";
@@ -519,7 +518,11 @@ function homeItems(){
     });
   }
   if(on.courses)    (blogData.courses||[]).forEach(function(c,i){ add("课程", c, c.icon||"📚", c.title, c.intro||c.desc, "openCourse("+i+")"); });
-  if(on.collections)(blogData.collections||[]).forEach(function(c,i){ add("合辑", c, c.icon||"📦", c.title, c.intro||c.desc, "openCollection("+i+")"); });
+  if(on.collections)(blogData.collections||[]).forEach(function(c,i){
+    /* 空系列不进首页信息流，避免最新位置被「整理中」占掉 */
+    if(!collectFiles(c).length && !collEntryList(c).length) return;
+    add("合辑", c, c.icon||"📦", c.title, c.intro||c.desc, "openCollection("+i+")");
+  });
   if(on.papers)     (blogData.papers||[]).forEach(function(p,i){ add("论文", p, "📝", p.title, p.abstract||p.desc, "openPaper("+i+")"); });
   if(on.notices)    (blogData.notices||[]).forEach(function(n,i){ add("通知", n, "🔔", n.title, n.content, "openNotice("+i+")"); });
   if(on.classItems) (blogData.classItems||[]).forEach(function(c,i){ add("班级", c, "👥", c.title, c.content, "openClass("+i+")"); });
@@ -555,13 +558,10 @@ function homeEngagementCounts(a){
   };
 }
 function homeCardHTML(a){
-  var sc = blogData.siteConfig || {};
   var imgs = collectImages(a.item || {});
   var bg = (imgs[0] && imgs[0].url) || a.item.cover || "";
   var cover = bg ? '<div class="ac-cover" style="background-image:url(' + esc(bg) + ')" aria-hidden="true"></div>' : "";
   var nf = collectFiles(a.item || {}).length;
-  var counts = homeEngagementCounts(a);
-  var e = engagementEntry(a.key, false) || {};
   var typeIcon = isImgUrl(a.icon) ? '<img src="' + esc(a.icon) + '" alt="">' : esc(a.icon || "📄");
   return '<article class="article-card ac-card' + (cover ? ' has-cover' : ' no-cover') + '" tabindex="0" role="link" data-open="' + esc(a.click) + '" data-ek="' + esc(a.key) + '" data-title="' + esc(a.title) + '" data-path="' + esc(a.path) + '" data-base-views="' + Number(a.item && a.item.views || 0) + '" data-base-likes="' + Number(a.item && a.item.likes || 0) + '" data-base-favorites="' + Number(a.item && a.item.favorites || 0) + '" data-base-comments="' + Number(a.item && a.item.comments || 0) + '">'
     + '<div class="ac-body">'
@@ -570,17 +570,10 @@ function homeCardHTML(a){
     +   (a.tags.length ? '<div class="ac-tags">' + a.tags.map(function(t){ return "<span># " + esc(t) + "</span>"; }).join("") + '</div>' : "")
     +   (a.desc ? '<p class="ac-desc">' + esc(a.desc.slice(0, 150)) + '</p>' : "")
     +   '<div class="ac-meta">'
-    +     (a.updated ? '<span>🕒 更新 ' + esc(String(a.updated).slice(0, 10)) + '</span>' : "")
-    +     '<span>✍ ' + a.words + ' 字</span>'
-    +     '<span>⏱ ' + Math.max(1, Math.round(a.words / 400)) + ' 分钟</span>'
-    +     (nf ? '<span>📎 ' + nf + ' 个文件</span>' : "")
-    +   '</div>'
-    +   '<div class="ac-actions">'
-    +     '<span class="ac-act is-static" title="浏览量">👁 <span data-count="views">' + counts.views + '</span></span>'
-    +     '<button type="button" class="ac-act' + (e.liked ? ' on' : '') + '" data-eng="like" title="点赞">👍 <span data-count="like">' + counts.likes + '</span></button>'
-    +     '<button type="button" class="ac-act' + (e.favorite ? ' on' : '') + '" data-eng="favorite" title="收藏">⭐ <span data-count="favorite">' + counts.favorites + '</span></button>'
-    +     '<button type="button" class="ac-act" data-eng="comment" title="评论">💬 <span data-count="comment">' + counts.comments + '</span></button>'
-    +     '<button type="button" class="ac-act" data-eng="share" title="分享">↗ 分享</button>'
+    +     (a.updated ? '<span>更新于 ' + esc(String(a.updated).slice(0, 16)) + '</span>' : "")
+    +     '<span>' + a.words + ' 字</span>'
+    +     '<span>约 ' + Math.max(1, Math.round(a.words / 400)) + ' 分钟</span>'
+    +     (nf ? '<span>' + nf + ' 个文件</span>' : "")
     +   '</div>'
     + '</div>' + cover + '</article>';
 }
@@ -894,23 +887,44 @@ function collectionCover(c){
   var imgs = collectImages(c || {});
   return (imgs[0] && imgs[0].url) || c.cover || (blogData.siteConfig && blogData.siteConfig.defaultImage) || "";
 }
+function collectionSymbolHTML(c){
+  var ic = (c && c.icon) || "📦";
+  if(isImgUrl(ic)){
+    return '<img class="coll-symbol-img" src="' + esc(ic) + '" alt="" loading="lazy" onerror="this.style.display=\'none\';var n=this.nextElementSibling;if(n)n.style.display=\'block\'">'
+      + '<span class="coll-symbol-fallback" aria-hidden="true">📦</span>';
+  }
+  return '<span class="coll-symbol-text">' + esc(ic) + '</span>';
+}
 function collectionCardHTML(c, idx){
   var cover = collectionCover(c);
   var files = collectFiles(c);
-  return '<article class="coll-card" onclick="openCollection(' + idx + ')">'
-    +   '<div class="coll-card-cover' + (cover ? '' : ' none') + '"' + (cover ? ' style="background-image:url(' + esc(cover) + ')"' : '') + '>'
-    +     (cover ? '' : (isImgUrl(c.icon) ? '<img src="' + esc(c.icon) + '" alt="">' : esc(c.icon || '📦')))
+  var ents = collEntryList(c).length;
+  var empty = !files.length && !ents;
+  var meta = [];
+  if(files.length) meta.push(files.length + " 份文件");
+  if(ents) meta.push(ents + " 个条目");
+  if(!meta.length) meta.push("整理中");
+  return '<article class="coll-card' + (empty ? ' is-empty' : '') + '" tabindex="0" role="link" onclick="openCollection(' + idx + ')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openCollection(' + idx + ')}">'
+    +   '<div class="coll-card-cover' + (cover ? '' : ' is-symbol') + '">'
+    +     (cover ? '<img src="' + esc(cover) + '" alt="" loading="lazy" onerror="this.parentNode.classList.add(\'img-missing\');this.remove()">' : '')
+    +     '<span class="coll-card-symbol" aria-hidden="true">' + collectionSymbolHTML(c) + '</span>'
+    +     '<span class="coll-card-kind">系列资料</span>'
     +   '</div>'
     +   '<div class="coll-card-body">'
     +     '<div class="coll-card-top"><span class="ac-badge">合辑</span>' + ((c.tags || []).length ? '<span class="coll-card-tag">#' + esc((c.tags || [])[0]) + '</span>' : '') + '</div>'
     +     '<h3>' + esc(c.title || '未命名合辑') + '</h3>'
     +     (c.desc ? '<p>' + esc(c.desc) + '</p>' : '')
-    +     '<div class="coll-card-meta"><span>📎 ' + files.length + ' 个文件</span>' + (c.time ? '<span>🕒 ' + esc(String(c.time).slice(0,10)) + '</span>' : '') + (c.author ? '<span>✍ ' + esc(c.author) + '</span>' : '') + '</div>'
+    +     '<div class="coll-card-foot"><span>' + meta.join(' · ') + (c.time ? ' · ' + esc(String(c.time).slice(0,10)) : '') + '</span><span class="coll-card-enter">' + (empty ? '查看 →' : '打开系列 →') + '</span></div>'
     +   '</div></article>';
 }
 function renderCollections(){
   var arr = (blogData.collections || []).map(function(c, i){ return {c:c, i:i}; });
-  arr.sort(function(a, b){ return byTimeDesc(a.c, b.c); });
+  arr.sort(function(a, b){
+    var ac = (collectFiles(a.c).length || collEntryList(a.c).length) ? 1 : 0;
+    var bc = (collectFiles(b.c).length || collEntryList(b.c).length) ? 1 : 0;
+    if(ac !== bc) return bc - ac;
+    return byTimeDesc(a.c, b.c);
+  });
   renderPaged("collections", "collectionList", "collectionPager", arr, function(it){
     return collectionCardHTML(it.c, it.i);
   }, "暂无合辑", 8);
@@ -928,12 +942,17 @@ function collFileKind(f){
   if(/^(md|markdown|txt)$/.test(e)) return 'doc';
   if(/^(html?|htm)$/.test(e)) return 'html';
   if(e === 'pdf') return 'pdf';
+  if(/^(doc|docx|wps|odt)$/.test(e)) return 'word';
+  if(/^(ppt|pptx|key|odp)$/.test(e)) return 'slides';
+  if(/^(xls|xlsx|csv|ods)$/.test(e)) return 'sheet';
   return 'file';
 }
 function collFileTitle(f){
   return '<span class="coll-file-icon">' + (function(){
     var k = collFileKind(f);
-    return k === 'image' ? '🖼️' : k === 'audio' ? '🎵' : k === 'video' ? '🎬' : k === 'doc' ? '📝' : k === 'html' ? '🌐' : k === 'pdf' ? '📕' : (f.external ? '🔗' : '📎');
+    return k === 'image' ? '🖼️' : k === 'audio' ? '🎵' : k === 'video' ? '🎬' : k === 'doc' ? '📝' :
+      k === 'html' ? '🌐' : k === 'pdf' ? '📕' : k === 'word' ? '📄' : k === 'slides' ? '📊' :
+      k === 'sheet' ? '📈' : (f.external ? '🔗' : '📎');
   })() + '</span><b>' + esc(f.name || '未命名文件') + '</b>';
 }
 function collFileBlock(f){
@@ -959,15 +978,14 @@ function collFileBlock(f){
 }
 function collectionFilesHTML(c){
   var files = collectFiles(c || {});
-  if(!files.length) return '<div class="info-card"><h3>📎 系列资料</h3><div class="empty">这个合辑还没有上传文件</div></div>';
+  if(!files.length) return "";
   return '<div class="info-card collection-library"><h3>📎 系列资料 <span class="coll-count">' + files.length + '</span></h3><div class="coll-file-grid">' + files.map(collFileBlock).join('') + '</div></div>';
 }
 
 /* ============================================================
-   合辑条目：每个系列下按日期排列的 Markdown / HTML 条目
-   站长浏览器存过 GitHub Token 时，可点「编辑」直接写回 data.json
+   合辑条目：每个系列下按日期排列的只读条目
+   条目与文件只在管理后台维护，前台只提供预览 / 下载
    ============================================================ */
-var collEntryCtx = { ci: -1, ei: -1 };
 function collEntryList(c){
   return Array.isArray(c && c.entries) ? c.entries : [];
 }
@@ -978,160 +996,30 @@ function collEntrySorted(c){
     return (b.e.updated || b.e.created || "").localeCompare(a.e.updated || a.e.created || "");
   });
 }
-function collEntryBodyHTML(e){
-  if(!e) return "";
-  if(String(e.kind || "md").toLowerCase() === "html"){
-    return '<div class="coll-entry-html">' + String(e.body || "") + '</div>';
-  }
-  return mdRenderHTML(e.body || "") || '<div class="empty">这条还没有内容</div>';
+function collEntryMeta(e){
+  var f = (e && e.file) || {};
+  var kind = String((e && e.kind) || collFileExt({ name: f.name || "" }) || "file").toUpperCase();
+  return { kind: kind, size: f.size ? fmtSize(f.size) : "", name: f.name || "", url: f.url || "" };
 }
 function collEntryListHTML(c){
   var list = collEntrySorted(c);
-  var canEdit = collEntryCanEdit();
-  var head = '<div class="coll-entry-list-head"><h3>📚 系列条目 <span class="coll-count">' + list.length + '</span></h3>'
-    + (canEdit ? '<button type="button" class="coll-entry-new" onclick="newCollEntry()">+ 新建条目</button>' : '')
-    + '</div>';
-  if(!list.length){
-    return '<div class="info-card coll-entry-list">' + head
-      + '<div class="empty">这个系列还没有条目' + (canEdit ? '，点右上角「新建条目」开始写。' : '。') + '</div></div>';
-  }
+  if(!list.length) return "";
+  var head = '<div class="coll-entry-list-head"><h3>系列条目</h3><span class="coll-count">' + list.length + '</span></div>';
   var rows = list.map(function(it){
-    var e = it.e;
-    var kind = String(e.kind || "md").toLowerCase() === "html" ? "HTML" : "MD";
-    var preview = String(e.body || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 90);
-    return '<button type="button" class="coll-entry-row" data-cei="' + it.i + '" onclick="openCollEntry(' + it.i + ')">'
+    var e = it.e, m = collEntryMeta(e);
+    var tools = m.url
+      ? '<button type="button" class="coll-entry-open" data-file-preview="1" data-file-url="' + esc(m.url) + '" data-file-name="' + esc(e.title || m.name) + '">预览</button>'
+        + '<a class="coll-entry-dl" href="' + esc(m.url) + '" download="' + esc(m.name) + '">下载</a>'
+      : '<span class="coll-entry-dim">文件未就绪</span>';
+    return '<div class="coll-entry-row">'
       +   '<span class="coll-entry-date">' + esc(e.date || "未设日期") + '</span>'
-      +   '<span class="coll-entry-row-main"><b>' + esc(e.title || "未命名条目") + '</b><span>' + esc(preview || "暂无内容") + '</span></span>'
-      +   '<span class="coll-entry-kind">' + kind + '</span>'
-      +   '<span class="coll-entry-arrow" aria-hidden="true">›</span>'
-      + '</button>';
+      +   '<span class="coll-entry-row-main"><b>' + esc(e.title || "未命名条目") + '</b>'
+      +     '<span>' + esc(m.name || "暂无文件") + (m.size ? " \u00b7 " + esc(m.size) : "") + '</span></span>'
+      +   '<span class="coll-entry-kind">' + esc(m.kind) + '</span>'
+      +   '<span class="coll-entry-tools">' + tools + '</span>'
+      + '</div>';
   }).join("");
   return '<div class="info-card coll-entry-list">' + head + '<div class="coll-entry-rows">' + rows + '</div></div>';
-}
-function collEntryCanEdit(){
-  return typeof frontToken === "function" && !!frontToken();
-}
-function openCollEntry(ei){
-  var c = (blogData.collections || [])[currentCollectionIdx];
-  if(!c) return;
-  var e = collEntryList(c)[ei];
-  if(!e) return;
-  collEntryCtx = { ci: currentCollectionIdx, ei: ei };
-  var modal = document.getElementById("collEntryModal");
-  var view = document.getElementById("collEntryView");
-  var editor = document.getElementById("collEntryEditor");
-  if(!modal || !view || !editor) return;
-  var kind = String(e.kind || "md").toLowerCase() === "html" ? "html" : "md";
-  document.getElementById("collEntryHeading").textContent = e.title || "未命名条目";
-  document.getElementById("collEntryMeta").textContent = (c.title || "") + (e.date ? " · " + e.date : "");
-  document.getElementById("collEntryBadge").textContent = kind === "html" ? "HTML" : "MD";
-  view.innerHTML = collEntryBodyHTML(e);
-  view.className = "coll-entry-view md-body";
-  editor.hidden = true;
-  view.hidden = false;
-  var canEdit = collEntryCanEdit();
-  var editBtn = document.getElementById("collEntryEditBtn");
-  if(editBtn) editBtn.hidden = !canEdit;
-  modal.classList.add("show");
-  modal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("coll-entry-open");
-  if(typeof enhanceCodeBlocks === "function") enhanceCodeBlocks(view);
-  window.scrollTo(0, 0);
-}
-function closeCollEntry(){
-  var modal = document.getElementById("collEntryModal");
-  if(modal){ modal.classList.remove("show"); modal.setAttribute("aria-hidden", "true"); }
-  document.body.classList.remove("coll-entry-open");
-  collEntryCtx = { ci: -1, ei: -1 };
-}
-function newCollEntry(){
-  var c = (blogData.collections || [])[currentCollectionIdx];
-  if(!c) return;
-  if(!collEntryCanEdit()){
-    showToast("需要先在管理后台「站点设置」保存 GitHub Token", "error");
-    return;
-  }
-  collEntryCtx = { ci: currentCollectionIdx, ei: -1 };
-  var modal = document.getElementById("collEntryModal");
-  if(!modal) return;
-  document.getElementById("collEntryHeading").textContent = "新建条目";
-  document.getElementById("collEntryMeta").textContent = c.title || "";
-  document.getElementById("collEntryBadge").textContent = "MD";
-  document.getElementById("collEntryView").hidden = true;
-  document.getElementById("collEntryEditor").hidden = false;
-  document.getElementById("collEntryEditBtn").hidden = true;
-  document.getElementById("collEntryTitle").value = "";
-  document.getElementById("collEntryDate").value = todayStr();
-  document.getElementById("collEntryKind").value = "md";
-  document.getElementById("collEntryText").value = "";
-  document.getElementById("collEntrySaveState").textContent = "";
-  modal.classList.add("show");
-  modal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("coll-entry-open");
-  setTimeout(function(){ document.getElementById("collEntryTitle").focus(); }, 50);
-}
-function startCollEntryEdit(){
-  var c = (blogData.collections || [])[collEntryCtx.ci];
-  var e = c && collEntryList(c)[collEntryCtx.ei];
-  if(!e) return;
-  document.getElementById("collEntryView").hidden = true;
-  document.getElementById("collEntryEditor").hidden = false;
-  document.getElementById("collEntryEditBtn").hidden = true;
-  document.getElementById("collEntryTitle").value = e.title || "";
-  document.getElementById("collEntryDate").value = String(e.date || "").slice(0, 10);
-  document.getElementById("collEntryKind").value = String(e.kind || "md").toLowerCase() === "html" ? "html" : "md";
-  document.getElementById("collEntryText").value = e.body || "";
-  document.getElementById("collEntrySaveState").textContent = "";
-}
-function cancelCollEntryEdit(){
-  var c = (blogData.collections || [])[collEntryCtx.ci];
-  var e = c && collEntryList(c)[collEntryCtx.ei];
-  if(!e){ closeCollEntry(); return; }
-  document.getElementById("collEntryEditor").hidden = true;
-  document.getElementById("collEntryView").hidden = false;
-  document.getElementById("collEntryEditBtn").hidden = false;
-}
-async function saveCollEntry(){
-  var ctx = collEntryCtx;
-  var title = document.getElementById("collEntryTitle").value.trim();
-  var date = document.getElementById("collEntryDate").value;
-  var kind = document.getElementById("collEntryKind").value === "html" ? "html" : "md";
-  var body = document.getElementById("collEntryText").value;
-  var state = document.getElementById("collEntrySaveState");
-  var btn = document.getElementById("collEntrySaveBtn");
-  if(!title){ if(state) state.textContent = "请填写标题"; return; }
-  if(typeof pushDataChange !== "function"){ if(state) state.textContent = "保存功能不可用"; return; }
-  if(btn){ btn.disabled = true; btn.textContent = "保存中…"; }
-  if(state) state.textContent = "正在写入 GitHub…";
-  try{
-    await pushDataChange(function(latest){
-      latest.collections = latest.collections || [];
-      var col = latest.collections[ctx.ci];
-      if(!col) throw new Error("合辑不存在，请刷新页面");
-      col.entries = Array.isArray(col.entries) ? col.entries : [];
-      var now = nowStr();
-      if(ctx.ei >= 0 && col.entries[ctx.ei]){
-        var old = col.entries[ctx.ei];
-        col.entries[ctx.ei] = Object.assign({}, old, { title:title, date:date, kind:kind, body:body, updated:now });
-      }else{
-        col.entries.push({ title:title, date:date, kind:kind, body:body, created:now, updated:now });
-        ctx.ei = col.entries.length - 1;
-      }
-      col.time = now;
-    }, "更新合辑条目：" + title);
-    var c = (blogData.collections || [])[currentCollectionIdx];
-    if(c){
-      document.getElementById("colDetailFiles").innerHTML = galleryHTML(c) + collEntryListHTML(c) + collectionFilesHTML(c);
-      if(typeof renderCollections === "function") renderCollections();
-    }
-    closeCollEntry();
-    showToast("已保存到博客，约 1 分钟后前台全部生效");
-  }catch(err){
-    if(state) state.textContent = "保存失败：" + err.message;
-    showToast("保存失败：" + err.message, "error");
-  }finally{
-    if(btn){ btn.disabled = false; btn.textContent = "保存到博客"; }
-  }
 }
 function hydrateCollectionDocs(root){
   if(!root) return;
@@ -1165,19 +1053,27 @@ function openCollection(idx){
   if(typeof setActiveNav === "function") setActiveNav("collections");
   var icon = document.getElementById('colDetailIcon');
   var iconVal = c.icon || '📦';
-  icon.innerHTML = isImgUrl(iconVal) ? '<img src="' + esc(iconVal) + '" alt="">' : esc(iconVal);
+  icon.innerHTML = isImgUrl(iconVal)
+    ? '<img src="' + esc(iconVal) + '" alt="" onerror="this.parentNode.textContent=\'📦\'">'
+    : '<span class="hero-symbol">' + esc(iconVal) + '</span>';
   document.getElementById('colDetailTitle').textContent = c.title || '合辑';
   document.getElementById('colDetailDesc').textContent = c.desc || '';
   var files = collectFiles(c);
+  var entries = collEntryList(c).length;
   document.getElementById('colDetailChips').innerHTML =
       '<span class="info-chip green">📎 <b>' + files.length + '</b> 个文件</span>'
+    + (entries ? '<span class="info-chip">📚 <b>' + entries + '</b> 个条目</span>' : '')
     + (c.time ? '<span class="info-chip">🕒 ' + esc(c.time) + '</span>' : '')
     + (c.author ? '<span class="info-chip">✍ ' + esc(c.author) + '</span>' : '')
     + (c.tags || []).map(function(t){ return '<span class="info-chip" style="cursor:pointer" onclick="openTag(\'' + esc(String(t).replace(/'/g, "\\'")) + '\')">🏷 ' + esc(t) + '</span>'; }).join('');
   var intro = document.getElementById('colDetailIntro');
   intro.innerHTML = mdRenderHTML(c.intro || c.desc || '') || '<div class="empty">暂无系列介绍</div>';
   intro.className = 'md-body';
-  document.getElementById('colDetailFiles').innerHTML = galleryHTML(c) + collEntryListHTML(c) + collectionFilesHTML(c);
+  var detailParts = galleryHTML(c) + collEntryListHTML(c) + collectionFilesHTML(c);
+  if(!detailParts){
+    detailParts = '<div class="info-card collection-empty-note"><span class="cen-icon" aria-hidden="true">📂</span><div><b>这个系列还在整理</b><p>目前没有可预览或下载的文件，稍后再来看看。</p></div></div>';
+  }
+  document.getElementById('colDetailFiles').innerHTML = detailParts;
   showSideInfo('📦 合辑信息',
       '<div class="kv"><span class="k">系列名称</span><span class="v">' + esc(c.title || '') + '</span></div>'
     + '<div class="kv"><span class="k">资料数量</span><span class="v">' + files.length + ' 个</span></div>'
@@ -1216,7 +1112,6 @@ function renderCourseSummary(){
     return '<div class="course-summary-stat"><b>' + value + '</b><span>' + label + '</span></div>';
   }
   box.innerHTML = '<div class="course-summary-head">'
-    + '<span class="course-summary-kicker">COURSE LIBRARY</span>'
     + '<h2>课程资料库</h2>'
     + '<p>按课程归档课件、通知、考试与参考资料。</p>'
     + '</div>'
@@ -1227,24 +1122,22 @@ function renderCourseSummary(){
     + stat(avg + "%", "平均进度")
     + '</div>';
 }
-function courseCardHTML(c, idx, ordinal){
+function courseCardHTML(c, idx){
   var files = collectFiles(c).length;
   var folders = cfsFolderList(c).length;
   var pg = Math.max(0, Math.min(100, Number(c.progress || 0)));
   var done = courseDone(c);
   var desc = mdText(c.intro || c.desc || "").replace(/\s+/g, " ").trim();
   if(desc.length > 150) desc = desc.slice(0, 150) + "…";
-  var tags = hpTagsOf(c.tags).slice(0, 3);
   return '<article class="course-item' + (done ? ' is-done' : '') + '" data-course-idx="' + idx + '" tabindex="0" role="link" onclick="openCourse(' + idx + ')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openCourse(' + idx + ')}">'
     + courseArtHTML(c)
     + '<div class="course-item-body">'
     +   '<div class="course-item-top">'
-    +     '<span class="course-index">COURSE ' + String(ordinal || 0).padStart(2, "0") + '</span>'
+    +     '<span class="course-index">课程</span>'
     +     '<span class="course-state-pill' + (done ? ' done' : '') + '">' + (done ? '✓ 已完成' : '进行中 ' + pg + '%') + '</span>'
     +   '</div>'
     +   '<h3>' + esc(c.title || "未命名课程") + '</h3>'
     +   '<p class="course-desc">' + (desc ? esc(desc) : "暂无课程简介") + '</p>'
-    +   (tags.length ? '<div class="course-tags">' + tags.map(function(t){ return '<span>#' + esc(t) + '</span>'; }).join("") + '</div>' : "")
     +   '<div class="course-meta">'
     +     '<span>📁 ' + folders + ' 个文件夹</span>'
     +     '<span>📎 ' + files + ' 份资料</span>'
@@ -1261,8 +1154,8 @@ function renderCourses(){
   renderCourseSummary();
   var arr = (blogData.courses||[]).map(function(c,i){ return {c:c, i:i}; });
   arr.sort(function(a,b){ return byTimeDesc(a.c, b.c); });
-  renderPaged("courses", "coursesList", "coursesPager", arr, function(it, ordinal){
-    return courseCardHTML(it.c, it.i, ordinal + 1);
+  renderPaged("courses", "coursesList", "coursesPager", arr, function(it){
+    return courseCardHTML(it.c, it.i);
   }, "暂无课程");
 }
 /* ============================================================

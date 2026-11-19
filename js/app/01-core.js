@@ -218,7 +218,9 @@ function filePreviewKind(name, url){
   if(/^(txt|log|json|csv|tsv|xml|ya?ml|ini|conf|cfg|js|mjs|cjs|ts|css|scss|less|py|c|cpp|h|hpp|java|go|rs|sql|sh|bat|ps1)$/.test(ext)) return "text";
   if(/^(mp3|wav|flac|aac|m4a|ogg|opus)$/.test(ext)) return "audio";
   if(/^(mp4|webm|mov|mkv|avi|ogv)$/.test(ext)) return "video";
-  if(/^(doc|docx|ppt|pptx|xls|xlsx|odt|ods|odp)$/.test(ext)) return "office";
+  if(ext === "docx") return "word";
+  if(ext === "pptx") return "slides";
+  if(/^(doc|ppt|xls|xlsx|odt|ods|odp)$/.test(ext)) return "office";
   return "other";
 }
 function isLocalUploadPath(url){
@@ -236,7 +238,8 @@ function isLocalUploadPath(url){
 function filePreviewIcon(kind){
   return kind === "image" ? "🖼️" : kind === "pdf" ? "📕" : kind === "html" ? "🌐" :
     kind === "markdown" ? "📝" : kind === "text" ? "📄" : kind === "audio" ? "🎵" :
-    kind === "video" ? "🎬" : kind === "office" ? "📊" : "📎";
+    kind === "video" ? "🎬" : kind === "word" ? "📄" : kind === "slides" ? "📊" :
+    kind === "office" ? "📊" : "📎";
 }
 function openFilePreviewFromButton(btn){
   if(!btn) return;
@@ -248,7 +251,10 @@ function fileActionHTML(url, name){
   var kind = filePreviewKind(name, url);
   if(local){
     var label = kind === "other" ? "打开" : "预览";
-    return '<button type="button" class="file-open file-preview-trigger" data-file-preview="1" data-file-url="' + esc(url) + '" data-file-name="' + esc(name || "文件") + '">' + label + '</button>';
+    return '<span class="file-actions">'
+      + '<button type="button" class="file-open file-preview-trigger" data-file-preview="1" data-file-url="' + esc(url) + '" data-file-name="' + esc(name || "文件") + '">' + label + '</button>'
+      + '<a class="file-dl-icon" href="' + esc(url) + '" download="' + esc(name || "文件") + '" title="下载文件" aria-label="下载 ' + esc(name || "文件") + '">↓</a>'
+      + '</span>';
   }
   if(isExternalFile(url)){
     return '<a class="file-open" href="'+esc(url)+'" target="_blank" rel="noopener">打开</a>';
@@ -260,8 +266,92 @@ function fileActionHTML(url, name){
    通用文件预览器：站内上传的常见文件直接在页面内打开
    ============================================================ */
 var fileViewerLoadId = 0;
+var previewScriptCache = {};
 function fileViewerAbsolute(url){
   try{ return new URL(url, document.baseURI).href; }catch(e){ return String(url || ""); }
+}
+function loadPreviewScript(src){
+  if(previewScriptCache[src]) return previewScriptCache[src];
+  previewScriptCache[src] = new Promise(function(resolve, reject){
+    var s = document.createElement("script");
+    s.src = src;
+    s.async = true;
+    s.onload = function(){ resolve(); };
+    s.onerror = function(){
+      delete previewScriptCache[src];
+      reject(new Error("预览组件加载失败"));
+    };
+    document.head.appendChild(s);
+  });
+  return previewScriptCache[src];
+}
+function fileViewerFallbackHTML(kind, abs, name, message){
+  return '<div class="file-viewer-fallback"><span>' + filePreviewIcon(kind) + '</span><h3>' + esc(name) +
+    '</h3><p>' + esc(message || "浏览器暂时无法直接预览这个文件。") + '</p><div class="file-viewer-fallback-actions">' +
+    '<a class="file-open" href="' + esc(abs) + '" target="_blank" rel="noopener">新窗口打开</a>' +
+    '<a class="file-open" href="' + esc(abs) + '" download="' + esc(name) + '">下载</a></div></div>';
+}
+function renderWordPreview(body, abs, name, loadId){
+  body.className += " is-document is-office-render";
+  body.innerHTML = '<div class="file-viewer-loading">正在读取并排版 Word 文档…</div>';
+  loadPreviewScript("assets/vendor/jszip.min.js?v=20261119j")
+    .then(function(){ return loadPreviewScript("assets/vendor/docx-preview.min.js?v=20261119j"); })
+    .then(function(){
+      if(!window.docx || typeof window.docx.renderAsync !== "function") throw new Error("Word 预览组件不可用");
+      return fetch(abs, {cache:"no-store"});
+    })
+    .then(function(res){
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      return res.arrayBuffer();
+    })
+    .then(function(buf){
+      if(loadId !== fileViewerLoadId) return;
+      body.innerHTML = '<div class="office-preview-host docx-preview-host"></div>';
+      var host = body.firstChild;
+      return window.docx.renderAsync(buf, host, null, {
+        className: "docx",
+        inWrapper: true,
+        breakPages: true,
+        ignoreWidth: window.innerWidth < 760,
+        ignoreHeight: false,
+        renderHeaders: true,
+        renderFooters: true,
+        useBase64URL: true
+      });
+    })
+    .catch(function(err){
+      if(loadId !== fileViewerLoadId) return;
+      body.innerHTML = fileViewerFallbackHTML("word", abs, name, "Word 预览没有成功：" + (err.message || "文件可能尚未发布") + "。可以直接下载，或用本机 Office 打开。");
+    });
+}
+function renderPptPreview(body, abs, name, loadId){
+  body.className += " is-document is-office-render";
+  body.innerHTML = '<div class="file-viewer-loading">正在读取并排版 PPT 演示文稿…</div>';
+  loadPreviewScript("assets/vendor/pptx-preview.bundle.js?v=20261119j")
+    .then(function(){ return fetch(abs, {cache:"no-store"}); })
+    .then(function(res){
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      return res.arrayBuffer();
+    })
+    .then(function(buf){
+      if(loadId !== fileViewerLoadId) return;
+      if(!window.pptxPreview || typeof window.pptxPreview.init !== "function") throw new Error("PPT 预览组件不可用");
+      body.innerHTML = '<div class="office-preview-host pptx-preview-host"></div>';
+      var host = body.firstChild;
+      var minWidth = window.innerWidth < 760 ? 640 : 300;
+      var width = Math.max(minWidth, Math.min(1120, body.clientWidth - 24));
+      var height = Math.max(260, Math.round(width * 9 / 16));
+      var viewer = window.pptxPreview.init(host, {width: width, height: height, mode: "slide"});
+      return viewer.preview(buf).then(function(){
+        var count = viewer.slideCount;
+        var pager = host.querySelector(".pptx-preview-wrapper-pagination");
+        if(pager && count) pager.textContent = "1/" + count;
+      });
+    })
+    .catch(function(err){
+      if(loadId !== fileViewerLoadId) return;
+      body.innerHTML = fileViewerFallbackHTML("slides", abs, name, "PPT 预览没有成功：" + (err.message || "文件可能尚未发布") + "。可以直接下载，或用本机 PowerPoint 打开。");
+    });
 }
 function openFilePreview(url, name){
   if(!url) return;
@@ -279,12 +369,21 @@ function openFilePreview(url, name){
   var loadId = ++fileViewerLoadId;
   name = name || "文件";
   if(nameEl) nameEl.textContent = name;
-  if(metaEl) metaEl.textContent = (ext ? ext.toUpperCase() : "文件") + " · " + ({
+  var kindLabel = {
     image:"图片预览", pdf:"PDF 文档", html:"HTML 页面", markdown:"Markdown 文档",
-    text:"文本文件", audio:"音频", video:"视频", office:"Office 文档", other:"文件"
-  }[kind] || "文件");
+    text:"文本文件", audio:"音频", video:"视频", word:"Word 文档", slides:"PPT 演示文稿",
+    office:"Office 文档", other:"文件"
+  }[kind] || "文件";
+  if(metaEl){
+    var mobileMeta = window.innerWidth < 700;
+    metaEl.textContent = (ext ? ext.toUpperCase() : "文件") + " · " +
+      (mobileMeta ? (kind === "slides" ? "可左右滑动" : kindLabel.replace(" 文档", "").replace(" 演示文稿", "")) : kindLabel);
+  }
   if(iconEl) iconEl.textContent = filePreviewIcon(kind);
-  if(openEl) openEl.href = abs;
+  if(openEl){
+    openEl.href = abs;
+    openEl.textContent = window.innerWidth < 700 ? "打开" : "新窗口打开";
+  }
   if(dlEl){ dlEl.href = abs; dlEl.setAttribute("download", name); }
   body.className = "file-viewer-body";
   body.innerHTML = "";
@@ -302,9 +401,15 @@ function openFilePreview(url, name){
     body.innerHTML = '<div class="file-viewer-media"><audio controls autoplay src="' + esc(abs) + '"></audio></div>';
   }else if(kind === "video"){
     body.innerHTML = '<div class="file-viewer-media"><video controls autoplay playsinline src="' + esc(abs) + '"></video></div>';
+  }else if(kind === "word"){
+    renderWordPreview(body, abs, name, loadId);
+  }else if(kind === "slides"){
+    renderPptPreview(body, abs, name, loadId);
   }else if(kind === "office"){
-    var localHost = /^(localhost|127\.0\.0\.1|\[::1\])$/i.test(location.hostname);
-    if(localHost){
+    /* Office 在线预览必须能访问公网地址；本地文件走下载兜底，
+       但预览本机引用的公网文件时仍可直接用在线预览。 */
+    var loopbackFile = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?\//i.test(abs);
+    if(loopbackFile){
       body.innerHTML = '<div class="file-viewer-fallback"><span>📊</span><h3>' + esc(name) + '</h3><p>Office 在线预览需要部署到公网后再打开；本地开发时请先下载查看。</p><div class="file-viewer-fallback-actions"><a class="file-open" href="' + esc(abs) + '" target="_blank" rel="noopener">打开</a><a class="file-open" href="' + esc(abs) + '" download="' + esc(name) + '">下载</a></div></div>';
     }else{
       body.className += " is-frame";

@@ -12,7 +12,6 @@ function renderAll(){
   $("cfgAvatar").value = sc.avatar || "";
   $("cfgFavicon").value = sc.favicon || "";
   $("cfgDefaultImage").value = sc.defaultImage || "";
-  $("cfgColumns").value = sc.columns || "1";
   $("cfgDefaultAvatar").value = sc.defaultAvatar || "";
   $("cfgLoginHint").value = (sc.loginHint === undefined ? "" : sc.loginHint);
   $("cfgCoverPan").checked = (sc.coverPan !== false);
@@ -196,6 +195,84 @@ function delCourse(i){
 }
 
 /* ---------- 合辑 ---------- */
+function collEntryExt(name){
+  var m = String(name || "").match(/\.([a-z0-9]{1,10})$/i);
+  return m ? m[1].toLowerCase() : "";
+}
+function collEntryKindOf(name){
+  var e = collEntryExt(name);
+  if(/^(md|markdown)$/.test(e)) return "md";
+  if(/^(html?|htm)$/.test(e)) return "html";
+  return e || "file";
+}
+function collEntryIcon(kind){
+  return kind === "md" ? "📝" : kind === "html" ? "🌐" : kind === "pdf" ? "📕" :
+    /^(ppt|pptx|key)$/.test(kind) ? "📊" : /^(doc|docx|wps)$/.test(kind) ? "📄" :
+    /^(xls|xlsx|csv)$/.test(kind) ? "📈" : /^(png|jpe?g|gif|webp|svg|bmp|avif)$/.test(kind) ? "🖼️" :
+    /^(mp3|wav|flac|aac|m4a|ogg)$/.test(kind) ? "🎵" : /^(mp4|webm|mov|mkv|avi)$/.test(kind) ? "🎬" : "📎";
+}
+function pickCollectionEntryFile(){
+  var input = $("collEntryFileInput");
+  if(input){ input.value = ""; input.click(); }
+}
+async function onCollectionEntryFile(e){
+  var file = e.target.files && e.target.files[0];
+  e.target.value = "";
+  if(!file) return;
+  var hint = $("collEntryFileHint");
+  if(hint){ hint.textContent = "正在上传：" + file.name; hint.className = "coll-entry-filehint"; }
+  try{
+    var meta = await uploadFile(file, "collection");
+    collectionEntryPick = { name: meta.name, url: meta.url, type: meta.type, size: meta.size };
+    if(hint){
+      hint.innerHTML = '<b>' + collEntryIcon(collEntryKindOf(meta.name)) + ' ' + esc(meta.name) + '</b>'
+        + '<span>' + esc(meta.type || "文件") + (meta.size ? " · " + fmtSize(meta.size) : "") + '</span>'
+        + '<button class="btn btn-ghost btn-sm" type="button" onclick="clearCollectionEntryPick()">清除</button>';
+      hint.className = "coll-entry-filehint has-file";
+    }
+    if(!$("collEntryTitle").value.trim()) $("collEntryTitle").value = String(meta.name).replace(/\.[^.]+$/, "");
+    showToast("文件已上传，点「+ 添加条目」加入列表");
+  }catch(err){
+    if(hint){ hint.textContent = "上传失败：" + err.message; hint.className = "coll-entry-filehint is-err"; }
+    showToast("上传失败：" + err.message, "error");
+  }
+}
+function clearCollectionEntryPick(){
+  collectionEntryPick = null;
+  var hint = $("collEntryFileHint");
+  if(hint){ hint.textContent = "未选择文件"; hint.className = "coll-entry-filehint"; }
+}
+function addCollectionEntry(){
+  var title = $("collEntryTitle").value.trim();
+  var date = $("collEntryDate").value || todayStr();
+  if(!title){ showToast("请填写条目标题", "error"); return; }
+  if(!collectionEntryPick){ showToast("请先选择一个文件（md / html / pdf / ppt / word 等）", "error"); return; }
+  collectionEntryDrafts.push({ title: title, date: date, kind: collEntryKindOf(collectionEntryPick.name), file: Object.assign({}, collectionEntryPick) });
+  $("collEntryTitle").value = "";
+  clearCollectionEntryPick();
+  renderCollectionEntryAdmin();
+  showToast("条目已加入草稿，记得点「保存合辑」");
+}
+function removeCollectionEntry(i){
+  collectionEntryDrafts.splice(i, 1);
+  renderCollectionEntryAdmin();
+}
+function renderCollectionEntryAdmin(){
+  var box = $("collEntryAdminList");
+  if(!box) return;
+  if(!collectionEntryDrafts.length){
+    box.innerHTML = '<div class="coll-entry-admin-empty">还没有条目：填标题 → 选文件 → 点「+ 添加条目」。</div>';
+    return;
+  }
+  box.innerHTML = collectionEntryDrafts.map(function(en, i){
+    return '<div class="coll-entry-admin-row">'
+      + '<span class="coll-entry-admin-date">' + esc(en.date || "") + '</span>'
+      + '<span class="coll-entry-admin-main"><b>' + esc(en.title) + '</b>'
+      + '<span>' + collEntryIcon(en.kind) + ' ' + esc((en.file && en.file.name) || "") + '</span></span>'
+      + '<button class="btn btn-danger btn-sm" type="button" onclick="removeCollectionEntry(' + i + ')">移除</button>'
+      + '</div>';
+  }).join("");
+}
 function saveCollection(){
   var title = $("collTitle").value.trim();
   if(!title){ showToast("请输入合辑名称", "error"); return; }
@@ -210,6 +287,7 @@ function saveCollection(){
     author: $("collAuthor").value.trim() || (blogData.siteConfig && blogData.siteConfig.name) || "思齐",
     files: (drafts.collection || []).map(function(f){ return Object.assign({}, f); }),
     images: (imgDrafts.collection || []).slice(),
+    entries: collectionEntryDrafts.map(function(en){ return Object.assign({}, en, { file: Object.assign({}, en.file) }); }),
     time: nowStr()
   };
   if(old){
@@ -237,6 +315,9 @@ function editCollection(i){
   $("collTags").value = (c.tags || []).join(",");
   $("collAuthor").value = c.author || "";
   drafts.collection = (c.files || []).map(function(f){ return Object.assign({}, f); });
+  collectionEntryDrafts = (c.entries || []).map(function(en){ return Object.assign({}, en, { file: Object.assign({}, en.file || {}) }); });
+  clearCollectionEntryPick();
+  renderCollectionEntryAdmin();
   setImgDrafts("collection", c.images || []);
   renderDraftFiles("collection");
   $("collectionFormTitle").textContent = "编辑合辑：" + (c.title || "");
@@ -252,6 +333,9 @@ function cancelCollectionEdit(){
     if($(id)) $(id).value = "";
   });
   drafts.collection = [];
+  collectionEntryDrafts = [];
+  clearCollectionEntryPick();
+  renderCollectionEntryAdmin();
   setImgDrafts("collection", []);
   renderDraftFiles("collection");
   $("collectionFormTitle").textContent = "添加合辑系列";
@@ -268,9 +352,10 @@ function renderCollections(){
       var c = r.item, i = r.i;
       var files = (c.files || []).length;
       var imgs = (c.images || []).length;
+      var ents = (c.entries || []).length;
       return '<div class="item-row"><div class="info"><div class="title">'
         + iconThumb(c.icon, 26) + ' ' + esc(c.title) + '</div><div class="desc">'
-        + esc(c.desc || "") + ' · ' + files + ' 个文件' + (imgs ? (' · ' + imgs + ' 张图片') : '')
+        + esc(c.desc || "") + ' · ' + ents + ' 个条目 · ' + files + ' 个文件' + (imgs ? (' · ' + imgs + ' 张图片') : '')
         + ' · ' + esc(c.time || '') + '</div>'
         + fileRows(c.files, "collections", i) + imgRows(c.images, "collections", i)
         + '</div><div class="actions"><button class="btn btn-ghost btn-sm" onclick="editCollection(' + i + ')">编辑</button>'

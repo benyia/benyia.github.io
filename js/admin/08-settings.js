@@ -12,7 +12,6 @@ function saveSiteConfig(){
     avatar: $("cfgAvatar").value.trim() || "思",
     favicon: favicon,
     defaultImage: $("cfgDefaultImage").value.trim(),
-    columns: $("cfgColumns").value || "1",
     defaultAvatar: $("cfgDefaultAvatar").value.trim(),
     loginHint: $("cfgLoginHint").value,
     coverPan: $("cfgCoverPan").checked,

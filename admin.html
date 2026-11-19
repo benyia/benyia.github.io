@@ -10,9 +10,9 @@
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <!-- 样式按模块拆分（顺序即层叠顺序）：骨架/登录 → 富文本编辑器 → 弹窗
      改完任一文件请同步改这里的 ?v= 版本号 -->
-<link rel="stylesheet" href="css/admin/01-base.css?v=20261118q">
-<link rel="stylesheet" href="css/admin/02-editor.css?v=20261118q">
-<link rel="stylesheet" href="css/admin/03-dialog.css?v=20261118q">
+<link rel="stylesheet" href="css/admin/01-base.css?v=20261119j">
+<link rel="stylesheet" href="css/admin/02-editor.css?v=20261119j">
+<link rel="stylesheet" href="css/admin/03-dialog.css?v=20261119j">
 <link rel="stylesheet" href="assets/katex/katex.min.css">
 <script defer src="assets/katex/katex.min.js"></script>
 <script defer src="assets/katex/contrib/auto-render.min.js"></script>
@@ -119,15 +119,6 @@
         </div>
         <div class="note" style="margin-top:-4px">后台标签默认显示「管理后台 - 前台网站标题」。取消勾选后，可以单独设置后台标签标题；前台和后台可以分别修改。</div>
         <div class="form-row"><input type="text" id="cfgDefaultImage" placeholder="默认图片(没上传图片时显示，可留空)" style="flex:2"><button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultImage')">上传</button><span id="prev_cfgDefaultImage"></span></div>
-        <div class="form-row">
-          <label style="font-size:.88rem;display:flex;align-items:center;gap:8px">前台帖子显示：
-            <select id="cfgColumns" style="padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-family:inherit">
-              <option value="1">单列</option>
-              <option value="2">双列</option>
-              <option value="3">多列（三列）</option>
-            </select>
-          </label>
-        </div>
         <div class="form-row">
           <input type="text" id="cfgDefaultAvatar" placeholder="名单默认头像(图片路径，留空用内置)" style="flex:2">
           <button class="btn btn-ghost btn-sm" onclick="pickIcon('cfgDefaultAvatar')">上传</button><span id="prev_cfgDefaultAvatar"></span>
@@ -314,7 +305,7 @@
       <div class="card">
         <h2 id="collectionFormTitle">添加合辑系列</h2>
         <div class="editing-bar" id="collectionEditBar">正在编辑，保存后才会生效 —— <a onclick="cancelCollectionEdit()">取消编辑</a></div>
-        <div class="note">一个合辑就是一组系列资料，例如「AI教程」「Win11优化」「系统安装」「魔法网站」。系列内可以上传 Markdown、HTML、PDF、图片、音乐、视频、压缩包等任意文件。</div>
+        <div class="note">一个合辑就是一组系列资料。条目、文件与封面全部在这里添加，保存后前台只读展示；前台只提供在线预览和下载，不提供任何编辑入口。</div>
         <div class="form-row">
           <input type="text" id="collIcon" placeholder="图标（如 📦、🤖、💻）" style="flex:0.7">
           <button class="btn btn-ghost btn-sm" type="button" onclick="pickIcon('collIcon')">图片</button><span id="prev_collIcon"></span>
@@ -326,6 +317,20 @@
           <input type="text" id="collAuthor" placeholder="整理人 / 作者" style="flex:0.7">
         </div>
         <div class="form-row"><textarea id="collIntro" placeholder="系列详细介绍，支持 Markdown……"></textarea></div>
+
+        <div class="form-row" style="margin:14px 0 6px"><b style="font-size:.88rem">📚 系列条目</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">一条 = 标题 + 日期 + 一个文件；上传后前台即可预览</span></div>
+        <div class="preview-formats" aria-label="支持在线预览的文件类型">
+          <span>可直接预览</span><b>Markdown</b><b>HTML</b><b>PDF</b><b>Word</b><b>PPT</b><b>图片</b><b>音视频</b>
+        </div>
+        <div class="coll-entry-form">
+          <input type="text" id="collEntryTitle" placeholder="条目标题，例如：1月1日 广告优化">
+          <input type="date" id="collEntryDate">
+          <button class="btn btn-ghost btn-sm" type="button" onclick="pickCollectionEntryFile()">📄 选择文件</button>
+          <button class="btn btn-primary btn-sm" type="button" onclick="addCollectionEntry()">+ 添加条目</button>
+        </div>
+        <div class="coll-entry-filehint" id="collEntryFileHint">未选择文件</div>
+        <input type="file" id="collEntryFileInput" style="display:none" onchange="onCollectionEntryFile(event)">
+        <div class="coll-entry-admin" id="collEntryAdminList"></div>
 
         <div class="form-row" style="margin-bottom:6px"><b style="font-size:.88rem">🖼️ 封面 / 展示图</b><span style="font-size:.78rem;color:#94a3b8;margin-left:6px">第一张作为封面</span></div>
         <div id="imgList_collection" style="margin-bottom:6px"></div>
@@ -909,13 +914,13 @@
 </div>
 
 <!-- 脚本按模块拆分：普通 script 共享全局作用域，顺序即依赖顺序，不要调换 -->
-<script src="js/admin/01-core.js?v=20261118q"></script>
-<script src="js/admin/02-editor.js?v=20261118q"></script>
-<script src="js/admin/03-list.js?v=20261118q"></script>
-<script src="js/admin/04-api.js?v=20261118q"></script>
-<script src="js/admin/05-upload.js?v=20261118q"></script>
-<script src="js/admin/06-forms.js?v=20261118q"></script>
-<script src="js/admin/07-render.js?v=20261118q"></script>
-<script src="js/admin/08-settings.js?v=20261118q"></script>
+<script src="js/admin/01-core.js?v=20261119j"></script>
+<script src="js/admin/02-editor.js?v=20261119j"></script>
+<script src="js/admin/03-list.js?v=20261119j"></script>
+<script src="js/admin/04-api.js?v=20261119j"></script>
+<script src="js/admin/05-upload.js?v=20261119j"></script>
+<script src="js/admin/06-forms.js?v=20261119j"></script>
+<script src="js/admin/07-render.js?v=20261119j"></script>
+<script src="js/admin/08-settings.js?v=20261119j"></script>
 </body>
 </html>

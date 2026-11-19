@@ -8,11 +8,12 @@
     "avatar": "files/头像3.webp",
     "favicon": "files/头像4.png",
     "defaultImage": "",
-    "columns": "2",
     "defaultAvatar": "",
     "loginHint": "提示：我喜欢的人的生日",
     "coverPan": true,
     "coverPanSec": 3,
+    "bgOpacity": 100,
+    "bgBlur": 0,
     "name": "思齐",
     "bio": "控制工程研究生 · 记录学习与生活",
     "welcome": {
@@ -1780,6 +1781,10 @@
   ],
   "logs": [
     {
+      "time": "2026-11-19 13:17",
+      "action": "修改站点设置"
+    },
+    {
       "time": "2026-11-18 17:06",
       "action": "编辑合辑：win优化教程"
     },
@@ -2173,10 +2178,6 @@
     },
     {
       "time": "2026-09-30 11:54",
-      "action": "编辑应用：Reddit（红迪）"
-    },
-    {
-      "time": "2026-09-30 11:53",
       "action": "编辑应用：Reddit（红迪）"
     }
   ],
